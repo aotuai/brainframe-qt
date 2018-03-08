@@ -21,7 +21,7 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
                                  f"not a class. Check your imports")
 
         if cls is None:
-            print("IGNORE THIS ERROR. QT DESIGNER IS DUMB")
+            print("IGNORE THIS ERROR. QT DESIGNER IS DUMB:")
             return
 
         super().__init__()
@@ -30,8 +30,8 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
         self.qt_designer_folder = "Dilili" if not qt_designer_folder \
             else qt_designer_folder
 
-        self.widget_name = cls.__name__ if name is None else name
-        self.widget_path = path.__module__ if path is None else path
+        self.widget_name = cls.__name__ if not name else name
+        self.widget_path = cls.__module__ if not path else path
 
         self._initialized = False
 
@@ -90,8 +90,8 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
         XML fragment that allows the default values of the custom widget's
         properties to be overridden
         """
-        return f"<widget class={self.widget_name} name={self.widget_name}>" \
-               f"</widget>"
+        return f'<widget class="{self.widget_name}" name="{self.widget_name}">'\
+               f'</widget>'
 
     def includeFile(self):
         """Name of the module containing the class that implements the widget"""

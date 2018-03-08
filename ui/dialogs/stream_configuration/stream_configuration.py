@@ -6,4 +6,4 @@ class StreamConfiguration(QWidget):
     def __init__(self, parent):
 
         # Flags isn't required but PyCharm complains
-        super().__init__(parent, flags=None)
+        super().__init__(parent)
