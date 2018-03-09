@@ -1,10 +1,10 @@
 from ui.resources import BasePlugin
 
 
-class VideoLarge(BasePlugin):
+class Toolbar(BasePlugin):
 
     # noinspection PyUnresolvedReferences
-    from video_large import VideoLarge as Widget
+    from ui.main_window.toolbar.toolbar import Toolbar as Widget
 
     def __init__(self):
 

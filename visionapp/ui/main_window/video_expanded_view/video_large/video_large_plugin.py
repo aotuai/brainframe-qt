@@ -1,10 +1,11 @@
 from ui.resources import BasePlugin
 
 
-class VideoThumbnailView(BasePlugin):
+class VideoLarge(BasePlugin):
 
     # noinspection PyUnresolvedReferences
-    from video_thumbnail_view import VideoThumbnailView as Widget
+    from ui.main_window.video_expanded_view.video_large.video_large \
+        import VideoLarge as Widget
 
     def __init__(self):
 

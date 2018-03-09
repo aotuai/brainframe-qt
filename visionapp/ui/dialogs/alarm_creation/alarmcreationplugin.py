@@ -1,10 +1,11 @@
 from ui.resources import BasePlugin
 
 
-class AlertLog(BasePlugin):
+class AlarmCreationDialog(BasePlugin):
 
     # noinspection PyUnresolvedReferences
-    from alert_log import AlertLog as Widget
+    from ui.dialogs.alarm_creation.alarm_creation \
+        import AlarmCreationDialog as Widget
 
     def __init__(self):
 
