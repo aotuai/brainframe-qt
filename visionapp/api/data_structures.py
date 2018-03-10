@@ -40,7 +40,7 @@ class Alarm(Dictable):
     "with_class_name": The class name of detected object in order to be counted
     "with_attributes": the attribute for a person to have to be counted,
     "check_value": The int value or threshhold to be over, under, or equal to,
-    "test": >, <, !=, == (as string),
+    "tests": >, <, !=, == (as string),
     "use_active_time": bool,
     "start_time":  "HH:MM" using 24 hour time,
     "end_time": "HH:MM" using 24 hour time}
@@ -68,7 +68,7 @@ class Alarm(Dictable):
     def from_dict(d):
         return Alarm(name=d["name"],
                      id_=d["id"],
-                     test=d["test"],
+                     test=d["tests"],
                      check_value=d["check_value"],
                      with_class_name=d["with_class_name"],
                      with_attributes=d["with_attributes"],
