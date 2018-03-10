@@ -14,10 +14,12 @@ class Dictable(abc.ABC):
 
 class ZoneStatus(Dictable):
     """
-    {"Zone": {params for a Zone},
+    {"zone": Zone,
      "tstamp": ms,
      "total_count": {"person": 100, "dog": 5},
-     "objects": ["person": [Detection, Detection], "dog": [Detection]}
+     "objects": {"person": [Detection, Detection], "dog": [Detection]}
+     "alerts": [Alert, Alert]
+     }
     """
     def to_dict(self, d):
         pass
@@ -90,7 +92,7 @@ class Alert(Dictable):
     An alert can be sent WITHOUT an end_time, but never without a start_time.
     The database will ONLY record alerts that have finished.
     {"id": int,
-    "alarm": the alarm for this alert,
+    "alarm_id": the id for this alerts alarm,
     "start_time": ms,
     "end_time": None or ms
     }
