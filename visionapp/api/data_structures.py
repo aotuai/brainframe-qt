@@ -1,27 +1,35 @@
 import abc
+import ujson
 
 
-class Dictable(abc.ABC):
+class Codec(abc.ABC):
     @abc.abstractstaticmethod
-    def from_dict(d):
+    def from_dict(d: dict):
         pass
 
     @abc.abstractmethod
-    def to_dict(self):
+    def to_dict(self) -> dict:
         pass
 
+    def to_json(self) -> str:
+        return ujson.loads(self.to_dict())
 
-class Detection(Dictable):
+    def from_json(self, j: str):
+        return self.from_dict(ujson.dumps(j))
+
+
+class Detection(Codec):
     """
     {"class_name": str "person" or "object name here",
     "rect": [x1, y1, x2, y2],
     "attributes": ["boy", "drinking_water"]}
     """
 
-    def __init__(self, class_name, rect, attributes):
+    def __init__(self, *, class_name, rect, attributes):
         self.class_name = class_name
         self.rect = rect
         self.attributes = attributes
+
 
     def to_dict(self):
         return self.__dict__
@@ -33,20 +41,20 @@ class Detection(Dictable):
                          attributes=d["attributes"])
 
 
-class Alarm(Dictable):
+class Alarm(Codec):
     """
     {"name": str,
     "id": int,
     "with_class_name": The class name of detected object in order to be counted
     "with_attributes": the attribute for a person to have to be counted,
     "check_value": The int value or threshhold to be over, under, or equal to,
-    "tests": >, <, !=, == (as string),
+    "test": >, <, !=, == (as string),
     "use_active_time": bool,
     "start_time":  "HH:MM" using 24 hour time,
     "end_time": "HH:MM" using 24 hour time}
     """
 
-    def __init__(self, name, id_, test, check_value,
+    def __init__(self, *, name, id_, test, check_value,
                  with_class_name, with_attributes,
                  use_active_time, active_time_start, active_time_end):
         self.name = name
@@ -68,7 +76,7 @@ class Alarm(Dictable):
     def from_dict(d):
         return Alarm(name=d["name"],
                      id_=d["id"],
-                     test=d["tests"],
+                     test=d["test"],
                      check_value=d["check_value"],
                      with_class_name=d["with_class_name"],
                      with_attributes=d["with_attributes"],
@@ -77,7 +85,7 @@ class Alarm(Dictable):
                      active_time_end=d["active_time_end"])
 
 
-class Alert(Dictable):
+class Alert(Codec):
     """
     An alert can be sent WITHOUT an end_time, but never without a start_time.
     The database will ONLY record alerts that have finished.
@@ -88,7 +96,7 @@ class Alert(Dictable):
     }
     """
 
-    def __init__(self, id_, alarm_id, start_time, end_time):
+    def __init__(self, *, id_, alarm_id, start_time, end_time):
         self.id_ = id_
         self.alarm_id = alarm_id
         self.start_time = start_time
@@ -107,7 +115,7 @@ class Alert(Dictable):
                      end_time=d["end_time"])
 
 
-class Zone(Dictable):
+class Zone(Codec):
     """
     {"name": str,
     "id": int,
@@ -115,7 +123,7 @@ class Zone(Dictable):
     "coords": [[x1, y1], [x2, y2], [x3, y3], [x4, y4] ... [xn, yn]]
     """
 
-    def __init__(self, name, id_, alarms, coords):
+    def __init__(self, *, name, id_, alarms, coords):
         self.name = name
         self.id_ = id_
         self.alarms = alarms
@@ -137,17 +145,17 @@ class Zone(Dictable):
                     coords=d["coords"])
 
 
-class ZoneStatus(Dictable):
+class ZoneStatus(Codec):
     """
     {"zone": Zone,
      "tstamp": ms,
      "total_counts": {"person": 100, "dog": 5},
-     "detections": {"person": [Detection, Detection], "dog": [Detection]}
+     "detections": [Detection, Detection, Detection, Detection]
      "alerts": [Alert, Alert]
      }
     """
 
-    def __init__(self, zone, tstamp, total_counts, detections, alerts):
+    def __init__(self, *, zone, tstamp, total_counts, detections, alerts):
         self.zone = zone
         self.tstamp = tstamp
         self.total_counts = total_counts
@@ -158,6 +166,8 @@ class ZoneStatus(Dictable):
         d = self.__dict__
         d["zone"] = self.zone.to_dict()
         d["detections"] = [det.to_dict() for det in self.detections]
+        # d["detections"] = {class_name: [det.to_dict() for det in dets]
+        #                    for class_name, dets in self.detections.items()}
         d["alerts"] = [alert.to_dict() for alert in self.alerts]
         return d
 
@@ -165,6 +175,8 @@ class ZoneStatus(Dictable):
     def from_dict(d):
         zone = Zone.from_dict(d["zone"])
         detections = [Detection.from_dict(det) for det in d["detections"]]
+        # detections = {class_name: [Detection.from_dict(det) for det in dets]
+        #               for class_name, dets in d["detections"].items()}
         alerts = [Alert.from_dict(alert) for alert in d["alerts"]]
         return ZoneStatus(zone=zone,
                           tstamp=d["tstamp"],
@@ -174,13 +186,13 @@ class ZoneStatus(Dictable):
 
 
 # Stream Data structures
-class WebcamConfig(Dictable):
+class WebcamConfig(Codec):
     """
     {"device_index": int}
     """
     CONN_TYPE = "Webcam"
 
-    def __init__(self, device_index):
+    def __init__(self, *, device_index):
         self.device_index = device_index
 
     def to_dict(self):
@@ -190,13 +202,13 @@ class WebcamConfig(Dictable):
     def from_dict(d):
         return WebcamConfig(device_index=d["device_index"])
 
-class IPPasswordConfig(Dictable):
+class IPPasswordConfig(Codec):
     """
     {"url": valid URL, "username": str, "password": str}
     """
     CONN_TYPE = "IPPassword"
 
-    def __init__(self, url, username, password):
+    def __init__(self, *, url, username, password):
         self.url = url
         self.username = username
         self.password = password
@@ -210,7 +222,7 @@ class IPPasswordConfig(Dictable):
                                 username=d["username"],
                                 password=d["password"])
 
-class StreamConfiguration(Dictable):
+class StreamConfiguration(Codec):
     """
     A stream configuration can only be gotten from the API, and has an
     ID.
@@ -223,7 +235,7 @@ class StreamConfiguration(Dictable):
     CONN_TYPES = {WebcamConfig.CONN_TYPE: WebcamConfig,
                   IPPasswordConfig.CONN_TYPE: IPPasswordConfig}
 
-    def __init__(self, name, id_, connection_type, config):
+    def __init__(self, *, name, id_, connection_type, config):
         self.name = name
         self.id_ = id_
         self.connection_type = connection_type
@@ -247,4 +259,27 @@ class StreamConfiguration(Dictable):
                                    config=config)
 
 
+# Engine related stuff
+class EngineConfiguration(Codec):
+    """This is for telling the client the capabilities of the engine. This might
+    include the total number of streams available, the types of detectable
+    objects, the types of attributes that can be detected, etc.
 
+    {"version": "0.0.0.1",
+    "detectable": {"CLASS_NAME": ["ATTRIBUTE, "ATTRIBUTE"],
+                   "person": ["boy", "girl", "smoking", "drinking"]},
+    "max_streams": 4 # License restrictions}
+    """
+    def __init__(self, *, version, detectable, max_streams):
+        self.version = version
+        self.detectable = detectable
+        self.max_streams = max_streams
+
+    def to_dict(self):
+        return self.__dict__
+
+    @staticmethod
+    def from_dict(d):
+        return EngineConfiguration(version=d["version"],
+                                   detectable=d["detectable"],
+                                   max_streams=d["max_streams"])

@@ -69,6 +69,15 @@ def get_unverified_alerts(stream_id):
     :return:
     """
 
+def get_engine_configuration():
+    """Returns the capabilities of the machine learning engine on the server.
+    Currently, it can tell you:
+        The types of objects that can be detected
+        The types of attributes that can be detected for each object.
+
+    :return: EngineConfiguration
+    """
+
 def set_zone(zone, stream_id):
     """Check if zone.name already exists, and create it if not.
 
