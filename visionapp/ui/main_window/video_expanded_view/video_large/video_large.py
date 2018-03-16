@@ -1,8 +1,8 @@
-from PyQt5.QtWidgets import QWidget
+from ui.resources.stream_widget import StreamWidget
 
 
-class VideoLarge(QWidget):
+class VideoLarge(StreamWidget):
 
-    def __init__(self, parent):
+    def __init__(self, parent=None, frame_rate=30):
 
-        super().__init__(parent)
+        super().__init__(frame_rate, parent)

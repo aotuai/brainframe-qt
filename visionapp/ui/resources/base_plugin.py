@@ -51,7 +51,7 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
 
     def createWidget(self, parent):
         """Return a new instance of the custom widget with the given parent"""
-        return self.widget_class(parent)
+        return self.widget_class(parent=parent)
 
     def name(self):
         """Name of the class that implements the custom widget"""

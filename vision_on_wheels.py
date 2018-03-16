@@ -1,25 +1,17 @@
 import os
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.uic import loadUi
+from PyQt5.QtWidgets import QApplication
 
-
-class MainWindow(QMainWindow):
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
-        loadUi("ui/main_window/main.ui", self).show()
-
-        print(dir(self))
-
+# TODO: Wrap this up in something nicer
+from visionapp.ui.main import Main
 
 if __name__ == '__main__':
 
+    # Ensure that all relative paths are correct
     os.chdir(os.path.dirname(__file__) + "/visionapp")
 
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = Main()
 
     app.exec_()

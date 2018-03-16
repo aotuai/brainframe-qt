@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QWidget" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1072</width>
+    <height>639</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="main_layout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="Toolbar" name="Toolbar"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="video_layout">
+       <item>
+        <widget class="VideoThumbnailView" name="VideoThumbnailView">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="VideoExpandedView" name="VideoExpandedView">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VideoThumbnailView</class>
+   <extends>QWidget</extends>
+   <header>ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
+  </customwidget>
+  <customwidget>
+   <class>VideoExpandedView</class>
+   <extends>QWidget</extends>
+   <header>ui.main_window.video_expanded_view.video_expanded_view</header>
+  </customwidget>
+  <customwidget>
+   <class>Toolbar</class>
+   <extends>QWidget</extends>
+   <header>ui.main_window.toolbar.toolbar</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>VideoThumbnailView</sender>
+   <signal>thumbnail_stream_clicked_signal(int)</signal>
+   <receiver>VideoExpandedView</receiver>
+   <slot>open_expanded_view_slot(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>530</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>602</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>VideoExpandedView</sender>
+   <signal>expanded_stream_closed_signal()</signal>
+   <receiver>VideoThumbnailView</receiver>
+   <slot>remove_all_thumbnail_highlight_slots()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>586</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>528</x>
+     <y>112</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
