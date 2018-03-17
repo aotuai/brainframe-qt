@@ -122,9 +122,9 @@ class ZoneAlarm(Codec):
     """
     {
     "id": int,
-    "name": str,
+    "name": "Smoking in Building",
     "conditions": [ZoneAlarmCondition, ZoneAlarmCondition]
-    "use_active_time": bool,
+    "use_active_time": True,
     "start_time":  "HH:MM:SS" using 24 hour time,
     "end_time": "HH:MM:SS" using 24 hour time}
     """
@@ -191,8 +191,8 @@ class Alert(Codec):
 
 class Zone(Codec):
     """
-    {"name": str,
-    "id": int,
+    {"id": int,
+    "name": "Couch Area",
     "stream_id": the stream id that this zone belongs to,
     "alarms": [Alarm, Alarm, Alarm]
     "coords": [[x1, y1], [x2, y2], [x3, y3], [x4, y4] ... [xn, yn]]
@@ -223,7 +223,7 @@ class Zone(Codec):
 class ZoneStatus(Codec):
     """
     {"zone": Zone,
-     "tstamp": ms,
+     "tstamp": ms (Unix Style),
      "total_count": {"person": 100, "dog": 5},
      "detections": [Detection, Detection, Detection, Detection]
      "alerts": [Alert, Alert]
