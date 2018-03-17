@@ -20,19 +20,19 @@
       <number>20</number>
      </property>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="alarm_name_label">
        <property name="text">
         <string>Name:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="alarm_name"/>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="parameters_label">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -45,9 +45,9 @@
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QGridLayout" name="if_layout">
      <item row="0" column="3">
-      <widget class="QComboBox" name="object_combo_box"/>
+      <widget class="QComboBox" name="countable_combo_box"/>
      </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="test_type_combo_box"/>
@@ -87,7 +87,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="in_layout">
      <property name="bottomMargin">
       <number>20</number>
      </property>
@@ -105,7 +105,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="region_combo_box"/>
+      <widget class="QComboBox" name="zone_combo_box">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -123,7 +130,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="active_times_label">
      <property name="font">
       <font>
        <weight>75</weight>

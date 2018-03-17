@@ -1,11 +1,11 @@
 from ui.resources import BasePlugin
 
 
-class TaskList(BasePlugin):
+class RegionList(BasePlugin):
 
     # noinspection PyUnresolvedReferences
-    from ui.dialogs.task_configuration.task_list.task_list \
-        import TaskList as Widget
+    from ui.dialogs.task_configuration.zone_list.zone_list \
+        import ZoneList as Widget
 
     def __init__(self):
 
