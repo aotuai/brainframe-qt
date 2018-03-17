@@ -176,10 +176,12 @@ class ZoneStatus(Codec):
     """The current status of everything going on inside a zone.
     """
 
-    def __init__(self, *, zone, tstamp, total_counts, detections, alerts):
+    def __init__(self, *, zone, tstamp, detections, alerts,
+                 total_entered, total_exited):
         self.zone = zone
         self.tstamp = tstamp
-        self.total_counts = total_counts
+        self.total_entered = total_entered
+        self.total_exited = total_exited
         self.detections = detections
         self.alerts = alerts
 
@@ -187,8 +189,6 @@ class ZoneStatus(Codec):
         d = self.__dict__
         d["zone"] = self.zone.to_dict()
         d["detections"] = [det.to_dict() for det in self.detections]
-        # d["detections"] = {class_name: [det.to_dict() for det in dets]
-        #                    for class_name, dets in self.detections.items()}
         d["alerts"] = [alert.to_dict() for alert in self.alerts]
         return d
 
@@ -196,12 +196,11 @@ class ZoneStatus(Codec):
     def from_dict(d):
         zone = Zone.from_dict(d["zone"])
         detections = [Detection.from_dict(det) for det in d["detections"]]
-        # detections = {class_name: [Detection.from_dict(det) for det in dets]
-        #               for class_name, dets in d["detections"].items()}
         alerts = [Alert.from_dict(alert) for alert in d["alerts"]]
         return ZoneStatus(zone=zone,
                           tstamp=d["tstamp"],
-                          total_counts=d["total_counts"],
+                          total_entered=d["total_entered"],
+                          total_exited=d["total_exited"],
                           detections=detections,
                           alerts=alerts)
 
