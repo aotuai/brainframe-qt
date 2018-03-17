@@ -22,16 +22,9 @@ class Codec(abc.ABC):
 
 
 class Detection(Codec):
-    """
-    {"class_name": str "person" or "object name here",
-    "rect": [x1, y1, x2, y2],
-
-    # Child detections, like "face" or "feet" if this Detection was "person"
-    "children": [Detection, Detection]
-
-    # Attributes directly relevant to "person"
-    "attributes":  [Attribute, Attribute, Attribute]
-    }
+    """A detected object. It can have 'children', for example, a "person" can
+    have a "face" object as a child. It can also own several Attributes. For
+    example, a "person" can exhibit a behaviour. A Face can have a gender.
     """
     def __init__(self, *, class_name, rect, children, attributes):
         self.class_name = class_name
@@ -57,11 +50,7 @@ class Detection(Codec):
 
 
 class Attribute(Codec):
-    """
-    {
-    "category": "Gender",
-    "value": "male"
-    }
+    """This holds an attribute of a detection
     """
     def __init__(self, *, category, value):
         self.category = category
@@ -76,27 +65,8 @@ class Attribute(Codec):
                          value=d["value"])
 
 
-"""
-Make:
-- Attribute class
-    name: "boy"
-    category: "gender"
-    
-ZoneAlarmCondition
-    - Take conditional elements
-    
-"""
-
-
-
 class ZoneAlarmCondition(Codec):
-    """
-    {
-    "test": >, <, =, !=
-    "check_value": integer
-    "with_class_name": "person"
-    "attribute": Attribute object
-    }
+    """This holds logic information for a ZoneAlarm.
     """
     def __init__(self, *, test, check_value, with_class_name, attribute):
         self.test = test
@@ -119,14 +89,7 @@ class ZoneAlarmCondition(Codec):
 
 
 class ZoneAlarm(Codec):
-    """
-    {
-    "id": int,
-    "name": "Smoking in Building",
-    "conditions": [ZoneAlarmCondition, ZoneAlarmCondition]
-    "use_active_time": True,
-    "start_time":  "HH:MM:SS" using 24 hour time,
-    "end_time": "HH:MM:SS" using 24 hour time}
+    """This is the configuration for an alarm.
     """
 
     def __init__(self, *, name, conditions,
@@ -160,14 +123,8 @@ class ZoneAlarm(Codec):
 
 
 class Alert(Codec):
-    """
+    """This is sent when an Alarm has been triggered.
     An alert can be sent WITHOUT an end_time, but never without a start_time.
-    The data will ONLY record alerts that have finished.
-    {"id": int,
-    "alarm_id": the id for this alerts alarm,
-    "start_time": ms,
-    "end_time": None or ms
-    }
     """
 
     def __init__(self, *, alarm_id, start_time, end_time, id_=None):
@@ -190,12 +147,7 @@ class Alert(Codec):
 
 
 class Zone(Codec):
-    """
-    {"id": int,
-    "name": "Couch Area",
-    "stream_id": the stream id that this zone belongs to,
-    "alarms": [Alarm, Alarm, Alarm]
-    "coords": [[x1, y1], [x2, y2], [x3, y3], [x4, y4] ... [xn, yn]]
+    """The definition for a zone. It is a non-convex polygon or a line.
     """
 
     def __init__(self, *, name, alarms, coords, id_=None):
@@ -221,13 +173,7 @@ class Zone(Codec):
 
 
 class ZoneStatus(Codec):
-    """
-    {"zone": Zone,
-     "tstamp": ms (Unix Style),
-     "total_count": {"person": 100, "dog": 5},
-     "detections": [Detection, Detection, Detection, Detection]
-     "alerts": [Alert, Alert]
-     }
+    """The current status of everything going on inside a zone.
     """
 
     def __init__(self, *, zone, tstamp, total_counts, detections, alerts):
@@ -262,21 +208,7 @@ class ZoneStatus(Codec):
 
 # Stream Data structures
 class StreamConfiguration(Codec):
-    """
-    A stream configuration can only be gotten from the API, and has an
-    ID.
-    {"name": str,
-    "id": int,
-    "connection_type": "Webcam" or "IPPassword"
-    "parameters": The JSON defining the parameters for this connection type
-
-    Parameters
-    "Webcam"
-        {"device_index": int}
-
-    "IPPassword"
-        {"url": valid URL, "username": str, "password": str}
-    }
+    """Configuration for the server to open a video stream.
     """
 
     def __init__(self, *, name, connection_type, parameters, id_=None):
@@ -305,16 +237,8 @@ class EngineConfiguration(Codec):
     """This is for telling the client the capabilities of the engine. This might
     include the total number of streams available, the types of detectable
     objects, the types of attributes that can be detected, etc.
-
-    {"version": "0.0.0.1",
-    "detectable": {"CLASS_NAME": {"ATTRIBUTE_TYPE": ["OPTION1", "OPTIONS2"]},
-                   "person": {"gender": ["boy", "girl"],
-                              "basic_behaviour": ["drinking_water", "smoking", "phoning"],
-                              "posture": ["standing", "sitting", "lying_down"]
-                              }
-                   },
-    "max_streams": 4 # License restrictions}
     """
+
     def __init__(self, *, version, detectable, max_streams):
         self.version = version
         self.detectable = detectable
