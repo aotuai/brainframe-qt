@@ -25,28 +25,55 @@ class Detection(Codec):
     """
     {"class_name": str "person" or "object name here",
     "rect": [x1, y1, x2, y2],
+
+    # Child detections, like "face" or "feet" if this Detection was "person"
+    "children": [Detection, Detection]
+
+    # Attributes directly relevant to "person"
     "attributes":  [Attribute, Attribute, Attribute]
     }
     """
-    # TODO: Alex, add the attributes
-    def __init__(self, *, class_name, rect, attributes):
+    def __init__(self, *, class_name, rect, children, attributes):
         self.class_name = class_name
         self.rect = rect
+        self.children = children
         self.attributes = attributes
 
+
+    def to_dict(self):
+        d = self.__dict__
+        d["children"] = [Detection.to_dict(det) for det in self.children]
+        d["attributes"] = [Attribute.to_dict(att) for att in self.attributes]
+        return d
+
+    @staticmethod
+    def from_dict(d):
+        children = [Detection.from_dict(det) for det in d["children"]]
+        attributes = [Attribute.from_dict(att) for att in d["attributes"]]
+        return Detection(class_name=d["class_name"],
+                         rect=d["rect"],
+                         children=children,
+                         attributes=attributes)
+
+
+class Attribute(Codec):
+    """
+    {
+    "category": "Gender",
+    "value": "male"
+    }
+    """
+    def __init__(self, *, category, value):
+        self.category = category
+        self.value = value
 
     def to_dict(self):
         return self.__dict__
 
     @staticmethod
     def from_dict(d):
-        return Detection(class_name=d["class_name"],
-                         rect=d["rect"],
-                         attributes=d["attributes"])
-
-class Attribute(Codec):
-    # TODO: Alex, create the attributes
-    pass
+        return Attribute(category=d["category"],
+                         value=d["value"])
 
 
 """
@@ -65,20 +92,30 @@ ZoneAlarmCondition
 class ZoneAlarmCondition(Codec):
     """
     {
-    "alarm_id": The alarm that this belongs to
     "test": >, <, =, !=
     "check_value": integer
     "with_class_name": "person"
     "attribute": Attribute object
     }
     """
-    # TODO: Alex
+    def __init__(self, *, test, check_value, with_class_name, attribute):
+        self.test = test
+        self.check_value = check_value
+        self.with_class_name = with_class_name
+        self.with_attribute = attribute
+
     def to_dict(self) -> dict:
-        pass
+        d = self.__dict__
+        d["with_attribute"] = self.with_attribute.to_dict()
+        return d
 
     @staticmethod
     def from_dict(d: dict):
-        pass
+        return ZoneAlarmCondition(
+            test=d["test"],
+            check_value=d["check_value"],
+            with_class_name=d["with_class_name"],
+            attribute=Attribute.from_dict(d["with_attribute"]))
 
 
 class ZoneAlarm(Codec):
@@ -92,16 +129,11 @@ class ZoneAlarm(Codec):
     "end_time": "HH:MM:SS" using 24 hour time}
     """
 
-    def __init__(self, *, name, test, check_value,
-                 with_class_name, with_attributes,
-                 use_active_time, active_time_start, active_time_end,
-                 id_=None):
+    def __init__(self, *, name, conditions,
+                 use_active_time, active_time_start, active_time_end, id_=None):
         self.name = name
         self.id_ = id_
-        self.test = test
-        self.check_value = check_value
-        self.with_class_name = with_class_name
-        self.with_attributes = with_attributes
+        self.conditions = conditions
         self.use_active_time = use_active_time
         self.active_time_start = active_time_start
         self.active_time_end = active_time_end
@@ -111,16 +143,17 @@ class ZoneAlarm(Codec):
     def to_dict(self):
         d = self.__dict__
         d["id"] = d.pop("id_")
+        d["conditions"] = [ZoneAlarmCondition.to_dict(cond)
+                           for cond in self.conditions]
         return d
 
     @staticmethod
     def from_dict(d):
+        conditions = [ZoneAlarmCondition.from_dict(cond)
+                      for cond in d["conditions"]]
         return ZoneAlarm(name=d["name"],
                          id_=d["id"],
-                         test=d["test"],
-                         check_value=d["check_value"],
-                         with_class_name=d["with_class_name"],
-                         with_attributes=d["with_attributes"],
+                         conditions=conditions,
                          use_active_time=d["use_active_time"],
                          active_time_start=d["active_time_start"],
                          active_time_end=d["active_time_end"])
@@ -261,12 +294,10 @@ class StreamConfiguration(Codec):
     @staticmethod
     def from_dict(d):
         # Get the config
-        config_type = StreamConfiguration.CONN_TYPES[d["connection_type"]]
-        parameters = config_type.from_dict(d["parameters"])
         return StreamConfiguration(name=d["name"],
                                    id_=d["id"],
                                    connection_type=d["connection_type"],
-                                   parameters=parameters)
+                                   parameters=d["parameters"])
 
 
 # Engine related stuff
