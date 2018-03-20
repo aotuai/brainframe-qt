@@ -48,7 +48,36 @@
       </widget>
      </item>
      <item>
-      <widget class="AlertLog" name="alert_log"/>
+      <layout class="QHBoxLayout" name="bottom_layout">
+       <item>
+        <widget class="AlertLog" name="alert_log">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="config_button_layout">
+         <item>
+          <widget class="QPushButton" name="task_config_button">
+           <property name="text">
+            <string>Task Config</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="source_config_button">
+           <property name="text">
+            <string>Source Config</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
@@ -84,8 +113,42 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>task_config_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>open_task_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>318</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>197</x>
+     <y>281</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>source_config_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>open_source_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>346</x>
+     <y>251</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>222</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>expanded_stream_closed_slot()</slot>
+  <slot>open_task_config()</slot>
+  <slot>open_source_config()</slot>
  </slots>
 </ui>
