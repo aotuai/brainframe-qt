@@ -4,7 +4,7 @@ import sys
 from PyQt5.QtWidgets import QApplication
 
 # TODO: Wrap this up in something nicer
-from visionapp.ui.main import Main
+from visionapp.client.ui.main import Main
 
 if __name__ == '__main__':
 

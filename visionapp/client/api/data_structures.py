@@ -93,13 +93,13 @@ class ZoneAlarm(Codec):
     """
 
     def __init__(self, *, name, conditions,
-                 use_active_time, active_time_start, active_time_end, id_=None):
+                 use_active_time, active_start_time, active_end_time, id_=None):
         self.name = name
         self.id_ = id_
         self.conditions = conditions
         self.use_active_time = use_active_time
-        self.active_time_start = active_time_start
-        self.active_time_end = active_time_end
+        self.active_start_time = active_start_time
+        self.active_end_time = active_end_time
 
 
 
@@ -118,8 +118,8 @@ class ZoneAlarm(Codec):
                          id_=d["id"],
                          conditions=conditions,
                          use_active_time=d["use_active_time"],
-                         active_time_start=d["active_time_start"],
-                         active_time_end=d["active_time_end"])
+                         active_start_time=d["active_start_time"],
+                         active_end_time=d["active_end_time"])
 
 
 class Alert(Codec):
@@ -208,6 +208,16 @@ class ZoneStatus(Codec):
 # Stream Data structures
 class StreamConfiguration(Codec):
     """Configuration for the server to open a video stream.
+
+    Connection Types:
+        "webcam"
+        parameters: {"device_id": 0}
+
+        "ipcamera"
+        parameters: {"url": "http://185.10.80.33:8082"}
+
+        "file"
+        parameters: {"filepath": "/home/usr/videos/my_vid.mp4"}
     """
 
     def __init__(self, *, name, connection_type, parameters, id_=None):

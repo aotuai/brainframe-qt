@@ -1,7 +1,7 @@
 import requests
-import ujson
 
-from visionapp.api.data_structures import *
+from visionapp.client.api.data_structures import *
+
 
 class API:
     def __init__(self, hostname, port):
@@ -37,10 +37,11 @@ class API:
     # Stream Specific stuff
     def start_stream(self, stream_id):
         """Tell server to start a stream
-
-        :param stream_id:
-        :return:
+        :param stream_id: The ID of the stream configuration to open.
+        :return:The URL to connect to for the stream.
+            cv2.VideoCapture(URL) must be compatible.
         """
+
 
     def end_stream(self, stream_id):
         """
@@ -49,6 +50,12 @@ class API:
         :return:
         """
 
+    def get_stream_timestamp(self, stream_id):
+        """Get the current timestamp of the stream, from the server side.
+        :returns: A Unix style timestamp for the stream"""
+
+
+    # Get Analysis
     def get_latest_zone_statuses(self):
         """Get all ZoneStatuses
 
@@ -63,6 +70,7 @@ class API:
         :return:
         """
 
+    # Backend Capabilities
     def get_engine_configuration(self):
         """Returns the capabilities of the machine learning engine on the server.
         Currently, it can tell you:
