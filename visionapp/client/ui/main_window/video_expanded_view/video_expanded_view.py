@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QHBoxLayout, QWidget
 from PyQt5.uic import loadUi
 
+import client_paths
 from .video_large.video_large import VideoLarge
 
 
@@ -14,12 +15,8 @@ class VideoExpandedView(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
 
-        loadUi("ui/main_window/video_expanded_view/video_expanded_view.ui")
-
-        # TODO: Migrate to QtDesigner
-        self.layout_ = QHBoxLayout(self)
-        self.setLayout(self.layout_)
-        self.layout_.addWidget(VideoLarge(self, 5))
+        loadUi(client_paths.video_expanded_view_ui, self)
+        self.video_layout.addWidget(VideoLarge(self, 5))
 
         self.sizePolicy().setHorizontalStretch(0)
 

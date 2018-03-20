@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
+import client_paths
 from ui.dialogs.alarm_creation.alarm_creation import AlarmCreationDialog
 from ui.dialogs.task_configuration.zone_list.zone_and_tasks.zone_and_tasks \
     import ZoneAndTasks
@@ -13,7 +14,7 @@ class TaskConfiguration(QWidget):
 
         super().__init__(parent)
 
-        loadUi("ui/dialogs/task_configuration/task_configuration.ui", self)
+        loadUi(client_paths.task_configuration_ui, self)
 
     @pyqtSlot()
     def new_alarm(self):

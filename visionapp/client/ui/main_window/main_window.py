@@ -1,6 +1,7 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
+
+import client_paths
 
 
 class MainWindow(QWidget):
@@ -12,4 +13,4 @@ class MainWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        loadUi("ui/main_window/main_window.ui", self)
+        loadUi(client_paths.main_window_ui, self)

@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
+import client_paths
+
 
 class Main(QMainWindow):
     """Main window for entire UI"""
@@ -8,4 +10,4 @@ class Main(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        loadUi("ui/main.ui", self).show()
+        loadUi(client_paths.main_ui, self).show()

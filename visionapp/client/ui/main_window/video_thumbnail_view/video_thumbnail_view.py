@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
+import client_paths
 from .video_small.video_small import VideoSmall
 from ui.resources.flow_layout import FlowLayout
 
@@ -17,8 +18,7 @@ class VideoThumbnailView(QWidget):
 
         super().__init__(parent)
 
-        loadUi("ui/main_window/video_thumbnail_view/video_thumbnail_view.ui",
-               self)
+        loadUi(client_paths.video_thumbnail_view_ui, self)
 
         self.layout_ = FlowLayout(self)
         self.setLayout(self.layout_)
