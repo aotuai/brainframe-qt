@@ -6,6 +6,10 @@ from visionapp.client.api.data_structures import *
 class API:
     _instance = None
 
+    # For testing purposes
+    get = requests.get
+    put = requests.put
+
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super().__new__(cls)
@@ -25,6 +29,10 @@ class API:
         """Get all StreamConfigurations that currently exist.
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
+        req = "/api/streams/"
+        data = self._get(req)
+        configs = [StreamConfiguration.from_dict(data) for d in data]
+        return configs
 
     def set_stream_configuration(self, stream_configuration):
         """Update an existing stream configuration or create a new one
@@ -32,6 +40,11 @@ class API:
         :param stream_configuration: StreamConfiguration
         :return: StreamConfiguration, initialized with an ID
         """
+        req = "/api/streams/"
+        data = self._put(req, stream_configuration)
+        config = StreamConfiguration.from_dict(data)
+        return config
+
 
     def delete_stream_configuration(self, stream_name):
         """
@@ -111,8 +124,7 @@ class API:
         :param zone: A Zone object
         :return: Zone, initialized with an ID
         """
-        req = "/api/streams/{stream_id}/zones".format(
-            stream_id=stream_id)
+        req = "/api/streams/{stream_id}/zones".format(stream_id=stream_id)
         data = self._put(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
@@ -122,15 +134,15 @@ class API:
             base_url=self._base_url,
             api_url=api_url)
 
-        response = requests.get(url)
+        response = self.get(url)
         return ujson.loads(response.content)
 
     def _put(self, api_url, codec: Codec):
         url = "{base_url}{api_url}".format(
             base_url=self._base_url,
             api_url=api_url)
-
-        response = requests.put(url, data=codec.to_json())
+        data = codec.to_json()
+        response = self.put(url, data=data)
         return ujson.loads(response.content)
 
 

@@ -34,7 +34,7 @@ class Detection(Codec):
 
 
     def to_dict(self):
-        d = self.__dict__
+        d = dict(self.__dict__)
         d["children"] = [Detection.to_dict(det) for det in self.children]
         d["attributes"] = [Attribute.to_dict(att) for att in self.attributes]
         return d
@@ -75,7 +75,7 @@ class ZoneAlarmCondition(Codec):
         self.with_attribute = attribute
 
     def to_dict(self) -> dict:
-        d = self.__dict__
+        d = dict(self.__dict__)
         d["with_attribute"] = self.with_attribute.to_dict()
         return d
 
@@ -104,7 +104,7 @@ class ZoneAlarm(Codec):
 
 
     def to_dict(self):
-        d = self.__dict__
+        d = dict(self.__dict__)
         d["id"] = d.pop("id_")
         d["conditions"] = [ZoneAlarmCondition.to_dict(cond)
                            for cond in self.conditions]
@@ -134,7 +134,7 @@ class Alert(Codec):
         self.end_time = end_time
 
     def to_dict(self):
-        d = self.__dict__
+        d = dict(self.__dict__)
         d["id"] = d.pop("id_")
         return d
 
@@ -157,10 +157,9 @@ class Zone(Codec):
         self.coords = coords
 
     def to_dict(self):
-        d = self.__dict__
-        alarms = [alarm.to_dict() for alarm in self.alarms]
+        d = dict(self.__dict__)
+        d["alarms"] = [alarm.to_dict() for alarm in self.alarms]
         d["id"] = d.pop("id_")
-        d["alarms"] = alarms
         return d
 
     @staticmethod
@@ -186,7 +185,7 @@ class ZoneStatus(Codec):
         self.alerts = alerts
 
     def to_dict(self):
-        d = self.__dict__
+        d = dict(self.__dict__)
         d["zone"] = self.zone.to_dict()
         d["detections"] = [det.to_dict() for det in self.detections]
         d["alerts"] = [alert.to_dict() for alert in self.alerts]
@@ -228,7 +227,7 @@ class StreamConfiguration(Codec):
 
 
     def to_dict(self):
-        d = self.__dict__
+        d = dict(self.__dict__)
         d["id"] = d.pop("id_")
         return d
 
