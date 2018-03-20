@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
+import client_paths
+
 
 class Toolbar(QWidget):
 
@@ -8,4 +10,4 @@ class Toolbar(QWidget):
 
         super().__init__(parent)
 
-        loadUi("ui/main_window/toolbar/toolbar.ui", self)
+        loadUi(client_paths.toolbar_ui, self)

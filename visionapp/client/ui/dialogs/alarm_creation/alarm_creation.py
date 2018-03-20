@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
+import client_paths
 from ui.resources.datatypes.alarm import Alarm
 
 
@@ -9,7 +10,7 @@ class AlarmCreationDialog(QDialog):
     def __init__(self, zone_list=None, parent=None):
         super().__init__(parent)
 
-        loadUi("ui/dialogs/alarm_creation/alarm_creation.ui", self)
+        loadUi(client_paths.alarm_creation_ui, self)
 
         if zone_list:
             self.zone_combo_box.clear()
