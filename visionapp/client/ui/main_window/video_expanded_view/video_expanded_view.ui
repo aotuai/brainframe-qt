@@ -17,7 +17,31 @@
    <item>
     <layout class="QVBoxLayout" name="main_layout">
      <item>
-      <widget class="VideoLarge" name="video_large">
+      <layout class="QHBoxLayout" name="close_button_layout">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="hide_button">
+         <property name="text">
+          <string>X</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="VideoLarge" name="expanded_video">
        <property name="frame_rate" stdset="0">
         <number>10</number>
        </property>
@@ -43,5 +67,25 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>hide_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>expanded_stream_closed_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>409</x>
+     <y>23</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>expanded_stream_closed_slot()</slot>
+ </slots>
 </ui>

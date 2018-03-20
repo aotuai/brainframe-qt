@@ -23,8 +23,6 @@ class VideoThumbnailView(QWidget):
         self.layout_ = FlowLayout(self)
         self.setLayout(self.layout_)
 
-        self.sizePolicy().setHorizontalStretch(5)
-
         # TODO: Remove once added dynamically
         self.layout_.addWidget(VideoSmall(self, 5))
         self.layout_.addWidget(VideoSmall(self, 5))

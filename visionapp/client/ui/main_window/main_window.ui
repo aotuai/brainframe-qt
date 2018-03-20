@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1072</width>
-    <height>639</height>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -85,8 +85,8 @@
    <slot>open_expanded_view_slot(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>530</x>
-     <y>80</y>
+     <x>312</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>602</x>
@@ -105,10 +105,46 @@
      <y>111</y>
     </hint>
     <hint type="destinationlabel">
-     <x>528</x>
-     <y>112</y>
+     <x>312</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>VideoExpandedView</sender>
+   <signal>expanded_stream_closed_signal()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hide_video_expanded_view()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>751</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>753</x>
+     <y>3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>VideoThumbnailView</sender>
+   <signal>thumbnail_stream_clicked_signal(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_video_expanded_view()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>191</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>194</x>
+     <y>2</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>show_video_expanded_view()</slot>
+  <slot>hide_video_expanded_view()</slot>
+ </slots>
 </ui>
