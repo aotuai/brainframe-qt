@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 from PyQt5.uic import loadUi
 
-import client_paths
+from ui.resources import client_paths
 
 # TODO: Scroll!
 class ZoneList(QScrollArea):

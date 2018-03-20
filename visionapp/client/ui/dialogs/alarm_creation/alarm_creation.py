@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
-import client_paths
+from ui.resources import client_paths
 from ui.resources.datatypes.alarm import Alarm
 
 

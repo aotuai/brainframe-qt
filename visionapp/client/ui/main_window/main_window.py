@@ -1,11 +1,11 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
-import client_paths
+from ui.resources import client_paths
 
 
-class MainWindow(QWidget):
+class MainWindow(QMainWindow):
     """Main window for entire UI
 
     This is a Widget plugin in the event that it needs to handle slots and
@@ -14,7 +14,7 @@ class MainWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        loadUi(client_paths.main_window_ui, self)
+        loadUi(client_paths.main_window_ui, self).show()
 
     @pyqtSlot()
     def show_video_expanded_view(self):

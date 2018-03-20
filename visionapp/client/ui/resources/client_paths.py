@@ -5,7 +5,6 @@ from pathlib import Path
 
 # UI Paths
 ui                       = Path("ui")
-main_ui                  = Path(ui                      , "main.ui"                )
 
 # Main Window
 main_window_dir          = Path(ui                      , "main_window"            )

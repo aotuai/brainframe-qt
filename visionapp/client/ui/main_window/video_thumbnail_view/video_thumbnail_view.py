@@ -2,7 +2,9 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
-import client_paths
+from api import api
+
+from ui.resources import client_paths
 from .video_small.video_small import VideoSmall
 from ui.resources.flow_layout import FlowLayout
 
@@ -22,6 +24,9 @@ class VideoThumbnailView(QWidget):
 
         self.layout_ = FlowLayout(self)
         self.setLayout(self.layout_)
+
+        # for stream in api.get_stream_configurations():
+        #     pass
 
         # TODO: Remove once added dynamically
         self.layout_.addWidget(VideoSmall(self, 5))

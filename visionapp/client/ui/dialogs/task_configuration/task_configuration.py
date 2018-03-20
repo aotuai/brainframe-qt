@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
-import client_paths
+from ui.resources import client_paths
 from ui.dialogs.alarm_creation.alarm_creation import AlarmCreationDialog
 from ui.dialogs.task_configuration.zone_list.zone_and_tasks.zone_and_tasks \
     import ZoneAndTasks

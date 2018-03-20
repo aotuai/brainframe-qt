@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QHBoxLayout, QWidget
 from PyQt5.uic import loadUi
 
-import client_paths
+from ui.resources import client_paths
 from .video_large.video_large import VideoLarge
 
 

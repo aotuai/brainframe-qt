@@ -4,6 +4,13 @@ from visionapp.client.api.data_structures import *
 
 
 class API:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self, hostname, port):
         self.hostname = hostname
         self.port = port
@@ -12,7 +19,6 @@ class API:
     def close(self):
         """Close all threaded parts of the API and then close the API connection
         """
-
 
     # Stream Configuration Stuff
     def get_stream_configurations(self):
@@ -42,7 +48,6 @@ class API:
             cv2.VideoCapture(URL) must be compatible.
         """
 
-
     def end_stream(self, stream_id):
         """
         This tells BrainServer to close its socket for this stream
@@ -53,7 +58,6 @@ class API:
     def get_stream_timestamp(self, stream_id):
         """Get the current timestamp of the stream, from the server side.
         :returns: A Unix style timestamp for the stream"""
-
 
     # Get Analysis
     def get_latest_zone_statuses(self):
@@ -112,7 +116,6 @@ class API:
         data = self._put(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
-
 
     def _get(self, api_url):
         url = "{base_url}{api_url}".format(
