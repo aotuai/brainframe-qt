@@ -15,10 +15,33 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <layout class="QHBoxLayout" name="video_layout"/>
+    <layout class="QVBoxLayout" name="main_layout">
+     <item>
+      <widget class="VideoLarge" name="video_large">
+       <property name="frame_rate" stdset="0">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="AlertLog" name="alert_log"/>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VideoLarge</class>
+   <extends>QGraphicsView</extends>
+   <header>ui.main_window.video_expanded_view.video_large.video_large</header>
+  </customwidget>
+  <customwidget>
+   <class>AlertLog</class>
+   <extends>QWidget</extends>
+   <header>ui.main_window.video_expanded_view.alert_log.alert_log</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

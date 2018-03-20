@@ -16,7 +16,6 @@ class VideoExpandedView(QWidget):
         super().__init__(parent)
 
         loadUi(client_paths.video_expanded_view_ui, self)
-        self.video_layout.addWidget(VideoLarge(self, 5))
 
         self.sizePolicy().setHorizontalStretch(0)
 

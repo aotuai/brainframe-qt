@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import pyqtProperty, QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
@@ -12,7 +12,7 @@ class StreamWidget(QGraphicsView):
 
     Makes use of a QTimer to get frames"""
 
-    def __init__(self, frame_rate=10, parent=None):
+    def __init__(self, frame_rate=30, parent=None):
         """Init StreamWidget object
 
         :param frame_rate: Frame rate of video in fps
@@ -28,12 +28,14 @@ class StreamWidget(QGraphicsView):
         self.video_stream = None  # TODO: Stream()
         self.current_frame = None
 
+        self._frame_rate = frame_rate
+
         # Get first frame, then start timer to do it repetitively
         self.update_frame()
         self.frame_update_timer = QTimer()
         # noinspection PyUnresolvedReferences
         self.frame_update_timer.timeout.connect(self.update_frame)
-        self.frame_update_timer.start(1000 // frame_rate)
+        self.frame_update_timer.start(1000 // self.frame_rate)
 
     def update_frame(self):
         """Grab the newest frame from the Stream object"""
@@ -51,3 +53,13 @@ class StreamWidget(QGraphicsView):
             pass
         else:
             pass
+
+    @pyqtProperty(int)
+    def frame_rate(self):
+        return self._frame_rate
+
+    @frame_rate.setter
+    def frame_rate(self, frame_rate):
+        self.frame_update_timer.setInterval(1000 // frame_rate)
+        self._frame_rate = frame_rate
+
