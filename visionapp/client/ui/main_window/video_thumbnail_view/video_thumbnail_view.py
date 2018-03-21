@@ -18,6 +18,11 @@ class VideoThumbnailView(QWidget):
 
     def __init__(self, parent=None):
 
+        # TODO: Debug
+        if api is not None:
+            api.get_stream_configurations = \
+                get_stream_configurations_debug
+
         super().__init__(parent)
 
         loadUi(client_paths.video_thumbnail_view_ui, self)
@@ -25,14 +30,19 @@ class VideoThumbnailView(QWidget):
         self.layout_ = FlowLayout(self)
         self.setLayout(self.layout_)
 
-        # for stream in api.get_stream_configurations():
-        #     pass
-
-        # TODO: Remove once added dynamically
-        self.layout_.addWidget(VideoSmall(self, 5))
-        self.layout_.addWidget(VideoSmall(self, 5))
-        self.layout_.addWidget(VideoSmall(self, 5))
-        self.layout_.addWidget(VideoSmall(self, 5))
+        self.streams = {}
+        if api is not None:
+            for stream_conf in api.get_stream_configurations():
+                video = VideoSmall(self, stream_conf, 30)
+                self.streams[stream_conf.id_] = video
+                self.layout_.addWidget(video)
+        else:
+            # Create fake videos for QtDesigner
+            # TODO: Use mock for this
+            for stream_conf in get_stream_configurations_debug():
+                video = VideoSmall(self, stream_conf, 30)
+                self.streams[stream_conf.id_] = video
+                self.layout_.addWidget(video)
 
         self.current_stream_id = None
 
@@ -69,3 +79,17 @@ class VideoThumbnailView(QWidget):
             self.current_stream_id = None
 
 
+# DEBUG
+def get_stream_configurations_debug():
+    from api.data_structures import StreamConfiguration
+    configs = [
+        StreamConfiguration(name="Image1",
+                            connection_type="image",
+                            parameters={"path": "ui/resources/images/cat.jpg"},
+                            id_=1010101),
+        StreamConfiguration(name="Image1",
+                            connection_type="image",
+                            parameters={"path": "ui/resources/images/video.jpeg"},
+                            id_=2020202)]
+
+    return configs

@@ -8,8 +8,8 @@ class VideoSmall(StreamWidget):
 
     stream_clicked = pyqtSignal(int)
 
-    def __init__(self, parent=None, frame_rate=30):
-        super().__init__(frame_rate, parent)
+    def __init__(self, parent=None, stream_conf=None, frame_rate=30):
+        super().__init__(stream_conf, frame_rate, parent)
 
         self.parent = parent
 
@@ -19,8 +19,6 @@ class VideoSmall(StreamWidget):
             self.stream_clicked.connect(parent.thumbnail_stream_clicked_slot)
             parent.remove_selection_border_signal.connect(
                 self.remove_selection_border_slot)
-
-        self.stream_id = 1234  # TODO
 
     def mouseReleaseEvent(self, event):
 

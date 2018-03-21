@@ -13,15 +13,21 @@ class StreamWidget(QGraphicsView):
 
     Makes use of a QTimer to get frames"""
 
-    def __init__(self, frame_rate=30, parent=None):
+    def __init__(self, stream_conf=None, frame_rate=30, parent=None):
         """Init StreamWidget object
 
         :param frame_rate: Frame rate of video in fps
         """
         super().__init__(parent)
 
+        self.stream_conf = stream_conf
+        self.stream_id = stream_conf.id_ if stream_conf else None
+
         # TODO: Without caching this, UI gets laggy. This might be an issue
-        self._pixmap_temp = QPixmap("ui/resources/video.jpeg").scaled(300, 200)
+        if stream_conf:
+            self._pixmap_temp = QPixmap(stream_conf.parameters['path']).scaled(300, 200)
+        else:
+            self._pixmap_temp = QPixmap("ui/resources/images/video.jpeg").scaled(300, 200)
 
         self.scene_ = QGraphicsScene()
         self.setScene(self.scene_)
