@@ -41,7 +41,7 @@ class API:
         :return: StreamConfiguration, initialized with an ID
         """
         req = "/api/streams/"
-        data = self._put(req, stream_configuration)
+        data = self._put_codec(req, stream_configuration)
         config = StreamConfiguration.from_dict(data)
         return config
 
@@ -75,12 +75,28 @@ class API:
         {“stream_id1”: [ZoneStatus, ZoneStatus], “stream_id2”: [ZoneStatus]}
         """
 
+    # Alerts
     def get_unverified_alerts(self, stream_id):
         """Gets all alerts that have not been verified or rejected
 
         :param stream_id:
         :return:
         """
+        req = "/api/alerts/unverified".format(
+            stream_id=stream_id)
+        data = self._get(req, params={"stream_id": str(stream_id)})
+        alerts = [Alert.from_dict(a) for a in data]
+        return alerts
+
+    def set_alert_verification(self, alert_id, verified_as: bool):
+        """Sets an alert verified as True or False
+        :param stream_id: The stream that the alert is part of
+        :param alert_id: The
+        :return: The modified Alert
+        """
+        req = "/api/alerts/{alert_id}".format(alert_id=alert_id)
+        resp = self.put(self._full_url(req), data=ujson.dumps(verified_as))
+
 
     # Backend Capabilities
     def get_engine_configuration(self):
@@ -102,8 +118,8 @@ class API:
 
     def get_zone(self, stream_id, zone_id):
         """Get a specific zone"""
-        zones = self.get_zones(stream_id)
-        zones = [zone for zone in zones if zone.id == zone_id]
+        data = self.get_zones(stream_id)
+        zones = [zone for zone in data if zone.id == zone_id]
         assert len(zones) != 0, ("A zone with that stream_id and zone_id could"
                                  " not be found!")
         return zones[0]
@@ -116,26 +132,30 @@ class API:
         :return: Zone, initialized with an ID
         """
         req = "/api/streams/{stream_id}/zones".format(stream_id=stream_id)
-        data = self._put(req, zone)
+        data = self._put_codec(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
 
-    def _get(self, api_url):
-        url = "{base_url}{api_url}".format(
-            base_url=self._base_url,
-            api_url=api_url)
-
-        response = self.get(url)
+    def _get(self, api_url, params=None):
+        """
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param params: The "query_string" to add to the url. In the format
+        of a dict, {"key": "value", ...} key and val must be a string
+        :return:
+        """
+        response = self.get(self._full_url(api_url), params=params)
         return ujson.loads(response.content)
 
-    def _put(self, api_url, codec: Codec):
-        url = "{base_url}{api_url}".format(
-            base_url=self._base_url,
-            api_url=api_url)
+    def _put_codec(self, api_url, codec: Codec):
         data = codec.to_json()
-        response = self.put(url, data=data)
+        response = self.put(self._full_url(api_url), data=data)
         return ujson.loads(response.content)
 
+    def _full_url(self, api_url):
+        url = "{base_url}{api_url}".format(
+            base_url=self._base_url,
+            api_url=api_url)
+        return url
 
 if __name__ == "__main__":
     api = API("http://localhost", 8000)
