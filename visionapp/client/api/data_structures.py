@@ -26,12 +26,12 @@ class Detection(Codec):
     have a "face" object as a child. It can also own several Attributes. For
     example, a "person" can exhibit a behaviour. A Face can have a gender.
     """
+
     def __init__(self, *, class_name, rect, children, attributes):
         self.class_name = class_name
         self.rect = rect
         self.children = children
         self.attributes = attributes
-
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -52,6 +52,7 @@ class Detection(Codec):
 class Attribute(Codec):
     """This holds an attribute of a detection
     """
+
     def __init__(self, *, category, value):
         self.category = category
         self.value = value
@@ -68,6 +69,7 @@ class Attribute(Codec):
 class ZoneAlarmCondition(Codec):
     """This holds logic information for a ZoneAlarm.
     """
+
     def __init__(self, *, test, check_value, with_class_name, attribute):
         self.test = test
         self.check_value = check_value
@@ -100,8 +102,6 @@ class ZoneAlarm(Codec):
         self.use_active_time = use_active_time
         self.active_start_time = active_start_time
         self.active_end_time = active_end_time
-
-
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -225,7 +225,6 @@ class StreamConfiguration(Codec):
         self.connection_type = connection_type
         self.parameters = parameters
 
-
     def to_dict(self):
         d = dict(self.__dict__)
         d["id"] = d.pop("id_")
@@ -260,5 +259,3 @@ class EngineConfiguration(Codec):
         return EngineConfiguration(version=d["version"],
                                    detectable=d["detectable"],
                                    max_streams=d["max_streams"])
-
-
