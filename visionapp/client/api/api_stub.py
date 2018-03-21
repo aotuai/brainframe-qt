@@ -7,8 +7,8 @@ class API:
     _instance = None
 
     # For testing purposes
-    get = requests.get
-    put = requests.put
+    get = staticmethod(requests.get)
+    put = staticmethod(requests.put)
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:

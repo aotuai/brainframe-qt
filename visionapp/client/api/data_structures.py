@@ -124,13 +124,19 @@ class ZoneAlarm(Codec):
 class Alert(Codec):
     """This is sent when an Alarm has been triggered.
     An alert can be sent WITHOUT an end_time, but never without a start_time.
+
+    self.verified_as can be True, False or None.
+        If True, then this alert was labeled by a person as being legitimate
+        If False,then this alert was labeled by a person as being a false alarm
+        If None, then this alert has not been labeled yet.
     """
 
-    def __init__(self, *, alarm_id, start_time, end_time, id_=None):
+    def __init__(self, *, alarm_id, start_time, end_time, verified_as, id_=None):
         self.id = id_
         self.alarm_id = alarm_id
         self.start_time = start_time
         self.end_time = end_time
+        self.verified_as = verified_as
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -141,7 +147,8 @@ class Alert(Codec):
         return Alert(id_=d["id"],
                      alarm_id=d["alarm_id"],
                      start_time=d["start_time"],
-                     end_time=d["end_time"])
+                     end_time=d["end_time"],
+                     verified_as=d["verified_as"])
 
 
 class Zone(Codec):
