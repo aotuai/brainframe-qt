@@ -67,10 +67,6 @@ class API:
         :return:
         """
 
-    def get_stream_timestamp(self, stream_id):
-        """Get the current timestamp of the stream, from the server side.
-        :returns: A Unix style timestamp for the stream"""
-
     # Get Analysis
     def get_latest_zone_statuses(self):
         """Get all ZoneStatuses
@@ -98,28 +94,24 @@ class API:
 
     # Zone specific stuff
     def get_zones(self, stream_id):
-        """Returns a list of Zone's associated with that stream
-        :param zone_name: If zone_name is specified, only that zone will
-            be returned by this function
-        :param stream_id:
-        :return:
-        """
+        """Returns a list of Zone's associated with that stream"""
         req = "/api/streams/{stream_id}/zones".format(stream_id=str(stream_id))
         data = self._get(req)
         zones = [Zone.from_dict(j) for j in data]
         return zones
 
     def get_zone(self, stream_id, zone_id):
-        req = "/api/streams/{stream_id}/zones/{zone_id}".format(
-            stream_id=stream_id,
-            zone_id=zone_id)
-        data = self._get(req)
-        zone = Zone.from_dict(data)
-        return zone
+        """Get a specific zone"""
+        zones = self.get_zones(stream_id)
+        zones = [zone for zone in zones if zone.id == zone_id]
+        assert len(zones) != 0, ("A zone with that stream_id and zone_id could"
+                                 " not be found!")
+        return zones[0]
 
-    def set_zone(self, stream_id, zone: Zone):
+    def set_zone(self, stream_id, zone):
         """Update or create a zone. If the Zone doesn't exist, the zone.id
         must be None. An initialized Zone with an ID will be returned.
+        :param stream_id: The stream_id that this zone exists in
         :param zone: A Zone object
         :return: Zone, initialized with an ID
         """
