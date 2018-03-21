@@ -223,11 +223,12 @@ class StreamConfiguration(Codec):
         parameters: {"filepath": "/home/usr/videos/my_vid.mp4"}
     """
 
-    def __init__(self, *, name, connection_type, parameters, id_=None):
+    def __init__(self, *, name, connection_type, parameters, id_=None, is_active=None):
         self.name = name
         self.id = id_
         self.connection_type = connection_type
         self.parameters = parameters
+        self.is_active = is_active
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -235,11 +236,11 @@ class StreamConfiguration(Codec):
 
     @staticmethod
     def from_dict(d):
-        # Get the config
         return StreamConfiguration(name=d["name"],
                                    id_=d["id"],
                                    connection_type=d["connection_type"],
-                                   parameters=d["parameters"])
+                                   parameters=d["parameters"],
+                                   is_active=d["is_active"])
 
 
 # Engine related stuff

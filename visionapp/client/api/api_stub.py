@@ -53,6 +53,12 @@ class API:
         """
 
     # Stream Specific stuff
+    def start_analyzing(self, stream_id):
+        pass
+
+    def stop_analyzing(self, stream_id):
+        pass
+
     def start_stream(self, stream_id):
         """Tell server to start a stream
         :param stream_id: The ID of the stream configuration to open.
