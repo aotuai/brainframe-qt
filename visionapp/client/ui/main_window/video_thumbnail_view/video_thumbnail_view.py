@@ -34,14 +34,14 @@ class VideoThumbnailView(QWidget):
         if api is not None:
             for stream_conf in api.get_stream_configurations():
                 video = VideoSmall(self, stream_conf, 30)
-                self.streams[stream_conf.id_] = video
+                self.streams[stream_conf.id] = video
                 self.layout_.addWidget(video)
         else:
             # Create fake videos for QtDesigner
             # TODO: Use mock for this
             for stream_conf in get_stream_configurations_debug():
                 video = VideoSmall(self, stream_conf, 30)
-                self.streams[stream_conf.id_] = video
+                self.streams[stream_conf.id] = video
                 self.layout_.addWidget(video)
 
         self.current_stream_id = None

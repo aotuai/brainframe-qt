@@ -21,7 +21,7 @@ class StreamWidget(QGraphicsView):
         super().__init__(parent)
 
         self.stream_conf = stream_conf
-        self.stream_id = stream_conf.id_ if stream_conf else None
+        self.stream_id = stream_conf.id if stream_conf else None
 
         # TODO: Without caching this, UI gets laggy. This might be an issue
         if stream_conf:

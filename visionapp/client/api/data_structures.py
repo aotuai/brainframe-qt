@@ -97,7 +97,7 @@ class ZoneAlarm(Codec):
     def __init__(self, *, name, conditions,
                  use_active_time, active_start_time, active_end_time, id_=None):
         self.name = name
-        self.id_ = id_
+        self.id = id_
         self.conditions = conditions
         self.use_active_time = use_active_time
         self.active_start_time = active_start_time
@@ -105,7 +105,6 @@ class ZoneAlarm(Codec):
 
     def to_dict(self):
         d = dict(self.__dict__)
-        d["id"] = d.pop("id_")
         d["conditions"] = [ZoneAlarmCondition.to_dict(cond)
                            for cond in self.conditions]
         return d
@@ -128,14 +127,13 @@ class Alert(Codec):
     """
 
     def __init__(self, *, alarm_id, start_time, end_time, id_=None):
-        self.id_ = id_
+        self.id = id_
         self.alarm_id = alarm_id
         self.start_time = start_time
         self.end_time = end_time
 
     def to_dict(self):
         d = dict(self.__dict__)
-        d["id"] = d.pop("id_")
         return d
 
     @staticmethod
@@ -152,14 +150,13 @@ class Zone(Codec):
 
     def __init__(self, *, name, alarms, coords, id_=None):
         self.name = name
-        self.id_ = id_
+        self.id = id_
         self.alarms = alarms
         self.coords = coords
 
     def to_dict(self):
         d = dict(self.__dict__)
         d["alarms"] = [alarm.to_dict() for alarm in self.alarms]
-        d["id"] = d.pop("id_")
         return d
 
     @staticmethod
@@ -221,13 +218,12 @@ class StreamConfiguration(Codec):
 
     def __init__(self, *, name, connection_type, parameters, id_=None):
         self.name = name
-        self.id_ = id_
+        self.id = id_
         self.connection_type = connection_type
         self.parameters = parameters
 
     def to_dict(self):
         d = dict(self.__dict__)
-        d["id"] = d.pop("id_")
         return d
 
     @staticmethod

@@ -36,7 +36,7 @@ class API:
 
     def set_stream_configuration(self, stream_configuration):
         """Update an existing stream configuration or create a new one
-        If creating a new one, the stream_configuration.id_ will be None
+        If creating a new one, the stream_configuration.id will be None
         :param stream_configuration: StreamConfiguration
         :return: StreamConfiguration, initialized with an ID
         """
@@ -118,7 +118,7 @@ class API:
         return zone
 
     def set_zone(self, stream_id, zone: Zone):
-        """Update or create a zone. If the Zone doesn't exist, the zone.id_
+        """Update or create a zone. If the Zone doesn't exist, the zone.id
         must be None. An initialized Zone with an ID will be returned.
         :param zone: A Zone object
         :return: Zone, initialized with an ID

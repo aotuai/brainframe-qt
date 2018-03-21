@@ -37,7 +37,7 @@ class VideoSmall(StreamWidget):
 
     @pyqtSlot(int)
     def remove_selection_border_slot(self, stream_id):
-        """Remove border around stream if stream_id matches self.id_"""
+        """Remove border around stream if stream_id matches self.id"""
         if self.stream_id == stream_id:
             # TODO: Remove border
             pass
