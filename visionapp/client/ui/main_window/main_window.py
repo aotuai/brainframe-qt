@@ -27,3 +27,4 @@ class MainWindow(QMainWindow):
         """Called by expanded_view when expanded video is closed"""
         self.video_layout.setStretch(0, 2)
         self.video_layout.setStretch(1, 0)
+
