@@ -31,7 +31,7 @@ class API:
         """
         req = "/api/streams/"
         data = self._get(req)
-        configs = [StreamConfiguration.from_dict(data) for d in data]
+        configs = [StreamConfiguration.from_dict(d) for d in data]
         return configs
 
     def set_stream_configuration(self, stream_configuration):
@@ -44,7 +44,6 @@ class API:
         data = self._put(req, stream_configuration)
         config = StreamConfiguration.from_dict(data)
         return config
-
 
     def delete_stream_configuration(self, stream_name):
         """
