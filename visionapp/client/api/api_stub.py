@@ -1,6 +1,6 @@
 import requests
 
-from api.data_structures import *
+from visionapp.client.api.data_structures import *
 
 
 class API:
