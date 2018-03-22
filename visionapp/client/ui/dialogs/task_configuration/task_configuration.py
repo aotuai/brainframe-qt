@@ -1,20 +1,35 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
 from ui.resources import client_paths
-from ui.dialogs.alarm_creation.alarm_creation import AlarmCreationDialog
+from ui.dialogs import AlarmCreationDialog
+# TODO: Shorten (most likely with an __init__.py)
 from ui.dialogs.task_configuration.zone_list.zone_and_tasks.zone_and_tasks \
     import ZoneAndTasks
 
 
-class TaskConfiguration(QWidget):
+class TaskConfiguration(QDialog):
 
-    def __init__(self, parent):
+    def __init__(self, parent=None, stream_conf=None):
 
         super().__init__(parent)
 
         loadUi(client_paths.task_configuration_ui, self)
+
+        self.stream_conf = stream_conf if stream_conf else None
+        if stream_conf:
+            self.video.change_stream(stream_conf)
+
+    @classmethod
+    def open_configuration(cls, stream_conf):
+        dialog = cls(stream_conf=stream_conf)
+
+        dialog.video.change_stream(stream_conf)
+
+        result = dialog.exec_()
+
+        return result
 
     @pyqtSlot()
     def new_alarm(self):

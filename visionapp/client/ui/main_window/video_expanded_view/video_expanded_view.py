@@ -1,10 +1,10 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
 from api.codecs import StreamConfiguration
+from ui.dialogs import TaskConfiguration
 from ui.resources import client_paths
-from .video_large.video_large import VideoLarge
 
 
 class VideoExpandedView(QWidget):
@@ -18,6 +18,8 @@ class VideoExpandedView(QWidget):
 
         loadUi(client_paths.video_expanded_view_ui, self)
 
+        self.current_video = None
+
         self._set_widgets_hidden(True)
 
     @pyqtSlot(object)
@@ -26,6 +28,8 @@ class VideoExpandedView(QWidget):
 
         # TODO:
         self.expanded_video.change_stream(stream_conf)
+
+        self.current_video = stream_conf
 
         # Show expanded view widgets
         self._set_widgets_hidden(False)
@@ -38,6 +42,8 @@ class VideoExpandedView(QWidget):
 
         self.expanded_video.change_stream(None)
 
+        self.current_video = None
+
         # Hide expanded view widgets
         self._set_widgets_hidden(True)
 
@@ -48,6 +54,11 @@ class VideoExpandedView(QWidget):
     @pyqtSlot()
     def open_task_config(self):
         print("Opening task configuration")
+        config = TaskConfiguration.open_configuration(self.current_video)
+        if not config:
+            return
+
+        # TODO
 
     @pyqtSlot()
     def open_source_config(self):
