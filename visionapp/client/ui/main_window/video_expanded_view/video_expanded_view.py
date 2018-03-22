@@ -17,6 +17,8 @@ class VideoExpandedView(QWidget):
 
         loadUi(client_paths.video_expanded_view_ui, self)
 
+        self._set_widgets_hidden(True)
+
     @pyqtSlot(int)
     def open_expanded_view_slot(self, stream_id):
         """Signaled by thumbnail view when thumbnail video is clicked"""
@@ -24,12 +26,8 @@ class VideoExpandedView(QWidget):
         # TODO:
         # self.expanded_video.change_stream(stream_id)
 
-        # TODO: Don't hardcode these
-        self.expanded_video.setHidden(False)
-        self.hide_button.setHidden(False)
-        self.alert_log.setHidden(False)
-        self.task_config_button.setHidden(False)
-        self.source_config_button.setHidden(False)
+        # Show expanded view widgets
+        self._set_widgets_hidden(False)
 
         self.sizePolicy().setHorizontalStretch(5)
 
@@ -40,12 +38,8 @@ class VideoExpandedView(QWidget):
         # TODO:
         # self.expanded_video.change_stream(None)
 
-        # TODO: Don't hardcode these
-        self.expanded_video.setHidden(True)
-        self.hide_button.setHidden(True)
-        self.alert_log.setHidden(True)
-        self.task_config_button.setHidden(True)
-        self.source_config_button.setHidden(True)
+        # Hide expanded view widgets
+        self._set_widgets_hidden(True)
 
         # Alert slots that expanded stream was closed
         # VideoThumbnailView will remove highlight from thumbnail video
@@ -58,3 +52,10 @@ class VideoExpandedView(QWidget):
     @pyqtSlot()
     def open_source_config(self):
         print("Opening source configuration")
+
+    def _set_widgets_hidden(self, hidden=True):
+        self.expanded_video.setHidden(hidden)
+        self.hide_button.setHidden(hidden)
+        self.alert_log.setHidden(hidden)
+        self.task_config_button.setHidden(hidden)
+        self.source_config_button.setHidden(hidden)

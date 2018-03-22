@@ -31,7 +31,7 @@
      <widget class="Toolbar" name="Toolbar"/>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="video_layout">
+     <layout class="QHBoxLayout" name="video_layout" stretch="2,0">
       <item>
        <widget class="VideoThumbnailView" name="VideoThumbnailView">
         <property name="sizePolicy">
