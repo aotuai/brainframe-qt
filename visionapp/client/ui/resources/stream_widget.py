@@ -20,14 +20,10 @@ class StreamWidget(QGraphicsView):
         """
         super().__init__(parent)
 
-        self.stream_conf = stream_conf
-        self.stream_id = stream_conf.id if stream_conf else None
+        self.stream_conf = None
+        self.stream_id = None
 
-        # TODO: Without caching this, UI gets laggy. This might be an issue
-        if stream_conf:
-            self._pixmap_temp = QPixmap(stream_conf.parameters['path']).scaled(300, 200)
-        else:
-            self._pixmap_temp = QPixmap("ui/resources/images/video.jpeg").scaled(300, 200)
+        self.change_stream(stream_conf)
 
         self.scene_ = QGraphicsScene()
         self.setScene(self.scene_)
@@ -42,7 +38,7 @@ class StreamWidget(QGraphicsView):
         self.frame_update_timer = QTimer()
         # noinspection PyUnresolvedReferences
         self.frame_update_timer.timeout.connect(self.update_frame)
-        self.frame_update_timer.start(1000 // self.frame_rate)
+        self.frame_update_timer.start(1000 // frame_rate)
 
     def update_frame(self):
         """Grab the newest frame from the Stream object"""
@@ -52,14 +48,18 @@ class StreamWidget(QGraphicsView):
         self.current_frame = self.scene_.addPixmap(self._pixmap_temp)
 
     # TODO
-    def change_stream(self, stream_id):
+    def change_stream(self, stream_conf):
         """Change the stream source of the video
 
-        If stream_id is None, the Widget will remove stop grabbing frames"""
-        if stream_id is None:
-            pass
+        If stream_conf is None, the Widget will remove stop grabbing frames"""
+        self.stream_conf = stream_conf
+        self.stream_id = stream_conf.id if stream_conf else None
+
+        # TODO: Without caching this, UI gets laggy. This might be an issue
+        if stream_conf:
+            self._pixmap_temp = QPixmap(stream_conf.parameters['path']).scaled(300, 200)
         else:
-            pass
+            self._pixmap_temp = QPixmap("ui/resources/images/video.jpeg").scaled(300, 200)
 
     @pyqtProperty(int)
     def frame_rate(self):

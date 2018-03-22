@@ -10,11 +10,8 @@ from ui.resources.flow_layout import FlowLayout
 
 
 class VideoThumbnailView(QWidget):
-
-    thumbnail_stream_clicked_signal = pyqtSignal(int)
+    thumbnail_stream_clicked_signal = pyqtSignal(object)
     """Used to alert outer widget of change"""
-
-    remove_selection_border_signal = pyqtSignal(int)
 
     def __init__(self, parent=None):
 
@@ -58,25 +55,22 @@ class VideoThumbnailView(QWidget):
         #     return
 
         # Remove selection border from previously selected video
-        if self.current_stream_id:
-            self.remove_selection_border_signal.emit(self.current_stream_id)
-
+        self.remove_selected_thumbnail_highlight_slot()
         # Alert outer widget
-        self.thumbnail_stream_clicked_signal.emit(stream_id)
+        self.thumbnail_stream_clicked_signal.emit(
+            self.streams[stream_id].stream_conf)
 
         # Store stream as current stream
         self.current_stream_id = stream_id
 
     @pyqtSlot()
-    def remove_all_thumbnail_highlight_slots(self):
+    def remove_selected_thumbnail_highlight_slot(self):
         """Called by outer widget when expanded video is explicitly closed
 
         Removes selection border from currently selected video
         """
-
         if self.current_stream_id:
-            self.remove_selection_border_signal.emit(self.current_stream_id)
-            self.current_stream_id = None
+            self.streams[self.current_stream_id].remove_selection_border()
 
 
 # DEBUG
@@ -89,7 +83,8 @@ def get_stream_configurations_debug():
                             id_=1010101),
         StreamConfiguration(name="Image1",
                             connection_type="image",
-                            parameters={"path": "ui/resources/images/video.jpeg"},
+                            parameters={
+                                "path": "ui/resources/images/video.jpeg"},
                             id_=2020202)]
 
     return configs

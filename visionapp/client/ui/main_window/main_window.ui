@@ -78,9 +78,9 @@
  <connections>
   <connection>
    <sender>VideoThumbnailView</sender>
-   <signal>thumbnail_stream_clicked_signal(int)</signal>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
    <receiver>VideoExpandedView</receiver>
-   <slot>open_expanded_view_slot(int)</slot>
+   <slot>open_expanded_view_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>312</x>
@@ -96,7 +96,7 @@
    <sender>VideoExpandedView</sender>
    <signal>expanded_stream_closed_signal()</signal>
    <receiver>VideoThumbnailView</receiver>
-   <slot>remove_all_thumbnail_highlight_slots()</slot>
+   <slot>remove_selected_thumbnail_highlight_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>586</x>
@@ -126,7 +126,7 @@
   </connection>
   <connection>
    <sender>VideoThumbnailView</sender>
-   <signal>thumbnail_stream_clicked_signal(int)</signal>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
    <receiver>MainWindow</receiver>
    <slot>show_video_expanded_view()</slot>
    <hints>

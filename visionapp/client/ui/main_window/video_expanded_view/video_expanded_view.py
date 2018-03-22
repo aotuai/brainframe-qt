@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QHBoxLayout, QWidget
 from PyQt5.uic import loadUi
 
+from api.codecs import StreamConfiguration
 from ui.resources import client_paths
 from .video_large.video_large import VideoLarge
 
@@ -19,12 +20,12 @@ class VideoExpandedView(QWidget):
 
         self._set_widgets_hidden(True)
 
-    @pyqtSlot(int)
-    def open_expanded_view_slot(self, stream_id):
+    @pyqtSlot(object)
+    def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
         """Signaled by thumbnail view when thumbnail video is clicked"""
 
         # TODO:
-        # self.expanded_video.change_stream(stream_id)
+        self.expanded_video.change_stream(stream_conf)
 
         # Show expanded view widgets
         self._set_widgets_hidden(False)

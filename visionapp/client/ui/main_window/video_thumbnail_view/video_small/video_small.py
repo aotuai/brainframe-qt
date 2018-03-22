@@ -17,8 +17,6 @@ class VideoSmall(StreamWidget):
         # and signals using QtDesigner and have to do it manually
         if parent is not None:  # Required or QtDesigner throws errors
             self.stream_clicked.connect(parent.thumbnail_stream_clicked_slot)
-            parent.remove_selection_border_signal.connect(
-                self.remove_selection_border_slot)
 
     def mouseReleaseEvent(self, event):
 
@@ -35,9 +33,6 @@ class VideoSmall(StreamWidget):
         """Add border around stream"""
         pass
 
-    @pyqtSlot(int)
-    def remove_selection_border_slot(self, stream_id):
-        """Remove border around stream if stream_id matches self.id"""
-        if self.stream_id == stream_id:
-            # TODO: Remove border
-            pass
+    def remove_selection_border(self):
+        """Remove border around stream"""
+        pass
