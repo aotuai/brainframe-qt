@@ -96,7 +96,7 @@
    <sender>VideoExpandedView</sender>
    <signal>expanded_stream_closed_signal()</signal>
    <receiver>VideoThumbnailView</receiver>
-   <slot>remove_selected_thumbnail_highlight_slot()</slot>
+   <slot>expand_thumbnail_view_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>586</x>
