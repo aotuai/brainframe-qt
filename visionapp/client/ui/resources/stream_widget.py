@@ -1,5 +1,5 @@
 # noinspection PyUnresolvedReferences
-from PyQt5.QtCore import pyqtProperty, QTimer
+from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
@@ -45,7 +45,11 @@ class StreamWidget(QGraphicsView):
 
         # TODO: Use Stream frame
         # pixmap = QPixmap(self.video_stream.get_frame())
-        self.current_frame = self.scene_.addPixmap(self._pixmap_temp)
+        if not self.current_frame:
+            self.current_frame = self.scene_.addPixmap(self._pixmap_temp)
+        else:
+            self.current_frame.setPixmap(self._pixmap_temp)
+        self.fitInView(self.current_frame)
 
     # TODO
     def change_stream(self, stream_conf):
@@ -57,9 +61,10 @@ class StreamWidget(QGraphicsView):
 
         # TODO: Without caching this, UI gets laggy. This might be an issue
         if stream_conf:
-            self._pixmap_temp = QPixmap(stream_conf.parameters['path']).scaled(300, 200)
+            self._pixmap_temp = QPixmap(stream_conf.parameters['path'])
         else:
-            self._pixmap_temp = QPixmap("ui/resources/images/video.jpeg").scaled(300, 200)
+            # TODO: Don't hardcode path
+            self._pixmap_temp = QPixmap("ui/resources/images/video_not_found.png")
 
     @pyqtProperty(int)
     def frame_rate(self):
@@ -69,4 +74,8 @@ class StreamWidget(QGraphicsView):
     def frame_rate(self, frame_rate):
         self.frame_update_timer.setInterval(1000 // frame_rate)
         self._frame_rate = frame_rate
+
+    def resizeEvent(self, event):
+        self.fitInView(self.current_frame)
+        super().resizeEvent(event)
 

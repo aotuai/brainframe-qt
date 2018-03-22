@@ -34,10 +34,9 @@ class VideoExpandedView(QWidget):
 
     @pyqtSlot()
     def expanded_stream_closed_slot(self):
-        """Signaled by expanded video widget when widget is closed"""
+        """Signaled by close button"""
 
-        # TODO:
-        # self.expanded_video.change_stream(None)
+        self.expanded_video.change_stream(None)
 
         # Hide expanded view widgets
         self._set_widgets_hidden(True)
