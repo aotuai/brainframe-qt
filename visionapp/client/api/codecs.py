@@ -50,10 +50,11 @@ class Detection(Codec):
 
 
 class Attribute(Codec):
-    """This holds an attribute of a detection
+    """This holds an attribute of a detection. These should _not_ be made
+    on the client side
     """
 
-    def __init__(self, *, category, value):
+    def __init__(self, *, category=None, value=None):
         self.category = category
         self.value = value
 
@@ -70,11 +71,12 @@ class ZoneAlarmCondition(Codec):
     """This holds logic information for a ZoneAlarm.
     """
 
-    def __init__(self, *, test, check_value, with_class_name, attribute):
+    def __init__(self, *, test, check_value, with_class_name, attribute, id_=None):
         self.test = test
         self.check_value = check_value
         self.with_class_name = with_class_name
         self.with_attribute = attribute
+        self.id = id_
 
     def to_dict(self) -> dict:
         d = dict(self.__dict__)
@@ -87,7 +89,8 @@ class ZoneAlarmCondition(Codec):
             test=d["test"],
             check_value=d["check_value"],
             with_class_name=d["with_class_name"],
-            attribute=Attribute.from_dict(d["with_attribute"]))
+            attribute=Attribute.from_dict(d["with_attribute"]),
+            id_=d["id"])
 
 
 class ZoneAlarm(Codec):

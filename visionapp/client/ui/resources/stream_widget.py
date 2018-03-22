@@ -32,7 +32,7 @@ class StreamWidget(QGraphicsView):
         self.scene_ = QGraphicsScene()
         self.setScene(self.scene_)
 
-        self.video_stream = None  # TODO: Stream()
+        self.video_stream = None  # TODO: StreamReader()
         self.current_frame = None
 
         self._frame_rate = frame_rate

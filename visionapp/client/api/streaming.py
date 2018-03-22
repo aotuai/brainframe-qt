@@ -26,22 +26,6 @@ class StreamManager:
         # run self.close_stream for each stream id
 
 
-class Stream(Thread):
-    def __init__(self, socket):
-        pass
-
-    def get_frame(self):
-        """Returns the latest frame received by the thread.
-        """
-        pass
-
-    def run(self):
-        """Get latest frames
-        Constantly pulls frames from the socket and caches them for use
-        of get_frame
-        """
-
-
 
 class StatusPoller(Thread):
     """ This solves the problem that multiple UI elements will want to know the

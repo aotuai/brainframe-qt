@@ -1,6 +1,6 @@
 import requests
 
-from visionapp.client.api.data_structures import *
+from visionapp.client.api.codecs import *
 
 
 class API:
@@ -25,13 +25,17 @@ class API:
         """
 
     # Stream Configuration Stuff
-    def get_stream_configurations(self):
+    def get_stream_configurations(self, only_get_active=False):
         """Get all StreamConfigurations that currently exist.
+        :param only_get_active: If True, It will get StreamConfigurations that
+        are currently active, AKA being streamed
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
         req = "/api/streams/"
         data = self._get(req)
         configs = [StreamConfiguration.from_dict(d) for d in data]
+        if only_get_active:
+            configs = [c for c in configs if c.is_active]
         return configs
 
     def set_stream_configuration(self, stream_configuration):
@@ -52,26 +56,35 @@ class API:
         :return:
         """
 
+    # Setting server analysis tasks
     # Stream Specific stuff
     def start_analyzing(self, stream_id):
+        """
+        Tell the server to set this stream config to active, and start analysis
+        :param stream_id:
+        :return:
+        Raises a LicenseException if you tried to start more than
+        STREAMS_ALLOWED_BY_LICENSE
+        """
         pass
 
     def stop_analyzing(self, stream_id):
-        pass
-
-    def start_stream(self, stream_id):
-        """Tell server to start a stream
-        :param stream_id: The ID of the stream configuration to open.
-        :return:The URL to connect to for the stream.
-            cv2.VideoCapture(URL) must be compatible.
         """
 
-    def end_stream(self, stream_id):
-        """
-        This tells BrainServer to close its socket for this stream
         :param stream_id:
         :return:
         """
+
+    def get_stream(self, stream_id):
+        """Get the URL for this stream from the server
+        :param stream_id: The ID of the stream configuration to open.
+        :return:The URL to connect to for the stream.
+            cv2.VideoCapture(URL) must be compatible.
+
+        Raises an error if a stream is not active (being analyzed)
+        """
+        # TODO(Alex): make this raise an error if the stream is not active
+
 
     # Get Analysis
     def get_latest_zone_statuses(self):

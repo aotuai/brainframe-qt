@@ -81,7 +81,7 @@ class VideoThumbnailView(QWidget):
 
 # DEBUG
 def get_stream_configurations_debug():
-    from api.data_structures import StreamConfiguration
+    from api.codecs import StreamConfiguration
     configs = [
         StreamConfiguration(name="Image1",
                             connection_type="image",
