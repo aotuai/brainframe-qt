@@ -1,6 +1,6 @@
 import requests
 
-from visionapp.client.api.codecs import *
+from api.codecs import *
 
 
 class API:
