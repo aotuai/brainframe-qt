@@ -1,6 +1,3 @@
-# noinspection PyPep8
-
-
 from pathlib import Path
 
 # UI Paths
@@ -24,6 +21,9 @@ video_thumbnail_view_ui  = Path(video_thumbnail_view_dir, "video_thumbnail_view.
 
 # Dialogs
 dialogs_dir              = Path(ui                      , "dialogs"                )
+
+stream_configuration_dir = Path(dialogs_dir             , "stream_configuration"   )
+stream_configuration_ui  = Path(stream_configuration_dir, "stream_configuration.ui")
 
 alarm_creation_dir       = Path(dialogs_dir             , "alarm_creation"         )
 alarm_creation_ui        = Path(alarm_creation_dir      , "alarm_creation.ui"      )
