@@ -1,3 +1,3 @@
-from .api_stub import API
-from . import codecs
+from api.api_stub import API
+
 api = None
