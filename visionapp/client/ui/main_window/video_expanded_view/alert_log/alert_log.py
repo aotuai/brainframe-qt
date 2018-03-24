@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
-from ui.resources import client_paths
+from visionapp.client.ui.resources.paths import qt_ui_paths
 
 
 class AlertLog(QWidget):
@@ -10,4 +10,4 @@ class AlertLog(QWidget):
 
         super().__init__(parent)
 
-        loadUi(client_paths.alert_log_ui, self)
+        loadUi(qt_ui_paths.alert_log_ui, self)

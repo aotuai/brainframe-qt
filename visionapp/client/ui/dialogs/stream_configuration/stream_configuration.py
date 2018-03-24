@@ -4,7 +4,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
-from ui.resources import client_paths
+from visionapp.client.ui.resources.paths import qt_ui_paths
 
 
 class StreamConfiguration(QDialog):
@@ -19,7 +19,7 @@ class StreamConfiguration(QDialog):
 
         super().__init__(parent)
 
-        loadUi(client_paths.stream_configuration_ui, self)
+        loadUi(qt_ui_paths.stream_configuration_ui, self)
 
         if stream_conf:
             pass

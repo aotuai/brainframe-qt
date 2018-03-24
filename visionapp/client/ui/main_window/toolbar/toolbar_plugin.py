@@ -1,10 +1,10 @@
-from ui.resources import BasePlugin
+from visionapp.client.ui.resources import BasePlugin
 
 
 class Toolbar(BasePlugin):
 
     # noinspection PyUnresolvedReferences
-    from ui.main_window.toolbar.toolbar import Toolbar as Widget
+    from visionapp.client.ui.main_window.toolbar.toolbar import Toolbar as Widget
 
     def __init__(self):
 

@@ -21,7 +21,7 @@ else:
     from tasks.task import Task
     from tasks.zone import Zone
 
-from ui.resources.datatypes.alarm import Alarm
+from visionapp.client.ui.resources.datatypes.alarm import Alarm
 
 
 class ZoneAndTasks(QWidget):

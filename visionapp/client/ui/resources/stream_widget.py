@@ -66,7 +66,7 @@ class StreamWidget(QGraphicsView):
         # It might also be because of the IO read. If the frame is from a video
         # object
         if stream_conf:
-            self._pixmap_temp = QPixmap(stream_conf.parameters['path'])
+            self._pixmap_temp = QPixmap(str(stream_conf.parameters['path']))
         else:
             # TODO: Don't hardcode path
             self._pixmap_temp = QPixmap("ui/resources/images/video_not_found.png")

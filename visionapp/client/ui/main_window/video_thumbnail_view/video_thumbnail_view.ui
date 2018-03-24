@@ -16,6 +16,11 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="main_layout"/>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

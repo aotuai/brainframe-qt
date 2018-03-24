@@ -1,6 +1,6 @@
 from threading import Thread
 
-from visionapp.stream_capture import StreamReader
+from visionapp.shared.stream_capture import StreamReader
 
 
 class StreamManager:

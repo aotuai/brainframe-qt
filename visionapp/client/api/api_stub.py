@@ -1,8 +1,8 @@
 import requests
 import ujson
 
-from api.codecs import StreamConfiguration, Zone, Alert, Codec
-from api.streaming import StreamManager
+from visionapp.client.api.codecs import StreamConfiguration, Zone, Alert, Codec
+from visionapp.client.api.streaming import StreamManager
 
 
 class API:

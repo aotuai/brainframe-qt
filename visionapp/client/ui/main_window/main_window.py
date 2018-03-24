@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
-from ui.resources import client_paths
+from visionapp.client.ui.resources.paths import qt_ui_paths
 
 
 class MainWindow(QMainWindow):
@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        loadUi(client_paths.main_window_ui, self).show()
+        loadUi(qt_ui_paths.main_window_ui, self).show()
 
     @pyqtSlot()
     def show_video_expanded_view(self):

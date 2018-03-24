@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 from PyQt5.uic import loadUi
 
-from ui.resources import client_paths
+from visionapp.client.ui.resources.paths import qt_ui_paths
 
 # TODO: Scroll!
 class ZoneList(QScrollArea):
@@ -12,7 +12,7 @@ class ZoneList(QScrollArea):
     def __init__(self, parent):
         super().__init__(parent)
 
-        loadUi(client_paths.zone_list_ui, self)
+        loadUi(qt_ui_paths.zone_list_ui, self)
 
         self.zones = {}
 

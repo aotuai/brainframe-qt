@@ -1,10 +1,14 @@
+import os
 from pathlib import Path
 
-# UI Paths
-ui                       = Path("ui")
+
+# TODO: Figure out how to get rid of the visionapp/client from top level path
+ui_dir                   = Path("ui"                                               )
+if not os.getcwd().endswith("client"):
+    ui_dir               = Path("visionapp", "client"   , ui_dir                   )
 
 # Main Window
-main_window_dir          = Path(ui                      , "main_window"            )
+main_window_dir          = Path(ui_dir                  , "main_window"            )
 main_window_ui           = Path(main_window_dir         , "main_window.ui"         )
 
 toolbar_dir              = Path(main_window_dir         , "toolbar"                )
@@ -19,8 +23,11 @@ alert_log_ui             = Path(alert_log_dir           , "alert_log.ui"        
 video_thumbnail_view_dir = Path(main_window_dir         , "video_thumbnail_view"   )
 video_thumbnail_view_ui  = Path(video_thumbnail_view_dir, "video_thumbnail_view.ui")
 
+new_stream_dir           = Path(video_thumbnail_view_dir, "new_stream"             )
+new_stream_ui            = Path(new_stream_dir          , "new_stream.ui"          )
+
 # Dialogs
-dialogs_dir              = Path(ui                      , "dialogs"                )
+dialogs_dir              = Path(ui_dir                  , "dialogs"                )
 
 stream_configuration_dir = Path(dialogs_dir             , "stream_configuration"   )
 stream_configuration_ui  = Path(stream_configuration_dir, "stream_configuration.ui")
@@ -33,4 +40,3 @@ task_configuration_ui    = Path(task_configuration_dir  , "task_configuration.ui
 
 zone_list_dir            = Path(task_configuration_dir  , "zone_list"              )
 zone_list_ui             = Path(zone_list_dir           , "zone_list.ui"           )
-

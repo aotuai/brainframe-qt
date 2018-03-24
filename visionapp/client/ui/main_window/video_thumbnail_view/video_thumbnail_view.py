@@ -6,9 +6,9 @@ from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QGridLayout
 from PyQt5.uic import loadUi
 
-from api import api
+from visionapp.client.api import api
 
-from ui.resources import client_paths
+from visionapp.client.ui.resources.paths import qt_ui_paths, image_paths
 from .video_small.video_small import VideoSmall
 
 
@@ -25,10 +25,7 @@ class VideoThumbnailView(QWidget):
 
         super().__init__(parent)
 
-        loadUi(client_paths.video_thumbnail_view_ui, self)
-
-        self.layout_ = QGridLayout(self)
-        self.setLayout(self.layout_)
+        loadUi(qt_ui_paths.video_thumbnail_view_ui, self)
 
         self._grid_width = grid_width
         self._grid_width_expanded = grid_width
@@ -95,42 +92,40 @@ class VideoThumbnailView(QWidget):
         self._grid_width = grid_width
 
         widgets = []
-        for i in reversed(range(self.layout_.count())):
-            widgets.insert(0, self.layout_.itemAt(i).widget())
-            self.layout_.removeItem(self.layout_.itemAt(i))
+        for i in reversed(range(self.main_layout.count())):
+            widgets.insert(0, self.main_layout.itemAt(i).widget())
+            self.main_layout.removeItem(self.main_layout.itemAt(i))
 
         for widget in widgets:
             self._add_widget_to_layout(widget)
 
     def _add_widget_to_layout(self, widget):
 
-        row, col = divmod(self.layout_.count(), self._grid_width)
+        row, col = divmod(self.main_layout.count(), self._grid_width)
 
-        self.layout_.addWidget(widget, row, col)
+        self.main_layout.addWidget(widget, row, col)
 
 
 # DEBUG
 def get_stream_configurations_debug():
-    from api.codecs import StreamConfiguration
+    from visionapp.client.api.codecs import StreamConfiguration
     configs = [
         StreamConfiguration(name="Image1",
                             connection_type="image",
-                            parameters={"path": "ui/resources/images/cat.jpg"},
+                            parameters={"path": image_paths.cat_test_video},
                             id_=1010101),
         StreamConfiguration(name="Image1",
                             connection_type="image",
                             parameters={
-                                "path": "ui/resources/images/video.jpeg"},
+                                "path": image_paths.camera_test_video},
                             id_=2020202),
         StreamConfiguration(name="Image1",
                             connection_type="image",
-                            parameters={
-                                "path": "ui/resources/images/cat.jpg"},
+                            parameters={"path": image_paths.cat_test_video},
                             id_=3030303),
         StreamConfiguration(name="Image1",
                             connection_type="image",
-                            parameters={
-                                "path": "ui/resources/images/video.jpeg"},
+                            parameters={"path": image_paths.camera_test_video},
                             id_=4040404)]
 
     return configs
