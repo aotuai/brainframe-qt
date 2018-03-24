@@ -17,8 +17,13 @@ class StreamManager:
         :param url: The URL of the stream to connect to
         :return: A Stream object
         """
-        stream_reader = StreamReader(url)
-        self._stream_readers[url] = stream_reader
+        if url not in self._stream_readers:
+            stream_reader = StreamReader(url)
+            self._stream_readers[url] = stream_reader
+
+            return stream_reader
+        else:
+            return self._stream_readers[url]
 
     def close_stream(self, url):
         """Close a specific stream and remove the reference """

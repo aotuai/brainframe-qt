@@ -76,10 +76,9 @@ class API:
         """
 
     def get_stream(self, stream_id):
-        """Get the URL for this stream from the server
+        """Get the StreamReader for the given stream_id.
         :param stream_id: The ID of the stream configuration to open.
-        :return:The URL to connect to for the stream.
-            cv2.VideoCapture(URL) must be compatible.
+        :return: A StreamReader object
 
         Raises an error if a stream is not active (being analyzed)
         """
