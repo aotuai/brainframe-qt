@@ -1,3 +1,3 @@
 from .alarm_creation.alarm_creation import AlarmCreationDialog
 from .task_configuration.task_configuration import TaskConfiguration
-from .stream_configuration.stream_configuration import StreamConfiguration
+from .stream_configuration.stream_configuration import StreamConfigurationDialog

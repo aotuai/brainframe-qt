@@ -4,6 +4,8 @@ from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
+from visionapp.client.ui.resources.paths import image_paths
+
 
 # TODO
 # from [] import Stream
@@ -65,11 +67,14 @@ class StreamWidget(QGraphicsView):
         # TODO: Without caching this, UI gets laggy. This might be an issue
         # It might also be because of the IO read. If the frame is from a video
         # object
-        if stream_conf:
-            self._pixmap_temp = QPixmap(str(stream_conf.parameters['path']))
-        else:
+        try:
+            # TODO: Remove ast dependency
+            import ast
+            params = ast.literal_eval(stream_conf.parameters)
+            self._pixmap_temp = QPixmap(str(params["filepath"]))
+        except AttributeError:
             # TODO: Don't hardcode path
-            self._pixmap_temp = QPixmap("ui/resources/images/video_not_found.png")
+            self._pixmap_temp = QPixmap(str(image_paths.video_not_found))
 
     @pyqtProperty(int)
     def frame_rate(self):

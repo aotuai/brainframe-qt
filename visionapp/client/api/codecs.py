@@ -1,4 +1,5 @@
 import abc
+from enum import Enum
 import ujson
 
 
@@ -71,7 +72,8 @@ class ZoneAlarmCondition(Codec):
     """This holds logic information for a ZoneAlarm.
     """
 
-    def __init__(self, *, test, check_value, with_class_name, attribute, id_=None):
+    def __init__(self, *, test, check_value, with_class_name, attribute,
+                 id_=None):
         self.test = test
         self.check_value = check_value
         self.with_class_name = with_class_name
@@ -134,7 +136,8 @@ class Alert(Codec):
         If None, then this alert has not been labeled yet.
     """
 
-    def __init__(self, *, alarm_id, start_time, end_time, verified_as, id_=None):
+    def __init__(self, *, alarm_id, start_time, end_time, verified_as,
+                 id_=None):
         self.id = id_
         self.alarm_id = alarm_id
         self.start_time = start_time
@@ -225,8 +228,13 @@ class StreamConfiguration(Codec):
         "file"
         parameters: {"filepath": "/home/usr/videos/my_vid.mp4"}
     """
+    # noinspection PyArgumentList
+    # PyCharm incorrectly complains
+    ConnType = Enum("ConnType",
+                    "ip_camera webcam file")
 
-    def __init__(self, *, name, connection_type, parameters, id_=None, is_active=None):
+    def __init__(self, *, name, connection_type, parameters, id_=None,
+                 is_active=None):
         self.name = name
         self.id = id_
         self.connection_type = connection_type
@@ -235,13 +243,15 @@ class StreamConfiguration(Codec):
 
     def to_dict(self):
         d = dict(self.__dict__)
+        d["connection_type"] = self.connection_type.name
         return d
 
     @staticmethod
     def from_dict(d):
+        connection_t = StreamConfiguration.ConnType(d["connection_type"])
         return StreamConfiguration(name=d["name"],
                                    id_=d["id"],
-                                   connection_type=d["connection_type"],
+                                   connection_type=connection_t,
                                    parameters=d["parameters"],
                                    is_active=d["is_active"])
 

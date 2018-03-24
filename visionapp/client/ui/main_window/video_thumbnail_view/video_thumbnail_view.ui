@@ -18,10 +18,41 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="main_layout"/>
+    <layout class="QGridLayout" name="main_layout">
+     <item row="0" column="0">
+      <widget class="NewStreamButton" name="NewStreamButton"/>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>NewStreamButton</class>
+   <extends>QLabel</extends>
+   <header>visionapp.client.ui.main_window.video_thumbnail_view.new_stream_button.new_stream_button</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>NewStreamButton</sender>
+   <signal>new_stream_button_clicked()</signal>
+   <receiver>widget</receiver>
+   <slot>create_new_stream_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>19</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>create_new_stream_slot()</slot>
+ </slots>
 </ui>

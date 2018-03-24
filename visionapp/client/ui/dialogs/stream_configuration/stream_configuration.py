@@ -1,19 +1,13 @@
-from enum import Enum
-
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
 from visionapp.client.ui.resources.paths import qt_ui_paths
+from api.codecs import StreamConfiguration
 
 
-class StreamConfiguration(QDialog):
+class StreamConfigurationDialog(QDialog):
     """Dialog for configuring a Stream"""
-
-    # noinspection PyArgumentList
-    # PyCharm incorrectly complains
-    ConnectionType = Enum("ConnectionType",
-                          "unconfigured ip_camera webcam file")
 
     def __init__(self, parent=None, stream_conf=None):
 
@@ -24,16 +18,40 @@ class StreamConfiguration(QDialog):
         if stream_conf:
             pass
         else:
-            self.connection_type = self.ConnectionType.unconfigured
+            self.connection_type = None
 
-        if self.connection_type == self.ConnectionType.unconfigured:
+        if self.connection_type is None:
             self._set_parameter_widgets_hidden(True)
+
+    @classmethod
+    def configure_stream(cls, stream_conf=None):
+        dialog = cls(stream_conf)
+        result = dialog.exec_()
+
+        if not result:
+            return None
+
+        if dialog.connection_type == StreamConfiguration.ConnType.ip_camera:
+            parameters = \
+                f'{{"url":"{dialog.parameter_value.text()}"}}'
+        elif dialog.connection_type == StreamConfiguration.ConnType.webcam:
+            parameters = \
+                f'{{"device_id":{dialog.parameter_value.text()}}}'
+        elif dialog.connection_type == StreamConfiguration.ConnType.file:
+            parameters = \
+                f'{{"filepath":"{dialog.parameter_value.text()}"}}'
+        else:
+            raise NotImplementedError("Unrecognized connection type")
+
+        return StreamConfiguration(name=dialog.stream_name.text(),
+                                   connection_type=dialog.connection_type,
+                                   parameters=parameters)
 
     @pyqtSlot(str)
     def connection_type_changed_slot(self, connection_type):
         """Called when connection_type_combo_box's value is changed"""
         if connection_type == "":
-            self.connection_type = self.ConnectionType.unconfigured
+            self.connection_type = None
 
             # Hide parameter widgets
             self._set_parameter_widgets_hidden(True)
@@ -43,14 +61,14 @@ class StreamConfiguration(QDialog):
             self._set_parameter_widgets_hidden(False)
 
             if connection_type == "IP Camera":
-                self.connection_type = self.ConnectionType.ip_camera
+                self.connection_type = StreamConfiguration.ConnType.ip_camera
                 self.parameter_label.setText("Camera <b>address[:port]</b>")
             elif connection_type == "Webcam":
-                self.connection_type = self.ConnectionType.webcam
+                self.connection_type = StreamConfiguration.ConnType.webcam
                 self.parameter_label.setText("Device ID")
             elif connection_type == "File":
                 # TODO: Use QFileDialog
-                self.connection_type = self.ConnectionType.file
+                self.connection_type = StreamConfiguration.ConnType.file
                 self.parameter_label.setText("Filepath")
 
     def _set_parameter_widgets_hidden(self, hidden):
@@ -68,7 +86,7 @@ if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
 
     app = QApplication([])
-    window = StreamConfiguration()
+    window = StreamConfigurationDialog()
     window.show()
 
     app.exec_()

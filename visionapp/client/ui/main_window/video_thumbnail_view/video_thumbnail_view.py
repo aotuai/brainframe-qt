@@ -1,13 +1,12 @@
-import math
-
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget, QGridLayout
+from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
 from visionapp.client.api import api
 
+from visionapp.client.ui.dialogs import StreamConfigurationDialog
 from visionapp.client.ui.resources.paths import qt_ui_paths, image_paths
 from .video_small.video_small import VideoSmall
 
@@ -20,8 +19,7 @@ class VideoThumbnailView(QWidget):
 
         # TODO: Debug
         if api is not None:
-            api.get_stream_configurations = \
-                get_stream_configurations_debug
+            api.get_stream_configurations = get_stream_configurations_debug
 
         super().__init__(parent)
 
@@ -33,16 +31,12 @@ class VideoThumbnailView(QWidget):
         self.streams = {}
         if api is not None:
             for stream_conf in api.get_stream_configurations():
-                video = VideoSmall(self, stream_conf, 30)
-                self.streams[stream_conf.id] = video
-                self._add_widget_to_layout(video)
+                self.new_stream_widget(stream_conf)
         else:
             # Create fake videos for QtDesigner
             # TODO: Use mock for this
             for stream_conf in get_stream_configurations_debug():
-                video = VideoSmall(self, stream_conf, 30)
-                self.streams[stream_conf.id] = video
-                self._add_widget_to_layout(video)
+                self.new_stream_widget(stream_conf)
 
         self.current_stream_id = None
 
@@ -83,6 +77,13 @@ class VideoThumbnailView(QWidget):
         if self.current_stream_id:
             self.streams[self.current_stream_id].remove_selection_border()
 
+    @pyqtSlot()
+    def create_new_stream_slot(self):
+        stream_conf = StreamConfigurationDialog.configure_stream()
+
+        if stream_conf:
+            self.new_stream_widget(stream_conf)
+
     @pyqtProperty(int)
     def grid_width(self):
         return self._grid_width
@@ -99,6 +100,11 @@ class VideoThumbnailView(QWidget):
         for widget in widgets:
             self._add_widget_to_layout(widget)
 
+    def new_stream_widget(self, stream_conf):
+        video = VideoSmall(self, stream_conf, 30)
+        self.streams[stream_conf.id] = video
+        self._add_widget_to_layout(video)
+
     def _add_widget_to_layout(self, widget):
 
         row, col = divmod(self.main_layout.count(), self._grid_width)
@@ -111,21 +117,24 @@ def get_stream_configurations_debug():
     from visionapp.client.api.codecs import StreamConfiguration
     configs = [
         StreamConfiguration(name="Image1",
-                            connection_type="image",
-                            parameters={"path": image_paths.cat_test_video},
+                            connection_type=StreamConfiguration.ConnType.file,
+                            parameters=
+                            f'{{"filepath": "{image_paths.cat_test_video}"}}',
                             id_=1010101),
         StreamConfiguration(name="Image1",
-                            connection_type="image",
-                            parameters={
-                                "path": image_paths.camera_test_video},
+                            connection_type=StreamConfiguration.ConnType.file,
+                            parameters=
+                            f'{{"filepath": "{image_paths.camera_test_video}"}}',
                             id_=2020202),
         StreamConfiguration(name="Image1",
-                            connection_type="image",
-                            parameters={"path": image_paths.cat_test_video},
+                            connection_type=StreamConfiguration.ConnType.file,
+                            parameters=
+                            f'{{"filepath": "{image_paths.cat_test_video}"}}',
                             id_=3030303),
         StreamConfiguration(name="Image1",
-                            connection_type="image",
-                            parameters={"path": image_paths.camera_test_video},
+                            connection_type=StreamConfiguration.ConnType.file,
+                            parameters=
+                            f'{{"filepath": "{image_paths.camera_test_video}"}}',
                             id_=4040404)]
 
     return configs
