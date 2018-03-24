@@ -248,7 +248,7 @@ class StreamConfiguration(Codec):
 
     @staticmethod
     def from_dict(d):
-        connection_t = StreamConfiguration.ConnType(d["connection_type"])
+        connection_t = StreamConfiguration.ConnType[d["connection_type"]]
         return StreamConfiguration(name=d["name"],
                                    id_=d["id"],
                                    connection_type=connection_t,

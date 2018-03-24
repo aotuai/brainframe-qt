@@ -20,10 +20,8 @@ class StreamManager:
         if url not in self._stream_readers:
             stream_reader = StreamReader(url)
             self._stream_readers[url] = stream_reader
-
             return stream_reader
-        else:
-            return self._stream_readers[url]
+        return self._stream_readers[url]
 
     def close_stream(self, url):
         """Close a specific stream and remove the reference """

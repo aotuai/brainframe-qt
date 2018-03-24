@@ -181,13 +181,3 @@ class API:
             base_url=self._base_url,
             api_url=api_url)
         return url
-
-if __name__ == "__main__":
-    api = API("http://localhost", 8000)
-    zones = api.get_zones(0)
-    zone = api.get_zone(0, 2)
-
-    new_zone = api.set_zone(0, zone)
-    print(zone)
-    print(zones)
-    print(new_zone)
