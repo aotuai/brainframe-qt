@@ -1,6 +1,7 @@
 import requests
 
 from visionapp.client.api.codecs import *
+from visionapp.client.api.streaming import StreamManager
 
 
 class API:
@@ -20,9 +21,7 @@ class API:
         self.port = port
         self._base_url = self.hostname + ":" + str(self.port)
 
-    def close(self):
-        """Close all threaded parts of the API and then close the API connection
-        """
+        self._stream_manager = StreamManager()
 
     # Stream Configuration Stuff
     def get_stream_configurations(self, only_get_active=False):
@@ -49,12 +48,12 @@ class API:
         config = StreamConfiguration.from_dict(data)
         return config
 
-    def delete_stream_configuration(self, stream_name):
-        """
+    def delete_stream_configuration(self, stream_id):
+        """Deletes a stream configuration with the given ID
 
-        :param stream_name:
-        :return:
+        :param stream_id: The ID of the stream to delete
         """
+        # TODO(Alex or maybe Tyler if he's up to it): Implement this in April
 
     # Setting server analysis tasks
     # Stream Specific stuff
@@ -83,7 +82,10 @@ class API:
 
         Raises an error if a stream is not active (being analyzed)
         """
-        # TODO(Alex): make this raise an error if the stream is not active
+        req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
+        url = self._get(req)
+
+        return self._stream_manager.get_stream(url)
 
 
     # Get Analysis
@@ -154,6 +156,10 @@ class API:
         data = self._put_codec(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
+
+    def close(self):
+        """Clean up the API. It may no longer be used after this call."""
+        self._stream_manager.close_all()
 
     def _get(self, api_url, params=None):
         """

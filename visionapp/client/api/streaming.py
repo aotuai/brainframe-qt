@@ -1,30 +1,36 @@
 from threading import Thread
 
+from visionapp.stream_capture import StreamReader
+
 
 class StreamManager:
     """
     Keeps track of existing Stream objects, and
     """
     def __init__(self):
-        # Keep a dict of {stream_id: stream} that have been opened
-        pass
+        self._stream_readers = {}
 
-    def get_stream(self, stream_id):
+    def get_stream(self, url: str) -> StreamReader:
         """Gets a specific stream object OR creates the connection and returns
         it if it does not already exist
 
-        :param stream_id:
+        :param url: The URL of the stream to connect to
         :return: A Stream object
         """
+        stream_reader = StreamReader(url)
+        self._stream_readers[url] = stream_reader
 
-    def close_stream(self, stream_id):
+    def close_stream(self, url):
         """Close a specific stream and remove the reference """
-        # Set 'stream.running' = False for that stream
+        self._stream_readers[url].close()
+        del self._stream_readers[url]
 
     def close_all(self):
         """Close all streams and remove references"""
-        # run self.close_stream for each stream id
+        for _, stream_reader in self._stream_readers.items():
+            stream_reader.close()
 
+        self._stream_readers = {}
 
 
 class StatusPoller(Thread):
@@ -40,3 +46,4 @@ class StatusPoller(Thread):
     def close(self):
         """Close the status polling thread"""
         self.__running = False
+
