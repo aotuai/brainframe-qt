@@ -1,10 +1,10 @@
-from ui.resources import BasePlugin
+from visionapp.client.ui.resources import BasePlugin
 
 
 class VideoLarge(BasePlugin):
 
     # noinspection PyUnresolvedReferences
-    from ui.main_window.video_expanded_view.video_large.video_large \
+    from visionapp.client.ui.main_window.video_expanded_view.video_large.video_large \
         import VideoLarge as Widget
 
     def __init__(self):

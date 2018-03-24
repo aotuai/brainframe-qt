@@ -2,9 +2,9 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
-from api.codecs import StreamConfiguration
-from ui.dialogs import TaskConfiguration
-from ui.resources import client_paths
+from visionapp.client.api.codecs import StreamConfiguration
+from visionapp.client.ui.dialogs import TaskConfiguration
+from visionapp.client.ui.resources.paths import qt_ui_paths
 
 
 class VideoExpandedView(QWidget):
@@ -16,7 +16,7 @@ class VideoExpandedView(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
 
-        loadUi(client_paths.video_expanded_view_ui, self)
+        loadUi(qt_ui_paths.video_expanded_view_ui, self)
 
         self.current_video = None
 

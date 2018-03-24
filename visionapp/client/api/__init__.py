@@ -1,3 +1,3 @@
-from api.api_stub import API
+from visionapp.client.api.api_stub import API
 
 api = None

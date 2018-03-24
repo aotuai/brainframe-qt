@@ -61,17 +61,17 @@
   <customwidget>
    <class>VideoThumbnailView</class>
    <extends>QWidget</extends>
-   <header>ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
+   <header>visionapp.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
   </customwidget>
   <customwidget>
    <class>VideoExpandedView</class>
    <extends>QWidget</extends>
-   <header>ui.main_window.video_expanded_view.video_expanded_view</header>
+   <header>visionapp.client.ui.main_window.video_expanded_view.video_expanded_view</header>
   </customwidget>
   <customwidget>
    <class>Toolbar</class>
    <extends>QWidget</extends>
-   <header>ui.main_window.toolbar.toolbar</header>
+   <header>visionapp.client.ui.main_window.toolbar.toolbar</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -87,12 +87,12 @@
   <customwidget>
    <class>VideoLarge</class>
    <extends>QGraphicsView</extends>
-   <header>ui.main_window.video_expanded_view.video_large.video_large</header>
+   <header>visionapp.client.ui.main_window.video_expanded_view.video_large.video_large</header>
   </customwidget>
   <customwidget>
    <class>AlertLog</class>
    <extends>QWidget</extends>
-   <header>ui.main_window.video_expanded_view.alert_log.alert_log</header>
+   <header>visionapp.client.ui.main_window.video_expanded_view.alert_log.alert_log</header>
   </customwidget>
  </customwidgets>
  <resources/>

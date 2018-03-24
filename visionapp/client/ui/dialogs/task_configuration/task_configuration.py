@@ -2,10 +2,10 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
-from ui.resources import client_paths
-from ui.dialogs import AlarmCreationDialog
+from visionapp.client.ui.resources.paths import qt_ui_paths
+from visionapp.client.ui.dialogs import AlarmCreationDialog
 # TODO: Shorten (most likely with an __init__.py)
-from ui.dialogs.task_configuration.zone_list.zone_and_tasks.zone_and_tasks \
+from visionapp.client.ui.dialogs.task_configuration.zone_list.zone_and_tasks.zone_and_tasks \
     import ZoneAndTasks
 
 
@@ -15,7 +15,7 @@ class TaskConfiguration(QDialog):
 
         super().__init__(parent)
 
-        loadUi(client_paths.task_configuration_ui, self)
+        loadUi(qt_ui_paths.task_configuration_ui, self)
 
         self.stream_conf = stream_conf if stream_conf else None
         if stream_conf:
