@@ -1,4 +1,5 @@
 # noinspection PyUnresolvedReferences
+# pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
@@ -36,7 +37,9 @@ class StreamWidget(QGraphicsView):
         # Get first frame, then start timer to do it repetitively
         self.update_frame()
         self.frame_update_timer = QTimer()
+
         # noinspection PyUnresolvedReferences
+        # .connect is erroneously detected as unresolved
         self.frame_update_timer.timeout.connect(self.update_frame)
         self.frame_update_timer.start(1000 // frame_rate)
 
@@ -60,6 +63,8 @@ class StreamWidget(QGraphicsView):
         self.stream_id = stream_conf.id if stream_conf else None
 
         # TODO: Without caching this, UI gets laggy. This might be an issue
+        # It might also be because of the IO read. If the frame is from a video
+        # object
         if stream_conf:
             self._pixmap_temp = QPixmap(stream_conf.parameters['path'])
         else:
