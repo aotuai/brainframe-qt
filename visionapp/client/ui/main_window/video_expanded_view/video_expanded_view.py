@@ -26,15 +26,12 @@ class VideoExpandedView(QWidget):
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
         """Signaled by thumbnail view when thumbnail video is clicked"""
 
-        # TODO:
         self.expanded_video.change_stream(stream_conf)
 
         self.current_video = stream_conf
 
         # Show expanded view widgets
         self._set_widgets_hidden(False)
-
-        self.sizePolicy().setHorizontalStretch(5)
 
     @pyqtSlot()
     def expanded_stream_closed_slot(self):

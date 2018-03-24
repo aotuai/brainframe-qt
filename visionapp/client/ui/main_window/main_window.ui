@@ -33,24 +33,10 @@
     <item>
      <layout class="QHBoxLayout" name="video_layout" stretch="2,0">
       <item>
-       <widget class="VideoThumbnailView" name="VideoThumbnailView">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
+       <widget class="VideoThumbnailView" name="video_thumbnail_view"/>
       </item>
       <item>
-       <widget class="VideoExpandedView" name="VideoExpandedView">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
+       <widget class="VideoExpandedView" name="video_expanded_view"/>
       </item>
      </layout>
     </item>
@@ -77,9 +63,9 @@
  <resources/>
  <connections>
   <connection>
-   <sender>VideoThumbnailView</sender>
+   <sender>video_thumbnail_view</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
-   <receiver>VideoExpandedView</receiver>
+   <receiver>video_expanded_view</receiver>
    <slot>open_expanded_view_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -93,9 +79,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>VideoExpandedView</sender>
+   <sender>video_expanded_view</sender>
    <signal>expanded_stream_closed_signal()</signal>
-   <receiver>VideoThumbnailView</receiver>
+   <receiver>video_thumbnail_view</receiver>
    <slot>expand_thumbnail_view_slot()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -109,7 +95,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>VideoExpandedView</sender>
+   <sender>video_expanded_view</sender>
    <signal>expanded_stream_closed_signal()</signal>
    <receiver>MainWindow</receiver>
    <slot>hide_video_expanded_view()</slot>
@@ -125,7 +111,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>VideoThumbnailView</sender>
+   <sender>video_thumbnail_view</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
    <receiver>MainWindow</receiver>
    <slot>show_video_expanded_view()</slot>
