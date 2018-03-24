@@ -23,6 +23,9 @@ class StreamWidget(QGraphicsView):
         """
         super().__init__(parent)
 
+        # Remove ugly white background and border from QGraphicsView
+        self.setStyleSheet("background-color: transparent; border: 0px")
+
         self.stream_conf = None
         self.stream_id = None
 
@@ -54,13 +57,13 @@ class StreamWidget(QGraphicsView):
             self.current_frame = self.scene_.addPixmap(self._pixmap_temp)
         else:
             self.current_frame.setPixmap(self._pixmap_temp)
-        self.fitInView(self.current_frame)
+        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
 
     # TODO
     def change_stream(self, stream_conf):
         """Change the stream source of the video
 
-        If stream_conf is None, the Widget will remove stop grabbing frames"""
+        If stream_conf is None, the StreamWidget will stop grabbing frames"""
         self.stream_conf = stream_conf
         self.stream_id = stream_conf.id if stream_conf else None
 
@@ -86,6 +89,6 @@ class StreamWidget(QGraphicsView):
         self._frame_rate = frame_rate
 
     def resizeEvent(self, event):
-        self.fitInView(self.current_frame)
+        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
         super().resizeEvent(event)
 
