@@ -1,3 +1,3 @@
-from .api_stub import API
+from api.api_stub import API
 
 api = None
