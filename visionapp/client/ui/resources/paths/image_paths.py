@@ -1,11 +1,7 @@
-import os
 from pathlib import Path
 
 
-# TODO: Figure out how to get rid of the visionapp/client from top level path
-image_dir = Path("ui/resources/images")
-if not os.getcwd().endswith("client"):
-    image_dir = Path("visionapp", "client", image_dir)
+image_dir = Path("visionapp", "client", "ui", "resources", "images")
 
 
 # Icons

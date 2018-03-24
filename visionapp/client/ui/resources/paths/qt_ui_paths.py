@@ -1,11 +1,7 @@
-import os
 from pathlib import Path
 
 
-# TODO: Figure out how to get rid of the visionapp/client from top level path
-ui_dir                   = Path("ui"                                               )
-if not os.getcwd().endswith("client"):
-    ui_dir               = Path("visionapp", "client"   , ui_dir                   )
+ui_dir = Path("visionapp", "client", "ui")
 
 # Main Window
 main_window_dir          = Path(ui_dir                  , "main_window"            )
