@@ -1,4 +1,5 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QSizePolicy
 
 from visionapp.client.ui.resources.stream_widget import StreamWidget
 
@@ -12,6 +13,8 @@ class VideoSmall(StreamWidget):
         super().__init__(stream_conf, frame_rate, parent)
 
         self.parent = parent
+
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.MinimumExpanding)
 
         # Because these widgets are added dynamically, we can't connect slots
         # and signals using QtDesigner and have to do it manually

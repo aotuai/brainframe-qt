@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
 from visionapp.client.ui.resources.paths import qt_ui_paths
-from api.codecs import StreamConfiguration
+from visionapp.client.api.codecs import StreamConfiguration
 
 
 class StreamConfigurationDialog(QDialog):
