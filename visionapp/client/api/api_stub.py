@@ -1,7 +1,10 @@
+from typing import Union, List
 import requests
 import ujson
 
-from visionapp.client.api.codecs import StreamConfiguration, Zone, Alert, Codec
+from visionapp.shared.stream_capture import StreamReader
+from visionapp.client.api.codecs import StreamConfiguration, \
+    Zone, Alert, Codec, ZoneStatus, EngineConfiguration
 from visionapp.client.api.streaming import StreamManager
 
 
@@ -26,7 +29,8 @@ class API:
         self._stream_manager = StreamManager()
 
     # Stream Configuration Stuff
-    def get_stream_configurations(self, only_get_active=False):
+    def get_stream_configurations(self, only_get_active=False) \
+            -> List[StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
         :param only_get_active: If True, It will get StreamConfigurations that
         are currently active, AKA being streamed
@@ -39,7 +43,8 @@ class API:
             configs = [c for c in configs if c.is_active]
         return configs
 
-    def set_stream_configuration(self, stream_configuration):
+    def set_stream_configuration(self,
+                                 stream_configuration) -> StreamConfiguration:
         """Update an existing stream configuration or create a new one
         If creating a new one, the stream_configuration.id will be None
         :param stream_configuration: StreamConfiguration
@@ -55,7 +60,7 @@ class API:
 
         :param stream_id: The ID of the stream to delete
         """
-        # TODO(Alex or maybe Tyler if he's up to it): Implement this in April
+        # TODO: Implement this in April
 
     # Setting server analysis tasks
     def start_analyzing(self, stream_id):
@@ -79,20 +84,20 @@ class API:
         self._put_json(req, 'false')
 
     # Stream Specific stuff
-    def get_stream(self, stream_id):
+    def get_stream(self, stream_id) -> Union[None, StreamReader]:
         """Get the StreamReader for the given stream_id.
         :param stream_id: The ID of the stream configuration to open.
-        :return: A StreamReader object
-
-        Raises an error if a stream is not active (being analyzed)
+        :return: A StreamReader object OR None, if the server was unable to
+        open a stream
         """
         req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
         url = self._get(req)
-
+        if url is None:
+            return None
         return self._stream_manager.get_stream(url)
 
     # Get Analysis
-    def get_latest_zone_statuses(self):
+    def get_latest_zone_statuses(self) -> List[ZoneStatus]:
         """Get all ZoneStatuses
 
         :return:
@@ -100,7 +105,7 @@ class API:
         """
 
     # Alerts
-    def get_unverified_alerts(self, stream_id):
+    def get_unverified_alerts(self, stream_id) -> List[Alert]:
         """Gets all alerts that have not been verified or rejected
 
         :param stream_id:
@@ -116,13 +121,14 @@ class API:
         """Sets an alert verified as True or False
         :param stream_id: The stream that the alert is part of
         :param alert_id: The
+        :param verified_as: Set verification to True or False
         :return: The modified Alert
         """
         req = "/api/alerts/{alert_id}".format(alert_id=alert_id)
         resp = self._put_json(req, ujson.dumps(verified_as))
 
     # Backend Capabilities
-    def get_engine_configuration(self):
+    def get_engine_configuration(self) -> EngineConfiguration:
         """Returns the capabilities of the machine learning engine on the server.
         Currently, it can tell you:
             The types of objects that can be detected
@@ -132,14 +138,14 @@ class API:
         """
 
     # Zone specific stuff
-    def get_zones(self, stream_id):
+    def get_zones(self, stream_id) -> List[Zone]:
         """Returns a list of Zone's associated with that stream"""
         req = "/api/streams/{stream_id}/zones".format(stream_id=str(stream_id))
         data = self._get(req)
         zones = [Zone.from_dict(j) for j in data]
         return zones
 
-    def get_zone(self, stream_id, zone_id):
+    def get_zone(self, stream_id, zone_id) -> Zone:
         """Get a specific zone"""
         data = self.get_zones(stream_id)
         zones = [zone for zone in data if zone.id == zone_id]
