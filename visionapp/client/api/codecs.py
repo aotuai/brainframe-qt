@@ -222,7 +222,7 @@ class StreamConfiguration(Codec):
         "webcam"
         parameters: {"device_id": 0}
 
-        "ipcamera"
+        "ip_camera"
         parameters: {"url": "http://185.10.80.33:8082"}
 
         "file"
@@ -235,6 +235,10 @@ class StreamConfiguration(Codec):
 
     def __init__(self, *, name, connection_type, parameters, id_=None,
                  is_active=None):
+        assert connection_type in StreamConfiguration.ConnType,\
+            "You must feed StreamConfiguration.ConnType into connection_type"\
+            " You used a " + str(type(connection_type)) + " instead!"
+
         self.name = name
         self.id = id_
         self.connection_type = connection_type
