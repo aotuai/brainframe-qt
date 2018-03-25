@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QSizePolicy
 
 from visionapp.client.ui.resources.stream_widget import StreamWidget

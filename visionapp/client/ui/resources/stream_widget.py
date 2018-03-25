@@ -29,13 +29,13 @@ class StreamWidget(QGraphicsView):
         self.stream_conf = None
         self.stream_id = None
 
-        self.change_stream(stream_conf)
-
         self.scene_ = QGraphicsScene()
         self.setScene(self.scene_)
 
-        self.video_stream = None  # TODO: StreamReader()
         self.current_frame = None
+        self.change_stream(stream_conf)
+
+        self.video_stream = None  # TODO: StreamReader()
 
         self._frame_rate = frame_rate
 
@@ -52,7 +52,6 @@ class StreamWidget(QGraphicsView):
         """Grab the newest frame from the Stream object"""
 
         # TODO: Use Stream frame
-        # pixmap = QPixmap(self.video_stream.get_frame())
         if not self.current_frame:
             self.current_frame = self.scene_.addPixmap(self._pixmap_temp)
         else:
@@ -66,6 +65,10 @@ class StreamWidget(QGraphicsView):
         If stream_conf is None, the StreamWidget will stop grabbing frames"""
         self.stream_conf = stream_conf
         self.stream_id = stream_conf.id if stream_conf else None
+
+        for item in self.scene_.items():
+            self.scene_.removeItem(item)
+            self.current_frame = None
 
         # TODO: Without caching this, UI gets laggy. This might be an issue
         # It might also be because of the IO read. If the frame is from a video
@@ -91,4 +94,3 @@ class StreamWidget(QGraphicsView):
     def resizeEvent(self, event):
         self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
         super().resizeEvent(event)
-
