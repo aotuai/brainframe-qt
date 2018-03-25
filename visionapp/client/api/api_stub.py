@@ -43,8 +43,8 @@ class API:
             configs = [c for c in configs if c.is_active]
         return configs
 
-    def set_stream_configuration(self,
-                                 stream_configuration) -> StreamConfiguration:
+    def set_stream_configuration(self, stream_configuration) \
+            -> StreamConfiguration:
         """Update an existing stream configuration or create a new one
         If creating a new one, the stream_configuration.id will be None
         :param stream_configuration: StreamConfiguration
@@ -63,16 +63,18 @@ class API:
         # TODO: Implement this in April
 
     # Setting server analysis tasks
-    def start_analyzing(self, stream_id):
+    def start_analyzing(self, stream_id) -> bool:
         """
         Tell the server to set this stream config to active, and start analysis
         :param stream_id:
-        :return:
-        Raises a LicenseError if you tried to start more than are supported
+        :return: True or False if the server was able to start analysis on that
+        stream. It could fail because: unable to start stream, or license
+        restrictions.
         """
         req = "/api/streams/{stream_id}/analyze".format(
             stream_id=stream_id)
-        self._put_json(req, 'true')
+        resp = self._put_json(req, 'true')
+        return resp
 
     def stop_analyzing(self, stream_id):
         """Tell the server to stop analyzing a particular stream
