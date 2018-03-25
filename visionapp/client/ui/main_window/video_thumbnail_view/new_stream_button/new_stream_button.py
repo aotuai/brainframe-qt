@@ -18,8 +18,6 @@ class NewStreamButton(QLabel):
         # Also sets the pixmap
         self._fix_pixmap_size()
 
-        self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
-
     def resizeEvent(self, event):
         self._fix_pixmap_size()
         super().resizeEvent(event)

@@ -100,16 +100,32 @@ class VideoThumbnailView(QWidget):
         for widget in widgets:
             self._add_widget_to_layout(widget)
 
+        self.updateGeometry()
+
+        self._set_layout_equal_stretch()
+
     def new_stream_widget(self, stream_conf):
         video = VideoSmall(self, stream_conf, 30)
         self.streams[stream_conf.id] = video
         self._add_widget_to_layout(video)
 
     def _add_widget_to_layout(self, widget):
-
         row, col = divmod(self.main_layout.count(), self._grid_width)
 
         self.main_layout.addWidget(widget, row, col)
+
+        self._set_layout_equal_stretch()
+
+    def _set_layout_equal_stretch(self):
+        """Set all cells in grid layout to have have same width and height"""
+        for row in range(self.main_layout.rowCount()):
+            self.main_layout.setRowStretch(row, 1)
+        for col in range(self.main_layout.columnCount()):
+            self.main_layout.setColumnStretch(col, 1)
+
+    def resizeEvent(self, event):
+        print(self.width())
+        super().resizeEvent(event)
 
 
 # DEBUG
@@ -129,7 +145,7 @@ def get_stream_configurations_debug():
         StreamConfiguration(name="Image1",
                             connection_type=StreamConfiguration.ConnType.file,
                             parameters=
-                            f'{{"filepath": "{image_paths.cat_test_video}"}}',
+                            f'{{"filepath":"{image_paths.ostrich_test_video}"}}',
                             id_=3030303),
         StreamConfiguration(name="Image1",
                             connection_type=StreamConfiguration.ConnType.file,

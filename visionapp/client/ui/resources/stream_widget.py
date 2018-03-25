@@ -90,7 +90,3 @@ class StreamWidget(QGraphicsView):
     def frame_rate(self, frame_rate):
         self.frame_update_timer.setInterval(1000 // frame_rate)
         self._frame_rate = frame_rate
-
-    def resizeEvent(self, event):
-        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
-        super().resizeEvent(event)
