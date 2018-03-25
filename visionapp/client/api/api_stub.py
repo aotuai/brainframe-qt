@@ -13,6 +13,7 @@ class API:
     put = staticmethod(requests.put)
 
     def __new__(cls, *args, **kwargs):
+        # Make sure that this class is a singleton
         if not cls._instance:
             cls._instance = super().__new__(cls)
         return cls._instance
@@ -66,7 +67,11 @@ class API:
         Raises a LicenseException if you tried to start more than
         STREAMS_ALLOWED_BY_LICENSE
         """
-        pass
+        req = "/api/streams/{stream_id}/analyze".format(
+            stream_id=stream_id)
+        data = 'true'
+        self._put_json(req, data)
+
 
     def stop_analyzing(self, stream_id):
         """
@@ -116,8 +121,7 @@ class API:
         :return: The modified Alert
         """
         req = "/api/alerts/{alert_id}".format(alert_id=alert_id)
-        resp = self.put(self._full_url(req), data=ujson.dumps(verified_as))
-
+        resp = self._put_json(req, ujson.dumps(verified_as))
 
     # Backend Capabilities
     def get_engine_configuration(self):
@@ -173,8 +177,13 @@ class API:
 
     def _put_codec(self, api_url, codec: Codec):
         data = codec.to_json()
-        response = self.put(self._full_url(api_url), data=data)
-        return ujson.loads(response.content)
+        resp = self.put(self._full_url(api_url), data=data)
+        return ujson.loads(resp.content)
+
+    def _put_json(self, api_url, json):
+        resp = self.put(self._full_url(api_url), data=json)
+        if resp.content:
+            return ujson.loads(resp.content)
 
     def _full_url(self, api_url):
         url = "{base_url}{api_url}".format(
