@@ -58,28 +58,27 @@ class API:
         # TODO(Alex or maybe Tyler if he's up to it): Implement this in April
 
     # Setting server analysis tasks
-    # Stream Specific stuff
     def start_analyzing(self, stream_id):
         """
         Tell the server to set this stream config to active, and start analysis
         :param stream_id:
         :return:
-        Raises a LicenseException if you tried to start more than
-        STREAMS_ALLOWED_BY_LICENSE
+        Raises a LicenseError if you tried to start more than are supported
         """
         req = "/api/streams/{stream_id}/analyze".format(
             stream_id=stream_id)
-        data = 'true'
-        self._put_json(req, data)
-
+        self._put_json(req, 'true')
 
     def stop_analyzing(self, stream_id):
-        """
-
+        """Tell the server to stop analyzing a particular stream
         :param stream_id:
         :return:
         """
+        req = "/api/streams/{stream_id}/analyze".format(
+            stream_id=stream_id)
+        self._put_json(req, 'false')
 
+    # Stream Specific stuff
     def get_stream(self, stream_id):
         """Get the StreamReader for the given stream_id.
         :param stream_id: The ID of the stream configuration to open.
@@ -91,7 +90,6 @@ class API:
         url = self._get(req)
 
         return self._stream_manager.get_stream(url)
-
 
     # Get Analysis
     def get_latest_zone_statuses(self):
@@ -163,7 +161,7 @@ class API:
 
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
-        self._stream_manager.close_all()
+        self._stream_manager.close()
 
     def _get(self, api_url, params=None):
         """
