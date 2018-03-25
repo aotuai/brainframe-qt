@@ -28,7 +28,7 @@ class StreamManager:
         self._stream_readers[url].close()
         del self._stream_readers[url]
 
-    def close_all(self):
+    def close(self):
         """Close all streams and remove references"""
         for _, stream_reader in self._stream_readers.items():
             stream_reader.close()
