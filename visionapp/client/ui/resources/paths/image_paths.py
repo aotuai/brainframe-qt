@@ -5,7 +5,8 @@ image_dir = Path("visionapp", "client", "ui", "resources", "images")
 
 
 # Icons
-new_stream_icon   = Path(image_dir, "new_stream_icon.jpg")
-cat_test_video    = Path(image_dir, "cat.jpg"            )
-camera_test_video = Path(image_dir, "camera.jpeg"        )
-video_not_found   = Path(image_dir, "video_not_found.png")
+new_stream_icon    = Path(image_dir, "new_stream_icon.jpg")
+cat_test_video     = Path(image_dir, "cat.jpg"            )
+ostrich_test_video = Path(image_dir, "ostrich.jpg"        )
+camera_test_video  = Path(image_dir, "camera.jpeg"        )
+video_not_found    = Path(image_dir, "video_not_found.png")

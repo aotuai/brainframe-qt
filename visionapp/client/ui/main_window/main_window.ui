@@ -33,7 +33,29 @@
     <item>
      <layout class="QHBoxLayout" name="video_layout" stretch="2,0">
       <item>
-       <widget class="VideoThumbnailView" name="video_thumbnail_view"/>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="video_thumbnail_view">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>979</width>
+           <height>612</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="VideoThumbnailView" name="video_thumbnail_view_contents"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </item>
       <item>
        <widget class="VideoExpandedView" name="video_expanded_view"/>
@@ -63,7 +85,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>video_thumbnail_view</sender>
+   <sender>video_thumbnail_view_contents</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
    <receiver>video_expanded_view</receiver>
    <slot>open_expanded_view_slot(PyQt_PyObject)</slot>
@@ -81,7 +103,7 @@
   <connection>
    <sender>video_expanded_view</sender>
    <signal>expanded_stream_closed_signal()</signal>
-   <receiver>video_thumbnail_view</receiver>
+   <receiver>video_thumbnail_view_contents</receiver>
    <slot>expand_thumbnail_view_slot()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -111,7 +133,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>video_thumbnail_view</sender>
+   <sender>video_thumbnail_view_contents</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
    <receiver>MainWindow</receiver>
    <slot>show_video_expanded_view()</slot>
