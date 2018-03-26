@@ -2,24 +2,18 @@ from typing import Union, List
 import requests
 import ujson
 
+from visionapp.shared.singleton import Singleton
 from visionapp.shared.stream_capture import StreamReader
 from visionapp.client.api.codecs import StreamConfiguration, \
     Zone, Alert, Codec, ZoneStatus, EngineConfiguration
 from visionapp.client.api.streaming import StreamManager
 
 
-class API:
-    _instance = None
-
+class API(metaclass=Singleton):
     # For testing purposes
     get = staticmethod(requests.get)
     put = staticmethod(requests.put)
 
-    def __new__(cls, *args, **kwargs):
-        # Make sure that this class is a singleton
-        if not cls._instance:
-            cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(self, hostname, port):
         self.hostname = hostname
