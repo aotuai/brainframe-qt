@@ -21,6 +21,8 @@ class Codec(abc.ABC):
     def from_json(cls, j: str):
         return cls.from_dict(ujson.loads(j))
 
+    def __repr__(self):
+        return str(self.to_dict())
 
 class Detection(Codec):
     """A detected object. It can have 'children', for example, a "person" can
