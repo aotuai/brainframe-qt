@@ -174,7 +174,7 @@ class Zone(Codec):
 
     @staticmethod
     def from_dict(d):
-        print("DID THING!")        alarms = [ZoneAlarm.from_dict(alarm_d) for alarm_d in d["alarms"]]
+        alarms = [ZoneAlarm.from_dict(alarm_d) for alarm_d in d["alarms"]]
         return Zone(name=d["name"],
                     id_=d["id"],
                     alarms=alarms,
