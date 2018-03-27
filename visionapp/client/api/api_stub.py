@@ -14,7 +14,6 @@ class API(metaclass=Singleton):
     get = staticmethod(requests.get)
     put = staticmethod(requests.put)
 
-
     def __init__(self, hostname, port):
         self.hostname = hostname
         self.port = port
@@ -31,21 +30,23 @@ class API(metaclass=Singleton):
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
         req = "/api/streams/"
-        data = self._get(req)
+        data, _ = self._get(req)
         configs = [StreamConfiguration.from_dict(d) for d in data]
         if only_get_active:
             configs = [c for c in configs if c.is_active]
         return configs
 
     def set_stream_configuration(self, stream_configuration) \
-            -> StreamConfiguration:
+            -> Union[None, StreamConfiguration]:
         """Update an existing stream configuration or create a new one
         If creating a new one, the stream_configuration.id will be None
         :param stream_configuration: StreamConfiguration
         :return: StreamConfiguration, initialized with an ID
         """
         req = "/api/streams/"
-        data = self._put_codec(req, stream_configuration)
+        data, success = self._put_codec(req, stream_configuration)
+        if not success:
+            return None
         config = StreamConfiguration.from_dict(data)
         return config
 
@@ -54,7 +55,7 @@ class API(metaclass=Singleton):
 
         :param stream_id: The ID of the stream to delete
         """
-        # TODO: Implement this in April
+        # TODO: Implement this Post 1.0 release
 
     # Setting server analysis tasks
     def start_analyzing(self, stream_id) -> bool:
@@ -67,7 +68,7 @@ class API(metaclass=Singleton):
         """
         req = "/api/streams/{stream_id}/analyze".format(
             stream_id=stream_id)
-        resp = self._put_json(req, 'true')
+        resp, _ = self._put_json(req, 'true')
         return resp
 
     def stop_analyzing(self, stream_id):
@@ -84,11 +85,13 @@ class API(metaclass=Singleton):
         """Get the StreamReader for the given stream_id.
         :param stream_id: The ID of the stream configuration to open.
         :return: A StreamReader object OR None, if the server was unable to
-        open a stream
+        open a stream.
+
+        The server returns an HTTP internal server error if unable to open
         """
         req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
-        url = self._get(req)
-        if url is None:
+        url, success = self._get(req)
+        if not success:
             return None
         return self._stream_manager.get_stream(url)
 
@@ -109,7 +112,7 @@ class API(metaclass=Singleton):
         """
         req = "/api/alerts/unverified".format(
             stream_id=stream_id)
-        data = self._get(req, params={"stream_id": str(stream_id)})
+        data, _ = self._get(req, params={"stream_id": str(stream_id)})
         alerts = [Alert.from_dict(a) for a in data]
         return alerts
 
@@ -121,7 +124,7 @@ class API(metaclass=Singleton):
         :return: The modified Alert
         """
         req = "/api/alerts/{alert_id}".format(alert_id=alert_id)
-        resp = self._put_json(req, ujson.dumps(verified_as))
+        self._put_json(req, ujson.dumps(verified_as))
 
     # Backend Capabilities
     def get_engine_configuration(self) -> EngineConfiguration:
@@ -137,7 +140,9 @@ class API(metaclass=Singleton):
     def get_zones(self, stream_id) -> List[Zone]:
         """Returns a list of Zone's associated with that stream"""
         req = "/api/streams/{stream_id}/zones".format(stream_id=str(stream_id))
-        data = self._get(req)
+        data, success = self._get(req)
+        if not success:
+            return []
         zones = [Zone.from_dict(j) for j in data]
         return zones
 
@@ -157,7 +162,7 @@ class API(metaclass=Singleton):
         :return: Zone, initialized with an ID
         """
         req = "/api/streams/{stream_id}/zones".format(stream_id=stream_id)
-        data = self._put_codec(req, zone)
+        data, _ = self._put_codec(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
 
@@ -170,20 +175,25 @@ class API(metaclass=Singleton):
         :param api_url: The /api/blah/blah to append to the base_url
         :param params: The "query_string" to add to the url. In the format
         of a dict, {"key": "value", ...} key and val must be a string
-        :return:
+        :return: The JSON values, and whether the request was successful
         """
-        response = self.get(self._full_url(api_url), params=params)
-        return ujson.loads(response.content)
+        resp = self.get(self._full_url(api_url), params=params)
+        if resp.content:
+            return ujson.loads(resp.content), resp.ok
+        return None, resp.ok
 
     def _put_codec(self, api_url, codec: Codec):
         data = codec.to_json()
         resp = self.put(self._full_url(api_url), data=data)
-        return ujson.loads(resp.content)
+        if resp.content:
+            return ujson.loads(resp.content), resp.ok
+        return None, resp.ok
 
     def _put_json(self, api_url, json):
         resp = self.put(self._full_url(api_url), data=json)
         if resp.content:
-            return ujson.loads(resp.content)
+            return ujson.loads(resp.content), resp.ok
+        return None, resp.ok
 
     def _full_url(self, api_url):
         url = "{base_url}{api_url}".format(
