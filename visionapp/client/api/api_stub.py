@@ -1,6 +1,7 @@
-from typing import Union, List
+import logging
 import requests
 import ujson
+from typing import Union, List
 
 from visionapp.shared.singleton import Singleton
 from visionapp.shared.stream_capture import StreamReader
@@ -92,7 +93,9 @@ class API(metaclass=Singleton):
         req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
         url, success = self._get(req)
         if not success:
+            logging.warning("API: Requested stream that doesn't exist!")
             return None
+        logging.info("API: Opening stream on url" + url)
         return self._stream_manager.get_stream(url)
 
     # Get Analysis
