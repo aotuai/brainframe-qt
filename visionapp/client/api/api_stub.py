@@ -23,16 +23,22 @@ class API(metaclass=Singleton):
         self._stream_manager = StreamManager()
 
     # Stream Configuration Stuff
-    def get_stream_configurations(self, only_get_active=False) \
-            -> List[StreamConfiguration]:
+    def get_stream_configurations(self, only_get_active=False, stream_id=None) \
+            -> Union[List[StreamConfiguration], StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
         :param only_get_active: If True, It will get StreamConfigurations that
         are currently active, AKA being streamed
+        :param stream_id: If set, returns only the StreamConfiguration
+        associated with that id
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
         req = "/api/streams/"
         data, _ = self._get(req)
         configs = [StreamConfiguration.from_dict(d) for d in data]
+
+        if stream_id:
+            # Search for and return config with matching stream_id
+            return next((c for c in configs if c.id == stream_id), None)
         if only_get_active:
             configs = [c for c in configs if c.is_active]
         return configs
