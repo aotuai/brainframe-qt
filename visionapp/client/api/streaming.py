@@ -39,6 +39,9 @@ class StreamManager:
 class StatusPoller(Thread):
     """ This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream. """
+    def __init__(self):
+        super().__init__(name="StatusPollerThread")
+
     def run(self):
         """Polls Brainserver for ZoneStatuses at a constant rate"""
 
