@@ -15,20 +15,32 @@ class VideoThumbnailView(QWidget):
     thumbnail_stream_clicked_signal = pyqtSignal(object)
     """Used to alert outer widget of change"""
 
-    def __init__(self, parent=None, grid_width=3):
-
-        # TODO: Debug
-        if api is not None:
-            api.get_stream_configurations = get_stream_configurations_debug
+    def __init__(self, parent=None, grid_num_columns=3):
 
         super().__init__(parent)
 
         loadUi(qt_ui_paths.video_thumbnail_view_ui, self)
 
-        self._grid_width = grid_width
-        self._grid_width_expanded = grid_width
+        # TODO: Debug
+        if api is not None:
+            api.get_stream_configurations = get_stream_configurations_debug
+
+        self._grid_num_columns = grid_num_columns
+        """Current number of columns in grid"""
+        self._grid_num_columns_expanded = grid_num_columns
+        """Number of columns in grid when thumbnail view is expanded"""
 
         self.streams = {}
+        """Streams currently in the ThumbnailView
+        
+        Dict is formatted as {stream_id: StreamConfiguration()}
+        """
+
+        # # Get streams from API and create widgets for each
+        # for stream_conf in api.get_stream_configurations():
+        #     self.new_stream_widget(stream_conf)
+        #     self.streams[stream_conf.id] = stream_conf
+
         if api is not None:
             for stream_conf in api.get_stream_configurations():
                 self.new_stream_widget(stream_conf)
@@ -39,6 +51,7 @@ class VideoThumbnailView(QWidget):
                 self.new_stream_widget(stream_conf)
 
         self.current_stream_id = None
+        """Currently expanded stream. None if no stream selected"""
 
     @pyqtSlot(int)
     def thumbnail_stream_clicked_slot(self, stream_id):
@@ -62,7 +75,7 @@ class VideoThumbnailView(QWidget):
         # Store stream as current stream
         self.current_stream_id = stream_id
 
-        self.grid_width = 1
+        self.grid_num_columns = 1
 
     @pyqtSlot()
     def expand_thumbnail_view_slot(self):
@@ -71,7 +84,7 @@ class VideoThumbnailView(QWidget):
         Removes selection border from currently selected video
         """
         # Resize GridLayout
-        self.grid_width = self._grid_width_expanded
+        self.grid_num_columns = self._grid_num_columns_expanded
 
         # Remove selection border from currently selected video
         if self.current_stream_id:
@@ -85,12 +98,12 @@ class VideoThumbnailView(QWidget):
             self.new_stream_widget(stream_conf)
 
     @pyqtProperty(int)
-    def grid_width(self):
-        return self._grid_width
+    def grid_num_columns(self):
+        return self._grid_num_columns
 
-    @grid_width.setter
-    def grid_width(self, grid_width):
-        self._grid_width = grid_width
+    @grid_num_columns.setter
+    def grid_num_columns(self, grid_num_columns):
+        self._grid_num_columns = grid_num_columns
 
         widgets = []
         for i in reversed(range(self.main_layout.count())):
@@ -100,6 +113,7 @@ class VideoThumbnailView(QWidget):
         for widget in widgets:
             self._add_widget_to_layout(widget)
 
+        # TODO: Document purpose
         self.updateGeometry()
 
         self._set_layout_equal_stretch()
@@ -110,7 +124,7 @@ class VideoThumbnailView(QWidget):
         self._add_widget_to_layout(video)
 
     def _add_widget_to_layout(self, widget):
-        row, col = divmod(self.main_layout.count(), self._grid_width)
+        row, col = divmod(self.main_layout.count(), self._grid_num_columns)
 
         self.main_layout.addWidget(widget, row, col)
 
@@ -124,7 +138,6 @@ class VideoThumbnailView(QWidget):
             self.main_layout.setColumnStretch(col, 1)
 
     def resizeEvent(self, event):
-        print(self.width())
         super().resizeEvent(event)
 
 
