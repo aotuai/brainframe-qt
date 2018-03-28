@@ -19,7 +19,7 @@ class VideoSmall(StreamWidget):
         if parent is not None:  # Required or QtDesigner throws errors
             self.stream_clicked.connect(parent.thumbnail_stream_clicked_slot)
 
-        self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.MinimumExpanding)
 
     def mouseReleaseEvent(self, event):
 
