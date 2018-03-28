@@ -14,6 +14,7 @@ class API(metaclass=Singleton):
     # For testing purposes
     get = staticmethod(requests.get)
     put = staticmethod(requests.put)
+    delete = staticmethod(requests.delete)
 
     def __init__(self, hostname, port):
         self.hostname = hostname
@@ -156,7 +157,10 @@ class API(metaclass=Singleton):
         return zones
 
     def get_zone(self, stream_id, zone_id) -> Zone:
-        """Get a specific zone"""
+        """Get a specific zone.
+        :param stream_id: The ID of the stream that the desired zone is for
+        :param zone_id: The ID of the zone to get
+        """
         data = self.get_zones(stream_id)
         zones = [zone for zone in data if zone.id == zone_id]
         assert len(zones) != 0, ("A zone with that stream_id and zone_id could"
@@ -174,6 +178,16 @@ class API(metaclass=Singleton):
         data, _ = self._put_codec(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
+
+    def delete_zone(self, stream_id, zone_id):
+        """Deletes a zone with the given ID.
+        :param stream_id: The ID of the stream the zone is a part of
+        :param zone_id: The ID of the zone to delete
+        """
+        req = "/api/streams/{stream_id}/zones/{zone_id}".format(
+            stream_id=stream_id,
+            zone_id=zone_id)
+        self._delete(req)
 
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
@@ -202,6 +216,16 @@ class API(metaclass=Singleton):
         resp = self.put(self._full_url(api_url), data=json)
         if resp.content:
             return ujson.loads(resp.content), resp.ok
+        return None, resp.ok
+
+    def _delete(self, api_url, params=None):
+        """Sends a DELETE request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param params: The "query_string" to add to the URL. Must be a
+          str-to-str dict
+        :return: The JSON response, and whether the request was successful
+        """
+        resp = self.delete(self._full_url(api_url), params=params)
         return None, resp.ok
 
     def _full_url(self, api_url):
