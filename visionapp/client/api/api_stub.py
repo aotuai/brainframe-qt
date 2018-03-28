@@ -8,6 +8,37 @@ from visionapp.shared.stream_capture import StreamReader
 from visionapp.client.api.codecs import StreamConfiguration, \
     Zone, Alert, Codec, ZoneStatus, EngineConfiguration
 from visionapp.client.api.streaming import StreamManager
+from visionapp.shared import rest_errors
+
+
+class APIError(Exception):
+    """Raised when a failure happens while communicating with the server."""
+
+    def __init__(self, resp):
+        """Create a new APIError.
+        :param resp: The error response as encoded JSON
+        """
+        if len(resp) == 0:
+            self._kind = "Unknown kind"
+            self._description = ""
+        else:
+            resp = ujson.loads(resp)
+            self._kind = resp["title"]
+            if "description" in resp:
+                self._description = resp["description"]
+            self._description = ""
+
+        super().__init__("{kind}: {description}".format(
+            kind=self._kind,
+            description=self._description))
+
+    @property
+    def kind(self):
+        """Return the type of error this is. Refer to rest_errors.py for what
+        types are available.
+        :return: Type of error
+        """
+        return self._kind
 
 
 class API(metaclass=Singleton):
@@ -34,7 +65,8 @@ class API(metaclass=Singleton):
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
         req = "/api/streams/"
-        data, _ = self._get(req)
+        data = self._get(req)
+
         configs = [StreamConfiguration.from_dict(d) for d in data]
 
         if stream_id:
@@ -52,9 +84,7 @@ class API(metaclass=Singleton):
         :return: StreamConfiguration, initialized with an ID
         """
         req = "/api/streams/"
-        data, success = self._put_codec(req, stream_configuration)
-        if not success:
-            return None
+        data = self._put_codec(req, stream_configuration)
         config = StreamConfiguration.from_dict(data)
         return config
 
@@ -76,7 +106,7 @@ class API(metaclass=Singleton):
         """
         req = "/api/streams/{stream_id}/analyze".format(
             stream_id=stream_id)
-        resp, _ = self._put_json(req, 'true')
+        resp = self._put_json(req, 'true')
         return resp
 
     def stop_analyzing(self, stream_id):
@@ -98,10 +128,15 @@ class API(metaclass=Singleton):
         The server returns an HTTP internal server error if unable to open
         """
         req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
-        url, success = self._get(req)
-        if not success:
-            logging.warning("API: Requested stream that doesn't exist!")
-            return None
+        try:
+            url = self._get(req)
+        except APIError as e:
+            if e.kind == rest_errors.STREAM_NOT_FOUND:
+                logging.warning("API: Requested stream that doesn't exist!")
+                return None
+            else:
+                raise
+
         logging.info("API: Opening stream on url" + url)
         return self._stream_manager.get_stream(url)
 
@@ -120,9 +155,10 @@ class API(metaclass=Singleton):
         :param stream_id:
         :return:
         """
-        req = "/api/alerts/unverified".format(
+        req = "/api/alerts/{stream_id}".format(
             stream_id=stream_id)
-        data, _ = self._get(req, params={"stream_id": str(stream_id)})
+        data = self._get(req, params={"stream_id": str(stream_id)})
+
         alerts = [Alert.from_dict(a) for a in data]
         return alerts
 
@@ -150,9 +186,7 @@ class API(metaclass=Singleton):
     def get_zones(self, stream_id) -> List[Zone]:
         """Returns a list of Zone's associated with that stream"""
         req = "/api/streams/{stream_id}/zones".format(stream_id=str(stream_id))
-        data, success = self._get(req)
-        if not success:
-            return []
+        data = self._get(req)
         zones = [Zone.from_dict(j) for j in data]
         return zones
 
@@ -175,7 +209,7 @@ class API(metaclass=Singleton):
         :return: Zone, initialized with an ID
         """
         req = "/api/streams/{stream_id}/zones".format(stream_id=stream_id)
-        data, _ = self._put_codec(req, zone)
+        data = self._put_codec(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
 
@@ -194,39 +228,63 @@ class API(metaclass=Singleton):
         self._stream_manager.close()
 
     def _get(self, api_url, params=None):
-        """
+        """Send a GET request to the given URL.
         :param api_url: The /api/blah/blah to append to the base_url
         :param params: The "query_string" to add to the url. In the format
         of a dict, {"key": "value", ...} key and val must be a string
-        :return: The JSON values, and whether the request was successful
+        :return: The JSON response as a dict, or None if none was sent
         """
         resp = self.get(self._full_url(api_url), params=params)
+        if not resp.ok:
+            raise APIError(resp.content)
+
         if resp.content:
-            return ujson.loads(resp.content), resp.ok
-        return None, resp.ok
+            return ujson.loads(resp.content)
+        return None
 
     def _put_codec(self, api_url, codec: Codec):
+        """Send a PUT request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param codec: A codec to convert to JSON and send
+        :return: The JSON response as a dict, or None if none was sent
+        """
         data = codec.to_json()
         resp = self.put(self._full_url(api_url), data=data)
+        if not resp.ok:
+            raise APIError(resp.content)
+
         if resp.content:
-            return ujson.loads(resp.content), resp.ok
-        return None, resp.ok
+            return ujson.loads(resp.content)
+        return None
 
     def _put_json(self, api_url, json):
+        """Send a PUT request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param json: Preformatted JSON to send
+        :return: The JSON response as a dict, or None if none was sent
+        """
         resp = self.put(self._full_url(api_url), data=json)
+        if not resp.ok:
+            raise APIError(resp.content)
+
         if resp.content:
-            return ujson.loads(resp.content), resp.ok
-        return None, resp.ok
+            return ujson.loads(resp.content)
+        return None
 
     def _delete(self, api_url, params=None):
         """Sends a DELETE request to the given URL.
         :param api_url: The /api/blah/blah to append to the base_url
         :param params: The "query_string" to add to the URL. Must be a
           str-to-str dict
-        :return: The JSON response, and whether the request was successful
+        :return: The JSON response as a dict, or None if none was sent
         """
         resp = self.delete(self._full_url(api_url), params=params)
-        return None, resp.ok
+        if not resp.ok:
+            raise APIError(resp)
+
+        if resp.content:
+            return ujson.loads(resp.content)
+        return None
 
     def _full_url(self, api_url):
         url = "{base_url}{api_url}".format(
