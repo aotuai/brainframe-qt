@@ -121,7 +121,14 @@
       </widget>
      </item>
      <item>
-      <widget class="VideoLarge" name="video"/>
+      <widget class="VideoTaskConfig" name="video_task_config"/>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="dialog_button_box">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -134,13 +141,45 @@
    <header>visionapp.client.ui.dialogs.task_configuration.zone_list.zone_list</header>
   </customwidget>
   <customwidget>
-   <class>VideoLarge</class>
+   <class>VideoTaskConfig</class>
    <extends>QGraphicsView</extends>
-   <header>visionapp.client.ui.main_window.video_expanded_view.video_large.video_large</header>
+   <header>visionapp.client.ui.dialogs.task_configuration.video_task_config.video_task_config</header>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
+  <connection>
+   <sender>dialog_button_box</sender>
+   <signal>accepted()</signal>
+   <receiver>TaskConfiguration</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dialog_button_box</sender>
+   <signal>rejected()</signal>
+   <receiver>TaskConfiguration</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>325</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
   <connection>
    <sender>alarm_button</sender>
    <signal>clicked()</signal>
