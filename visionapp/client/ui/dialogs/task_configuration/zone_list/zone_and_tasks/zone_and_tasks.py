@@ -13,25 +13,21 @@ from PyQt5.QtWidgets import (
     QSizePolicy
 )
 
-# TODO: Relative import for testing
-if __name__ != '__main__':
-    from .tasks.task import Task
-    from .tasks.zone import Zone
-else:
-    from tasks.task import Task
-    from tasks.zone import Zone
-
+from .tasks.zone_widget import ZoneWidget
+from visionapp.client.api.codecs import Zone
 from visionapp.client.ui.resources.datatypes.alarm import Alarm
 
 
 class ZoneAndTasks(QWidget):
     """https://stackoverflow.com/a/37927256/8134178"""
 
-    def __init__(self, zone_name, zone_type, parent=None):
+    def __init__(self, zone, parent=None):
         super().__init__(parent)
 
-        self.zone_name = zone_name
-        self.zone_type = zone_type
+        self.zone_name = zone.name
+        self.zone_type = None
+
+        self.zone = zone
 
         self.tasks = []
 
@@ -40,9 +36,8 @@ class ZoneAndTasks(QWidget):
         self.alarm_area_layout = None
         self.toggle_button = None
         self.main_layout = None
-        self.zone = None
+        self.zone_widget = None
 
-        self.init_ui()
 
         # self.setStyleSheet("background-color:black;")
 
@@ -56,7 +51,7 @@ class ZoneAndTasks(QWidget):
         self.toggle_button = QToolButton(self)
         self.main_layout = QGridLayout(self)
 
-        self.zone = Zone(self.zone_name, self.zone_type, self)
+        self.zone_widget = ZoneWidget(self.zone_name, self.zone_type, self)
 
         self.toggle_button.setArrowType(Qt.RightArrow)
         self.toggle_button.setCheckable(True)
@@ -93,7 +88,7 @@ class ZoneAndTasks(QWidget):
         self.main_layout.setVerticalSpacing(0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.addWidget(self.toggle_button, 0, 0)
-        self.main_layout.addWidget(self.zone, 0, 1)
+        self.main_layout.addWidget(self.zone_widget, 0, 1)
         self.main_layout.addWidget(self.alarm_area, 1, 1, 1, 1)
         self.setLayout(self.main_layout)
 
@@ -126,7 +121,7 @@ class ZoneAndTasks(QWidget):
         self.alarm_area.setLayout(self.alarm_area_layout)
 
         collapsed_height = self.sizeHint().height() \
-            - self.alarm_area.maximumHeight()
+                           - self.alarm_area.maximumHeight()
 
         content_height = self.alarm_area_layout.sizeHint().height()
 
@@ -134,8 +129,6 @@ class ZoneAndTasks(QWidget):
         self.alarm_area.setMinimumHeight(content_height)
         self.setMinimumHeight(collapsed_height + content_height)
         self.setMaximumHeight(collapsed_height + content_height)
-
-        print(collapsed_height, content_height)
 
         # Animate the maximumHeight of the widget to hide the alarm_area
         for i in range(2):
@@ -158,12 +151,20 @@ class ZoneAndTasks(QWidget):
 
         self.set_content_layout()
 
+    def update_zone_type(self):
+        if len(self.zone.coords) == 0:
+            self.zone_widget.set_task_type(ZoneWidget.TaskType.in_progress)
+        elif len(self.zone.coords) == 2:
+            self.zone_widget.set_task_type(ZoneWidget.TaskType.line)
+        else:
+            self.zone_widget.set_task_type(ZoneWidget.TaskType.region)
+
 
 if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
 
     app = QApplication([])
-    zone_and_tasks = ZoneAndTasks("Locker Area", "region")
+    zone_and_tasks = ZoneAndTasks(Zone(name="Test Zone", coords=[]))
     zone_and_tasks.show()
 
     app.exec_()

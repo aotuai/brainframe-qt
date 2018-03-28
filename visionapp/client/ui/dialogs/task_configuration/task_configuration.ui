@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>843</width>
-    <height>503</height>
+    <height>469</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -121,14 +121,91 @@
       </widget>
      </item>
      <item>
-      <widget class="VideoTaskConfig" name="video_task_config"/>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="dialog_button_box">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <widget class="VideoTaskConfig" name="video_task_config">
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
        </property>
       </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="confirm_op_button">
+         <property name="text">
+          <string>Confirm</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="cancel_op_button">
+         <property name="text">
+          <string>Cancel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="instruction_label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QDialogButtonBox" name="dialog_button_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
@@ -155,8 +232,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>289</y>
+     <x>831</x>
+     <y>457</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -171,8 +248,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>325</x>
-     <y>289</y>
+     <x>831</x>
+     <y>457</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -228,10 +305,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>confirm_op_button</sender>
+   <signal>clicked()</signal>
+   <receiver>TaskConfiguration</receiver>
+   <slot>new_region_confirmed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>485</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>434</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancel_op_button</sender>
+   <signal>clicked()</signal>
+   <receiver>TaskConfiguration</receiver>
+   <slot>new_region_canceled()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>657</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>new_alarm()</slot>
   <slot>new_region()</slot>
   <slot>new_line()</slot>
+  <slot>new_region_confirmed()</slot>
+  <slot>new_region_canceled()</slot>
  </slots>
 </ui>
