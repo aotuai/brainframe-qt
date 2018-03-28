@@ -4,7 +4,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 from PyQt5.uic import loadUi
 
+from .zone_and_tasks import ZoneAndTasks
 from visionapp.client.ui.resources.paths import qt_ui_paths
+
 
 # TODO: Scroll!
 class ZoneList(QScrollArea):
@@ -29,8 +31,9 @@ class ZoneList(QScrollArea):
         return tuple(zones)
 
     def add_zone(self, zone):
-        self.zones[zone.zone_name] = zone
-        self.main_layout.addWidget(zone)
+        zone_widget = ZoneAndTasks(zone, self)
+        self.zones[zone.name] = zone_widget
+        self.main_layout.addWidget(zone_widget)
 
     def add_alarm(self, alarm):
         zone = alarm.zone

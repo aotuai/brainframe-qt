@@ -15,8 +15,8 @@ from PyQt5.QtWidgets import (
 
 # TODO: Relative import for testing
 if __name__ != '__main__':
-    from .tasks.task import Task
-    from .tasks.zone import Zone
+    from .tasks.task_widget import TaskWidget
+    from .tasks.zone_widget import ZoneWidget
 else:
     from tasks.task import Task
     from tasks.zone import Zone
@@ -50,7 +50,7 @@ class ZoneAndTasks(QWidget):
         self.alarm_area_layout = QVBoxLayout()
         self.toggle_button = QToolButton()
         self.main_layout = QGridLayout()
-        self.zone = Zone(self.zone_name, self.zone_type)
+        self.zone = ZoneWidget(self.zone_name, self.zone_type)
 
         self.toggle_button.setArrowType(Qt.RightArrow)
         self.toggle_button.setCheckable(True)
@@ -116,7 +116,7 @@ class ZoneAndTasks(QWidget):
 
     def add_alarm(self, alarm: Alarm):
         print("adding alarm")
-        alarm_widget = Task(alarm.alarm_name, "alarm")
+        alarm_widget = TaskWidget(alarm.alarm_name, TaskWidget.TaskType.alarm)
         self.alarm_area_layout.addWidget(alarm_widget)
 
         self.set_content_layout()
@@ -126,7 +126,7 @@ if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
 
     app = QApplication([])
-    zone_and_tasks = ZoneAndTasks("Locker Area", "region")
+    zone_and_tasks = ZoneAndTasks("Locker Area", ZoneAndTasks.TaskType.region)
     zone_and_tasks.show()
 
     app.exec_()

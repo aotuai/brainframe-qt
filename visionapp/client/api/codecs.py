@@ -161,12 +161,15 @@ class Alert(Codec):
 
 class Zone(Codec):
     """The definition for a zone. It is a non-convex polygon or a line.
+
+    :param coords: List of lists (ex: [[0, 0], [10, 10], [100, 500], [0, 500]])
+    points are pixel based, with (0, 0) at top left
     """
 
-    def __init__(self, *, name, alarms, coords, id_=None):
+    def __init__(self, *, name, coords, alarms=(), id_=None):
         self.name = name
         self.id = id_
-        self.alarms = alarms
+        self.alarms = list(alarms)
         self.coords = coords
 
     def to_dict(self):
