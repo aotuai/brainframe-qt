@@ -17,6 +17,8 @@ class VideoSmall(StreamWidget):
         # Because these widgets are added dynamically, we can't connect slots
         # and signals using QtDesigner and have to do it manually
         if parent is not None:  # Required or QtDesigner throws errors
+            # noinspection PyUnresolvedReferences
+            # .connect is erroneously detected as unresolved
             self.stream_clicked.connect(parent.thumbnail_stream_clicked_slot)
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.MinimumExpanding)
@@ -28,7 +30,7 @@ class VideoSmall(StreamWidget):
         # Add border around stream to indicate its selection
         self.add_selection_border()
 
-        self.stream_clicked.emit(self.stream_id)
+        self.stream_clicked.emit(self.stream_conf.id)
 
         super().mousePressEvent(event)
 

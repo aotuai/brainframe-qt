@@ -110,7 +110,7 @@ class TaskConfiguration(QDialog):
 
         # Instruct the VideoTaskConfig instance to delete its unconfirmed
         # polygon
-        self.video_task_config.remove_unconfirmed_polygon()
+        self.video_task_config.clear_unconfirmed_polygon()
 
         self._set_widgets_enabled(True)
 

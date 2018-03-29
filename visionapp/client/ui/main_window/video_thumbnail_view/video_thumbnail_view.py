@@ -21,9 +21,9 @@ class VideoThumbnailView(QWidget):
 
         loadUi(qt_ui_paths.video_thumbnail_view_ui, self)
 
-        # TODO: Debug
-        if api is not None:
-            api.get_stream_configurations = get_stream_configurations_debug
+        # # TODO: Debug
+        # if api is not None:
+        #     api.get_stream_configurations = get_stream_configurations_debug
 
         self._grid_num_columns = grid_num_columns
         """Current number of columns in grid"""
@@ -41,14 +41,9 @@ class VideoThumbnailView(QWidget):
         #     self.new_stream_widget(stream_conf)
         #     self.streams[stream_conf.id] = stream_conf
 
-        if api is not None:
-            for stream_conf in api.get_stream_configurations():
-                self.new_stream_widget(stream_conf)
-        else:
-            # Create fake videos for QtDesigner
-            # TODO: Use mock for this
-            for stream_conf in get_stream_configurations_debug():
-                self.new_stream_widget(stream_conf)
+        for stream_conf in api.get_stream_configurations():
+            print(stream_conf)
+            self.new_stream_widget(stream_conf)
 
         self.current_stream_id = None
         """Currently expanded stream. None if no stream selected"""
