@@ -21,10 +21,6 @@ class VideoThumbnailView(QWidget):
 
         loadUi(qt_ui_paths.video_thumbnail_view_ui, self)
 
-        # # TODO: Debug
-        # if api is not None:
-        #     api.get_stream_configurations = get_stream_configurations_debug
-
         self._grid_num_columns = grid_num_columns
         """Current number of columns in grid"""
         self._grid_num_columns_expanded = grid_num_columns
@@ -35,11 +31,6 @@ class VideoThumbnailView(QWidget):
         
         Dict is formatted as {stream_id: StreamConfiguration()}
         """
-
-        # # Get streams from API and create widgets for each
-        # for stream_conf in api.get_stream_configurations():
-        #     self.new_stream_widget(stream_conf)
-        #     self.streams[stream_conf.id] = stream_conf
 
         for stream_conf in api.get_stream_configurations():
             print(stream_conf)
@@ -134,31 +125,3 @@ class VideoThumbnailView(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-
-
-# DEBUG
-def get_stream_configurations_debug():
-    from visionapp.client.api.codecs import StreamConfiguration
-    configs = [
-        StreamConfiguration(name="Image1",
-                            connection_type=StreamConfiguration.ConnType.file,
-                            parameters=
-                            f'{{"filepath": "{image_paths.cat_test_video}"}}',
-                            id_=1010101),
-        StreamConfiguration(name="Image1",
-                            connection_type=StreamConfiguration.ConnType.file,
-                            parameters=
-                            f'{{"filepath": "{image_paths.camera_test_video}"}}',
-                            id_=2020202),
-        StreamConfiguration(name="Image1",
-                            connection_type=StreamConfiguration.ConnType.file,
-                            parameters=
-                            f'{{"filepath":"{image_paths.ostrich_test_video}"}}',
-                            id_=3030303),
-        StreamConfiguration(name="Image1",
-                            connection_type=StreamConfiguration.ConnType.file,
-                            parameters=
-                            f'{{"filepath": "{image_paths.camera_test_video}"}}',
-                            id_=4040404)]
-
-    return configs
