@@ -46,7 +46,7 @@ class TaskConfiguration(QDialog):
     @pyqtSlot()
     def new_region(self):
 
-        region_name, ok = QInputDialog.getText(QInputDialog(), "New Zone",
+        region_name, ok = QInputDialog.getText(self, "New Zone",
                                                "Name for new zone:")
         if not ok:
             # User pressed cancel or escape or otherwise closed the window
