@@ -21,6 +21,9 @@ class TaskConfiguration(QDialog):
             self.video_task_config.change_stream(stream_conf)
 
         self.unconfirmed_zone: Zone = None
+        self.unconfirmed_zone_widget = None
+
+        self._hide_operation_widgets(True)
 
     @classmethod
     def open_configuration(cls, stream_conf):
@@ -71,6 +74,7 @@ class TaskConfiguration(QDialog):
 
         # Disable critical widgets from being interacted with during creation
         self._set_widgets_enabled(False)
+        self._hide_operation_widgets(False)
 
     @pyqtSlot()
     def new_region_confirmed(self):
@@ -94,6 +98,7 @@ class TaskConfiguration(QDialog):
         self.unconfirmed_zone = None
 
         self._set_widgets_enabled(True)
+        self._hide_operation_widgets(True)
 
     @pyqtSlot()
     def new_region_canceled(self):
@@ -124,6 +129,11 @@ class TaskConfiguration(QDialog):
         self.region_button.setEnabled(enabled)
         self.detect_behavior_checkbox.setEnabled(enabled)
         self.crowd_heatmap_checkbox.setEnabled(enabled)
+
+    def _hide_operation_widgets(self, hidden):
+        self.confirm_op_button.setHidden(hidden)
+        self.cancel_op_button.setHidden(hidden)
+        self.instruction_label.setHidden(hidden)
 
 
 if __name__ == '__main__':

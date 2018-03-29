@@ -128,7 +128,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QHBoxLayout" name="op_button_layout">
        <property name="topMargin">
         <number>0</number>
        </property>
@@ -162,7 +162,7 @@
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer">
+      <spacer name="vertical_spacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
