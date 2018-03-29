@@ -32,11 +32,11 @@ class StreamConfigurationDialog(QDialog):
             return None
 
         if dialog.connection_type == StreamConfiguration.ConnType.ip_camera:
-            params = {"url": '"{}"'.format(dialog.parameter_value.text())}
+            params = {"url": "{}".format(dialog.parameter_value.text())}
         elif dialog.connection_type == StreamConfiguration.ConnType.webcam:
-            params = {"device_id": '"{}"'.format(dialog.parameter_value.text())}
+            params = {"device_id": "{}".format(dialog.parameter_value.text())}
         elif dialog.connection_type == StreamConfiguration.ConnType.file:
-            params = {"filepath": '"{}"'.format(dialog.parameter_value.text())}
+            params = {"filepath": "{}".format(dialog.parameter_value.text())}
         else:
             raise NotImplementedError("Unrecognized connection type")
 
