@@ -32,20 +32,17 @@ class StreamConfigurationDialog(QDialog):
             return None
 
         if dialog.connection_type == StreamConfiguration.ConnType.ip_camera:
-            parameters = \
-                f'{{"url":"{dialog.parameter_value.text()}"}}'
+            params = {"url": '"{}"'.format(dialog.parameter_value.text())}
         elif dialog.connection_type == StreamConfiguration.ConnType.webcam:
-            parameters = \
-                f'{{"device_id":{dialog.parameter_value.text()}}}'
+            params = {"device_id": '"{}"'.format(dialog.parameter_value.text())}
         elif dialog.connection_type == StreamConfiguration.ConnType.file:
-            parameters = \
-                f'{{"filepath":"{dialog.parameter_value.text()}"}}'
+            params = {"filepath": '"{}"'.format(dialog.parameter_value.text())}
         else:
             raise NotImplementedError("Unrecognized connection type")
 
         return StreamConfiguration(name=dialog.stream_name.text(),
                                    connection_type=dialog.connection_type,
-                                   parameters=parameters)
+                                   parameters=params)
 
     @pyqtSlot(str)
     def connection_type_changed_slot(self, connection_type):
