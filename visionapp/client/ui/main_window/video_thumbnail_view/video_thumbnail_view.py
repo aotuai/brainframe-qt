@@ -1,13 +1,13 @@
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.uic import loadUi
 
-from visionapp.client.api import api
+from visionapp.client.api import api, APIError
 
 from visionapp.client.ui.dialogs import StreamConfigurationDialog
-from visionapp.client.ui.resources.paths import qt_ui_paths, image_paths
+from visionapp.client.ui.resources.paths import qt_ui_paths
 from .video_small.video_small import VideoSmall
 
 
@@ -80,8 +80,19 @@ class VideoThumbnailView(QWidget):
     def create_new_stream_slot(self):
         stream_conf = StreamConfigurationDialog.configure_stream()
 
+        try:
+            stream_conf = api.set_stream_configuration(stream_conf)
+        except APIError:
+            QMessageBox.information(self,
+                                    "Error Opening Stream",
+                                    "<b>Error encountered while opening stream</b>"
+                                    "<br><br>"
+                                    "Is stream already open?<br>"
+                                    "Is this a valid stream source?")
+            return
+
         if stream_conf:
-            self.new_stream_widget(stream_conf)
+                self.new_stream_widget(stream_conf)
 
     @pyqtProperty(int)
     def grid_num_columns(self):
