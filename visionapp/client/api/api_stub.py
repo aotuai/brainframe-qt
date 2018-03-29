@@ -119,7 +119,7 @@ class API(metaclass=Singleton):
         self._put_json(req, 'false')
 
     # Stream Specific stuff
-    def get_stream(self, stream_id) -> Union[None, StreamReader]:
+    def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
         """Get the StreamReader for the given stream_id.
         :param stream_id: The ID of the stream configuration to open.
         :return: A StreamReader object OR None, if the server was unable to
