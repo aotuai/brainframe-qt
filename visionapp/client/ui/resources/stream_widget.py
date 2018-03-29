@@ -88,7 +88,7 @@ class StreamWidget(QGraphicsView):
             self.update_frame(QPixmap(str(image_paths.video_not_found)))
             self.frame_update_timer.stop()
         else:
-            self.video_stream = api.get_stream(stream_conf.id)
+            self.video_stream = api.get_stream_reader(stream_conf.id)
             self.frame_update_timer.start(1000 // self._frame_rate)
 
     @pyqtProperty(int)
