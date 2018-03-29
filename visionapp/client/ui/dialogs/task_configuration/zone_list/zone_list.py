@@ -35,6 +35,8 @@ class ZoneList(QScrollArea):
         self.zones[zone.name] = zone_widget
         self.main_layout.addWidget(zone_widget)
 
+        return zone_widget
+
     def add_alarm(self, alarm):
         zone = alarm.zone
 

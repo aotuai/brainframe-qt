@@ -91,8 +91,7 @@ class TaskConfiguration(QDialog):
         """
 
         # Make ZoneAndTasks widget re-evaluate it's zone_type
-        # TODO: THIS WAS THE LAST THING I WAS WORKING ON
-        # self.unconfirmed_zone.update_zone_type()
+        self.unconfirmed_zone_widget.update_zone_type()
 
         # Clear unconfirmed zone now that we're done with it
         self.unconfirmed_zone = None
