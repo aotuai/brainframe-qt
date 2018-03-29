@@ -1,7 +1,7 @@
 import logging
 import requests
 import ujson
-from typing import Union, List
+from typing import Union, List, Dict
 
 from visionapp.shared.singleton import Singleton
 from visionapp.shared.stream_capture import StreamReader
@@ -141,13 +141,18 @@ class API(metaclass=Singleton):
         return self._stream_manager.get_stream(url)
 
     # Get Analysis
-    def get_latest_zone_statuses(self) -> List[ZoneStatus]:
+    def get_latest_zone_statuses(self) -> Dict[int, List[ZoneStatus]]:
         """Get all ZoneStatuses
+        This method gets ALL of the latest processed zone statuses for every
+        zone for every stream. The call is intentionally broad and large so as
+        to lower the overhead of pinging the server and waiting for a return.
 
+        All active streams will have a key in the output dict.
         :return:
         {“stream_id1”: [ZoneStatus, ZoneStatus], “stream_id2”: [ZoneStatus]}
         """
         # TODO: Impliment get_latest_zone_status in test_integration_analysis.py/test_zone_statuses
+        req = "/api/streams/{stream_id}/url"
 
     # Alerts
     def get_unverified_alerts(self, stream_id) -> List[Alert]:

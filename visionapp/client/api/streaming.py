@@ -30,8 +30,8 @@ class StreamManager:
 
     def close(self):
         """Close all streams and remove references"""
-        for _, stream_reader in self._stream_readers.items():
-            stream_reader.close()
+        for url in self._stream_readers.copy().keys():
+            self.close_stream(url)
 
         self._stream_readers = {}
 
@@ -47,7 +47,7 @@ class StatusPoller(Thread):
 
     def get_latest(self, stream_id):
         """Returns the latest cached list of ZoneStatuses for that stream_id"""
-        return self.__latest[stream_id]
+        return self._latest[stream_id]
 
     def close(self):
         """Close the status polling thread"""
