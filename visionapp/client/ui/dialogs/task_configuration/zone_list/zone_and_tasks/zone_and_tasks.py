@@ -5,7 +5,6 @@ from PyQt5.QtCore import (
     Qt
 )
 from PyQt5.QtWidgets import (
-    QScrollArea,
     QToolButton,
     QWidget,
     QGridLayout,
@@ -13,7 +12,7 @@ from PyQt5.QtWidgets import (
     QSizePolicy
 )
 
-from .tasks.zone_widget import ZoneWidget
+from .tasks.task_widget import TaskWidget
 from visionapp.client.api.codecs import Zone
 from visionapp.client.ui.resources.datatypes.alarm import Alarm
 
@@ -25,7 +24,7 @@ class ZoneAndTasks(QWidget):
         super().__init__(parent)
 
         self.zone_name = zone.name
-        self.zone_type = None
+        self.zone_type = TaskWidget.TaskType.in_progress
 
         self.zone = zone
 
@@ -38,6 +37,7 @@ class ZoneAndTasks(QWidget):
         self.main_layout = None
         self.zone_widget = None
 
+        self.init_ui()
 
         # self.setStyleSheet("background-color:black;")
 
@@ -51,7 +51,7 @@ class ZoneAndTasks(QWidget):
         self.toggle_button = QToolButton(self)
         self.main_layout = QGridLayout(self)
 
-        self.zone_widget = ZoneWidget(self.zone_name, self.zone_type, self)
+        self.zone_widget = TaskWidget(self.zone_name, self.zone_type, self)
 
         self.toggle_button.setArrowType(Qt.RightArrow)
         self.toggle_button.setCheckable(True)
@@ -145,7 +145,8 @@ class ZoneAndTasks(QWidget):
             content_animation.setEndValue(content_height)
 
     def add_alarm(self, alarm: Alarm):
-        alarm_widget = Task(alarm.alarm_name, "alarm", self.alarm_area)
+        alarm_widget = TaskWidget(alarm.alarm_name, TaskWidget.TaskType.alarm,
+                                  self.alarm_area)
 
         self.alarm_area_layout.addWidget(alarm_widget)
 
@@ -153,11 +154,11 @@ class ZoneAndTasks(QWidget):
 
     def update_zone_type(self):
         if len(self.zone.coords) == 0:
-            self.zone_widget.set_task_type(ZoneWidget.TaskType.in_progress)
+            self.zone_widget.set_task_type(TaskWidget.TaskType.in_progress)
         elif len(self.zone.coords) == 2:
-            self.zone_widget.set_task_type(ZoneWidget.TaskType.line)
+            self.zone_widget.set_task_type(TaskWidget.TaskType.line)
         else:
-            self.zone_widget.set_task_type(ZoneWidget.TaskType.region)
+            self.zone_widget.set_task_type(TaskWidget.TaskType.region)
 
 
 if __name__ == '__main__':
