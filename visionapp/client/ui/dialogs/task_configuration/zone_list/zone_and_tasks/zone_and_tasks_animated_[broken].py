@@ -13,14 +13,8 @@ from PyQt5.QtWidgets import (
     QSizePolicy
 )
 
-# TODO: Relative import for testing
-if __name__ != '__main__':
-    from .tasks.task_widget import TaskWidget
-    from .tasks.zone_widget import ZoneWidget
-else:
-    from tasks.task import Task
-    from tasks.zone import Zone
-
+from .tasks.task_widget import TaskWidget
+from .tasks.zone_widget import ZoneWidget
 from visionapp.client.ui.resources.datatypes.alarm import Alarm
 
 
@@ -42,9 +36,9 @@ class ZoneAndTasks(QWidget):
         self.main_layout = None
         self.zone = None
 
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         self.toggle_animation = QParallelAnimationGroup()
         self.alarm_area = QScrollArea()
         self.alarm_area_layout = QVBoxLayout()
