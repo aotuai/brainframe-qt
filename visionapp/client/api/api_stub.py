@@ -150,10 +150,16 @@ class API(metaclass=Singleton):
 
         All active streams will have a key in the output dict.
         :return:
-        {“stream_id1”: [ZoneStatus, ZoneStatus], “stream_id2”: [ZoneStatus]}
+        {stream_id1: [ZoneStatus, ZoneStatus], stream_id2: [ZoneStatus]}
         """
         # TODO: Impliment get_latest_zone_status in test_integration_analysis.py/test_zone_statuses
-        req = "/api/streams/{stream_id}/url"
+        req = "/api/streams/status/"
+        data = self._get(req)
+
+        # Convert ZoneStatuses to Codecs
+        out = {int(s_id): [ZoneStatus.from_dict(status) for status in statuses]
+               for s_id, statuses in data.items()}
+        return out
 
     # Alerts
     def get_unverified_alerts(self, stream_id) -> List[Alert]:
