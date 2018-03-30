@@ -1,4 +1,4 @@
-from visionapp.client.ui.resources.stream_widget import StreamWidget
+from visionapp.client.ui.resources.video_items.stream_widget import StreamWidget
 
 
 class VideoLarge(StreamWidget):

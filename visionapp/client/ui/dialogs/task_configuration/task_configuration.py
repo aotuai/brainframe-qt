@@ -17,7 +17,7 @@ class TaskConfiguration(QDialog):
 
         loadUi(qt_ui_paths.task_configuration_ui, self)
 
-        self.stream_conf = None  # type: StreamConfiguration
+        self.stream_conf = stream_conf  # type: StreamConfiguration
         if stream_conf:
             self.video_task_config.change_stream(stream_conf)
 

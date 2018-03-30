@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QSizePolicy
 
-from visionapp.client.ui.resources.stream_widget import StreamWidget
+from visionapp.client.ui.resources.video_items.stream_widget import StreamWidget
 
 
 class VideoSmall(StreamWidget):

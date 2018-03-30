@@ -25,8 +25,13 @@ class StreamWidget(QGraphicsView):
         # Remove ugly white background and border from QGraphicsView
         self.setStyleSheet("background-color: transparent; border: 0px")
 
+        # TODO: Alex: Uncomment
+        # self.stream_poller = api.get_stream_poller()
+
+        # Stream configuration for current widget
         self.stream_conf = None
 
+        # Scene to draw items to
         self.scene_ = QGraphicsScene()
         self.setScene(self.scene_)
 
@@ -39,10 +44,17 @@ class StreamWidget(QGraphicsView):
         self.frame_update_timer = QTimer()
         # noinspection PyUnresolvedReferences
         # .connect is erroneously detected as unresolved
-        self.frame_update_timer.timeout.connect(self.update_frame)
+        self.frame_update_timer.timeout.connect(self.update_items)
 
         # Initialize stream configuration and get started
         self.change_stream(stream_conf)
+
+    def update_items(self):
+        self.update_frame()
+
+        # TODO: Alex: Uncomment
+        # self.update_zones()
+        # self.update_detections()
 
     def update_frame(self, pixmap: QPixmap = None):
         """Grab the newest frame from the Stream object
@@ -73,7 +85,14 @@ class StreamWidget(QGraphicsView):
             self.current_frame.setPixmap(pixmap)
         self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
 
-    # TODO
+    def update_zones(self):
+        # TODO: Alex
+        for zone in self.stream_poller.get_latest(self.stream_conf.id):
+            pass
+
+    def update_detections(self):
+        pass
+
     def change_stream(self, stream_conf):
         """Change the stream source of the video
 
