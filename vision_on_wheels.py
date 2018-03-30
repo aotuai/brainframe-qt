@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication
 from visionapp.client import api, MainWindow
 
 # Monkeypatch the api to be an instantiated object
-api.__dict__['api'] = api.API("http://localhost", 8000)
+api.__dict__['api'] = api.API("http://localhost:8000")
 
 # Set all stream analysis as "active" here, since there's no way to in the UI
 configs = api.api.get_stream_configurations()

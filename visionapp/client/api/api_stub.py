@@ -49,15 +49,13 @@ class API(metaclass=Singleton):
     put = staticmethod(requests.put)
     delete = staticmethod(requests.delete)
 
-    def __init__(self, hostname, port):
-        self.hostname = hostname
-        self.port = port
-        self._base_url = self.hostname + ":" + str(self.port)
+    def __init__(self, server_url):
+        self._server_url = server_url
 
         self._stream_manager = StreamManager()
-        self._status_poller = StatusPoller(self.get_latest_zone_statuses, 10)
+        self._status_poller = StatusPoller(self, 10)
 
-    # Non-Backend calling functions
+
     def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
         """Get the StreamReader for the given stream_id.
         :param stream_id: The ID of the stream configuration to open.
@@ -308,6 +306,6 @@ class API(metaclass=Singleton):
 
     def _full_url(self, api_url):
         url = "{base_url}{api_url}".format(
-            base_url=self._base_url,
+            base_url=self._server_url,
             api_url=api_url)
         return url
