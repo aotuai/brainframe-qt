@@ -59,6 +59,8 @@ class VideoExpandedView(QWidget):
 
     @pyqtSlot()
     def open_source_config(self):
+        # TODO: Alex: Open the source config dialog window for the stream
+        # Use ui.dialogs.stream_configuration
         print("Opening source configuration")
 
     def _set_widgets_hidden(self, hidden=True):
