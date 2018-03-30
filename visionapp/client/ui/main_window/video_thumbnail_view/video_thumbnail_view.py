@@ -80,8 +80,6 @@ class VideoThumbnailView(QWidget):
     def create_new_stream_slot(self):
         stream_conf = StreamConfigurationDialog.configure_stream()
 
-        # if stream_conf:
-
         try:
             stream_conf = api.set_stream_configuration(stream_conf)
         except APIError:
