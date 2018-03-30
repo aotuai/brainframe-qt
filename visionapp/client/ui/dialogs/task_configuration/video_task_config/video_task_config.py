@@ -60,8 +60,10 @@ class VideoTaskConfig(StreamWidget):
         return ret
 
     def clear_unconfirmed_polygon(self):
-        self.scene_.removeItem(self.unconfirmed_polygon)
-        self.unconfirmed_polygon = None
+
+        if self.unconfirmed_polygon is not None:
+            self.scene_.removeItem(self.unconfirmed_polygon)
+            self.unconfirmed_polygon = None
 
 
 class ClickCircle(QGraphicsEllipseItem):
