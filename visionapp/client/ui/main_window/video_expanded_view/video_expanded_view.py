@@ -34,6 +34,7 @@ class VideoExpandedView(QWidget):
         self.current_video = stream_conf
 
         # Show expanded view widgets
+        self.stream_name_label.setText(stream_conf.name)
         self._set_widgets_hidden(False)
 
     @pyqtSlot()
@@ -72,3 +73,4 @@ class VideoExpandedView(QWidget):
         self.alert_log.setHidden(hidden)
         self.task_config_button.setHidden(hidden)
         self.source_config_button.setHidden(hidden)
+        self.stream_name_label.setHidden(hidden)

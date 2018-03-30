@@ -15,7 +15,6 @@ from PyQt5.QtWidgets import (
 
 from .tasks.task_widget import TaskWidget
 from .tasks.zone_widget import ZoneWidget
-from visionapp.client.ui.resources.datatypes.alarm import Alarm
 
 
 class ZoneAndTasks(QWidget):

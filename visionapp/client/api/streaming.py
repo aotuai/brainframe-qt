@@ -1,5 +1,6 @@
+import logging
 from threading import Thread
-from time import sleep
+from time import sleep, time
 
 from visionapp.shared.stream_capture import StreamReader
 
@@ -50,7 +51,7 @@ class StatusPoller(Thread):
         """
         super().__init__(name="StatusPollerThread")
         self._get_latest_zone_statuses = get_latest_statuses_func
-        self._ms_between_updates = ms_between_updates / 1000
+        self._seconds_between_updates = ms_between_updates / 1000
         self._running = False
 
         # Get something before starting the thread
@@ -61,15 +62,28 @@ class StatusPoller(Thread):
         """Polls Brainserver for ZoneStatuses at a constant rate"""
         self._running = True
         while self._running:
-            self._latest = self._get_latest_zone_statuses()
-            sleep(self._ms_between_updates)
+
+            # Call the server, timing how long the call takes
+            try:
+                start = time()
+                self._latest = self._get_latest_zone_statuses()
+                call_time = time() - start
+            except ConnectionError:
+                logging.warning("StatusLogger: Could not reach server!")
+                sleep(2)
+                
+            # Sleep for the appropriate amount to keep call times consistent
+            time_left = self._seconds_between_updates - call_time
+            if time_left > 0:
+                sleep(time_left)
 
         self._running = False
 
     def get_detections(self, stream_id):
         """Conveniently return all detections found in this stream"""
-        latest = self._latest
-        statuses = latest[stream_id]
+        statuses = self.get_latest_statuses(stream_id)
+        if len(statuses) == 0:
+            return []
 
         # Find the main screen
         status = [status for status in statuses

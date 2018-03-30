@@ -38,8 +38,9 @@ class StreamWidget(QGraphicsView):
         self.scene_ = QGraphicsScene()
         self.setScene(self.scene_)
 
-        self.video_stream = None
+        self.video_stream = None  # Set in change_stream
         self.current_frame = None
+        self._default_frame = QPixmap(str(image_paths.video_not_found))
         self.timestamp = -1
 
         self._frame_rate = frame_rate
@@ -67,9 +68,13 @@ class StreamWidget(QGraphicsView):
         """Grab the newest frame from the Stream object
 
         :param pixmap: If passed, the frame will be manually set to it"""
+
         if not pixmap:
-            if not self.video_stream.is_initialized:
-                # Don't display a frame until stream is ready
+            # Check if the object actually has a stream
+            if self.video_stream is None or \
+                    not self.video_stream.is_initialized or \
+                    not self.video_stream.is_running:
+                self._set_frame(self._default_frame)
                 return
 
             timestamp, frame = self.video_stream.latest_frame_rgb
@@ -77,12 +82,13 @@ class StreamWidget(QGraphicsView):
             # Don't render image if it hasn't changed
             if timestamp <= self.timestamp:
                 return
-            else:
-                self.timestamp = timestamp
 
+            self.timestamp = timestamp
             pixmap = self._get_pixmap_from_numpy_frame(frame)
             # TODO: Use video_stream.is_running to stop widget if stream ends
 
+    def _set_frame(self, pixmap: QPixmap):
+        """Set the current frame to the given pixmap"""
         # Create new QGraphicsPixmapItem if there isn't one
         if not self.current_frame:
             self.current_frame = self.scene_.addPixmap(pixmap)
@@ -127,7 +133,7 @@ class StreamWidget(QGraphicsView):
             self.current_frame = None
 
         if not stream_conf:
-            self.update_frame(QPixmap(str(image_paths.video_not_found)))
+            self._set_frame(QPixmap(str(image_paths.video_not_found)))
             self.frame_update_timer.stop()
         else:
             self.video_stream = api.get_stream_reader(stream_conf.id)

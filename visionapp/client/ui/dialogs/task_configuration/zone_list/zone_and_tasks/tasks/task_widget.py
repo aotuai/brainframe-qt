@@ -11,7 +11,7 @@ class TaskWidget(QWidget):
 
     # noinspection PyArgumentList
     # PyCharm incorrectly complains
-    TaskType = Enum("TaskType", "region line alarm in_progress")
+    TaskType = Enum("TaskType", ["region", "line",  "alarm", "in_progress"])
 
     def __init__(self, task_name, task_type: TaskType, parent=None):
         super().__init__(parent)

@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
 from visionapp.client.ui.resources.paths import qt_ui_paths
-from visionapp.client.ui.resources.datatypes.alarm import Alarm
 
 
 class AlarmCreationDialog(QDialog):

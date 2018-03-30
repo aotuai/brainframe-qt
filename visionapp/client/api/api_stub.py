@@ -55,7 +55,7 @@ class API(metaclass=Singleton):
         self._base_url = self.hostname + ":" + str(self.port)
 
         self._stream_manager = StreamManager()
-        self._status_poller = StatusPoller(self.get_latest_zone_statuses, 100)
+        self._status_poller = StatusPoller(self.get_latest_zone_statuses, 10)
 
     # Non-Backend calling functions
     def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:

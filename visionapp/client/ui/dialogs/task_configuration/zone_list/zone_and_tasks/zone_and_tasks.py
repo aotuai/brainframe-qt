@@ -13,8 +13,8 @@ from PyQt5.QtWidgets import (
 )
 
 from .tasks.task_widget import TaskWidget
-from visionapp.client.api.codecs import Zone
-from visionapp.client.ui.resources.datatypes.alarm import Alarm
+from visionapp.client.api.codecs import Zone, ZoneAlarm
+
 
 
 class ZoneAndTasks(QWidget):
@@ -144,7 +144,7 @@ class ZoneAndTasks(QWidget):
             content_animation.setStartValue(0)
             content_animation.setEndValue(content_height)
 
-    def add_alarm(self, alarm: Alarm):
+    def add_alarm(self, alarm: ZoneAlarm):
         alarm_widget = TaskWidget(alarm.alarm_name, TaskWidget.TaskType.alarm,
                                   self.alarm_area)
 

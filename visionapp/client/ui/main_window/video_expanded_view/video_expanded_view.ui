@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>282</height>
+    <width>1073</width>
+    <height>832</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,6 +18,21 @@
     <layout class="QVBoxLayout" name="main_layout">
      <item>
       <layout class="QHBoxLayout" name="close_button_layout">
+       <item>
+        <widget class="QLabel" name="stream_name_label">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>[Stream Name]</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">

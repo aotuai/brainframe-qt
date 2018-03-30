@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Tuple
 
 from PyQt5.QtCore import Qt

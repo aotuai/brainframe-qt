@@ -51,33 +51,8 @@ class TaskConfiguration(QDialog):
 
     @pyqtSlot()
     def new_region(self):
-
-        while True:
-            region_name, ok = QInputDialog.getText(self, "New Region",
-                                                   "Name for new region:")
-            if not ok:
-                # User pressed cancel or escape or otherwise closed the window
-                # without pressing Ok
-                return
-
-            # Strip whitespace as a favor for the user
-            region_name = region_name.strip()
-
-            # TODO: Grey out QInputDialog Ok button if no entry instead
-            if region_name == "":
-                # Return if entered string is empty
-                return
-
-            zones = api.get_zones(self.stream_conf.id)
-            if region_name in [zone.name for zone in zones]:
-                title = "Item Name Already Exists"
-                message = "Item {} already exists in Stream".format(region_name)
-                message += "<br>Please use another name."
-                QMessageBox.information(self, title, message)
-                continue
-
-            break
-
+        region_name = self.get_new_zone_name("New Region",
+                                             "Name for new region:")
         # Create a new Zone
         self.unconfirmed_zone = Zone(name=region_name, coords=[])
 
@@ -140,6 +115,35 @@ class TaskConfiguration(QDialog):
         self.video_task_config.clear_unconfirmed_polygon()
 
         self._set_widgets_enabled(True)
+
+    def get_new_zone_name(self, prompt_title, prompt_text):
+        """Get the name for a new zone, while checking if it exists"""
+        while True:
+            region_name, ok = QInputDialog.getText(self, "New Region",
+                                                   "Name for new region:")
+            if not ok:
+                # User pressed cancel or escape or otherwise closed the window
+                # without pressing Ok
+                return
+
+            # Strip whitespace as a favor for the user
+            region_name = region_name.strip()
+
+            # TODO: Grey out QInputDialog Ok button if no entry instead
+            if region_name == "":
+                # Return if entered string is empty
+                return
+
+            zones = api.get_zones(self.stream_conf.id)
+            if region_name in [zone.name for zone in zones]:
+                title = "Item Name Already Exists"
+                message = "Item {} already exists in Stream".format(region_name)
+                message += "<br>Please use another name."
+                QMessageBox.information(self, title, message)
+                continue
+
+            break
+        return region_name
 
     @pyqtSlot()
     def new_line(self):
