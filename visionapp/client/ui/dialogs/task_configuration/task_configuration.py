@@ -1,8 +1,9 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QDialog, QInputDialog, QDialogButtonBox
+from PyQt5.QtWidgets import QDialog, QInputDialog, QDialogButtonBox, QMessageBox
 from PyQt5.uic import loadUi
 
-from visionapp.client.api.codecs import Zone
+from visionapp.client.api import api
+from visionapp.client.api.codecs import Zone, StreamConfiguration
 from visionapp.client.ui.resources.paths import qt_ui_paths
 from visionapp.client.ui.dialogs import AlarmCreationDialog
 from .zone_list import ZoneList
@@ -16,7 +17,7 @@ class TaskConfiguration(QDialog):
 
         loadUi(qt_ui_paths.task_configuration_ui, self)
 
-        self.stream_conf = stream_conf if stream_conf else None
+        self.stream_conf = None  # type: StreamConfiguration
         if stream_conf:
             self.video_task_config.change_stream(stream_conf)
 
@@ -46,17 +47,31 @@ class TaskConfiguration(QDialog):
     @pyqtSlot()
     def new_region(self):
 
-        region_name, ok = QInputDialog.getText(self, "New Zone",
-                                               "Name for new zone:")
-        if not ok:
-            # User pressed cancel or escape or otherwise closed the window
-            # without pressing Ok
-            return
+        while True:
+            region_name, ok = QInputDialog.getText(self, "New Region",
+                                                   "Name for new region:")
+            if not ok:
+                # User pressed cancel or escape or otherwise closed the window
+                # without pressing Ok
+                return
 
-        # TODO: Grey out QInputDialog Ok button if no entry instead
-        if region_name == "":
-            # Return if entered string is empty
-            return
+            # Strip whitespace as a favor for the user
+            region_name = region_name.strip()
+
+            # TODO: Grey out QInputDialog Ok button if no entry instead
+            if region_name == "":
+                # Return if entered string is empty
+                return
+
+            zones = api.get_zones(self.stream_conf.id)
+            if region_name in [zone.name for zone in zones]:
+                title = "Item Name Already Exists"
+                message = "Item {} already exists in Stream".format(region_name)
+                message += "<br>Please use another name."
+                QMessageBox.information(self, title, message)
+                continue
+
+            break
 
         # Create a new Zone
         self.unconfirmed_zone = Zone(name=region_name, coords=[])
@@ -92,6 +107,9 @@ class TaskConfiguration(QDialog):
 
         # Make ZoneAndTasks widget re-evaluate it's zone_type
         self.unconfirmed_zone_widget.update_zone_type()
+
+        # Add zone to database
+        api.set_zone(self.stream_conf.id, self.unconfirmed_zone)
 
         # Clear unconfirmed zone now that we're done with it
         self.unconfirmed_zone = None
