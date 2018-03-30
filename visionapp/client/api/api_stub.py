@@ -84,7 +84,9 @@ class API(metaclass=Singleton):
         return self._status_poller
 
     # Stream Configuration Stuff
-    def get_stream_configurations(self, only_get_active=False, stream_id=None) \
+    def get_stream_configurations(self,
+                                  only_get_active=False,
+                                  stream_id=None) \
             -> Union[List[StreamConfiguration], StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
         :param only_get_active: If True, It will get StreamConfigurations that
@@ -193,13 +195,18 @@ class API(metaclass=Singleton):
 
     # Backend Capabilities
     def get_engine_configuration(self) -> EngineConfiguration:
-        """Returns the capabilities of the machine learning engine on the server.
+        """Returns the capabilities of the machine learning engine on the
+        server.
+
         Currently, it can tell you:
             The types of objects that can be detected
             The types of attributes that can be detected for each object.
 
         :return: EngineConfiguration
         """
+        req = "/api/engine-configuration"
+        resp = self._get(req)
+        return EngineConfiguration.from_dict(resp)
 
     # Zone specific stuff
     def get_zones(self, stream_id) -> List[Zone]:

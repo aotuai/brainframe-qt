@@ -275,14 +275,22 @@ class StreamConfiguration(Codec):
 
 # Engine related stuff
 class EngineConfiguration(Codec):
-    """This is for telling the client the capabilities of the engine. This might
-    include the total number of streams available, the types of detectable
-    objects, the types of attributes that can be detected, etc.
+    """This is for telling the client the capabilities of the engine. This
+    might include the total number of streams available, the types of
+    detectable objects, the types of attributes that can be detected, etc.
     """
 
-    def __init__(self, *, version, detectable, max_streams):
+    def __init__(self, *, version, attributes, attribute_ownership,
+                 max_streams):
         self.version = version
-        self.detectable = detectable
+        # A dict where the key is an attribute type and the value is a list of
+        # possible values for the attribute type
+        self.attributes = attributes
+        # A dict where the key is a detection class and the value is a list of
+        # all attributes that may apply to that detection class
+        self.attribute_ownership = attribute_ownership
+        # The maximum amount of allowed streams that can have analysis run on
+        # them at once
         self.max_streams = max_streams
 
     def to_dict(self):
@@ -290,6 +298,8 @@ class EngineConfiguration(Codec):
 
     @staticmethod
     def from_dict(d):
-        return EngineConfiguration(version=d["version"],
-                                   detectable=d["detectable"],
-                                   max_streams=d["max_streams"])
+        return EngineConfiguration(
+            version=d["version"],
+            attributes=d["attributes"],
+            attribute_ownership=d["attribute_ownership"],
+            max_streams=d["max_streams"])
