@@ -33,7 +33,6 @@ class VideoThumbnailView(QWidget):
         """
 
         for stream_conf in api.get_stream_configurations():
-            print(stream_conf)
             self.new_stream_widget(stream_conf)
 
         self.current_stream_id = None
