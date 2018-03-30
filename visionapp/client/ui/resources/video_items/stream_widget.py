@@ -6,6 +6,7 @@ from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
+from visionapp.client.ui.resources.video_items import StreamPolygon
 from visionapp.client.ui.resources.paths import image_paths
 from visionapp.client.api import api
 
@@ -87,10 +88,25 @@ class StreamWidget(QGraphicsView):
 
     def update_zones(self):
         # TODO: Alex
+
+        # Find current zones polygons
+        items = self.scene_.items()
+        polygons = filter(lambda item: isinstance(item, StreamPolygon), items)
+        polygons = filter(lambda item:
+                          item.type == StreamPolygon.PolygonType.zone, polygons)
+        # Delete current zones polygons
+        for polygon in polygons:
+            self.scene_.removeItem(polygon)
+
+        # Add new StreamPolygons
         for zone in self.stream_poller.get_latest(self.stream_conf.id):
-            pass
+            self.scene_.addItem(StreamPolygon(StreamPolygon.PolygonType.zone,
+                                              zone.coords))
 
     def update_detections(self):
+
+        # TODO: Alex: Very similar to update_zones. May be able to combine rmval
+        # This function allows for fading out as well, though
         pass
 
     def change_stream(self, stream_conf):
