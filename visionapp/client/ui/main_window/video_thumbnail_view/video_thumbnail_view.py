@@ -80,20 +80,21 @@ class VideoThumbnailView(QWidget):
     def create_new_stream_slot(self):
         stream_conf = StreamConfigurationDialog.configure_stream()
 
-        if stream_conf:
+        # if stream_conf:
 
-            try:
-                stream_conf = api.set_stream_configuration(stream_conf)
-            except APIError:
-                QMessageBox.information(self,
-                                        "Error Opening Stream",
-                                        "<b>Error encountered while opening stream</b>"
-                                        "<br><br>"
-                                        "Is stream already open?<br>"
-                                        "Is this a valid stream source?")
-                return
+        try:
+            stream_conf = api.set_stream_configuration(stream_conf)
+        except APIError:
 
-            self.new_stream_widget(stream_conf)
+            message = "<b>Error encountered while opening stream</b>" \
+                      + "<br><br>" \
+                      + "Is stream already open?<br>" \
+                      + "Is this a valid stream source?"
+
+            QMessageBox.information(self, "Error Opening Stream", message)
+            return
+
+        self.new_stream_widget(stream_conf)
 
     @pyqtProperty(int)
     def grid_num_columns(self):
