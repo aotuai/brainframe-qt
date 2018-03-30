@@ -213,14 +213,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ZoneList</class>
-   <extends>QScrollArea</extends>
-   <header>visionapp.client.ui.dialogs.task_configuration.zone_list.zone_list</header>
-  </customwidget>
-  <customwidget>
    <class>VideoTaskConfig</class>
    <extends>QGraphicsView</extends>
    <header>visionapp.client.ui.dialogs.task_configuration.video_task_config.video_task_config</header>
+  </customwidget>
+  <customwidget>
+   <class>ZoneList</class>
+   <extends>QScrollArea</extends>
+   <header>visionapp.client.ui.dialogs.task_configuration.zone_list.zone_list</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -312,8 +312,8 @@
    <slot>new_region_confirmed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>485</x>
-     <y>343</y>
+     <x>555</x>
+     <y>342</y>
     </hint>
     <hint type="destinationlabel">
      <x>434</x>
@@ -328,12 +328,28 @@
    <slot>new_region_canceled()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>657</x>
-     <y>345</y>
+     <x>834</x>
+     <y>342</y>
     </hint>
     <hint type="destinationlabel">
      <x>509</x>
      <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>video_task_config</sender>
+   <signal>polygon_is_valid_signal(bool)</signal>
+   <receiver>TaskConfiguration</receiver>
+   <slot>enable_confirm_op_button(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>629</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>372</x>
+     <y>441</y>
     </hint>
    </hints>
   </connection>
@@ -344,5 +360,6 @@
   <slot>new_line()</slot>
   <slot>new_region_confirmed()</slot>
   <slot>new_region_canceled()</slot>
+  <slot>enable_confirm_op_button(bool)</slot>
  </slots>
 </ui>

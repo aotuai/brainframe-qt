@@ -4,7 +4,6 @@ import ujson
 
 
 class Codec(abc.ABC):
-
     @abc.abstractmethod
     def to_dict(self) -> dict:
         pass
@@ -24,6 +23,7 @@ class Codec(abc.ABC):
     def __repr__(self):
         return str(self.to_dict())
 
+
 class Detection(Codec):
     """A detected object. It can have 'children', for example, a "person" can
     have a "face" object as a child. It can also own several Attributes. For
@@ -41,6 +41,14 @@ class Detection(Codec):
         d["children"] = [Detection.to_dict(det) for det in self.children]
         d["attributes"] = [Attribute.to_dict(att) for att in self.attributes]
         return d
+
+    @property
+    def coords(self):
+        """Conveniently return a list of coordinates, polygon style"""
+        return [(self.rect[0], self.rect[1]),
+                (self.rect[2], self.rect[1]),
+                (self.rect[2], self.rect[3]),
+                (self.rect[0], self.rect[3])]
 
     @staticmethod
     def from_dict(d):
@@ -240,8 +248,8 @@ class StreamConfiguration(Codec):
 
     def __init__(self, *, name, connection_type, parameters, id_=None,
                  is_active=None):
-        assert connection_type in StreamConfiguration.ConnType,\
-            "You must feed StreamConfiguration.ConnType into connection_type"\
+        assert connection_type in StreamConfiguration.ConnType, \
+            "You must feed StreamConfiguration.ConnType into connection_type" \
             " You used a " + str(type(connection_type)) + " instead!"
 
         self.name = name

@@ -1,4 +1,5 @@
 from threading import Thread
+from time import sleep
 
 from visionapp.shared.stream_capture import StreamReader
 
@@ -7,6 +8,7 @@ class StreamManager:
     """
     Keeps track of existing Stream objects, and
     """
+
     def __init__(self):
         self._stream_readers = {}
 
@@ -32,24 +34,56 @@ class StreamManager:
         """Close all streams and remove references"""
         for url in self._stream_readers.copy().keys():
             self.close_stream(url)
-
+        print("Closing Stream manager")
         self._stream_readers = {}
 
 
 class StatusPoller(Thread):
     """ This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream. """
-    def __init__(self):
+
+    def __init__(self, get_latest_statuses_func, ms_between_updates: int):
+        """
+        :param get_latest_statuses_func: A function returning the latest
+        zone statuses, passed in by the API
+        :param ms_between_updates: Miliseconds between calling for an update
+        """
         super().__init__(name="StatusPollerThread")
+        self._get_latest_zone_statuses = get_latest_statuses_func
+        self._ms_between_updates = ms_between_updates / 1000
+        self._running = False
+
+        # Get something before starting the thread
+        self._latest = self._get_latest_zone_statuses
+        self.start()
 
     def run(self):
         """Polls Brainserver for ZoneStatuses at a constant rate"""
+        self._running = True
+        while self._running:
+            self._latest = self._get_latest_zone_statuses()
+            sleep(self._ms_between_updates)
 
-    def get_latest(self, stream_id):
+        self._running = False
+
+    def get_detections(self, stream_id):
+        """Conveniently return all detections found in this stream"""
+        latest = self._latest
+        statuses = latest[stream_id]
+
+        # Find the main screen
+        status = [status for status in statuses
+                  if status.zone.name == "Screen"][0]
+        return status.detections
+
+    def get_latest_statuses(self, stream_id):
         """Returns the latest cached list of ZoneStatuses for that stream_id"""
-        return self._latest[stream_id]
+        latest = self._latest
+        if stream_id not in latest:
+            return []
+        return latest[stream_id]
 
     def close(self):
         """Close the status polling thread"""
-        self.__running = False
-
+        self._running = False
+        self.join()

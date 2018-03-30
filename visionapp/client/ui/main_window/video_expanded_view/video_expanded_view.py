@@ -20,6 +20,9 @@ class VideoExpandedView(QWidget):
 
         self.current_video = None
 
+        # TODO: Button is only disabled until API allows editing of StreamConfig
+        self.source_config_button.setDisabled(True)
+
         self._set_widgets_hidden(True)
 
     @pyqtSlot(object)

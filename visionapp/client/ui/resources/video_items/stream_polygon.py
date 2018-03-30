@@ -1,3 +1,4 @@
+from typing import Union, List
 from enum import Enum
 
 from PyQt5.QtCore import QPointF, Qt
@@ -6,20 +7,21 @@ from PyQt5.QtWidgets import QGraphicsPolygonItem
 
 
 class StreamPolygon(QGraphicsPolygonItem):
-
     # noinspection PyArgumentList
     # PyCharm incorrectly complains
     # TODO: Alex: Are there more types of polygons?
-    PolygonType = Enum("PolygonType", "zone detection")
 
-    def __init__(self, polygon_type: PolygonType, points=(), *,
+    def __init__(self, points=(), *,
                  border_color=Qt.red, border_thickness=5,
                  fill_color=Qt.red, fill_alpha=128, parent=None):
-
-        self.type = polygon_type
-        self.polygon = QPolygonF(points)
-
+        self.polygon = QPolygonF()
         super().__init__(self.polygon, parent=parent)
+
+        # Initialize each point, in case the input is a list
+        for point in points:
+            self.insert_point(point)
+
+
 
         # Use border color unless manually set
         if fill_color is None:
@@ -36,7 +38,9 @@ class StreamPolygon(QGraphicsPolygonItem):
         # Apply thickness
         self._apply_border_thickness(border_thickness)
 
-    def insert_point(self, point: QPointF):
+    def insert_point(self, point: Union[List, QPointF]):
+        if isinstance(point, list) or isinstance(point, tuple):
+            point = QPointF(point[0], point[1])
         self.polygon.append(point)
         self.setPolygon(self.polygon)
 
@@ -74,3 +78,11 @@ class StreamPolygon(QGraphicsPolygonItem):
         pen = self.pen()
         pen.setWidth(border_thickness)
         self.setPen(pen)
+
+
+class DetectionPolygon(StreamPolygon):
+    """Render a Detection polygon with a title and behaviour information"""
+
+
+class ZonePolygon(StreamPolygon):
+    """No changes yet"""

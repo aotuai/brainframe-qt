@@ -12,6 +12,9 @@ class _MockAPI:
     def get_stream_configurations():
         return []
 
+    @staticmethod
+    def get_status_poller():
+        return None
 
 # API instance that is later monkeypatched to be a singleton
 # TODO: Use Py3.6 variable annotations when available

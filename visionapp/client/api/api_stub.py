@@ -9,6 +9,7 @@ from visionapp.client.api.codecs import StreamConfiguration, \
     Zone, Alert, Codec, ZoneStatus, EngineConfiguration
 from visionapp.client.api.streaming import StreamManager
 from visionapp.shared import rest_errors
+from visionapp.client.api.streaming import StatusPoller
 
 
 class APIError(Exception):
@@ -54,6 +55,33 @@ class API(metaclass=Singleton):
         self._base_url = self.hostname + ":" + str(self.port)
 
         self._stream_manager = StreamManager()
+        self._status_poller = StatusPoller(self.get_latest_zone_statuses, 100)
+
+    # Non-Backend calling functions
+    def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
+        """Get the StreamReader for the given stream_id.
+        :param stream_id: The ID of the stream configuration to open.
+        :return: A StreamReader object OR None, if the server was unable to
+        open a stream.
+
+        The server returns an HTTP internal server error if unable to open
+        """
+        req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
+        try:
+            url = self._get(req)
+        except APIError as e:
+            if e.kind == rest_errors.STREAM_NOT_FOUND:
+                logging.warning("API: Requested stream that doesn't exist!")
+                return None
+            else:
+                raise
+
+        logging.info("API: Opening stream on url" + url)
+        return self._stream_manager.get_stream(url)
+
+    def get_status_poller(self):
+        """Returns the singleton StatusPoller object"""
+        return self._status_poller
 
     # Stream Configuration Stuff
     def get_stream_configurations(self, only_get_active=False, stream_id=None) \
@@ -118,28 +146,6 @@ class API(metaclass=Singleton):
         req = "/api/streams/{stream_id}/analyze".format(
             stream_id=stream_id)
         self._put_json(req, 'false')
-
-    # Stream Specific stuff
-    def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
-        """Get the StreamReader for the given stream_id.
-        :param stream_id: The ID of the stream configuration to open.
-        :return: A StreamReader object OR None, if the server was unable to
-        open a stream.
-
-        The server returns an HTTP internal server error if unable to open
-        """
-        req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
-        try:
-            url = self._get(req)
-        except APIError as e:
-            if e.kind == rest_errors.STREAM_NOT_FOUND:
-                logging.warning("API: Requested stream that doesn't exist!")
-                return None
-            else:
-                raise
-
-        logging.info("API: Opening stream on url" + url)
-        return self._stream_manager.get_stream(url)
 
     # Get Analysis
     def get_latest_zone_statuses(self) -> Dict[int, List[ZoneStatus]]:
@@ -238,6 +244,7 @@ class API(metaclass=Singleton):
 
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
+        self._status_poller.close()
         self._stream_manager.close()
 
     def _get(self, api_url, params=None):

@@ -10,18 +10,23 @@ from .zone_list import ZoneList
 
 
 class TaskConfiguration(QDialog):
-
     def __init__(self, parent=None, stream_conf=None):
-
+        """There should _always_ be a stream_configuration passed here. The
+        reason it is None is to allow compatibility with QTDesigner."""
         super().__init__(parent)
 
         loadUi(qt_ui_paths.task_configuration_ui, self)
 
+        # If not running within QTDesigner, run logic
         self.stream_conf = stream_conf  # type: StreamConfiguration
         if stream_conf:
             self.video_task_config.change_stream(stream_conf)
+            self.stream_name_label.setText(stream_conf.name)
+            zones = api.get_zones(stream_conf.id)
+            for zone in zones:
+                self.zone_list.add_zone(zone)
 
-        self.unconfirmed_zone: Zone = None
+        self.unconfirmed_zone = None  # type: Zone
         self.unconfirmed_zone_widget = None
 
         self._hide_operation_widgets(True)

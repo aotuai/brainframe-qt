@@ -6,7 +6,8 @@ from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
-from visionapp.client.ui.resources.video_items import StreamPolygon
+from visionapp.client.ui.resources.video_items import \
+    ZonePolygon, DetectionPolygon
 from visionapp.client.ui.resources.paths import image_paths
 from visionapp.client.api import api
 
@@ -26,11 +27,12 @@ class StreamWidget(QGraphicsView):
         # Remove ugly white background and border from QGraphicsView
         self.setStyleSheet("background-color: transparent; border: 0px")
 
-        # TODO: Alex: Uncomment
-        # self.stream_poller = api.get_stream_poller()
-
         # Stream configuration for current widget
         self.stream_conf = None
+
+        # Render settings
+        self.render_detections = True
+        self.render_zones = True
 
         # Scene to draw items to
         self.scene_ = QGraphicsScene()
@@ -50,12 +52,16 @@ class StreamWidget(QGraphicsView):
         # Initialize stream configuration and get started
         self.change_stream(stream_conf)
 
+        # Get the Status poller
+        # TODO: Alex Uncomment
+        self.status_poller = api.get_status_poller()
+
     def update_items(self):
         self.update_frame()
 
         # TODO: Alex: Uncomment
-        # self.update_zones()
-        # self.update_detections()
+        self.update_zones()
+        self.update_detections()
 
     def update_frame(self, pixmap: QPixmap = None):
         """Grab the newest frame from the Stream object
@@ -88,26 +94,27 @@ class StreamWidget(QGraphicsView):
 
     def update_zones(self):
         # TODO: Alex
+        if not self.render_zones: return
 
-        # Find current zones polygons
-        items = self.scene_.items()
-        polygons = filter(lambda item: isinstance(item, StreamPolygon), items)
-        polygons = filter(lambda item:
-                          item.type == StreamPolygon.PolygonType.zone, polygons)
-        # Delete current zones polygons
-        for polygon in polygons:
-            self.scene_.removeItem(polygon)
+        self._remove_by_type(ZonePolygon)
 
         # Add new StreamPolygons
-        for zone in self.stream_poller.get_latest(self.stream_conf.id):
-            self.scene_.addItem(StreamPolygon(StreamPolygon.PolygonType.zone,
-                                              zone.coords))
+        statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
+
+        for zone_status in statuses:
+            if zone_status.zone.name == "Screen": continue
+            self.scene_.addItem(ZonePolygon(zone_status.zone.coords))
 
     def update_detections(self):
-
+        if not self.render_detections: return
         # TODO: Alex: Very similar to update_zones. May be able to combine rmval
+
         # This function allows for fading out as well, though
-        pass
+        self._remove_by_type(DetectionPolygon)
+
+        detections = self.status_poller.get_detections(self.stream_conf.id)
+        for det in detections:
+            self.scene_.addItem(DetectionPolygon(det.coords))
 
     def change_stream(self, stream_conf):
         """Change the stream source of the video
@@ -125,6 +132,21 @@ class StreamWidget(QGraphicsView):
         else:
             self.video_stream = api.get_stream_reader(stream_conf.id)
             self.frame_update_timer.start(1000 // self._frame_rate)
+
+    def set_render_settings(self, *, detections=None, zones=None):
+        if detections is not None:
+            self.render_detections = detections
+        if zones is not None:
+            self.render_zones = zones
+
+    def _remove_by_type(self, item_type):
+        # Find current zones polygons
+        items = self.scene_.items()
+        # polygons = filter(lambda item: isinstance(item, StreamPolygon), items)
+        polygons = filter(lambda item: type(item) == item_type, items)
+        # Delete current zones polygons
+        for polygon in polygons:
+            self.scene_.removeItem(polygon)
 
     @pyqtProperty(int)
     def frame_rate(self):
