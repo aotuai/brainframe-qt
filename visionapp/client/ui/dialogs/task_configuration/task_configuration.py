@@ -117,6 +117,10 @@ class TaskConfiguration(QDialog):
         self._set_widgets_enabled(True)
         self._hide_operation_widgets(True)
 
+    @pyqtSlot(bool)
+    def enable_confirm_op_button(self, enable):
+        self.confirm_op_button.setEnabled(enable)
+
     @pyqtSlot()
     def new_region_canceled(self):
 

@@ -1,7 +1,8 @@
 from typing import List
 
-from PyQt5.QtCore import QPointF, Qt
+from PyQt5.QtCore import pyqtSignal, QPointF, Qt
 from PyQt5.QtGui import QMouseEvent
+from shapely import geometry
 
 from visionapp.client.ui.resources.video_items import (
     ClickCircle,
@@ -11,6 +12,8 @@ from visionapp.client.ui.resources.video_items import (
 
 
 class VideoTaskConfig(StreamWidget):
+
+    polygon_is_valid_signal = pyqtSignal(bool)
 
     def __init__(self, parent=None, stream_conf=None, frame_rate=30):
         super().__init__(stream_conf, frame_rate, parent)
@@ -46,10 +49,19 @@ class VideoTaskConfig(StreamWidget):
             if self.unconfirmed_polygon not in self.scene_.items():
                 self.scene_.addItem(self.unconfirmed_polygon)
 
+        # TODO: Alex: Uncomment; This won't work off the bat
+        # How to reset polygon?
+        # polygon = geometry.Polygon(self.unconfirmed_polygon)
+        # if polygon.is_convex:
+        #     # TODO: Needs to be wired to slot in TaskConfiguration widget
+        #     self.polygon_is_valid_signal.emit(False)
+        # else:
+        #     self.polygon_is_valid_signal.emit(True)
+
         super().mouseReleaseEvent(event)
 
     def start_new_polygon(self):
-        self.unconfirmed_polygon = StreamPolygon()
+        self.unconfirmed_polygon = StreamPolygon(StreamPolygon.PolygonType.zone)
 
     def confirm_unconfirmed_polygon(self):
         self.zones.append(self.unconfirmed_polygon)
