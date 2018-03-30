@@ -26,7 +26,8 @@ class APIError(Exception):
             self._kind = resp["title"]
             if "description" in resp:
                 self._description = resp["description"]
-            self._description = ""
+            else:
+                self._description = ""
 
         super().__init__("{kind}: {description}".format(
             kind=self._kind,
