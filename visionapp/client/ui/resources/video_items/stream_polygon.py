@@ -1,3 +1,5 @@
+from enum import Enum
+
 from PyQt5.QtCore import QPointF, Qt
 from PyQt5.QtGui import QColor, QPolygonF
 from PyQt5.QtWidgets import QGraphicsPolygonItem
@@ -5,10 +7,16 @@ from PyQt5.QtWidgets import QGraphicsPolygonItem
 
 class StreamPolygon(QGraphicsPolygonItem):
 
-    def __init__(self, points=(), *,
+    # noinspection PyArgumentList
+    # PyCharm incorrectly complains
+    # TODO: Alex: Are there more types of polygons?
+    PolygonType = Enum("PolygonType", "zone detection")
+
+    def __init__(self, polygon_type: PolygonType, points=(), *,
                  border_color=Qt.red, border_thickness=5,
                  fill_color=Qt.red, fill_alpha=128, parent=None):
 
+        self.type = polygon_type
         self.polygon = QPolygonF(points)
 
         super().__init__(self.polygon, parent=parent)
