@@ -76,10 +76,10 @@ class API(metaclass=Singleton):
         logging.info("API: Opening stream on url" + url)
         return self._stream_manager.get_stream(url)
 
-    def get_status_poller(self):
+    def get_status_poller(self) -> StatusPoller:
         """Returns the singleton StatusPoller object"""
         if self._status_poller is None or not self._status_poller.is_running:
-            self._status_poller = StatusPoller(self, 1000)
+            self._status_poller = StatusPoller(self, 100)
         return self._status_poller
 
     # Stream Configuration Stuff
@@ -116,7 +116,6 @@ class API(metaclass=Singleton):
         req = "/api/streams/"
         data = self._put_codec(req, stream_configuration)
         config = StreamConfiguration.from_dict(data)
-        print("GOT", config)
         return config
 
     def delete_stream_configuration(self, stream_id):

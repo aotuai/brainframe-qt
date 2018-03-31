@@ -34,8 +34,9 @@ class VideoTaskConfig(StreamWidget):
 
             # Don't allow the user to input an invalid polygon
             if len(self.unconfirmed_polygon.polygon) > 2:
-                points = [(point.x(), point.y())
-                          for point in self.unconfirmed_polygon.polygon]
+                # points = [(point.x(), point.y())
+                #           for point in self.unconfirmed_polygon.polygon]
+                points = self.unconfirmed_polygon.points_list
                 points.append((click.x(), click.y()))
                 shapely_polygon = geometry.Polygon(points)
                 if not shapely_polygon.is_valid:
@@ -65,12 +66,39 @@ class VideoTaskConfig(StreamWidget):
 
         super().mouseReleaseEvent(event)
 
+    def mouseMoveEvent(self, event: QMouseEvent):
+        """Render a line being drawn to show what the polygon will look like
+        if the mouse is clicked"""
+        if self.unconfirmed_polygon is None:
+            return
+        if len(self.unconfirmed_polygon.polygon) < 1:
+            return
+
+        self.remove_items_by_type(ZonePolygon)
+        move_point = self.mapToScene(event.pos())
+        points = self.unconfirmed_polygon.points_list
+        points.append(move_point)
+
+        visual_polygon = ZonePolygon(points, opacity=.25)
+
+        # Add the new polygon first, then superimpose the current polygon
+        self.scene_.addItem(visual_polygon)
+        self.scene_.addItem(self.unconfirmed_polygon)
+
     def start_new_polygon(self):
+        self.setMouseTracking(True)  # Allow for realtime zone updating
         self.unconfirmed_polygon = ZonePolygon()
 
     def confirm_unconfirmed_polygon(self):
-        self.zones.append(self.unconfirmed_polygon)
+        # Clear all objects that built up while making the polygon
+        self.remove_items_by_type(ZonePolygon)
+        self.remove_items_by_type(ClickCircle)
+
+        # Add the green finished polygon
         self.unconfirmed_polygon.set_color(Qt.green)
+        self.scene_.addItem(self.unconfirmed_polygon)
+
+        self.zones.append(self.unconfirmed_polygon)
 
         ret = self.unconfirmed_polygon.polygon
 
@@ -84,4 +112,3 @@ class VideoTaskConfig(StreamWidget):
         if self.unconfirmed_polygon is not None:
             self.scene_.removeItem(self.unconfirmed_polygon)
             self.unconfirmed_polygon = None
-
