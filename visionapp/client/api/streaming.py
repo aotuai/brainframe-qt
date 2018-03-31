@@ -35,7 +35,6 @@ class StreamManager:
         """Close all streams and remove references"""
         for url in self._stream_readers.copy().keys():
             self.close_stream(url)
-        print("Closing Stream manager")
         self._stream_readers = {}
 
 
@@ -43,19 +42,19 @@ class StatusPoller(Thread):
     """ This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream. """
 
-    def __init__(self, get_latest_statuses_func, ms_between_updates: int):
+    def __init__(self, api, ms_between_updates: int):
         """
         :param get_latest_statuses_func: A function returning the latest
         zone statuses, passed in by the API
         :param ms_between_updates: Miliseconds between calling for an update
         """
         super().__init__(name="StatusPollerThread")
-        self._get_latest_zone_statuses = get_latest_statuses_func
+        self._api = api
         self._seconds_between_updates = ms_between_updates / 1000
         self._running = False
 
         # Get something before starting the thread
-        self._latest = self._get_latest_zone_statuses
+        self._latest = self._api.get_latest_zone_statuses()
         self.start()
 
     def run(self):
@@ -66,7 +65,7 @@ class StatusPoller(Thread):
             # Call the server, timing how long the call takes
             try:
                 start = time()
-                self._latest = self._get_latest_zone_statuses()
+                self._latest = self._api.get_latest_zone_statuses()
                 call_time = time() - start
             except ConnectionError:
                 logging.warning("StatusLogger: Could not reach server!")
@@ -78,6 +77,10 @@ class StatusPoller(Thread):
                 sleep(time_left)
 
         self._running = False
+
+    @property
+    def is_running(self):
+        return self._running
 
     def get_detections(self, stream_id):
         """Conveniently return all detections found in this stream"""

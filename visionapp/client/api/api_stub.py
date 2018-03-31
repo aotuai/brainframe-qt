@@ -53,7 +53,7 @@ class API(metaclass=Singleton):
         self._server_url = server_url
 
         self._stream_manager = StreamManager()
-        self._status_poller = StatusPoller(self, 10)
+        self._status_poller = None
 
 
     def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
@@ -77,8 +77,11 @@ class API(metaclass=Singleton):
         logging.info("API: Opening stream on url" + url)
         return self._stream_manager.get_stream(url)
 
+
     def get_status_poller(self):
         """Returns the singleton StatusPoller object"""
+        if self._status_poller is None or not self._status_poller.is_running:
+            self._status_poller = StatusPoller(self, 10)
         return self._status_poller
 
     # Stream Configuration Stuff
@@ -242,7 +245,8 @@ class API(metaclass=Singleton):
 
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
-        self._status_poller.close()
+        if self._status_poller is not None:
+            self._status_poller.close()
         self._stream_manager.close()
 
     def _get(self, api_url, params=None):
