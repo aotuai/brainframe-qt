@@ -280,18 +280,34 @@ class EngineConfiguration(Codec):
     detectable objects, the types of attributes that can be detected, etc.
     """
 
-    def __init__(self, *, version, attributes, attribute_ownership,
+    def __init__(self, *, version, attribute_ownership, attributes,
                  max_streams):
+
         self.version = version
-        # A dict where the key is an attribute type and the value is a list of
-        # possible values for the attribute type
-        self.attributes = attributes
-        # A dict where the key is a detection class and the value is a list of
-        # all attribute types that may apply to that detection class
+
         self.attribute_ownership = attribute_ownership
-        # The maximum amount of allowed streams that can have analysis run on
-        # them at once
+        """Attribute types supported by each detection class in the network
+        
+        A dict where the key is a detection class and the value is a list of
+        all attribute types that may apply to that detection class. The value
+        is not the same ass the dict retuned by EngineConfiguration.attributes
+        so that multiple detection classes can share the same attributes
+        
+        Ex: {'person': ['Behavior']}
+        """
+
+        self.attributes = attributes
+        """Possible values for each detection class
+        
+        A dict where the key is an attribute type and the value is a list of
+        possible values for the attribute type
+        
+        Ex: {'Behavior': ['drinking', 'phoning', 'smoking', 'unknown']}
+        """
+
         self.max_streams = max_streams
+        """The maximum amount of allowed streams that can have analysis run on
+        them at once"""
 
     def to_dict(self):
         return self.__dict__
