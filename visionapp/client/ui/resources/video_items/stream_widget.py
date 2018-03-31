@@ -59,8 +59,6 @@ class StreamWidget(QGraphicsView):
 
     def update_items(self):
         self.update_frame()
-
-        # TODO: Alex: Uncomment
         self.update_zones()
         self.update_detections()
 
@@ -100,10 +98,8 @@ class StreamWidget(QGraphicsView):
         self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
 
     def update_zones(self):
-        # TODO: Alex
-        if not self.render_zones: return
-
         self._remove_by_type(ZonePolygon)
+        if not self.render_zones: return
 
         # Add new StreamPolygons
         statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
@@ -113,12 +109,10 @@ class StreamWidget(QGraphicsView):
             self.scene_.addItem(ZonePolygon(zone_status.zone.coords))
 
     def update_detections(self):
+        self._remove_by_type(DetectionPolygon)
         if not self.render_detections: return
-        # TODO: Alex: Very similar to update_zones. May be able to combine rmval
 
         # This function allows for fading out as well, though
-        self._remove_by_type(DetectionPolygon)
-
         detections = self.status_poller.get_detections(self.stream_conf.id)
         for det in detections:
             self.scene_.addItem(DetectionPolygon(det.coords))

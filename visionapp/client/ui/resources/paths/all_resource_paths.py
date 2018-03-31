@@ -14,7 +14,6 @@ def route_path(*args: Union[str, Path]) -> Path:
     """This function takes a path, routes it to the correct spot, saves it,
     and returns a pathlib Path object"""
     global all_paths
-    print("Getting args", *args)
     if hasattr(sys, '_MEIPASS'):
         print("returning", Path(sys._MEIPASS, *args))
         return Path(sys._MEIPASS, *args)
@@ -23,5 +22,4 @@ def route_path(*args: Union[str, Path]) -> Path:
     path = Path(*args)
     if path.is_file():
         all_paths.append(str(path))
-    print("Returning", path)
     return path
