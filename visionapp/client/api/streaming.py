@@ -1,9 +1,10 @@
 import logging
+from typing import List, Tuple
 from threading import Thread
 from time import sleep, time
 
 from visionapp.shared.stream_capture import StreamReader
-
+from visionapp.client.api import codecs
 
 class StreamManager:
     """
@@ -82,18 +83,19 @@ class StatusPoller(Thread):
     def is_running(self):
         return self._running
 
-    def get_detections(self, stream_id):
-        """Conveniently return all detections found in this stream"""
+    def get_detections(self, stream_id) -> Tuple[float, List[codecs.Detection]]:
+        """Conveniently return all detections found in this stream and
+        their respective timestamp in which they were detected."""
         statuses = self.get_latest_statuses(stream_id)
         if len(statuses) == 0:
-            return []
+            return 0, []
 
         # Find the main screen
         status = [status for status in statuses
                   if status.zone.name == "Screen"][0]
-        return status.detections
+        return status.tstamp, status.detections
 
-    def get_latest_statuses(self, stream_id):
+    def get_latest_statuses(self, stream_id) -> List[codecs.ZoneStatus]:
         """Returns the latest cached list of ZoneStatuses for that stream_id"""
         latest = self._latest
         if stream_id not in latest:

@@ -43,6 +43,14 @@ class Detection(Codec):
         return d
 
     @property
+    def height(self):
+        return self.rect[3] - self.rect[1]
+
+    @property
+    def width(self):
+        return self.rect[2] - self.rect[0]
+
+    @property
     def coords(self):
         """Conveniently return a list of coordinates, polygon style"""
         return [(self.rect[0], self.rect[1]),

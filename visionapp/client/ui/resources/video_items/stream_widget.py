@@ -1,4 +1,5 @@
 import logging
+from time import time
 
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
@@ -7,7 +8,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
 from visionapp.client.ui.resources.video_items import \
-    ZonePolygon, DetectionPolygon
+    ZonePolygon, DetectionPolygon, StreamPolygon
 from visionapp.client.ui.resources.paths import image_paths
 from visionapp.client.api import api
 
@@ -59,8 +60,8 @@ class StreamWidget(QGraphicsView):
 
     def update_items(self):
         self.update_frame()
-        self.update_zones()
-        self.update_detections()
+        self.update_latest_zones()
+        self.update_latest_detections()
 
     def update_frame(self, pixmap: QPixmap = None):
         """Grab the newest frame from the Stream object
@@ -72,6 +73,8 @@ class StreamWidget(QGraphicsView):
             if self.video_stream is None or \
                     not self.video_stream.is_initialized or \
                     not self.video_stream.is_running:
+                # Since the video isn't working, clear any zones and dets
+                self.remove_items_by_type(StreamPolygon)
                 self._set_frame(self._default_frame)
                 return
 
@@ -86,21 +89,10 @@ class StreamWidget(QGraphicsView):
             self._set_frame(pixmap)
             # TODO: Use video_stream.is_running to stop widget if stream ends
 
-    def _set_frame(self, pixmap: QPixmap):
-        """Set the current frame to the given pixmap"""
-        # Create new QGraphicsPixmapItem if there isn't one
-        if not self.current_frame:
-            self.current_frame = self.scene_.addPixmap(pixmap)
+    def update_latest_zones(self):
 
-        # Otherwise modify the existing one
-        else:
-            self.current_frame.setPixmap(pixmap)
-        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
-
-    def update_zones(self):
-        self._remove_by_type(ZonePolygon)
         if not self.render_zones: return
-
+        self.remove_items_by_type(ZonePolygon)
         # Add new StreamPolygons
         statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
 
@@ -108,14 +100,16 @@ class StreamWidget(QGraphicsView):
             if zone_status.zone.name == "Screen": continue
             self.scene_.addItem(ZonePolygon(zone_status.zone.coords))
 
-    def update_detections(self):
-        self._remove_by_type(DetectionPolygon)
+    def update_latest_detections(self):
+        self.remove_items_by_type(DetectionPolygon)
         if not self.render_detections: return
 
         # This function allows for fading out as well, though
-        detections = self.status_poller.get_detections(self.stream_conf.id)
-        for det in detections:
-            self.scene_.addItem(DetectionPolygon(det.coords))
+        tstamp, dets = self.status_poller.get_detections(self.stream_conf.id)
+        for det in dets:
+            age = time() - tstamp
+            polygon = DetectionPolygon(det, seconds_old=age)
+            self.scene_.addItem(polygon)
 
     def change_stream(self, stream_conf):
         """Change the stream source of the video
@@ -140,7 +134,18 @@ class StreamWidget(QGraphicsView):
         if zones is not None:
             self.render_zones = zones
 
-    def _remove_by_type(self, item_type):
+    def _set_frame(self, pixmap: QPixmap):
+        """Set the current frame to the given pixmap"""
+        # Create new QGraphicsPixmapItem if there isn't one
+        if not self.current_frame:
+            self.current_frame = self.scene_.addPixmap(pixmap)
+
+        # Otherwise modify the existing one
+        else:
+            self.current_frame.setPixmap(pixmap)
+        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
+
+    def remove_items_by_type(self, item_type):
         # Find current zones polygons
         items = self.scene_.items()
         # polygons = filter(lambda item: isinstance(item, StreamPolygon), items)

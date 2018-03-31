@@ -78,18 +78,21 @@ class VideoThumbnailView(QWidget):
     @pyqtSlot()
     def create_new_stream_slot(self):
         stream_conf = StreamConfigurationDialog.configure_stream()
-        stream_conf = api.set_stream_configuration(stream_conf)
-        # try:
-        #
-        # except APIError:
-        #
-        #     message = "<b>Error encountered while opening stream</b>" \
-        #               + "<br><br>" \
-        #               + "Is stream already open?<br>" \
-        #               + "Is this a valid stream source?"
-        #
-        #     QMessageBox.information(self, "Error Opening Stream", message)
-        #     return
+        try:
+            stream_conf = api.set_stream_configuration(stream_conf)
+
+            # Currently, we default to setting all new streams as 'active'
+            success = api.start_analyzing(stream_conf.id)
+
+        except APIError:
+
+            message = "<b>Error encountered while opening stream</b>" \
+                      + "<br><br>" \
+                      + "Is stream already open?<br>" \
+                      + "Is this a valid stream source?"
+
+            QMessageBox.information(self, "Error Opening Stream", message)
+            return
 
         self.new_stream_widget(stream_conf)
 
