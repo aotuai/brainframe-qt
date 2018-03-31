@@ -85,7 +85,6 @@ class StatusPoller(Thread):
     def get_detections(self, stream_id):
         """Conveniently return all detections found in this stream"""
         statuses = self.get_latest_statuses(stream_id)
-        print(statuses)
         if len(statuses) == 0:
             return []
 

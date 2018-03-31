@@ -113,7 +113,6 @@ class StreamWidget(QGraphicsView):
         if not self.render_detections: return
 
         # This function allows for fading out as well, though
-
         detections = self.status_poller.get_detections(self.stream_conf.id)
         for det in detections:
             self.scene_.addItem(DetectionPolygon(det.coords))
