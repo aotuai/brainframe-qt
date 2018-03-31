@@ -287,7 +287,7 @@ class EngineConfiguration(Codec):
         # possible values for the attribute type
         self.attributes = attributes
         # A dict where the key is a detection class and the value is a list of
-        # all attributes that may apply to that detection class
+        # all attribute types that may apply to that detection class
         self.attribute_ownership = attribute_ownership
         # The maximum amount of allowed streams that can have analysis run on
         # them at once
