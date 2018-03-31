@@ -290,7 +290,7 @@ class EngineConfiguration(Codec):
         
         A dict where the key is a detection class and the value is a list of
         all attribute types that may apply to that detection class. The value
-        is not the same ass the dict retuned by EngineConfiguration.attributes
+        is not the same as the dict retuned by EngineConfiguration.attributes
         so that multiple detection classes can share the same attributes
         
         Ex: {'person': ['Behavior']}
