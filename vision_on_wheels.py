@@ -14,7 +14,7 @@ for config in configs:
     success = api.api.start_analyzing(config.id)
 
 # Ensure that all relative paths are correct
-os.chdir(os.path.dirname(__file__))
+# os.chdir(os.path.dirname(__file__))
 
 app = QApplication(sys.argv)
 window = MainWindow()

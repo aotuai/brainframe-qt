@@ -36,4 +36,4 @@ task_configuration_ui    = route_path(task_configuration_dir  , "task_configurat
 
 zone_list_dir            = route_path(task_configuration_dir  , "zone_list"              )
 zone_list_ui             = route_path(zone_list_dir           , "zone_list.ui"           )
-print(all_paths)
+

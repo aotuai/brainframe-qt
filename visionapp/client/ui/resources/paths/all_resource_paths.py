@@ -20,7 +20,7 @@ def route_path(*args: Union[str, Path]) -> Path:
         return Path(sys._MEIPASS, *args)
 
     # Check if this file should be saved for pyinstaller
-    path = Path(*args).resolve()
+    path = Path(*args)
     if path.is_file():
         all_paths.append(str(path))
     print("Returning", path)
