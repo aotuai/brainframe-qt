@@ -55,7 +55,6 @@ class API(metaclass=Singleton):
         self._stream_manager = StreamManager()
         self._status_poller = StatusPoller(self, 10)
 
-
     def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
         """Get the StreamReader for the given stream_id.
         :param stream_id: The ID of the stream configuration to open.
@@ -118,11 +117,13 @@ class API(metaclass=Singleton):
         return config
 
     def delete_stream_configuration(self, stream_id):
-        """Deletes a stream configuration with the given ID
+        """Deletes a stream configuration with the given ID. Also stops
+        analysis if analysis was running and closes the stream.
 
         :param stream_id: The ID of the stream to delete
         """
-        # TODO: Implement this Post 1.0 release
+        req = "/api/streams/{stream_id}".format(stream_id=stream_id)
+        self._delete(req)
 
     # Setting server analysis tasks
     def start_analyzing(self, stream_id) -> bool:
@@ -158,7 +159,8 @@ class API(metaclass=Singleton):
         :return:
         {stream_id1: [ZoneStatus, ZoneStatus], stream_id2: [ZoneStatus]}
         """
-        # TODO: Impliment get_latest_zone_status in test_integration_analysis.py/test_zone_statuses
+        # TODO: Implement get_latest_zone_status in
+        # test_integration_analysis.py/test_zone_statuses
         req = "/api/streams/status/"
         data = self._get(req)
 
@@ -316,3 +318,4 @@ class API(metaclass=Singleton):
             base_url=self._server_url,
             api_url=api_url)
         return url
+
