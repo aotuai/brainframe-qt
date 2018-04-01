@@ -77,8 +77,8 @@ class VideoThumbnailView(QWidget):
 
     @pyqtSlot(QAction)
     def create_new_stream_slot(self, action):
-        print("Running action!")
         stream_conf = StreamConfigurationDialog.configure_stream()
+        if stream_conf is None: return
         try:
             stream_conf = api.set_stream_configuration(stream_conf)
 

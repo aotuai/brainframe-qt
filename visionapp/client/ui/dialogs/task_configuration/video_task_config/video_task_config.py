@@ -111,4 +111,5 @@ class VideoTaskConfig(StreamWidget):
 
         if self.unconfirmed_polygon is not None:
             self.scene_.removeItem(self.unconfirmed_polygon)
+            self.scene_.remove_it
             self.unconfirmed_polygon = None
