@@ -127,6 +127,7 @@ class API(metaclass=Singleton):
         req = "/api/streams/{stream_id}".format(stream_id=stream_id)
         self._delete(req)
 
+
     # Setting server analysis tasks
     def start_analyzing(self, stream_id) -> bool:
         """
