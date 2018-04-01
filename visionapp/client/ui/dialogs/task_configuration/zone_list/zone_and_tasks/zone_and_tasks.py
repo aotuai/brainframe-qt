@@ -61,12 +61,16 @@ class ZoneAndTasks(QWidget):
 
         # Connect alarm's delete_button_pressed
         alarm_widget.delete_button_pressed.connect(
-            lambda: self.remove_alarm(alarm, alarm_widget))
+            lambda alarm=alarm, alarm_widget=alarm_widget: self.remove_alarm(
+                alarm, alarm_widget))
 
         self.alarm_area_layout.addWidget(alarm_widget)
 
     def remove_alarm(self, alarm: ZoneAlarm, alarm_widget: TaskWidget):
-        self.zone.alarms.remove(alarm)
+        try:
+            self.zone.alarms.remove(alarm)
+        except ValueError:
+            pass
         alarm_widget.deleteLater()
         self.zone = api.set_zone(self.zone.stream_id, self.zone)
 
@@ -80,4 +84,3 @@ class ZoneAndTasks(QWidget):
             self.zone_widget.set_task_type(TaskWidget.TaskType.line)
         else:
             self.zone_widget.set_task_type(TaskWidget.TaskType.region)
-

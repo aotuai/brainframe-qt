@@ -51,7 +51,7 @@ class TaskConfiguration(QDialog):
         if not alarm:
             return None
 
-        api.set_zone(self.stream_conf.id, zone)
+        zone = api.set_zone(self.stream_conf.id, zone)
         self.zone_list.add_alarm(zone, alarm)
 
     @pyqtSlot()
@@ -88,11 +88,13 @@ class TaskConfiguration(QDialog):
 
         # Make ZoneAndTasks widget re-evaluate it's zone_type
         self.unconfirmed_zone_widget.update_zone_type()
-
         # Add zone to database
         zone = api.set_zone(self.stream_conf.id, self.unconfirmed_zone)
+        self.unconfirmed_zone_widget.zone = zone
 
         self.zone_list.zones[zone.id] = self.zone_list.zones.pop(None)
+        self.unconfirmed_zone_widget.zone_deleted_signal.connect(
+            self.zone_list.delete_zone)
 
         # Clear unconfirmed zone now that we're done with it
         self.unconfirmed_zone = None
