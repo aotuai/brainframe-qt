@@ -7,7 +7,7 @@ from shapely import geometry
 from visionapp.client.ui.resources.video_items import (
     ClickCircle,
     StreamWidget,
-    ZonePolygon
+    StreamPolygon
 )
 
 
@@ -18,10 +18,10 @@ class VideoTaskConfig(StreamWidget):
         super().__init__(stream_conf, frame_rate, parent)
         self.set_render_settings(detections=False, zones=False)
 
-        self.zones: List[ZonePolygon] = []
+        self.zones: List[StreamPolygon] = []
         """List of zones"""
 
-        self.unconfirmed_polygon: ZonePolygon = None
+        self.unconfirmed_polygon: StreamPolygon = None
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         """Called when mouse click is _released_ on Widget"""
@@ -74,12 +74,12 @@ class VideoTaskConfig(StreamWidget):
         if len(self.unconfirmed_polygon.polygon) < 1:
             return
 
-        self.remove_items_by_type(ZonePolygon)
+        self.remove_items_by_type(StreamPolygon)
         move_point = self.mapToScene(event.pos())
         points = self.unconfirmed_polygon.points_list
         points.append(move_point)
 
-        visual_polygon = ZonePolygon(points, opacity=.25)
+        visual_polygon = StreamPolygon(points, opacity=.25)
 
         # Add the new polygon first, then superimpose the current polygon
         self.scene_.addItem(visual_polygon)
@@ -87,11 +87,11 @@ class VideoTaskConfig(StreamWidget):
 
     def start_new_polygon(self):
         self.setMouseTracking(True)  # Allow for realtime zone updating
-        self.unconfirmed_polygon = ZonePolygon()
+        self.unconfirmed_polygon = StreamPolygon()
 
     def confirm_unconfirmed_polygon(self):
         # Clear all objects that built up while making the polygon
-        self.remove_items_by_type(ZonePolygon)
+        self.remove_items_by_type(StreamPolygon)
         self.remove_items_by_type(ClickCircle)
 
         # Add the green finished polygon

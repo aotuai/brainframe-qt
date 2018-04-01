@@ -1,12 +1,8 @@
-import random
 from typing import Union, List
-from enum import Enum
 
 from PyQt5.QtCore import QPointF, QPoint, Qt
 from PyQt5.QtGui import QColor, QPolygonF
 from PyQt5.QtWidgets import QGraphicsPolygonItem, QGraphicsTextItem
-
-from visionapp.client.api import codecs
 
 
 class StreamPolygon(QGraphicsPolygonItem):
@@ -77,47 +73,6 @@ class StreamPolygon(QGraphicsPolygonItem):
         pen = self.pen()
         pen.setWidth(border_thickness)
         self.setPen(pen)
-
-
-class DetectionPolygon(StreamPolygon):
-    """Render a Detection polygon with a title and behaviour information"""
-    MAX_SECONDS_OLD = 3
-    """After a certain amount of time, the detection will be transparent"""
-
-    def __init__(self, det: codecs.Detection, seconds_old=0, parent=None):
-        """
-        :param detection: The Detection object to render
-        :param seconds_old: Fades the detection by a standard amount based on
-        it's age.
-        :param parent:
-        """
-        # Choose a color for this class name
-        rand_seed = random.Random(det.class_name)
-        hue = rand_seed.random()
-
-        class_color = QColor.fromHsvF(hue, 1.0, 1.0)
-
-        # Choose the opacity based on the age of the detection
-        clamped_age = sorted([0, seconds_old, self.MAX_SECONDS_OLD])[1]
-        opacity = 1 - clamped_age / self.MAX_SECONDS_OLD
-        opacity += 0.05  # Minimum opacity for a detection
-
-        super().__init__(det.coords,
-                         border_color=class_color,
-                         border_thickness=3,
-                         opacity=opacity, parent=parent)
-
-        # Create the description box
-        top_left = det.coords[0]
-        text = det.class_name + "\n" + "".join([a.category + ": " + a.value
-                                           for a in det.attributes])
-        self.label_box = StreamLabelBox(text,
-                                        top_left=top_left,
-                                        parent=self)
-
-
-class ZonePolygon(StreamPolygon):
-    """No changes yet"""
 
 
 class StreamLabelBox(StreamPolygon):
