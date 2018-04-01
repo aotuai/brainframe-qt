@@ -1,4 +1,5 @@
 from PyQt5.QtCore import (
+    pyqtSignal,
     QParallelAnimationGroup,
     QPropertyAnimation,
     QAbstractAnimation,
@@ -13,13 +14,16 @@ from PyQt5.QtWidgets import (
 )
 
 from .tasks.task_widget import TaskWidget
+from visionapp.client.api import api
 from visionapp.client.api.codecs import Zone, ZoneAlarm
 
 
 class ZoneAndTasks(QWidget):
     """https://stackoverflow.com/a/37927256/8134178"""
 
-    def __init__(self, zone, parent=None):
+    zone_deleted_signal = pyqtSignal(int)
+
+    def __init__(self, zone: Zone, parent=None):
         super().__init__(parent)
 
         self.zone_name = zone.name
@@ -146,9 +150,22 @@ class ZoneAndTasks(QWidget):
     def add_alarm(self, alarm: ZoneAlarm):
         alarm_widget = TaskWidget(alarm.name, TaskWidget.TaskType.alarm)
 
+        # Connect alarm's delete_button_pressed
+        alarm_widget.delete_button_pressed.connect(
+            lambda: self.remove_alarm(alarm, alarm_widget))
+
         self.alarm_area_layout.addWidget(alarm_widget)
 
         self.set_content_layout()
+
+    def remove_alarm(self, alarm: ZoneAlarm, alarm_widget: TaskWidget):
+        self.zone.alarms.remove(alarm)
+        alarm_widget.deleteLater()
+        self.set_content_layout()
+        self.zone = api.set_zone(self.zone, self.zone.stream_id)
+
+    def zone_deleted(self):
+        self.zone_deleted_signal.emit(self.zone.id)
 
     def update_zone_type(self):
         if len(self.zone.coords) == 0:

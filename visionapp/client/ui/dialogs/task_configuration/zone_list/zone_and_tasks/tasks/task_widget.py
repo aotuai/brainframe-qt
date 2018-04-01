@@ -1,18 +1,26 @@
 from enum import Enum
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QWidget
+from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QSizePolicy,
+    QWidget
+)
 
 from visionapp.client.ui.resources.paths import image_paths
 
 
 class TaskWidget(QWidget):
-
     # noinspection PyArgumentList
     # PyCharm incorrectly complains
-    TaskType = Enum("TaskType", ["region", "line",  "alarm", "in_progress"])
+    TaskType = Enum("TaskType", ["region", "line", "alarm", "in_progress"])
 
+    delete_button_pressed = pyqtSignal()
+
+    # TODO: Use .ui files
     def __init__(self, task_name, task_type: TaskType, parent=None):
         super().__init__(parent)
 
@@ -32,19 +40,21 @@ class TaskWidget(QWidget):
                                            QSizePolicy.Minimum)
 
         # TODO: Use modular resource path approach Alex was talking about
-        self.settings_gear = QLabel()
-        gear_icon = QPixmap(str(image_paths.settings_gear_icon))
-        gear_icon = gear_icon.scaled(32, 32,
-                                     transformMode=Qt.SmoothTransformation)
-        self.settings_gear.setPixmap(gear_icon)
-        self.settings_gear.setSizePolicy(QSizePolicy.Minimum,
+        self.delete_button = QPushButton()
+        trash_icon = QIcon(QPixmap(str(image_paths.trash_icon)))
+        self.delete_button.setIcon(trash_icon)
+        self.delete_button.setSizePolicy(QSizePolicy.Minimum,
                                          QSizePolicy.Minimum)
 
         self.main_layout.addWidget(self.icon)
         self.main_layout.addWidget(self.task_name_label, Qt.AlignLeft)
-        self.main_layout.addWidget(self.settings_gear)
+        self.main_layout.addWidget(self.delete_button)
 
         self.setLayout(self.main_layout)
+
+        # noinspection PyUnresolvedReferences
+        # PyCharm incorrectly thinks .connect doesn't exist
+        self.delete_button.clicked.connect(self.delete_button_pressed)
 
     def set_task_type(self, task_type: TaskType):
         self.task_type = task_type

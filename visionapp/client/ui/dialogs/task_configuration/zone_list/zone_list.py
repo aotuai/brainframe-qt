@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout
 from PyQt5.uic import loadUi
 
@@ -17,7 +17,9 @@ class ZoneList(QScrollArea):
 
         loadUi(qt_ui_paths.zone_list_ui, self)
 
+        self.stream_id = None
         self.zones = {}
+        """Stores zones in a {zone.id: ZoneAndTasks()} dict"""
 
         self.main_layout = QVBoxLayout()
         self.main_layout.setAlignment(Qt.AlignTop)
@@ -33,7 +35,7 @@ class ZoneList(QScrollArea):
 
     def add_zone(self, zone):
         zone_widget = ZoneAndTasks(zone, self)
-        self.zones[zone.name] = zone_widget
+        self.zones[zone.id] = zone_widget
         self.main_layout.addWidget(zone_widget)
 
         for alarm in zone.alarms:
@@ -43,9 +45,18 @@ class ZoneList(QScrollArea):
 
     def add_alarm(self, zone, alarm):
         """Add an alarm widget to a ZoneAndTasks widget"""
-        self.zones[zone.name].add_alarm(alarm)
+        self.zones[zone.id].add_alarm(alarm)
 
     def init_zones(self, stream_id):
+        self.stream_id = stream_id
         zones = api.get_zones(stream_id)
         for zone in zones:
-            self.zones[zone.name] = self.add_zone(zone)
+            zone_widget = self.add_zone(zone)  # type: ZoneAndTasks
+            self.zones[zone.id] = zone_widget
+            zone_widget.zone_deleted_signal.connect(self.zone_deleted_slot)
+
+    @pyqtSlot(int)
+    def zone_deleted_slot(self, zone_id):
+        api.delete_zone(self.stream_id, zone_id)
+        self.zones[zone_id].deleteLater()
+        self.zones.pop(zone_id)
