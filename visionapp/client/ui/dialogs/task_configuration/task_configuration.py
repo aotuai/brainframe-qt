@@ -124,7 +124,9 @@ class TaskConfiguration(QDialog):
     def new_zone(self, new_zone_name, max_points=None):
         """Create a new zone (either line or region)"""
         # Create a new Zone
-        self.unconfirmed_zone = Zone(name=new_zone_name, coords=[])
+        self.unconfirmed_zone = Zone(name=new_zone_name,
+                                     stream_id=self.stream_conf.id,
+                                     coords=[])
 
         # Set instruction text
         self.instruction_label.setText(
