@@ -39,7 +39,25 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="alert_log_layout"/>
+      <layout class="QVBoxLayout" name="alert_log_layout">
+       <item>
+        <widget class="QScrollArea" name="scroll_area">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="alert_log">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>380</width>
+            <height>252</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

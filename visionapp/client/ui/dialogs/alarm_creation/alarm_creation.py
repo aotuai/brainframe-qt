@@ -48,7 +48,7 @@ class AlarmCreationDialog(QDialog):
         zones = {zone.name: zone for zone in zones}  # type: List[Zone]
 
         if not result:
-            return None
+            return None, None
 
         alarm_name = dialog.alarm_name.text()
         test_type = dialog.test_type_combo_box.currentText()
@@ -58,6 +58,10 @@ class AlarmCreationDialog(QDialog):
         zone = dialog.zone_combo_box.currentText()
         start_time = dialog.start_time_edit.time().toString("HH:mm:ss")
         stop_time = dialog.stop_time_edit.time().toString("HH:mm:ss")
+
+        # Sanitize the inputs
+        if not dialog.inputs_valid():
+            return None, None
 
         # Find category that attribute value is a part of
         for category in engine_config.attribute_ownership[countable]:
@@ -81,6 +85,12 @@ class AlarmCreationDialog(QDialog):
         zones[zone].alarms.append(alarm)
 
         return zones[zone], alarm
+
+    def inputs_valid(self):
+        """Return True or false if the inputs are valid"""
+        if self.alarm_name.text() == "": return False
+        if self.behavior_combo_box.currentText() == "": return False
+        return True
 
     @pyqtSlot(str)
     def countable_index_changed(self, countable):

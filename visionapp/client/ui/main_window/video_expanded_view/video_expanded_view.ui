@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1073</width>
-    <height>832</height>
+    <height>749</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,7 +67,7 @@
        <item>
         <widget class="AlertLog" name="alert_log">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>

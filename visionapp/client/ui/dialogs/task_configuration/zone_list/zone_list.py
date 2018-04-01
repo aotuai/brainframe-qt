@@ -52,6 +52,7 @@ class ZoneList(QScrollArea):
         zones = api.get_zones(stream_id)
         for zone in zones:
             zone_widget = self.add_zone(zone)  # type: ZoneAndTasks
+            zone_widget.update_zone_type()
             self.zones[zone.id] = zone_widget
             zone_widget.zone_deleted_signal.connect(self.zone_deleted_slot)
 
