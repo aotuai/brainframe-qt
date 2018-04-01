@@ -87,8 +87,9 @@ class Attribute(Codec):
 
 
 class ZoneAlarmCondition(Codec):
-    """This holds logic information for a ZoneAlarm.
-    """
+    """This holds logic information for a ZoneAlarm."""
+
+    test_types = [">", "<", "=", "!="]
 
     def __init__(self, *, test, check_value, with_class_name, attribute,
                  id_=None):

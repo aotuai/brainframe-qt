@@ -26,8 +26,8 @@ class AlarmCreationDialog(QDialog):
         self.engine_conf = engine_config
         self.zones = zones
 
-        # TODO: Where to pull these from?
-        self._update_combo_box(self.test_type_combo_box, ["+"])
+        self._update_combo_box(self.test_type_combo_box,
+                               ZoneAlarmCondition.test_types)
 
         detection_classes = self.engine_conf.attribute_ownership
         self._update_combo_box(self.countable_combo_box,
@@ -105,13 +105,3 @@ class AlarmCreationDialog(QDialog):
             attribute_values = sum(attribute_values, [''])
             self._update_combo_box(self.behavior_combo_box,
                                    attribute_values)
-
-
-if __name__ == '__main__':
-    from PyQt5.QtWidgets import QApplication
-
-    app = QApplication([])
-    window = AlarmCreationDialog(None)
-    window.show()
-
-    app.exec_()
