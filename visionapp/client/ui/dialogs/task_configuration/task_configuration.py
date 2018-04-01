@@ -22,9 +22,9 @@ class TaskConfiguration(QDialog):
         if stream_conf:
             self.video_task_config.change_stream(stream_conf)
             self.stream_name_label.setText(stream_conf.name)
-            zones = api.get_zones(stream_conf.id)
-            for zone in zones:
-                self.zone_list.add_zone(zone)
+
+            # Create TaskAndZone widgets in ZoneList for zones in database
+            self.zone_list.init_zones(stream_conf.id)
 
         self.unconfirmed_zone = None  # type: Zone
         self.unconfirmed_zone_widget = None
@@ -43,11 +43,17 @@ class TaskConfiguration(QDialog):
 
     @pyqtSlot()
     def new_alarm(self):
-        alarm = AlarmCreationDialog.new_alarm(self.zone_list.get_zones())
+
+        engine_config = api.get_engine_configuration()
+        zones = api.get_zones(self.stream_conf.id)
+
+        zone, alarm = AlarmCreationDialog.new_alarm(zones=zones,
+                                                    engine_config=engine_config)
         if not alarm:
             return
 
-        self.zone_list.add_alarm(alarm)
+        api.set_zone(self.stream_conf.id, zone)
+        self.zone_list.add_alarm(zone, alarm)
 
     @pyqtSlot()
     def new_region(self):

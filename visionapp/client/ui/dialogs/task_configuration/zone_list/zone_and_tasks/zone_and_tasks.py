@@ -16,7 +16,6 @@ from .tasks.task_widget import TaskWidget
 from visionapp.client.api.codecs import Zone, ZoneAlarm
 
 
-
 class ZoneAndTasks(QWidget):
     """https://stackoverflow.com/a/37927256/8134178"""
 
@@ -145,8 +144,7 @@ class ZoneAndTasks(QWidget):
             content_animation.setEndValue(content_height)
 
     def add_alarm(self, alarm: ZoneAlarm):
-        alarm_widget = TaskWidget(alarm.alarm_name, TaskWidget.TaskType.alarm,
-                                  self.alarm_area)
+        alarm_widget = TaskWidget(alarm.name, TaskWidget.TaskType.alarm)
 
         self.alarm_area_layout.addWidget(alarm_widget)
 

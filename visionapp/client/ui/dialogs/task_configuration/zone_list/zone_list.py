@@ -6,14 +6,15 @@ from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 from PyQt5.uic import loadUi
 
 from .zone_and_tasks import ZoneAndTasks
+from visionapp.client.api import api
 from visionapp.client.ui.resources.paths import qt_ui_paths
 
 
 # TODO: Scroll!
 class ZoneList(QScrollArea):
 
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.zone_list_ui, self)
 
@@ -25,8 +26,7 @@ class ZoneList(QScrollArea):
 
     def get_zones(self) -> Tuple[str]:
         """Get names of zones"""
-        # TODO: [Global] is for global zone for now
-        zones = list(self.zones.keys()) + ["[Global]"]
+        zones = self.zones.keys()
 
         # noinspection PyTypeChecker
         return tuple(zones)
@@ -36,12 +36,16 @@ class ZoneList(QScrollArea):
         self.zones[zone.name] = zone_widget
         self.main_layout.addWidget(zone_widget)
 
+        for alarm in zone.alarms:
+            self.add_alarm(zone, alarm)
+
         return zone_widget
 
-    def add_alarm(self, alarm):
-        zone = alarm.zone
+    def add_alarm(self, zone, alarm):
+        """Add an alarm widget to a ZoneAndTasks widget"""
+        self.zones[zone.name].add_alarm(alarm)
 
-        if zone != "[Global]":  # TODO: Better management of global zone
-            self.zones[zone].add_alarm(alarm)
-
-        self.main_layout.addWidget(QWidget())
+    def init_zones(self, stream_id):
+        zones = api.get_zones(stream_id)
+        for zone in zones:
+            self.zones[zone.name] = self.add_zone(zone)
