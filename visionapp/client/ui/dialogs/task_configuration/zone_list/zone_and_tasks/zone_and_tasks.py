@@ -175,12 +175,3 @@ class ZoneAndTasks(QWidget):
         else:
             self.zone_widget.set_task_type(TaskWidget.TaskType.region)
 
-
-if __name__ == '__main__':
-    from PyQt5.QtWidgets import QApplication
-
-    app = QApplication([])
-    zone_and_tasks = ZoneAndTasks(Zone(name="Test Zone", coords=[]))
-    zone_and_tasks.show()
-
-    app.exec_()

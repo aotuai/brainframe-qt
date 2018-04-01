@@ -183,9 +183,10 @@ class Zone(Codec):
     points are pixel based, with (0, 0) at top left
     """
 
-    def __init__(self, *, name, coords, alarms=(), id_=None):
+    def __init__(self, *, name, coords, stream_id, alarms=(), id_=None):
         self.name = name
         self.id = id_
+        self.stream_id = stream_id
         self.alarms = list(alarms)
         self.coords = coords
 
@@ -200,6 +201,7 @@ class Zone(Codec):
         return Zone(name=d["name"],
                     id_=d["id"],
                     alarms=alarms,
+                    stream_id=d["stream_id"],
                     coords=d["coords"])
 
 
@@ -291,7 +293,6 @@ class EngineConfiguration(Codec):
 
     def __init__(self, *, version, attribute_ownership, attributes,
                  max_streams):
-
         self.version = version
 
         self.attribute_ownership = attribute_ownership
