@@ -42,8 +42,6 @@ class AlarmCreationDialog(QDialog):
 
         # Input sanitation
         self.alarm_name.textEdited.connect(self.verify_inputs_valid)
-        self.behavior_combo_box.currentTextChanged.connect(
-            self.verify_inputs_valid)
         self.verify_inputs_valid()
 
     @classmethod
@@ -93,8 +91,6 @@ class AlarmCreationDialog(QDialog):
         """Return True or false if the inputs are valid"""
         is_valid = True
         if self.alarm_name.text().strip() == "":
-            is_valid = False
-        if self.behavior_combo_box.currentText() == "":
             is_valid = False
 
         self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(is_valid)

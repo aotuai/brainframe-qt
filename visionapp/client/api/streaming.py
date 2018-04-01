@@ -1,10 +1,11 @@
 import logging
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from threading import Thread
 from time import sleep, time
 
 from visionapp.shared.stream_capture import StreamReader
 from visionapp.client.api import codecs
+
 
 class StreamManager:
     """
@@ -51,15 +52,17 @@ class StatusPoller(Thread):
     """ This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream. """
 
-    def __init__(self, api, ms_between_updates: int):
+    def __init__(self, api, ms_status_updates):
         """
         :param get_latest_statuses_func: A function returning the latest
         zone statuses, passed in by the API
-        :param ms_between_updates: Miliseconds between calling for an update
+        :param ms_status_updates: Miliseconds between calling for a zone status
+        update
+        :param ms_alert_updates: Miliseconds between calling to check for
         """
         super().__init__(name="StatusPollerThread")
         self._api = api
-        self._seconds_between_updates = ms_between_updates / 1000
+        self._seconds_between_updates = ms_status_updates / 1000
         self._running = False
 
         # Get something before starting the thread
@@ -79,7 +82,7 @@ class StatusPoller(Thread):
             except ConnectionError:
                 logging.warning("StatusLogger: Could not reach server!")
                 sleep(2)
-                
+
             # Sleep for the appropriate amount to keep call times consistent
             time_left = self._seconds_between_updates - call_time
             if time_left > 0:
@@ -90,6 +93,22 @@ class StatusPoller(Thread):
     @property
     def is_running(self):
         return self._running
+
+    def get_alarm(self, stream_id, alarm_id) -> Union[None, codecs.ZoneAlarm]:
+        """Return a list of unverified alerts for this stream_id"""
+        zones = self.get_zones(stream_id)
+        if len(zones) == 0:
+            return []
+        alarms = sum([zone.alarms for zone in zones], [])
+        alarms = [alarm for alarm in alarms if alarm.id == alarm_id]
+        if len(alarms) == 0:
+            return None
+        return alarms[0]
+
+    def get_zones(self, stream_id) -> List[codecs.Zone]:
+        statuses = self.get_latest_statuses(stream_id)
+        zones = [status.zone for status in statuses]
+        return zones
 
     def get_detections(self, stream_id) -> Tuple[float, List[codecs.Detection]]:
         """Conveniently return all detections found in this stream and

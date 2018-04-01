@@ -106,7 +106,7 @@ class TaskConfiguration(QDialog):
         self.instruction_label.setText("")
 
         # Tell ZoneList to delete widget
-        self.zone_list.delete_zone(self.unconfirmed_zone.id)
+        self.zone_list.delete_zone_widget(self.unconfirmed_zone.id)
 
         # Delete unconfirmed zone
         self.unconfirmed_zone = None

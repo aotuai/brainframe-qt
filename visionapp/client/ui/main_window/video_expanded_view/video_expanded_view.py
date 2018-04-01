@@ -33,7 +33,7 @@ class VideoExpandedView(QWidget):
         """Signaled by thumbnail view when thumbnail video is clicked"""
 
         self.expanded_video.change_stream(stream_conf)
-
+        self.alert_log.change_stream(stream_conf.id)
         self.stream_conf = stream_conf
 
         # Show expanded view widgets
@@ -46,7 +46,7 @@ class VideoExpandedView(QWidget):
         """Signaled by close button"""
 
         self.expanded_video.change_stream(None)
-
+        self.alert_log.change_stream(None)
         self.stream_conf = None
 
         # Hide expanded view widgets
@@ -60,6 +60,7 @@ class VideoExpandedView(QWidget):
     def delete_stream_button_clicked(self):
         self.stream_delete_signal.emit(self.stream_conf.id)
         self.expanded_video.change_stream(None)
+        self.alert_log.change_stream(None)
         self.expanded_stream_closed_slot()
         self.stream_conf = None
 
