@@ -61,24 +61,7 @@ class TaskConfiguration(QDialog):
                                              "Name for new region:")
         if region_name is None:
             return
-
-        # Create a new Zone
-        self.unconfirmed_zone = Zone(name=region_name, coords=[])
-
-        # Set instruction text
-        self.instruction_label.setText(
-            'Add points until done, then press "Confirm" button')
-
-        # Add the a Zone widget to the sidebar
-        self.unconfirmed_zone_widget = self.zone_list.add_zone(
-            self.unconfirmed_zone)
-
-        # Instruct the VideoTaskConfig instance to start accepting mouseEvents
-        self.video_task_config.start_new_polygon()
-
-        # Disable critical widgets from being interacted with during creation
-        self._set_widgets_enabled(False)
-        self._hide_operation_widgets(False)
+        self.new_zone(region_name)
 
     @pyqtSlot()
     def new_region_confirmed(self):
@@ -106,6 +89,16 @@ class TaskConfiguration(QDialog):
         self._set_widgets_enabled(True)
         self._hide_operation_widgets(True)
 
+    @pyqtSlot()
+    def new_line(self):
+        print("new line called")
+        line_name = self.get_new_zone_name("New Line",
+                                           "Name for new line:")
+
+        if line_name is None:
+            return
+        self.new_zone(line_name, max_points=2)
+
     @pyqtSlot(bool)
     def enable_confirm_op_button(self, enable):
         self.confirm_op_button.setEnabled(enable)
@@ -128,11 +121,31 @@ class TaskConfiguration(QDialog):
         self._set_widgets_enabled(True)
         self._hide_operation_widgets(True)
 
+    def new_zone(self, new_zone_name, max_points=None):
+        """Create a new zone (either line or region)"""
+        # Create a new Zone
+        self.unconfirmed_zone = Zone(name=new_zone_name, coords=[])
+
+        # Set instruction text
+        self.instruction_label.setText(
+            'Add points until done, then press "Confirm" button')
+
+        # Add the a Zone widget to the sidebar
+        self.unconfirmed_zone_widget = self.zone_list.add_zone(
+            self.unconfirmed_zone)
+
+        # Instruct the VideoTaskConfig instance to start accepting mouseEvents
+        self.video_task_config.start_new_polygon(max_points)
+
+        # Disable critical widgets from being interacted with during creation
+        self._set_widgets_enabled(False)
+        self._hide_operation_widgets(False)
+
     def get_new_zone_name(self, prompt_title, prompt_text):
         """Get the name for a new zone, while checking if it exists"""
         while True:
-            region_name, ok = QInputDialog.getText(self, "New Region",
-                                                   "Name for new region:")
+            region_name, ok = QInputDialog.getText(self, prompt_title,
+                                                   prompt_text)
             if not ok:
                 # User pressed cancel or escape or otherwise closed the window
                 # without pressing Ok
@@ -156,10 +169,6 @@ class TaskConfiguration(QDialog):
 
             break
         return region_name
-
-    @pyqtSlot()
-    def new_line(self):
-        self.zone_list.add_zone("Test Region", ZoneList.TaskType.line)
 
     def _set_widgets_enabled(self, enabled):
         # TODO: Do this dynamically:

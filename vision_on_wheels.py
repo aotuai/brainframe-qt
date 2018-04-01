@@ -13,10 +13,6 @@ configs = api.api.get_stream_configurations()
 for config in configs:
     success = api.api.start_analyzing(config.id)
 
-    for zone in api.api.get_zones(config.id):
-        if zone.name == "Screen": continue  # TODO: Delete the zone-deletion debugging code
-        api.api.delete_zone(config.id, zone.id)
-
 # Ensure that all relative paths are correct
 # os.chdir(os.path.dirname(__file__))
 

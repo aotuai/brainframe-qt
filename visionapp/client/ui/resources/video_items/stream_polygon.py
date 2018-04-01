@@ -95,5 +95,6 @@ class StreamLabelBox(StreamPolygon):
                          border_color=parent.border_color,
                          fill_color=parent.border_color,
                          border_thickness=parent.border_thickness,
+                         opacity=0.35,
                          parent=parent)
         self.label_text.setZValue(self.zValue() + 1)

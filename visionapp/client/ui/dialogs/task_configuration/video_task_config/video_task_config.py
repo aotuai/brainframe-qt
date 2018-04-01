@@ -21,13 +21,20 @@ class VideoTaskConfig(StreamWidget):
         self.zones: List[StreamPolygon] = []
         """List of zones"""
 
+        # Variables related to making a new polygon
         self.unconfirmed_polygon: StreamPolygon = None
+        self.max_points = None
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         """Called when mouse click is _released_ on Widget"""
 
         # Ignore mouseEvents (until new region is begun)
         if self.unconfirmed_polygon is not None:
+            points = self.unconfirmed_polygon.points_list
+
+            # If maximum points has already been reached
+            if self.max_points is not None and len(points) >= self.max_points:
+                return
 
             # Get the coordinates of the mouse press in the scene's coordinates
             click = self.mapToScene(event.pos())
@@ -55,28 +62,23 @@ class VideoTaskConfig(StreamWidget):
             if self.unconfirmed_polygon not in self.scene_.items():
                 self.scene_.addItem(self.unconfirmed_polygon)
 
-        # # TODO: Alex: Uncomment; This won't work off the bat
-        # # How to reset polygon?
-        # polygon = geometry.Polygon(self.unconfirmed_polygon.polygon)
-        # if polygon.is_valid:
-        #     # TODO: Needs to be wired to slot in TaskConfiguration widget
-        #     self.polygon_is_valid_signal.emit(False)
-        # else:
-        #     self.polygon_is_valid_signal.emit(True)
-
         super().mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event: QMouseEvent):
         """Render a line being drawn to show what the polygon will look like
         if the mouse is clicked"""
+
         if self.unconfirmed_polygon is None:
             return
         if len(self.unconfirmed_polygon.polygon) < 1:
             return
 
+        points = self.unconfirmed_polygon.points_list
+        if self.max_points is not None and len(points) >= self.max_points:
+            return
+
         self.remove_items_by_type(StreamPolygon)
         move_point = self.mapToScene(event.pos())
-        points = self.unconfirmed_polygon.points_list
         points.append(move_point)
 
         visual_polygon = StreamPolygon(points, opacity=.25)
@@ -85,9 +87,10 @@ class VideoTaskConfig(StreamWidget):
         self.scene_.addItem(visual_polygon)
         self.scene_.addItem(self.unconfirmed_polygon)
 
-    def start_new_polygon(self):
+    def start_new_polygon(self, max_points=None):
         self.setMouseTracking(True)  # Allow for realtime zone updating
         self.unconfirmed_polygon = StreamPolygon()
+        self.max_points = max_points
 
     def confirm_unconfirmed_polygon(self):
         # Clear all objects that built up while making the polygon
@@ -104,12 +107,14 @@ class VideoTaskConfig(StreamWidget):
 
         # Polygon is no longer "unconfirmed" so delete that reference
         self.unconfirmed_polygon = None
-
+        self.max_points = None
         return ret
 
     def clear_unconfirmed_polygon(self):
 
         if self.unconfirmed_polygon is not None:
             self.scene_.removeItem(self.unconfirmed_polygon)
-            self.scene_.remove_it
+            self.remove_items_by_type(StreamPolygon)
+            self.remove_items_by_type(ClickCircle)
             self.unconfirmed_polygon = None
+            self.max_points = None

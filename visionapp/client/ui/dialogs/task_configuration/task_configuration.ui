@@ -58,20 +58,6 @@
       </layout>
      </item>
      <item>
-      <widget class="QCheckBox" name="detect_behavior_checkbox">
-       <property name="text">
-        <string>Detect Behaviors</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="crowd_heatmap_checkbox">
-       <property name="text">
-        <string>Crowd Heatmap Filter</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="current_tasks_label">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">

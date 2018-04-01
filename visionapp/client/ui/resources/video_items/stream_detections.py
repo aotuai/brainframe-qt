@@ -65,7 +65,7 @@ class ZoneStatusPolygon(StreamPolygon):
                           key=lambda pt: pt[0] ** 2 + pt[1] ** 2)[0]
 
         # Create the description box for the zone
-        text = "Zone: " + status.zone.name + "\nEntered: "
+        text = status.zone.name + "\nEntered: "
         text += ", ".join([str(v) + " " + k + "s"
                            for k, v in status.total_entered.items()])
         text += "\nExited: "
