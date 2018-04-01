@@ -294,21 +294,22 @@ class EngineConfiguration(Codec):
         self.version = version
 
         self.attribute_ownership = attribute_ownership
-        """Attribute types supported by each detection class in the network
+        """Attribute types (categories) supported by each detection class in the
+        network
         
         A dict where the key is a detection class and the value is a list of
         all attribute types that may apply to that detection class. The value
         is not the same as the dict returned by EngineConfiguration.attributes
         so that multiple detection classes can share the same attributes
         
-        Ex: {'person': ['Behavior']}
+        Ex: {'person': ['Behavior', 'Gender']}
         """
 
         self.attributes = attributes
         """Possible values for each detection class
         
-        A dict where the key is an attribute type and the value is a list of
-        possible values for the attribute type
+        A dict where the key is an attribute type (category) and the value is a
+        list of possible values for the attribute type.
         
         Ex: {'Behavior': ['drinking', 'phoning', 'smoking', 'unknown']}
         """
