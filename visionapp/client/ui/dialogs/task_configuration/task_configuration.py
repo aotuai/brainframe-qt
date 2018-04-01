@@ -6,7 +6,6 @@ from visionapp.client.api import api
 from visionapp.client.api.codecs import Zone, StreamConfiguration
 from visionapp.client.ui.resources.paths import qt_ui_paths
 from visionapp.client.ui.dialogs import AlarmCreationDialog
-from .zone_list import ZoneList
 
 
 class TaskConfiguration(QDialog):
@@ -56,6 +55,16 @@ class TaskConfiguration(QDialog):
         self.zone_list.add_alarm(zone, alarm)
 
     @pyqtSlot()
+    def new_line(self):
+        print("new line called")
+        line_name = self.get_new_zone_name("New Line",
+                                           "Name for new line:")
+
+        if line_name is None:
+            return
+        self.new_zone(line_name, max_points=2)
+
+    @pyqtSlot()
     def new_region(self):
         region_name = self.get_new_zone_name("New Region",
                                              "Name for new region:")
@@ -85,29 +94,19 @@ class TaskConfiguration(QDialog):
 
         # Clear unconfirmed zone now that we're done with it
         self.unconfirmed_zone = None
+        self.unconfirmed_zone_widget = None
 
         self._set_widgets_enabled(True)
         self._hide_operation_widgets(True)
-
-    @pyqtSlot()
-    def new_line(self):
-        print("new line called")
-        line_name = self.get_new_zone_name("New Line",
-                                           "Name for new line:")
-
-        if line_name is None:
-            return
-        self.new_zone(line_name, max_points=2)
-
-    @pyqtSlot(bool)
-    def enable_confirm_op_button(self, enable):
-        self.confirm_op_button.setEnabled(enable)
 
     @pyqtSlot()
     def new_region_canceled(self):
 
         # Remove instruction text
         self.instruction_label.setText("")
+
+        # Tell ZoneList to delete widget
+        self.zone_list.delete_zone(self.unconfirmed_zone.id)
 
         # Delete unconfirmed zone
         self.unconfirmed_zone = None
@@ -142,6 +141,10 @@ class TaskConfiguration(QDialog):
         # Disable critical widgets from being interacted with during creation
         self._set_widgets_enabled(False)
         self._hide_operation_widgets(False)
+
+    @pyqtSlot(bool)
+    def enable_confirm_op_button(self, enable):
+        self.confirm_op_button.setEnabled(enable)
 
     def get_new_zone_name(self, prompt_title, prompt_text):
         """Get the name for a new zone, while checking if it exists"""

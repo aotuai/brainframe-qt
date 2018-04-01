@@ -55,6 +55,7 @@ class ZoneAndTasks(QWidget):
         self.main_layout = QGridLayout(self)
 
         self.zone_widget = TaskWidget(self.zone_name, self.zone_type, self)
+        self.zone_widget.delete_button_pressed.connect(self.zone_deleted)
 
         self.toggle_button.setArrowType(Qt.RightArrow)
         self.toggle_button.setCheckable(True)
@@ -162,7 +163,7 @@ class ZoneAndTasks(QWidget):
         self.zone.alarms.remove(alarm)
         alarm_widget.deleteLater()
         self.set_content_layout()
-        self.zone = api.set_zone(self.zone, self.zone.stream_id)
+        self.zone = api.set_zone(self.zone.stream_id, self.zone)
 
     def zone_deleted(self):
         self.zone_deleted_signal.emit(self.zone.id)

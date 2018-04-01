@@ -43,8 +43,6 @@ class TaskWidget(QWidget):
         self.delete_button = QPushButton()
         trash_icon = QIcon(QPixmap(str(image_paths.trash_icon)))
         self.delete_button.setIcon(trash_icon)
-        self.delete_button.setSizePolicy(QSizePolicy.Minimum,
-                                         QSizePolicy.Minimum)
 
         self.main_layout.addWidget(self.icon)
         self.main_layout.addWidget(self.task_name_label, Qt.AlignLeft)
@@ -58,6 +56,13 @@ class TaskWidget(QWidget):
 
     def set_task_type(self, task_type: TaskType):
         self.task_type = task_type
+
+        # Don't allow Screen region to be deleted
+        if self.task_type == self.TaskType.region \
+                and self.task_name == "Screen":
+            self.delete_button.setDisabled(True)
+
+        # Change icon to reflect new task_type
         self.update_icon()
 
     def update_icon(self):

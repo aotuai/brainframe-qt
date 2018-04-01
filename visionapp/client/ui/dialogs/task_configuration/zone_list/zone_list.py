@@ -43,6 +43,12 @@ class ZoneList(QScrollArea):
 
         return zone_widget
 
+    @pyqtSlot(int)
+    def delete_zone(self, zone_id):
+        api.delete_zone(self.stream_id, zone_id)
+        self.zones[zone_id].deleteLater()
+        self.zones.pop(zone_id)
+
     def add_alarm(self, zone, alarm):
         """Add an alarm widget to a ZoneAndTasks widget"""
         self.zones[zone.id].add_alarm(alarm)
@@ -54,10 +60,4 @@ class ZoneList(QScrollArea):
             zone_widget = self.add_zone(zone)  # type: ZoneAndTasks
             zone_widget.update_zone_type()
             self.zones[zone.id] = zone_widget
-            zone_widget.zone_deleted_signal.connect(self.zone_deleted_slot)
-
-    @pyqtSlot(int)
-    def zone_deleted_slot(self, zone_id):
-        api.delete_zone(self.stream_id, zone_id)
-        self.zones[zone_id].deleteLater()
-        self.zones.pop(zone_id)
+            zone_widget.zone_deleted_signal.connect(self.delete_zone)
