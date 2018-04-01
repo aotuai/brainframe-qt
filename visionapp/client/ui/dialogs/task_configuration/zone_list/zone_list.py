@@ -1,8 +1,7 @@
-from enum import Enum
 from typing import Tuple
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QScrollArea, QVBoxLayout
 from PyQt5.uic import loadUi
 
 from .zone_and_tasks import ZoneAndTasks
@@ -29,6 +28,7 @@ class ZoneList(QScrollArea):
         zones = self.zones.keys()
 
         # noinspection PyTypeChecker
+        # PyCharm is dumb here
         return tuple(zones)
 
     def add_zone(self, zone):
