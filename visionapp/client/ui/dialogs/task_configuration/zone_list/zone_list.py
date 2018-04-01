@@ -48,4 +48,6 @@ class ZoneList(QScrollArea):
     def init_zones(self, stream_id):
         zones = api.get_zones(stream_id)
         for zone in zones:
-            self.zones[zone.name] = self.add_zone(zone)
+            zone_widget = self.add_zone(zone)
+            zone_widget.update_zone_type()
+            self.zones[zone.name] = zone_widget

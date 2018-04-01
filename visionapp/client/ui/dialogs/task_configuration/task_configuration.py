@@ -50,7 +50,7 @@ class TaskConfiguration(QDialog):
         zone, alarm = AlarmCreationDialog.new_alarm(zones=zones,
                                                     engine_config=engine_config)
         if not alarm:
-            return
+            return None
 
         api.set_zone(self.stream_conf.id, zone)
         self.zone_list.add_alarm(zone, alarm)
@@ -180,8 +180,6 @@ class TaskConfiguration(QDialog):
         self.alarm_button.setEnabled(enabled)
         self.line_button.setEnabled(enabled)
         self.region_button.setEnabled(enabled)
-        self.detect_behavior_checkbox.setEnabled(enabled)
-        self.crowd_heatmap_checkbox.setEnabled(enabled)
 
     def _hide_operation_widgets(self, hidden):
         self.confirm_op_button.setHidden(hidden)
