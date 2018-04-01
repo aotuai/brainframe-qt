@@ -8,7 +8,8 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
 from visionapp.client.ui.resources.video_items import \
-    ZonePolygon, DetectionPolygon, StreamPolygon
+    StreamPolygon
+from ui.resources.video_items import DetectionPolygon, ZoneStatusPolygon
 from visionapp.client.ui.resources.paths import image_paths
 from visionapp.client.api import api
 
@@ -74,7 +75,8 @@ class StreamWidget(QGraphicsView):
                     not self.video_stream.is_initialized or \
                     not self.video_stream.is_running:
                 # Since the video isn't working, clear any zones and dets
-                self.remove_items_by_type(StreamPolygon)
+                self.remove_items_by_type(ZoneStatusPolygon)
+                self.remove_items_by_type(DetectionPolygon)
                 self._set_frame(self._default_frame)
                 return
 
@@ -90,15 +92,15 @@ class StreamWidget(QGraphicsView):
             # TODO: Use video_stream.is_running to stop widget if stream ends
 
     def update_latest_zones(self):
-
         if not self.render_zones: return
-        self.remove_items_by_type(ZonePolygon)
+        self.remove_items_by_type(ZoneStatusPolygon)
+
         # Add new StreamPolygons
         statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
 
         for zone_status in statuses:
             if zone_status.zone.name == "Screen": continue
-            self.scene_.addItem(ZonePolygon(zone_status.zone.coords))
+            self.scene_.addItem(ZoneStatusPolygon(zone_status))
 
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
@@ -148,8 +150,8 @@ class StreamWidget(QGraphicsView):
     def remove_items_by_type(self, item_type):
         # Find current zones polygons
         items = self.scene_.items()
-        # polygons = filter(lambda item: isinstance(item, StreamPolygon), items)
         polygons = filter(lambda item: type(item) == item_type, items)
+
         # Delete current zones polygons
         for polygon in polygons:
             self.scene_.removeItem(polygon)
