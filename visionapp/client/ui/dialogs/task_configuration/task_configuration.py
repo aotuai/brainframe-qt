@@ -90,7 +90,9 @@ class TaskConfiguration(QDialog):
         self.unconfirmed_zone_widget.update_zone_type()
 
         # Add zone to database
-        api.set_zone(self.stream_conf.id, self.unconfirmed_zone)
+        zone = api.set_zone(self.stream_conf.id, self.unconfirmed_zone)
+
+        self.zone_list.zones[zone.id] = self.zone_list.zones.pop(None)
 
         # Clear unconfirmed zone now that we're done with it
         self.unconfirmed_zone = None
