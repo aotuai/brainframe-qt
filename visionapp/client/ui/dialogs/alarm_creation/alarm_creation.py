@@ -1,7 +1,7 @@
 from typing import List
 
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
 
 from visionapp.client.api.codecs import (
@@ -40,6 +40,12 @@ class AlarmCreationDialog(QDialog):
         self._update_combo_box(self.zone_combo_box,
                                [zone.name for zone in zones])
 
+        # Input sanitation
+        self.alarm_name.textEdited.connect(self.verify_inputs_valid)
+        self.behavior_combo_box.currentTextChanged.connect(
+            self.verify_inputs_valid)
+        self.verify_inputs_valid()
+
     @classmethod
     def new_alarm(cls, *, zones, engine_config):
         dialog = cls(zones, engine_config, None)
@@ -58,10 +64,6 @@ class AlarmCreationDialog(QDialog):
         zone = dialog.zone_combo_box.currentText()
         start_time = dialog.start_time_edit.time().toString("HH:mm:ss")
         stop_time = dialog.stop_time_edit.time().toString("HH:mm:ss")
-
-        # Sanitize the inputs
-        if not dialog.inputs_valid():
-            return None, None
 
         # Find category that attribute value is a part of
         for category in engine_config.attribute_ownership[countable]:
@@ -86,11 +88,16 @@ class AlarmCreationDialog(QDialog):
 
         return zones[zone], alarm
 
-    def inputs_valid(self):
+    @pyqtSlot()
+    def verify_inputs_valid(self):
         """Return True or false if the inputs are valid"""
-        if self.alarm_name.text() == "": return False
-        if self.behavior_combo_box.currentText() == "": return False
-        return True
+        is_valid = True
+        if self.alarm_name.text().strip() == "":
+            is_valid = False
+        if self.behavior_combo_box.currentText() == "":
+            is_valid = False
+
+        self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(is_valid)
 
     @pyqtSlot(str)
     def countable_index_changed(self, countable):
