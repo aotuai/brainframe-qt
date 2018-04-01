@@ -310,7 +310,7 @@ class API(metaclass=Singleton):
         """
         resp = self.delete(self._full_url(api_url), params=params)
         if not resp.ok:
-            raise APIError(resp)
+            raise APIError(resp.content)
 
         if resp.content:
             return ujson.loads(resp.content)
