@@ -84,6 +84,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="delete_stream_button">
+           <property name="text">
+            <string>Delete Stream</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="source_config_button">
            <property name="text">
             <string>Source Config</string>
@@ -119,8 +126,8 @@
    <slot>expanded_stream_closed_slot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>409</x>
-     <y>23</y>
+     <x>1064</x>
+     <y>31</y>
     </hint>
     <hint type="destinationlabel">
      <x>339</x>
@@ -135,8 +142,8 @@
    <slot>open_task_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>318</x>
-     <y>219</y>
+     <x>1063</x>
+     <y>734</y>
     </hint>
     <hint type="destinationlabel">
      <x>197</x>
@@ -151,12 +158,28 @@
    <slot>open_source_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>346</x>
-     <y>251</y>
+     <x>1063</x>
+     <y>822</y>
     </hint>
     <hint type="destinationlabel">
      <x>222</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delete_stream_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>delete_stream_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>997</x>
+     <y>760</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>719</y>
     </hint>
    </hints>
   </connection>
@@ -165,5 +188,6 @@
   <slot>expanded_stream_closed_slot()</slot>
   <slot>open_task_config()</slot>
   <slot>open_source_config()</slot>
+  <slot>delete_stream_button_clicked()</slot>
  </slots>
 </ui>

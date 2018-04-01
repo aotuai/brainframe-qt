@@ -2,9 +2,9 @@ import random
 
 from PyQt5.QtGui import QColor
 
-from api import codecs
-from ui.resources.video_items import StreamPolygon
-from ui.resources.video_items.stream_polygon import StreamLabelBox
+from visionapp.client.api import codecs
+from visionapp.client.ui.resources.video_items import StreamPolygon
+from visionapp.client.ui.resources.video_items.stream_polygon import StreamLabelBox
 
 
 def generate_unique_qcolor(name: str):

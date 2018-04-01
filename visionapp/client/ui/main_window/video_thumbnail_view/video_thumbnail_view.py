@@ -29,7 +29,7 @@ class VideoThumbnailView(QWidget):
         self.streams = {}
         """Streams currently in the ThumbnailView
         
-        Dict is formatted as {stream_id: StreamConfiguration()}
+        Dict is formatted as {stream_id: VideoSmall()}
         """
 
         for stream_conf in api.get_stream_configurations():
@@ -95,6 +95,18 @@ class VideoThumbnailView(QWidget):
             return
 
         self.new_stream_widget(stream_conf)
+
+    @pyqtSlot(int)
+    def delete_stream_slot(self, stream_id):
+        """"""
+        stream_widget = self.streams.pop(stream_id)
+        stream_widget.deleteLater()
+        self.current_stream_id = None
+        api.delete_stream_configuration(stream_id)
+        # 1) call delete on the API (make sure this closes the stream client-side)
+        # 2) pop widget from self.streams {stream_id: stream}
+        # 3) DELETE the widget
+        # 4)
 
     @pyqtProperty(int)
     def grid_num_columns(self):

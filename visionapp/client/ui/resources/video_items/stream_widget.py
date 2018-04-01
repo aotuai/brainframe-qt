@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
 from visionapp.client.ui.resources.video_items import \
     StreamPolygon
-from ui.resources.video_items import DetectionPolygon, ZoneStatusPolygon
+from visionapp.client.ui.resources.video_items import DetectionPolygon, ZoneStatusPolygon
 from visionapp.client.ui.resources.paths import image_paths
 from visionapp.client.api import api
 

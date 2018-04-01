@@ -13,12 +13,15 @@ class VideoExpandedView(QWidget):
     expanded_stream_closed_signal = pyqtSignal()
     """Signaled when expanded stream is closed"""
 
+    stream_delete_signal = pyqtSignal(int)
+    """Called when the user wants to delete a stream"""
+
     def __init__(self, parent):
         super().__init__(parent)
 
         loadUi(qt_ui_paths.video_expanded_view_ui, self)
 
-        self.current_video = None
+        self.stream_conf = None
 
         # TODO: Button is only disabled until API allows editing of StreamConfig
         self.source_config_button.setDisabled(True)
@@ -31,7 +34,7 @@ class VideoExpandedView(QWidget):
 
         self.expanded_video.change_stream(stream_conf)
 
-        self.current_video = stream_conf
+        self.stream_conf = stream_conf
 
         # Show expanded view widgets
         self.stream_name_label.setText(stream_conf.name)
@@ -43,7 +46,7 @@ class VideoExpandedView(QWidget):
 
         self.expanded_video.change_stream(None)
 
-        self.current_video = None
+        self.stream_conf = None
 
         # Hide expanded view widgets
         self._set_widgets_hidden(True)
@@ -53,13 +56,20 @@ class VideoExpandedView(QWidget):
         self.expanded_stream_closed_signal.emit()
 
     @pyqtSlot()
+    def delete_stream_button_clicked(self):
+        self.stream_delete_signal.emit(self.stream_conf.id)
+        self.expanded_video.change_stream(None)
+        self.expanded_stream_closed_slot()
+        self.stream_conf = None
+
+    @pyqtSlot()
     def open_task_config(self):
         print("Opening task configuration")
-        config = TaskConfiguration.open_configuration(self.current_video)
+        config = TaskConfiguration.open_configuration(self.stream_conf)
         if not config:
             return
 
-        # TODO
+            # TODO
 
     @pyqtSlot()
     def open_source_config(self):
@@ -74,3 +84,4 @@ class VideoExpandedView(QWidget):
         self.task_config_button.setHidden(hidden)
         self.source_config_button.setHidden(hidden)
         self.stream_name_label.setHidden(hidden)
+        self.delete_stream_button.setHidden(hidden)
