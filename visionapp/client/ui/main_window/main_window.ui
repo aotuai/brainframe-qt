@@ -28,9 +28,6 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="Toolbar" name="Toolbar"/>
-    </item>
-    <item>
      <layout class="QHBoxLayout" name="video_layout" stretch="2,0">
       <item>
        <widget class="QScrollArea" name="scrollArea">
@@ -58,7 +55,7 @@
            <x>0</x>
            <y>0</y>
            <width>977</width>
-           <height>608</height>
+           <height>610</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -76,6 +73,26 @@
     </item>
    </layout>
   </widget>
+  <widget class="QToolBar" name="tool_bar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="add_stream_action"/>
+  </widget>
+  <action name="add_stream_action">
+   <property name="text">
+    <string>Add Stream</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to add a new stream source!</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -88,14 +105,25 @@
    <extends>QWidget</extends>
    <header>visionapp.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
   </customwidget>
-  <customwidget>
-   <class>Toolbar</class>
-   <extends>QWidget</extends>
-   <header>visionapp.client.ui.main_window.toolbar.toolbar</header>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
+  <connection>
+   <sender>video_expanded_view</sender>
+   <signal>expanded_stream_closed_signal()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hide_video_expanded_view()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1043</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>753</x>
+     <y>3</y>
+    </hint>
+   </hints>
+  </connection>
   <connection>
    <sender>video_thumbnail_view_contents</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
@@ -107,8 +135,8 @@
      <y>135</y>
     </hint>
     <hint type="destinationlabel">
-     <x>602</x>
-     <y>80</y>
+     <x>1043</x>
+     <y>121</y>
     </hint>
    </hints>
   </connection>
@@ -119,28 +147,12 @@
    <slot>expand_thumbnail_view_slot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>586</x>
-     <y>111</y>
+     <x>1043</x>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>312</x>
      <y>167</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>video_expanded_view</sender>
-   <signal>expanded_stream_closed_signal()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>hide_video_expanded_view()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>751</x>
-     <y>95</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>753</x>
-     <y>3</y>
     </hint>
    </hints>
   </connection>
@@ -157,6 +169,38 @@
     <hint type="destinationlabel">
      <x>194</x>
      <y>2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>video_expanded_view</sender>
+   <signal>stream_delete_signal(int)</signal>
+   <receiver>video_thumbnail_view_contents</receiver>
+   <slot>delete_stream_slot(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1043</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>829</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tool_bar</sender>
+   <signal>actionTriggered(QAction*)</signal>
+   <receiver>video_thumbnail_view_contents</receiver>
+   <slot>create_new_stream_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>68</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>151</x>
+     <y>179</y>
     </hint>
    </hints>
   </connection>

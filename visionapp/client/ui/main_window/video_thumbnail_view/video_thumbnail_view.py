@@ -1,7 +1,7 @@
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget, QMessageBox
+from PyQt5.QtWidgets import QWidget, QMessageBox, QAction
 from PyQt5.uic import loadUi
 
 from visionapp.client.api import api, APIError
@@ -75,8 +75,9 @@ class VideoThumbnailView(QWidget):
         if self.current_stream_id:
             self.streams[self.current_stream_id].remove_selection_border()
 
-    @pyqtSlot()
-    def create_new_stream_slot(self):
+    @pyqtSlot(QAction)
+    def create_new_stream_slot(self, action):
+        print("Running action!")
         stream_conf = StreamConfigurationDialog.configure_stream()
         try:
             stream_conf = api.set_stream_configuration(stream_conf)
