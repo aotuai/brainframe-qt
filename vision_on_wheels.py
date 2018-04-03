@@ -1,10 +1,16 @@
 import os
 import sys
+from argparse import ArgumentParser
+
 
 from PyQt5.QtWidgets import QApplication
 
 from visionapp.client import api, MainWindow
 
+
+parser = ArgumentParser(decription="This runs the client VisionApp")
+parser.add_argument("-u", "-url", type=str, default="http://localhost:8000",
+                    )
 # Monkeypatch the api to be an instantiated object
 api.__dict__['api'] = api.API("http://localhost:8000")
 
