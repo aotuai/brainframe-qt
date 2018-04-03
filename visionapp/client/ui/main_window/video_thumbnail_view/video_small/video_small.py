@@ -10,7 +10,7 @@ class VideoSmall(StreamWidget):
     stream_clicked = pyqtSignal(int)
 
     def __init__(self, parent=None, stream_conf=None, frame_rate=30):
-        super().__init__(stream_conf, frame_rate, parent)
+        super().__init__(stream_conf, frame_rate, parent=parent)
 
         self.parent = parent
 
@@ -21,7 +21,7 @@ class VideoSmall(StreamWidget):
             # .connect is erroneously detected as unresolved
             self.stream_clicked.connect(parent.thumbnail_stream_clicked_slot)
 
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.MinimumExpanding)
+        self.setStyleSheet("background-color:#404040;")
 
     def mouseReleaseEvent(self, event):
 
