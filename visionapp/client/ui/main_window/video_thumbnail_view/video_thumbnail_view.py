@@ -1,7 +1,7 @@
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget, QMessageBox, QAction
+from PyQt5.QtWidgets import QAction, QGridLayout, QMessageBox, QWidget
 from PyQt5.uic import loadUi
 
 from visionapp.client.api import api, APIError
@@ -21,6 +21,8 @@ class VideoThumbnailView(QWidget):
 
         loadUi(qt_ui_paths.video_thumbnail_view_ui, self)
 
+        self.grid_num_rows = 0
+        """Current number of row in grid"""
         self._grid_num_columns = grid_num_columns
         """Current number of columns in grid"""
         self._grid_num_columns_expanded = grid_num_columns
@@ -125,29 +127,37 @@ class VideoThumbnailView(QWidget):
         for widget in widgets:
             self._add_widget_to_layout(widget)
 
-        # TODO: Document purpose
-        self.updateGeometry()
-
         self._set_layout_equal_stretch()
 
     def new_stream_widget(self, stream_conf):
         video = VideoSmall(self, stream_conf, 30)
         self.streams[stream_conf.id] = video
         self._add_widget_to_layout(video)
+        self._set_layout_equal_stretch()
 
     def _add_widget_to_layout(self, widget):
         row, col = divmod(self.main_layout.count(), self._grid_num_columns)
 
         self.main_layout.addWidget(widget, row, col)
 
-        self._set_layout_equal_stretch()
+        # row+1 is equal to number of rows in grid after addition
+        # (+1 is for indexing at 1 for a count)
+        self.grid_num_rows = row+1
 
     def _set_layout_equal_stretch(self):
         """Set all cells in grid layout to have have same width and height"""
         for row in range(self.main_layout.rowCount()):
-            self.main_layout.setRowStretch(row, 1)
+            if row < self.grid_num_rows:
+                self.main_layout.setRowStretch(row, 1)
+            else:
+                # Hide rows that have nothing in them
+                self.main_layout.setRowStretch(row, 0)
         for col in range(self.main_layout.columnCount()):
-            self.main_layout.setColumnStretch(col, 1)
+            if col < self._grid_num_columns:
+                self.main_layout.setColumnStretch(col, 1)
+            else:
+                # Hide columns that have nothing in them
+                self.main_layout.setColumnStretch(col, 0)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
