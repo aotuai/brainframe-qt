@@ -65,12 +65,23 @@ class ZoneStatusPolygon(StreamPolygon):
                           key=lambda pt: pt[0] ** 2 + pt[1] ** 2)[0]
 
         # Create the description box for the zone
-        text = status.zone.name + "\nEntered: "
-        text += ", ".join([str(v) + " " + k + "s"
-                           for k, v in status.total_entered.items()])
-        text += "\nExited: "
-        text += ", ".join([str(v) + " " + k + "s"
-                           for k, v in status.total_exited.items()])
+        text = status.zone.name
+        if len(self.points_list) == 2:
+            # If the zone is a line
+            text = status.zone.name + "\nEntered: "
+            text += ", ".join([str(v) + " " + k + "s"
+                               for k, v in status.total_entered.items()
+                               if v > 0])
+            text += "\nExited: "
+            text += ", ".join([str(v) + " " + k + "s"
+                               for k, v in status.total_exited.items()
+                               if v > 0])
+        else:
+            # If the zone is a region
+            counts = status.detection_counts
+            text += "\n" + "\n".join([str(v) + " " + k + "s"
+                             for k, v in status.detection_counts.items()])
+        text = text.strip()
 
         if len(status.alerts):
             text += "\nAlert!!!"

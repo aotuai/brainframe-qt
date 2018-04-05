@@ -79,7 +79,7 @@ class API(metaclass=Singleton):
     def get_status_poller(self) -> StatusPoller:
         """Returns the singleton StatusPoller object"""
         if self._status_poller is None or not self._status_poller.is_running:
-            self._status_poller = StatusPoller(self, 100)
+            self._status_poller = StatusPoller(self, 75)
         return self._status_poller
 
     # Stream Configuration Stuff
@@ -162,8 +162,6 @@ class API(metaclass=Singleton):
         :return:
         {stream_id1: [ZoneStatus, ZoneStatus], stream_id2: [ZoneStatus]}
         """
-        # TODO: Implement get_latest_zone_status in
-        # test_integration_analysis.py/test_zone_statuses
         req = "/api/streams/status/"
         data = self._get(req)
 

@@ -77,8 +77,10 @@ class StatusPoller(Thread):
             # Call the server, timing how long the call takes
             try:
                 start = time()
-                self._latest = self._api.get_latest_zone_statuses()
+                latest = self._api.get_latest_zone_statuses()
+                self._latest = latest
                 call_time = time() - start
+                print("Got latest")
             except ConnectionError:
                 logging.warning("StatusLogger: Could not reach server!")
                 sleep(2)

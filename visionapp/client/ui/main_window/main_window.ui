@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Dilili VisionOnWheels</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="main_layout">
@@ -54,8 +54,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>977</width>
-           <height>610</height>
+           <width>971</width>
+           <height>617</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -96,14 +96,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VideoExpandedView</class>
-   <extends>QWidget</extends>
-   <header>visionapp.client.ui.main_window.video_expanded_view.video_expanded_view</header>
-  </customwidget>
-  <customwidget>
    <class>VideoThumbnailView</class>
    <extends>QWidget</extends>
    <header>visionapp.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
+  </customwidget>
+  <customwidget>
+   <class>VideoExpandedView</class>
+   <extends>QWidget</extends>
+   <header>visionapp.client.ui.main_window.video_expanded_view.video_expanded_view</header>
   </customwidget>
  </customwidgets>
  <resources/>
