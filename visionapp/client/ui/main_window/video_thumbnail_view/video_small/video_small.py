@@ -21,11 +21,9 @@ class VideoSmall(StreamWidget):
             # .connect is erroneously detected as unresolved
             self.stream_clicked.connect(parent.thumbnail_stream_clicked_slot)
 
-        self.setStyleSheet("background-color:#404040;")
+        # self.setStyleSheet("background-color:#404040;")
 
     def mouseReleaseEvent(self, event):
-
-        print("Moused button released")
 
         # Add border around stream to indicate its selection
         self.add_selection_border()

@@ -7,9 +7,10 @@ from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
-from visionapp.client.ui.resources.video_items import \
-    StreamPolygon
-from visionapp.client.ui.resources.video_items import DetectionPolygon, ZoneStatusPolygon
+from visionapp.client.ui.resources.video_items import (
+    DetectionPolygon,
+    ZoneStatusPolygon
+)
 from visionapp.client.ui.resources.paths import image_paths
 from visionapp.client.api import api
 
@@ -39,6 +40,8 @@ class StreamWidget(QGraphicsView):
         # Scene to draw items to
         self.scene_ = QGraphicsScene()
         self.setScene(self.scene_)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.video_stream = None  # Set in change_stream
         self.current_frame = None
@@ -56,8 +59,10 @@ class StreamWidget(QGraphicsView):
         self.change_stream(stream_conf)
 
         # Get the Status poller
-        # TODO: Alex Uncomment
         self.status_poller = api.get_status_poller()
+
+        # self.setStyleSheet("background-color:green;")
+
 
     def update_items(self):
         self.update_frame()
@@ -172,3 +177,15 @@ class StreamWidget(QGraphicsView):
         image = QImage(frame.data, width, height, bytes_per_line,
                        QImage.Format_RGB888)
         return QPixmap.fromImage(image)
+
+    def resizeEvent(self, event):
+        """Take up entire width using aspect ratio of scene"""
+        if not self.scene().width():
+            return
+
+        aspect_ratio = self.scene().height() / self.scene().width()
+        height = int(event.size().width() * aspect_ratio)
+
+        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
+
+        self.setFixedHeight(height)
