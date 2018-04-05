@@ -141,6 +141,11 @@ class StreamWidget(QGraphicsView):
         # Create new QGraphicsPixmapItem if there isn't one
         if not self.current_frame:
             self.current_frame = self.scene_.addPixmap(pixmap)
+            # TODO: No idea why this works. Maybe find a better solution?
+            # This forces a resizeEvent. Using geometry.size() does not work
+            # for some reason. The 1000 is arbitrary. Seems to work just as
+            # well at 100x100.
+            self.resize(1000, 1000)
 
         # Otherwise modify the existing one
         else:
