@@ -1,14 +1,15 @@
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QAction, QGridLayout, QMessageBox, QWidget
+from PyQt5.QtWidgets import QAction, QMessageBox, QWidget
 from PyQt5.uic import loadUi
 
 from visionapp.client.api import api, APIError
 
+from .video_small.video_small import VideoSmall
 from visionapp.client.ui.dialogs import StreamConfigurationDialog
 from visionapp.client.ui.resources.paths import qt_ui_paths
-from .video_small.video_small import VideoSmall
+from visionapp.shared import rest_errors
 
 
 class VideoThumbnailView(QWidget):
@@ -85,14 +86,21 @@ class VideoThumbnailView(QWidget):
             stream_conf = api.set_stream_configuration(stream_conf)
 
             # Currently, we default to setting all new streams as 'active'
-            success = api.start_analyzing(stream_conf.id)
+            api.start_analyzing(stream_conf.id)
 
-        except APIError:
+        except APIError as err:
 
-            message = "<b>Error encountered while opening stream</b>" \
-                      + "<br><br>" \
-                      + "Is stream already open?<br>" \
-                      + "Is this a valid stream source?"
+            if err.kind == rest_errors.DUPLICATE_STREAM_SOURCE:
+                message = "<b>Stream source already open</b>" \
+                          "<br><br>" \
+                          "You already have the stream source open.<br><br>" \
+                          "Error: <b>" + err.kind + "</b>"
+            else:
+                message = "<b>Error encountered while opening stream</b>" \
+                          "<br><br>" \
+                          "Is stream already open?<br>" \
+                          "Is this a valid stream source?<br><br>" \
+                          "Error: <b>" + err.kind + "</b>"
 
             QMessageBox.information(self, "Error Opening Stream", message)
             return
@@ -102,14 +110,15 @@ class VideoThumbnailView(QWidget):
     @pyqtSlot(int)
     def delete_stream_slot(self, stream_id):
         """"""
-        stream_widget = self.streams.pop(stream_id)
-        stream_widget.deleteLater()
-        self.current_stream_id = None
         api.delete_stream_configuration(stream_id)
-        # 1) call delete on the API (make sure this closes the stream client-side)
-        # 2) pop widget from self.streams {stream_id: stream}
-        # 3) DELETE the widget
-        # 4)
+        self.current_stream_id = None
+
+        stream_widget = self.streams.pop(stream_id)
+        self.main_layout.removeWidget(stream_widget)
+        stream_widget.deleteLater()
+
+        # Force a reflow in case it hasn't happened yet
+        self.grid_num_columns = self._grid_num_columns
 
     @pyqtProperty(int)
     def grid_num_columns(self):
@@ -142,7 +151,7 @@ class VideoThumbnailView(QWidget):
 
         # row+1 is equal to number of rows in grid after addition
         # (+1 is for indexing at 1 for a count)
-        self.grid_num_rows = row+1
+        self.grid_num_rows = row + 1
 
     def _set_layout_equal_stretch(self):
         """Set all cells in grid layout to have have same width and height"""
