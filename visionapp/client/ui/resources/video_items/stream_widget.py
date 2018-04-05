@@ -16,7 +16,7 @@ from visionapp.client.api import api
 
 
 class StreamWidget(QGraphicsView):
-    """Base widget that uses Stream object to get frames
+    """Base widget that uses Stream object to get frames.
 
     Makes use of a QTimer to get frames"""
 
