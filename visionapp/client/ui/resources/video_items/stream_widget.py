@@ -63,38 +63,33 @@ class StreamWidget(QGraphicsView):
 
         # self.setStyleSheet("background-color:green;")
 
-
     def update_items(self):
         self.update_frame()
         self.update_latest_zones()
         self.update_latest_detections()
 
-    def update_frame(self, pixmap: QPixmap = None):
-        """Grab the newest frame from the Stream object
+    def update_frame(self):
+        """Grab the newest frame from the Stream object"""
+        # Check if the object actually has a stream
+        if self.video_stream is None or \
+                not self.video_stream.is_initialized or \
+                not self.video_stream.is_running:
+            # Since the video isn't working, clear any zones and dets
+            self.remove_items_by_type(ZoneStatusPolygon)
+            self.remove_items_by_type(DetectionPolygon)
+            self._set_frame(self._default_frame)
+            return
 
-        :param pixmap: If passed, the frame will be manually set to it"""
+        timestamp, frame = self.video_stream.latest_frame_rgb
 
-        if not pixmap:
-            # Check if the object actually has a stream
-            if self.video_stream is None or \
-                    not self.video_stream.is_initialized or \
-                    not self.video_stream.is_running:
-                # Since the video isn't working, clear any zones and dets
-                self.remove_items_by_type(ZoneStatusPolygon)
-                self.remove_items_by_type(DetectionPolygon)
-                self._set_frame(self._default_frame)
-                return
+        # Don't render image if it hasn't changed
+        if timestamp <= self.timestamp:
+            return
 
-            timestamp, frame = self.video_stream.latest_frame_rgb
-
-            # Don't render image if it hasn't changed
-            if timestamp <= self.timestamp:
-                return
-
-            self.timestamp = timestamp
-            pixmap = self._get_pixmap_from_numpy_frame(frame)
-            self._set_frame(pixmap)
-            # TODO: Use video_stream.is_running to stop widget if stream ends
+        self.timestamp = timestamp
+        pixmap = self._get_pixmap_from_numpy_frame(frame)
+        self._set_frame(pixmap)
+        # TODO: Use video_stream.is_running to stop widget if stream ends
 
     def update_latest_zones(self):
         if not self.render_zones: return
