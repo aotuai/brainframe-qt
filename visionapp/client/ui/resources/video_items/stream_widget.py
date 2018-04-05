@@ -45,7 +45,6 @@ class StreamWidget(QGraphicsView):
 
         self.video_stream = None  # Set in change_stream
         self.current_frame = None
-        self._default_frame = QPixmap(str(image_paths.video_not_found))
         self.timestamp = -1
 
         self._frame_rate = frame_rate
@@ -72,8 +71,16 @@ class StreamWidget(QGraphicsView):
         """Grab the newest frame from the Stream object"""
 
         # Check if the object actually has a stream
-        if not self.stream_is_up:
-            self._set_frame(self._default_frame)
+        if self.video_stream is None:
+            return
+        if not self.video_stream.is_running:
+            pixmap = self._static_pixmap(image_paths.stream_finished)
+            self._set_frame(pixmap)
+            return
+        if self.video_stream.is_running \
+                and not self.video_stream.is_initialized:
+            pixmap = self._static_pixmap(image_paths.connecting_to_stream)
+            self._set_frame(pixmap)
             return
 
         timestamp, frame = self.video_stream.latest_frame_rgb
@@ -101,8 +108,8 @@ class StreamWidget(QGraphicsView):
 
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
-        if not self.render_detections: return
-        if not self.stream_is_up: return
+        if not self.render_detections or not self.stream_is_up:
+            return
 
         # This function allows for fading out as well, though
         tstamp, dets = self.status_poller.get_detections(self.stream_conf.id)
@@ -163,9 +170,9 @@ class StreamWidget(QGraphicsView):
     def stream_is_up(self):
         """Returns True if there is an active stream that is giving frames
         at the moment."""
-        return not self.video_stream is None and \
-               self.video_stream.is_initialized and \
-               self.video_stream.is_running
+        return self.video_stream is not None \
+            and self.video_stream.is_initialized \
+            and self.video_stream.is_running
 
     @pyqtProperty(int)
     def frame_rate(self):
@@ -183,6 +190,10 @@ class StreamWidget(QGraphicsView):
         image = QImage(frame.data, width, height, bytes_per_line,
                        QImage.Format_RGB888)
         return QPixmap.fromImage(image)
+
+    @staticmethod
+    def _static_pixmap(path):
+        return QPixmap(str(path))
 
     def resizeEvent(self, event):
         """Take up entire width using aspect ratio of scene"""
