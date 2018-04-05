@@ -1,6 +1,7 @@
 import abc
-from enum import Enum
 import ujson
+from collections import Counter
+from enum import Enum
 
 
 class Codec(abc.ABC):
@@ -217,6 +218,13 @@ class ZoneStatus(Codec):
         self.total_exited = total_exited
         self.detections = detections
         self.alerts = alerts
+
+    @property
+    def detection_counts(self):
+        """The current count of each class type detected in the video
+        :returns: {'class_name': int count, ...} """
+        counter = Counter([det.class_name for det in self.detections])
+        return counter
 
     def to_dict(self):
         d = dict(self.__dict__)
