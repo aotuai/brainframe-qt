@@ -1,7 +1,7 @@
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QAction, QGridLayout, QMessageBox, QWidget
+from PyQt5.QtWidgets import QAction, QMessageBox, QWidget
 from PyQt5.uic import loadUi
 
 from visionapp.client.api import api, APIError
@@ -10,6 +10,7 @@ from .video_small.video_small import VideoSmall
 from visionapp.client.ui.dialogs import StreamConfigurationDialog
 from visionapp.client.ui.resources.paths import qt_ui_paths
 from visionapp.shared import rest_errors
+
 
 class VideoThumbnailView(QWidget):
     thumbnail_stream_clicked_signal = pyqtSignal(object)
@@ -150,7 +151,7 @@ class VideoThumbnailView(QWidget):
 
         # row+1 is equal to number of rows in grid after addition
         # (+1 is for indexing at 1 for a count)
-        self.grid_num_rows = row+1
+        self.grid_num_rows = row + 1
 
     def _set_layout_equal_stretch(self):
         """Set all cells in grid layout to have have same width and height"""
