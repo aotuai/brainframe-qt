@@ -63,42 +63,34 @@ class StreamWidget(QGraphicsView):
 
         # self.setStyleSheet("background-color:green;")
 
-
     def update_items(self):
-        self.update_frame()
+        frame_was_set = self.update_frame()
         self.update_latest_zones()
         self.update_latest_detections()
 
-    def update_frame(self, pixmap: QPixmap = None):
-        """Grab the newest frame from the Stream object
+    def update_frame(self):
+        """Grab the newest frame from the Stream object"""
 
-        :param pixmap: If passed, the frame will be manually set to it"""
+        # Check if the object actually has a stream
+        if not self.stream_is_up:
+            self._set_frame(self._default_frame)
+            return
 
-        if not pixmap:
-            # Check if the object actually has a stream
-            if self.video_stream is None or \
-                    not self.video_stream.is_initialized or \
-                    not self.video_stream.is_running:
-                # Since the video isn't working, clear any zones and dets
-                self.remove_items_by_type(ZoneStatusPolygon)
-                self.remove_items_by_type(DetectionPolygon)
-                self._set_frame(self._default_frame)
-                return
+        timestamp, frame = self.video_stream.latest_frame_rgb
 
-            timestamp, frame = self.video_stream.latest_frame_rgb
+        # Don't render image if it hasn't changed
+        if timestamp <= self.timestamp:
+            return
 
-            # Don't render image if it hasn't changed
-            if timestamp <= self.timestamp:
-                return
-
-            self.timestamp = timestamp
-            pixmap = self._get_pixmap_from_numpy_frame(frame)
-            self._set_frame(pixmap)
-            # TODO: Use video_stream.is_running to stop widget if stream ends
+        self.timestamp = timestamp
+        pixmap = self._get_pixmap_from_numpy_frame(frame)
+        self._set_frame(pixmap)
+        # TODO: Use video_stream.is_running to stop widget if stream ends
 
     def update_latest_zones(self):
-        if not self.render_zones: return
         self.remove_items_by_type(ZoneStatusPolygon)
+        if not self.render_zones: return
+        if not self.stream_is_up: return
 
         # Add new StreamPolygons
         statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
@@ -110,6 +102,7 @@ class StreamWidget(QGraphicsView):
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
         if not self.render_detections: return
+        if not self.stream_is_up: return
 
         # This function allows for fading out as well, though
         tstamp, dets = self.status_poller.get_detections(self.stream_conf.id)
@@ -160,6 +153,14 @@ class StreamWidget(QGraphicsView):
         # Delete current zones polygons
         for polygon in polygons:
             self.scene_.removeItem(polygon)
+
+    @property
+    def stream_is_up(self):
+        """Returns True if there is an active stream that is giving frames
+        at the moment."""
+        return not self.video_stream is None and \
+               self.video_stream.is_initialized and \
+               self.video_stream.is_running
 
     @pyqtProperty(int)
     def frame_rate(self):

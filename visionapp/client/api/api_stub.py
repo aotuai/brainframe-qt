@@ -79,7 +79,7 @@ class API(metaclass=Singleton):
     def get_status_poller(self) -> StatusPoller:
         """Returns the singleton StatusPoller object"""
         if self._status_poller is None or not self._status_poller.is_running:
-            self._status_poller = StatusPoller(self, 100)
+            self._status_poller = StatusPoller(self, 75)
         return self._status_poller
 
     # Stream Configuration Stuff
