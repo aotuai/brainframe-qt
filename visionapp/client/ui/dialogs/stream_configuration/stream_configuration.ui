@@ -182,6 +182,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>stream_name</tabstop>
+  <tabstop>connection_type_combo_box</tabstop>
+  <tabstop>parameter_value</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
