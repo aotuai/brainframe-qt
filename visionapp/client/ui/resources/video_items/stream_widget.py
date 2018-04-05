@@ -206,3 +206,7 @@ class StreamWidget(QGraphicsView):
         self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
 
         self.setFixedHeight(height)
+
+    def wheelEvent(self, event):
+        """Send scroll wheel events to parent object"""
+        return self.parent().wheelEvent(event)
