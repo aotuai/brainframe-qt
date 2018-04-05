@@ -1,9 +1,9 @@
-import logging
 from time import time
 
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
-from PyQt5.QtCore import pyqtProperty, Qt, QTimer
+from PyQt5.QtCore import pyqtProperty
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
@@ -18,8 +18,8 @@ from visionapp.client.api import api
 class StreamWidget(QGraphicsView):
     """Base widget that uses Stream object to get frames.
 
-    Makes use of a QTimer to get frames"""
-
+    Makes use of a QTimer to get frames
+    """
     def __init__(self, stream_conf=None, frame_rate=30, parent=None):
         """Init StreamWidget object
 
@@ -40,8 +40,6 @@ class StreamWidget(QGraphicsView):
         # Scene to draw items to
         self.scene_ = QGraphicsScene()
         self.setScene(self.scene_)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.video_stream = None  # Set in change_stream
         self.current_frame = None
@@ -96,14 +94,17 @@ class StreamWidget(QGraphicsView):
 
     def update_latest_zones(self):
         self.remove_items_by_type(ZoneStatusPolygon)
-        if not self.render_zones: return
-        if not self.stream_is_up: return
+        if not self.render_zones:
+            return
+        if not self.stream_is_up:
+            return
 
         # Add new StreamPolygons
         statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
 
         for zone_status in statuses:
-            if zone_status.zone.name == "Screen": continue
+            if zone_status.zone.name == "Screen":
+                continue
             self.scene_.addItem(ZoneStatusPolygon(zone_status))
 
     def update_latest_detections(self):
@@ -200,13 +201,13 @@ class StreamWidget(QGraphicsView):
         if not self.scene().width():
             return
 
+        # EXTREMELY IMPORTANT LINE!
+        # The sceneRect grows but never shrinks automatically
+        self.scene().setSceneRect(self.scene().itemsBoundingRect())
+
         aspect_ratio = self.scene().height() / self.scene().width()
         height = int(event.size().width() * aspect_ratio)
 
         self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
 
         self.setFixedHeight(height)
-
-    def wheelEvent(self, event):
-        """Send scroll wheel events to parent object"""
-        return self.parent().wheelEvent(event)
