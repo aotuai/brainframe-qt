@@ -102,16 +102,23 @@ class ZoneAlarmCondition(Codec):
 
     def to_dict(self) -> dict:
         d = dict(self.__dict__)
-        d["with_attribute"] = self.with_attribute.to_dict()
+        if self.with_attribute is not None:
+            d["with_attribute"] = self.with_attribute.to_dict()
+
         return d
 
     @staticmethod
     def from_dict(d: dict):
+        # with_attribute is an optional parameter
+        with_attribute = None
+        if d["with_attribute"] is not None:
+            with_attribute = Attribute.from_dict(d["with_attribute"])
+
         return ZoneAlarmCondition(
             test=d["test"],
             check_value=d["check_value"],
             with_class_name=d["with_class_name"],
-            attribute=Attribute.from_dict(d["with_attribute"]),
+            attribute=with_attribute,
             id_=d["id"])
 
 
@@ -119,8 +126,8 @@ class ZoneAlarm(Codec):
     """This is the configuration for an alarm.
     """
 
-    def __init__(self, *, name, conditions,
-                 use_active_time, active_start_time, active_end_time, id_=None):
+    def __init__(self, *, name, conditions, use_active_time,
+                 active_start_time, active_end_time, id_=None):
         self.name = name
         self.id = id_
         self.conditions = conditions
