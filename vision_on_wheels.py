@@ -27,7 +27,6 @@ for config in configs:
 
 # Run the UI
 app = QApplication(sys.argv)
-print(image_paths.application_icon.exists())
 app.setWindowIcon(QIcon(str(image_paths.application_icon)))
 window = MainWindow()
 app.exec_()
