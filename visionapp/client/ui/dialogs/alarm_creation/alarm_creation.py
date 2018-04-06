@@ -36,6 +36,9 @@ class AlarmCreationDialog(QDialog):
         # Set the behavior combo box to have initial attributes values
         detection_class = self.countable_combo_box.currentText()
         self._update_attribute_values(detection_class)
+        # Update the attribute values when the behavior selection changes
+        self.countable_combo_box.currentTextChanged.connect(
+            self._update_attribute_values)
 
         self._update_combo_box(self.zone_combo_box,
                                [zone.name for zone in zones])
