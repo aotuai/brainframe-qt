@@ -75,8 +75,11 @@ class AlarmCreationDialog(QDialog):
         else:
             category = None
 
-        behavior = None if behavior == "" else behavior
-        attribute = Attribute(category=category, value=behavior)
+        if behavior == "":
+            # No behavior was selected
+            attribute = None
+        else:
+            attribute = Attribute(category=category, value=behavior)
 
         alarm_condition = ZoneAlarmCondition(test=test_type,
                                              check_value=count,
@@ -97,8 +100,6 @@ class AlarmCreationDialog(QDialog):
         """Return True or false if the inputs are valid"""
         is_valid = True
         if self.alarm_name.text().strip() == "":
-            is_valid = False
-        if self.behavior_combo_box.currentText() == "":
             is_valid = False
 
         self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(is_valid)
