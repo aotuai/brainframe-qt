@@ -221,6 +221,16 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>alarm_name</tabstop>
+  <tabstop>test_type_combo_box</tabstop>
+  <tabstop>count_spin_box</tabstop>
+  <tabstop>countable_combo_box</tabstop>
+  <tabstop>behavior_combo_box</tabstop>
+  <tabstop>zone_combo_box</tabstop>
+  <tabstop>start_time_edit</tabstop>
+  <tabstop>stop_time_edit</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
