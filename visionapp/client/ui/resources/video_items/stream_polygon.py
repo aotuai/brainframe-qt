@@ -7,8 +7,12 @@ from PyQt5.QtWidgets import QGraphicsPolygonItem, QGraphicsTextItem
 
 class StreamPolygon(QGraphicsPolygonItem):
     def __init__(self, points=(), *,
-                 border_color=Qt.red, border_thickness=5,
-                 fill_color=None, opacity=1.0, parent=None):
+                 border_color=None,
+                 border_thickness=1,
+                 border_linetype=None,
+                 fill_color=None,
+                 opacity=1.0,
+                 parent=None):
         self.polygon = QPolygonF()
         super().__init__(self.polygon, parent=parent)
 
@@ -20,16 +24,31 @@ class StreamPolygon(QGraphicsPolygonItem):
         # if fill_color is None:
         #     fill_color = border_color
 
+        # Set the opacity of the polygon
         self.setOpacity(opacity)
-        self.border_color = None
-        self.fill_color = None
-        self.border_thickness = None
 
-        # Apply the colors
-        self.set_color(border_color, fill_color)
+        pen = self.pen()
+        brush = self.brush()
+
+        # Apply the border color
+        if border_color:
+            pen.setColor(border_color)
+
+        # If there's a fill, apply the fill color
+        if fill_color:
+            self.fill_color = QColor(fill_color)
+            brush.setColor(fill_color)
+            brush.setStyle(Qt.SolidPattern)
+
+        if border_linetype:
+            pen.setStyle(border_linetype)
 
         # Apply thickness
-        self._apply_border_thickness(border_thickness)
+        pen.setWidth(border_thickness)
+
+        # Apply the styles
+        self.setPen(pen)
+        self.setBrush(brush)
 
     def insert_point(self, point: Union[List, QPointF]):
         if isinstance(point, list) or isinstance(point, tuple):
@@ -37,42 +56,11 @@ class StreamPolygon(QGraphicsPolygonItem):
         self.polygon.append(point)
         self.setPolygon(self.polygon)
 
-    def set_color(self, border_color=None, fill_color=None):
-        """Set border color and fill_color of Polygon
-
-        If fill_color is None, it is set to border_color
-        """
-        if border_color:
-            self.border_color = border_color
-            self._apply_border_color(border_color)
-        if fill_color:
-            self.fill_color = QColor(fill_color)
-            self._apply_fill_color(fill_color)
-
     @property
     def points_list(self):
         """Returns a list in a non-QT type"""
         return [(point.x(), point.y())
                 for point in self.polygon]
-
-    def _apply_border_color(self, border_color):
-        pen = self.pen()
-        pen.setColor(border_color)
-        self.setPen(pen)
-
-    def _apply_fill_color(self, fill_color):
-        brush = self.brush()
-        brush.setColor(fill_color)
-        brush.setStyle(Qt.SolidPattern)
-        self.setBrush(brush)
-
-    def _apply_border_thickness(self, border_thickness):
-
-        self.border_thickness = border_thickness
-
-        pen = self.pen()
-        pen.setWidth(border_thickness)
-        self.setPen(pen)
 
 
 class StreamLabelBox(StreamPolygon):
@@ -92,9 +80,9 @@ class StreamLabelBox(StreamPolygon):
                   [rect[0], rect[3]]]
 
         super().__init__(points=coords,
-                         border_color=parent.border_color,
-                         fill_color=parent.border_color,
-                         border_thickness=parent.border_thickness,
+                         border_color=parent.pen().color(),
+                         fill_color=parent.pen().color(),
+                         border_thickness=parent.pen().width(),
                          opacity=0.35,
                          parent=parent)
         self.label_text.setZValue(self.zValue() + 1)

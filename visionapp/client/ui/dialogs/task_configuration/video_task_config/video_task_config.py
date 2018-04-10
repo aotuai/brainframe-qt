@@ -1,7 +1,7 @@
 from typing import List
 
 from PyQt5.QtCore import pyqtSignal, QPointF, Qt
-from PyQt5.QtGui import QMouseEvent
+from PyQt5.QtGui import QMouseEvent, QColor
 from shapely import geometry
 
 from visionapp.client.ui.resources.video_items import (
@@ -16,10 +16,7 @@ class VideoTaskConfig(StreamWidget):
 
     def __init__(self, parent=None, stream_conf=None, frame_rate=30):
         super().__init__(stream_conf, frame_rate, parent)
-        self.set_render_settings(detections=False, zones=False)
-
-        self.zones: List[StreamPolygon] = []
-        """List of zones"""
+        self.set_render_settings(detections=False, zones=True)
 
         # Variables related to making a new polygon
         self.unconfirmed_polygon: StreamPolygon = None
@@ -81,40 +78,36 @@ class VideoTaskConfig(StreamWidget):
         move_point = self.mapToScene(event.pos())
         points.append(move_point)
 
-        visual_polygon = StreamPolygon(points, opacity=.25)
+        visual_polygon = StreamPolygon(points,
+                                       opacity=.25,
+                                       border_thickness=3,
+                                       border_color=QColor(50, 255, 50))
 
         # Add the new polygon first, then superimpose the current polygon
         self.scene_.addItem(visual_polygon)
         self.scene_.addItem(self.unconfirmed_polygon)
 
     def start_new_polygon(self, max_points=None):
+        self.set_render_settings(zones=False)
         self.setMouseTracking(True)  # Allow for realtime zone updating
-        self.unconfirmed_polygon = StreamPolygon()
+        self.unconfirmed_polygon = StreamPolygon(
+            border_thickness=3,
+            border_color=QColor(50, 255, 50))
         self.max_points = max_points
 
     def confirm_unconfirmed_polygon(self):
         # Clear all objects that built up while making the polygon
-        self.remove_items_by_type(StreamPolygon)
-        self.remove_items_by_type(ClickCircle)
+        new_polygon = self.unconfirmed_polygon.polygon
+        self.clean_up()
+        return new_polygon
 
-        # Add the green finished polygon
-        self.unconfirmed_polygon.set_color(Qt.green)
-        self.scene_.addItem(self.unconfirmed_polygon)
-
-        self.zones.append(self.unconfirmed_polygon)
-
-        ret = self.unconfirmed_polygon.polygon
-
-        # Polygon is no longer "unconfirmed" so delete that reference
-        self.unconfirmed_polygon = None
-        self.max_points = None
-        return ret
-
-    def clear_unconfirmed_polygon(self):
-
+    def clean_up(self):
+        """Return the widget back to the normal mode, where it is ready to start
+        creating a new polygon"""
         if self.unconfirmed_polygon is not None:
             self.scene_.removeItem(self.unconfirmed_polygon)
             self.remove_items_by_type(StreamPolygon)
             self.remove_items_by_type(ClickCircle)
             self.unconfirmed_polygon = None
             self.max_points = None
+        self.set_render_settings(zones=True)

@@ -2,10 +2,11 @@ import os
 import sys
 from argparse import ArgumentParser
 
-
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QIcon
 
 from visionapp.client import api, MainWindow
+from visionapp.client.ui.resources.paths import image_paths
 
 # CLI Arguments
 parser = ArgumentParser(description="This runs the client VisionApp")
@@ -26,6 +27,7 @@ for config in configs:
 
 # Run the UI
 app = QApplication(sys.argv)
+app.setWindowIcon(QIcon(str(image_paths.application_icon)))
 window = MainWindow()
 app.exec_()
 

@@ -36,6 +36,9 @@ class AlarmCreationDialog(QDialog):
         # Set the behavior combo box to have initial attributes values
         detection_class = self.countable_combo_box.currentText()
         self._update_attribute_values(detection_class)
+        # Update the attribute values when the behavior selection changes
+        self.countable_combo_box.currentTextChanged.connect(
+            self._update_attribute_values)
 
         self._update_combo_box(self.zone_combo_box,
                                [zone.name for zone in zones])
@@ -72,8 +75,11 @@ class AlarmCreationDialog(QDialog):
         else:
             category = None
 
-        behavior = None if behavior == "" else behavior
-        attribute = Attribute(category=category, value=behavior)
+        if behavior == "":
+            # No behavior was selected
+            attribute = None
+        else:
+            attribute = Attribute(category=category, value=behavior)
 
         alarm_condition = ZoneAlarmCondition(test=test_type,
                                              check_value=count,
@@ -94,8 +100,6 @@ class AlarmCreationDialog(QDialog):
         """Return True or false if the inputs are valid"""
         is_valid = True
         if self.alarm_name.text().strip() == "":
-            is_valid = False
-        if self.behavior_combo_box.currentText() == "":
             is_valid = False
 
         self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(is_valid)

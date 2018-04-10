@@ -33,21 +33,21 @@ class AlertLog(QWidget):
         unverified = api.get_unverified_alerts(self.stream_id)
 
         for alert in unverified:
-            if alert.id in self.alert_widgets:
-                continue
-            alarm = self.status_poller.get_alarm(self.stream_id, alert.alarm_id)
-            alarm_text = alarm.name
-            alert_start = datetime.fromtimestamp(alert.start_time)
-            alert_start = alert_start.strftime('%H:%M')
-            alert_end = ""
-            if alert.end_time is not None:
-                alert_end = datetime.fromtimestamp(alert.end_time)
-                alert_end = " to " + alert_end.strftime('%H:%M')
-            alert_time = alert_start + alert_end
 
-            alert_widget = AlertLogEntry(alert_time, alarm_text)
-            self.alert_log.layout().addWidget(alert_widget)
-            self.alert_widgets[alert.id] = alert_widget
+            if self.alert_widgets.get(alert.id, None) is None:
+                # If the alert widget hasn't been made yet
+                alarm = self.status_poller.get_alarm(self.stream_id,
+                                                     alert.alarm_id)
+                alert_widget = AlertLogEntry(start_time=alert.start_time,
+                                             end_time=alert.end_time,
+                                             alarm_name=alarm.name)
+                self.alert_log.layout().insertWidget(0, alert_widget)
+                self.alert_widgets[alert.id] = alert_widget
+            else:
+                # If the alert already exists, update the information
+                alert_widget = self.alert_widgets[alert.id]
+                alert_widget.update_time(alert.start_time, alert.end_time)
+
 
     @pyqtSlot(int)
     def change_stream(self, stream_id):

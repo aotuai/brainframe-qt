@@ -15,7 +15,6 @@ def route_path(*args: Union[str, Path]) -> Path:
     and returns a pathlib Path object"""
     global all_paths
     if hasattr(sys, '_MEIPASS'):
-        print("returning", Path(sys._MEIPASS, *args))
         return Path(sys._MEIPASS, *args)
 
     # Check if this file should be saved for pyinstaller
