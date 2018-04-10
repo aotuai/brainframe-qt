@@ -16,6 +16,8 @@ class MainWindow(QMainWindow):
 
         loadUi(qt_ui_paths.main_window_ui, self).show()
 
+        self.setCentralWidget(self.centralwidget)
+
     @pyqtSlot()
     def show_video_expanded_view(self):
         """Called by thumbnail_view when a thumbnail is clicked"""
