@@ -1,9 +1,9 @@
-import logging
 from time import time
 
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
-from PyQt5.QtCore import pyqtProperty, Qt, QTimer
+from PyQt5.QtCore import pyqtProperty
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
@@ -18,8 +18,8 @@ from visionapp.client.api import api
 class StreamWidget(QGraphicsView):
     """Base widget that uses Stream object to get frames.
 
-    Makes use of a QTimer to get frames"""
-
+    Makes use of a QTimer to get frames
+    """
     def __init__(self, stream_conf=None, frame_rate=30, parent=None):
         """Init StreamWidget object
 
@@ -38,10 +38,7 @@ class StreamWidget(QGraphicsView):
         self.render_zones = True
 
         # Scene to draw items to
-        self.scene_ = QGraphicsScene()
-        self.setScene(self.scene_)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setScene(QGraphicsScene())
 
         self.video_stream = None  # Set in change_stream
         self.current_frame = None
@@ -98,15 +95,18 @@ class StreamWidget(QGraphicsView):
 
     def update_latest_zones(self):
         self.remove_items_by_type(ZoneStatusPolygon)
-        if not self.render_zones: return
-        if not self.stream_is_up: return
+        if not self.render_zones:
+            return
+        if not self.stream_is_up:
+            return
 
         # Add new StreamPolygons
         statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
 
         for zone_status in statuses:
-            if zone_status.zone.name == "Screen": continue
-            self.scene_.addItem(ZoneStatusPolygon(zone_status))
+            if zone_status.zone.name == "Screen":
+                continue
+            self.scene().addItem(ZoneStatusPolygon(zone_status))
 
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
@@ -118,7 +118,7 @@ class StreamWidget(QGraphicsView):
         for det in dets:
             age = time() - tstamp
             polygon = DetectionPolygon(det, seconds_old=age)
-            self.scene_.addItem(polygon)
+            self.scene().addItem(polygon)
 
     def change_stream(self, stream_conf):
         """Change the stream source of the video
@@ -126,8 +126,8 @@ class StreamWidget(QGraphicsView):
         If stream_conf is None, the StreamWidget will stop grabbing frames"""
         self.stream_conf = stream_conf
 
-        for item in self.scene_.items():
-            self.scene_.removeItem(item)
+        for item in self.scene().items():
+            self.scene().removeItem(item)
             self.current_frame = None
 
         if not stream_conf:
@@ -147,7 +147,7 @@ class StreamWidget(QGraphicsView):
         """Set the current frame to the given pixmap"""
         # Create new QGraphicsPixmapItem if there isn't one
         if not self.current_frame:
-            self.current_frame = self.scene_.addPixmap(pixmap)
+            self.current_frame = self.scene().addPixmap(pixmap)
             # TODO: No idea why this works. Maybe find a better solution?
             # This forces a resizeEvent. Using geometry.size() does not work
             # for some reason. The 1000 is arbitrary. Seems to work just as
@@ -157,16 +157,16 @@ class StreamWidget(QGraphicsView):
         # Otherwise modify the existing one
         else:
             self.current_frame.setPixmap(pixmap)
-        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
+        self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
 
     def remove_items_by_type(self, item_type):
         # Find current zones polygons
-        items = self.scene_.items()
+        items = self.scene().items()
         polygons = filter(lambda item: type(item) == item_type, items)
 
         # Delete current zones polygons
         for polygon in polygons:
-            self.scene_.removeItem(polygon)
+            self.scene().removeItem(polygon)
 
     @property
     def stream_is_up(self):
@@ -202,13 +202,13 @@ class StreamWidget(QGraphicsView):
         if not self.scene().width():
             return
 
+        # EXTREMELY IMPORTANT LINE!
+        # The sceneRect grows but never shrinks automatically
+        self.scene().setSceneRect(self.scene().itemsBoundingRect())
+
         aspect_ratio = self.scene().height() / self.scene().width()
         height = int(event.size().width() * aspect_ratio)
 
-        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
+        self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
 
         self.setFixedHeight(height)
-
-    def wheelEvent(self, event):
-        """Send scroll wheel events to parent object"""
-        return self.parent().wheelEvent(event)
