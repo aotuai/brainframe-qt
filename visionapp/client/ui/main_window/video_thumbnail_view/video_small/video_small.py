@@ -37,3 +37,14 @@ class VideoSmall(StreamWidget):
     def remove_selection_border(self):
         """Remove border around stream"""
         pass
+
+    def resizeEvent(self, event):
+        """Resize widget to maximum height while maintaining aspect ratio"""
+        super().resizeEvent(event)
+
+        if not self.scene().width():
+            return
+
+        aspect_ratio = self.scene().height() / self.scene().width()
+        height = int(event.size().width() * aspect_ratio)
+        self.setFixedHeight(height)

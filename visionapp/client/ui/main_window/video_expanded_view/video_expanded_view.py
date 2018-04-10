@@ -40,7 +40,6 @@ class VideoExpandedView(QWidget):
         self.stream_name_label.setText(stream_conf.name)
         self._set_widgets_hidden(False)
 
-
     @pyqtSlot()
     def expanded_stream_closed_slot(self):
         """Signaled by close button"""

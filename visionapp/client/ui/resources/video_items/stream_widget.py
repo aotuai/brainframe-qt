@@ -37,10 +37,7 @@ class StreamWidget(QGraphicsView):
         self.render_zones = True
 
         # Scene to draw items to
-        self.scene_ = QGraphicsScene()
-        self.setScene(self.scene_)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setScene(QGraphicsScene())
 
         self.video_stream = None  # Set in change_stream
         self.current_frame = None
@@ -59,6 +56,7 @@ class StreamWidget(QGraphicsView):
         # Get the Status poller
         self.status_poller = api.get_status_poller()
 
+        # For debugging. Easy to see true widget size
         # self.setStyleSheet("background-color:green;")
 
     def update_items(self):
@@ -139,6 +137,9 @@ class StreamWidget(QGraphicsView):
             self.video_stream = api.get_stream_reader(stream_conf.id)
             self.frame_update_timer.start(1000 // self._frame_rate)
 
+        # Force resize
+        self.resizeEvent(event=None)
+
     def set_render_settings(self, *, detections=None, zones=None):
         if detections is not None:
             self.render_detections = detections
@@ -150,16 +151,12 @@ class StreamWidget(QGraphicsView):
         # Create new QGraphicsPixmapItem if there isn't one
         if not self.current_frame:
             self.current_frame = self.scene().addPixmap(pixmap)
-            # TODO: No idea why this works. Maybe find a better solution?
-            # This forces a resizeEvent. Using geometry.size() does not work
-            # for some reason. The 1000 is arbitrary. Seems to work just as
-            # well at 100x100.
-            self.resize(1000, 1000)
 
         # Otherwise modify the existing one
         else:
             self.current_frame.setPixmap(pixmap)
-        self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
+
+        # Force resize of
 
     def remove_items_by_type(self, item_type):
         # Find current zones polygons
@@ -199,18 +196,10 @@ class StreamWidget(QGraphicsView):
     def _static_pixmap(path):
         return QPixmap(str(path))
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event=None):
         """Take up entire width using aspect ratio of scene"""
-        if not self.scene().width():
-            return
-
         # EXTREMELY IMPORTANT LINE!
         # The sceneRect grows but never shrinks automatically
         self.scene().setSceneRect(self.scene().itemsBoundingRect())
 
-        aspect_ratio = self.scene().height() / self.scene().width()
-        height = int(event.size().width() * aspect_ratio)
-
         self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
-
-        self.setFixedHeight(height)

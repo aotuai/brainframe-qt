@@ -46,12 +46,6 @@ class VideoThumbnailView(QWidget):
         """Signaled by child VideoWidget and then passed upwards
 
         Also removes selection border from previously selected video"""
-        print(f"Stream {stream_id} clicked")
-
-        # TODO: Don't do anything if stream already active
-        # if self.current_stream_id == stream_id:
-        #     return
-
         # Remove selection border from previously selected video
         if self.current_stream_id:
             self.streams[self.current_stream_id].remove_selection_border()

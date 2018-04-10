@@ -55,7 +55,7 @@
        <item>
         <widget class="QToolButton" name="hide_button">
          <property name="text">
-          <string>X</string>
+          <string>×</string>
          </property>
         </widget>
        </item>
@@ -74,7 +74,7 @@
         <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::MinimumExpanding</enum>
+        <enum>QSizePolicy::Preferred</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
