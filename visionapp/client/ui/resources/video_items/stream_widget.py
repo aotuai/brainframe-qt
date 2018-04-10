@@ -2,8 +2,7 @@ from time import time
 
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
-from PyQt5.QtCore import pyqtProperty
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
@@ -18,8 +17,8 @@ from visionapp.client.api import api
 class StreamWidget(QGraphicsView):
     """Base widget that uses Stream object to get frames.
 
-    Makes use of a QTimer to get frames
-    """
+    Makes use of a QTimer to get frames"""
+
     def __init__(self, stream_conf=None, frame_rate=30, parent=None):
         """Init StreamWidget object
 
@@ -38,7 +37,10 @@ class StreamWidget(QGraphicsView):
         self.render_zones = True
 
         # Scene to draw items to
-        self.setScene(QGraphicsScene())
+        self.scene_ = QGraphicsScene()
+        self.setScene(self.scene_)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.video_stream = None  # Set in change_stream
         self.current_frame = None
