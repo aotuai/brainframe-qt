@@ -72,6 +72,8 @@ class StreamWidget(QGraphicsView):
 
         # Check if the object actually has a stream
         if self.video_stream is None:
+            pixmap = self._static_pixmap(image_paths.stream_finished)
+            self._set_frame(pixmap)
             return
         if not self.video_stream.is_running:
             pixmap = self._static_pixmap(image_paths.stream_finished)
