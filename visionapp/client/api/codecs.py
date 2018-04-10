@@ -272,8 +272,7 @@ class StreamConfiguration(Codec):
     ConnType = Enum("ConnType",
                     "ip_camera webcam file")
 
-    def __init__(self, *, name, connection_type, parameters, id_=None,
-                 is_active=None):
+    def __init__(self, *, name, connection_type, parameters, id_=None):
         assert connection_type in StreamConfiguration.ConnType, \
             "You must feed StreamConfiguration.ConnType into connection_type" \
             " You used a " + str(type(connection_type)) + " instead!"
@@ -282,7 +281,6 @@ class StreamConfiguration(Codec):
         self.id = id_
         self.connection_type = connection_type
         self.parameters = parameters
-        self.is_active = is_active
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -295,8 +293,7 @@ class StreamConfiguration(Codec):
         return StreamConfiguration(name=d["name"],
                                    id_=d["id"],
                                    connection_type=connection_t,
-                                   parameters=d["parameters"],
-                                   is_active=d["is_active"])
+                                   parameters=d["parameters"])
 
 
 # Engine related stuff

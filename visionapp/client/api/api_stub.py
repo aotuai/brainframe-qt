@@ -55,27 +55,6 @@ class API(metaclass=Singleton):
         self._stream_manager = StreamManager()
         self._status_poller = None
 
-    def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
-        """Get the StreamReader for the given stream_id.
-        :param stream_id: The ID of the stream configuration to open.
-        :return: A StreamReader object OR None, if the server was unable to
-        open a stream.
-
-        The server returns an HTTP internal server error if unable to open
-        """
-        req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
-        try:
-            url = self._get(req)
-        except APIError as e:
-            if e.kind == rest_errors.STREAM_NOT_FOUND:
-                logging.warning("API: Requested stream that doesn't exist!")
-                return None
-            else:
-                raise
-
-        logging.info("API: Opening stream on url" + url)
-        return self._stream_manager.get_stream(url)
-
     def get_status_poller(self) -> StatusPoller:
         """Returns the singleton StatusPoller object"""
         if self._status_poller is None or not self._status_poller.is_running:
@@ -84,7 +63,6 @@ class API(metaclass=Singleton):
 
     # Stream Configuration Stuff
     def get_stream_configurations(self,
-                                  only_get_active=False,
                                   stream_id=None) \
             -> Union[List[StreamConfiguration], StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
@@ -102,8 +80,6 @@ class API(metaclass=Singleton):
         if stream_id:
             # Search for and return config with matching stream_id
             return next((c for c in configs if c.id == stream_id), None)
-        if only_get_active:
-            configs = [c for c in configs if c.is_active]
         return configs
 
     def set_stream_configuration(self, stream_configuration) \
@@ -127,6 +103,27 @@ class API(metaclass=Singleton):
         req = "/api/streams/{stream_id}".format(stream_id=stream_id)
         self._delete(req)
 
+    # Stream Controls
+    def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
+        """Get the StreamReader for the given stream_id.
+        :param stream_id: The ID of the stream configuration to open.
+        :return: A StreamReader object OR None, if the server was unable to
+        open a stream.
+
+        The server returns an HTTP internal server error if unable to open
+        """
+        req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
+        try:
+            url = self._get(req)
+        except APIError as e:
+            if e.kind == rest_errors.STREAM_NOT_FOUND:
+                logging.warning("API: Requested stream that doesn't exist!")
+                return None
+            else:
+                raise
+
+        logging.info("API: Opening stream on url" + url)
+        return self._stream_manager.get_stream(url)
 
     # Setting server analysis tasks
     def start_analyzing(self, stream_id) -> bool:

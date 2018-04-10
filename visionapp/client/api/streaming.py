@@ -99,7 +99,7 @@ class StatusPoller(Thread):
         """Return a list of unverified alerts for this stream_id"""
         zones = self.get_zones(stream_id)
         if len(zones) == 0:
-            return []
+            return None
         alarms = sum([zone.alarms for zone in zones], [])
         alarms = [alarm for alarm in alarms if alarm.id == alarm_id]
         if len(alarms) == 0:

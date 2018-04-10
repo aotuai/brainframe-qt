@@ -38,6 +38,7 @@ class AlertLog(QWidget):
                 # If the alert widget hasn't been made yet
                 alarm = self.status_poller.get_alarm(self.stream_id,
                                                      alert.alarm_id)
+                if alarm is None: continue
                 alert_widget = AlertLogEntry(start_time=alert.start_time,
                                              end_time=alert.end_time,
                                              alarm_name=alarm.name)
