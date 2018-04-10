@@ -38,8 +38,7 @@ class StreamWidget(QGraphicsView):
         self.render_zones = True
 
         # Scene to draw items to
-        self.scene_ = QGraphicsScene()
-        self.setScene(self.scene_)
+        self.setScene(QGraphicsScene())
 
         self.video_stream = None  # Set in change_stream
         self.current_frame = None
@@ -105,7 +104,7 @@ class StreamWidget(QGraphicsView):
         for zone_status in statuses:
             if zone_status.zone.name == "Screen":
                 continue
-            self.scene_.addItem(ZoneStatusPolygon(zone_status))
+            self.scene().addItem(ZoneStatusPolygon(zone_status))
 
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
@@ -117,7 +116,7 @@ class StreamWidget(QGraphicsView):
         for det in dets:
             age = time() - tstamp
             polygon = DetectionPolygon(det, seconds_old=age)
-            self.scene_.addItem(polygon)
+            self.scene().addItem(polygon)
 
     def change_stream(self, stream_conf):
         """Change the stream source of the video
@@ -125,8 +124,8 @@ class StreamWidget(QGraphicsView):
         If stream_conf is None, the StreamWidget will stop grabbing frames"""
         self.stream_conf = stream_conf
 
-        for item in self.scene_.items():
-            self.scene_.removeItem(item)
+        for item in self.scene().items():
+            self.scene().removeItem(item)
             self.current_frame = None
 
         if not stream_conf:
@@ -146,7 +145,7 @@ class StreamWidget(QGraphicsView):
         """Set the current frame to the given pixmap"""
         # Create new QGraphicsPixmapItem if there isn't one
         if not self.current_frame:
-            self.current_frame = self.scene_.addPixmap(pixmap)
+            self.current_frame = self.scene().addPixmap(pixmap)
             # TODO: No idea why this works. Maybe find a better solution?
             # This forces a resizeEvent. Using geometry.size() does not work
             # for some reason. The 1000 is arbitrary. Seems to work just as
@@ -156,16 +155,16 @@ class StreamWidget(QGraphicsView):
         # Otherwise modify the existing one
         else:
             self.current_frame.setPixmap(pixmap)
-        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
+        self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
 
     def remove_items_by_type(self, item_type):
         # Find current zones polygons
-        items = self.scene_.items()
+        items = self.scene().items()
         polygons = filter(lambda item: type(item) == item_type, items)
 
         # Delete current zones polygons
         for polygon in polygons:
-            self.scene_.removeItem(polygon)
+            self.scene().removeItem(polygon)
 
     @property
     def stream_is_up(self):
@@ -208,6 +207,6 @@ class StreamWidget(QGraphicsView):
         aspect_ratio = self.scene().height() / self.scene().width()
         height = int(event.size().width() * aspect_ratio)
 
-        self.fitInView(self.scene_.itemsBoundingRect(), Qt.KeepAspectRatio)
+        self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
 
         self.setFixedHeight(height)
