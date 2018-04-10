@@ -22,7 +22,6 @@ class VideoSmall(StreamWidget):
         # self.setStyleSheet("background-color:#404040;")
 
     def mouseReleaseEvent(self, event):
-
         # Add border around stream to indicate its selection
         self.add_selection_border()
 
@@ -38,13 +37,13 @@ class VideoSmall(StreamWidget):
         """Remove border around stream"""
         pass
 
-    def resizeEvent(self, event):
-        """Resize widget to maximum height while maintaining aspect ratio"""
-        super().resizeEvent(event)
+    def _resize(self, size):
+        """Resize widget to max allowed height that maintains aspect ratio"""
+        super()._resize(size)
 
         if not self.scene().width():
             return
 
         aspect_ratio = self.scene().height() / self.scene().width()
-        height = int(event.size().width() * aspect_ratio)
+        height = int(size.width() * aspect_ratio)
         self.setFixedHeight(height)

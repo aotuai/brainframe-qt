@@ -137,9 +137,6 @@ class StreamWidget(QGraphicsView):
             self.video_stream = api.get_stream_reader(stream_conf.id)
             self.frame_update_timer.start(1000 // self._frame_rate)
 
-        # Force resize
-        self.resizeEvent(event=None)
-
     def set_render_settings(self, *, detections=None, zones=None):
         if detections is not None:
             self.render_detections = detections
@@ -156,7 +153,8 @@ class StreamWidget(QGraphicsView):
         else:
             self.current_frame.setPixmap(pixmap)
 
-        # Force resize of
+        # Force resize
+        self._resize(self.size())
 
     def remove_items_by_type(self, item_type):
         # Find current zones polygons
@@ -198,6 +196,9 @@ class StreamWidget(QGraphicsView):
 
     def resizeEvent(self, event=None):
         """Take up entire width using aspect ratio of scene"""
+        self._resize(event.size())
+
+    def _resize(self, size):
         # EXTREMELY IMPORTANT LINE!
         # The sceneRect grows but never shrinks automatically
         self.scene().setSceneRect(self.scene().itemsBoundingRect())
