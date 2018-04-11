@@ -18,7 +18,7 @@ def generate_unique_qcolor(name: str):
 
 class DetectionPolygon(StreamPolygon):
     """Render a Detection polygon with a title and behaviour information"""
-    MAX_SECONDS_OLD = 3
+    MAX_SECONDS_OLD = 1.5
     """After a certain amount of time, the detection will be transparent"""
 
     def __init__(self, det: codecs.Detection, seconds_old=0, parent=None):

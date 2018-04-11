@@ -199,8 +199,18 @@ class StreamWidget(QGraphicsView):
         self._resize(event.size())
 
     def _resize(self, size):
-        # EXTREMELY IMPORTANT LINE!
-        # The sceneRect grows but never shrinks automatically
-        self.scene().setSceneRect(self.scene().itemsBoundingRect())
 
-        self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
+        if self.current_frame is not None:
+            # EXTREMELY IMPORTANT LINE!
+            # The sceneRect grows but never shrinks automatically
+            self.scene().setSceneRect(self.current_frame.boundingRect())
+            self.fitInView(self.current_frame.boundingRect(),
+                           Qt.KeepAspectRatio)
+
+
+        # This was removed because we don't want labels to expand curr scene
+        # EXTREMELY IMPORTANT LINE!
+            # The sceneRect grows but never shrinks automatically
+        # self.scene().setSceneRect(self.scene().itemsBoundingRect())
+        # self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
+

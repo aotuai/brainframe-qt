@@ -17,7 +17,7 @@ class VideoTaskConfig(StreamWidget):
     def __init__(self, parent=None, stream_conf=None, frame_rate=30):
         super().__init__(stream_conf, frame_rate, parent)
         self.set_render_settings(detections=False, zones=True)
-
+        
         # Variables related to making a new polygon
         self.unconfirmed_polygon: StreamPolygon = None
         self.max_points = None
@@ -51,13 +51,13 @@ class VideoTaskConfig(StreamWidget):
             circle = ClickCircle(click.x(), click.y(),
                                  diameter=10,
                                  color=Qt.red)
-            self.scene_.addItem(circle)
+            self.scene().addItem(circle)
 
             self.unconfirmed_polygon.insert_point(click)
 
             # Draw item if not already drawn
-            if self.unconfirmed_polygon not in self.scene_.items():
-                self.scene_.addItem(self.unconfirmed_polygon)
+            if self.unconfirmed_polygon not in self.scene().items():
+                self.scene().addItem(self.unconfirmed_polygon)
 
         super().mouseReleaseEvent(event)
 
@@ -84,8 +84,8 @@ class VideoTaskConfig(StreamWidget):
                                        border_color=QColor(50, 255, 50))
 
         # Add the new polygon first, then superimpose the current polygon
-        self.scene_.addItem(visual_polygon)
-        self.scene_.addItem(self.unconfirmed_polygon)
+        self.scene().addItem(visual_polygon)
+        self.scene().addItem(self.unconfirmed_polygon)
 
     def start_new_polygon(self, max_points=None):
         self.set_render_settings(zones=False)
@@ -105,7 +105,7 @@ class VideoTaskConfig(StreamWidget):
         """Return the widget back to the normal mode, where it is ready to start
         creating a new polygon"""
         if self.unconfirmed_polygon is not None:
-            self.scene_.removeItem(self.unconfirmed_polygon)
+            self.scene().removeItem(self.unconfirmed_polygon)
             self.remove_items_by_type(StreamPolygon)
             self.remove_items_by_type(ClickCircle)
             self.unconfirmed_polygon = None
