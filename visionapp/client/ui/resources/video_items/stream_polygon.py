@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QGraphicsPolygonItem, QGraphicsTextItem
 
 
 class StreamPolygon(QGraphicsPolygonItem):
-    def __init__(self, points=(), *,
+    def __init__(self, points: List[QPointF] = (), *,
                  border_color=None,
                  border_thickness=1,
                  border_linetype=None,
@@ -45,6 +45,7 @@ class StreamPolygon(QGraphicsPolygonItem):
 
         # Apply thickness
         pen.setWidth(border_thickness)
+        pen.setJoinStyle(Qt.RoundJoin)
 
         # Apply the styles
         self.setPen(pen)
@@ -74,15 +75,15 @@ class StreamLabelBox(StreamPolygon):
         self.label_text.setDefaultTextColor(QColor(255, 255, 255))
 
         rect = self.label_text.sceneBoundingRect().getCoords()
-        coords = [[rect[0], rect[1]],
-                  [rect[2], rect[1]],
-                  [rect[2], rect[3]],
-                  [rect[0], rect[3]]]
+        coords = [QPointF(rect[0], rect[1]),
+                  QPointF(rect[2], rect[1]),
+                  QPointF(rect[2], rect[3]),
+                  QPointF(rect[0], rect[3])]
 
         super().__init__(points=coords,
                          border_color=parent.pen().color(),
                          fill_color=parent.pen().color(),
-                         border_thickness=parent.pen().width(),
+                         border_thickness=1,
                          opacity=0.35,
                          parent=parent)
         self.label_text.setZValue(self.zValue() + 1)

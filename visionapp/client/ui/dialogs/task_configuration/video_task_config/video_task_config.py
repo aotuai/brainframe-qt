@@ -1,5 +1,3 @@
-from typing import List
-
 from PyQt5.QtCore import pyqtSignal, QPointF, Qt
 from PyQt5.QtGui import QMouseEvent, QColor
 from shapely import geometry
@@ -49,9 +47,11 @@ class VideoTaskConfig(StreamWidget):
 
             # Create new circle
             circle = ClickCircle(click.x(), click.y(),
-                                 diameter=10,
-                                 color=Qt.red)
+                                 diameter=self.scene().width() / 50,
+                                 border_thickness=self.scene().width() / 100,
+                                 color=QColor(200, 50, 50))
             self.scene().addItem(circle)
+            circle.setZValue(self.unconfirmed_polygon.zValue() + 1)
 
             self.unconfirmed_polygon.insert_point(click)
 
@@ -69,6 +69,9 @@ class VideoTaskConfig(StreamWidget):
             return
         if len(self.unconfirmed_polygon.polygon) < 1:
             return
+        #
+        # if event.buttons() == Qt.LeftButton:
+        #     print("Left")
 
         points = self.unconfirmed_polygon.points_list
         if self.max_points is not None and len(points) >= self.max_points:
@@ -78,20 +81,20 @@ class VideoTaskConfig(StreamWidget):
         move_point = self.mapToScene(event.pos())
         points.append(move_point)
 
-        visual_polygon = StreamPolygon(points,
-                                       opacity=.25,
-                                       border_thickness=3,
-                                       border_color=QColor(50, 255, 50))
+        preview_polygon = StreamPolygon(points,
+                                        opacity=.25,
+                                        border_thickness=self.scene().width() / 100,
+                                        border_color=QColor(50, 255, 50))
 
         # Add the new polygon first, then superimpose the current polygon
-        self.scene().addItem(visual_polygon)
+        self.scene().addItem(preview_polygon)
         self.scene().addItem(self.unconfirmed_polygon)
 
     def start_new_polygon(self, max_points=None):
         self.set_render_settings(zones=False)
         self.setMouseTracking(True)  # Allow for realtime zone updating
         self.unconfirmed_polygon = StreamPolygon(
-            border_thickness=3,
+            border_thickness=self.scene().width() / 100,
             border_color=QColor(50, 255, 50))
         self.max_points = max_points
 

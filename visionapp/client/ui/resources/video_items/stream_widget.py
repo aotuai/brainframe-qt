@@ -106,7 +106,10 @@ class StreamWidget(QGraphicsView):
         for zone_status in statuses:
             if zone_status.zone.name == "Screen":
                 continue
-            self.scene().addItem(ZoneStatusPolygon(zone_status))
+            # Border thickness as % of screen size
+            border = self.scene().width() / 100
+            self.scene().addItem(ZoneStatusPolygon(zone_status,
+                                                   border_thickness=border))
 
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
@@ -206,7 +209,6 @@ class StreamWidget(QGraphicsView):
             self.scene().setSceneRect(self.current_frame.boundingRect())
             self.fitInView(self.current_frame.boundingRect(),
                            Qt.KeepAspectRatio)
-
 
         # This was removed because we don't want labels to expand curr scene
         # EXTREMELY IMPORTANT LINE!

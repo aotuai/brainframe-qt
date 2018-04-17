@@ -6,7 +6,8 @@ class ClickCircle(QGraphicsEllipseItem):
     """Debug class used for showing mouse clicks on video"""
 
     def __init__(self, x, y, *,
-                 diameter=None, radius=None, color=Qt.black, parent=None):
+                 diameter=None, radius=None, border_thickness=1,
+                 color=Qt.black, parent=None):
         if radius is not None:
             diameter = radius * 2
         self.diameter = diameter
@@ -20,4 +21,5 @@ class ClickCircle(QGraphicsEllipseItem):
 
         pen = self.pen()
         pen.setColor(color)
+        pen.setWidth(border_thickness)
         self.setPen(pen)
