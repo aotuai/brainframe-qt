@@ -45,8 +45,11 @@ class DetectionPolygon(StreamPolygon):
         top_left = det.coords[0]
         text = det.class_name
         if len(det.attributes):
-            text += "\n" + "".join([a.category + ": " + a.value
-                                    for a in det.attributes])
+
+            attributes_str_list = [a.category + ": " + a.value
+                                    for a in det.attributes]
+            attributes_str_list.sort()
+            text += "\n" + "\n".join(attributes_str_list)
 
         self.label_box = StreamLabelBox(text,
                                         top_left=top_left,
