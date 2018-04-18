@@ -1,6 +1,6 @@
 from typing import Union, List
 
-from PyQt5.QtCore import QPointF, QPoint, Qt
+from PyQt5.QtCore import QLineF, QPointF, QPoint, Qt
 from PyQt5.QtGui import QColor, QPolygonF
 from PyQt5.QtWidgets import QGraphicsPolygonItem, QGraphicsTextItem
 
@@ -55,6 +55,20 @@ class StreamPolygon(QGraphicsPolygonItem):
         if isinstance(point, list) or isinstance(point, tuple):
             point = QPointF(point[0], point[1])
         self.polygon.append(point)
+        self.setPolygon(self.polygon)
+
+    def move_point(self, old_point: QPointF, new_point: QPointF):
+        """Find point of polygon nearest to old_point and move it to
+        new_point
+        """
+        points = list(self.polygon)
+        nearest_point = sorted(points,
+                               key=lambda pt: QLineF(pt, old_point).length())[0]
+
+        nearest_point.setX(new_point.x())
+        nearest_point.setY(new_point.y())
+
+        self.polygon = QPolygonF(points)
         self.setPolygon(self.polygon)
 
     @property

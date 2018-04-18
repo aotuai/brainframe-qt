@@ -15,13 +15,26 @@ class VideoTaskConfig(StreamWidget):
     def __init__(self, parent=None, stream_conf=None, frame_rate=30):
         super().__init__(stream_conf, frame_rate, parent)
         self.set_render_settings(detections=False, zones=True)
-        
+
         # Variables related to making a new polygon
         self.unconfirmed_polygon: StreamPolygon = None
         self.max_points = None
 
+        # Set when a mousePressEvent occurs on top of a ClickCircle during edits
+        self.clicked_circle = None  # type: ClickCircle
+
+    def mousePressEvent(self, event: QMouseEvent):
+        item_at = self.itemAt(event.pos())
+        if isinstance(item_at, ClickCircle):
+            self.clicked_circle = self.itemAt(event.pos())
+
     def mouseReleaseEvent(self, event: QMouseEvent):
         """Called when mouse click is _released_ on Widget"""
+
+        # Don't do anything if a ClickCircle was clicked on mouse _press_
+        if self.clicked_circle:
+            self.clicked_circle = None
+            return
 
         # Ignore mouseEvents (until new region is begun)
         if self.unconfirmed_polygon is not None:
@@ -36,12 +49,7 @@ class VideoTaskConfig(StreamWidget):
 
             # Don't allow the user to input an invalid polygon
             if len(self.unconfirmed_polygon.polygon) > 2:
-                # points = [(point.x(), point.y())
-                #           for point in self.unconfirmed_polygon.polygon]
-                points = self.unconfirmed_polygon.points_list
-                points.append((click.x(), click.y()))
-                shapely_polygon = geometry.Polygon(points)
-                if not shapely_polygon.is_valid:
+                if not self._is_polygon_valid(points, click):
                     print("User tried to enter invalid point")
                     return
 
@@ -69,26 +77,43 @@ class VideoTaskConfig(StreamWidget):
             return
         if len(self.unconfirmed_polygon.polygon) < 1:
             return
-        #
-        # if event.buttons() == Qt.LeftButton:
-        #     print("Left")
 
+        mouse_pos = self.mapToScene(event.pos())
         points = self.unconfirmed_polygon.points_list
-        if self.max_points is not None and len(points) >= self.max_points:
-            return
 
         self.remove_items_by_type(StreamPolygon)
-        move_point = self.mapToScene(event.pos())
-        points.append(move_point)
 
-        preview_polygon = StreamPolygon(points,
-                                        opacity=.25,
-                                        border_thickness=self.scene().width() / 100,
-                                        border_color=QColor(50, 255, 50))
-
-        # Add the new polygon first, then superimpose the current polygon
-        self.scene().addItem(preview_polygon)
+        # Draw current polygon
         self.scene().addItem(self.unconfirmed_polygon)
+
+        if event.buttons() == Qt.LeftButton and self.clicked_circle:
+            # We're dragging a circle
+
+            # Create a temp polygon and check if it's valid after dragging
+            temp_polygon = StreamPolygon(self.unconfirmed_polygon.polygon)
+            temp_polygon.move_point(self.clicked_circle.pos(), mouse_pos)
+            if not self._is_polygon_valid(temp_polygon.points_list):
+                # If not, don't move anything
+                return
+
+            # Move polygon point and click circle
+            self.unconfirmed_polygon.move_point(self.clicked_circle.pos(),
+                                                mouse_pos)
+            self.clicked_circle.setPos(mouse_pos)
+
+        elif self.max_points is None or len(points) < self.max_points:
+            # Nothing is being dragged. Only create a preview polygon if we have
+            # more than 3 points
+
+            points.append((mouse_pos.x(), mouse_pos.y()))
+
+            preview_polygon = StreamPolygon(points,
+                                            opacity=.25,
+                                            border_thickness=self.scene().width() / 100,
+                                            border_color=QColor(50, 255, 50))
+
+            # Draw preview polygon
+            self.scene().addItem(preview_polygon)
 
     def start_new_polygon(self, max_points=None):
         self.set_render_settings(zones=False)
@@ -114,3 +139,15 @@ class VideoTaskConfig(StreamWidget):
             self.unconfirmed_polygon = None
             self.max_points = None
         self.set_render_settings(zones=True)
+
+    @staticmethod
+    def _is_polygon_valid(point_list, new_point: QPointF = None):
+        """Verify that a list of points is a valid shapely Polygon"""
+        if new_point:
+            if isinstance(new_point, QPointF):
+                new_point = new_point.x(), new_point.y()
+            point_list.append(new_point)
+
+        shapely_polygon = geometry.Polygon(point_list)
+
+        return shapely_polygon.is_valid
