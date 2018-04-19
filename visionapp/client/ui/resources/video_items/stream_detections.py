@@ -73,11 +73,7 @@ class ZoneStatusPolygon(StreamPolygon):
         text = status.zone.name
         if len(status.zone.coords) == 2:
             # If the zone is a line
-            text = status.zone.name + "\nEntered: "
-            text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v-1))
-                               for k, v in status.total_entered.items()
-                               if v > 0])
-            text += "\nExited: "
+            text = status.zone.name + "\nCrossed: "
             text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v-1))
                                for k, v in status.total_exited.items()
                                if v > 0])
