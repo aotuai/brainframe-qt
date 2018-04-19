@@ -33,6 +33,7 @@ while True:
         print("Server not running. Trying again in 2 seconds...")
         time.sleep(2)
         continue
+    print("Successfully connected to server. Starting UI.")
     for config in configs:
         success = api.api.start_analyzing(config.id)
     break
