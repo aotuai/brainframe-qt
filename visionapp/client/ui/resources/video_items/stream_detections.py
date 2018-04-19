@@ -21,7 +21,8 @@ class DetectionPolygon(StreamPolygon):
     MAX_SECONDS_OLD = 1.5
     """After a certain amount of time, the detection will be transparent"""
 
-    def __init__(self, det: codecs.Detection, seconds_old=0, parent=None):
+    def __init__(self, det: codecs.Detection, attributes=set(), seconds_old=0,
+                 parent=None):
         """
         :param detection: The Detection object to render
         :param seconds_old: Fades the detection by a standard amount based on
@@ -44,10 +45,10 @@ class DetectionPolygon(StreamPolygon):
         # Create the description box
         top_left = det.coords[0]
         text = det.class_name
-        if len(det.attributes):
-
+        if len(attributes):
             attributes_str_list = [a.category + ": " + a.value
-                                    for a in det.attributes]
+                                   for a in det.attributes if
+                                   a.value in attributes]
             attributes_str_list.sort()
             text += "\n" + "\n".join(attributes_str_list)
 
@@ -74,13 +75,13 @@ class ZoneStatusPolygon(StreamPolygon):
         if len(status.zone.coords) == 2:
             # If the zone is a line
             text = status.zone.name + "\nCrossed: "
-            text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v-1))
+            text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
                                for k, v in status.total_exited.items()
                                if v > 0])
         else:
             # If the zone is a region
             counts = status.detection_counts
-            text += "\n" + "\n".join(["{} {}{}".format(v, k, "s" * bool(v-1))
+            text += "\n" + "\n".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
                                       for k, v in counts.items()])
         text = text.strip()
 
