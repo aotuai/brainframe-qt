@@ -92,8 +92,10 @@ class VideoTaskConfig(StreamWidget):
             # Create a temp polygon and check if it's valid after dragging
             temp_polygon = StreamPolygon(self.unconfirmed_polygon.polygon)
             temp_polygon.move_point(self.clicked_circle.pos(), mouse_pos)
-            if not self._is_polygon_valid(temp_polygon.points_list):
-                # If not, don't move anything
+
+            if (len(temp_polygon.polygon) > 2  # Don't check lines
+                    and not self._is_polygon_valid(temp_polygon.points_list)):
+                # If not valid, don't move anything
                 return
 
             # Move polygon point and click circle
