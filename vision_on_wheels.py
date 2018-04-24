@@ -13,8 +13,8 @@ parser = ArgumentParser(description="This runs the client VisionApp")
 parser.add_argument("-a", "--api-url", type=str,
                     default="http://localhost:8000",
                     help="The URL that the server is currently running on. "
-                         "This can be localhost, or a local IP, or a remote"
-                         " IP depending on your setup.")
+                         "This can be localhost, or a local IP, or a remote "
+                         "IP depending on your setup.")
 args = parser.parse_args()
 
 # Monkeypatch the api to be an instantiated object
