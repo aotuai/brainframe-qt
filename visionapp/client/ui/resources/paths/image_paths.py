@@ -9,7 +9,7 @@ image_dir = Path("visionapp", "client", "ui", "resources", "images")
 video_not_found      = route_path(image_dir, "video_not_found.png"     )
 connecting_to_stream = route_path(image_dir, "connecting_to_stream.png")
 stream_finished      = route_path(image_dir, "stream_finished.png"     )
-splash_screen        = route_path(image_dir, "splash_screen.jpg"       )
+splash_screen        = route_path(image_dir, "splash_screen.png"       )
 
 # Icons
 icon_dir           = route_path(image_dir, "icons"              )
