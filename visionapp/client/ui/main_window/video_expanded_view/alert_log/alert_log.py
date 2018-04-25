@@ -1,12 +1,10 @@
-from datetime import datetime
-
-from PyQt5.QtWidgets import QWidget, QVBoxLayout
-from PyQt5.QtCore import QTimer, pyqtSlot
+from PyQt5.QtWidgets import QVBoxLayout, QWidget
+from PyQt5.QtCore import pyqtSlot, QTimer
 from PyQt5.uic import loadUi
 
-from visionapp.client.ui.resources.paths import qt_ui_paths
-from .alert_log_entry.alert_log_entry import AlertLogEntry
+from .alert_log_entry import AlertLogEntry
 from visionapp.client.api import api
+from visionapp.client.ui.resources.paths import qt_ui_paths
 
 
 class AlertLog(QWidget):
@@ -22,6 +20,8 @@ class AlertLog(QWidget):
 
         # Start a QTimer for periodically updating unverified alerts
         self.timer = QTimer()
+        # noinspection PyUnresolvedReferences
+        # connect is erroneously detected as unresolved
         self.timer.timeout.connect(self.update_unverified_alerts)
         self.timer.start(1000)
 
@@ -48,7 +48,6 @@ class AlertLog(QWidget):
                 # If the alert already exists, update the information
                 alert_widget = self.alert_widgets[alert.id]
                 alert_widget.update_time(alert.start_time, alert.end_time)
-
 
     @pyqtSlot(int)
     def change_stream(self, stream_id):
