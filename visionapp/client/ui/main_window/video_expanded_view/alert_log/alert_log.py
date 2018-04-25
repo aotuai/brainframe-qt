@@ -28,7 +28,8 @@ class AlertLog(QWidget):
         self.alert_log.setLayout(QVBoxLayout())
 
     def update_unverified_alerts(self):
-        if self.stream_id is None: return
+        if self.stream_id is None:
+            return
 
         unverified = api.get_unverified_alerts(self.stream_id)
 
