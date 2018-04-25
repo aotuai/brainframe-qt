@@ -14,12 +14,16 @@ class SplashScreen(QSplashScreen):
 
         # Make the number of ellipses pulse
         self.ellipses_timer = QTimer()
+        # noinspection PyUnresolvedReferences
+        # connect is erroneously detected as unresolved
         self.ellipses_timer.timeout.connect(self.increase_ellipses)
         self.ellipses_timer.start(1000)
 
         # Keep the splash screen on top in window managers that do not support
         # always on top flag
         self.raise_timer = QTimer()
+        # noinspection PyUnresolvedReferences
+        # connect is erroneously detected as unresolved
         self.raise_timer.timeout.connect(self.raise_)
         self.raise_timer.start(10)
 
