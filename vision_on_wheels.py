@@ -26,7 +26,7 @@ app.setWindowIcon(QIcon(str(image_paths.application_icon)))
 
 with SplashScreen() as splash_screen:
 
-    splash_screen.showMessage("Connection to server unsuccessful. Retrying")
+    splash_screen.showMessage("Attempting to connect to server")
 
     while True:
 
