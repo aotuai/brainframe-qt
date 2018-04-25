@@ -46,9 +46,8 @@ class SplashScreen(QSplashScreen):
 
     def showMessage(self, message,
                     alignment=Qt.AlignLeft | Qt.AlignBottom,
-                    color=Qt.black):
+                    color=Qt.white):
         """Default to show message at bottom left in white"""
-        # TODO: Change to black with better splash screen image
         super().showMessage(message, alignment, color)
 
     def mousePressEvent(self, event):
