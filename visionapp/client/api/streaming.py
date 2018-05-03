@@ -72,6 +72,7 @@ class StatusPoller(Thread):
     def run(self):
         """Polls Brainserver for ZoneStatuses at a constant rate"""
         self._running = True
+        call_time = 0
         while self._running:
 
             # Call the server, timing how long the call takes
@@ -134,3 +135,4 @@ class StatusPoller(Thread):
         """Close the status polling thread"""
         self._running = False
         self.join()
+client
