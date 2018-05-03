@@ -135,4 +135,3 @@ class StatusPoller(Thread):
         """Close the status polling thread"""
         self._running = False
         self.join()
-client
