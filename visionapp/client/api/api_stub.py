@@ -174,8 +174,7 @@ class API(metaclass=Singleton):
         :param stream_id:
         :return:
         """
-        req = "/api/alerts/{stream_id}".format(
-            stream_id=stream_id)
+        req = "/api/alerts"
         data = self._get(req, params={"stream_id": str(stream_id)})
 
         alerts = [Alert.from_dict(a) for a in data]
