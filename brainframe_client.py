@@ -22,8 +22,8 @@ parser.add_argument("-a", "--api-url", type=str,
                          "IP depending on your setup.")
 args = parser.parse_args()
 
-# Monkeypatch the api to be an instantiated object
-api.__dict__['api'] = api.API(args.api_url)
+# Set the API url
+api.api.set_url(args.api_url)
 
 # Run the UI
 app = QApplication(sys.argv)
@@ -33,7 +33,7 @@ app.setOrganizationName('dilili-labs')
 app.setOrganizationDomain('dilililabs.com')
 app.setApplicationName('brainframe')
 
-# Ensure that user has accepted license agreement. Otherwise show it to them
+# Ensure that user has accepted license agreement. Otherwise close program
 if not LicenseAgreement.get_agreement():
     sys.exit("Program Closing: License Not Accepted")
 
