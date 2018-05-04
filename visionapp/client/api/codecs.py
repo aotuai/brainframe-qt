@@ -342,3 +342,31 @@ class EngineConfiguration(Codec):
             attributes=d["attributes"],
             attribute_ownership=d["attribute_ownership"],
             max_streams=d["max_streams"])
+
+
+class Identity(Codec):
+    """A specific, recognizable object or person."""
+
+    def __init__(self, *, id_, name, class_name, metadata):
+        self.id = id_
+        """A unique identifier."""
+
+        self.name = name
+        """The name of the identified detection."""
+
+        self.class_name = class_name
+        """The name of the class that this detection is of."""
+
+        self.metadata = metadata
+        """Any additional user-defined information about the identity."""
+
+    def to_dict(self):
+        return self.__dict__
+
+    @staticmethod
+    def from_dict(d):
+        return Identity(
+            id_=d["id"],
+            name=d["name"],
+            class_name=d["class_name"],
+            metadata=d["metadata"])
