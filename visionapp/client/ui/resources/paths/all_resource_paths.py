@@ -3,7 +3,6 @@
 path for a file depending on whether or not the script is running inside of
 pyinstaller, or as normal python."""
 import sys
-import os
 from typing import Union
 from pathlib import Path
 

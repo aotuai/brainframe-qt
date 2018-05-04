@@ -1,11 +1,14 @@
 from argparse import ArgumentParser
+from distutils.util import strtobool
 from requests.exceptions import ConnectionError
+import signal
 import sys
 
+from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
-from visionapp.client import api, MainWindow, SplashScreen
+from visionapp.client import api, MainWindow, SplashScreen, LicenseAgreement
 from visionapp.client.ui.resources.paths import image_paths
 
 # CLI Arguments
@@ -22,8 +25,20 @@ api.__dict__['api'] = api.API(args.api_url)
 
 # Run the UI
 app = QApplication(sys.argv)
-app.setWindowIcon(QIcon(str(image_paths.application_icon)))
 
+app.setWindowIcon(QIcon(str(image_paths.application_icon)))
+app.setOrganizationName('dilili-labs')
+app.setOrganizationDomain('dilililabs.com')
+app.setApplicationName('vision-on-wheels')  # TODO: Change Name
+
+# Ensure that user has accepted license agreement. Otherwise show it to them
+license_accepted = QSettings().value("client_license_accepted")
+if not license_accepted or not strtobool(license_accepted):
+
+    if not LicenseAgreement.get_agreement():
+        sys.exit("Program Closing: License Not Accepted")
+
+# Show splash screen while waiting for server connection
 with SplashScreen() as splash_screen:
 
     splash_screen.showMessage("Attempting to connect to server")
