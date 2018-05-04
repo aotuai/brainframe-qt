@@ -122,9 +122,49 @@ class ZoneAlarmCondition(Codec):
             id_=d["id"])
 
 
-class ZoneAlarm(Codec):
-    """This is the configuration for an alarm.
+class ZoneAlarmRateCondition(Codec):
+    """A condition that must be met for an alarm to go off. Compares the rate of
+    change in the count of some object against a test value.
     """
+
+    test_types = [">", "<"]
+
+    def __init__(self, *, test, time, change, direction, with_class_name,
+                 with_attribute, id_=None):
+        self.test = test
+        self.time = time
+        self.change = change
+        self.direction = direction
+        self.with_class_name = with_class_name
+        self.with_attribute = with_attribute
+        self.id = id_
+
+    def to_dict(self) -> dict:
+        d = dict(self.__dict__)
+        if self.with_attribute is not None:
+            d["with_attribute"] = self.with_attribute.to_dict()
+
+        return d
+
+    @staticmethod
+    def from_dict(d: dict):
+        # with_attribute is an optional parameter
+        with_attribute = None
+        if d["with_attribute"] is not None:
+            with_attribute = Attribute.from_dict(d["with_attribute"])
+
+        return ZoneAlarmRateCondition(
+            test=d["test"],
+            time=d["time"],
+            change=d["change"],
+            direction=d["direction"],
+            with_class_name=d["with_class_name"],
+            with_attribute=with_attribute,
+            id_=d["id"])
+
+
+class ZoneAlarm(Codec):
+    """This is the configuration for an alarm."""
 
     def __init__(self, *, name, conditions, use_active_time,
                  active_start_time, active_end_time, id_=None):
