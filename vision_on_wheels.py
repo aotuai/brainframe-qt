@@ -11,6 +11,10 @@ from PyQt5.QtWidgets import QApplication
 from visionapp.client import api, MainWindow, SplashScreen, LicenseAgreement
 from visionapp.client.ui.resources.paths import image_paths
 
+# Handle Keyboard Interrupt
+signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit("Exiting"))
+
+
 # CLI Arguments
 parser = ArgumentParser(description="This runs the client VisionApp")
 parser.add_argument("-a", "--api-url", type=str,
