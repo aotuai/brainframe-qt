@@ -35,15 +35,23 @@ class AlertLog(QWidget):
 
         for alert in unverified:
 
-            if alert.id not in self.alert_widgets.get:
+            if alert.id not in self.alert_widgets:
                 # If the alert widget hasn't been made yet
                 alarm = self.status_poller.get_alarm(self.stream_id,
                                                      alert.alarm_id)
                 if alarm is None:
                     continue
+
+                alert_text = ""
+                for condition in alarm.conditions:
+                    alert_text += f"{condition.test} {condition.check_value} " \
+                                  f"{condition.with_attribute or ''} " \
+                                  f"{condition.with_class_name}(s) in region " \
+                                  f"[region]"
                 alert_widget = AlertLogEntry(start_time=alert.start_time,
                                              end_time=alert.end_time,
-                                             alarm_name=alarm.name)
+                                             alarm_name=alarm.name,
+                                             alert_text=alert_text)
                 self.alert_log.layout().insertWidget(0, alert_widget)
                 self.alert_widgets[alert.id] = alert_widget
             else:
