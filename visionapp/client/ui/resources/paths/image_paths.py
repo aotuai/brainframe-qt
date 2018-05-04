@@ -1,8 +1,6 @@
-from pathlib import Path
-
 from .all_resource_paths import route_path
 
-image_dir = Path("visionapp", "client", "ui", "resources", "images")
+image_dir = route_path("visionapp", "client", "ui", "resources", "images")
 
 
 # Images
