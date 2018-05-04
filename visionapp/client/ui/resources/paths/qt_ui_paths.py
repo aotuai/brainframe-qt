@@ -1,7 +1,6 @@
-from pathlib import Path
-from visionapp.client.ui.resources.paths.all_resource_paths import route_path, all_paths
+from .all_resource_paths import route_path
 
-ui_dir = Path("visionapp", "client", "ui")
+ui_dir = route_path("visionapp", "client", "ui")
 
 # Main Window
 main_window_dir          = route_path(ui_dir                  , "main_window"            )
@@ -40,3 +39,5 @@ task_configuration_ui    = route_path(task_configuration_dir  , "task_configurat
 zone_list_dir            = route_path(task_configuration_dir  , "zone_list"              )
 zone_list_ui             = route_path(zone_list_dir           , "zone_list.ui"           )
 
+license_agreement_dir    = route_path(dialogs_dir             , "license_agreement"      )
+license_agreement_ui     = route_path(license_agreement_dir   , "license_agreement.ui"   )
