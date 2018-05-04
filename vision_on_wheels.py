@@ -1,10 +1,8 @@
 from argparse import ArgumentParser
-from distutils.util import strtobool
 from requests.exceptions import ConnectionError
 import signal
 import sys
 
-from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
@@ -36,11 +34,8 @@ app.setOrganizationDomain('dilililabs.com')
 app.setApplicationName('vision-on-wheels')  # TODO: Change Name
 
 # Ensure that user has accepted license agreement. Otherwise show it to them
-license_accepted = QSettings().value("client_license_accepted")
-if not license_accepted or not strtobool(license_accepted):
-
-    if not LicenseAgreement.get_agreement():
-        sys.exit("Program Closing: License Not Accepted")
+if not LicenseAgreement.get_agreement():
+    sys.exit("Program Closing: License Not Accepted")
 
 # Show splash screen while waiting for server connection
 with SplashScreen() as splash_screen:
