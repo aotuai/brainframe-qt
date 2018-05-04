@@ -44,16 +44,23 @@ class APIError(Exception):
 
 
 class API(metaclass=Singleton):
+    """Singleton class instance of API
+
+    If server_url is not used in constructor, set_url MUST be used.
+    """
     # For testing purposes
     get = staticmethod(requests.get)
     put = staticmethod(requests.put)
     delete = staticmethod(requests.delete)
 
-    def __init__(self, server_url):
+    def __init__(self, server_url=None):
         self._server_url = server_url
 
         self._stream_manager = StreamManager()
         self._status_poller = None
+
+    def set_url(self, server_url):
+        self._server_url = server_url
 
     def get_status_poller(self) -> StatusPoller:
         """Returns the singleton StatusPoller object"""
