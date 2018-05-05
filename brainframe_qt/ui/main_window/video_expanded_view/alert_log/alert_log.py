@@ -42,7 +42,7 @@ class AlertLog(QWidget):
 
         for alert in unverified:
 
-            if alert.id not in self.alert_widgets.get:
+            if alert.id not in self.alert_widgets:
                 # If the alert widget hasn't been made yet
                 alarm = self.status_poller.get_alarm(self.stream_id,
                                                      alert.alarm_id)
