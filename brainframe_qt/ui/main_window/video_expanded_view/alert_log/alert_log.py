@@ -61,7 +61,8 @@ class AlertLog(QWidget):
                                   f"in region [{zone_name}]\n"
                 alert_widget = AlertLogEntry(start_time=alert.start_time,
                                              end_time=alert.end_time,
-                                             alarm_name=alarm.name)
+                                             alarm_name=alarm.name,
+                                             alert_text=alert_text)
                 self.alert_log.layout().insertWidget(0, alert_widget)
                 self.alert_widgets[alert.id] = alert_widget
             else:
