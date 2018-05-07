@@ -123,7 +123,7 @@ class StreamWidget(QGraphicsView):
         for status in statuses:
             interested_attributes = defaultdict(set)
             for alarm in status.zone.alarms:
-                for condition in alarm.conditions:
+                for condition in alarm.count_conditions:
 
                     class_name = condition.with_class_name
                     attribute = condition.with_attribute

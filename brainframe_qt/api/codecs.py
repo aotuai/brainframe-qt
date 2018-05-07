@@ -127,12 +127,17 @@ class ZoneAlarmRateCondition(Codec):
     change in the count of some object against a test value.
     """
 
-    test_types = [">", "<"]
+    test_types = [">=", "<="]
 
-    def __init__(self, *, test, time, change, direction, with_class_name,
+    # noinspection PyArgumentList
+    # PyCharm incorrectly complains
+    DirectionType = Enum("DirectionType",
+                         ["entering", "exiting", "entering_or_exiting"])
+
+    def __init__(self, *, test, duration, change, direction, with_class_name,
                  with_attribute, id_=None):
         self.test = test
-        self.time = time
+        self.duration = duration
         self.change = change
         self.direction = direction
         self.with_class_name = with_class_name
@@ -143,6 +148,8 @@ class ZoneAlarmRateCondition(Codec):
         d = dict(self.__dict__)
         if self.with_attribute is not None:
             d["with_attribute"] = self.with_attribute.to_dict()
+
+        d["direction"] = self.direction.name
 
         return d
 
@@ -155,9 +162,9 @@ class ZoneAlarmRateCondition(Codec):
 
         return ZoneAlarmRateCondition(
             test=d["test"],
-            time=d["time"],
+            duration=d["duration"],
             change=d["change"],
-            direction=d["direction"],
+            direction=ZoneAlarmRateCondition.DirectionType[d["direction"]],
             with_class_name=d["with_class_name"],
             with_attribute=with_attribute,
             id_=d["id"])
@@ -166,28 +173,36 @@ class ZoneAlarmRateCondition(Codec):
 class ZoneAlarm(Codec):
     """This is the configuration for an alarm."""
 
-    def __init__(self, *, name, conditions, use_active_time,
-                 active_start_time, active_end_time, id_=None):
+    def __init__(self, *, name, count_conditions, rate_conditions,
+                 use_active_time, active_start_time, active_end_time, id_=None):
         self.name = name
         self.id = id_
-        self.conditions = conditions
+        self.count_conditions = count_conditions
+        self.rate_conditions = rate_conditions
         self.use_active_time = use_active_time
         self.active_start_time = active_start_time
         self.active_end_time = active_end_time
 
     def to_dict(self):
         d = dict(self.__dict__)
-        d["conditions"] = [ZoneAlarmCondition.to_dict(cond)
-                           for cond in self.conditions]
+        d["count_conditions"] = [ZoneAlarmCondition.to_dict(cond)
+                                 for cond in self.count_conditions]
+        d["rate_conditions"] = [ZoneAlarmRateCondition.to_dict(cond)
+                                for cond in self.rate_conditions]
+
         return d
 
     @staticmethod
     def from_dict(d):
-        conditions = [ZoneAlarmCondition.from_dict(cond)
-                      for cond in d["conditions"]]
+        count_conditions = [ZoneAlarmCondition.from_dict(cond)
+                            for cond in d["count_conditions"]]
+        rate_conditions = [ZoneAlarmRateCondition.from_dict(cond)
+                           for cond in d["rate_conditions"]]
+
         return ZoneAlarm(name=d["name"],
                          id_=d["id"],
-                         conditions=conditions,
+                         count_conditions=count_conditions,
+                         rate_conditions=rate_conditions,
                          use_active_time=d["use_active_time"],
                          active_start_time=d["active_start_time"],
                          active_end_time=d["active_end_time"])
@@ -310,7 +325,7 @@ class StreamConfiguration(Codec):
     # noinspection PyArgumentList
     # PyCharm incorrectly complains
     ConnType = Enum("ConnType",
-                    "ip_camera webcam file")
+                    ["ip_camera", "webcam", "file"])
 
     def __init__(self, *, name, connection_type, parameters, id_=None):
         assert connection_type in StreamConfiguration.ConnType, \

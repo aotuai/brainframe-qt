@@ -81,12 +81,13 @@ class AlarmCreationDialog(QDialog):
         else:
             attribute = Attribute(category=category, value=behavior)
 
-        alarm_condition = ZoneAlarmCondition(test=test_type,
+        count_condition = ZoneAlarmCondition(test=test_type,
                                              check_value=count,
                                              with_class_name=countable,
                                              attribute=attribute)
         alarm = ZoneAlarm(name=alarm_name,
-                          conditions=[alarm_condition],
+                          count_conditions=[count_condition],
+                          rate_conditions=[],  # TODO: Add rate support to UI
                           active_start_time=start_time,
                           active_end_time=stop_time,
                           use_active_time=True)  # TODO: False?
