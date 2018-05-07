@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>367</width>
-    <height>281</height>
+    <width>382</width>
+    <height>513</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,6 +32,49 @@
     </layout>
    </item>
    <item>
+    <widget class="QLabel" name="condition_type_label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Condition Type</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
+     <item>
+      <widget class="QRadioButton" name="count_based_button">
+       <property name="text">
+        <string>Count Based</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">condition_type_button_group</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rate_based_button">
+       <property name="text">
+        <string>Rate Based</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">condition_type_button_group</string>
+       </attribute>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QLabel" name="parameters_label">
      <property name="font">
       <font>
@@ -46,17 +89,8 @@
    </item>
    <item>
     <layout class="QGridLayout" name="if_layout">
-     <item row="0" column="3">
-      <widget class="QComboBox" name="countable_combo_box"/>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="test_type_combo_box"/>
-     </item>
      <item row="0" column="4">
       <widget class="QComboBox" name="behavior_combo_box"/>
-     </item>
-     <item row="0" column="2">
-      <widget class="QSpinBox" name="count_spin_box"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="if_label">
@@ -67,11 +101,20 @@
         </size>
        </property>
        <property name="text">
-        <string>IF</string>
+        <string>If</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="5">
+     <item row="0" column="2">
+      <widget class="QSpinBox" name="count_spin_box"/>
+     </item>
+     <item row="0" column="3">
+      <widget class="QComboBox" name="countable_combo_box"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="test_type_combo_box"/>
+     </item>
+     <item row="0" column="6">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -84,6 +127,25 @@
        </property>
       </spacer>
      </item>
+     <item row="0" column="5">
+      <widget class="QComboBox" name="direction_combo_box">
+       <item>
+        <property name="text">
+         <string>enter</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>exit</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>enter/exit</string>
+        </property>
+       </item>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -92,7 +154,7 @@
       <number>20</number>
      </property>
      <item>
-      <widget class="QLabel" name="in_label">
+      <widget class="QLabel" name="in_count_label">
        <property name="minimumSize">
         <size>
          <width>20</width>
@@ -100,7 +162,14 @@
         </size>
        </property>
        <property name="text">
-        <string>IN</string>
+        <string>in</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="region_label">
+       <property name="text">
+        <string>region</string>
        </property>
       </widget>
      </item>
@@ -111,6 +180,39 @@
          <width>100</width>
          <height>0</height>
         </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="in_rate_label">
+       <property name="minimumSize">
+        <size>
+         <width>20</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>in</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="duration_spin_box">
+       <property name="toolTip">
+        <string>Maximum 1 day (86400 seconds)</string>
+       </property>
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <double>86400.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="seconds_label">
+       <property name="text">
+        <string>seconds</string>
        </property>
       </widget>
      </item>
@@ -223,6 +325,8 @@
  </widget>
  <tabstops>
   <tabstop>alarm_name</tabstop>
+  <tabstop>count_based_button</tabstop>
+  <tabstop>rate_based_button</tabstop>
   <tabstop>test_type_combo_box</tabstop>
   <tabstop>count_spin_box</tabstop>
   <tabstop>countable_combo_box</tabstop>
@@ -266,4 +370,7 @@
    </hints>
   </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="condition_type_button_group"/>
+ </buttongroups>
 </ui>
