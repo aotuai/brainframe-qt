@@ -218,10 +218,11 @@ class Alert(Codec):
         If None, then this alert has not been labeled yet.
     """
 
-    def __init__(self, *, alarm_id, start_time, end_time, verified_as,
+    def __init__(self, *, alarm_id, zone_id, start_time, end_time, verified_as,
                  id_=None):
         self.id = id_
         self.alarm_id = alarm_id
+        self.zone_id = zone_id
         self.start_time = start_time
         self.end_time = end_time
         self.verified_as = verified_as
@@ -234,6 +235,7 @@ class Alert(Codec):
     def from_dict(d):
         return Alert(id_=d["id"],
                      alarm_id=d["alarm_id"],
+                     zone_id=d["zone_id"],
                      start_time=d["start_time"],
                      end_time=d["end_time"],
                      verified_as=d["verified_as"])
