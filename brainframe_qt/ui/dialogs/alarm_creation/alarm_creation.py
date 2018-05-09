@@ -31,9 +31,6 @@ class AlarmCreationDialog(QDialog):
         self.engine_conf = engine_config
         self.zones = zones
 
-        self._update_combo_box(self.test_type_combo_box,
-                               ZoneAlarmCondition.test_types)
-
         detection_classes = self.engine_conf.attribute_ownership
         self._update_combo_box(self.countable_combo_box,
                                detection_classes.keys())
@@ -70,9 +67,14 @@ class AlarmCreationDialog(QDialog):
         if condition_type == self.ConditionType.count:
             self.hide_count_widgets(False)
             self.hide_rate_widgets(True)
+            self._update_combo_box(
+                self.test_type_combo_box,
+                ZoneAlarmCondition.test_types)
         if condition_type == self.ConditionType.rate:
             self.hide_count_widgets(True)
             self.hide_rate_widgets(False)
+            self._update_combo_box(self.test_type_combo_box,
+                                   ZoneAlarmRateCondition.test_types)
 
     def hide_count_widgets(self, hidden):
         """Hide widgets used when using count conditions"""
@@ -97,7 +99,7 @@ class AlarmCreationDialog(QDialog):
             return None, None
 
         alarm_name = dialog.alarm_name.text()
-        condition_type = dialog.condition_type_button_group.checkedButton()
+        condition_button = dialog.condition_type_button_group.checkedButton()
         test_type = dialog.test_type_combo_box.currentText()
         count = dialog.count_spin_box.value()
         countable = dialog.countable_combo_box.currentText()
@@ -105,10 +107,10 @@ class AlarmCreationDialog(QDialog):
         start_time = dialog.start_time_edit.time().toString("HH:mm:ss")
         stop_time = dialog.stop_time_edit.time().toString("HH:mm:ss")
 
-        count_condition = None
-        rate_condition = None
+        count_condition = []
+        rate_condition = []
 
-        if condition_type == "Count Based":
+        if condition_button is dialog.count_based_button:
             behavior = dialog.behavior_combo_box.currentText()
 
             # Find category that attribute value is a part of
@@ -124,12 +126,13 @@ class AlarmCreationDialog(QDialog):
             else:
                 attribute = Attribute(category=category, value=behavior)
 
-            count_condition = ZoneAlarmCondition(test=test_type,
-                                                 check_value=count,
-                                                 with_class_name=countable,
-                                                 attribute=attribute)
+            count_condition.append(ZoneAlarmCondition(
+                test=test_type,
+                check_value=count,
+                with_class_name=countable,
+                with_attribute=attribute))
 
-        elif condition_type == "Rate Based":
+        if condition_button is dialog.rate_based_button:
             direction = dialog.direction_combo_box.currentText()
             duration = dialog.duration_spin_box.value()
 
@@ -141,19 +144,21 @@ class AlarmCreationDialog(QDialog):
                 direction = \
                     ZoneAlarmRateCondition.DirectionType.entering_or_exiting
 
-            rate_condition = ZoneAlarmRateCondition(test=test_type,
-                                                     change=count,
-                                                     direction=direction,
-                                                     duration=duration,
-                                                     with_class_name=countable,
-                                                     attribute=None)
+            rate_condition.append(ZoneAlarmRateCondition(
+                test=test_type,
+                change=count,
+                direction=direction,
+                duration=duration,
+                with_class_name=countable,
+                with_attribute=None))
 
         else:
-            raise ValueError(f"Invalid condition type '{condition_type}'")
+            raise ValueError(f"Invalid condition button checked: "
+                             f"'{condition_button.currentText()}'")
 
         alarm = ZoneAlarm(name=alarm_name,
-                          count_conditions=[count_condition],
-                          rate_conditions=[rate_condition],
+                          count_conditions=count_condition,
+                          rate_conditions=rate_condition,
                           active_start_time=start_time,
                           active_end_time=stop_time,
                           use_active_time=True)  # TODO: False?

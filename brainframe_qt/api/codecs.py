@@ -92,12 +92,12 @@ class ZoneAlarmCondition(Codec):
 
     test_types = [">", "<", "=", "!="]
 
-    def __init__(self, *, test, check_value, with_class_name, attribute,
+    def __init__(self, *, test, check_value, with_class_name, with_attribute,
                  id_=None):
         self.test = test
         self.check_value = check_value
         self.with_class_name = with_class_name
-        self.with_attribute = attribute
+        self.with_attribute = with_attribute
         self.id = id_
 
     def to_dict(self) -> dict:
@@ -118,7 +118,7 @@ class ZoneAlarmCondition(Codec):
             test=d["test"],
             check_value=d["check_value"],
             with_class_name=d["with_class_name"],
-            attribute=with_attribute,
+            with_attribute=with_attribute,
             id_=d["id"])
 
 
