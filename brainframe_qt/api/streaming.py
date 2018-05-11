@@ -54,11 +54,10 @@ class StatusPoller(Thread):
 
     def __init__(self, api, ms_status_updates):
         """
-        :param get_latest_statuses_func: A function returning the latest
-        zone statuses, passed in by the API
+        :param api: An API() object for interacting with the BrainFrame REST
+        api.
         :param ms_status_updates: Miliseconds between calling for a zone status
         update
-        :param ms_alert_updates: Miliseconds between calling to check for
         """
         super().__init__(name="StatusPollerThread")
         self._api = api
