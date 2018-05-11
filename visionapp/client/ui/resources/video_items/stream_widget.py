@@ -5,6 +5,8 @@ from time import time
 from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
+from configparser import ConfigParser
+from collections import deque
 
 from visionapp.client.ui.resources.video_items import (
     DetectionPolygon,
@@ -59,6 +61,15 @@ class StreamWidget(QGraphicsView):
         # For debugging. Easy to see true widget size
         # self.setStyleSheet("background-color:green;")
 
+        # init frameBuffer for frame rendering delay
+        cp = ConfigParser()
+        cp.read('vision_on_wheels.ini')
+        if cp.has_option('general','num_frames_delay'):
+            self.NUM_FRAMES_DELAY = cp.getint('general','num_frames_delay')
+        else:
+            self.NUM_FRAMES_DELAY = 0
+        self.frameBuffer = deque()
+
     def update_items(self):
         self.update_frame()
         self.update_latest_zones()
@@ -90,7 +101,12 @@ class StreamWidget(QGraphicsView):
 
         self.timestamp = timestamp
         pixmap = self._get_pixmap_from_numpy_frame(frame)
-        self._set_frame(pixmap)
+
+        # add frame rendering delay
+        self.frameBuffer.append(pixmap)
+        if len(self.frameBuffer) > self.NUM_FRAMES_DELAY:
+            self._set_frame(self.frameBuffer.popleft())
+
         # TODO: Use video_stream.is_running to stop widget if stream ends
 
     def update_latest_zones(self):
