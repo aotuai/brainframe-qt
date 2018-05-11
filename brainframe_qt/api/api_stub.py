@@ -6,7 +6,7 @@ from typing import Union, List, Dict
 from brainframe.shared.singleton import Singleton
 from brainframe.shared.stream_capture import StreamReader
 from brainframe.client.api.codecs import StreamConfiguration, \
-    Zone, Alert, Codec, ZoneStatus, EngineConfiguration
+    Zone, Alert, Codec, ZoneStatus, EngineConfiguration, Identity
 from brainframe.client.api.streaming import StreamManager
 from brainframe.shared import rest_errors
 from brainframe.client.api.streaming import StatusPoller
@@ -107,7 +107,7 @@ class API(metaclass=Singleton):
 
         :param stream_id: The ID of the stream to delete
         """
-        req = "/api/streams/{stream_id}".format(stream_id=stream_id)
+        req = f"/api/streams/{stream_id}"
         self._delete(req)
 
     # Stream Controls
@@ -119,7 +119,7 @@ class API(metaclass=Singleton):
 
         The server returns an HTTP internal server error if unable to open
         """
-        req = "/api/streams/{stream_id}/url".format(stream_id=stream_id)
+        req = f"/api/streams/{stream_id}/url"
         try:
             url = self._get(req)
         except APIError as e:
@@ -141,8 +141,7 @@ class API(metaclass=Singleton):
         stream. It could fail because: unable to start stream, or license
         restrictions.
         """
-        req = "/api/streams/{stream_id}/analyze".format(
-            stream_id=stream_id)
+        req = f"/api/streams/{stream_id}/analyze"
         resp = self._put_json(req, 'true')
         return resp
 
@@ -151,8 +150,7 @@ class API(metaclass=Singleton):
         :param stream_id:
         :return:
         """
-        req = "/api/streams/{stream_id}/analyze".format(
-            stream_id=stream_id)
+        req = f"/api/streams/{stream_id}/analyze"
         self._put_json(req, 'false')
 
     # Get Analysis
@@ -194,7 +192,7 @@ class API(metaclass=Singleton):
         :param verified_as: Set verification to True or False
         :return: The modified Alert
         """
-        req = "/api/alerts/{alert_id}".format(alert_id=alert_id)
+        req = f"/api/alerts/{alert_id}"
         self._put_json(req, ujson.dumps(verified_as))
 
     # Backend Capabilities
@@ -215,7 +213,7 @@ class API(metaclass=Singleton):
     # Zone specific stuff
     def get_zones(self, stream_id) -> List[Zone]:
         """Returns a list of Zone's associated with that stream"""
-        req = "/api/streams/{stream_id}/zones".format(stream_id=str(stream_id))
+        req = f"/api/streams/{stream_id}/zones"
         data = self._get(req)
         zones = [Zone.from_dict(j) for j in data]
         return zones
@@ -231,27 +229,46 @@ class API(metaclass=Singleton):
                                  " not be found!")
         return zones[0]
 
-    def set_zone(self, stream_id, zone):
+    def set_zone(self, stream_id: int, zone: Zone):
         """Update or create a zone. If the Zone doesn't exist, the zone.id
         must be None. An initialized Zone with an ID will be returned.
         :param stream_id: The stream_id that this zone exists in
         :param zone: A Zone object
         :return: Zone, initialized with an ID
         """
-        req = "/api/streams/{stream_id}/zones".format(stream_id=stream_id)
+        req = f"/api/streams/{stream_id}/zones"
         data = self._put_codec(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
 
-    def delete_zone(self, stream_id, zone_id):
+    def delete_zone(self, stream_id: int, zone_id: int):
         """Deletes a zone with the given ID.
         :param stream_id: The ID of the stream the zone is a part of
         :param zone_id: The ID of the zone to delete
         """
-        req = "/api/streams/{stream_id}/zones/{zone_id}".format(
-            stream_id=stream_id,
-            zone_id=zone_id)
+        req = f"/api/streams/{stream_id}/zones/{zone_id}"
         self._delete(req)
+
+    def get_identity(self, identity_id: int) -> Identity:
+        """Gets the identity with the given ID.
+        :param identity_id: The ID of the identity to get
+        :return: Identity
+        """
+        req = f"/api/identities/{identity_id}"
+        identity = self._get(req)
+
+        return Identity.from_dict(identity)
+
+    def set_identity(self, identity: Identity) -> Identity:
+        """Updates or creates an identity. If the identity does not already
+        exist, identity.id must be None. The returned identity will have an
+        assigned ID.
+        :param identity: The identity to save or create
+        :return: the saved identity
+        """
+        req = f"/api/identities"
+        saved = self._put_codec(req, identity)
+        return Identity.from_dict(saved)
 
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
