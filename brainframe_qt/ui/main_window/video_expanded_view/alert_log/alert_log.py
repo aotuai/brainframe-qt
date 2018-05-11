@@ -7,13 +7,6 @@ from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-condition_test_map = {'>': "Greater than",
-                      '>=': "Greater than or equal to",
-                      '<': "Less than",
-                      '<=': "Less than or equal to",
-                      "=": "Exactly"}
-
-
 class AlertLog(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
@@ -51,14 +44,13 @@ class AlertLog(QWidget):
 
                 zone_name = api.get_zone(self.stream_id, alert.zone_id).name
 
-                alert_text = ""
-                for condition in alarm.conditions:
-                    condition_str = condition_test_map[condition.test]
-                    attr = condition.with_attribute
-                    attr = attr + ' ' if attr else ''
-                    alert_text += f"{condition_str} {condition.check_value} " \
-                                  f"{attr}{condition.with_class_name}(s) " \
-                                  f"in region [{zone_name}]\n"
+                # Create text for alert
+                alert_text = "One of the following conditions was triggered:" \
+                             "\n\n"
+                for condition in alarm.count_conditions + alarm.rate_conditions:
+                    alert_text += repr(condition)
+                    alert_text += f" in region [{zone_name}]\n"
+
                 alert_widget = AlertLogEntry(start_time=alert.start_time,
                                              end_time=alert.end_time,
                                              alarm_name=alarm.name,

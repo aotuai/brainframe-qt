@@ -5,8 +5,15 @@ from typing import Union, List, Dict
 
 from brainframe.shared.singleton import Singleton
 from brainframe.shared.stream_capture import StreamReader
-from brainframe.client.api.codecs import StreamConfiguration, \
-    Zone, Alert, Codec, ZoneStatus, EngineConfiguration, Identity
+from brainframe.client.api.codecs import (
+    Alert,
+    Codec,
+    EngineConfiguration,
+    StreamConfiguration,
+    Zone,
+    ZoneStatus,
+    Identity
+)
 from brainframe.client.api.streaming import StreamManager
 from brainframe.shared import rest_errors
 from brainframe.client.api.streaming import StatusPoller
