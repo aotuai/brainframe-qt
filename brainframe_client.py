@@ -12,7 +12,6 @@ from brainframe.client.ui.resources.paths import image_paths
 # Handle Keyboard Interrupt
 signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit("Exiting"))
 
-
 # CLI Arguments
 parser = ArgumentParser(description="This runs the client brainframe")
 parser.add_argument("-a", "--api-url", type=str,
@@ -39,11 +38,9 @@ if not LicenseAgreement.get_agreement():
 
 # Show splash screen while waiting for server connection
 with SplashScreen() as splash_screen:
-
     splash_screen.showMessage("Attempting to connect to server")
 
     while True:
-
         try:
             # Set all stream analysis as "active" here, since there is currently
             # no # way to in the UI
