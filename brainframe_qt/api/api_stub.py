@@ -277,6 +277,29 @@ class API(metaclass=Singleton):
         saved = self._put_codec(req, identity)
         return Identity.from_dict(saved)
 
+    def new_identity_image(self, identity_id: int, image: bytes) -> int:
+        """Saves and encodes an image under the identity with the given ID.
+
+        :param identity_id: Identity to associate the image with
+        :param image: The image to save
+        :return: The image ID
+        """
+        req = f"/api/identities/{identity_id}/images"
+        image_id = self._put_raw(req, image)
+        return image_id
+
+    def get_identity_image(self, identity_id: int, image_id: int) -> bytes:
+        """Returns the image with the given image ID.
+
+        :param identity_id: The ID of the identity that the image is associated
+            with
+        :param image_id: The ID of the image
+        :return: Bytes of the image
+        """
+        req = f"/api/identities/{identity_id}/images/{image_id}"
+        image = self._get_raw(req)
+        return image
+
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
         if self._status_poller is not None:
@@ -291,6 +314,33 @@ class API(metaclass=Singleton):
         :return: The JSON response as a dict, or None if none was sent
         """
         resp = self.get(self._full_url(api_url), params=params)
+        if not resp.ok:
+            raise APIError(resp.content)
+
+        if resp.content:
+            return ujson.loads(resp.content)
+        return None
+
+    def _get_raw(self, api_url, params=None):
+        """Send a GET request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param params: The "query_string" to add to the url. In the format
+        of a dict, {"key": "value", ...} key and val must be a string
+        :return: The raw bytes of the response
+        """
+        resp = self.get(self._full_url(api_url), params=params)
+        if not resp.ok:
+            raise APIError(resp.content)
+
+        return resp.content
+
+    def _put_raw(self, api_url, data: bytes):
+        """Send a PUT request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base url
+        :param data: The raw data to send
+        :return: The JSON response as a dict, or None of none was sent
+        """
+        resp = self.put(self._full_url(api_url), data=data)
         if not resp.ok:
             raise APIError(resp.content)
 
