@@ -11,10 +11,10 @@ splash_screen        = route_path(image_dir, "splash_screen.png"       )
 
 # Icons
 icon_dir           = route_path(image_dir, "icons"              )
-new_stream_icon    = route_path( icon_dir, "new_stream.jpg"     )
-alarm_icon         = route_path( icon_dir, "alarm.jpg"          )
+new_stream_icon    = route_path( icon_dir, "new_stream.png"     )
+alarm_icon         = route_path( icon_dir, "alarm.png"          )
 alert_icon         = route_path( icon_dir, "alert.png"          )
-line_icon          = route_path( icon_dir, "line.jpg"           )
+line_icon          = route_path( icon_dir, "line.png"           )
 region_icon        = route_path( icon_dir, "region.png"         )
 settings_gear_icon = route_path( icon_dir, "settings_gear.png"  )
 question_mark_icon = route_path( icon_dir, "question_mark.png"  )
