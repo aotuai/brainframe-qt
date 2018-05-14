@@ -15,7 +15,10 @@
    version="1.1"
    id="svg1752"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="folder.svg">
+   sodipodi:docname="folder.svg"
+   inkscape:export-filename="/home/tyler/workspace/brainframe/brainframe/client/ui/resources/images/icons/folder.png"
+   inkscape:export-xdpi="65.024002"
+   inkscape:export-ydpi="65.024002">
   <defs
      id="defs1746" />
   <sodipodi:namedview
@@ -26,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="222.3673"
-     inkscape:cy="147.54911"
+     inkscape:cx="224.89268"
+     inkscape:cy="187.95521"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"

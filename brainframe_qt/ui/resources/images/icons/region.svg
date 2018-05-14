@@ -15,7 +15,10 @@
    version="1.1"
    id="svg890"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="region.svg">
+   sodipodi:docname="region.svg"
+   inkscape:export-filename="/home/tyler/workspace/brainframe/brainframe/client/ui/resources/images/icons/region.png"
+   inkscape:export-xdpi="65.019997"
+   inkscape:export-ydpi="65.019997">
   <defs
      id="defs884" />
   <sodipodi:namedview
@@ -25,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.9899495"
-     inkscape:cx="-305.0345"
-     inkscape:cy="196.65051"
+     inkscape:zoom="1.4"
+     inkscape:cx="215.64062"
+     inkscape:cy="238.39132"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
