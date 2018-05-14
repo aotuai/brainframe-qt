@@ -66,12 +66,17 @@ class Attribute(Codec):
 class Identity(Codec):
     """A specific, recognizable object or person."""
 
-    def __init__(self, *, id_, name, class_name, metadata):
+    def __init__(self, *, id_, identity_id, nickname, class_name, metadata):
         self.id = id_
         """A unique identifier."""
 
-        self.name = name
+        self.identity_id = identity_id
         """The name of the identified detection."""
+
+        self.nickname = nickname
+        """A display name for the identity which may not be unique, like a
+        person's name.
+        """
 
         self.class_name = class_name
         """The name of the class that this detection is of."""
@@ -86,6 +91,7 @@ class Identity(Codec):
     def from_dict(d):
         return Identity(
             id_=d["id"],
-            name=d["name"],
+            identity_id=d["identity_id"],
+            nickname=d["nickname"],
             class_name=d["class_name"],
             metadata=d["metadata"])
