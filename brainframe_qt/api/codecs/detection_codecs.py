@@ -67,10 +67,14 @@ class Identity(Codec):
     """A specific, recognizable object or person."""
 
     def __init__(self, *,
-                 identity_id, nickname, class_name, metadata="{}", id_=None):
+                 unique_name, nickname, class_name, metadata="{}", id_=None):
 
-        self.identity_id = identity_id
-        """The name of the identified detection."""
+        self.unique_name = unique_name
+        """The unique id of the identified detection.
+        
+        Not to be confused with the id_ field of the object which is a field
+        used by the database.
+        """
 
         self.nickname = nickname
         """A display name for the identity which may not be unique, like a
@@ -93,7 +97,7 @@ class Identity(Codec):
     def from_dict(d):
         return Identity(
             id_=d["id"],
-            identity_id=d["identity_id"],
+            unique_name=d["unique_name"],
             nickname=d["nickname"],
             class_name=d["class_name"],
             metadata=d["metadata"])
