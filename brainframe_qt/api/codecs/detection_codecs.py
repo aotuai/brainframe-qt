@@ -66,9 +66,8 @@ class Attribute(Codec):
 class Identity(Codec):
     """A specific, recognizable object or person."""
 
-    def __init__(self, *, id_, identity_id, nickname, class_name, metadata):
-        self.id = id_
-        """A unique identifier."""
+    def __init__(self, *,
+                 identity_id, nickname, class_name, metadata="{}", id_=None):
 
         self.identity_id = identity_id
         """The name of the identified detection."""
@@ -83,6 +82,9 @@ class Identity(Codec):
 
         self.metadata = metadata
         """Any additional user-defined information about the identity."""
+
+        self.id = id_
+        """A unique identifier."""
 
     def to_dict(self):
         return self.__dict__
