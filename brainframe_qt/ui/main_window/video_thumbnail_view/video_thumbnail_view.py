@@ -1,15 +1,14 @@
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
-from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QAction, QMessageBox, QWidget
+from PyQt5.QtCore import pyqtProperty
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.client.api import api, APIError
+from brainframe.client.api import api
 
 from .video_small.video_small import VideoSmall
-from brainframe.client.ui.dialogs import StreamConfigurationDialog
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.shared import rest_errors
 
 
 class VideoThumbnailView(QWidget):
@@ -71,36 +70,6 @@ class VideoThumbnailView(QWidget):
         # Remove selection border from currently selected video
         if self.current_stream_id:
             self.streams[self.current_stream_id].remove_selection_border()
-
-    @pyqtSlot(QAction)
-    def create_new_stream_slot(self, action):
-        stream_conf = StreamConfigurationDialog.configure_stream()
-        if stream_conf is None:
-            return
-        try:
-            stream_conf = api.set_stream_configuration(stream_conf)
-
-            # Currently, we default to setting all new streams as 'active'
-            api.start_analyzing(stream_conf.id)
-
-        except APIError as err:
-
-            if err.kind == rest_errors.DUPLICATE_STREAM_SOURCE:
-                message = "<b>Stream source already open</b>" \
-                          "<br><br>" \
-                          "You already have the stream source open.<br><br>" \
-                          "Error: <b>" + err.kind + "</b>"
-            else:
-                message = "<b>Error encountered while opening stream</b>" \
-                          "<br><br>" \
-                          "Is stream already open?<br>" \
-                          "Is this a valid stream source?<br><br>" \
-                          "Error: <b>" + err.kind + "</b>"
-
-            QMessageBox.information(self, "Error Opening Stream", message)
-            return
-
-        self.new_stream_widget(stream_conf)
 
     @pyqtSlot(int)
     def delete_stream_slot(self, stream_id):

@@ -1,16 +1,19 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from PyQt5.uic import loadUi
 
+from brainframe.client.api import api, APIError
+from brainframe.client.ui.dialogs import (
+    StreamConfigurationDialog,
+    IdentityConfiguration
+)
 from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.shared import rest_errors
 
 
 class MainWindow(QMainWindow):
-    """Main window for entire UI
+    """Main window for entire UI"""
 
-    This is a Widget plugin in the event that it needs to handle slots and
-    signals for its layouts. It might be squashed into ui.main in the future
-    """
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -28,3 +31,36 @@ class MainWindow(QMainWindow):
         self.video_layout.setStretch(0, 2)
         self.video_layout.setStretch(1, 0)
 
+    @pyqtSlot()
+    def new_stream(self):
+        stream_conf = StreamConfigurationDialog.configure_stream()
+        if stream_conf is None:
+            return
+        try:
+            stream_conf = api.set_stream_configuration(stream_conf)
+
+            # Currently, we default to setting all new streams as 'active'
+            api.start_analyzing(stream_conf.id)
+
+        except APIError as err:
+
+            if err.kind == rest_errors.DUPLICATE_STREAM_SOURCE:
+                message = "<b>Stream source already open</b>" \
+                          "<br><br>" \
+                          "You already have the stream source open.<br><br>" \
+                          "Error: <b>" + err.kind + "</b>"
+            else:
+                message = "<b>Error encountered while opening stream</b>" \
+                          "<br><br>" \
+                          "Is stream already open?<br>" \
+                          "Is this a valid stream source?<br><br>" \
+                          "Error: <b>" + err.kind + "</b>"
+
+            QMessageBox.information(self, "Error Opening Stream", message)
+            return
+
+        self.video_thumbnail_view.new_stream_widget(stream_conf)
+
+    @pyqtSlot()
+    def new_identity(self):
+        IdentityConfiguration().get_new_identities()

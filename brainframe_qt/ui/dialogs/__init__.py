@@ -1,4 +1,5 @@
 from .alarm_creation.alarm_creation import AlarmCreationDialog
-from .task_configuration.task_configuration import TaskConfiguration
+from .identity_configuration.identity_configuration import IdentityConfiguration
 from .license_agreement.license_agreement import LicenseAgreement
 from .stream_configuration.stream_configuration import StreamConfigurationDialog
+from .task_configuration.task_configuration import TaskConfiguration
