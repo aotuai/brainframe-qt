@@ -17,7 +17,10 @@
    version="1.1"
    id="svg1538"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="new_stream.svg">
+   sodipodi:docname="new_stream.svg"
+   inkscape:export-filename="/home/tyler/workspace/brainframe/brainframe/client/ui/resources/images/icons/new_stream.png"
+   inkscape:export-xdpi="65.019997"
+   inkscape:export-ydpi="65.019997">
   <defs
      id="defs1532">
     <linearGradient
@@ -63,9 +66,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="390.75214"
-     inkscape:cy="193.01306"
+     inkscape:zoom="1.4"
+     inkscape:cx="198.89632"
+     inkscape:cy="254.79685"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -82,7 +85,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -92,22 +95,22 @@
      id="layer1"
      transform="translate(0,-197)">
     <rect
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.74470568;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect2083"
-       width="41.025871"
-       height="28.063299"
-       x="24.214788"
-       y="-264.75726"
+       width="51.209938"
+       height="35.029598"
+       x="19.498823"
+       y="-264.86575"
        transform="scale(1,-1)" />
     <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 71.478518,256.93962 14.499371,4.54358 v -22.317 l -14.550511,4.3917 z"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.74470568;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 78.495077,255.10756 18.098625,5.67145 v -27.85686 l -18.16246,5.48187 z"
        id="path2085"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <g
        id="g2106-1"
-       transform="matrix(0,1,1,0,-255.11201,213.47495)"
+       transform="matrix(0,1.2482352,1.2482352,0,-329.16671,200.85342)"
        style="fill:#ffffff;fill-opacity:1;stroke:url(#linearGradient2156);stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">
       <path
          inkscape:connector-curvature="0"
@@ -122,7 +125,7 @@
     </g>
     <g
        id="g2106"
-       transform="matrix(0,1,1,0,-255.11201,213.47495)"
+       transform="matrix(0,1.2482352,1.2482352,0,-329.16671,200.85342)"
        style="fill:#000000;fill-opacity:1">
       <path
          inkscape:connector-curvature="0"
