@@ -153,7 +153,7 @@ class API(metaclass=Singleton):
         return resp
 
     def stop_analyzing(self, stream_id):
-        """Tell the server to stop analyzing a particular stream
+        """Tell the server to close analyzing a particular stream
         :param stream_id:
         :return:
         """
