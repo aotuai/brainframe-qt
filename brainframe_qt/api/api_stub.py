@@ -277,26 +277,32 @@ class API(metaclass=Singleton):
         saved = self._put_codec(req, identity)
         return Identity.from_dict(saved)
 
-    def new_identity_image(self, identity_id: int, image: bytes) -> int:
+    def new_identity_image(self, identity_id: int, class_name: str,
+                           image: bytes) -> int:
         """Saves and encodes an image under the identity with the given ID.
 
         :param identity_id: Identity to associate the image with
+        :param class_name: The class name to encode this image for
         :param image: The image to save
         :return: The image ID
         """
-        req = f"/api/identities/{identity_id}/images"
+        req = f"/api/identities/{identity_id}/classes/{class_name}/images"
         image_id = self._put_raw(req, image)
         return image_id
 
-    def get_identity_image(self, identity_id: int, image_id: int) -> bytes:
+    def get_identity_image(self, identity_id: int, class_name: str,
+                           image_id: int) -> bytes:
         """Returns the image with the given image ID.
 
         :param identity_id: The ID of the identity that the image is associated
             with
+        :param class_name: The class name that this image was encoded for
         :param image_id: The ID of the image
         :return: Bytes of the image
         """
-        req = f"/api/identities/{identity_id}/images/{image_id}"
+        req = (f"/api/identities/{identity_id}"
+               f"/classes/{class_name}"
+               f"/images/{image_id}")
         image = self._get_raw(req)
         return image
 
