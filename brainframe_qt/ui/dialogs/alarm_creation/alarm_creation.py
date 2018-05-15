@@ -132,7 +132,7 @@ class AlarmCreationDialog(QDialog):
                 with_class_name=countable,
                 with_attribute=attribute))
 
-        if condition_button is dialog.rate_based_button:
+        elif condition_button is dialog.rate_based_button:
             direction = dialog.direction_combo_box.currentText()
             duration = dialog.duration_spin_box.value()
 
