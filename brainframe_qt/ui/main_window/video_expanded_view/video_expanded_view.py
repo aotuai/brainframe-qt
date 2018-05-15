@@ -23,7 +23,8 @@ class VideoExpandedView(QWidget):
 
         self.stream_conf = None
 
-        # TODO: Button is only disabled until API allows editing of StreamConfig
+        # TODO(Bryce Beagle): Button is only disabled until API allows editing
+        # of StreamConfig
         self.source_config_button.setDisabled(True)
 
         self._set_widgets_hidden(True)
@@ -70,11 +71,13 @@ class VideoExpandedView(QWidget):
         if not config:
             return
 
+            # TODO(Bryce Beagle): Actually say what this TODO is for
             # TODO
 
     @pyqtSlot()
     def open_source_config(self):
-        # TODO: Alex: Open the source config dialog window for the stream
+        # TODO(Bryce Beagle): Open the source config dialog window for the
+        # stream
         # Use ui.dialogs.stream_configuration
         print("Opening source configuration")
 

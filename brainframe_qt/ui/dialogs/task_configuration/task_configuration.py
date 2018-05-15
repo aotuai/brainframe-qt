@@ -168,7 +168,8 @@ class TaskConfiguration(QDialog):
             # Strip whitespace as a favor for the user
             region_name = region_name.strip()
 
-            # TODO: Grey out QInputDialog Ok button if no entry instead
+            # TODO(Bryce Beagle): Grey out QInputDialog Ok button if no entry
+            # instead
             if region_name == "":
                 # Return if entered string is empty
                 return None
@@ -185,7 +186,7 @@ class TaskConfiguration(QDialog):
         return region_name
 
     def _set_widgets_enabled(self, enabled):
-        # TODO: Do this dynamically:
+        # TODO(Bryce Beagle): Do this dynamically:
         # https://stackoverflow.com/a/34892529/8134178
 
         self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(enabled)

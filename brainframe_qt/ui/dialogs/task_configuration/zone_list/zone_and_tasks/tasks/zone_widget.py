@@ -2,7 +2,7 @@ from .task_widget import TaskWidget
 
 
 class ZoneWidget(TaskWidget):
-    # TODO: Migrate to .ui file using QtDesigner
+    # TODO(Bryce Beagle): Migrate to .ui file using QtDesigner
     def __init__(self, zone_name, zone_type, parent=None):
         super().__init__(zone_name, zone_type, parent)
 

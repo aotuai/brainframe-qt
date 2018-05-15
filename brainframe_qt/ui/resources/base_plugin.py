@@ -4,7 +4,7 @@ from PyQt5.QtDesigner import QPyDesignerCustomWidgetPlugin
 from PyQt5.QtGui import QIcon
 
 
-# TODO: Use a metaclass
+# TODO(Bryce Beagle): Use a metaclass
 class BasePlugin(QPyDesignerCustomWidgetPlugin):
     """Subclass me to create a create a new custom plugin for QtDesigner"""
 
@@ -66,22 +66,22 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
 
     def icon(self):
         """Icon that QtDesigner puts next to the widget in the sidebar"""
-        # TODO
+        # TODO(Bryce Beagle)
         return QIcon()
 
     def toolTip(self):
         """Short desc. of the custom widget used by QtDesigner in a tooltip"""
-        # TODO: Maybe support?
+        # TODO(Bryce Beagle): Maybe support?
         return self.widget_name
 
     def whatsThis(self):
         """Full desc. of the custom widget used by QtDesigner in a tooltip"""
-        # TODO: Maybe support?
+        # TODO(Bryce Beagle): Maybe support?
         return self.widget_name
 
     def isContainer(self):
         """Whether or not the widget is a container-type widget"""
-        # TODO: Maybe support?
+        # TODO(Bryce Beagle): Maybe support?
         return False
 
     def domXml(self):

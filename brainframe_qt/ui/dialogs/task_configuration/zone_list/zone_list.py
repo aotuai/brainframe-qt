@@ -9,7 +9,7 @@ from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-# TODO: Scroll!
+# TODO(Bryce Beagle): Scroll!
 class ZoneList(QScrollArea):
 
     def __init__(self, parent=None):
