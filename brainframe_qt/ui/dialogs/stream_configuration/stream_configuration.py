@@ -64,7 +64,7 @@ class StreamConfigurationDialog(QDialog):
                 self.connection_type = StreamConfiguration.ConnType.webcam
                 self.parameter_label.setText("Device ID")
             elif connection_type == "File":
-                # TODO: Use QFileDialog
+                # TODO(Bryce Beagle): Use QFileDialog
                 self.connection_type = StreamConfiguration.ConnType.file
                 self.parameter_label.setText("Filepath")
 

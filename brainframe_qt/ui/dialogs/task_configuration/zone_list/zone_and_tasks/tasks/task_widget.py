@@ -20,7 +20,7 @@ class TaskWidget(QWidget):
 
     delete_button_pressed = pyqtSignal()
 
-    # TODO: Use .ui files
+    # TODO(Bryce Beagle): Use .ui files
     def __init__(self, task_name, task_type: TaskType, parent=None):
         super().__init__(parent)
 
