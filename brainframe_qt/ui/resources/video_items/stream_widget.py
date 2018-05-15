@@ -92,7 +92,7 @@ class StreamWidget(QGraphicsView):
         self.timestamp = timestamp
         pixmap = self._get_pixmap_from_numpy_frame(frame)
         self._set_frame(pixmap)
-        # TODO: Use video_stream.is_running to stop widget if stream ends
+        # TODO: Use video_stream.is_running to close widget if stream ends
 
     def update_latest_zones(self):
         self.remove_items_by_type(ZoneStatusPolygon)
@@ -152,7 +152,7 @@ class StreamWidget(QGraphicsView):
     def change_stream(self, stream_conf):
         """Change the stream source of the video
 
-        If stream_conf is None, the StreamWidget will stop grabbing frames"""
+        If stream_conf is None, the StreamWidget will close grabbing frames"""
         self.stream_conf = stream_conf
 
         for item in self.scene().items():
