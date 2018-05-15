@@ -63,4 +63,4 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def new_identity(self):
-        IdentityConfiguration().get_new_identities()
+        IdentityConfiguration().create_new_identities()

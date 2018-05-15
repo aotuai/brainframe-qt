@@ -18,6 +18,7 @@ class IdentityPrototype:
 
     Used before adding to server
     """
+
     def __init__(self):
         self.identity_id: str = None
         self.nickname: str = None
@@ -35,18 +36,18 @@ class IdentityConfiguration(QWidget):
 
         for identity_prototype in self.get_new_identities_from_path():
 
-            for class_name, images in identity_prototype.images:
+            for class_name, images in identity_prototype.images.items():
 
                 identity = Identity(
                     unique_name=identity_prototype.identity_id,
                     nickname=identity_prototype.nickname,
+                    metadata="{}",
                     class_name=class_name
                 )
 
                 identity = api.set_identity(identity)
 
                 for image in images:
-
                     api.new_identity_image(identity.id, image)
 
     @staticmethod
