@@ -76,8 +76,7 @@ class API(metaclass=Singleton):
         return self._status_poller
 
     # Stream Configuration
-    def get_stream_configurations(self, stream_id=None) \
-            -> Union[List[StreamConfiguration], StreamConfiguration]:
+    def get_stream_configurations(self) -> List[StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
         :param stream_id: If set, returns only the StreamConfiguration
         associated with that id
@@ -87,11 +86,10 @@ class API(metaclass=Singleton):
         data = self._get(req)
 
         configs = [StreamConfiguration.from_dict(d) for d in data]
-
-        if stream_id:
-            # Search for and return config with matching stream_id
-            return next((c for c in configs if c.id == stream_id), None)
         return configs
+
+    def get_stream_configuration(self, stream_id):
+        pass
 
     def set_stream_configuration(self, stream_configuration) \
             -> Union[None, StreamConfiguration]:
