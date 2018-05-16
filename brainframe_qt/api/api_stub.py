@@ -75,13 +75,9 @@ class API(metaclass=Singleton):
             self._status_poller = StatusPoller(self, 100)
         return self._status_poller
 
-    # Stream Configuration Stuff
-    def get_stream_configurations(self,
-                                  stream_id=None) \
-            -> Union[List[StreamConfiguration], StreamConfiguration]:
+    # Stream Configuration
+    def get_stream_configurations(self) -> List[StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
-        :param only_get_active: If True, It will get StreamConfigurations that
-        are currently active, AKA being streamed
         :param stream_id: If set, returns only the StreamConfiguration
         associated with that id
         :return: [StreamConfiguration, StreamConfiguration, ...]
@@ -90,11 +86,10 @@ class API(metaclass=Singleton):
         data = self._get(req)
 
         configs = [StreamConfiguration.from_dict(d) for d in data]
-
-        if stream_id:
-            # Search for and return config with matching stream_id
-            return next((c for c in configs if c.id == stream_id), None)
         return configs
+
+    def get_stream_configuration(self, stream_id):
+        pass
 
     def set_stream_configuration(self, stream_configuration) \
             -> Union[None, StreamConfiguration]:
@@ -217,7 +212,6 @@ class API(metaclass=Singleton):
         resp = self._get(req)
         return EngineConfiguration.from_dict(resp)
 
-    # Zone specific stuff
     def get_zones(self, stream_id) -> List[Zone]:
         """Returns a list of Zone's associated with that stream"""
         req = f"/api/streams/{stream_id}/zones"
@@ -256,6 +250,7 @@ class API(metaclass=Singleton):
         req = f"/api/streams/{stream_id}/zones/{zone_id}"
         self._delete(req)
 
+    # Identities
     def get_identity(self, identity_id: int) -> Identity:
         """Gets the identity with the given ID.
         :param identity_id: The ID of the identity to get
@@ -266,12 +261,13 @@ class API(metaclass=Singleton):
 
         return Identity.from_dict(identity)
 
-    def get_all_identities(self) -> List[Identity]:
+    def get_identities(self, unique_name=None) -> List[Identity]:
         """Returns all identities from the server.
         :return: List of identities
         """
         req = f"/api/identities"
-        identities = self._get(req)
+        params = {"unique_name": unique_name} if unique_name else None
+        identities = self._get(req, params=params)
         identities = [Identity.from_dict(d) for d in identities]
 
         return identities
@@ -322,6 +318,7 @@ class API(metaclass=Singleton):
             self._status_poller.close()
         self._stream_manager.close()
 
+    # Private Functions
     def _get(self, api_url, params=None):
         """Send a GET request to the given URL.
         :param api_url: The /api/blah/blah to append to the base_url
