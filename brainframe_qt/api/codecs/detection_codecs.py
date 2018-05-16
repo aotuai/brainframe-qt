@@ -7,14 +7,17 @@ class Detection(Codec):
     example, a "person" can exhibit a behaviour. A Face can have a gender.
     """
 
-    def __init__(self, *, class_name, rect, children, attributes):
+    def __init__(self, *, class_name, rect, children, attributes, with_identity):
         self.class_name = class_name
         self.rect = rect
         self.children = children
         self.attributes = attributes
+        self.with_identity = with_identity
 
     def to_dict(self):
         d = dict(self.__dict__)
+        if self.with_identity:
+            d["with_identity"] = Identity.to_dict(d["with_identity"])
         d["children"] = [Detection.to_dict(det) for det in self.children]
         d["attributes"] = [Attribute.to_dict(att) for att in self.attributes]
         return d
@@ -37,12 +40,17 @@ class Detection(Codec):
 
     @staticmethod
     def from_dict(d):
+        with_identity = None
+        if d["with_identity"]:
+            with_identity = Identity.from_dict(d["with_identity"])
+
         children = [Detection.from_dict(det) for det in d["children"]]
         attributes = [Attribute.from_dict(att) for att in d["attributes"]]
         return Detection(class_name=d["class_name"],
                          rect=d["rect"],
                          children=children,
-                         attributes=attributes)
+                         attributes=attributes,
+                         with_identity=with_identity)
 
 
 class Attribute(Codec):
