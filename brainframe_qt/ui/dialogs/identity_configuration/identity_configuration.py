@@ -39,15 +39,13 @@ class IdentityConfiguration(QWidget):
 
                 identity = Identity(
                     unique_name=identity_prototype.identity_id,
-                    nickname=identity_prototype.nickname,
-                    class_name=class_name
-                )
+                    nickname=identity_prototype.nickname)
 
                 identity = api.set_identity(identity)
 
                 for image in images:
 
-                    api.new_identity_image(identity.id, image)
+                    api.new_identity_image(identity.id, class_name, image)
 
     @staticmethod
     def get_new_identities_from_path() -> List[IdentityPrototype]:
