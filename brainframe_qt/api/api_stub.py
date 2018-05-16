@@ -266,6 +266,16 @@ class API(metaclass=Singleton):
 
         return Identity.from_dict(identity)
 
+    def get_all_identities(self) -> List[Identity]:
+        """Returns all identities from the server.
+        :return: List of identities
+        """
+        req = f"/api/identities"
+        identities = self._get(req)
+        identities = [Identity.from_dict(d) for d in identities]
+
+        return identities
+
     def set_identity(self, identity: Identity) -> Identity:
         """Updates or creates an identity. If the identity does not already
         exist, identity.id must be None. The returned identity will have an
