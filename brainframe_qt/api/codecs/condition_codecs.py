@@ -11,8 +11,10 @@ condition_test_map = {'>': "Greater than",
                       "=": "Exactly"}
 
 
-class ZoneAlarmCondition(Codec):
-    """This holds logic information for a ZoneAlarm."""
+class ZoneAlarmCountCondition(Codec):
+    """A condition that must be met for an alarm to go off. Compares the number
+    of objects in a zone to some number.
+    """
 
     test_types = [">", "<", "=", "!="]
 
@@ -45,7 +47,7 @@ class ZoneAlarmCondition(Codec):
         if d["with_attribute"] is not None:
             with_attribute = Attribute.from_dict(d["with_attribute"])
 
-        return ZoneAlarmCondition(
+        return ZoneAlarmCountCondition(
             test=d["test"],
             check_value=d["check_value"],
             with_class_name=d["with_class_name"],
