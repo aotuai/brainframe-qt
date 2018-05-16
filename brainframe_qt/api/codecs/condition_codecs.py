@@ -27,7 +27,7 @@ class ZoneAlarmCondition(Codec):
     def __repr__(self):
         condition_str = condition_test_map[self.test]
         attr = self.with_attribute
-        attr = attr + ' ' if attr else ''
+        attr = attr.value + ' ' if attr else ''
         return f"{condition_str} {self.check_value} " \
                f"{attr}{self.with_class_name}(s) "
 
