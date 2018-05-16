@@ -46,7 +46,7 @@ class IdentityConfiguration(QWidget):
                 identity = Identity(
                     unique_name=identity_prototype.unique_name,
                     nickname=identity_prototype.nickname,
-                    metadata="{}")
+                    metadata={})
 
                 try:
                     identity = api.set_identity(identity)
