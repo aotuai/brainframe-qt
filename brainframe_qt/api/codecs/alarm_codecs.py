@@ -1,5 +1,5 @@
 from .base_codecs import Codec
-from .condition_codecs import ZoneAlarmCondition, ZoneAlarmRateCondition
+from .condition_codecs import ZoneAlarmCountCondition, ZoneAlarmRateCondition
 
 
 class ZoneAlarm(Codec):
@@ -17,7 +17,7 @@ class ZoneAlarm(Codec):
 
     def to_dict(self):
         d = dict(self.__dict__)
-        d["count_conditions"] = [ZoneAlarmCondition.to_dict(cond)
+        d["count_conditions"] = [ZoneAlarmCountCondition.to_dict(cond)
                                  for cond in self.count_conditions]
         d["rate_conditions"] = [ZoneAlarmRateCondition.to_dict(cond)
                                 for cond in self.rate_conditions]
@@ -26,7 +26,7 @@ class ZoneAlarm(Codec):
 
     @staticmethod
     def from_dict(d):
-        count_conditions = [ZoneAlarmCondition.from_dict(cond)
+        count_conditions = [ZoneAlarmCountCondition.from_dict(cond)
                             for cond in d["count_conditions"]]
         rate_conditions = [ZoneAlarmRateCondition.from_dict(cond)
                            for cond in d["rate_conditions"]]

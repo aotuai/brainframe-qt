@@ -10,7 +10,7 @@ from brainframe.client.api.codecs import (
     EngineConfiguration,
     Zone,
     ZoneAlarm,
-    ZoneAlarmCondition,
+    ZoneAlarmCountCondition,
     ZoneAlarmRateCondition
 )
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -69,7 +69,7 @@ class AlarmCreationDialog(QDialog):
             self.hide_rate_widgets(True)
             self._update_combo_box(
                 self.test_type_combo_box,
-                ZoneAlarmCondition.test_types)
+                ZoneAlarmCountCondition.test_types)
         if condition_type == self.ConditionType.rate:
             self.hide_count_widgets(True)
             self.hide_rate_widgets(False)
@@ -126,7 +126,7 @@ class AlarmCreationDialog(QDialog):
             else:
                 attribute = Attribute(category=category, value=behavior)
 
-            count_condition.append(ZoneAlarmCondition(
+            count_condition.append(ZoneAlarmCountCondition(
                 test=test_type,
                 check_value=count,
                 with_class_name=countable,
