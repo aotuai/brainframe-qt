@@ -35,10 +35,10 @@ class IdentityConfiguration(QWidget):
 
     def create_new_identities(self):
 
-        duplicate_identities: Set[str] = set()
-        missing_identities: Set[str] = set()
-        unencodable_class_types: Set[str] = set()
+        errors = defaultdict(set)
 
+        # Change the function called here to be different method of adding
+        # identities if desired
         for identity_prototype in self.get_new_identities_from_path():
 
             for class_name, images in identity_prototype.images.items():
@@ -55,7 +55,7 @@ class IdentityConfiguration(QWidget):
                         # Identity already exists
                         identity = api.get_identities(
                             unique_name=identity_prototype.unique_name)[0]
-                        duplicate_identities.add(identity.unique_name)
+                        errors[err.kind].add(identity.unique_name)
                     else:
                         # Re-raise other kinds of APIErrors
                         raise err
@@ -64,24 +64,12 @@ class IdentityConfiguration(QWidget):
                     try:
                         api.new_identity_image(identity.id, class_name, image)
                     except APIError as err:
-                        if err.kind == rest_errors.IDENTITY_NOT_FOUND:
-                            missing_identities.add(identity.unique_name)
-                        elif err.kind == rest_errors.NOT_ENCODABLE:
-                            unencodable_class_types.add(identity.unique_name)
-                        else:
-                            raise err  # Re-raise other kinds of APIErrors
+                        errors[err.kind].add(identity.unique_name)
 
-        # TODO: Popup message
-        if duplicate_identities:
-            print("The following identities already exist in database:",
-                  duplicate_identities)
-        if missing_identities:
-            print("The following images are missing identities "
-                  "(this should never happen):", missing_identities)
-        if unencodable_class_types:
-            # TODO: The actual class type causing issues
-            print("The following images have an unencodable class type:",
-                  unencodable_class_types)
+        # More detailed errors
+        for error, identities in errors.items():
+            print(f"Error `{error}` with the following identities:\n"
+                  f"    {identities}")
 
     @staticmethod
     def get_new_identities_from_path() -> List[IdentityPrototype]:
