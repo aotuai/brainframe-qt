@@ -75,7 +75,8 @@ class VideoThumbnailView(QWidget):
     @pyqtSlot(QAction)
     def create_new_stream_slot(self, action):
         stream_conf = StreamConfigurationDialog.configure_stream()
-        if stream_conf is None: return
+        if stream_conf is None:
+            return
         try:
             stream_conf = api.set_stream_configuration(stream_conf)
 
@@ -155,7 +156,13 @@ class VideoThumbnailView(QWidget):
             else:
                 # Hide rows that have nothing in them
                 self.main_layout.setRowStretch(row, 0)
-        for col in range(self.main_layout.columnCount()):
+
+        # Force the minimum number of shown columns to be equal to exactly
+        # self._grid_num_columns.
+        # If self._grid_num_columns > columnCount(), force show extra columns
+        # If self._grid_num_columns < columnCount(), force hide extra columns
+        num_cols = max(self.main_layout.columnCount(), self._grid_num_columns)
+        for col in range(num_cols):
             if col < self._grid_num_columns:
                 self.main_layout.setColumnStretch(col, 1)
             else:

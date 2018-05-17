@@ -33,9 +33,10 @@ class AlertLogEntry(QWidget):
 
         alert_start = datetime.fromtimestamp(self.start_time)
         alert_start = alert_start.strftime('%H:%M')
-        alert_end = ""
         if self.end_time is not None:
             alert_end = datetime.fromtimestamp(self.end_time)
             alert_end = " to " + alert_end.strftime('%H:%M')
+        else:
+            alert_end = "(Ongoing)"
         alert_time = alert_start + alert_end
         self.time_label.setText(alert_time)

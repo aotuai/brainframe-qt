@@ -139,6 +139,11 @@ class TaskConfiguration(QDialog):
         self.unconfirmed_zone_widget = self.zone_list.add_zone(
             self.unconfirmed_zone)
 
+        # Allow delete button on new zone widget in zone list to cancel the new
+        # zone
+        self.unconfirmed_zone_widget.zone_deleted_signal.connect(
+            self.new_region_canceled)
+
         # Instruct the VideoTaskConfig instance to start accepting mouseEvents
         self.video_task_config.start_new_polygon(max_points)
 

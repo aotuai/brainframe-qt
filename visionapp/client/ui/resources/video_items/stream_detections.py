@@ -21,7 +21,8 @@ class DetectionPolygon(StreamPolygon):
     MAX_SECONDS_OLD = 1.5
     """After a certain amount of time, the detection will be transparent"""
 
-    def __init__(self, det: codecs.Detection, seconds_old=0, parent=None):
+    def __init__(self, det: codecs.Detection, attributes=set(), seconds_old=0,
+                 parent=None):
         """
         :param detection: The Detection object to render
         :param seconds_old: Fades the detection by a standard amount based on
@@ -44,10 +45,10 @@ class DetectionPolygon(StreamPolygon):
         # Create the description box
         top_left = det.coords[0]
         text = det.class_name
-        if len(det.attributes):
-
+        if len(attributes):
             attributes_str_list = [a.category + ": " + a.value
-                                    for a in det.attributes]
+                                   for a in det.attributes if
+                                   a.value in attributes]
             attributes_str_list.sort()
             text += "\n" + "\n".join(attributes_str_list)
 
@@ -62,8 +63,8 @@ class ZoneStatusPolygon(StreamPolygon):
     NORMAL_COLOR = QColor(0, 255, 125)
     ALERTING_COLOR = QColor(255, 125, 0)
 
-    def __init__(self, status: codecs.ZoneStatus, parent=None):
-
+    def __init__(self, status: codecs.ZoneStatus, *,
+                 border_thickness=1, parent=None):
 
         # Find the top-left point of the zone
         top_left = sorted(status.zone.coords,
@@ -73,20 +74,15 @@ class ZoneStatusPolygon(StreamPolygon):
         text = status.zone.name
         if len(status.zone.coords) == 2:
             # If the zone is a line
-            text = status.zone.name + "\nEntered: "
-            text += ", ".join([str(v) + " " + k + "s" * bool(v - 1)
-                               for k, v in status.total_entered.items()
-                               if v > 0])
-            text += "\nExited: "
-            text += ", ".join([str(v) + " " + k + "s" * bool(v - 1)
+            text = status.zone.name + "\nCrossed: "
+            text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
                                for k, v in status.total_exited.items()
                                if v > 0])
         else:
             # If the zone is a region
             counts = status.detection_counts
-            text += "\n" + "\n".join([str(v) + " " + k + "s" * bool(v - 1)
-                                      for k, v in
-                                      status.detection_counts.items()])
+            text += "\n" + "\n".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
+                                      for k, v in counts.items()])
         text = text.strip()
 
         if len(status.alerts):
@@ -103,7 +99,7 @@ class ZoneStatusPolygon(StreamPolygon):
         # Create the polygon
         super().__init__(points=status.zone.coords,
                          border_color=color,
-                         border_thickness=1,
+                         border_thickness=border_thickness,
                          border_linetype=Qt.DotLine,
                          opacity=opacity,
                          parent=parent)

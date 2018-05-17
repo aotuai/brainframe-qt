@@ -1,3 +1,4 @@
+from collections import defaultdict
 from time import time
 
 # noinspection PyUnresolvedReferences
@@ -122,19 +123,47 @@ class StreamWidget(QGraphicsView):
         for zone_status in statuses:
             if zone_status.zone.name == "Screen":
                 continue
-            self.scene().addItem(ZoneStatusPolygon(zone_status))
+            # Border thickness as % of screen size
+            border = self.scene().width() / 100
+            self.scene().addItem(ZoneStatusPolygon(zone_status,
+                                                   border_thickness=border))
 
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
         if not self.render_detections or not self.stream_is_up:
             return
 
-        # This function allows for fading out as well, though
+        statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
         tstamp, dets = self.status_poller.get_detections(self.stream_conf.id)
-        for det in dets:
-            age = time() - tstamp
-            polygon = DetectionPolygon(det, seconds_old=age)
-            self.scene().addItem(polygon)
+
+        for status in statuses:
+            interested_attributes = defaultdict(set)
+            for alarm in status.zone.alarms:
+                for condition in alarm.conditions:
+
+                    class_name = condition.with_class_name
+                    attribute = condition.with_attribute
+
+                    # Nothing to add if no attributes with alarm
+                    if attribute is None:
+                        continue
+
+                    interested_attributes[class_name].add(attribute.value)
+
+            for detection in status.detections:
+                attributes = set(
+                    attribute.value for attribute in detection.attributes)
+                class_name = detection.class_name
+                attributes_in_alarm = interested_attributes[class_name]
+
+                attributes_to_draw = attributes.intersection(
+                    attributes_in_alarm)
+
+                age = time() - tstamp  # Used for fading
+                polygon = DetectionPolygon(detection,
+                                           attributes=attributes_to_draw,
+                                           seconds_old=age)
+                self.scene().addItem(polygon)
 
     def change_stream(self, stream_conf):
         """Change the stream source of the video
@@ -186,8 +215,8 @@ class StreamWidget(QGraphicsView):
         """Returns True if there is an active stream that is giving frames
         at the moment."""
         return self.video_stream is not None \
-            and self.video_stream.is_initialized \
-            and self.video_stream.is_running
+               and self.video_stream.is_initialized \
+               and self.video_stream.is_running
 
     @pyqtProperty(int)
     def frame_rate(self):
@@ -223,10 +252,8 @@ class StreamWidget(QGraphicsView):
             self.fitInView(self.current_frame.boundingRect(),
                            Qt.KeepAspectRatio)
 
-
         # This was removed because we don't want labels to expand curr scene
         # EXTREMELY IMPORTANT LINE!
-            # The sceneRect grows but never shrinks automatically
+        # The sceneRect grows but never shrinks automatically
         # self.scene().setSceneRect(self.scene().itemsBoundingRect())
         # self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
-
