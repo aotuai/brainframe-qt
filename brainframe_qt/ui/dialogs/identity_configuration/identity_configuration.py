@@ -10,9 +10,9 @@ from PyQt5.uic import loadUi
 from .directory_selector import DirectorySelector
 from .identity_error_popup import IdentityError, IdentityErrorPopup
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.api import api, APIError
+from brainframe.client.api import api, api_errors
 from brainframe.client.api.codecs import Identity
-from brainframe.shared import rest_errors
+from brainframe.shared import error_kinds
 
 
 # TODO: Use @dataclass decorator in Python3.7
@@ -180,18 +180,16 @@ class ImageSenderWorker(QObject):
 
             try:
                 identity = api.set_identity(identity)
-            except APIError as err:
-                if err.kind == rest_errors.DUPLICATE_IDENTITY_NAME:
-                    # Identity already exists
-                    identity = api.get_identities(
-                        unique_name=identity_prototype.unique_name
-                    )[0]
+            except api_errors.DuplicateIdentityNameError:
+                # Identity already exists
+                identity = api.get_identities(
+                    unique_name=identity_prototype.unique_name
+                )[0]
 
-                    # This error is a warning. Don't show it to user
-                    pass
-
-                else:
-                    identity_error.error = err.kind
+                # This error is a warning. Don't show it to user
+                pass
+            except api_errors.BaseAPIError as err:
+                identity_error.error = err.kind
 
             for class_name, images in identity_prototype.images.items():
 
@@ -205,16 +203,16 @@ class ImageSenderWorker(QObject):
                             identity.id,
                             class_name,
                             image_bytes)
-                    except APIError as err:
-                        # We don't care about right the error/warning right now
-                        if err.kind == rest_errors.NOT_ENCODABLE \
-                                or err.kind == rest_errors.NOT_DETECTABLE:
-                            class_name_error.error = err.kind
-                        if err.kind != rest_errors.IMAGE_ALREADY_ENCODED:
-                            image_error = IdentityError(
-                                image_name.name,
-                                err.kind)
-                            class_name_error.children.add(image_error)
+                    except (api_errors.NoEncoderForClassError,
+                            api_errors.NotDetectableError) as err:
+                        class_name_error.error = err.kind
+                    except api_errors.ImageAlreadyEncodedError:
+                        pass
+                    except api_errors.BaseAPIError as err:
+                        image_error = IdentityError(
+                            image_name.name,
+                            err.kind)
+                        class_name_error.children.add(image_error)
 
                     processed_images += 1
                     self.update_progress_bar.emit(processed_images)
