@@ -28,18 +28,18 @@ class IdentityErrorPopup(QDialog):
 
             identity_tree_item = QTreeWidgetItem(
                 self.error_tree,
-                [identity_error.value, "", "", identity_error.error])
+                [identity_error.value, identity_error.error])
 
             for encoding_error in identity_error.children:
 
                 encoding_tree_item = QTreeWidgetItem(
                     identity_tree_item,
-                    ["", encoding_error.value, "", encoding_error.error])
+                    [encoding_error.value, encoding_error.error])
 
                 for image_error in encoding_error.children:
                     QTreeWidgetItem(
                         encoding_tree_item,
-                        ["", "", image_error.value, image_error.error])
+                        [image_error.value, image_error.error])
 
         self.error_tree.expandAll()
         self.error_tree.header().setSectionResizeMode(
