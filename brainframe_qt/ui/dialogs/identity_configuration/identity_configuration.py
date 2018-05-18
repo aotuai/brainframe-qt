@@ -1,7 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 import re
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set, Tuple, Union
 
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject, QThread
 from PyQt5.QtWidgets import QDialog
@@ -62,6 +62,10 @@ class IdentityConfiguration(QDialog):
         # identities if desired
         identity_prototypes, num_images = self.get_new_identities_from_path()
 
+        # User canceled
+        if identity_prototypes is None:
+            return
+
         self.thread.started.connect(
             lambda: self.worker.send_images(identity_prototypes))
         self.worker.done_sending.connect(self.images_done_sending)
@@ -78,20 +82,22 @@ class IdentityConfiguration(QDialog):
 
     @pyqtSlot()
     def images_done_sending(self):
-        print("ending thread")
         self.thread.quit()
         self.progress_bar.setHidden(True)
 
     @classmethod
-    def get_new_identities_from_path(cls) -> Tuple[List[IdentityPrototype],
-                                                   int]:
+    def get_new_identities_from_path(cls) \
+            -> Tuple[Union[None, List[IdentityPrototype]], int]:
         """Get a list of IdentityPrototypes for sending to server, and the total
         number of images
 
         :returns Tuple[List[IdentityPrototype], int]
         """
-
         path = DirectorySelector().get_path()
+
+        # User canceled
+        if path is None:
+            return None, 0
 
         num_images = cls.verify_directory_structure(path)
 
