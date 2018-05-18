@@ -1,7 +1,10 @@
 import logging
+from typing import Union, List, Dict
+from io import BytesIO
+
 import requests
 import ujson
-from typing import Union, List, Dict
+from PIL import Image
 
 from brainframe.shared.singleton import Singleton
 from brainframe.shared.stream_capture import StreamReader
@@ -293,7 +296,26 @@ class API(metaclass=Singleton):
         :return: The image ID
         """
         req = f"/api/identities/{identity_id}/classes/{class_name}/images"
-        image_id = self._put_raw(req, image)
+
+        # Try to figure out the image type. If we can't figure it out, send it
+        # as raw data to the server in case the server supports it
+
+        try:
+            pil_image = Image.open(BytesIO(image))
+
+            if pil_image.format == "JPEG":
+                mime_type = "image/jpeg"
+            elif pil_image.format == "PNG":
+                mime_type = "image/png"
+            else:
+                mime_type = "application/octet-stream"
+        except IOError:
+            # TODO(Tyler Compton): This failure mode is stupid but I don't want
+            # two ways for this call to fail when an invalid image is passed to
+            # it. Figure out a better way.
+            mime_type = "application/octet-stream"
+
+        image_id = self._put_raw(req, image, mime_type)
         return image_id
 
     def get_identity_image(self, identity_id: int, class_name: str,
@@ -347,13 +369,16 @@ class API(metaclass=Singleton):
 
         return resp.content
 
-    def _put_raw(self, api_url, data: bytes):
+    def _put_raw(self, api_url, data: bytes, content_type: str):
         """Send a PUT request to the given URL.
         :param api_url: The /api/blah/blah to append to the base url
         :param data: The raw data to send
+        :param content_type: The mime type of the data being sent
         :return: The JSON response as a dict, or None of none was sent
         """
-        resp = self.put(self._full_url(api_url), data=data)
+        resp = self.put(self._full_url(api_url),
+                        data=data,
+                        headers={'content-type': content_type})
         if not resp.ok:
             raise APIError(resp.content)
 
