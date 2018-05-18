@@ -61,7 +61,6 @@ class DetectionPolygon(StreamPolygon):
                                         top_left=top_left,
                                         parent=self)
 
-
 class ZoneStatusPolygon(StreamPolygon):
     """Render a ZoneStatus's Zone along with information about the Zone
     Status"""
