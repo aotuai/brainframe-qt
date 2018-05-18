@@ -102,10 +102,10 @@
   </action>
   <action name="add_identity_action">
    <property name="text">
-    <string>Add Identities</string>
+    <string>Identity Configuration</string>
    </property>
    <property name="toolTip">
-    <string>Add new identities</string>
+    <string>Configure identities</string>
    </property>
   </action>
  </widget>
