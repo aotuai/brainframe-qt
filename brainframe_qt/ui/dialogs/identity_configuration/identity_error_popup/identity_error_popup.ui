@@ -59,7 +59,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Errors encountered during idendity creation:</string>
+      <string>Errors encountered during identity creation:</string>
      </property>
     </widget>
    </item>
