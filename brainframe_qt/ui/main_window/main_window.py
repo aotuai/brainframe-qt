@@ -62,5 +62,5 @@ class MainWindow(QMainWindow):
         self.video_thumbnail_view.new_stream_widget(stream_conf)
 
     @pyqtSlot()
-    def new_identity(self):
-        IdentityConfiguration().create_new_identities()
+    def show_identities_dialog(self):
+        IdentityConfiguration.show_dialog()

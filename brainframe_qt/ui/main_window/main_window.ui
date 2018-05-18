@@ -223,7 +223,7 @@
    <sender>add_identity_action</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>new_identity()</slot>
+   <slot>show_identities_dialog()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -239,7 +239,7 @@
  <slots>
   <slot>show_video_expanded_view()</slot>
   <slot>hide_video_expanded_view()</slot>
-  <slot>new_identity()</slot>
+  <slot>show_identities_dialog()</slot>
   <slot>new_stream()</slot>
  </slots>
 </ui>

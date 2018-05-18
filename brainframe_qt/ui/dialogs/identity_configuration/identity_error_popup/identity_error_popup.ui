@@ -31,6 +31,9 @@
      <attribute name="headerCascadingSectionResizes">
       <bool>true</bool>
      </attribute>
+     <attribute name="headerStretchLastSection">
+      <bool>false</bool>
+     </attribute>
      <column>
       <property name="text">
        <string>Unique ID</string>

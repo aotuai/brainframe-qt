@@ -1,6 +1,6 @@
 from typing import Set
 
-from PyQt5.QtWidgets import QDialog, QTreeWidgetItem
+from PyQt5.QtWidgets import QDialog, QHeaderView, QTreeWidgetItem
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -42,6 +42,8 @@ class IdentityErrorPopup(QDialog):
                         ["", "", image_error.value, image_error.error])
 
         self.error_tree.expandAll()
+        self.error_tree.header().setSectionResizeMode(
+            QHeaderView.ResizeToContents)
 
     @classmethod
     def show_errors(cls, errors: Set[IdentityError]):
