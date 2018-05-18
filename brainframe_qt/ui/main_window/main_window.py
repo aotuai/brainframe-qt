@@ -2,13 +2,12 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from PyQt5.uic import loadUi
 
-from brainframe.client.api import api, APIError
+from brainframe.client.api import api, api_errors
 from brainframe.client.ui.dialogs import (
     StreamConfigurationDialog,
     IdentityConfiguration
 )
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.shared import rest_errors
 
 
 class MainWindow(QMainWindow):
@@ -42,20 +41,20 @@ class MainWindow(QMainWindow):
             # Currently, we default to setting all new streams as 'active'
             api.start_analyzing(stream_conf.id)
 
-        except APIError as err:
+        except api_errors.DuplicateStreamSourceError as err:
+            message = "<b>Stream source already open</b>" \
+                      "<br><br>" \
+                      "You already have the stream source open.<br><br>" \
+                      "Error: <b>" + err.kind + "</b>"
 
-            if err.kind == rest_errors.DUPLICATE_STREAM_SOURCE:
-                message = "<b>Stream source already open</b>" \
-                          "<br><br>" \
-                          "You already have the stream source open.<br><br>" \
-                          "Error: <b>" + err.kind + "</b>"
-            else:
-                message = "<b>Error encountered while opening stream</b>" \
-                          "<br><br>" \
-                          "Is stream already open?<br>" \
-                          "Is this a valid stream source?<br><br>" \
-                          "Error: <b>" + err.kind + "</b>"
-
+            QMessageBox.information(self, "Error Opening Stream", message)
+            return
+        except api_errors.BaseAPIError as err:
+            message = "<b>Error encountered while opening stream</b>" \
+                      "<br><br>" \
+                      "Is stream already open?<br>" \
+                      "Is this a valid stream source?<br><br>" \
+                      "Error: <b>" + err.kind + "</b>"
             QMessageBox.information(self, "Error Opening Stream", message)
             return
 

@@ -17,40 +17,31 @@ from brainframe.client.api.codecs import (
     ZoneStatus,
     Identity
 )
+from brainframe.client.api import api_errors
 from brainframe.client.api.streaming import StreamManager
-from brainframe.shared import rest_errors
+from brainframe.shared import error_kinds
 from brainframe.client.api.streaming import StatusPoller
 
 
-class APIError(Exception):
-    """Raised when a failure happens while communicating with the server."""
+def _make_api_error(resp_content):
+    """Makes the corresponding error for this response.
 
-    def __init__(self, resp):
-        """Create a new APIError.
-        :param resp: The error response as encoded JSON
-        """
-        if len(resp) == 0:
-            self._kind = "Unknown kind"
-            self._description = ""
-        else:
-            resp = ujson.loads(resp)
-            self._kind = resp["title"]
-            if "description" in resp:
-                self._description = resp["description"]
-            else:
-                self._description = ""
+    :param resp_content: The HTTP response to inspect for info
+    :return: An error that can be thrown describing this failure
+    """
+    if len(resp_content) == 0:
+        kind = error_kinds.UNKNOWN
+        description = ("A failure happened but the server did not respond "
+                       "with a proper error")
+    else:
+        resp_content = ujson.loads(resp_content)
+        kind = resp_content["title"]
+        description = resp_content["description"]
 
-        super().__init__("{kind}: {description}".format(
-            kind=self._kind,
-            description=self._description))
-
-    @property
-    def kind(self):
-        """Return the type of error this is. Refer to rest_errors.py for what
-        types are available.
-        :return: Type of error
-        """
-        return self._kind
+    if kind not in api_errors.kind_to_error_type:
+        return api_errors.UnknownError(description)
+    else:
+        return api_errors.kind_to_error_type[kind](description)
 
 
 class API(metaclass=Singleton):
@@ -127,12 +118,9 @@ class API(metaclass=Singleton):
         req = f"/api/streams/{stream_id}/url"
         try:
             url = self._get(req)
-        except APIError as e:
-            if e.kind == rest_errors.STREAM_NOT_FOUND:
-                logging.warning("API: Requested stream that doesn't exist!")
-                return None
-            else:
-                raise
+        except api_errors.StreamNotFoundError:
+            logging.warning("API: Requested stream that doesn't exist!")
+            return None
 
         logging.info("API: Opening stream on url" + url)
         return self._stream_manager.get_stream(url)
@@ -350,7 +338,7 @@ class API(metaclass=Singleton):
         """
         resp = self.get(self._full_url(api_url), params=params)
         if not resp.ok:
-            raise APIError(resp.content)
+            raise _make_api_error(resp.content)
 
         if resp.content:
             return ujson.loads(resp.content)
@@ -365,7 +353,7 @@ class API(metaclass=Singleton):
         """
         resp = self.get(self._full_url(api_url), params=params)
         if not resp.ok:
-            raise APIError(resp.content)
+            raise _make_api_error(resp.content)
 
         return resp.content
 
@@ -380,7 +368,7 @@ class API(metaclass=Singleton):
                         data=data,
                         headers={'content-type': content_type})
         if not resp.ok:
-            raise APIError(resp.content)
+            raise _make_api_error(resp.content)
 
         if resp.content:
             return ujson.loads(resp.content)
@@ -395,7 +383,7 @@ class API(metaclass=Singleton):
         data = codec.to_json()
         resp = self.put(self._full_url(api_url), data=data)
         if not resp.ok:
-            raise APIError(resp.content)
+            raise _make_api_error(resp.content)
 
         if resp.content:
             return ujson.loads(resp.content)
@@ -409,7 +397,7 @@ class API(metaclass=Singleton):
         """
         resp = self.put(self._full_url(api_url), data=json)
         if not resp.ok:
-            raise APIError(resp.content)
+            raise _make_api_error(resp.content)
 
         if resp.content:
             return ujson.loads(resp.content)
@@ -424,7 +412,7 @@ class API(metaclass=Singleton):
         """
         resp = self.delete(self._full_url(api_url), params=params)
         if not resp.ok:
-            raise APIError(resp.content)
+            raise _make_api_error(resp.content)
 
         if resp.content:
             return ujson.loads(resp.content)
