@@ -36,6 +36,12 @@ identity_configuration_ui  = route_path(identity_configuration_dir, "identity_co
 directory_selector_dir     = route_path(identity_configuration_dir, "directory_selector"       )
 directory_selector_ui      = route_path(directory_selector_dir    , "directory_selector.ui"    )
 
+identity_error_popup_dir   = route_path(identity_configuration_dir, "identity_error_popup"     )
+identity_error_popup_ui    = route_path(identity_error_popup_dir  , "identity_error_popup.ui"  )
+
+tree_widget_dir            = route_path(identity_error_popup_dir  , "tree_widget"              )
+tree_widget_ui             = route_path(tree_widget_dir           , "tree_widget.ui"                 )
+
 license_agreement_dir      = route_path(dialogs_dir               , "license_agreement"        )
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
 
