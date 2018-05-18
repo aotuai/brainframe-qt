@@ -35,7 +35,7 @@ class IdentityConfiguration(QDialog):
 
         loadUi(qt_ui_paths.identity_configuration_ui, self)
 
-        # self.progress_bar.setHidden(True)
+        self.progress_bar.setHidden(True)
 
         self.worker: ImageSenderWorker = None
         self.thread: QThread = None
@@ -52,7 +52,7 @@ class IdentityConfiguration(QDialog):
 
         # Create thread to send images
         self.worker = ImageSenderWorker()
-        self.thread = QThread()
+        self.thread = QThread(self)
         self.thread.setObjectName("ImageSenderWorkerThread")
         self.worker.moveToThread(self.thread)
         self.worker.update_progress_bar.connect(self.update_progress_bar)
@@ -62,10 +62,14 @@ class IdentityConfiguration(QDialog):
         # identities if desired
         identity_prototypes, num_images = self.get_new_identities_from_path()
 
-        self.worker.send_images(identity_prototypes)
+        self.thread.started.connect(
+            lambda: self.worker.send_images(identity_prototypes))
+        self.worker.done_sending.connect(self.images_done_sending)
+
+        self.thread.start()
 
         # Set max value for progress bar
-        # self.progress_bar.setHidden(False)
+        self.progress_bar.setHidden(False)
         self.progress_bar.setMaximum(num_images)
 
     @pyqtSlot(int)
@@ -76,6 +80,7 @@ class IdentityConfiguration(QDialog):
     def images_done_sending(self):
         print("ending thread")
         self.thread.quit()
+        self.progress_bar.setHidden(True)
 
     @classmethod
     def get_new_identities_from_path(cls) -> Tuple[List[IdentityPrototype],
