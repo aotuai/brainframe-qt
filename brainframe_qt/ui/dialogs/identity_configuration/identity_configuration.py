@@ -12,7 +12,6 @@ from .identity_error_popup import IdentityError, IdentityErrorPopup
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.api import api, api_errors
 from brainframe.client.api.codecs import Identity
-from brainframe.shared import error_kinds
 
 
 # TODO: Use @dataclass decorator in Python3.7
