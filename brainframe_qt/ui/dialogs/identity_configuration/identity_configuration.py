@@ -121,19 +121,23 @@ class IdentityConfiguration(QDialog):
         if path is None:
             return None, 0
 
+        # TODO: Error is excessively vague. Should absolutely be within the function
         try:
             num_images = cls.verify_directory_structure(path)
-        except ValueError as e:
+        except ValueError as err:
             error_dialog = QMessageBox()
             error_dialog.setIcon(QMessageBox.Critical)
             error_dialog.setWindowTitle("Invalid Format")
-            error_dialog.setText("Unable to parse this directory!\n\n"
-                                 "Reason: " + str(e) +
-                                 "\n\nRead the manual to learn about the"
-                                 " required directory structure.")
+
+            # TODO: Use fstrings
+            error_dialog.setText(f"Unable to parse this directory!\n\n"
+                                 f"Reason:\n"
+                                 f"{err}\n\n"
+                                 f"Read the manual to learn about the required " 
+                                 f"directory structure.")
             print("Error")
             error_dialog.exec_()
-            return None, None
+            return None, 0
 
         identity_prototypes: List[IdentityPrototype] = []
 
@@ -143,15 +147,20 @@ class IdentityConfiguration(QDialog):
         for identity_dir in path.iterdir():
             identity_prototype = IdentityPrototype()
 
-            match = re.search(r"(.*?)\s*\((.*)\)$", identity_dir.name)
+            # TODO: Better regex to avoid if-else
+            if '(' not in identity_dir.name:
+                identity_prototype.unique_name = identity_dir.name
+                identity_prototype.nickname = ""
+            else:
+                match = re.search(r"(.+)\s*\((.*)\)", identity_dir.name)
 
-            # TODO: Warn
-            if not match:
-                print("Unknown file", identity_dir)
-                continue
+                # TODO: Warn
+                if not match:
+                    print("Unknown file", identity_dir)
+                    continue
 
-            identity_prototype.unique_name = match[1]
-            identity_prototype.nickname = match[2]
+                identity_prototype.unique_name = match[1]
+                identity_prototype.nickname = match[2]
 
             # Iterate over encoding class types
             for class_dir in identity_dir.iterdir():
