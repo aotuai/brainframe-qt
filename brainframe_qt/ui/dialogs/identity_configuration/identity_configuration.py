@@ -4,7 +4,7 @@ import re
 from typing import Dict, List, Set, Tuple, Union
 
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QObject, QThread
-from PyQt5.QtWidgets import QDialog, QTreeWidgetItem
+from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QMessageBox
 from PyQt5.uic import loadUi
 
 from .directory_selector import DirectorySelector
@@ -28,7 +28,6 @@ class IdentityPrototype:
 
 
 class IdentityConfiguration(QDialog):
-
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
@@ -90,7 +89,7 @@ class IdentityConfiguration(QDialog):
         if not identity_tree_item:
             QTreeWidgetItem(self.identity_tree, [unique_name])
 
-        # TODO: Encodings and images
+            # TODO: Encodings and images
 
     @pyqtSlot(int)
     def update_progress_bar(self, value):
@@ -122,7 +121,19 @@ class IdentityConfiguration(QDialog):
         if path is None:
             return None, 0
 
-        num_images = cls.verify_directory_structure(path)
+        try:
+            num_images = cls.verify_directory_structure(path)
+        except ValueError as e:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Critical)
+            error_dialog.setWindowTitle("Invalid Format")
+            error_dialog.setText("Unable to parse this directory!\n\n"
+                                 "Reason: " + str(e) +
+                                 "\n\nRead the manual to learn about the"
+                                 " required directory structure.")
+            print("Error")
+            error_dialog.exec_()
+            return None, None
 
         identity_prototypes: List[IdentityPrototype] = []
 
@@ -190,7 +201,6 @@ class IdentityConfiguration(QDialog):
 
 
 class ImageSenderWorker(QObject):
-
     update_tree_view = pyqtSignal(str, str, str)
     update_progress_bar = pyqtSignal(int)
     done_sending = pyqtSignal()
