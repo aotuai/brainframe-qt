@@ -48,7 +48,10 @@ class DetectionPolygon(StreamPolygon):
 
         # Add "Identity" to the description box
         if det.with_identity is not None:
-            text += "\n" + "Name: " + det.with_identity.nickname
+            if det.with_identity.nickname is not None:
+                text += "\n" + "Name: " + det.with_identity.nickname
+            else:
+                text += "\n" + "Name: " + det.with_identity.unique_name
 
         if len(attributes):
             attributes_str_list = [a.category + ": " + a.value
