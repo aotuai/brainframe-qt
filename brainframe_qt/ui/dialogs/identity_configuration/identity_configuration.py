@@ -3,8 +3,8 @@ from pathlib import Path
 import re
 from typing import Dict, List, Set, Tuple, Union
 
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject, QThread
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QObject, QThread
+from PyQt5.QtWidgets import QDialog, QTreeWidgetItem
 from PyQt5.uic import loadUi
 
 from .directory_selector import DirectorySelector
@@ -41,6 +41,8 @@ class IdentityConfiguration(QDialog):
 
         self.add_identities_button.clicked.connect(self.create_new_identities)
 
+        self.add_db_identities_to_tree()
+
     @classmethod
     def show_dialog(cls):
 
@@ -68,12 +70,27 @@ class IdentityConfiguration(QDialog):
         self.thread.started.connect(
             lambda: self.worker.send_images(identity_prototypes))
         self.worker.done_sending.connect(self.images_done_sending)
+        self.worker.update_tree_view.connect(self.update_tree_view)
 
         self.thread.start()
 
         # Set max value for progress bar
         self.progress_bar.setHidden(False)
         self.progress_bar.setMaximum(num_images)
+
+    @pyqtSlot(str, str, str)
+    def update_tree_view(self, unique_name, class_name, image_name):
+
+        print(unique_name, class_name, image_name)
+
+        identity_tree_item = self.identity_tree.findItems(
+            unique_name,
+            Qt.MatchExactly)
+
+        if not identity_tree_item:
+            QTreeWidgetItem(self.identity_tree, [unique_name])
+
+        # TODO: Encodings and images
 
     @pyqtSlot(int)
     def update_progress_bar(self, value):
@@ -83,6 +100,13 @@ class IdentityConfiguration(QDialog):
     def images_done_sending(self):
         self.thread.quit()
         self.progress_bar.setHidden(True)
+
+    def add_db_identities_to_tree(self):
+
+        identities = api.get_identities()
+
+        for identity in identities:
+            QTreeWidgetItem(self.identity_tree, [identity.unique_name])
 
     @classmethod
     def get_new_identities_from_path(cls) \
@@ -167,6 +191,7 @@ class IdentityConfiguration(QDialog):
 
 class ImageSenderWorker(QObject):
 
+    update_tree_view = pyqtSignal(str, str, str)
     update_progress_bar = pyqtSignal(int)
     done_sending = pyqtSignal()
 
@@ -208,20 +233,26 @@ class ImageSenderWorker(QObject):
                 class_name_error = IdentityError(class_name)
 
                 for image_name, image_bytes in images:
+
                     try:
                         api.new_identity_image(
                             identity.id,
                             class_name,
                             image_bytes)
+
+                        # Update UI's tree view if successful
+                        self.update_tree_view.emit(
+                            identity.unique_name,
+                            class_name,
+                            image_name.name)
+
                     except (api_errors.NoEncoderForClassError,
                             api_errors.NotDetectableError) as err:
                         class_name_error.error = err.kind
                     except api_errors.ImageAlreadyEncodedError:
                         pass
                     except api_errors.BaseAPIError as err:
-                        image_error = IdentityError(
-                            image_name.name,
-                            err.kind)
+                        image_error = IdentityError(image_name.name, err.kind)
                         class_name_error.children.add(image_error)
 
                     processed_images += 1
