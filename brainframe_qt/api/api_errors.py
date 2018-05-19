@@ -218,7 +218,7 @@ class TooManyDetectionsInImageError(BaseAPIError):
     given class in the frame, causing ambiguity on which one to encode.
     """
     def __init__(self, description):
-        super().__init__(error_kinds.IMAGE_NOT_FOUND_FOR_IDENTITY, description)
+        super().__init__(error_kinds.TOO_MANY_DETECTIONS_IN_IMAGE, description)
 
 
 kind_to_error_type[error_kinds.TOO_MANY_DETECTIONS_IN_IMAGE] = \
