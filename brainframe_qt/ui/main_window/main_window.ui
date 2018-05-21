@@ -90,7 +90,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="add_stream_action"/>
-   <addaction name="add_identity_action"/>
+   <addaction name="configure_identity_action"/>
   </widget>
   <action name="add_stream_action">
    <property name="text">
@@ -100,7 +100,7 @@
     <string>Click here to add a new stream source!</string>
    </property>
   </action>
-  <action name="add_identity_action">
+  <action name="configure_identity_action">
    <property name="text">
     <string>Identity Configuration</string>
    </property>
@@ -210,8 +210,8 @@
    <slot>new_stream()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>20</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>522</x>
@@ -220,7 +220,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>add_identity_action</sender>
+   <sender>configure_identity_action</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>show_identities_dialog()</slot>

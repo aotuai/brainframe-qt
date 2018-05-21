@@ -1,6 +1,7 @@
 import sys
 
 from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QMainWindow,
     QMessageBox,
@@ -15,7 +16,7 @@ from brainframe.client.ui.dialogs import (
     StreamConfigurationDialog,
     IdentityConfiguration
 )
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
 
 
 class MainWindow(QMainWindow):
@@ -25,6 +26,12 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
 
         loadUi(qt_ui_paths.main_window_ui, self).show()
+
+        # Add icons to buttons in toolbar
+        new_stream_icon = QIcon(str(image_paths.new_stream_icon))
+        configure_identities_icon = QIcon(str(image_paths.settings_gear_icon))
+        self.add_stream_action.setIcon(new_stream_icon)
+        self.configure_identity_action.setIcon(configure_identities_icon)
 
     @pyqtSlot()
     def show_video_expanded_view(self):
