@@ -7,7 +7,7 @@ import ujson
 from PIL import Image
 
 from brainframe.shared.singleton import Singleton
-from brainframe.shared.stream_capture import StreamReader
+from brainframe.client.api.streaming import SyncedStreamReader
 from brainframe.client.api.codecs import (
     Alert,
     Codec,
@@ -57,8 +57,9 @@ class API(metaclass=Singleton):
     def __init__(self, server_url=None):
         self._server_url = server_url
 
-        self._stream_manager = StreamManager()
+        # These are evaluated lazily
         self._status_poller = None
+        self._stream_manager = None
 
     def set_url(self, server_url):
         self._server_url = server_url
@@ -68,6 +69,12 @@ class API(metaclass=Singleton):
         if self._status_poller is None or not self._status_poller.is_running:
             self._status_poller = StatusPoller(self, 100)
         return self._status_poller
+
+    def get_stream_manager(self) -> StreamManager:
+        """Returns the singleton StreamManager object"""
+        if self._stream_manager is None:
+            self._stream_manager = StreamManager(self.get_status_poller())
+        return self._stream_manager
 
     # Stream Configuration
     def get_stream_configurations(self) -> List[StreamConfiguration]:
@@ -107,15 +114,15 @@ class API(metaclass=Singleton):
         self._delete(req)
 
     # Stream Controls
-    def get_stream_reader(self, stream_id) -> Union[None, StreamReader]:
-        """Get the StreamReader for the given stream_id.
-        :param stream_id: The ID of the stream configuration to open.
-        :return: A StreamReader object OR None, if the server was unable to
-        open a stream.
+    def get_stream_reader(self, stream_config: StreamConfiguration) \
+            -> Union[None, SyncedStreamReader]:
+        """Get the SyncedStreamReader for the given stream_id.
 
-        The server returns an HTTP internal server error if unable to open
+        :param stream_config: The stream configuration to open.
+        :return: A SyncedStreamReader object OR None, if the server was unable
+            to open a stream.
         """
-        req = f"/api/streams/{stream_id}/url"
+        req = f"/api/streams/{stream_config.id}/url"
         try:
             url = self._get(req)
         except api_errors.StreamNotFoundError:
@@ -123,7 +130,7 @@ class API(metaclass=Singleton):
             return None
 
         logging.info("API: Opening stream on url" + url)
-        return self._stream_manager.get_stream(url)
+        return self.get_stream_manager().get_stream(url, stream_config)
 
     # Setting server analysis tasks
     def start_analyzing(self, stream_id) -> bool:
@@ -326,7 +333,8 @@ class API(metaclass=Singleton):
         """Clean up the API. It may no longer be used after this call."""
         if self._status_poller is not None:
             self._status_poller.close()
-        self._stream_manager.close()
+        if self._stream_manager is not None:
+            self._stream_manager.close()
 
     # Private Functions
     def _get(self, api_url, params=None):

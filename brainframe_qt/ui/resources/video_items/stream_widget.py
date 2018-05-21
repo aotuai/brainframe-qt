@@ -83,17 +83,17 @@ class StreamWidget(QGraphicsView):
             self._set_frame(pixmap)
             return
 
-        timestamp, frame = self.video_stream.latest_frame_rgb
+        frame = self.video_stream.latest_processed_frame_rgb
+        if frame is not None:
+            # Don't render image if it hasn't changed
+            # if frame.tstamp <= self.timestamp:
+                # return
 
-        # Don't render image if it hasn't changed
-        if timestamp <= self.timestamp:
-            return
-
-        self.timestamp = timestamp
-        pixmap = self._get_pixmap_from_numpy_frame(frame)
-        self._set_frame(pixmap)
-        # TODO(Bryce Beagle): Use video_stream.is_running to stop widget if
-        # stream ends
+            self.timestamp = frame.tstamp
+            pixmap = self._get_pixmap_from_numpy_frame(frame.frame)
+            self._set_frame(pixmap)
+            # TODO(Bryce Beagle): Use video_stream.is_running to stop widget if
+            # stream ends
 
     def update_latest_zones(self):
         self.remove_items_by_type(ZoneStatusPolygon)
@@ -103,14 +103,13 @@ class StreamWidget(QGraphicsView):
             return
 
         # Add new StreamPolygons
-        statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
-
-        for zone_status in statuses:
-            if zone_status.zone.name == "Screen":
-                continue
+        frame = self.video_stream.latest_processed_frame_rgb
+        if frame is not None:
+            if frame.zone_status.zone.name == "Screen":
+                return
             # Border thickness as % of screen size
             border = self.scene().width() / 100
-            self.scene().addItem(ZoneStatusPolygon(zone_status,
+            self.scene().addItem(ZoneStatusPolygon(frame.zone_status,
                                                    border_thickness=border))
 
     def update_latest_detections(self):
@@ -118,12 +117,10 @@ class StreamWidget(QGraphicsView):
         if not self.render_detections or not self.stream_is_up:
             return
 
-        statuses = self.status_poller.get_latest_statuses(self.stream_conf.id)
-        tstamp, dets = self.status_poller.get_detections(self.stream_conf.id)
-
-        for status in statuses:
+        frame = self.video_stream.latest_processed_frame_rgb
+        if frame is not None:
             interested_attributes = defaultdict(set)
-            for alarm in status.zone.alarms:
+            for alarm in frame.zone_status.zone.alarms:
                 for condition in alarm.count_conditions:
 
                     class_name = condition.with_class_name
@@ -135,7 +132,7 @@ class StreamWidget(QGraphicsView):
 
                     interested_attributes[class_name].add(attribute.value)
 
-            for detection in status.detections:
+            for detection in frame.zone_status.detections:
                 attributes = set(
                     attribute.value for attribute in detection.attributes)
                 class_name = detection.class_name
@@ -144,7 +141,7 @@ class StreamWidget(QGraphicsView):
                 attributes_to_draw = attributes.intersection(
                     attributes_in_alarm)
 
-                age = time() - tstamp  # Used for fading
+                age = time() - frame.tstamp  # Used for fading
                 polygon = DetectionPolygon(detection,
                                            attributes=attributes_to_draw,
                                            seconds_old=age)
@@ -164,7 +161,7 @@ class StreamWidget(QGraphicsView):
             self._set_frame(QPixmap(str(image_paths.video_not_found)))
             self.frame_update_timer.stop()
         else:
-            self.video_stream = api.get_stream_reader(stream_conf.id)
+            self.video_stream = api.get_stream_reader(stream_conf)
             self.frame_update_timer.start(1000 // self._frame_rate)
 
     def set_render_settings(self, *, detections=None, zones=None):
@@ -236,9 +233,3 @@ class StreamWidget(QGraphicsView):
             self.scene().setSceneRect(self.current_frame.boundingRect())
             self.fitInView(self.current_frame.boundingRect(),
                            Qt.KeepAspectRatio)
-
-        # This was removed because we don't want labels to expand curr scene
-        # EXTREMELY IMPORTANT LINE!
-        # The sceneRect grows but never shrinks automatically
-        # self.scene().setSceneRect(self.scene().itemsBoundingRect())
-        # self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
