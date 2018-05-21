@@ -17,9 +17,7 @@ class IdentityError:
 
 class IdentityErrorPopup(QDialog):
 
-    def __init__(self,
-                 errors: Set[IdentityError],
-                 parent=None):
+    def __init__(self, errors: Set[IdentityError], parent=None):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.identity_error_popup_ui, self)
