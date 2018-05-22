@@ -117,4 +117,3 @@ class MainWindow(QMainWindow):
 
 
 sys.excepthook = MainWindow.excepthook
-
