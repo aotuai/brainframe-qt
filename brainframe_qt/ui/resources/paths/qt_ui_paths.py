@@ -27,6 +27,9 @@ new_stream_button_ui       = route_path(new_stream_button_dir     , "new_stream_
 # Dialogs
 dialogs_dir                = route_path(ui_dir                    , "dialogs"                  )
 
+about_page_dir             = route_path(dialogs_dir               , "about_page"               )
+about_page_ui              = route_path(about_page_dir            , "about_page.ui"            )
+
 alarm_creation_dir         = route_path(dialogs_dir               , "alarm_creation"           )
 alarm_creation_ui          = route_path(alarm_creation_dir        , "alarm_creation.ui"        )
 
