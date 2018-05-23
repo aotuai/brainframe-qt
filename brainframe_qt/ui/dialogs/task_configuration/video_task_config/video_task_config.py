@@ -109,10 +109,11 @@ class VideoTaskConfig(StreamWidget):
 
             points.append((mouse_pos.x(), mouse_pos.y()))
 
-            preview_polygon = StreamPolygon(points,
-                                            opacity=.25,
-                                            border_thickness=self.scene().width() / 100,
-                                            border_color=QColor(50, 255, 50))
+            preview_polygon = StreamPolygon(
+                points,
+                opacity=.25,
+                border_thickness=self.scene().width() / 200,
+                border_color=QColor(50, 255, 50))
 
             # Draw preview polygon
             self.scene().addItem(preview_polygon)
@@ -121,7 +122,7 @@ class VideoTaskConfig(StreamWidget):
         self.set_render_settings(zones=False)
         self.setMouseTracking(True)  # Allow for realtime zone updating
         self.unconfirmed_polygon = StreamPolygon(
-            border_thickness=self.scene().width() / 100,
+            border_thickness=self.scene().width() / 200,
             border_color=QColor(50, 255, 50))
         self.max_points = max_points
 

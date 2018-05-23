@@ -108,7 +108,7 @@ class StreamWidget(QGraphicsView):
             for zone_status in frame.zone_statuses:
                 if zone_status.zone.name != "Screen":
                     # Border thickness as % of screen size
-                    border = self.scene().width() / 100
+                    border = self.scene().width() / 200
                     self.scene().addItem(ZoneStatusPolygon(
                         zone_status, border_thickness=border))
 

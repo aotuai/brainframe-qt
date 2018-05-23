@@ -4,9 +4,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
 from brainframe.client.api import codecs
-from brainframe.client.ui.resources.video_items import StreamPolygon
-from brainframe.client.ui.resources.video_items.stream_polygon import \
-    StreamLabelBox
+from brainframe.client.ui.resources.video_items import (
+    StreamLabelBox,
+    StreamPolygon
+)
 
 
 def generate_unique_qcolor(name: str):
@@ -63,6 +64,7 @@ class DetectionPolygon(StreamPolygon):
         self.label_box = StreamLabelBox(text,
                                         top_left=top_left,
                                         parent=self)
+
 
 class ZoneStatusPolygon(StreamPolygon):
     """Render a ZoneStatus's Zone along with information about the Zone
