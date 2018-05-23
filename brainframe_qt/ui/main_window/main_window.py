@@ -31,8 +31,10 @@ class MainWindow(QMainWindow):
         # Add icons to buttons in toolbar
         new_stream_icon = QIcon(str(image_paths.new_stream_icon))
         configure_identities_icon = QIcon(str(image_paths.settings_gear_icon))
+        about_page_icon = QIcon(str(image_paths.information_icon))
         self.add_stream_action.setIcon(new_stream_icon)
         self.configure_identity_action.setIcon(configure_identities_icon)
+        self.show_about_page_action.setIcon(about_page_icon)
 
     @pyqtSlot()
     def show_video_expanded_view(self):
