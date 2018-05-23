@@ -152,7 +152,7 @@ class IdentityConfiguration(QDialog):
                 identity_prototype.unique_name = identity_dir.name
                 identity_prototype.nickname = ""
             else:
-                match = re.search(r"(.+)\s*\((.*)\)", identity_dir.name)
+                match = re.search(r"(.+?)\s*\((.*)\)", identity_dir.name)
 
                 # TODO: Warn
                 if not match:
