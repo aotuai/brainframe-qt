@@ -110,12 +110,27 @@
      </item>
      <item>
       <layout class="QGridLayout" name="if_layout">
-       <item row="0" column="4">
-        <widget class="QComboBox" name="behavior_combo_box">
-         <property name="sizeAdjustPolicy">
-          <enum>QComboBox::AdjustToMinimumContentsLength</enum>
-         </property>
+       <item row="0" column="6">
+        <widget class="QComboBox" name="direction_combo_box">
+         <item>
+          <property name="text">
+           <string>enter</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>exit</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>enter/exit</string>
+          </property>
+         </item>
         </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QSpinBox" name="count_spin_box"/>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="if_label">
@@ -136,10 +151,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QSpinBox" name="count_spin_box"/>
-       </item>
-       <item row="0" column="3">
+       <item row="0" column="4">
         <widget class="QComboBox" name="countable_combo_box"/>
        </item>
        <item row="0" column="1">
@@ -153,22 +165,10 @@
         </widget>
        </item>
        <item row="0" column="5">
-        <widget class="QComboBox" name="direction_combo_box">
-         <item>
-          <property name="text">
-           <string>enter</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>exit</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>enter/exit</string>
-          </property>
-         </item>
+        <widget class="QComboBox" name="behavior_combo_box">
+         <property name="sizeAdjustPolicy">
+          <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+         </property>
         </widget>
        </item>
       </layout>
@@ -376,7 +376,6 @@
   <tabstop>test_type_combo_box</tabstop>
   <tabstop>count_spin_box</tabstop>
   <tabstop>countable_combo_box</tabstop>
-  <tabstop>behavior_combo_box</tabstop>
   <tabstop>zone_combo_box</tabstop>
   <tabstop>start_time_edit</tabstop>
   <tabstop>stop_time_edit</tabstop>
