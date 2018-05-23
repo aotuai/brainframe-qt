@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1045</width>
+    <height>658</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dilili BrainFrame</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="main_layout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <layout class="QHBoxLayout" name="video_layout" stretch="2,0">
+      <item>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
+        <property name="midLineWidth">
+         <number>4</number>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="video_thumbnail_view_widget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>971</width>
+           <height>614</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="VideoThumbnailView" name="video_thumbnail_view"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="VideoExpandedView" name="video_expanded_view"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="tool_bar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="add_stream_action"/>
+   <addaction name="configure_identity_action"/>
+   <addaction name="show_about_page_action"/>
+  </widget>
+  <action name="add_stream_action">
+   <property name="text">
+    <string>Add Stream</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to add a new stream source!</string>
+   </property>
+  </action>
+  <action name="configure_identity_action">
+   <property name="text">
+    <string>Identity Configuration</string>
+   </property>
+   <property name="toolTip">
+    <string>Configure identities</string>
+   </property>
+  </action>
+  <action name="show_about_page_action">
+   <property name="text">
+    <string>Licenses</string>
+   </property>
+   <property name="toolTip">
+    <string>Open source licenses</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VideoThumbnailView</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
+  </customwidget>
+  <customwidget>
+   <class>VideoExpandedView</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_expanded_view.video_expanded_view</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>video_expanded_view</sender>
+   <signal>expanded_stream_closed_signal()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hide_video_expanded_view()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1043</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>753</x>
+     <y>3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>video_thumbnail_view</sender>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>video_expanded_view</receiver>
+   <slot>open_expanded_view_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>312</x>
+     <y>135</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1043</x>
+     <y>121</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>video_expanded_view</sender>
+   <signal>expanded_stream_closed_signal()</signal>
+   <receiver>video_thumbnail_view</receiver>
+   <slot>expand_thumbnail_view_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1043</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>video_thumbnail_view</sender>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_video_expanded_view()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>191</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>194</x>
+     <y>2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>video_expanded_view</sender>
+   <signal>stream_delete_signal(int)</signal>
+   <receiver>video_thumbnail_view</receiver>
+   <slot>delete_stream_slot(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1043</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>829</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>add_stream_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>new_stream()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>configure_identity_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_identities_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>show_about_page_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_about_page_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>show_video_expanded_view()</slot>
+  <slot>hide_video_expanded_view()</slot>
+  <slot>show_identities_dialog()</slot>
+  <slot>new_stream()</slot>
+  <slot>show_about_page_dialog()</slot>
+ </slots>
+</ui>
