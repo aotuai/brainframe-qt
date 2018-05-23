@@ -110,7 +110,9 @@ class StreamWidget(QGraphicsView):
                     # Border thickness as % of screen size
                     border = self.scene().width() / 200
                     self.scene().addItem(ZoneStatusPolygon(
-                        zone_status, border_thickness=border))
+                        zone_status,
+                        text_size=int(self.scene().height() / 50),
+                        border_thickness=border))
 
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
@@ -143,9 +145,11 @@ class StreamWidget(QGraphicsView):
                         attributes_in_alarm)
 
                     age = time() - frame.tstamp  # Used for fading
-                    polygon = DetectionPolygon(detection,
-                                               attributes=attributes_to_draw,
-                                               seconds_old=age)
+                    polygon = DetectionPolygon(
+                        detection,
+                        text_size=int(self.scene().height() / 50),
+                        attributes=attributes_to_draw,
+                        seconds_old=age)
                     self.scene().addItem(polygon)
 
     def change_stream(self, stream_conf):

@@ -22,7 +22,11 @@ class DetectionPolygon(StreamPolygon):
     MAX_SECONDS_OLD = 1.5
     """After a certain amount of time, the detection will be transparent"""
 
-    def __init__(self, det: codecs.Detection, attributes=set(), seconds_old=0,
+    def __init__(self,
+                 det: codecs.Detection,
+                 text_size,
+                 attributes=set(),
+                 seconds_old=0,
                  parent=None):
         """
         :param detection: The Detection object to render
@@ -63,6 +67,7 @@ class DetectionPolygon(StreamPolygon):
 
         self.label_box = StreamLabelBox(text,
                                         top_left=top_left,
+                                        text_size=text_size,
                                         parent=self)
 
 
@@ -72,7 +77,7 @@ class ZoneStatusPolygon(StreamPolygon):
     NORMAL_COLOR = QColor(0, 255, 125)
     ALERTING_COLOR = QColor(255, 125, 0)
 
-    def __init__(self, status: codecs.ZoneStatus, *,
+    def __init__(self, status: codecs.ZoneStatus, text_size, *,
                  border_thickness=1, parent=None):
 
         # Find the top-left point of the zone
@@ -115,5 +120,6 @@ class ZoneStatusPolygon(StreamPolygon):
 
         # Create the label box
         self.label_box = StreamLabelBox(text,
+                                        text_size=text_size,
                                         top_left=top_left,
                                         parent=self)
