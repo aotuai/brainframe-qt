@@ -55,7 +55,7 @@
            <x>0</x>
            <y>0</y>
            <width>971</width>
-           <height>617</height>
+           <height>614</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -91,6 +91,7 @@
    </attribute>
    <addaction name="add_stream_action"/>
    <addaction name="configure_identity_action"/>
+   <addaction name="show_about_page_action"/>
   </widget>
   <action name="add_stream_action">
    <property name="text">
@@ -106,6 +107,14 @@
    </property>
    <property name="toolTip">
     <string>Configure identities</string>
+   </property>
+  </action>
+  <action name="show_about_page_action">
+   <property name="text">
+    <string>Licenses</string>
+   </property>
+   <property name="toolTip">
+    <string>Open source licenses</string>
    </property>
   </action>
  </widget>
@@ -235,11 +244,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>show_about_page_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_about_page_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_video_expanded_view()</slot>
   <slot>hide_video_expanded_view()</slot>
   <slot>show_identities_dialog()</slot>
   <slot>new_stream()</slot>
+  <slot>show_about_page_dialog()</slot>
  </slots>
 </ui>

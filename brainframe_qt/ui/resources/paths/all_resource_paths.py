@@ -1,4 +1,3 @@
-
 """This module creates a list of all paths that exist, and returns the correct
 path for a file depending on whether or not the script is running inside of
 pyinstaller, or as normal python."""
@@ -6,8 +5,8 @@ import sys
 from typing import Union
 from pathlib import Path
 
-
 all_paths = []
+
 
 def route_path(*args: Union[str, Path]) -> Path:
     """This function takes a path, routes it to the correct spot, saves it,

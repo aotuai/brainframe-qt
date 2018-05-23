@@ -13,6 +13,7 @@ from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
 from brainframe.client.ui.dialogs import (
+    AboutPage,
     StreamConfigurationDialog,
     IdentityConfiguration
 )
@@ -79,6 +80,10 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def show_identities_dialog(self):
         IdentityConfiguration.show_dialog()
+
+    @pyqtSlot()
+    def show_about_page_dialog(self):
+        AboutPage.show_dialog()
 
     @staticmethod
     def excepthook(exc_type, exc_obj, exc_tb):

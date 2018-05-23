@@ -122,7 +122,7 @@ class AlarmCreationDialog(QDialog):
             else:
                 category = None
 
-            if behavior == "":
+            if behavior in ["", "[any]"]:
                 # No behavior was selected
                 attribute = None
             else:
@@ -198,6 +198,6 @@ class AlarmCreationDialog(QDialog):
                                 detection_classes[detection_class]]
 
             # Sum all lists and add also add empty entry
-            attribute_values = sum(attribute_values, [''])
+            attribute_values = sum(attribute_values, ['[any]'])
             self._update_combo_box(self.behavior_combo_box,
                                    attribute_values)

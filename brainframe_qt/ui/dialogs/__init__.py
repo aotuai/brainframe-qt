@@ -1,3 +1,4 @@
+from .about_page.about_page import AboutPage
 from .alarm_creation.alarm_creation import AlarmCreationDialog
 from .identity_configuration.identity_configuration import IdentityConfiguration
 from .license_agreement.license_agreement import LicenseAgreement
