@@ -98,16 +98,17 @@ class VideoTaskConfig(StreamWidget):
                 # If not valid, don't move anything
                 return
 
-            # Move polygon point and click circle
+                # Move polygon point and click circle
             self.unconfirmed_polygon.move_point(self.clicked_circle.pos(),
                                                 mouse_pos)
             self.clicked_circle.setPos(mouse_pos)
 
-        elif self.max_points is None or len(points) < self.max_points:
-            # Nothing is being dragged. Only create a preview polygon if we have
-            # more than 3 points
+        else:  # Nothing is being dragged.
 
-            points.append((mouse_pos.x(), mouse_pos.y()))
+            # Only create a preview polygon if we have more points to add
+            # Otherwise, polygon drawn is what will be confirmed
+            if self.max_points is None or len(points) < self.max_points:
+                points.append((mouse_pos.x(), mouse_pos.y()))
 
             preview_polygon = StreamPolygon(
                 points,

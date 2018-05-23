@@ -2,7 +2,7 @@ from typing import Union, Iterable, List
 
 from PyQt5.QtCore import Qt, QLineF, QPointF
 from PyQt5.QtGui import QColor, QPainterPath, QPolygonF
-from PyQt5.QtWidgets import QGraphicsPathItem, QGraphicsPolygonItem
+from PyQt5.QtWidgets import QGraphicsPathItem
 
 
 class StreamPolygon(QGraphicsPathItem):
