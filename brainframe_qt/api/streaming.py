@@ -100,10 +100,10 @@ class StatusPoller(Thread):
 class ProcessedFrame:
     """A frame that may or may not have undergone processing on the server."""
 
-    def __init__(self, frame, tstamp, zone_status):
+    def __init__(self, frame, tstamp, zone_statuses):
         self.frame = frame
         self.tstamp = tstamp
-        self.zone_status = zone_status
+        self.zone_statuses = zone_statuses
 
 
 class SyncedStreamReader(Thread):
@@ -155,7 +155,7 @@ class SyncedStreamReader(Thread):
         latest = self._latest
         if latest is not None:
             rgb = cv2.cvtColor(latest.frame, cv2.COLOR_BGR2RGB)
-            latest = ProcessedFrame(rgb, latest.tstamp, latest.zone_status)
+            latest = ProcessedFrame(rgb, latest.tstamp, latest.zone_statuses)
         return latest
 
     def wait_until_initialized(self):
@@ -197,14 +197,14 @@ class SyncedStreamReader(Thread):
             # Get the latest zone statuses
             zone_statuses = self.status_poller.get_latest_statuses(
                 self.stream_config.id)
-            zone_status = zone_statuses[-1] if zone_statuses else None
+            tstamp = zone_statuses[-1].tstamp if zone_statuses else None
 
-            if zone_statuses and last_inference_tstamp != zone_status.tstamp:
+            if zone_statuses and last_inference_tstamp != tstamp:
                 # Catch up to the previous inference frame
                 while frame_buf[0].tstamp <= last_inference_tstamp:
                     frame_buf.pop(0)
 
-                last_inference_tstamp = zone_status.tstamp
+                last_inference_tstamp = tstamp
 
             # If we have inference later than the current frame, update the
             # current frame
@@ -213,7 +213,7 @@ class SyncedStreamReader(Thread):
                 self._latest = ProcessedFrame(
                     frame.frame,
                     frame.tstamp,
-                    zone_status)
+                    zone_statuses)
 
             # Drain the buffer if it is getting too large
             while len(frame_buf) > self.MAX_BUF_SIZE:

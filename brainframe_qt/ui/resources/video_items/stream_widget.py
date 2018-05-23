@@ -105,12 +105,12 @@ class StreamWidget(QGraphicsView):
         # Add new StreamPolygons
         frame = self.video_stream.latest_processed_frame_rgb
         if frame is not None:
-            if frame.zone_status.zone.name == "Screen":
-                return
-            # Border thickness as % of screen size
-            border = self.scene().width() / 100
-            self.scene().addItem(ZoneStatusPolygon(frame.zone_status,
-                                                   border_thickness=border))
+            for zone_status in frame.zone_statuses:
+                if zone_status.zone.name != "Screen":
+                    # Border thickness as % of screen size
+                    border = self.scene().width() / 100
+                    self.scene().addItem(ZoneStatusPolygon(
+                        zone_status, border_thickness=border))
 
     def update_latest_detections(self):
         self.remove_items_by_type(DetectionPolygon)
@@ -119,33 +119,34 @@ class StreamWidget(QGraphicsView):
 
         frame = self.video_stream.latest_processed_frame_rgb
         if frame is not None:
-            interested_attributes = defaultdict(set)
-            for alarm in frame.zone_status.zone.alarms:
-                for condition in alarm.count_conditions:
+            for zone_status in frame.zone_statuses:
+                interested_attributes = defaultdict(set)
+                for alarm in zone_status.zone.alarms:
+                    for condition in alarm.count_conditions:
 
-                    class_name = condition.with_class_name
-                    attribute = condition.with_attribute
+                        class_name = condition.with_class_name
+                        attribute = condition.with_attribute
 
-                    # Nothing to add if no attributes with alarm
-                    if attribute is None:
-                        continue
+                        # Nothing to add if no attributes with alarm
+                        if attribute is None:
+                            continue
 
-                    interested_attributes[class_name].add(attribute.value)
+                        interested_attributes[class_name].add(attribute.value)
 
-            for detection in frame.zone_status.detections:
-                attributes = set(
-                    attribute.value for attribute in detection.attributes)
-                class_name = detection.class_name
-                attributes_in_alarm = interested_attributes[class_name]
+                for detection in zone_status.detections:
+                    attributes = set(
+                        attribute.value for attribute in detection.attributes)
+                    class_name = detection.class_name
+                    attributes_in_alarm = interested_attributes[class_name]
 
-                attributes_to_draw = attributes.intersection(
-                    attributes_in_alarm)
+                    attributes_to_draw = attributes.intersection(
+                        attributes_in_alarm)
 
-                age = time() - frame.tstamp  # Used for fading
-                polygon = DetectionPolygon(detection,
-                                           attributes=attributes_to_draw,
-                                           seconds_old=age)
-                self.scene().addItem(polygon)
+                    age = time() - frame.tstamp  # Used for fading
+                    polygon = DetectionPolygon(detection,
+                                               attributes=attributes_to_draw,
+                                               seconds_old=age)
+                    self.scene().addItem(polygon)
 
     def change_stream(self, stream_conf):
         """Change the stream source of the video
