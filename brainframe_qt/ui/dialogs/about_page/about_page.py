@@ -1,4 +1,5 @@
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (
     QDialog,
     QPlainTextEdit,
@@ -26,7 +27,17 @@ class AboutPage(QDialog):
         self.tab_widget.setTabPosition(QTabWidget.West)
 
         for license_ in sorted(text_paths.license_dir.iterdir()):
+
+            # Create text field to display license
             tab = QPlainTextEdit(license_.read_text(), self)
+
+            # Make text monospace using a fake font with a style hint
+            # This lets the system choose its preferred font
+            font = QFont("unexistent")
+            font.setStyleHint(QFont.Monospace)
+            tab.setFont(font)
+
+            # Add text box to tab widget
             self.tab_widget.addTab(tab, license_.suffix[1:])
 
     @classmethod
