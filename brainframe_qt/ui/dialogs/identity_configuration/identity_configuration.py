@@ -35,12 +35,23 @@ class IdentityConfiguration(QDialog):
 
         self.progress_bar.setHidden(True)
 
-        self.worker: ImageSenderWorker = None
-        self.thread: QThread = None
+        # Create thread to send images
+        self.worker = ImageSenderWorker()
+        self.thread = QThread(self)
+        self.thread.setObjectName("ImageSenderWorkerThread")
+        self.worker.moveToThread(self.thread)
+        self.worker.update_progress_bar.connect(self.update_progress_bar)
+
+        self.thread.started.connect(
+            lambda: self.worker.send_images(self.identity_prototypes))
+        self.worker.done_sending.connect(self.images_done_sending)
+        self.worker.update_tree_view.connect(self.update_tree_view)
 
         self.add_identities_button.clicked.connect(self.create_new_identities)
 
         self.add_db_identities_to_tree()
+
+        self.identity_prototypes = None
 
     @classmethod
     def show_dialog(cls):
@@ -50,26 +61,15 @@ class IdentityConfiguration(QDialog):
 
     def create_new_identities(self):
 
-        # Create thread to send images
-        self.worker = ImageSenderWorker()
-        self.thread = QThread(self)
-        self.thread.setObjectName("ImageSenderWorkerThread")
-        self.worker.moveToThread(self.thread)
-        self.worker.update_progress_bar.connect(self.update_progress_bar)
-
         # Get a all identities to add to server and the number of images.
         # Change the function called here to be different method of adding
         # identities if desired
-        identity_prototypes, num_images = self.get_new_identities_from_path()
+        self.identity_prototypes, num_images = \
+            self.get_new_identities_from_path()
 
         # User canceled
-        if identity_prototypes is None:
+        if self.identity_prototypes is None:
             return
-
-        self.thread.started.connect(
-            lambda: self.worker.send_images(identity_prototypes))
-        self.worker.done_sending.connect(self.images_done_sending)
-        self.worker.update_tree_view.connect(self.update_tree_view)
 
         self.thread.start()
 
@@ -80,8 +80,6 @@ class IdentityConfiguration(QDialog):
     @pyqtSlot(str, str, str)
     def update_tree_view(self, unique_name, class_name, image_name):
 
-        print(unique_name, class_name, image_name)
-
         identity_tree_item = self.identity_tree.findItems(
             unique_name,
             Qt.MatchExactly)
@@ -89,7 +87,11 @@ class IdentityConfiguration(QDialog):
         if not identity_tree_item:
             QTreeWidgetItem(self.identity_tree, [unique_name])
 
-            # TODO: Encodings and images
+            # TODO: This line resolves BF-220.
+            # It might be a hack instead of a fix
+            self.repaint()
+
+        # TODO: Encodings and images
 
     @pyqtSlot(int)
     def update_progress_bar(self, value):
@@ -213,9 +215,6 @@ class ImageSenderWorker(QObject):
     update_tree_view = pyqtSignal(str, str, str)
     update_progress_bar = pyqtSignal(int)
     done_sending = pyqtSignal()
-
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
 
     @pyqtSlot(object)
     def send_images(self, identity_prototypes):
