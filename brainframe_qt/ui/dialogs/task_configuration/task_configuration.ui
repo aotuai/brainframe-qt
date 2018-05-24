@@ -298,22 +298,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>cancel_op_button</sender>
-   <signal>clicked()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>new_region_canceled()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>834</x>
-     <y>342</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>509</x>
-     <y>5</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>video_task_config</sender>
    <signal>polygon_is_valid_signal(bool)</signal>
    <receiver>TaskConfiguration</receiver>
@@ -335,7 +319,7 @@
   <slot>new_region()</slot>
   <slot>new_line()</slot>
   <slot>new_region_confirmed()</slot>
-  <slot>new_region_canceled()</slot>
+  <slot>new_region_canceled(int)</slot>
   <slot>enable_confirm_op_button(bool)</slot>
  </slots>
 </ui>
