@@ -1,3 +1,5 @@
+import re
+
 from brainframe.shared import error_kinds
 
 
@@ -10,6 +12,16 @@ class BaseAPIError(BaseException):
     def __init__(self, kind, description):
         self.kind = kind
         super().__init__(f"{self.kind}: {description}")
+
+    def __str__(self):
+
+        name = self.__class__.__name__
+
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1 \2', name)
+        s2 = re.sub('([a-z0-9])([A-Z])', r'\1 \2', s1).capitalize()
+        s3 = s2.rsplit(" error")[0]
+
+        return s3
 
 
 class UnknownError(BaseAPIError):

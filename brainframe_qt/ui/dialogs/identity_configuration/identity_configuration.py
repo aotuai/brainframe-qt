@@ -271,7 +271,7 @@ class ImageSenderWorker(QObject):
                     except api_errors.ImageAlreadyEncodedError:
                         pass
                     except api_errors.BaseAPIError as err:
-                        image_error = IdentityError(image_name.name, err.kind)
+                        image_error = IdentityError(image_name.name, str(err))
                         class_name_error.children.add(image_error)
 
                     processed_images += 1
