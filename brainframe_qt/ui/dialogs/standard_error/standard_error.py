@@ -1,4 +1,6 @@
 import logging
+import os
+import sys
 import traceback
 
 from PyQt5.QtCore import Qt
@@ -26,6 +28,11 @@ class StandardError(QMessageBox):
 
     @classmethod
     def show_error(cls, exc_type, exc_obj, exc_tb):
+
+        # Ignore false exceptions thrown during init of QtDesigner
+        if cls._is_qt_designer_init_error(exc_obj):
+            return
+
         dialog = cls(exc_type, exc_obj, exc_tb)
         dialog.exec_()
 
@@ -85,3 +92,14 @@ class StandardError(QMessageBox):
         clipboard.setText(clipboard_text)
 
         logging.info("Error copied to clipboard")
+
+    @staticmethod
+    def _is_qt_designer_init_error(exc_obj):
+        # This environment variable is only set when running QtDesigner
+        if not os.getenv("PYQTDESIGNERPATH"):
+            return
+
+        # Ignore this specific error
+        ignore = "super-class __init__() of type BasePlugin was never called"
+        if str(exc_obj) == ignore:
+            return True
