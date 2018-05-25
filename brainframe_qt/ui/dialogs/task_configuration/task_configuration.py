@@ -58,7 +58,6 @@ class TaskConfiguration(QDialog):
 
     @pyqtSlot()
     def new_line(self):
-        print("new line called")
         line_name = self.get_new_zone_name("New Line",
                                            "Name for new line:")
 
@@ -118,7 +117,6 @@ class TaskConfiguration(QDialog):
         None if it should always be canceled
         """
         if self.unconfirmed_zone and zone_id == self.unconfirmed_zone.id:
-
             # Remove instruction text
             self.instruction_label.setText("")
 
