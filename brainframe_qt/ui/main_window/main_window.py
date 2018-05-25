@@ -76,7 +76,6 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def show_identities_dialog(self):
-        raise Exception
         IdentityConfiguration.show_dialog()
 
     @pyqtSlot()
