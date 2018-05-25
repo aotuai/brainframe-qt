@@ -1,19 +1,14 @@
 import sys
 
-from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
-    QMainWindow,
-    QMessageBox,
-    QSizePolicy,
-    QSpacerItem,
-    QTextEdit
-)
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QTextEdit
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
 from brainframe.client.ui.dialogs import (
     AboutPage,
+    StandardError,
     StreamConfigurationDialog,
     IdentityConfiguration
 )
@@ -81,46 +76,11 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def show_identities_dialog(self):
+        raise Exception
         IdentityConfiguration.show_dialog()
 
     @pyqtSlot()
     def show_about_page_dialog(self):
         AboutPage.show_dialog()
 
-    @staticmethod
-    def excepthook(exc_type, exc_obj, exc_tb):
-
-        import traceback
-
-        tb_message = traceback.format_exception(
-            exc_type, exc_obj, exc_tb)
-
-        tb_message_text = "".join(tb_message[:-1])
-        tb_message_info = tb_message[-1]
-
-        dialog = QMessageBox()
-        dialog.setWindowTitle("An exception has occurred")
-        dialog.setText("An exception has occurred. "
-                       "Select the details to display it")
-        dialog.setInformativeText(tb_message_info)
-        dialog.setDetailedText(tb_message_text)
-        dialog.setTextFormat(Qt.RichText)
-        dialog.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        dialog.setIcon(QMessageBox.Critical)
-
-        # Trick to set the width of the message dialog
-        # http://www.qtcentre.org/threads/22298-QMessageBox-Controlling-the-width
-        dialog.layout().addItem(
-            QSpacerItem(600, 0, QSizePolicy.Minimum, QSizePolicy.Expanding),
-            dialog.layout().rowCount(),
-            0, 1,
-            dialog.layout().columnCount())
-
-        # Force detailed view taller to show traceback better
-        # https://stackoverflow.com/a/48590647/8134178
-        dialog.findChildren(QTextEdit)[0].setFixedHeight(200)
-
-        dialog.exec_()
-
-
-sys.excepthook = MainWindow.excepthook
+    sys.excepthook = StandardError.show_error
