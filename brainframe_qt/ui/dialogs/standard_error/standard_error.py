@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 import traceback
 
 from PyQt5.QtCore import Qt
