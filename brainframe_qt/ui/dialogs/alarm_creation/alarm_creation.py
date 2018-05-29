@@ -69,13 +69,13 @@ class AlarmCreationDialog(QDialog):
             self.hide_rate_widgets(True)
             self._update_combo_box(
                 self.test_type_combo_box,
-                ZoneAlarmCountCondition.test_types)
+                ZoneAlarmCountCondition.TestType.__members__)
             self.count_spin_box.setMinimum(0)
         if condition_type == self.ConditionType.rate:
             self.hide_count_widgets(True)
             self.hide_rate_widgets(False)
             self._update_combo_box(self.test_type_combo_box,
-                                   ZoneAlarmRateCondition.test_types)
+                                   ZoneAlarmRateCondition.TestType.__members__)
             self.count_spin_box.setMinimum(1)
 
     def hide_count_widgets(self, hidden):
