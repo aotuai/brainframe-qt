@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from requests.exceptions import ConnectionError
+from time import sleep
 import signal
 import sys
 
@@ -48,6 +49,9 @@ with SplashScreen() as splash_screen:
         except ConnectionError:
             # Server not started yet
             app.processEvents()
+
+            # Prevent a busy loop while splashscreen is open
+            sleep(.1)
             continue
         splash_screen.showMessage("Successfully connected to server. "
                                   "Starting UI")
