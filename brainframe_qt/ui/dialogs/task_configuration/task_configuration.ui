@@ -177,7 +177,7 @@
           </sizepolicy>
          </property>
          <property name="standardButtons">
-          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+          <set>QDialogButtonBox::Ok</set>
          </property>
         </widget>
        </item>
@@ -189,50 +189,18 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ZoneList</class>
-   <extends>QScrollArea</extends>
-   <header>brainframe.client.ui.dialogs.task_configuration.zone_list.zone_list</header>
-  </customwidget>
-  <customwidget>
    <class>VideoTaskConfig</class>
    <extends>QGraphicsView</extends>
    <header>brainframe.client.ui.dialogs.task_configuration.video_task_config.video_task_config</header>
   </customwidget>
+  <customwidget>
+   <class>ZoneList</class>
+   <extends>QScrollArea</extends>
+   <header>brainframe.client.ui.dialogs.task_configuration.zone_list.zone_list</header>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>dialog_button_box</sender>
-   <signal>accepted()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>831</x>
-     <y>457</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dialog_button_box</sender>
-   <signal>rejected()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>831</x>
-     <y>457</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>alarm_button</sender>
    <signal>clicked()</signal>
@@ -310,6 +278,38 @@
     <hint type="destinationlabel">
      <x>372</x>
      <y>441</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dialog_button_box</sender>
+   <signal>accepted()</signal>
+   <receiver>TaskConfiguration</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>831</x>
+     <y>457</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dialog_button_box</sender>
+   <signal>rejected()</signal>
+   <receiver>TaskConfiguration</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>831</x>
+     <y>457</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>

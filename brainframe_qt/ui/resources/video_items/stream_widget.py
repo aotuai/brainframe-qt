@@ -13,6 +13,7 @@ from brainframe.client.ui.resources.video_items import (
 )
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.api import api
+from brainframe.client.api.streaming import SyncedStreamReader
 
 
 class StreamWidget(QGraphicsView):
@@ -40,7 +41,7 @@ class StreamWidget(QGraphicsView):
         # Scene to draw items to
         self.setScene(QGraphicsScene())
 
-        self.video_stream = None  # Set in change_stream
+        self.video_stream: SyncedStreamReader = None  # Set in change_stream
         self.current_frame = None
         self.timestamp = -1
 
@@ -121,7 +122,12 @@ class StreamWidget(QGraphicsView):
 
         frame = self.video_stream.latest_processed_frame_rgb
         if frame is not None:
+            screen_zone_status = None  # The status with all Detections in it
+            # Get attributes of interest
             for zone_status in frame.zone_statuses:
+
+                if zone_status.zone.name == "Screen":
+                    screen_zone_status = zone_status
                 interested_attributes = defaultdict(set)
                 for alarm in zone_status.zone.alarms:
                     for condition in alarm.count_conditions:
@@ -135,22 +141,26 @@ class StreamWidget(QGraphicsView):
 
                         interested_attributes[class_name].add(attribute.value)
 
-                for detection in zone_status.detections:
-                    attributes = set(
-                        attribute.value for attribute in detection.attributes)
-                    class_name = detection.class_name
-                    attributes_in_alarm = interested_attributes[class_name]
+            if not screen_zone_status:
+                raise ValueError("A packet of ZoneStatuses must always include"
+                                 " one with the name 'Screen'")
 
-                    attributes_to_draw = attributes.intersection(
-                        attributes_in_alarm)
+            for detection in screen_zone_status.detections:
+                attributes = set(
+                    attribute.value for attribute in detection.attributes)
+                class_name = detection.class_name
+                attributes_in_alarm = interested_attributes[class_name]
 
-                    age = time() - frame.tstamp  # Used for fading
-                    polygon = DetectionPolygon(
-                        detection,
-                        text_size=int(self.scene().height() / 50),
-                        attributes=attributes_to_draw,
-                        seconds_old=age)
-                    self.scene().addItem(polygon)
+                attributes_to_draw = attributes.intersection(
+                    attributes_in_alarm)
+
+                # Draw the detection on the screen
+                polygon = DetectionPolygon(
+                    detection,
+                    text_size=int(self.scene().height() / 50),
+                    attributes=attributes_to_draw,
+                    seconds_old=0)   # Fading is currently disabled
+                self.scene().addItem(polygon)
 
     def change_stream(self, stream_conf):
         """Change the stream source of the video

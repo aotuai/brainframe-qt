@@ -49,7 +49,6 @@ class AlertLog(QWidget):
                              "\n\n"
 
                 for condition in alarm.count_conditions + alarm.rate_conditions:
-                    print("About to add", condition)
                     alert_text += repr(condition)
                     alert_text += f" in region [{zone_name}]\n"
 

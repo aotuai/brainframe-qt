@@ -23,7 +23,7 @@ class ProcessedFrame:
 class SyncedStreamReader(Thread):
     """Reads frames from a stream and syncs them up with zone statuses."""
 
-    MAX_BUF_SIZE = 1000
+    MAX_BUF_SIZE = 100
 
     def __init__(self,
                  url: str,
@@ -67,9 +67,6 @@ class SyncedStreamReader(Thread):
     def latest_processed_frame_rgb(self) -> Union[ProcessedFrame, None]:
         """Returns the processed frame, but in RGB instead of BGR."""
         latest = self._latest
-        if latest is not None:
-            rgb = cv2.cvtColor(latest.frame, cv2.COLOR_BGR2RGB)
-            latest = ProcessedFrame(rgb, latest.tstamp, latest.zone_statuses)
         return latest
 
     def wait_until_initialized(self):
@@ -108,14 +105,16 @@ class SyncedStreamReader(Thread):
                 break
             frame_buf.append(ProcessedFrame(frame, tstamp, None))
 
-            # Get the latest zone statuses
+            # Get the latest zone statuses and the timestamp
             zone_statuses = self.status_poller.get_latest_statuses(
                 self.stream_id)
+
             tstamp = zone_statuses[-1].tstamp if zone_statuses else None
 
+            # Check if this is a fresh zone_status or not
             if zone_statuses and last_inference_tstamp != tstamp:
                 # Catch up to the previous inference frame
-                while frame_buf[0].tstamp <= last_inference_tstamp:
+                while frame_buf[0].tstamp < last_inference_tstamp:
                     frame_buf.pop(0)
 
                 last_inference_tstamp = tstamp
@@ -123,12 +122,14 @@ class SyncedStreamReader(Thread):
             # If we have inference later than the current frame, update the
             # current frame
             if frame_buf and frame_buf[0].tstamp <= last_inference_tstamp:
+
                 frame = frame_buf.pop(0)
+                rgb = cv2.cvtColor(frame.frame, cv2.COLOR_BGR2RGB)
                 self._latest = ProcessedFrame(
-                    frame.frame,
+                    rgb,
                     frame.tstamp,
                     zone_statuses)
-            print("Debug: ", self.stream_id, len(frame_buf))
+
             # Drain the buffer if it is getting too large
             while len(frame_buf) > self.MAX_BUF_SIZE:
                 frame_buf.pop(0)
