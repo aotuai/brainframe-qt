@@ -1,4 +1,5 @@
 from collections import Counter
+from typing import List, Optional, Dict
 
 from .base_codecs import Codec
 from .alarm_codecs import Alert, ZoneAlarm
@@ -18,6 +19,12 @@ class Zone(Codec):
         self.stream_id = stream_id
         self.alarms = list(alarms)
         self.coords = coords
+
+    def get_alarm(self, alarm_id) -> Optional[ZoneAlarm]:
+        for alarm in self.alarms:
+            if alarm.id == alarm_id:
+                return alarm
+        return None
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -40,15 +47,17 @@ class ZoneStatus(Codec):
 
     def __init__(self, *, zone, tstamp, detections, alerts,
                  total_entered, total_exited):
-        self.zone = zone
-        self.tstamp = tstamp
-        self.total_entered = total_entered
-        self.total_exited = total_exited
-        self.detections = detections
-        self.alerts = alerts
+        self.zone: Zone = zone
+        self.tstamp: float = tstamp
+        self.total_entered: dict = total_entered
+        self.total_exited: dict = total_exited
+        self.detections: List[Detection] = detections
+        self.alerts: List[Alert] = alerts
+
+
 
     @property
-    def detection_counts(self):
+    def detection_counts(self) -> dict:
         """The current count of each class type detected in the video
         :returns: {'class_name': int count, ...} """
         counter = Counter([det.class_name for det in self.detections])

@@ -1,5 +1,5 @@
 import logging
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Optional
 from threading import Thread
 from time import sleep, time
 
@@ -54,35 +54,29 @@ class StatusPoller(Thread):
     def is_running(self):
         return self._running
 
-    def get_alarm(self, stream_id, alarm_id) -> Union[None, codecs.ZoneAlarm]:
-        """Return a list of unverified alerts for this stream_id"""
-        zones = self.get_zones(stream_id)
-        if len(zones) == 0:
-            return None
-        alarms = sum([zone.alarms for zone in zones], [])
-        alarms = [alarm for alarm in alarms if alarm.id == alarm_id]
-        if len(alarms) == 0:
-            return None
-        return alarms[0]
+    # def get_alarm(self, stream_id, alarm_id) -> Optional[codecs.ZoneAlarm]:
+    #     """Return a list of unverified alerts for this stream_id"""
+    #     zones = self.get_zones(stream_id)
+    #     if len(zones) == 0:
+    #         return None
+    #     alarms = sum([zone.alarms for zone in zones], [])
+    #     alarms = [alarm for alarm in alarms if alarm.id == alarm_id]
+    #     if len(alarms) == 0:
+    #         return None
+    #     return alarms[0]
+    #
+    # def get_zone(self, stream_id, zone_id) -> Optional[codecs.Zone]:
+    #     for zone in self.get_zones(stream_id):
+    #         if zone.id == zone_id:
+    #             return zone
+    #     return None
 
-    def get_zones(self, stream_id) -> List[codecs.Zone]:
-        statuses = self.get_latest_statuses(stream_id)
-        zones = [status.zone for status in statuses]
-        return zones
+    # def get_zones(self, stream_id) -> List[codecs.Zone]:
+    #     statuses = self.latest_statuses(stream_id)
+    #     zones = [status.zone for status in statuses]
+    #     return zones
 
-    def get_detections(self, stream_id) -> Tuple[float, List[codecs.Detection]]:
-        """Conveniently return all detections found in this stream and
-        their respective timestamp in which they were detected."""
-        statuses = self.get_latest_statuses(stream_id)
-        if len(statuses) == 0:
-            return 0, []
-
-        # Find the main screen
-        status = [status for status in statuses
-                  if status.zone.name == "Screen"][0]
-        return status.tstamp, status.detections
-
-    def get_latest_statuses(self, stream_id) -> List[codecs.ZoneStatus]:
+    def latest_statuses(self, stream_id) -> List[codecs.ZoneStatus]:
         """Returns the latest cached list of ZoneStatuses for that stream_id"""
         latest = self._latest
         if stream_id not in latest:

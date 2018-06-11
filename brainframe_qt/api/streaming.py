@@ -106,7 +106,7 @@ class SyncedStreamReader(Thread):
             frame_buf.append(ProcessedFrame(frame, tstamp, None))
 
             # Get the latest zone statuses and the timestamp
-            zone_statuses = self.status_poller.get_latest_statuses(
+            zone_statuses = self.status_poller.latest_statuses(
                 self.stream_id)
 
             tstamp = zone_statuses[-1].tstamp if zone_statuses else None

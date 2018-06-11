@@ -7,7 +7,11 @@ from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
+
 class AlertLog(QWidget):
+    MAX_LOG_LENGTH = 25
+    """Limit the length of the Alert log for performance and sanity reasons"""
+
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -33,35 +37,41 @@ class AlertLog(QWidget):
 
         unverified = api.get_unverified_alerts(self.stream_id)
 
-        for alert in unverified:
-
-            if alert.id not in self.alert_widgets:
-                # If the alert widget hasn't been made yet
-                alarm = self.status_poller.get_alarm(self.stream_id,
-                                                     alert.alarm_id)
-                if alarm is None:
-                    continue
-
-                zone_name = api.get_zone(self.stream_id, alert.zone_id).name
-
-                # Create text for alert
-                alert_text = "One of the following conditions was triggered:" \
-                             "\n\n"
-
-                for condition in alarm.count_conditions + alarm.rate_conditions:
-                    alert_text += repr(condition)
-                    alert_text += f" in region [{zone_name}]\n"
-
-                alert_widget = AlertLogEntry(start_time=alert.start_time,
-                                             end_time=alert.end_time,
-                                             alarm_name=alarm.name,
-                                             alert_text=alert_text)
-                self.alert_log.layout().insertWidget(0, alert_widget)
-                self.alert_widgets[alert.id] = alert_widget
-            else:
+        for alert in unverified[:self.MAX_LOG_LENGTH]:
+            if alert.id in self.alert_widgets:
                 # If the alert already exists, update the information
                 alert_widget = self.alert_widgets[alert.id]
                 alert_widget.update_time(alert.start_time, alert.end_time)
+                continue
+
+            statuses = self.status_poller.latest_statuses(self.stream_id)
+
+            # Get the alarm that this alert belongs to
+            alarm = None
+            zone_name = None
+            for status in statuses:
+                alarm = status.zone.get_alarm(alert.alarm_id)
+                if alarm:
+                    zone_name = status.zone.name
+                    break
+            else:
+                # If no alarm was found, don't continue
+                continue
+
+            # Create text for alert
+            alert_text = "One of the following conditions was triggered:" \
+                         "\n\n"
+
+            for condition in alarm.count_conditions + alarm.rate_conditions:
+                alert_text += repr(condition)
+                alert_text += f" in region [{zone_name}]\n"
+
+            alert_widget = AlertLogEntry(start_time=alert.start_time,
+                                         end_time=alert.end_time,
+                                         alarm_name=alarm.name,
+                                         alert_text=alert_text)
+            self.alert_log.layout().insertWidget(0, alert_widget)
+            self.alert_widgets[alert.id] = alert_widget
 
     @pyqtSlot(int)
     def change_stream(self, stream_id):
