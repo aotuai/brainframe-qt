@@ -48,8 +48,6 @@ class StreamWidget(QGraphicsView):
         self._frame_rate = frame_rate
 
         self.frame_update_timer = QTimer()
-        # noinspection PyUnresolvedReferences
-        # .connect is erroneously detected as unresolved
         self.frame_update_timer.timeout.connect(self.update_items)
 
         # Initialize stream configuration and get started
@@ -62,9 +60,18 @@ class StreamWidget(QGraphicsView):
         # self.setStyleSheet("background-color:green;")
 
     def update_items(self):
+        frame = self.video_stream.latest_processed_frame_rgb
+
+        # Only update detections & zones when needed
+        if self.stream_is_up and frame is not None:
+            if frame.tstamp != self.timestamp:
+                self.update_latest_zones(frame.zone_statuses)
+                self.update_latest_detections(frame.zone_statuses)
+        else:
+            self.remove_items_by_type(DetectionPolygon)
+            self.remove_items_by_type(ZoneStatusPolygon)
+
         self.update_frame()
-        self.update_latest_zones()
-        self.update_latest_detections()
 
     def update_frame(self):
         """Grab the newest frame from the Stream object"""
@@ -87,8 +94,8 @@ class StreamWidget(QGraphicsView):
         frame = self.video_stream.latest_processed_frame_rgb
         if frame is not None:
             # Don't render image if it hasn't changed
-            # if frame.tstamp <= self.timestamp:
-                # return
+            if frame.tstamp <= self.timestamp:
+                return
 
             self.timestamp = frame.tstamp
             pixmap = self._get_pixmap_from_numpy_frame(frame.frame)
@@ -96,71 +103,65 @@ class StreamWidget(QGraphicsView):
             # TODO(Bryce Beagle): Use video_stream.is_running to stop widget if
             # stream ends
 
-    def update_latest_zones(self):
+    def update_latest_zones(self, zone_statuses):
         self.remove_items_by_type(ZoneStatusPolygon)
         if not self.render_zones:
             return
-        if not self.stream_is_up:
-            return
 
         # Add new StreamPolygons
-        frame = self.video_stream.latest_processed_frame_rgb
-        if frame is not None:
-            for zone_status in frame.zone_statuses:
-                if zone_status.zone.name != "Screen":
-                    # Border thickness as % of screen size
-                    border = self.scene().width() / 200
-                    self.scene().addItem(ZoneStatusPolygon(
-                        zone_status,
-                        text_size=int(self.scene().height() / 50),
-                        border_thickness=border))
+        for zone_status in zone_statuses:
+            if zone_status.zone.name != "Screen":
+                # Border thickness as % of screen size
+                border = self.scene().width() / 200
+                self.scene().addItem(ZoneStatusPolygon(
+                    zone_status,
+                    text_size=int(self.scene().height() / 50),
+                    border_thickness=border))
+                return
 
-    def update_latest_detections(self):
+    def update_latest_detections(self, zone_statuses):
         self.remove_items_by_type(DetectionPolygon)
-        if not self.render_detections or not self.stream_is_up:
+        if not self.render_detections:
             return
 
-        frame = self.video_stream.latest_processed_frame_rgb
-        if frame is not None:
-            screen_zone_status = None  # The status with all Detections in it
-            # Get attributes of interest
-            for zone_status in frame.zone_statuses:
+        screen_zone_status = None  # The status with all Detections in it
 
-                if zone_status.zone.name == "Screen":
-                    screen_zone_status = zone_status
-                interested_attributes = defaultdict(set)
-                for alarm in zone_status.zone.alarms:
-                    for condition in alarm.count_conditions:
+        # Get attributes of interest
+        interested_attributes = defaultdict(set)
+        for zone_status in zone_statuses:
+            if zone_status.zone.name == "Screen":
+                screen_zone_status = zone_status
 
-                        class_name = condition.with_class_name
-                        attribute = condition.with_attribute
 
-                        # Nothing to add if no attributes with alarm
-                        if attribute is None:
-                            continue
+            for alarm in zone_status.zone.alarms:
+                for condition in alarm.count_conditions:
+                    class_name = condition.with_class_name
+                    attribute = condition.with_attribute
 
-                        interested_attributes[class_name].add(attribute.value)
+                    # Nothing to add if no attributes with alarm
+                    if attribute is None:
+                        continue
 
-            if not screen_zone_status:
-                raise ValueError("A packet of ZoneStatuses must always include"
-                                 " one with the name 'Screen'")
+                    interested_attributes[class_name].add(attribute.value)
 
-            for detection in screen_zone_status.detections:
-                attributes = set(
-                    attribute.value for attribute in detection.attributes)
-                class_name = detection.class_name
-                attributes_in_alarm = interested_attributes[class_name]
+        if not screen_zone_status:
+            raise ValueError("A packet of ZoneStatuses must always include"
+                             " one with the name 'Screen'")
 
-                attributes_to_draw = attributes.intersection(
-                    attributes_in_alarm)
+        for detection in screen_zone_status.detections:
+            attributes = set(attr.value for attr in detection.attributes)
+            class_name = detection.class_name
 
-                # Draw the detection on the screen
-                polygon = DetectionPolygon(
-                    detection,
-                    text_size=int(self.scene().height() / 50),
-                    attributes=attributes_to_draw,
-                    seconds_old=0)   # Fading is currently disabled
-                self.scene().addItem(polygon)
+            attributes_in_alarm = interested_attributes[class_name]
+            attributes_to_draw = attributes.intersection(attributes_in_alarm)
+
+            # Draw the detection on the screen
+            polygon = DetectionPolygon(
+                detection,
+                text_size=int(self.scene().height() / 50),
+                attributes=attributes_to_draw,
+                seconds_old=0)  # Fading is currently disabled
+            self.scene().addItem(polygon)
 
     def change_stream(self, stream_conf):
         """Change the stream source of the video

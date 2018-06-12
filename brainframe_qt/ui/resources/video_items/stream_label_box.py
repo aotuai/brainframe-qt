@@ -32,6 +32,6 @@ class StreamLabelBox(StreamPolygon):
                          border_thickness=1,
                          opacity=0.35,
                          parent=parent)
-        self.label_text.setZValue(self.zValue() + 1)
 
+        self.label_text.setZValue(self.zValue() + 1)
         self.label_text.adjustSize()

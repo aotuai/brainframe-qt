@@ -54,8 +54,6 @@ class ZoneStatus(Codec):
         self.detections: List[Detection] = detections
         self.alerts: List[Alert] = alerts
 
-
-
     @property
     def detection_counts(self) -> dict:
         """The current count of each class type detected in the video
