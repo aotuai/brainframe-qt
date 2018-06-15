@@ -108,7 +108,7 @@ class StreamWidget(QGraphicsView):
         if not self.render_zones:
             return
 
-        # Add new StreamPolygons
+        # Draw all of the zones (except the default zone, "screen")
         for zone_status in zone_statuses:
             if zone_status.zone.name != "Screen":
                 # Border thickness as % of screen size
@@ -117,7 +117,6 @@ class StreamWidget(QGraphicsView):
                     zone_status,
                     text_size=int(self.scene().height() / 50),
                     border_thickness=border))
-                return
 
     def update_latest_detections(self, zone_statuses):
         self.remove_items_by_type(DetectionPolygon)
