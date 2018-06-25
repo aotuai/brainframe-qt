@@ -1,7 +1,7 @@
-from typing import Tuple
+from typing import Dict
 
-from PyQt5.QtCore import pyqtSlot, Qt
-from PyQt5.QtWidgets import QScrollArea, QVBoxLayout
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QScrollArea
 from PyQt5.uic import loadUi
 
 from .zone_and_tasks import ZoneAndTasks
@@ -9,7 +9,6 @@ from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-# TODO(Bryce Beagle): Scroll!
 class ZoneList(QScrollArea):
 
     def __init__(self, parent=None):
@@ -18,20 +17,17 @@ class ZoneList(QScrollArea):
         loadUi(qt_ui_paths.zone_list_ui, self)
 
         self.stream_id = None
-        self.zones = {}
-        """Stores zones in a {zone.id: ZoneAndTasks()} dict"""
+        self.zones: Dict[int, ZoneAndTasks] = {}  # Key is zone id
 
-        self.main_layout = QVBoxLayout()
-        self.main_layout.setAlignment(Qt.AlignTop)
-        self.setLayout(self.main_layout)
-
-    def get_zones(self) -> Tuple[str]:
-        """Get names of zones"""
-        zones = self.zones.keys()
-
-        # noinspection PyTypeChecker
-        # PyCharm is dumb here
-        return tuple(zones)
+    def init_zones(self, stream_id):
+        """Initialize zone list with zones already in database"""
+        self.stream_id = stream_id
+        zones = api.get_zones(stream_id)
+        for zone in zones:
+            zone_widget: ZoneAndTasks = self.add_zone(zone)
+            zone_widget.update_zone_type()
+            self.zones[zone.id] = zone_widget
+            zone_widget.zone_deleted_signal.connect(self.delete_zone)
 
     def add_zone(self, zone):
         zone_widget = ZoneAndTasks(zone, self)
@@ -45,22 +41,13 @@ class ZoneList(QScrollArea):
 
     @pyqtSlot(int)
     def delete_zone(self, zone_id):
+        # Delete zone from database
         api.delete_zone(self.stream_id, zone_id)
-        self.delete_zone_widget(zone_id)
 
-    def delete_zone_widget(self, zone_id):
+        # Delete the zone widget from list
         self.zones[zone_id].deleteLater()
         self.zones.pop(zone_id)
 
     def add_alarm(self, zone, alarm):
         """Add an alarm widget to a ZoneAndTasks widget"""
         self.zones[zone.id].add_alarm(alarm)
-
-    def init_zones(self, stream_id):
-        self.stream_id = stream_id
-        zones = api.get_zones(stream_id)
-        for zone in zones:
-            zone_widget = self.add_zone(zone)  # type: ZoneAndTasks
-            zone_widget.update_zone_type()
-            self.zones[zone.id] = zone_widget
-            zone_widget.zone_deleted_signal.connect(self.delete_zone)

@@ -48,11 +48,11 @@ tree_widget_ui             = route_path(tree_widget_dir           , "tree_widget
 license_agreement_dir      = route_path(dialogs_dir               , "license_agreement"        )
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
 
+stream_configuration_dir   = route_path(dialogs_dir               , "stream_configuration"     )
+stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )
+
 task_configuration_dir     = route_path(dialogs_dir               , "task_configuration"       )
 task_configuration_ui      = route_path(task_configuration_dir    , "task_configuration.ui"    )
 
 zone_list_dir              = route_path(task_configuration_dir    , "zone_list"                )
 zone_list_ui               = route_path(zone_list_dir             , "zone_list.ui"             )
-
-stream_configuration_dir   = route_path(dialogs_dir               , "stream_configuration"     )
-stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )

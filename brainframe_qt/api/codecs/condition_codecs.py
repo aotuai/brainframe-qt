@@ -1,7 +1,6 @@
-from enum import Enum
-
 from .base_codecs import Codec
 from .detection_codecs import Attribute
+from brainframe.shared import codec_enums
 
 
 condition_test_map = {'>': "Greater than",
@@ -16,7 +15,7 @@ class ZoneAlarmCountCondition(Codec):
     of objects in a zone to some number.
     """
 
-    test_types = [">", "<", "=", "!="]
+    TestType = codec_enums.CountConditionTestType
 
     def __init__(self, *, test, check_value, with_class_name, with_attribute,
                  id_=None):
@@ -60,12 +59,9 @@ class ZoneAlarmRateCondition(Codec):
     change in the count of some object against a test value.
     """
 
-    test_types = [">=", "<="]
+    TestType = codec_enums.RateConditionTestType
 
-    # noinspection PyArgumentList
-    # PyCharm incorrectly complains
-    DirectionType = Enum("DirectionType",
-                         ["entering", "exiting", "entering_or_exiting"])
+    DirectionType = codec_enums.DirectionType
 
     direction_map = {DirectionType.entering: "entered",
                      DirectionType.exiting: "exited",

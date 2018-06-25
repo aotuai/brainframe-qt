@@ -20,7 +20,7 @@ from brainframe.client.api.codecs import (
 from brainframe.client.api import api_errors
 from brainframe.client.api.streaming import StreamManager
 from brainframe.shared import error_kinds
-from brainframe.client.api.streaming import StatusPoller
+from brainframe.client.api.status_poller import StatusPoller
 
 
 def _make_api_error(resp_content):
@@ -168,7 +168,8 @@ class API(metaclass=Singleton):
         data = self._get(req)
 
         # Convert ZoneStatuses to Codecs
-        out = {int(s_id): [ZoneStatus.from_dict(status) for status in statuses]
+        out = {int(s_id): [ZoneStatus.from_dict(status)
+                           for status in statuses]
                for s_id, statuses in data.items()}
         return out
 

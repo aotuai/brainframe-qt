@@ -6,9 +6,11 @@ class ZoneAlarm(Codec):
     """This is the configuration for an alarm."""
 
     def __init__(self, *, name, count_conditions, rate_conditions,
-                 use_active_time, active_start_time, active_end_time, id_=None):
+                 use_active_time, active_start_time, active_end_time,
+                 id_=None, zone_id=None):
         self.name = name
         self.id = id_
+        self.zone_id = zone_id
         self.count_conditions = count_conditions
         self.rate_conditions = rate_conditions
         self.use_active_time = use_active_time
@@ -37,7 +39,8 @@ class ZoneAlarm(Codec):
                          rate_conditions=rate_conditions,
                          use_active_time=d["use_active_time"],
                          active_start_time=d["active_start_time"],
-                         active_end_time=d["active_end_time"])
+                         active_end_time=d["active_end_time"],
+                         zone_id=d["zone_id"])
 
 
 class Alert(Codec):
@@ -50,11 +53,10 @@ class Alert(Codec):
         If None, then this alert has not been labeled yet.
     """
 
-    def __init__(self, *, alarm_id, zone_id, start_time, end_time, verified_as,
+    def __init__(self, *, alarm_id, start_time, end_time, verified_as,
                  id_=None):
         self.id = id_
         self.alarm_id = alarm_id
-        self.zone_id = zone_id
         self.start_time = start_time
         self.end_time = end_time
         self.verified_as = verified_as
@@ -67,7 +69,6 @@ class Alert(Codec):
     def from_dict(d):
         return Alert(id_=d["id"],
                      alarm_id=d["alarm_id"],
-                     zone_id=d["zone_id"],
                      start_time=d["start_time"],
                      end_time=d["end_time"],
                      verified_as=d["verified_as"])

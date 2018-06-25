@@ -1,11 +1,12 @@
-from typing import Union, List
+from typing import Union, Iterable, List
 
-from PyQt5.QtCore import QLineF, QPointF, QPoint, Qt
-from PyQt5.QtGui import QColor, QPolygonF
-from PyQt5.QtWidgets import QGraphicsPolygonItem, QGraphicsTextItem
+from PyQt5.QtCore import Qt, QLineF, QPointF
+from PyQt5.QtGui import QColor, QPainterPath, QPolygonF
+from PyQt5.QtWidgets import QGraphicsPathItem
 
 
-class StreamPolygon(QGraphicsPolygonItem):
+class StreamPolygon(QGraphicsPathItem):
+
     def __init__(self, points: List[QPointF] = (), *,
                  border_color=None,
                  border_thickness=1,
@@ -13,16 +14,11 @@ class StreamPolygon(QGraphicsPolygonItem):
                  fill_color=None,
                  opacity=1.0,
                  parent=None):
+
+        super().__init__(parent=parent)
+
         self.polygon = QPolygonF()
-        super().__init__(self.polygon, parent=parent)
-
-        # Initialize each point, in case the input is a list
-        for point in points:
-            self.insert_point(point)
-
-        # Use border color unless manually set
-        # if fill_color is None:
-        #     fill_color = border_color
+        self.path: QPainterPath = None
 
         # Set the opacity of the polygon
         self.setOpacity(opacity)
@@ -51,53 +47,49 @@ class StreamPolygon(QGraphicsPolygonItem):
         self.setPen(pen)
         self.setBrush(brush)
 
+        self.draw_points(points)
+
     def insert_point(self, point: Union[List, QPointF]):
         if isinstance(point, list) or isinstance(point, tuple):
             point = QPointF(point[0], point[1])
         self.polygon.append(point)
-        self.setPolygon(self.polygon)
 
     def move_point(self, old_point: QPointF, new_point: QPointF):
         """Find point of polygon nearest to old_point and move it to
         new_point
         """
         points = list(self.polygon)
-        nearest_point = sorted(points,
-                               key=lambda pt: QLineF(pt, old_point).length())[0]
+        nearest_point = sorted(
+            points,
+            key=lambda pt: QLineF(pt, old_point).length()
+        )[0]
 
         nearest_point.setX(new_point.x())
         nearest_point.setY(new_point.y())
 
-        self.polygon = QPolygonF(points)
-        self.setPolygon(self.polygon)
+        self.draw_points(points)
+
+    def draw_points(self, points: Iterable):
+        """Create polygon using points and add it to the Item, replacing
+        the existing one
+        """
+        self.polygon = QPolygonF()
+        for point in points:
+            self.insert_point(point)
+
+        self.redraw_polygon()
+
+    def redraw_polygon(self):
+
+        self.path = QPainterPath()
+        self.path.addPolygon(self.polygon)
+
+        if len(self.polygon) > 2:
+            self.path.closeSubpath()
+
+        self.setPath(self.path)
 
     @property
     def points_list(self):
         """Returns a list in a non-QT type"""
-        return [(point.x(), point.y())
-                for point in self.polygon]
-
-
-class StreamLabelBox(StreamPolygon):
-    """This is a textbox that is intended to look pretty and go on top of
-    detection or zone objects"""
-
-    def __init__(self, title_text, top_left, parent=None):
-        # Create the text item
-        self.label_text = QGraphicsTextItem(title_text, parent=parent)
-        self.label_text.setPos(QPoint(int(top_left[0]), int(top_left[1])))
-        self.label_text.setDefaultTextColor(QColor(255, 255, 255))
-
-        rect = self.label_text.sceneBoundingRect().getCoords()
-        coords = [QPointF(rect[0], rect[1]),
-                  QPointF(rect[2], rect[1]),
-                  QPointF(rect[2], rect[3]),
-                  QPointF(rect[0], rect[3])]
-
-        super().__init__(points=coords,
-                         border_color=parent.pen().color(),
-                         fill_color=parent.pen().color(),
-                         border_thickness=1,
-                         opacity=0.35,
-                         parent=parent)
-        self.label_text.setZValue(self.zValue() + 1)
+        return [(point.x(), point.y()) for point in self.polygon]

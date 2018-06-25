@@ -30,6 +30,8 @@ class TaskConfiguration(QDialog):
 
         self._hide_operation_widgets(True)
 
+        self.cancel_op_button.clicked.connect(self._new_region_canceled_helper)
+
     @classmethod
     def open_configuration(cls, stream_conf):
         dialog = cls(stream_conf=stream_conf)
@@ -56,7 +58,6 @@ class TaskConfiguration(QDialog):
 
     @pyqtSlot()
     def new_line(self):
-        print("new line called")
         line_name = self.get_new_zone_name("New Line",
                                            "Name for new line:")
 
@@ -104,25 +105,32 @@ class TaskConfiguration(QDialog):
         self._hide_operation_widgets(True)
 
     @pyqtSlot()
-    def new_region_canceled(self):
+    def _new_region_canceled_helper(self):
+        """Called by cancel button. Immediately forwards signal to regular
+        new_region_canceled. This is done for typing purposes"""
+        self.new_region_canceled(self.unconfirmed_zone.id)
 
-        # Remove instruction text
-        self.instruction_label.setText("")
+    @pyqtSlot(int)
+    def new_region_canceled(self, zone_id=None):
+        """
+        :param zone_id: ID of zone being deleted for filtering purposes.
+        None if it should always be canceled
+        """
+        if self.unconfirmed_zone and zone_id == self.unconfirmed_zone.id:
+            # Remove instruction text
+            self.instruction_label.setText("")
 
-        # Tell ZoneList to delete widget
-        self.zone_list.delete_zone_widget(self.unconfirmed_zone.id)
+            # Delete unconfirmed zone
+            self.unconfirmed_zone = None
+            self.unconfirmed_zone_widget.deleteLater()
+            self.unconfirmed_zone_widget = None
 
-        # Delete unconfirmed zone
-        self.unconfirmed_zone = None
-        self.unconfirmed_zone_widget.deleteLater()
-        self.unconfirmed_zone_widget = None
+            # Instruct the VideoTaskConfig instance to delete its unconfirmed
+            # polygon
+            self.video_task_config.clean_up()
 
-        # Instruct the VideoTaskConfig instance to delete its unconfirmed
-        # polygon
-        self.video_task_config.clean_up()
-
-        self._set_widgets_enabled(True)
-        self._hide_operation_widgets(True)
+            self._set_widgets_enabled(True)
+            self._hide_operation_widgets(True)
 
     def new_zone(self, new_zone_name, max_points=None):
         """Create a new zone (either line or region)"""

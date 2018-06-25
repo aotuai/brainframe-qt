@@ -2,13 +2,21 @@ from datetime import datetime
 
 from PyQt5.QtWidgets import QMessageBox, QWidget
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.uic import loadUi
+from PyQt5.uic import loadUi, loadUiType
 from PyQt5.QtCore import Qt
 
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 
+# Preload the necessary icons for the AlertLogEntry
+pixmap = QPixmap(str(image_paths.alert_icon))
+pixmap = pixmap.scaled(32, 32, transformMode=Qt.SmoothTransformation)
+alert_icon = QIcon(pixmap)
 
-class AlertLogEntry(QWidget):
+# Preload & parse the UI file into memory, for performance reasons
+_Form, _Base = loadUiType(qt_ui_paths.alert_log_entry_ui)
+
+
+class AlertLogEntry(_Form, _Base):
     """An entry for the Alert Log"""
 
     def __init__(self, *, start_time="", end_time=None,
@@ -16,7 +24,7 @@ class AlertLogEntry(QWidget):
                  parent=None):
 
         super().__init__(parent)
-        loadUi(qt_ui_paths.alert_log_entry_ui, self)
+        self.setupUi(self)
 
         self.start_time = start_time
         self.end_time = end_time
@@ -30,9 +38,7 @@ class AlertLogEntry(QWidget):
 
         # Set the alert icon on the left of the log entry
         self.alert_icon_button.setText("")
-        pixmap = QPixmap(str(image_paths.alert_icon))
-        pixmap = pixmap.scaled(32, 32, transformMode=Qt.SmoothTransformation)
-        self.alert_icon_button.setIcon(QIcon(pixmap))
+        self.alert_icon_button.setIcon(alert_icon)
 
         # Update the time label for the alarm
         self.update_time(self.start_time, self.end_time)

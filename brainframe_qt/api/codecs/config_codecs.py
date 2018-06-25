@@ -1,6 +1,5 @@
-from enum import Enum
-
 from .base_codecs import Codec
+from brainframe.shared import codec_enums
 
 
 # Stream Data structures
@@ -17,10 +16,8 @@ class StreamConfiguration(Codec):
         "file"
         parameters: {"filepath": "/home/usr/videos/my_vid.mp4"}
     """
-    # noinspection PyArgumentList
-    # PyCharm incorrectly complains
-    ConnType = Enum("ConnType",
-                    ["ip_camera", "webcam", "file"])
+
+    ConnType = codec_enums.ConnType
 
     def __init__(self, *, name, connection_type, parameters, id_=None):
         assert connection_type in StreamConfiguration.ConnType, \

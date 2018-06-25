@@ -98,21 +98,23 @@ class VideoTaskConfig(StreamWidget):
                 # If not valid, don't move anything
                 return
 
-            # Move polygon point and click circle
+                # Move polygon point and click circle
             self.unconfirmed_polygon.move_point(self.clicked_circle.pos(),
                                                 mouse_pos)
             self.clicked_circle.setPos(mouse_pos)
 
-        elif self.max_points is None or len(points) < self.max_points:
-            # Nothing is being dragged. Only create a preview polygon if we have
-            # more than 3 points
+        else:  # Nothing is being dragged.
 
-            points.append((mouse_pos.x(), mouse_pos.y()))
+            # Only create a preview polygon if we have more points to add
+            # Otherwise, polygon drawn is what will be confirmed
+            if self.max_points is None or len(points) < self.max_points:
+                points.append((mouse_pos.x(), mouse_pos.y()))
 
-            preview_polygon = StreamPolygon(points,
-                                            opacity=.25,
-                                            border_thickness=self.scene().width() / 100,
-                                            border_color=QColor(50, 255, 50))
+            preview_polygon = StreamPolygon(
+                points,
+                opacity=.25,
+                border_thickness=self.scene().width() / 200,
+                border_color=QColor(50, 255, 50))
 
             # Draw preview polygon
             self.scene().addItem(preview_polygon)
@@ -121,7 +123,7 @@ class VideoTaskConfig(StreamWidget):
         self.set_render_settings(zones=False)
         self.setMouseTracking(True)  # Allow for realtime zone updating
         self.unconfirmed_polygon = StreamPolygon(
-            border_thickness=self.scene().width() / 100,
+            border_thickness=self.scene().width() / 200,
             border_color=QColor(50, 255, 50))
         self.max_points = max_points
 
