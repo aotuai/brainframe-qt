@@ -30,6 +30,7 @@ class AboutPage(QDialog):
 
             # Create text field to display license
             tab = QPlainTextEdit(license_.read_text(), self)
+            tab.setReadOnly(True)
 
             # Make text monospace using a fake font with a style hint
             # This lets the system choose its preferred font
