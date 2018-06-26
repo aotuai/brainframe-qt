@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.uic import loadUi, loadUiType
+from PyQt5.uic import loadUiType
 from PyQt5.QtCore import Qt
 
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
