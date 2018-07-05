@@ -246,3 +246,13 @@ class ImageAlreadyEncodedError(BaseAPIError):
 
 
 kind_to_error_type[error_kinds.IMAGE_ALREADY_ENCODED] = ImageAlreadyEncodedError
+
+
+class FrameNotFoundForAlertError(BaseAPIError):
+    """There was an attempt to get a frame for an alert that has no frame."""
+    def __init__(self, description):
+        super().__init__(error_kinds.FRAME_NOT_FOUND_FOR_ALERT, description)
+
+
+kind_to_error_type[error_kinds.FRAME_NOT_FOUND_FOR_ALERT] = \
+    FrameNotFoundForAlertError

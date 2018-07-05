@@ -188,13 +188,24 @@ class API(metaclass=Singleton):
 
     def set_alert_verification(self, alert_id, verified_as: bool):
         """Sets an alert verified as True or False
-        :param stream_id: The stream that the alert is part of
-        :param alert_id: The
+        :param alert_id: The ID of the alert to set
         :param verified_as: Set verification to True or False
         :return: The modified Alert
         """
         req = f"/api/alerts/{alert_id}"
         self._put_json(req, ujson.dumps(verified_as))
+
+    def get_alert_frame(self, alert_id: int) -> Union[bytes, None]:
+        """Returns the frame saved for this alert, or None if no frame is
+        recorded for this alert.
+
+        :param alert_id: The ID of the alert to get a frame for.
+        """
+        req = f"/api/alerts/{alert_id}/frame"
+        try:
+            return self._get_raw(req)
+        except api_errors.FrameNotFoundForAlertError:
+            return None
 
     # Backend Capabilities
     def get_engine_configuration(self) -> EngineConfiguration:
