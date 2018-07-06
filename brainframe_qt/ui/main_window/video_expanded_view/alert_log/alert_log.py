@@ -7,7 +7,6 @@ from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-
 class AlertLog(QWidget):
     MAX_LOG_LENGTH = 25
     """Limit the length of the Alert log for performance and sanity reasons"""

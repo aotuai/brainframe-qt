@@ -174,20 +174,25 @@ class API(metaclass=Singleton):
         return out
 
     # Alerts
-    def get_unverified_alerts(self, stream_id) -> List[Alert]:
+    def get_unverified_alerts(self, stream_id, page=1) -> List[Alert]:
         """Gets all alerts that have not been verified or rejected
 
-        :param stream_id:
+        :param stream_id: The stream ID to get unverified alerts for
+        :param page: Which "page" of alerts to get. Alerts are paginated in
+            sections of 100. The first page gets the first 100, the second page
+            gets the second 100, and so on.
         :return:
         """
         req = "/api/alerts"
-        data = self._get(req, params={"stream_id": str(stream_id)})
+        data = self._get(req, params={"stream_id": str(stream_id),
+                                      "page": str(page)})
 
         alerts = [Alert.from_dict(a) for a in data]
         return alerts
 
     def set_alert_verification(self, alert_id, verified_as: bool):
-        """Sets an alert verified as True or False
+        """Sets an alert verified as True or False.
+
         :param alert_id: The ID of the alert to set
         :param verified_as: Set verification to True or False
         :return: The modified Alert
@@ -200,6 +205,7 @@ class API(metaclass=Singleton):
         recorded for this alert.
 
         :param alert_id: The ID of the alert to get a frame for.
+        :return: Raw image data of the frame
         """
         req = f"/api/alerts/{alert_id}/frame"
         try:
