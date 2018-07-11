@@ -1,8 +1,9 @@
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtCore import Qt, pyqtSlot, QStandardPaths
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import QDialog, QFileDialog
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
 from brainframe.client.api.codecs import StreamConfiguration
 
 
@@ -22,6 +23,14 @@ class StreamConfigurationDialog(QDialog):
 
         if self.connection_type is None:
             self._set_parameter_widgets_hidden(True)
+
+        # Set the alert icon on the left of the log entry
+        self.select_file_button.setText("")
+        pixmap = QPixmap(str(image_paths.folder_icon))
+        pixmap = pixmap.scaled(32, 32, transformMode=Qt.SmoothTransformation)
+        self.select_file_button.setIcon(QIcon(pixmap))
+
+        self.select_file_button.clicked.connect(self._file_dialog)
 
     @classmethod
     def configure_stream(cls, stream_conf=None):
@@ -54,8 +63,6 @@ class StreamConfigurationDialog(QDialog):
             self._set_parameter_widgets_hidden(True)
 
         else:
-            # Show parameter widgets
-            self._set_parameter_widgets_hidden(False)
 
             if connection_type == "IP Camera":
                 self.connection_type = StreamConfiguration.ConnType.ip_camera
@@ -68,6 +75,9 @@ class StreamConfigurationDialog(QDialog):
                 self.connection_type = StreamConfiguration.ConnType.file
                 self.parameter_label.setText("Filepath")
 
+            # Show parameter widgets
+            self._set_parameter_widgets_hidden(False)
+
     def _set_parameter_widgets_hidden(self, hidden):
         """Hide or show the widgets related to the parameters
 
@@ -77,6 +87,21 @@ class StreamConfigurationDialog(QDialog):
         self.stream_options_label.setHidden(hidden)
         self.parameter_label.setHidden(hidden)
         self.parameter_value.setHidden(hidden)
+
+        # Hide the file selection button if selected connection type is not file
+        self.select_file_button.setHidden(
+            self.connection_type != StreamConfiguration.ConnType.file)
+
+    def _file_dialog(self):
+        """Get the path to (presumably) a video file"""
+
+        # Second return value is ignored. PyQt5 returns what appears to be a
+        # filter as a string as well, differing from the C++ implementation
+        file_path, _ = QFileDialog().getOpenFileName(self,
+            "Select video file",
+            QStandardPaths.writableLocation(QStandardPaths.HomeLocation))
+
+        self.parameter_value.setText(file_path)
 
 
 if __name__ == '__main__':

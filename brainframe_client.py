@@ -1,9 +1,12 @@
+# Import hack for LGPL compliance. This runs stuff on import
+from brainframe.shared import custom_libraries_lgpl
+
 from argparse import ArgumentParser
-from requests.exceptions import ConnectionError
 from time import sleep
 import signal
 import sys
 
+from requests.exceptions import ConnectionError
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
