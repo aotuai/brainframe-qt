@@ -40,6 +40,9 @@ class VideoThumbnailView(QWidget):
             # Create widgets for each
             self.new_stream(stream_conf)
 
+        # Hide the alerts layout
+        self.alert_streams_container.hide()
+
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
         """Stream has been clicked
@@ -89,15 +92,11 @@ class VideoThumbnailView(QWidget):
           self.all_streams_layout.ongoing_alerts_signal
         """
 
-        print("JHERE")
-
         if alerts_ongoing and stream_conf.id not in self.alert_stream_ids:
 
-            print("SDSDS")
-
             # Expand alert layout if necessary
-            # if self.alert_stream_ids:
-            #     self.alert_streams_container.setVisible()
+            if not self.alert_stream_ids:
+                self.alert_streams_container.show()
 
             # Add stream ID of alert to set
             self.alert_stream_ids.add(stream_conf.id)
