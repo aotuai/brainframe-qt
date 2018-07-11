@@ -70,16 +70,7 @@ class ThumbnailGridLayout(QWidget):
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
-        """Signaled by child VideoWidget and then passed upwards
-
-        TODO: Unimplemented
-        Also removes selection border from previously selected video
-        """
-        # TODO: Unimplemented
-        # Remove selection border from previously selected video
-        # if self.current_stream_id:
-        #     self.streams[self.current_stream_id].remove_selection_border()
-
+        """Signaled by child VideoWidget and then passed upwards"""
         # Resize layout to be a single column
         self.grid_num_columns = 1
 
@@ -87,8 +78,8 @@ class ThumbnailGridLayout(QWidget):
         if isinstance(self.sender(), VideoSmall):
             self.thumbnail_stream_clicked_signal.emit(stream_conf)
 
-        # Store stream as current stream
-        self.current_stream_id = stream_conf.id
+            # Store stream as current stream
+            self.current_stream_id = stream_conf.id
 
     @pyqtSlot(bool)
     def ongoing_alerts_slot(self, alerts_ongoing: bool):
@@ -168,4 +159,5 @@ class ThumbnailGridLayout(QWidget):
         # Remove selection border from currently selected video
         if self.current_stream_id:
             self.stream_widgets[
-                self.current_stream_id].remove_selection_border()
+                self.current_stream_id
+            ].remove_selection_border()

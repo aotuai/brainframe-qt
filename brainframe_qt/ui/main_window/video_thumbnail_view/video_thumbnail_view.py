@@ -89,7 +89,15 @@ class VideoThumbnailView(QWidget):
           self.all_streams_layout.ongoing_alerts_signal
         """
 
+        print("JHERE")
+
         if alerts_ongoing and stream_conf.id not in self.alert_stream_ids:
+
+            print("SDSDS")
+
+            # Expand alert layout if necessary
+            # if self.alert_stream_ids:
+            #     self.alert_streams_container.setVisible()
 
             # Add stream ID of alert to set
             self.alert_stream_ids.add(stream_conf.id)
@@ -101,6 +109,10 @@ class VideoThumbnailView(QWidget):
 
             # Remove stream ID of alert from set
             self.alert_stream_ids.remove(stream_conf.id)
+
+            # Hide alert layout if necessary
+            if not self.alert_stream_ids:
+                self.alert_streams_container.hide()
 
             # Remove widget for stream in the alert layout
             self.alert_streams_layout.delete_stream_widget(stream_conf.id)

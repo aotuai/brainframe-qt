@@ -7,73 +7,80 @@
     <x>0</x>
     <y>0</y>
     <width>705</width>
-    <height>825</height>
+    <height>821</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <item row="1" column="0">
+    <widget class="Line" name="layout_divider">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Streams with ongoing alerts:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="ThumbnailGridLayout" name="alert_streams_layout"/>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QWidget" name="alert_streams_container" native="true">
+     <layout class="QVBoxLayout">
+      <item>
+       <widget class="QLabel" name="alert_streams_label">
+        <property name="text">
+         <string>Streams with ongoing alerts:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="ThumbnailGridLayout" name="alert_streams_layout"/>
+      </item>
+      <item>
+       <spacer name="alerts_streams_vertical_spacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item row="3" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>All streams:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="ThumbnailGridLayout" name="all_streams_layout"/>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QWidget" name="all_streams_container" native="true">
+     <layout class="QVBoxLayout" name="_2">
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="all_streams_label">
+        <property name="text">
+         <string>All streams:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="ThumbnailGridLayout" name="all_streams_layout"/>
+      </item>
+      <item>
+       <spacer name="all_streams_vertical_spacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -87,34 +94,34 @@
  <resources/>
  <connections>
   <connection>
-   <sender>alert_streams_layout</sender>
-   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
-   <receiver>widget</receiver>
-   <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>222</x>
-     <y>26</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>294</x>
-     <y>95</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>all_streams_layout</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
    <receiver>widget</receiver>
    <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>200</x>
-     <y>50</y>
+     <x>33</x>
+     <y>457</y>
     </hint>
     <hint type="destinationlabel">
-     <x>294</x>
-     <y>141</y>
+     <x>61</x>
+     <y>817</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alert_streams_layout</sender>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>widget</receiver>
+   <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>80</x>
+     <y>413</y>
     </hint>
    </hints>
   </connection>
@@ -125,12 +132,12 @@
    <slot>ongoing_alerts_slot(PyQt_PyObject,bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>50</y>
+     <x>113</x>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
-     <x>298</x>
-     <y>202</y>
+     <x>55</x>
+     <y>415</y>
     </hint>
    </hints>
   </connection>
@@ -141,12 +148,12 @@
    <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>553</x>
-     <y>20</y>
+     <x>86</x>
+     <y>43</y>
     </hint>
     <hint type="destinationlabel">
-     <x>545</x>
-     <y>40</y>
+     <x>156</x>
+     <y>466</y>
     </hint>
    </hints>
   </connection>
@@ -157,12 +164,12 @@
    <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>584</x>
-     <y>44</y>
+     <x>204</x>
+     <y>459</y>
     </hint>
     <hint type="destinationlabel">
-     <x>590</x>
-     <y>15</y>
+     <x>202</x>
+     <y>50</y>
     </hint>
    </hints>
   </connection>
