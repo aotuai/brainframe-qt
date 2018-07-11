@@ -72,7 +72,7 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "Error Opening Stream", message)
             return
 
-        self.video_thumbnail_view.new_stream_widget(stream_conf)
+        self.video_thumbnail_view.new_stream(stream_conf)
 
     @pyqtSlot()
     def show_identities_dialog(self):

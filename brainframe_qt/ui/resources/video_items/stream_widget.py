@@ -1,5 +1,4 @@
 from collections import defaultdict
-from time import time
 
 # noinspection PyUnresolvedReferences
 # pyqtProperty is erroneously detected as unresolved
@@ -7,13 +6,13 @@ from PyQt5.QtCore import pyqtProperty, Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
+from brainframe.client.api import api
+from brainframe.client.api.streaming import SyncedStreamReader
+from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources.video_items import (
     DetectionPolygon,
     ZoneStatusPolygon
 )
-from brainframe.client.ui.resources.paths import image_paths
-from brainframe.client.api import api
-from brainframe.client.api.streaming import SyncedStreamReader
 
 
 class StreamWidget(QGraphicsView):
@@ -104,6 +103,7 @@ class StreamWidget(QGraphicsView):
             # stream ends
 
     def update_latest_zones(self, zone_statuses):
+        """Update the zones drawn on the frame"""
         self.remove_items_by_type(ZoneStatusPolygon)
         if not self.render_zones:
             return
@@ -119,6 +119,7 @@ class StreamWidget(QGraphicsView):
                     border_thickness=border))
 
     def update_latest_detections(self, zone_statuses):
+        """Update the detections drawn on the frame"""
         self.remove_items_by_type(DetectionPolygon)
         if not self.render_detections:
             return
@@ -130,7 +131,6 @@ class StreamWidget(QGraphicsView):
         for zone_status in zone_statuses:
             if zone_status.zone.name == "Screen":
                 screen_zone_status = zone_status
-
 
             for alarm in zone_status.zone.alarms:
                 for condition in alarm.count_conditions:

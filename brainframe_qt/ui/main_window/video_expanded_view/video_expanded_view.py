@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
+from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import TaskConfiguration
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -45,8 +46,13 @@ class VideoExpandedView(QWidget):
     def expanded_stream_closed_slot(self):
         """Signaled by close button"""
 
+        # Stop attempting to display a stream
         self.expanded_video.change_stream(None)
+
+        # Stop alert log from asking for alerts from stream
         self.alert_log.change_stream(None)
+
+        # No more stream_conf associate with
         self.stream_conf = None
 
         # Hide expanded view widgets
@@ -58,9 +64,19 @@ class VideoExpandedView(QWidget):
 
     @pyqtSlot()
     def delete_stream_button_clicked(self):
+        """Delete button has been clicked for stream
+
+        Connected to:
+        - QPushButton -- QtDesigner
+          self.delete_stream_button.clicked
+        """
+
+        # Delete stream from database
+        api.delete_stream_configuration(self.stream_conf.id)
+
+        # Remove StreamWidgets associated with stream being deleted
         self.stream_delete_signal.emit(self.stream_conf.id)
-        self.expanded_video.change_stream(None)
-        self.alert_log.change_stream(None)
+
         self.expanded_stream_closed_slot()
         self.stream_conf = None
 

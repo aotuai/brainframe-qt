@@ -55,7 +55,7 @@
            <x>0</x>
            <y>0</y>
            <width>971</width>
-           <height>617</height>
+           <height>616</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -168,7 +168,7 @@
    <sender>video_expanded_view</sender>
    <signal>expanded_stream_closed_signal()</signal>
    <receiver>video_thumbnail_view</receiver>
-   <slot>expand_thumbnail_view_slot()</slot>
+   <slot>expand_thumbnail_layouts_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1043</x>
