@@ -1,5 +1,6 @@
 import inspect
 
+from PyQt5.QtCore import QObject
 from PyQt5.QtDesigner import QPyDesignerCustomWidgetPlugin
 from PyQt5.QtGui import QIcon
 
@@ -9,10 +10,7 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
     """Subclass me to create a create a new custom plugin for QtDesigner"""
 
     # Init instance
-    def __init__(self, cls=None,
-                 qt_designer_folder=None,
-                 name=None,
-                 path=None):
+    def __init__(self, cls=None, qt_designer_folder=None, name=None, path=None):
 
         try:
             assert not inspect.ismodule(cls)
@@ -35,7 +33,7 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
 
         self._initialized = False
 
-    def initialize(self, form_editor):
+    def initialize(self, _form_editor):
         """Initialize the custom widget for use with the specified form_editor
 
         Not sure why this exists, but I think it was required
@@ -90,7 +88,7 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
         XML fragment that allows the default values of the custom widget's
         properties to be overridden
         """
-        return f'<widget class="{self.widget_name}" name="{self.widget_name}">'\
+        return f'<widget class="{self.widget_name}" name="{self.widget_name}">' \
                f'</widget>'
 
     def includeFile(self):

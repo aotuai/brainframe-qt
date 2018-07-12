@@ -1,5 +1,4 @@
 # noinspection PyUnresolvedReferences
-# pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
