@@ -88,7 +88,7 @@ class SyncedStreamReader(Thread):
     def run(self):
         self._running = True
 
-        with SyncedStreamReader.video_capture_lock:
+        with type(self).video_capture_lock:
             self._cap = cv2.VideoCapture(self.url)
 
         # Get the first frame to prove the stream is up. If not, end the stream.
