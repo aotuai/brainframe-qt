@@ -1,6 +1,6 @@
 import logging
 from typing import List, Tuple, Union
-from threading import Thread
+from threading import Thread, RLock
 from time import sleep, time
 
 import cv2
@@ -24,6 +24,13 @@ class SyncedStreamReader(Thread):
     """Reads frames from a stream and syncs them up with zone statuses."""
 
     MAX_BUF_SIZE = 100
+    video_capture_lock = RLock()
+    """Lock that exists to solve a strange, occasional SIGSEGV in OpenCV when
+    multiple threads attempt to create VideoCapture instances at the same time.
+    
+    It is not certain if this is the proper solution to the problem, but it does
+    prevent it from happening
+    """
 
     def __init__(self,
                  url: str,
@@ -80,7 +87,9 @@ class SyncedStreamReader(Thread):
 
     def run(self):
         self._running = True
-        self._cap = cv2.VideoCapture(self.url)
+
+        with SyncedStreamReader.video_capture_lock:
+            self._cap = cv2.VideoCapture(self.url)
 
         # Get the first frame to prove the stream is up. If not, end the stream.
         _, first_frame = self._cap.read()
