@@ -15,6 +15,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="main_layout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -28,42 +31,18 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="video_layout" stretch="2,0">
+     <layout class="QHBoxLayout" name="video_layout" stretch="2,0,0">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <item>
-       <widget class="QScrollArea" name="scrollArea">
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
+       <widget class="VideoThumbnailView" name="video_thumbnail_view"/>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <property name="lineWidth">
-         <number>0</number>
-        </property>
-        <property name="midLineWidth">
-         <number>4</number>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="video_thumbnail_view_widget">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>971</width>
-           <height>616</height>
-          </rect>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="VideoThumbnailView" name="video_thumbnail_view"/>
-          </item>
-         </layout>
-        </widget>
        </widget>
       </item>
       <item>
@@ -155,8 +134,8 @@
    <slot>open_expanded_view_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>312</x>
-     <y>135</y>
+     <x>108</x>
+     <y>122</y>
     </hint>
     <hint type="destinationlabel">
      <x>1043</x>
@@ -175,8 +154,8 @@
      <y>152</y>
     </hint>
     <hint type="destinationlabel">
-     <x>312</x>
-     <y>167</y>
+     <x>108</x>
+     <y>154</y>
     </hint>
    </hints>
   </connection>
@@ -187,8 +166,8 @@
    <slot>show_video_expanded_view()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>191</x>
-     <y>109</y>
+     <x>108</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
      <x>194</x>
@@ -207,8 +186,8 @@
      <y>330</y>
     </hint>
     <hint type="destinationlabel">
-     <x>829</x>
-     <y>285</y>
+     <x>108</x>
+     <y>272</y>
     </hint>
    </hints>
   </connection>

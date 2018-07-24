@@ -29,6 +29,7 @@ class StreamWidget(QGraphicsView):
 
         # Remove ugly white background and border from QGraphicsView
         self.setStyleSheet("background-color: transparent; border: 0px")
+        # self.setFrameStyle(0)
 
         # Stream configuration for current widget
         self.stream_conf = None
@@ -45,6 +46,8 @@ class StreamWidget(QGraphicsView):
         self.timestamp = -1
 
         self._frame_rate = frame_rate
+
+        self.frame_size = None
 
         self.frame_update_timer = QTimer()
         self.frame_update_timer.timeout.connect(self.update_items)
@@ -91,7 +94,7 @@ class StreamWidget(QGraphicsView):
             return
 
         frame = self.video_stream.latest_processed_frame_rgb
-        if frame is not None:
+        if frame:
             # Don't render image if it hasn't changed
             if frame.tstamp <= self.timestamp:
                 return
@@ -99,8 +102,11 @@ class StreamWidget(QGraphicsView):
             self.timestamp = frame.tstamp
             pixmap = self._get_pixmap_from_numpy_frame(frame.frame)
             self._set_frame(pixmap)
-            # TODO(Bryce Beagle): Use video_stream.is_running to stop widget if
-            # stream ends
+
+            if self.frame_size != pixmap.size():
+                self.resizeEvent()
+                self.updateGeometry()
+            self.frame_size = pixmap.size()
 
     def update_latest_zones(self, zone_statuses):
         """Update the zones drawn on the frame"""
@@ -195,9 +201,6 @@ class StreamWidget(QGraphicsView):
         else:
             self.current_frame.setPixmap(pixmap)
 
-        # Force resize
-        self._resize(self.size())
-
     def remove_items_by_type(self, item_type):
         # Find current zones polygons
         items = self.scene().items()
@@ -236,11 +239,22 @@ class StreamWidget(QGraphicsView):
     def _static_pixmap(path):
         return QPixmap(str(path))
 
+    def hasHeightForWidth(self):
+        """Enable the use of heightForWidth"""
+        return True
+
+    def heightForWidth(self, width: int):
+        """Lock the aspect ratio of the widget to match the aspect ratio of the
+        scene and its video frame
+        """
+
+        if not self.scene().width():
+            return 0
+
+        return width * self.scene().height() / self.scene().width()
+
     def resizeEvent(self, event=None):
         """Take up entire width using aspect ratio of scene"""
-        self._resize(event.size())
-
-    def _resize(self, size):
 
         if self.current_frame is not None:
             # EXTREMELY IMPORTANT LINE!

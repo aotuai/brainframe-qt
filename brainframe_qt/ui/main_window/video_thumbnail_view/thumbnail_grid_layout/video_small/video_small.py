@@ -102,7 +102,8 @@ class VideoSmall(StreamWidget):
 
             # Draw text
             font = painter.font()
-            font.setPointSize(int(rect.height() / 6))
+            point_size = int(rect.height() / 6)
+            font.setPointSize(point_size if point_size > 0 else 1)
             painter.setFont(font)
             painter.setPen(Qt.white)
 
@@ -136,14 +137,3 @@ class VideoSmall(StreamWidget):
     def remove_selection_border(self):
         """Remove border around stream"""
         pass
-
-    def _resize(self, size):
-        """Resize widget to max allowed height that maintains aspect ratio"""
-        super()._resize(size)
-
-        if not self.scene().width():
-            return
-
-        aspect_ratio = self.scene().height() / self.scene().width()
-        height = int(size.width() * aspect_ratio)
-        self.setFixedHeight(height)
