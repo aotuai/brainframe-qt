@@ -1,4 +1,5 @@
 # Import hack for LGPL compliance. This runs stuff on import
+# noinspection PyUnresolvedReferences
 from brainframe.shared import custom_libraries_lgpl
 
 from argparse import ArgumentParser
@@ -47,15 +48,16 @@ with SplashScreen() as splash_screen:
     while True:
         try:
             # Set all stream analysis as "active" here, since there is currently
-            # no # way to in the UI
+            # no way to in the UI
             configs = api.api.get_stream_configurations()
         except ConnectionError:
             # Server not started yet
             app.processEvents()
 
-            # Prevent a busy loop while splashscreen is open
+            # Prevent a busy loop while splash screen is open
             sleep(.1)
             continue
+
         splash_screen.showMessage("Successfully connected to server. "
                                   "Starting UI")
         for config in configs:
