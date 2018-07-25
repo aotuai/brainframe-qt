@@ -1,14 +1,12 @@
 import logging
-from typing import List, Tuple, Union
 from threading import Thread, RLock
 from time import sleep, time
+from typing import Union
 
 import cv2
 
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.status_poller import StatusPoller
-
-
 
 
 class ProcessedFrame:
@@ -131,7 +129,6 @@ class SyncedStreamReader(Thread):
             # If we have inference later than the current frame, update the
             # current frame
             if frame_buf and frame_buf[0].tstamp <= last_inference_tstamp:
-
                 frame = frame_buf.pop(0)
                 rgb = cv2.cvtColor(frame.frame, cv2.COLOR_BGR2RGB)
                 self._latest = ProcessedFrame(
