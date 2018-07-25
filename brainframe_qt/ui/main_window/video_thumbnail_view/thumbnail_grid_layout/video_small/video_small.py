@@ -5,7 +5,6 @@ from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources.video_items.stream_widget import (
     StreamWidget, DetectionPolygon, ZoneStatusPolygon
 )
-from .alert_banner import AlertBanner
 
 
 class VideoSmall(StreamWidget):
@@ -29,7 +28,6 @@ class VideoSmall(StreamWidget):
         super().__init__(stream_conf, frame_rate, parent=parent)
 
         self.ongoing_alerts: bool = False
-        self.alert_banner: AlertBanner = None
 
     def update_items(self):
         """Override the base StreamWidget implementation to add alert UI
@@ -57,14 +55,14 @@ class VideoSmall(StreamWidget):
     def manage_alert_indication(self, zone_statuses):
 
         # Get all alerts in each zone_status as a single list
-        # Unused. Might be helpful in future when we need to know more info
+        # [Unused]. Might be helpful in future when we need to know more info
         # alerts = [alert for zone_status in zone_statuses
         #           for alert in zone_status.alerts]
 
         # Any active alerts?
         alerts = any(zone_status.alerts for zone_status in zone_statuses)
 
-        # Added during overload
+        # self.ongoing_alerts is used during every paint in drawForeground
         if alerts and not self.ongoing_alerts:
             self.ongoing_alerts = True
             self.ongoing_alerts_signal.emit(True)
@@ -83,7 +81,6 @@ class VideoSmall(StreamWidget):
         much nothing
         """
         if self.ongoing_alerts:
-
             # Gray rectangle
             brush = painter.brush()
             brush.setColor(QColor(0, 0, 0, 127))  # Half transparent black
@@ -95,32 +92,30 @@ class VideoSmall(StreamWidget):
 
             # Draw alert background
             painter.fillRect(0,
-                             int(rect.height() * 2 / 3),
-                             int(rect.width()),
-                             int(rect.height() / 3),
+                             int(self.sceneRect().height() * 2 / 3),
+                             int(self.sceneRect().width()),
+                             int(self.sceneRect().height() / 3),
                              painter.brush())
 
             # Draw text
             font = painter.font()
-            point_size = int(rect.height() / 6)
+            point_size = int(self.sceneRect().height() / 6)
             font.setPointSize(point_size if point_size > 0 else 1)
             painter.setFont(font)
             painter.setPen(Qt.white)
 
-            painter.drawText(int(rect.width() / 24),
-                             int(rect.height() * 11 / 12), "Alert!")
+            painter.drawText(int(self.sceneRect().width() / 24),
+                             int(self.sceneRect().height() * 11 / 12), "Alert!")
 
             # Draw icon
             image = QImage(str(image_paths.alert_icon))
-            image = image.scaled(int(rect.width()),
-                                 int(rect.height() / 6),
+            image = image.scaled(int(self.sceneRect().width()),
+                                 int(self.sceneRect().height() / 6),
                                  Qt.KeepAspectRatio)
-            painter.drawImage(int(rect.width() * 23 / 24) - image.width(),
-                              int(rect.height() * 11 / 12) - image.height(),
-                              image)
-
-        else:
-            super().drawForeground(painter, rect)
+            painter.drawImage(
+                int(self.sceneRect().width() * 23 / 24) - image.width(),
+                int(self.sceneRect().height() * 11 / 12) - image.height(),
+                image)
 
     def mouseReleaseEvent(self, event):
         # Add border around stream to indicate its selection

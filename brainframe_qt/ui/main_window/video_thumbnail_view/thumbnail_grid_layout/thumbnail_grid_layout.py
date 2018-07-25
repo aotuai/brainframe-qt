@@ -16,7 +16,7 @@ class ThumbnailGridLayout(QWidget):
         
     Connected to:
     - VideoThumbnailView -- QtDesigner
-      [parent].ongoing_alerts_signal
+      [parent].ongoing_alerts_slot
     """
 
     def __init__(self, parent=None, grid_num_columns=3):
