@@ -35,13 +35,15 @@ class MainWindow(QMainWindow):
     def show_video_expanded_view(self):
         """Called by thumbnail_view when a thumbnail is clicked"""
         self.video_layout.setStretch(0, 2)
-        self.video_layout.setStretch(1, 5)
+        self.video_layout.setStretch(1, 0)
+        self.video_layout.setStretch(2, 5)
 
     @pyqtSlot()
     def hide_video_expanded_view(self):
         """Called by expanded_view when expanded video is closed"""
-        self.video_layout.setStretch(0, 2)
+        self.video_layout.setStretch(0, 1)
         self.video_layout.setStretch(1, 0)
+        self.video_layout.setStretch(2, 0)
 
     @pyqtSlot()
     def new_stream(self):
@@ -72,7 +74,7 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "Error Opening Stream", message)
             return
 
-        self.video_thumbnail_view.new_stream_widget(stream_conf)
+        self.video_thumbnail_view.new_stream(stream_conf)
 
     @pyqtSlot()
     def show_identities_dialog(self):

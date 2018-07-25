@@ -107,7 +107,12 @@ class StandardError(QMessageBox):
 
         # Force detailed view taller to show traceback better
         # https://stackoverflow.com/a/48590647/8134178
-        self.findChildren(QTextEdit)[0].setFixedHeight(200)
+        try:
+            self.findChildren(QTextEdit)[0].setFixedHeight(200)
+        except IndexError:
+            # Why is this exception raised when QtDesigner has another Exception
+            # during its initialization
+            pass
 
     def copy_to_clipboard(self):
         """Copy the error's text to the system clipboard"""
@@ -127,9 +132,10 @@ class StandardError(QMessageBox):
 
     @staticmethod
     def _is_qt_designer_init_error(exc_obj):
+
         # This environment variable is only set when running QtDesigner
-        if not os.getenv("PYQTDESIGNERPATH"):
-            return False
+        if os.getenv("PYQTDESIGNERPATH"):
+            return True
 
         # Ignore this specific error
         ignore = "super-class __init__() of type BasePlugin was never called"
