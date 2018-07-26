@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
@@ -31,19 +31,21 @@ class MainWindow(QMainWindow):
         self.configure_identity_action.setIcon(configure_identities_icon)
         self.show_about_page_action.setIcon(about_page_icon)
 
+        # https://stackoverflow.com/a/43835396/8134178
+        # 1 : 3 width ratio when expanded
+        self.video_splitter.setSizes([self.width() / 3, self.width()])
+
+        self.hide_video_expanded_view()
+
     @pyqtSlot()
     def show_video_expanded_view(self):
         """Called by thumbnail_view when a thumbnail is clicked"""
-        self.video_layout.setStretch(0, 2)
-        self.video_layout.setStretch(1, 0)
-        self.video_layout.setStretch(2, 5)
+        self.video_expanded_view.setHidden(False)
 
     @pyqtSlot()
     def hide_video_expanded_view(self):
         """Called by expanded_view when expanded video is closed"""
-        self.video_layout.setStretch(0, 1)
-        self.video_layout.setStretch(1, 0)
-        self.video_layout.setStretch(2, 0)
+        self.video_expanded_view.setHidden(True)
 
     @pyqtSlot()
     def new_stream(self):

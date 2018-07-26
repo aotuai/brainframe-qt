@@ -28,6 +28,10 @@ class VideoExpandedView(QWidget):
         # of StreamConfig
         self.source_config_button.setDisabled(True)
 
+        # https://stackoverflow.com/a/43835396/8134178
+        # 3 : 1 height ratio initially
+        self.splitter.setSizes([self.height(), self.height() / 3])
+
         self._set_widgets_hidden(True)
 
     @pyqtSlot(object)
@@ -98,10 +102,5 @@ class VideoExpandedView(QWidget):
         print("Opening source configuration")
 
     def _set_widgets_hidden(self, hidden=True):
-        self.expanded_video.setHidden(hidden)
-        self.hide_button.setHidden(hidden)
-        self.alert_log.setHidden(hidden)
-        self.task_config_button.setHidden(hidden)
-        self.source_config_button.setHidden(hidden)
-        self.stream_name_label.setHidden(hidden)
-        self.delete_stream_button.setHidden(hidden)
+        self.splitter.setHidden(hidden)
+        self.top_layout.setHidden(hidden)
