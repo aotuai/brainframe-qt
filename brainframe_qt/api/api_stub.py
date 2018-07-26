@@ -129,7 +129,7 @@ class API(metaclass=Singleton):
             logging.warning("API: Requested stream that doesn't exist!")
             return None
 
-        logging.info("API: Opening stream on url" + url)
+        logging.info("API: Opening stream on url " + url)
         return self.get_stream_manager().get_stream(url, stream_config)
 
     # Setting server analysis tasks

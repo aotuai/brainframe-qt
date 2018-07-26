@@ -1,3 +1,6 @@
+import logging
+logging.getLogger().setLevel(logging.INFO)
+
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
 from brainframe.shared import custom_libraries_lgpl
