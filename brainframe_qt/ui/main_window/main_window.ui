@@ -20,6 +20,9 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
       <widget class="VideoThumbnailView" name="video_thumbnail_view"/>
       <widget class="VideoExpandedView" name="video_expanded_view"/>
      </widget>
@@ -73,14 +76,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VideoThumbnailView</class>
-   <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
-  </customwidget>
-  <customwidget>
    <class>VideoExpandedView</class>
    <extends>QWidget</extends>
    <header>brainframe.client.ui.main_window.video_expanded_view.video_expanded_view</header>
+  </customwidget>
+  <customwidget>
+   <class>VideoThumbnailView</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
   </customwidget>
  </customwidgets>
  <resources/>
