@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget, QSizePolicy
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
@@ -30,6 +30,11 @@ class MainWindow(QMainWindow):
         self.add_stream_action.setIcon(new_stream_icon)
         self.configure_identity_action.setIcon(configure_identities_icon)
         self.show_about_page_action.setIcon(about_page_icon)
+
+        # Add a spacer to make the license button appear right justified
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.tool_bar.insertWidget(self.show_about_page_action, spacer)
 
         # https://stackoverflow.com/a/43835396/8134178
         # 1 : 3 width ratio when expanded
