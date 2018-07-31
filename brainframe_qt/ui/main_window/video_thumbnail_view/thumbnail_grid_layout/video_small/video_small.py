@@ -65,9 +65,11 @@ class VideoSmall(StreamWidget):
         # self.ongoing_alerts is used during every paint in drawForeground
         if alerts and not self.ongoing_alerts:
             self.ongoing_alerts = True
+            # noinspection PyUnresolvedReferences
             self.ongoing_alerts_signal.emit(True)
         elif not alerts and self.ongoing_alerts:
             self.ongoing_alerts = False
+            # noinspection PyUnresolvedReferences
             self.ongoing_alerts_signal.emit(False)
 
     def drawForeground(self, painter: QPainter, rect: QRectF):
@@ -121,6 +123,7 @@ class VideoSmall(StreamWidget):
         # Add border around stream to indicate its selection
         self.add_selection_border()
 
+        # noinspection PyUnresolvedReferences
         self.stream_clicked.emit(self.stream_conf)
 
         super().mousePressEvent(event)
