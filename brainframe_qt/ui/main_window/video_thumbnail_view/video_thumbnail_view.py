@@ -54,6 +54,7 @@ class VideoThumbnailView(QWidget):
         """
 
         # Alert outer widget
+        # noinspection PyUnresolvedReferences
         self.thumbnail_stream_clicked_signal.emit(stream_conf)
 
     @pyqtSlot()

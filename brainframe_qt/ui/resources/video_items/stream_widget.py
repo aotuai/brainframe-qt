@@ -50,6 +50,7 @@ class StreamWidget(QGraphicsView):
         self.frame_size = None
 
         self.frame_update_timer = QTimer()
+        # noinspection PyUnresolvedReferences
         self.frame_update_timer.timeout.connect(self.update_items)
 
         # Initialize stream configuration and get started
@@ -179,7 +180,8 @@ class StreamWidget(QGraphicsView):
             self.current_frame = None
 
         if not stream_conf:
-            self._set_frame(QPixmap(str(image_paths.video_not_found)))
+            # User should never see this image
+            self._set_frame(QPixmap(str(image_paths.dragon)))
             self.frame_update_timer.stop()
         else:
             self.video_stream = api.get_stream_reader(stream_conf)
@@ -196,6 +198,15 @@ class StreamWidget(QGraphicsView):
         # Create new QGraphicsPixmapItem if there isn't one
         if not self.current_frame:
             self.current_frame = self.scene().addPixmap(pixmap)
+
+            # Fixes BF-319: Clicking a stream, closing it, and reopening it
+            # again resulted in a stream that wasn't displayed properly. This
+            # was because the resizeEvent() would be triggered before the frame
+            # was set from None->'actual frame' preventing the setSceneRect()
+            # from being called. The was not an issue if another stream was
+            # clicked because it would then get _another_ resize event after the
+            # frame was loaded because the frame size would be different.
+            self.resizeEvent()
 
         # Otherwise modify the existing one
         else:
