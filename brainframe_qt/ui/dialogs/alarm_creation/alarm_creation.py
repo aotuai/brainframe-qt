@@ -45,16 +45,17 @@ class AlarmCreationDialog(QDialog):
         self._update_combo_box(self.zone_combo_box,
                                [zone.name for zone in zones])
 
+        # Condition type
+        self.condition_type_button_group.buttonClicked.connect(
+            self.condition_type_button_changed)
+        self.condition_type = None
+        self.set_condition_type(self.ConditionType.count)
+
         # Input sanitation
         self.alarm_name.textEdited.connect(self.verify_inputs_valid)
         self.behavior_combo_box.currentTextChanged.connect(
             self.verify_inputs_valid)
         self.verify_inputs_valid()
-
-        # Condition type
-        self.condition_type_button_group.buttonClicked.connect(
-            self.condition_type_button_changed)
-        self.set_condition_type(self.ConditionType.count)
 
     def condition_type_button_changed(self):
         checked_button = self.condition_type_button_group.checkedButton()
@@ -77,6 +78,8 @@ class AlarmCreationDialog(QDialog):
             self._update_combo_box(self.test_type_combo_box,
                                    ZoneAlarmRateCondition.TestType.__members__)
             self.count_spin_box.setMinimum(1)
+
+        self.condition_type = condition_type
 
     def hide_count_widgets(self, hidden):
         """Hide widgets used when using count conditions"""
@@ -175,6 +178,17 @@ class AlarmCreationDialog(QDialog):
         is_valid = True
         if self.alarm_name.text().strip() == "":
             is_valid = False
+        # Check to make sure the necessary combo boxes have selections. This
+        # also prevents the user from creating alarms when no classes are
+        # available
+        if self.condition_type == self.ConditionType.count:
+            if self.countable_combo_box.currentIndex() == -1 or \
+                    self.behavior_combo_box.currentIndex() == -1:
+                is_valid = False
+        elif self.condition_type == self.ConditionType.rate:
+            if self.countable_combo_box.currentIndex() == -1 or \
+                    self.direction_combo_box.currentIndex() == -1:
+                is_valid = False
 
         self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(is_valid)
 
