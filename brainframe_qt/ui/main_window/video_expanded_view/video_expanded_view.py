@@ -12,7 +12,14 @@ class VideoExpandedView(QWidget):
     """Holds the expanded video view. Hidden when no stream selected"""
 
     expanded_stream_closed_signal = pyqtSignal()
-    """Signaled when expanded stream is closed"""
+    """Signaled when expanded stream is closed
+    
+    Connected to:
+    - MainWindow -- QtDesigner
+      [parent].hide_video_expanded_view()
+    - VideoThumbnailView -- QtDesigner
+      [peer].expand_thumbnail_layouts_slot()
+    """
 
     stream_delete_signal = pyqtSignal(int)
     """Called when the user wants to delete a stream"""
@@ -32,8 +39,6 @@ class VideoExpandedView(QWidget):
         # 3 : 1 height ratio initially
         self.splitter.setSizes([self.height(), self.height() / 3])
 
-        self._set_widgets_hidden(True)
-
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
         """Signaled by thumbnail view when thumbnail video is clicked"""
@@ -42,9 +47,8 @@ class VideoExpandedView(QWidget):
         self.alert_log.change_stream(stream_conf.id)
         self.stream_conf = stream_conf
 
-        # Show expanded view widgets
+        # Set displayed title of stream
         self.stream_name_label.setText(stream_conf.name)
-        self._set_widgets_hidden(False)
 
     @pyqtSlot()
     def expanded_stream_closed_slot(self):
@@ -59,11 +63,9 @@ class VideoExpandedView(QWidget):
         # No more stream_conf associate with
         self.stream_conf = None
 
-        # Hide expanded view widgets
-        self._set_widgets_hidden(True)
-
         # Alert slots that expanded stream was closed
         # VideoThumbnailView will remove highlight from thumbnail video
+        # noinspection PyUnresolvedReferences
         self.expanded_stream_closed_signal.emit()
 
     @pyqtSlot()
@@ -79,6 +81,7 @@ class VideoExpandedView(QWidget):
         api.delete_stream_configuration(self.stream_conf.id)
 
         # Remove StreamWidgets associated with stream being deleted
+        # noinspection PyUnresolvedReferences
         self.stream_delete_signal.emit(self.stream_conf.id)
 
         self.expanded_stream_closed_slot()
@@ -100,7 +103,3 @@ class VideoExpandedView(QWidget):
         # stream
         # Use ui.dialogs.stream_configuration
         print("Opening source configuration")
-
-    def _set_widgets_hidden(self, hidden=True):
-        self.splitter.setHidden(hidden)
-        self.top_layout.setHidden(hidden)

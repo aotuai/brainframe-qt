@@ -36,7 +36,7 @@ class AlertLog(QWidget):
 
         unverified = api.get_unverified_alerts(self.stream_id)
 
-        for alert in unverified[:self.MAX_LOG_LENGTH]:
+        for alert in unverified[::-1]:
             if alert.id in self.alert_widgets:
                 # If the alert already exists, update the information
                 alert_widget = self.alert_widgets[alert.id]
