@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="ThumbnailScrollArea" name="thumbnail_scroll_area">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -48,7 +48,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>703</width>
+        <width>603</width>
         <height>819</height>
        </rect>
       </property>
@@ -151,6 +151,11 @@
    <class>ThumbnailGridLayout</class>
    <extends>QWidget</extends>
    <header>brainframe.client.ui.main_window.video_thumbnail_view.thumbnail_grid_layout.thumbnail_grid_layout</header>
+  </customwidget>
+  <customwidget>
+   <class>ThumbnailScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>brainframe.client.ui.main_window.video_thumbnail_view.thumbnail_scroll_area.thumbnail_scroll_area</header>
   </customwidget>
  </customwidgets>
  <resources/>
