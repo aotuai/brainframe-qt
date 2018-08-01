@@ -181,7 +181,7 @@ class StreamWidget(QGraphicsView):
 
         if not stream_conf:
             # User should never see this image
-            self._set_frame(QPixmap(str(image_paths.dragon)))
+            self._set_frame(QPixmap(str(image_paths.error)))
             self.frame_update_timer.stop()
         else:
             self.video_stream = api.get_stream_reader(stream_conf)

@@ -7,7 +7,7 @@ image_dir = route_path("brainframe", "client", "ui", "resources", "images")
 connecting_to_stream = route_path(image_dir, "connecting_to_stream.png")
 stream_finished      = route_path(image_dir, "stream_finished.png"     )
 splash_screen        = route_path(image_dir, "splash_screen.png"       )
-dragon               = route_path(image_dir, "dragon.jpg"              )
+error                = route_path(image_dir, "error_message.png"       )
 
 # Icons
 icon_dir             = route_path(image_dir, "icons"                   )
