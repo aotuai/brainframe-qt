@@ -347,6 +347,20 @@ class API(metaclass=Singleton):
         image = self._get_raw(req)
         return image
 
+    def get_image_ids_for_identity(self, identity_id, class_name) -> List[int]:
+        """Returns all IDs for the identity with the given ID that are for
+        encodings of the given class name.
+
+        :param identity_id: The ID of the identity to look for images under
+        :param class_name: The class name to look for images encoded for
+        :return: List of image IDs
+        """
+        req = (f"/api/identities/{identity_id}"
+               f"/classes/{class_name}"
+               f"/images")
+        image_ids = self._get(req)
+        return image_ids
+
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
         if self._status_poller is not None:
