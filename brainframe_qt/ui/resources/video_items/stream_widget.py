@@ -185,6 +185,7 @@ class StreamWidget(QGraphicsView):
             self.frame_update_timer.stop()
         else:
             self.video_stream = api.get_stream_reader(stream_conf)
+            self.update_items()   # Run immediately then start timer
             self.frame_update_timer.start(1000 // self._frame_rate)
 
     def set_render_settings(self, *, detections=None, zones=None):

@@ -11,9 +11,11 @@ class VideoSmall(StreamWidget):
     """Video for ThumbnailView"""
 
     stream_clicked = pyqtSignal(object)
-    """
+    """Alerts the layout view that a thumbnail has been clicked
+    
     Connected to:
-    - TODO:
+    - ThumbnailGridLayout -- Dynamic
+      [parent].thumbnail_stream_clicked_slot
     """
     ongoing_alerts_signal = pyqtSignal(bool)
     """Alerts the layout view that the stream has a change in the state of its

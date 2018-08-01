@@ -70,7 +70,14 @@ class ThumbnailGridLayout(QWidget):
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
-        """Signaled by child VideoWidget and then passed upwards"""
+        """Signaled by child VideoWidget and then passed upwards
+
+        Connected to:
+        - VideoSmall -- Dynamic
+          [child].stream_clicked
+        - ThumbnailGridLayout -- QtDesigner
+          [peer].thumbnail_stream_clicked_signal
+        """
         # Resize layout to be a single column
         self.grid_num_columns = 1
 
