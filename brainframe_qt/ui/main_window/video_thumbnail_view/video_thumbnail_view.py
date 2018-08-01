@@ -1,6 +1,6 @@
 # noinspection PyUnresolvedReferences
 from PyQt5.QtCore import pyqtProperty
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
@@ -125,3 +125,27 @@ class VideoThumbnailView(QWidget):
 
         # Store ID for each in set
         self.all_stream_ids.add(stream_conf.id)
+
+    def resizeEvent(self, event):
+        """Prevent the scrollbar from appearing and disappearing as the contents
+        of the scroll area try to fill the width
+        """
+        super().resizeEvent(event)
+
+        magic = 2
+        """Arbitrary value because the scrollbar width was _just_ not big
+        enough, most likely because h+w calculation isn't exactly the right
+        thing. This value was handpicked."""
+
+        h = self.hack_widget_used_to_make_videos_stay_at_top_of_widget.height()
+
+        # If the height of the widget at the bottom is small, that means we're
+        # either max height w/o scrollbar (the problem case) or >max height,
+        # where the scrollbar is always on. Regardless, we want the scrollbar on
+        if h <= self.thumbnail_scroll_area.verticalScrollBar().width() + magic:
+            self.thumbnail_scroll_area.setVerticalScrollBarPolicy(
+                Qt.ScrollBarAlwaysOn)
+        # Otherwise, hide the scrollbar
+        else:
+            self.thumbnail_scroll_area.setVerticalScrollBarPolicy(
+                Qt.ScrollBarAlwaysOff)
