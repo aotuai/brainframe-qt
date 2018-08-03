@@ -40,7 +40,7 @@ class VideoThumbnailView(QWidget):
             self.new_stream(stream_conf)
 
         # Hide the alerts layout
-        self.alert_streams_container.hide()
+        self.alert_streams_layout.hide()
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
@@ -96,7 +96,7 @@ class VideoThumbnailView(QWidget):
 
             # Expand alert layout if necessary
             if not self.alert_stream_ids:
-                self.alert_streams_container.show()
+                self.alert_streams_layout.show()
 
             # Add stream ID of alert to set
             self.alert_stream_ids.add(stream_conf.id)
@@ -111,7 +111,7 @@ class VideoThumbnailView(QWidget):
 
             # Hide alert layout if necessary
             if not self.alert_stream_ids:
-                self.alert_streams_container.hide()
+                self.alert_streams_layout.hide()
 
             # Remove widget for stream in the alert layout
             self.alert_streams_layout.delete_stream_widget(stream_conf.id)

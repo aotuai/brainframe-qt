@@ -27,9 +27,10 @@ class VideoSmall(StreamWidget):
     """
 
     def __init__(self, parent=None, stream_conf=None, frame_rate=30):
-        super().__init__(stream_conf, frame_rate, parent=parent)
 
         self.ongoing_alerts: bool = False
+
+        super().__init__(stream_conf, frame_rate, parent=parent)
 
     def update_items(self):
         """Override the base StreamWidget implementation to add alert UI

@@ -21,6 +21,9 @@ alert_log_entry_ui         = route_path(alert_log_entry_dir       , "alert_log_e
 video_thumbnail_view_dir   = route_path(main_window_dir           , "video_thumbnail_view"     )
 video_thumbnail_view_ui    = route_path(video_thumbnail_view_dir  , "video_thumbnail_view.ui"  )
 
+thumbnail_grid_layout_dir  = route_path(video_thumbnail_view_dir  , "thumbnail_grid_layout"    )
+thumbnail_grid_layout_ui   = route_path(thumbnail_grid_layout_dir , "thumbnail_grid_layout.ui" )
+
 new_stream_button_dir      = route_path(video_thumbnail_view_dir  , "new_stream_button"        )
 new_stream_button_ui       = route_path(new_stream_button_dir     , "new_stream_button.ui"     )
 

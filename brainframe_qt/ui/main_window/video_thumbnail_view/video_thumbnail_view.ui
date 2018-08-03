@@ -26,7 +26,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item row="3" column="0">
     <widget class="ThumbnailScrollArea" name="thumbnail_scroll_area">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
@@ -48,11 +48,11 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>603</width>
+        <width>703</width>
         <height>819</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,9999">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,9999">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -69,65 +69,17 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QWidget" name="alert_streams_container" native="true">
-         <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="alert_streams_label">
-            <property name="text">
-             <string>Streams with ongoing alerts:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="ThumbnailGridLayout" name="alert_streams_layout"/>
-          </item>
-         </layout>
+        <widget class="ThumbnailGridLayout" name="alert_streams_layout">
+         <property name="layout_name" stdset="0">
+          <string>Streams with ongoing alerts:</string>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="all_streams_container" native="true">
-         <layout class="QVBoxLayout" name="_2">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="all_streams_label">
-            <property name="text">
-             <string>All streams:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="ThumbnailGridLayout" name="all_streams_layout"/>
-          </item>
-         </layout>
+        <widget class="ThumbnailGridLayout" name="all_streams_layout">
+         <property name="layout_name" stdset="0">
+          <string>All streams:</string>
+         </property>
         </widget>
        </item>
        <item>
