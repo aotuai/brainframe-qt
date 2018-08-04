@@ -154,9 +154,9 @@
   </connection>
   <connection>
    <sender>video_expanded_view</sender>
-   <signal>stream_delete_signal(int)</signal>
+   <signal>stream_delete_signal(PyQt_PyObject)</signal>
    <receiver>video_thumbnail_view</receiver>
-   <slot>delete_stream_slot(int)</slot>
+   <slot>delete_stream_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1043</x>
