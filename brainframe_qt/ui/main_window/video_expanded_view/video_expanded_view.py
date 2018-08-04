@@ -21,7 +21,7 @@ class VideoExpandedView(QWidget):
       [peer].expand_thumbnail_layouts_slot()
     """
 
-    stream_delete_signal = pyqtSignal(int)
+    stream_delete_signal = pyqtSignal(object)
     """Called when the user wants to delete a stream"""
 
     def __init__(self, parent):
@@ -82,7 +82,7 @@ class VideoExpandedView(QWidget):
 
         # Remove StreamWidgets associated with stream being deleted
         # noinspection PyUnresolvedReferences
-        self.stream_delete_signal.emit(self.stream_conf.id)
+        self.stream_delete_signal.emit(self.stream_conf)
 
         self.expanded_stream_closed_slot()
         self.stream_conf = None

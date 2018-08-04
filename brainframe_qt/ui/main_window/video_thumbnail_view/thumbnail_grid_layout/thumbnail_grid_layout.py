@@ -1,8 +1,10 @@
 # noinspection PyUnresolvedReferences
 from PyQt5.QtCore import pyqtProperty
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QGridLayout, QWidget
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
+from PyQt5.QtWidgets import QWidget
+from PyQt5.uic import loadUi
 
+from brainframe.client.ui.resources.paths import qt_ui_paths
 from .video_small.video_small import VideoSmall
 
 
@@ -22,7 +24,7 @@ class ThumbnailGridLayout(QWidget):
     def __init__(self, parent=None, grid_num_columns=3):
         super().__init__(parent=parent)
 
-        self.setLayout(QGridLayout())
+        loadUi(qt_ui_paths.thumbnail_grid_layout_ui, self)
 
         self.grid_num_rows = 0
         """Current number of row in grid"""
@@ -40,6 +42,12 @@ class ThumbnailGridLayout(QWidget):
         self.current_stream_id = None
         """Currently expanded stream. None if no stream selected"""
 
+        self._layout_name: str = "Grid Layout"
+        """Text displayed on label on widget above grid"""
+
+        # Toggle the expansion of the streams when the button is clicked
+        self.dropdown_button.clicked.connect(self.toggle_expansion)
+
     def new_stream_widget(self, stream_conf):
         video = VideoSmall(self, stream_conf, 30)
 
@@ -51,9 +59,9 @@ class ThumbnailGridLayout(QWidget):
         self._set_layout_equal_stretch()
 
     def _add_widget_to_layout(self, widget):
-        row, col = divmod(self.layout().count(), self._grid_num_columns)
+        row, col = divmod(self.grid_layout.count(), self._grid_num_columns)
 
-        self.layout().addWidget(widget, row, col)
+        self.grid_layout.addWidget(widget, row, col)
 
         # row+1 is equal to number of rows in grid after addition
         # (+1 is for indexing at 1 for a count)
@@ -102,30 +110,30 @@ class ThumbnailGridLayout(QWidget):
 
     def _set_layout_equal_stretch(self):
         """Set all cells in grid layout to have have same width and height"""
-        for row in range(self.layout().rowCount()):
+        for row in range(self.grid_layout.rowCount()):
             if row < self.grid_num_rows:
-                self.layout().setRowStretch(row, 1)
+                self.grid_layout.setRowStretch(row, 1)
             else:
                 # Hide rows that have nothing in them
-                self.layout().setRowStretch(row, 0)
+                self.grid_layout.setRowStretch(row, 0)
 
         # Force the minimum number of shown columns to be equal to exactly
         # self._grid_num_columns.
         # If self._grid_num_columns > columnCount(), force show extra columns
         # If self._grid_num_columns < columnCount(), force hide extra columns
-        num_cols = max(self.layout().columnCount(), self._grid_num_columns)
+        num_cols = max(self.grid_layout.columnCount(), self._grid_num_columns)
         for col in range(num_cols):
             if col < self._grid_num_columns:
-                self.layout().setColumnStretch(col, 1)
+                self.grid_layout.setColumnStretch(col, 1)
             else:
                 # Hide columns that have nothing in them
-                self.layout().setColumnStretch(col, 0)
+                self.grid_layout.setColumnStretch(col, 0)
 
     def delete_stream_widget(self, stream_id):
         """Delete widget in layout with stream id = stream_id"""
 
         stream_widget = self.stream_widgets.pop(stream_id)
-        self.layout().removeWidget(stream_widget)
+        self.grid_layout.removeWidget(stream_widget)
         stream_widget.deleteLater()
 
         # Force a reflow in case it hasn't happened yet
@@ -135,24 +143,6 @@ class ThumbnailGridLayout(QWidget):
         # where the button is). Therefore, current_stream_id will always need to
         # be set to None
         self.current_stream_id = None
-
-    @pyqtProperty(int)
-    def grid_num_columns(self):
-        return self._grid_num_columns
-
-    @grid_num_columns.setter
-    def grid_num_columns(self, grid_num_columns):
-        self._grid_num_columns = grid_num_columns
-
-        widgets = []
-        for i in reversed(range(self.layout().count())):
-            widgets.insert(0, self.layout().itemAt(i).widget())
-            self.layout().removeItem(self.layout().itemAt(i))
-
-        for widget in widgets:
-            self._add_widget_to_layout(widget)
-
-        self._set_layout_equal_stretch()
 
     def expand_grid(self):
         """Called by outer widget when expanded video is explicitly closed
@@ -168,3 +158,43 @@ class ThumbnailGridLayout(QWidget):
             self.stream_widgets[
                 self.current_stream_id
             ].remove_selection_border()
+
+    @pyqtSlot(bool)
+    def toggle_expansion(self, expand):
+        """Called when the dropdown button bar is clicked
+
+        Connected to:
+        - QToolButton -- Dynamic
+          [self].dropdown_button.clicked
+        """
+        arrow_type = Qt.DownArrow if expand else Qt.RightArrow
+        self.dropdown_button.setArrowType(arrow_type)
+
+        self.layout_container.setVisible(expand)
+
+    @pyqtProperty(int)
+    def grid_num_columns(self):
+        return self._grid_num_columns
+
+    @grid_num_columns.setter
+    def grid_num_columns(self, grid_num_columns):
+        self._grid_num_columns = grid_num_columns
+
+        widgets = []
+        for i in reversed(range(self.grid_layout.count())):
+            widgets.insert(0, self.grid_layout.itemAt(i).widget())
+            self.grid_layout.removeItem(self.grid_layout.itemAt(i))
+
+        for widget in widgets:
+            self._add_widget_to_layout(widget)
+
+        self._set_layout_equal_stretch()
+
+    @pyqtProperty(str)
+    def layout_name(self):
+        return self._layout_name
+
+    @layout_name.setter
+    def layout_name(self, layout_name):
+        self.dropdown_button.setText(layout_name)
+        self._layout_name = layout_name
