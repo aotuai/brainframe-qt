@@ -48,7 +48,7 @@ class VideoThumbnailView(QWidget):
 
         Connected to:
         - ThumbnailGridLayout -- QtDesigner
-          self.all_streams_layout.thumbnail_stream_clicked_signal
+          self.alertless_streams_layout.thumbnail_stream_clicked_signal
         - ThumbnailGridLayout -- QtDesigner
           self.alert_streams_layout.thumbnail_stream_clicked_signal
         """
@@ -66,7 +66,7 @@ class VideoThumbnailView(QWidget):
           [peer].expanded_stream_closed_signal
         """
         # Resize GridLayout
-        self.all_streams_layout.expand_grid()
+        self.alertless_streams_layout.expand_grid()
         self.alert_streams_layout.expand_grid()
 
     @pyqtSlot(object)
@@ -77,7 +77,7 @@ class VideoThumbnailView(QWidget):
         - VideoExpandedView -- QtDesigner
           [peer].stream_delete_signal
         """
-        self.all_streams_layout.delete_stream_widget(stream_conf.id)
+        self.alertless_streams_layout.delete_stream_widget(stream_conf.id)
 
         # Delete stream from alert widget if it is there
         if stream_conf.id in self.alert_stream_ids:
@@ -89,7 +89,9 @@ class VideoThumbnailView(QWidget):
 
         Connected to:
         - ThumbnailGridLayout -- QtDesigner
-          self.all_streams_layout.ongoing_alerts_signal
+          self.alertless_streams_layout.ongoing_alerts_signal
+        - ThumbnailGridLayout -- QtDesigner
+          self.alert_streams_layout.ongoing_alerts_signal
         """
 
         if alerts_ongoing and stream_conf.id not in self.alert_stream_ids:
@@ -102,6 +104,7 @@ class VideoThumbnailView(QWidget):
             self.alert_stream_ids.add(stream_conf.id)
 
             # Create a widget for stream in the alert layout
+            self.alertless_streams_layout.delete_stream_widget(stream_conf.id)
             self.alert_streams_layout.new_stream_widget(stream_conf)
 
         elif stream_conf.id in self.alert_stream_ids and not alerts_ongoing:
@@ -115,13 +118,14 @@ class VideoThumbnailView(QWidget):
 
             # Remove widget for stream in the alert layout
             self.alert_streams_layout.delete_stream_widget(stream_conf.id)
+            self.alertless_streams_layout.new_stream_widget(stream_conf)
 
         else:
             raise RuntimeError("Inconsistent state with alert widgets")
 
     def new_stream(self, stream_conf):
         """Create a new stream widget and remember its ID"""
-        self.all_streams_layout.new_stream_widget(stream_conf)
+        self.alertless_streams_layout.new_stream_widget(stream_conf)
 
         # Store ID for each in set
         self.all_stream_ids.add(stream_conf.id)

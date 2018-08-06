@@ -13,8 +13,6 @@ class ThumbnailGridLayout(QWidget):
 
     ongoing_alerts_signal = pyqtSignal(object, bool)
     """Alert the thumbnail view that a stream has an alert associated with it
-    
-    Only all_alerts_layout instance has this signal connected to the slot
         
     Connected to:
     - VideoThumbnailView -- QtDesigner

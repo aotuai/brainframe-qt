@@ -76,9 +76,9 @@
         </widget>
        </item>
        <item>
-        <widget class="ThumbnailGridLayout" name="all_streams_layout">
+        <widget class="ThumbnailGridLayout" name="alertless_streams_layout">
          <property name="layout_name" stdset="0">
-          <string>All streams:</string>
+          <string>Streams without alerts:</string>
          </property>
         </widget>
        </item>
@@ -113,14 +113,14 @@
  <resources/>
  <connections>
   <connection>
-   <sender>all_streams_layout</sender>
+   <sender>alertless_streams_layout</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
    <receiver>widget</receiver>
    <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>33</x>
-     <y>457</y>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>61</x>
@@ -145,14 +145,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>all_streams_layout</sender>
+   <sender>alertless_streams_layout</sender>
    <signal>ongoing_alerts_signal(PyQt_PyObject,bool)</signal>
    <receiver>widget</receiver>
    <slot>ongoing_alerts_slot(PyQt_PyObject,bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>113</x>
-     <y>463</y>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -163,7 +163,7 @@
   <connection>
    <sender>alert_streams_layout</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
-   <receiver>all_streams_layout</receiver>
+   <receiver>alertless_streams_layout</receiver>
    <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -172,23 +172,39 @@
     </hint>
     <hint type="destinationlabel">
      <x>156</x>
-     <y>466</y>
+     <y>132</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>all_streams_layout</sender>
+   <sender>alertless_streams_layout</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
    <receiver>alert_streams_layout</receiver>
    <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>204</x>
-     <y>459</y>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>202</x>
      <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alert_streams_layout</sender>
+   <signal>ongoing_alerts_signal(PyQt_PyObject,bool)</signal>
+   <receiver>widget</receiver>
+   <slot>ongoing_alerts_slot(PyQt_PyObject,bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>33</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>352</x>
+     <y>410</y>
     </hint>
    </hints>
   </connection>
