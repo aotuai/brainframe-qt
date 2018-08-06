@@ -92,8 +92,8 @@ class SyncedStreamReader(Thread):
         # Get the first frame to prove the stream is up. If not, end the stream.
         _, first_frame = self._cap.read()
         if first_frame is None:
-            logging.info("StreamReader: Unable to get first frame from stream."
-                         " Closing.")
+            logging.warning("StreamReader: Unable to get first frame from "
+                            "stream. Closing.")
             self._running = False
             return
         self._stream_initialized = True
