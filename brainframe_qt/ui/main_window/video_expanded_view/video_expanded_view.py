@@ -31,10 +31,6 @@ class VideoExpandedView(QWidget):
 
         self.stream_conf = None
 
-        # TODO(Bryce Beagle): Button is only disabled until API allows editing
-        # of StreamConfig
-        self.source_config_button.setDisabled(True)
-
         # https://stackoverflow.com/a/43835396/8134178
         # 3 : 1 height ratio initially
         self.splitter.setSizes([self.height(), self.height() / 3])
@@ -96,10 +92,3 @@ class VideoExpandedView(QWidget):
 
             # TODO(Bryce Beagle): Actually say what this TODO is for
             # TODO
-
-    @pyqtSlot()
-    def open_source_config(self):
-        # TODO(Bryce Beagle): Open the source config dialog window for the
-        # stream
-        # Use ui.dialogs.stream_configuration
-        print("Opening source configuration")
