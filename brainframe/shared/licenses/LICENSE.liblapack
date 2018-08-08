@@ -1,0 +1,428 @@
+Copyright (c) 1992-2013 The University of Tennessee and The University
+                        of Tennessee Research Foundation.  All rights
+                        reserved.
+Copyright (c) 2000-2013 The University of California Berkeley. All
+                        rights reserved.
+Copyright (c) 2006-2013 The University of Colorado Denver.  All rights
+                        reserved.
+
+$COPYRIGHT$
+
+Additional copyrights may follow
+
+$HEADER$
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+- Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer listed
+  in this license in the documentation and/or other materials
+  provided with the distribution.
+
+- Neither the name of the copyright holders nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+The copyright holders provide no reassurances that the source code
+provided does not infringe any patent, copyright, or any other
+intellectual property rights of third parties.  The copyright holders
+disclaim any liability to any recipient for claims brought against
+recipient by any third party for infringement of that parties
+intellectual property rights.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+################################## libffi
+
+libffi - Copyright (c) 1996-2014  Anthony Green, Red Hat, Inc and others.
+See source files for details.
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+``Software''), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+################################## libexpat
+
+Copyright (c) 1997-2000 Thai Open Source Software Center Ltd
+Copyright (c) 2000-2017 Expat development team
+Licensed under the MIT license:
+Permission is  hereby granted,  free of charge,  to any  person obtaining
+a  copy  of  this  software   and  associated  documentation  files  (the
+"Software"),  to  deal in  the  Software  without restriction,  including
+without  limitation the  rights  to use,  copy,  modify, merge,  publish,
+distribute, sublicense, and/or sell copies of the Software, and to permit
+persons  to whom  the Software  is  furnished to  do so,  subject to  the
+following conditions:
+The above copyright  notice and this permission notice  shall be included
+in all copies or substantial portions of the Software.
+THE  SOFTWARE  IS  PROVIDED  "AS  IS",  WITHOUT  WARRANTY  OF  ANY  KIND,
+EXPRESS  OR IMPLIED,  INCLUDING  BUT  NOT LIMITED  TO  THE WARRANTIES  OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+NO EVENT SHALL THE AUTHORS OR  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR  OTHER LIABILITY, WHETHER  IN AN  ACTION OF CONTRACT,  TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+################################## libdrm
+Copyright 2005 Adam Jackson.
+Copyright (c) 2007-2008 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright (c) 2007-2008 Jakob Bornecrantz <wallbraker@gmail.com>
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright © 2014 NVIDIA Corporation
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2014 NVIDIA Corporation
+Copyright 2011      Luc Verhaegen <libv@codethink.co.uk>
+Copyright (C) 2016 Etnaviv Project
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 2012-2016 by the following authors:
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright (C) 2012-2016 by the following authors:
+Copyright (C) 2014-2015 Etnaviv Project
+Copyright (C) 2012-2016 by the following authors:
+Copyright (C) 2015 Etnaviv Project
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2014 NVIDIA Corporation
+Copyright © 2009 VMware, Inc., Palo Alto, CA., USA
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright (C) 2014 Red Hat
+Copyright © 2018 Intel Corporation
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright (C) 2013 Red Hat
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright © 2011 Red Hat
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2011 Red Hat
+Copyright © 2017-2018 Intel Corporation
+Copyright © 2012 Intel Corporation
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright (C) 2013 Samsung Electronics Co.Ltd
+Copyright (C) 2015 - Tobias Jakobi
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2015 Canonical Ltd. (Maarten Lankhorst)
+Copyright (c) 2015 Emil Velikov <emil.l.velikov@gmail.com>
+Copyright 2017 Advanced Micro Devices, Inc.
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright 2015 Advanced Micro Devices, Inc.
+Copyright 2017 Advanced Micro Devices, Inc.
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright 2017 Advanced Micro Devices, Inc.
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright 2015 Advanced Micro Devices, Inc.
+Copyright 2017 Advanced Micro Devices, Inc.
+Copyright 2015 Advanced Micro Devices, Inc.
+Copyright 2017 Advanced Micro Devices, Inc.
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright 2017 Advanced Micro Devices, Inc.
+Copyright 2008 Tungsten Graphics
+Copyright 2008 Intel Corporation
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+ Copyright 2005 Adam Jackson.
+Copyright (C) 2011 Texas Instruments, Inc
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright (C) 2011 Texas Instruments, Inc
+Copyright 2009 Samsung Electronics Co., Ltd.
+Copyright © 2009 VMware, Inc., Palo Alto, CA., USA
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2009 VMware, Inc., Palo Alto, CA., USA
+ Copyright © 2017 Advanced Micro Devices, Inc.
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+ Copyright © 2017 Advanced Micro Devices, Inc.
+Copyright (C) 2012 Rob Clark <robclark@freedesktop.org>
+Copyright (C) 2013 Rob Clark <robclark@freedesktop.org>
+Copyright (C) 2012 Rob Clark <robclark@freedesktop.org>
+Copyright (C) 2016 Rob Clark <robclark@freedesktop.org>
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright (C) 2012 Rob Clark <robclark@freedesktop.org>
+Copyright (C) 2013 Red Hat
+Copyright (C) 2013 Rob Clark <robclark@freedesktop.org>
+Copyright (C) 1996-2017 Free Software Foundation, Inc.
+dnl Copyright © 2004 Scott James Remnant <scott@netsplit.com>.
+dnl Copyright © 2012-2015 Dan Nicholson <dbn.lists@gmail.com>
+dnl Copyright (c) 2005, 2006, Oracle and/or its affiliates. All rights reserved.
+  Copyright (c) 2009 Mike Frysinger <vapier@gentoo.org>
+  Copyright (c) 2009 Steven G. Johnson <stevenj@alum.mit.edu>
+  Copyright (c) 2009 Matteo Frigo
+dnl Copyright 2005 Red Hat, Inc
+Copyright (C) 2002-2017 Free Software Foundation, Inc.
+Copyright (C) 2001-2017 Free Software Foundation, Inc.
+Copyright (C) 1997-2017 Free Software Foundation, Inc.
+Copyright (C) 1999-2017 Free Software Foundation, Inc.
+Copyright (C) 1996-2017 Free Software Foundation, Inc.
+Copyright (C) 2001-2017 Free Software Foundation, Inc.
+Copyright (C) 2003-2017 Free Software Foundation, Inc.
+Copyright (C) 2001-2017 Free Software Foundation, Inc.
+Copyright (C) 1997-2017 Free Software Foundation, Inc.
+Copyright (C) 2001-2017 Free Software Foundation, Inc.
+Copyright (C) 1999-2017 Free Software Foundation, Inc.
+Copyright (C) 2001-2017 Free Software Foundation, Inc.
+Copyright (C) 1996-2017 Free Software Foundation, Inc.
+Copyright (C) 2009-2017 Free Software Foundation, Inc.
+Copyright (C) 2001-2017 Free Software Foundation, Inc.
+Copyright (C) 2006-2017 Free Software Foundation, Inc.
+Copyright (C) 2004-2017 Free Software Foundation, Inc.
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright © 2017 Intel Corporation
+ Copyright 2015-2016 Collabora Ltd.
+ Copyright 2012 Google, Inc
+Copyright (C) 2017 Etnaviv Project
+Copyright (C) 2017 Zodiac Inflight Innovations
+Copyright (C) 2014-2015 Etnaviv Project
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright (C) 2014 Etnaviv Project
+Copyright (C) 2015 Etnaviv Project
+Copyright (C) 2014-2015 Etnaviv Project
+Copyright (C) 2015 Etnaviv Project
+Copyright (C) 2016 Etnaviv Project
+Copyright (C) 2014-2015 Etnaviv Project
+Copyright (C) 2014 Etnaviv Project
+Copyright © 2012, 2013 Thierry Reding
+Copyright © 2013 Erik Faye-Lund
+Copyright © 2014 NVIDIA Corporation
+Copyright © 2012, 2013 Thierry Reding
+Copyright © 2013 Erik Faye-Lund
+Copyright © 2014 NVIDIA Corporation
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2012, 2013 Thierry Reding
+Copyright © 2013 Erik Faye-Lund
+Copyright © 2014 NVIDIA Corporation
+Copyright 2006 Tungsten Graphics, Inc., Bismarck, ND. USA.
+Copyright (c) 2007-2008 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright (c) 2007-2008 Dave Airlie <airlied@linux.ie>
+Copyright (c) 2007-2008 Jakob Bornecrantz <wallbraker@gmail.com>
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2000 VA Linux Systems, Inc., Sunnyvale, California.
+Copyright (c) 2007-2008 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright (c) 2007-2008 Dave Airlie <airlied@linux.ie>
+Copyright (c) 2007-2008 Jakob Bornecrantz <wallbraker@gmail.com>
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright (c) 2007 Dave Airlie <airlied@linux.ie>
+Copyright (c) 2007 Jakob Bornecrantz <wallbraker@gmail.com>
+Copyright (c) 2008 Red Hat Inc.
+Copyright (c) 2007-2008 Tungsten Graphics, Inc., Cedar Park, TX., USA
+Copyright (c) 2007-2008 Intel Corporation
+Copyright 2011 Intel Corporation
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2000 VA Linux Systems, Inc., Sunnyvale, California.
+Copyright © 2009-2015 VMware, Inc., Palo Alto, CA., USA
+Copyright 2000 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2000 VA Linux Systems, Inc., Sunnyvale, California.
+Copyright 2000 Gareth Hughes
+Copyright 2002 Frank C. Earl
+Copyright 2002-2003 Leif Delgass
+Copyright 2000 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2000 VA Linux Systems, Inc., Fremont, California.
+Copyright 2002 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright 2000 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2000 VA Linux Systems, Inc., Fremont, California.
+Copyright 2002 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright 2005 Eric Anholt
+Copyright 2013 Red Hat
+Copyright © 2014-2015 Broadcom
+Copyright 2002 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright 2003 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright 2013 Red Hat
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2000 VA Linux Systems, Inc., Sunnyvale, California.
+Copyright (c) 2012-2013, NVIDIA CORPORATION.  All rights reserved.
+Copyright 2004  Felix Kuehling
+Copyright 1998-2003 VIA Technologies, Inc. All Rights Reserved.
+Copyright 2001-2003 S3 Graphics, Inc. All Rights Reserved.
+Copyright 2005 Stephane Marchesin.
+Copyright 1999, 2000 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2000 VA Linux Systems, Inc., Sunnyvale, California.
+Copyright © 2008 Jérôme Glisse
+Copyright © 2011 Red Hat All Rights Reserved.
+Copyright © 2008 Dave Airlie
+Copyright © 2008 Jérôme Glisse
+Copyright © 2008 Nicolai Haehnle
+Copyright © 2008 Jérôme Glisse
+Copyright © 2008 Dave Airlie
+Copyright © 2008 Jérôme Glisse
+Copyright 2010 Jerome Glisse <glisse@freedesktop.org>
+Copyright © 2009 Red Hat Inc.
+Copyright © 2008 Dave Airlie
+Copyright © 2008 Jérôme Glisse
+Copyright 2010 Jerome Glisse <glisse@freedesktop.org>
+Copyright © 2011 Red Hat All Rights Reserved.
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2008 Jérôme Glisse
+Copyright © 2008 Nicolai Haehnle
+Copyright © 2008 Jérôme Glisse
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+ Copyright 2005 Adam Jackson.
+Copyright (C) 2012 Samsung Electronics Co., Ltd.
+Copyright (C) 2013 Samsung Electronics Co.Ltd
+Copyright © 2017-2018 Intel Corporation
+Copyright (c) 2011 Samsung Electronics Co., Ltd.
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright (C) 2013 Samsung Electronics Co.Ltd
+Copyright (C) 2012 Samsung Electronics Co., Ltd.
+Copyright (C) 2013 Samsung Electronics Co.Ltd
+Copyright 2012 Red Hat Inc.
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright 2012 Red Hat Inc.
+Copyright (C) 2004-2005, 2007-2008, 2011-2017 Free Software
+  Copyright (C) 2004-2005, 2007, 2009, 2011-2017 Free Software
+  Copyright (C) 1996-2001, 2003-2017 Free Software Foundation, Inc.
+Copyright (C) 2014 Free Software Foundation, Inc.
+Copyright (C) 2011 Free Software Foundation, Inc.
+  Copyright (C) 2004-2005, 2007-2009, 2011-2017 Free Software
+  Copyright (C) 2004, 2011-2017 Free Software Foundation, Inc.
+Copyright (C) 1992-1996, 1998-2012 Free Software Foundation, Inc.
+Copyright (C) 2012 Free Software Foundation, Inc.
+Copyright (C) 2014 Free Software Foundation, Inc.
+Copyright © 2014 NVIDIA Corporation
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright © 2008 Jérôme Glisse
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright 2007 VMware, Inc.
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright 2017 Advanced Micro Devices, Inc.
+Copyright 2007 VMware, Inc.
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2008 Jérôme Glisse
+Copyright 2008 VMware, Inc.
+Copyright 2014 Advanced Micro Devices, Inc.
+Copyright © 2014 Advanced Micro Devices, Inc.
+Copyright © 2017 Advanced Micro Devices, Inc.
+Copyright © 2014 Advanced Micro Devices, Inc.
+Copyright 2008 VMware, Inc.
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright (C) 2011-2014 Free Software Foundation, Inc.
+Copyright (C) 1994 X Consortium
+Copyright (C) 1999-2017 Free Software Foundation, Inc.
+Copyright (C) 1999-2014 Free Software Foundation, Inc.
+Copyright (C) 1996-2014 Free Software Foundation, Inc.
+  Copyright 1992-2018 Free Software Foundation, Inc.
+Copyright 1992-2018 Free Software Foundation, Inc.
+Copyright (C) 1996-2017 Free Software Foundation, Inc.
+Copyright (C) 2004-2017 Bootstrap Authors
+Copyright (C) 2010-2017 Bootstrap Authors
+Copyright 1992-2018 Free Software Foundation, Inc.
+Copyright 1992-2018 Free Software Foundation, Inc.
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright 2006 Tungsten Graphics, Inc., Bismarck, ND. USA.
+Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
+Copyright © 2014 Broadcom
+Copyright © 2016 Broadcom
+Copyright © 2014 Broadcom
+Copyright © 2017 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2016 Broadcom
+Copyright 2003 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright © 2008 Intel Corporation
+Copyright (c) 2003-2016, Troy D. Hanson     http://troydhanson.github.com/uthash/
+Copyright © 2010 Intel Corporation
+Copyright (C) 1999 Wittawat Yamwong
+Copyright © 2009-2011 Intel Corporation
+Copyright 2006 Tungsten Graphics, Inc., Bismarck, ND., USA
+Binary file intel/intel_bufmgr_gem.c matches
+Copyright © 2008 Intel Corporation
+Copyright © 2008-2012 Intel Corporation
+Copyright © 2017-2018 Intel Corporation
+Copyright (C) 1994-2017 Free Software Foundation, Inc.
+Copyright © 2008 Intel Corporation
+Copyright © 2007 Intel Corporation
+Copyright 2006 Tungsten Graphics, Inc., Cedar Park, Texas.
+Copyright (C) 1999 Wittawat Yamwong
+Copyright © 2011 Intel Corporation
+Copyright © 2009 Intel Corporation
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sub license, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL
+THE COPYRIGHT HOLDERS, AUTHORS AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+The above copyright notice and this permission notice (including the
+next paragraph) shall be included in all copies or substantial portions
+of the Software.
