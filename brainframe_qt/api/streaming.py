@@ -1,14 +1,12 @@
 import logging
-from typing import List, Tuple, Union
-from threading import Thread
+from threading import Thread, RLock
 from time import sleep, time
+from typing import Union
 
 import cv2
 
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.status_poller import StatusPoller
-
-
 
 
 class ProcessedFrame:
@@ -24,6 +22,13 @@ class SyncedStreamReader(Thread):
     """Reads frames from a stream and syncs them up with zone statuses."""
 
     MAX_BUF_SIZE = 100
+    video_capture_lock = RLock()
+    """Lock that exists to solve a strange, occasional SIGSEGV in OpenCV when
+    multiple threads attempt to create VideoCapture instances at the same time.
+    
+    It is not certain if this is the proper solution to the problem, but it does
+    prevent it from happening
+    """
 
     def __init__(self,
                  url: str,
@@ -80,13 +85,15 @@ class SyncedStreamReader(Thread):
 
     def run(self):
         self._running = True
-        self._cap = cv2.VideoCapture(self.url)
+
+        with type(self).video_capture_lock:
+            self._cap = cv2.VideoCapture(self.url)
 
         # Get the first frame to prove the stream is up. If not, end the stream.
         _, first_frame = self._cap.read()
         if first_frame is None:
-            logging.info("StreamReader: Unable to get first frame from stream."
-                         " Closing.")
+            logging.warning("StreamReader: Unable to get first frame from "
+                            "stream. Closing.")
             self._running = False
             return
         self._stream_initialized = True
@@ -122,7 +129,6 @@ class SyncedStreamReader(Thread):
             # If we have inference later than the current frame, update the
             # current frame
             if frame_buf and frame_buf[0].tstamp <= last_inference_tstamp:
-
                 frame = frame_buf.pop(0)
                 rgb = cv2.cvtColor(frame.frame, cv2.COLOR_BGR2RGB)
                 self._latest = ProcessedFrame(

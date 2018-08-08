@@ -25,12 +25,6 @@
      <property name="text">
       <string>Select Directory</string>
      </property>
-     <property name="default">
-      <bool>false</bool>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
     </widget>
    </item>
    <item row="0" column="0" colspan="2">

@@ -1,10 +1,11 @@
 import logging
-from typing import List, Tuple, Union, Optional
 from threading import Thread
 from time import sleep, time
+from typing import List
+
+from requests.exceptions import ConnectionError as RequestsConnectionError
 
 from brainframe.client.api import codecs
-
 
 
 class StatusPoller(Thread):
@@ -39,7 +40,7 @@ class StatusPoller(Thread):
                 latest = self._api.get_latest_zone_statuses()
                 self._latest = latest
                 call_time = time() - start
-            except ConnectionError:
+            except RequestsConnectionError:
                 logging.warning("StatusLogger: Could not reach server!")
                 sleep(2)
 
@@ -53,28 +54,6 @@ class StatusPoller(Thread):
     @property
     def is_running(self):
         return self._running
-
-    # def get_alarm(self, stream_id, alarm_id) -> Optional[codecs.ZoneAlarm]:
-    #     """Return a list of unverified alerts for this stream_id"""
-    #     zones = self.get_zones(stream_id)
-    #     if len(zones) == 0:
-    #         return None
-    #     alarms = sum([zone.alarms for zone in zones], [])
-    #     alarms = [alarm for alarm in alarms if alarm.id == alarm_id]
-    #     if len(alarms) == 0:
-    #         return None
-    #     return alarms[0]
-    #
-    # def get_zone(self, stream_id, zone_id) -> Optional[codecs.Zone]:
-    #     for zone in self.get_zones(stream_id):
-    #         if zone.id == zone_id:
-    #             return zone
-    #     return None
-
-    # def get_zones(self, stream_id) -> List[codecs.Zone]:
-    #     statuses = self.latest_statuses(stream_id)
-    #     zones = [status.zone for status in statuses]
-    #     return zones
 
     def latest_statuses(self, stream_id) -> List[codecs.ZoneStatus]:
         """Returns the latest cached list of ZoneStatuses for that stream_id"""

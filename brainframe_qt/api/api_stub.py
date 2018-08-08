@@ -129,7 +129,7 @@ class API(metaclass=Singleton):
             logging.warning("API: Requested stream that doesn't exist!")
             return None
 
-        logging.info("API: Opening stream on url" + url)
+        logging.info("API: Opening stream on url " + url)
         return self.get_stream_manager().get_stream(url, stream_config)
 
     # Setting server analysis tasks
@@ -174,27 +174,44 @@ class API(metaclass=Singleton):
         return out
 
     # Alerts
-    def get_unverified_alerts(self, stream_id) -> List[Alert]:
+    def get_unverified_alerts(self, stream_id, page=1) -> List[Alert]:
         """Gets all alerts that have not been verified or rejected
 
-        :param stream_id:
+        :param stream_id: The stream ID to get unverified alerts for
+        :param page: Which "page" of alerts to get. Alerts are paginated in
+            sections of 100. The first page gets the first 100, the second page
+            gets the second 100, and so on.
         :return:
         """
         req = "/api/alerts"
-        data = self._get(req, params={"stream_id": str(stream_id)})
+        data = self._get(req, params={"stream_id": str(stream_id),
+                                      "page": str(page)})
 
         alerts = [Alert.from_dict(a) for a in data]
         return alerts
 
     def set_alert_verification(self, alert_id, verified_as: bool):
-        """Sets an alert verified as True or False
-        :param stream_id: The stream that the alert is part of
-        :param alert_id: The
+        """Sets an alert verified as True or False.
+
+        :param alert_id: The ID of the alert to set
         :param verified_as: Set verification to True or False
         :return: The modified Alert
         """
         req = f"/api/alerts/{alert_id}"
         self._put_json(req, ujson.dumps(verified_as))
+
+    def get_alert_frame(self, alert_id: int) -> Union[bytes, None]:
+        """Returns the frame saved for this alert, or None if no frame is
+        recorded for this alert.
+
+        :param alert_id: The ID of the alert to get a frame for.
+        :return: Raw image data of the frame
+        """
+        req = f"/api/alerts/{alert_id}/frame"
+        try:
+            return self._get_raw(req)
+        except api_errors.FrameNotFoundForAlertError:
+            return None
 
     # Backend Capabilities
     def get_engine_configuration(self) -> EngineConfiguration:
@@ -329,6 +346,20 @@ class API(metaclass=Singleton):
                f"/images/{image_id}")
         image = self._get_raw(req)
         return image
+
+    def get_image_ids_for_identity(self, identity_id, class_name) -> List[int]:
+        """Returns all IDs for the identity with the given ID that are for
+        encodings of the given class name.
+
+        :param identity_id: The ID of the identity to look for images under
+        :param class_name: The class name to look for images encoded for
+        :return: List of image IDs
+        """
+        req = (f"/api/identities/{identity_id}"
+               f"/classes/{class_name}"
+               f"/images")
+        image_ids = self._get(req)
+        return image_ids
 
     def close(self):
         """Clean up the API. It may no longer be used after this call."""

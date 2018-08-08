@@ -1,142 +1,155 @@
 # noinspection PyUnresolvedReferences
-# pyqtProperty is erroneously detected as unresolved
 from PyQt5.QtCore import pyqtProperty
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
-
-from .video_small.video_small import VideoSmall
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class VideoThumbnailView(QWidget):
     thumbnail_stream_clicked_signal = pyqtSignal(object)
-    """Used to alert outer widget of change"""
+    """Used to alert outer widget of change
+    
+    Connected to:
+    - MainWindow -- QtDesigner
+      [parent].show_video_expanded_view()
+    - VideoExpandedView -- QtDesigner
+      [peer].open_expanded_view_slot()
+    """
 
-    def __init__(self, parent=None, grid_num_columns=3):
+    def __init__(self, parent=None):
 
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.video_thumbnail_view_ui, self)
 
-        self.grid_num_rows = 0
-        """Current number of row in grid"""
-        self._grid_num_columns = grid_num_columns
-        """Current number of columns in grid"""
-        self._grid_num_columns_expanded = grid_num_columns
-        """Number of columns in grid when thumbnail view is expanded"""
-
-        self.streams = {}
-        """Streams currently in the ThumbnailView
-        
-        Dict is formatted as {stream_id: VideoSmall()}
-        """
-
-        for stream_conf in api.get_stream_configurations():
-            self.new_stream_widget(stream_conf)
+        self.all_stream_ids = set()
+        """Stream IDs currently in the ThumbnailView"""
+        self.alert_stream_ids = set()
+        """Streams IDs currently in the ThumbnailView with ongoing alerts"""
 
         self.current_stream_id = None
         """Currently expanded stream. None if no stream selected"""
 
-    @pyqtSlot(int)
-    def thumbnail_stream_clicked_slot(self, stream_id):
-        """Signaled by child VideoWidget and then passed upwards
+        # Get all current streams
+        for stream_conf in api.get_stream_configurations():
 
-        Also removes selection border from previously selected video"""
-        # Remove selection border from previously selected video
-        if self.current_stream_id:
-            self.streams[self.current_stream_id].remove_selection_border()
+            # Create widgets for each
+            self.new_stream(stream_conf)
+
+        # Hide the alerts layout
+        self.alert_streams_layout.hide()
+
+    @pyqtSlot(object)
+    def thumbnail_stream_clicked_slot(self, stream_conf):
+        """Stream has been clicked
+
+        Connected to:
+        - ThumbnailGridLayout -- QtDesigner
+          self.alertless_streams_layout.thumbnail_stream_clicked_signal
+        - ThumbnailGridLayout -- QtDesigner
+          self.alert_streams_layout.thumbnail_stream_clicked_signal
+        """
 
         # Alert outer widget
-        self.thumbnail_stream_clicked_signal.emit(
-            self.streams[stream_id].stream_conf)
-
-        # Store stream as current stream
-        self.current_stream_id = stream_id
-
-        self.grid_num_columns = 1
+        # noinspection PyUnresolvedReferences
+        self.thumbnail_stream_clicked_signal.emit(stream_conf)
 
     @pyqtSlot()
-    def expand_thumbnail_view_slot(self):
-        """Called by outer widget when expanded video is explicitly closed
+    def expand_thumbnail_layouts_slot(self):
+        """Expand the grid layouts to fill the entire main_window.
 
-        Removes selection border from currently selected video
+        Connected to:
+        - VideoExpandedView -- QtDesigner
+          [peer].expanded_stream_closed_signal
         """
         # Resize GridLayout
-        self.grid_num_columns = self._grid_num_columns_expanded
+        self.alertless_streams_layout.expand_grid()
+        self.alert_streams_layout.expand_grid()
 
-        # Remove selection border from currently selected video
-        if self.current_stream_id:
-            self.streams[self.current_stream_id].remove_selection_border()
+    @pyqtSlot(object)
+    def delete_stream_slot(self, stream_conf):
+        """Stream is being deleted
 
-    @pyqtSlot(int)
-    def delete_stream_slot(self, stream_id):
-        """"""
-        api.delete_stream_configuration(stream_id)
-        self.current_stream_id = None
+        Connected to:
+        - VideoExpandedView -- QtDesigner
+          [peer].stream_delete_signal
+        """
+        self.alertless_streams_layout.delete_stream_widget(stream_conf.id)
 
-        stream_widget = self.streams.pop(stream_id)
-        self.main_layout.removeWidget(stream_widget)
-        stream_widget.deleteLater()
+        # Delete stream from alert widget if it is there
+        if stream_conf.id in self.alert_stream_ids:
+            self.ongoing_alerts_slot(stream_conf, False)
 
-        # Force a reflow in case it hasn't happened yet
-        self.grid_num_columns = self._grid_num_columns
+    @pyqtSlot(object, bool)
+    def ongoing_alerts_slot(self, stream_conf, alerts_ongoing):
+        """Alert associated with stream
 
-    @pyqtProperty(int)
-    def grid_num_columns(self):
-        return self._grid_num_columns
+        Connected to:
+        - ThumbnailGridLayout -- QtDesigner
+          self.alertless_streams_layout.ongoing_alerts_signal
+        - ThumbnailGridLayout -- QtDesigner
+          self.alert_streams_layout.ongoing_alerts_signal
+        """
 
-    @grid_num_columns.setter
-    def grid_num_columns(self, grid_num_columns):
-        self._grid_num_columns = grid_num_columns
+        if alerts_ongoing and stream_conf.id not in self.alert_stream_ids:
 
-        widgets = []
-        for i in reversed(range(self.main_layout.count())):
-            widgets.insert(0, self.main_layout.itemAt(i).widget())
-            self.main_layout.removeItem(self.main_layout.itemAt(i))
+            # Expand alert layout if necessary
+            if not self.alert_stream_ids:
+                self.alert_streams_layout.show()
 
-        for widget in widgets:
-            self._add_widget_to_layout(widget)
+            # Add stream ID of alert to set
+            self.alert_stream_ids.add(stream_conf.id)
 
-        self._set_layout_equal_stretch()
+            # Create a widget for stream in the alert layout
+            self.alertless_streams_layout.delete_stream_widget(stream_conf.id)
+            self.alert_streams_layout.new_stream_widget(stream_conf)
 
-    def new_stream_widget(self, stream_conf):
-        video = VideoSmall(self, stream_conf, 30)
-        self.streams[stream_conf.id] = video
-        self._add_widget_to_layout(video)
-        self._set_layout_equal_stretch()
+        elif stream_conf.id in self.alert_stream_ids and not alerts_ongoing:
 
-    def _add_widget_to_layout(self, widget):
-        row, col = divmod(self.main_layout.count(), self._grid_num_columns)
+            # Remove stream ID of alert from set
+            self.alert_stream_ids.remove(stream_conf.id)
 
-        self.main_layout.addWidget(widget, row, col)
+            # Hide alert layout if necessary
+            if not self.alert_stream_ids:
+                self.alert_streams_layout.hide()
 
-        # row+1 is equal to number of rows in grid after addition
-        # (+1 is for indexing at 1 for a count)
-        self.grid_num_rows = row + 1
+            # Remove widget for stream in the alert layout
+            self.alert_streams_layout.delete_stream_widget(stream_conf.id)
+            self.alertless_streams_layout.new_stream_widget(stream_conf)
 
-    def _set_layout_equal_stretch(self):
-        """Set all cells in grid layout to have have same width and height"""
-        for row in range(self.main_layout.rowCount()):
-            if row < self.grid_num_rows:
-                self.main_layout.setRowStretch(row, 1)
-            else:
-                # Hide rows that have nothing in them
-                self.main_layout.setRowStretch(row, 0)
+        else:
+            raise RuntimeError("Inconsistent state with alert widgets")
 
-        # Force the minimum number of shown columns to be equal to exactly
-        # self._grid_num_columns.
-        # If self._grid_num_columns > columnCount(), force show extra columns
-        # If self._grid_num_columns < columnCount(), force hide extra columns
-        num_cols = max(self.main_layout.columnCount(), self._grid_num_columns)
-        for col in range(num_cols):
-            if col < self._grid_num_columns:
-                self.main_layout.setColumnStretch(col, 1)
-            else:
-                # Hide columns that have nothing in them
-                self.main_layout.setColumnStretch(col, 0)
+    def new_stream(self, stream_conf):
+        """Create a new stream widget and remember its ID"""
+        self.alertless_streams_layout.new_stream_widget(stream_conf)
+
+        # Store ID for each in set
+        self.all_stream_ids.add(stream_conf.id)
 
     def resizeEvent(self, event):
+        """Prevent the scrollbar from appearing and disappearing as the contents
+        of the scroll area try to fill the width
+        """
         super().resizeEvent(event)
+
+        magic = 2
+        """Arbitrary value because the scrollbar width was _just_ not big
+        enough, most likely because h+w calculation isn't exactly the right
+        thing. This value was handpicked."""
+
+        h = self.hack_widget_used_to_make_videos_stay_at_top_of_widget.height()
+
+        # If the height of the widget at the bottom is small, that means we're
+        # either max height w/o scrollbar (the problem case) or >max height,
+        # where the scrollbar is always on. Regardless, we want the scrollbar on
+        if h <= self.thumbnail_scroll_area.verticalScrollBar().width() + magic:
+            self.thumbnail_scroll_area.setVerticalScrollBarPolicy(
+                Qt.ScrollBarAlwaysOn)
+        # Otherwise, hide the scrollbar
+        else:
+            self.thumbnail_scroll_area.setVerticalScrollBarPolicy(
+                Qt.ScrollBarAlwaysOff)

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PyQt5.QtCore import Qt, QStandardPaths, QDir
+from PyQt5.QtCore import Qt, QStandardPaths
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from PyQt5.uic import loadUi

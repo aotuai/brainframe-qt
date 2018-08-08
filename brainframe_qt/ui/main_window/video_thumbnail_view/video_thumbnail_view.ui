@@ -6,35 +6,212 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>649</width>
-    <height>300</height>
+    <width>705</width>
+    <height>821</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="main_layout"/>
-   </item>
-   <item row="1" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="3" column="0">
+    <widget class="ThumbnailScrollArea" name="thumbnail_scroll_area">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
+     <property name="lineWidth">
+      <number>0</number>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
+     <property name="widgetResizable">
+      <bool>true</bool>
      </property>
-    </spacer>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>703</width>
+        <height>819</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,9999">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="ThumbnailGridLayout" name="alert_streams_layout">
+         <property name="layout_name" stdset="0">
+          <string>Streams with ongoing alerts:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="ThumbnailGridLayout" name="alertless_streams_layout">
+         <property name="layout_name" stdset="0">
+          <string>Streams without alerts:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="hack_widget_used_to_make_videos_stay_at_top_of_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ThumbnailGridLayout</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_thumbnail_view.thumbnail_grid_layout.thumbnail_grid_layout</header>
+  </customwidget>
+  <customwidget>
+   <class>ThumbnailScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>brainframe.client.ui.main_window.video_thumbnail_view.thumbnail_scroll_area.thumbnail_scroll_area</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>alertless_streams_layout</sender>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>widget</receiver>
+   <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>33</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>61</x>
+     <y>817</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alert_streams_layout</sender>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>widget</receiver>
+   <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>80</x>
+     <y>413</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alertless_streams_layout</sender>
+   <signal>ongoing_alerts_signal(PyQt_PyObject,bool)</signal>
+   <receiver>widget</receiver>
+   <slot>ongoing_alerts_slot(PyQt_PyObject,bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>415</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alert_streams_layout</sender>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>alertless_streams_layout</receiver>
+   <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>86</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>156</x>
+     <y>132</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alertless_streams_layout</sender>
+   <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>alert_streams_layout</receiver>
+   <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>202</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>alert_streams_layout</sender>
+   <signal>ongoing_alerts_signal(PyQt_PyObject,bool)</signal>
+   <receiver>widget</receiver>
+   <slot>ongoing_alerts_slot(PyQt_PyObject,bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>33</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>352</x>
+     <y>410</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>create_new_stream_slot()</slot>
+  <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
+  <slot>ongoing_alerts_slot(PyQt_PyObject,bool)</slot>
  </slots>
 </ui>

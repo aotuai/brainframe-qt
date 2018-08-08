@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
+from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import TaskConfiguration
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -11,9 +12,16 @@ class VideoExpandedView(QWidget):
     """Holds the expanded video view. Hidden when no stream selected"""
 
     expanded_stream_closed_signal = pyqtSignal()
-    """Signaled when expanded stream is closed"""
+    """Signaled when expanded stream is closed
+    
+    Connected to:
+    - MainWindow -- QtDesigner
+      [parent].hide_video_expanded_view()
+    - VideoThumbnailView -- QtDesigner
+      [peer].expand_thumbnail_layouts_slot()
+    """
 
-    stream_delete_signal = pyqtSignal(int)
+    stream_delete_signal = pyqtSignal(object)
     """Called when the user wants to delete a stream"""
 
     def __init__(self, parent):
@@ -23,11 +31,9 @@ class VideoExpandedView(QWidget):
 
         self.stream_conf = None
 
-        # TODO(Bryce Beagle): Button is only disabled until API allows editing
-        # of StreamConfig
-        self.source_config_button.setDisabled(True)
-
-        self._set_widgets_hidden(True)
+        # https://stackoverflow.com/a/43835396/8134178
+        # 3 : 1 height ratio initially
+        self.splitter.setSizes([self.height(), self.height() / 3])
 
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
@@ -37,30 +43,43 @@ class VideoExpandedView(QWidget):
         self.alert_log.change_stream(stream_conf.id)
         self.stream_conf = stream_conf
 
-        # Show expanded view widgets
+        # Set displayed title of stream
         self.stream_name_label.setText(stream_conf.name)
-        self._set_widgets_hidden(False)
 
     @pyqtSlot()
     def expanded_stream_closed_slot(self):
         """Signaled by close button"""
 
+        # Stop attempting to display a stream
         self.expanded_video.change_stream(None)
-        self.alert_log.change_stream(None)
-        self.stream_conf = None
 
-        # Hide expanded view widgets
-        self._set_widgets_hidden(True)
+        # Stop alert log from asking for alerts from stream
+        self.alert_log.change_stream(None)
+
+        # No more stream_conf associate with
+        self.stream_conf = None
 
         # Alert slots that expanded stream was closed
         # VideoThumbnailView will remove highlight from thumbnail video
+        # noinspection PyUnresolvedReferences
         self.expanded_stream_closed_signal.emit()
 
     @pyqtSlot()
     def delete_stream_button_clicked(self):
-        self.stream_delete_signal.emit(self.stream_conf.id)
-        self.expanded_video.change_stream(None)
-        self.alert_log.change_stream(None)
+        """Delete button has been clicked for stream
+
+        Connected to:
+        - QPushButton -- QtDesigner
+          self.delete_stream_button.clicked
+        """
+
+        # Delete stream from database
+        api.delete_stream_configuration(self.stream_conf.id)
+
+        # Remove StreamWidgets associated with stream being deleted
+        # noinspection PyUnresolvedReferences
+        self.stream_delete_signal.emit(self.stream_conf)
+
         self.expanded_stream_closed_slot()
         self.stream_conf = None
 
@@ -73,19 +92,3 @@ class VideoExpandedView(QWidget):
 
             # TODO(Bryce Beagle): Actually say what this TODO is for
             # TODO
-
-    @pyqtSlot()
-    def open_source_config(self):
-        # TODO(Bryce Beagle): Open the source config dialog window for the
-        # stream
-        # Use ui.dialogs.stream_configuration
-        print("Opening source configuration")
-
-    def _set_widgets_hidden(self, hidden=True):
-        self.expanded_video.setHidden(hidden)
-        self.hide_button.setHidden(hidden)
-        self.alert_log.setHidden(hidden)
-        self.task_config_button.setHidden(hidden)
-        self.source_config_button.setHidden(hidden)
-        self.stream_name_label.setHidden(hidden)
-        self.delete_stream_button.setHidden(hidden)
