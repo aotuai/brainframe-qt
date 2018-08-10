@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
 from brainframe.client.api import api
 from brainframe.client.api.streaming import SyncedStreamReader
+from brainframe.shared.stream_utils import StreamStatus
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources.video_items import (
     DetectionPolygon,
@@ -84,11 +85,11 @@ class StreamWidget(QGraphicsView):
             pixmap = self._static_pixmap(image_paths.stream_finished)
             self._set_frame(pixmap)
             return
-        if self.video_stream.status == SyncedStreamReader.Status.HALTED:
+        if self.video_stream.status == StreamStatus.HALTED:
             pixmap = self._static_pixmap(image_paths.stream_finished)
             self._set_frame(pixmap)
             return
-        if self.video_stream.status == SyncedStreamReader.Status.INITIALIZING:
+        if self.video_stream.status == StreamStatus.INITIALIZING:
             pixmap = self._static_pixmap(image_paths.connecting_to_stream)
             self._set_frame(pixmap)
             return
@@ -226,7 +227,7 @@ class StreamWidget(QGraphicsView):
         """Returns True if there is an active stream that is giving frames
         at the moment."""
         return self.video_stream is not None \
-            and self.video_stream.status == SyncedStreamReader.Status.STREAMING
+            and self.video_stream.status == StreamStatus.STREAMING
 
     @pyqtProperty(int)
     def frame_rate(self):
