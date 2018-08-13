@@ -85,11 +85,11 @@ class StreamWidget(QGraphicsView):
             pixmap = self._static_pixmap(image_paths.stream_finished)
             self._set_frame(pixmap)
             return
-        if self.video_stream.status == StreamStatus.HALTED:
+        if self.video_stream.status == StreamStatus.halted:
             pixmap = self._static_pixmap(image_paths.stream_finished)
             self._set_frame(pixmap)
             return
-        if self.video_stream.status == StreamStatus.INITIALIZING:
+        if self.video_stream.status == StreamStatus.initializing:
             pixmap = self._static_pixmap(image_paths.connecting_to_stream)
             self._set_frame(pixmap)
             return
@@ -227,7 +227,7 @@ class StreamWidget(QGraphicsView):
         """Returns True if there is an active stream that is giving frames
         at the moment."""
         return self.video_stream is not None \
-            and self.video_stream.status == StreamStatus.STREAMING
+            and self.video_stream.status == StreamStatus.streaming
 
     @pyqtProperty(int)
     def frame_rate(self):
