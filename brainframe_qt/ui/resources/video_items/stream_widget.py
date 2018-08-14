@@ -43,6 +43,9 @@ class StreamWidget(QGraphicsView):
         self.setScene(QGraphicsScene())
 
         self.video_stream: SyncedStreamReader = None  # Set in change_stream
+        self.stream_status = None
+        """Tracks the current known state of the stream and prevents redrawing
+        if the state has not changed"""
         self.current_frame = None
         self.timestamp = -1
 
@@ -84,30 +87,42 @@ class StreamWidget(QGraphicsView):
         if self.video_stream is None:
             pixmap = self._static_pixmap(image_paths.stream_finished)
             self._set_frame(pixmap)
-            return
-        if self.video_stream.status == StreamStatus.halted:
-            pixmap = self._static_pixmap(image_paths.stream_finished)
-            self._set_frame(pixmap)
-            return
-        if self.video_stream.status == StreamStatus.initializing:
-            pixmap = self._static_pixmap(image_paths.connecting_to_stream)
-            self._set_frame(pixmap)
+            self.resizeEvent()
             return
 
-        frame = self.video_stream.latest_processed_frame_rgb
-        if frame:
-            # Don't render image if it hasn't changed
-            if frame.tstamp <= self.timestamp:
-                return
+        pixmap = None
 
-            self.timestamp = frame.tstamp
-            pixmap = self._get_pixmap_from_numpy_frame(frame.frame)
+        # Video is streaming frames
+        if self.video_stream.status is StreamStatus.streaming:
+            frame = self.video_stream.latest_processed_frame_rgb
+            # Change image only we have a new one
+            if frame and frame.tstamp > self.timestamp:
+                self.timestamp = frame.tstamp
+                pixmap = self._get_pixmap_from_numpy_frame(frame.frame)
+                self._set_frame(pixmap)
+
+        # Video is not streaming
+        elif self.stream_status is not self.video_stream.status:
+            if self.video_stream.status is StreamStatus.halted:
+                pixmap = self._static_pixmap(image_paths.stream_finished)
+            elif self.video_stream.status is StreamStatus.initializing:
+                pixmap = self._static_pixmap(image_paths.connecting_to_stream)
+            else:
+                raise ValueError("Unknown stream status")
+
             self._set_frame(pixmap)
 
+        # Update viewport if the frame size has changed
+        if pixmap:
             if self.frame_size != pixmap.size():
                 self.resizeEvent()
                 self.updateGeometry()
             self.frame_size = pixmap.size()
+        else:
+            self.frame_size = None
+
+        # Keep track of current stream_status to monitor changes
+        self.stream_status = self.video_stream.status
 
     def update_latest_zones(self, zone_statuses):
         """Update the zones drawn on the frame"""
@@ -185,7 +200,13 @@ class StreamWidget(QGraphicsView):
             self.frame_update_timer.stop()
         else:
             self.video_stream = api.get_stream_reader(stream_conf)
-            self.update_items()   # Run immediately then start timer
+
+            # Reset timestamp so that a frame is always drawn. The old stream
+            # may have had a newer frame than the new one.
+            self.timestamp = -1
+
+            # Run immediately then start timer
+            self.update_items()
             self.frame_update_timer.start(1000 // self._frame_rate)
 
     def set_render_settings(self, *, detections=None, zones=None):
