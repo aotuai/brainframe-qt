@@ -248,7 +248,7 @@ class StreamWidget(QGraphicsView):
         """Returns True if there is an active stream that is giving frames
         at the moment."""
         return self.video_stream is not None \
-            and self.video_stream.status == StreamStatus.streaming
+            and self.video_stream.status is StreamStatus.streaming
 
     @pyqtProperty(int)
     def frame_rate(self):

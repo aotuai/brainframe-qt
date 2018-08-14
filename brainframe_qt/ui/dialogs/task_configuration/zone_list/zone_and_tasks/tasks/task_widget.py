@@ -58,7 +58,7 @@ class TaskWidget(QWidget):
         self.task_type = task_type
 
         # Don't allow Screen region to be deleted
-        if self.task_type == self.TaskType.region \
+        if self.task_type is self.TaskType.region \
                 and self.task_name == "Screen":
             self.delete_button.setDisabled(True)
 

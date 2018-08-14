@@ -117,7 +117,7 @@ class StreamManager:
             self._stream_readers[url] = stream_reader
             return stream_reader
 
-        if self._stream_readers[url].status == StreamStatus.halted:
+        if self._stream_readers[url].status is StreamStatus.halted:
             # Stream not running. Starting a new one.
             self._stream_readers[url].close()
             stream_reader = SyncedStreamReader(
