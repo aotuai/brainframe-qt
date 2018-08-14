@@ -85,7 +85,7 @@ class StreamWidget(QGraphicsView):
 
         # Check if the object actually has a stream
         if self.video_stream is None:
-            pixmap = self._static_pixmap(image_paths.stream_finished)
+            pixmap = self._static_pixmap(image_paths.connection_lost)
             self._set_frame(pixmap)
             self.resizeEvent()
             return
@@ -104,7 +104,7 @@ class StreamWidget(QGraphicsView):
         # Video is not streaming
         elif self.stream_status is not self.video_stream.status:
             if self.video_stream.status is StreamStatus.halted:
-                pixmap = self._static_pixmap(image_paths.stream_finished)
+                pixmap = self._static_pixmap(image_paths.connection_lost)
             elif self.video_stream.status is StreamStatus.initializing:
                 pixmap = self._static_pixmap(image_paths.connecting_to_stream)
             else:
