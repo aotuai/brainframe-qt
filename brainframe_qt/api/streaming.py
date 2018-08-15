@@ -1,6 +1,5 @@
 import logging
-from threading import Thread, RLock
-from time import sleep, time
+from threading import Thread
 
 import cv2
 
@@ -126,13 +125,26 @@ class StreamManager:
 
         return self._stream_readers[url]
 
-    def close_stream(self, url):
-        """Close a specific stream and remove the reference """
+    def close_stream_by_url(self, url):
+        """Close a specific stream and remove the reference.
+
+        :param url: The URL of the stream to delete
+        """
         self._stream_readers[url].close()
         del self._stream_readers[url]
+
+    def close_stream_by_id(self, stream_id):
+        """Close a specific stream and remove the reference.
+
+        :param stream_id: The ID of the stream to delete
+        """
+        for url, stream_reader in self._stream_readers.items():
+            if stream_reader.stream_id == stream_id:
+                self.close_stream_by_url(url)
+                break
 
     def close(self):
         """Close all streams and remove references"""
         for url in self._stream_readers.copy().keys():
-            self.close_stream(url)
+            self.close_stream_by_url(url)
         self._stream_readers = {}
