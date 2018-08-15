@@ -5,6 +5,8 @@ from io import BytesIO
 import requests
 import ujson
 from PIL import Image
+import cv2
+import numpy as np
 
 from brainframe.shared.singleton import Singleton
 from brainframe.client.api.streaming import SyncedStreamReader
@@ -200,16 +202,18 @@ class API(metaclass=Singleton):
         req = f"/api/alerts/{alert_id}"
         self._put_json(req, ujson.dumps(verified_as))
 
-    def get_alert_frame(self, alert_id: int) -> Union[bytes, None]:
+    def get_alert_frame(self, alert_id: int) -> Union[np.ndarray, None]:
         """Returns the frame saved for this alert, or None if no frame is
         recorded for this alert.
 
         :param alert_id: The ID of the alert to get a frame for.
-        :return: Raw image data of the frame
+        :return: The image as loaded by OpenCV, or None
         """
         req = f"/api/alerts/{alert_id}/frame"
         try:
-            return self._get_raw(req)
+            img_bytes = self._get_raw(req)
+            return cv2.imdecode(np.fromstring(img_bytes, np.uint8),
+                                cv2.IMREAD_COLOR)
         except api_errors.FrameNotFoundForAlertError:
             return None
 
@@ -332,20 +336,22 @@ class API(metaclass=Singleton):
         return image_id
 
     def get_identity_image(self, identity_id: int, class_name: str,
-                           image_id: int) -> bytes:
+                           image_id: int) -> np.ndarray:
         """Returns the image with the given image ID.
 
         :param identity_id: The ID of the identity that the image is associated
             with
         :param class_name: The class name that this image was encoded for
         :param image_id: The ID of the image
-        :return: Bytes of the image
+        :return: The image as loaded by OpenCV
         """
         req = (f"/api/identities/{identity_id}"
                f"/classes/{class_name}"
                f"/images/{image_id}")
-        image = self._get_raw(req)
-        return image
+        image_bytes = self._get_raw(req)
+
+        return cv2.imdecode(np.fromstring(image_bytes, np.uint8),
+                            cv2.IMREAD_COLOR)
 
     def get_image_ids_for_identity(self, identity_id, class_name) -> List[int]:
         """Returns all IDs for the identity with the given ID that are for
