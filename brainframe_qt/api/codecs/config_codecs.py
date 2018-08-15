@@ -31,12 +31,12 @@ class StreamConfiguration(Codec):
 
     def to_dict(self):
         d = dict(self.__dict__)
-        d["connection_type"] = self.connection_type.name
+        d["connection_type"] = self.connection_type.value
         return d
 
     @staticmethod
     def from_dict(d):
-        connection_t = StreamConfiguration.ConnType[d["connection_type"]]
+        connection_t = StreamConfiguration.ConnType(d["connection_type"])
         return StreamConfiguration(name=d["name"],
                                    id_=d["id"],
                                    connection_type=connection_t,

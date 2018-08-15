@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 from typing import List
 
 from PyQt5.QtCore import pyqtSlot
@@ -16,10 +16,12 @@ from brainframe.client.api.codecs import (
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
+class ConditionType(Enum):
+    COUNT = auto()
+    RATE = auto()
+
+
 class AlarmCreationDialog(QDialog):
-    # noinspection PyArgumentList
-    # PyCharm incorrectly complains
-    ConditionType = Enum("ConditionType", ["count", "rate"])
 
     def __init__(self, zones: List[Zone],
                  engine_config: EngineConfiguration,
@@ -49,7 +51,7 @@ class AlarmCreationDialog(QDialog):
         self.condition_type_button_group.buttonClicked.connect(
             self.condition_type_button_changed)
         self.condition_type = None
-        self.set_condition_type(self.ConditionType.count)
+        self.set_condition_type(ConditionType.COUNT)
 
         # Input sanitation
         self.alarm_name.textEdited.connect(self.verify_inputs_valid)
@@ -60,23 +62,23 @@ class AlarmCreationDialog(QDialog):
     def condition_type_button_changed(self):
         checked_button = self.condition_type_button_group.checkedButton()
         if checked_button is self.count_based_button:
-            self.set_condition_type(self.ConditionType.count)
+            self.set_condition_type(ConditionType.COUNT)
         elif checked_button is self.rate_based_button:
-            self.set_condition_type(self.ConditionType.rate)
+            self.set_condition_type(ConditionType.RATE)
 
     def set_condition_type(self, condition_type: ConditionType):
-        if condition_type == self.ConditionType.count:
+        if condition_type == ConditionType.COUNT:
             self.hide_count_widgets(False)
             self.hide_rate_widgets(True)
             self._update_combo_box(
                 self.test_type_combo_box,
-                ZoneAlarmCountCondition.TestType.__members__)
+                ZoneAlarmCountCondition.TestType.values())
             self.count_spin_box.setMinimum(0)
-        if condition_type == self.ConditionType.rate:
+        if condition_type == ConditionType.RATE:
             self.hide_count_widgets(True)
             self.hide_rate_widgets(False)
             self._update_combo_box(self.test_type_combo_box,
-                                   ZoneAlarmRateCondition.TestType.__members__)
+                                   ZoneAlarmRateCondition.TestType.values())
             self.count_spin_box.setMinimum(1)
 
         self.condition_type = condition_type
@@ -142,12 +144,12 @@ class AlarmCreationDialog(QDialog):
             duration = dialog.duration_spin_box.value()
 
             if direction == "enter":
-                direction = ZoneAlarmRateCondition.DirectionType.entering
+                direction = ZoneAlarmRateCondition.DirectionType.ENTERING
             elif direction == "exit":
                 direction = ZoneAlarmRateCondition.DirectionType.exiting
             elif direction == "enter/exit":
                 direction = \
-                    ZoneAlarmRateCondition.DirectionType.entering_or_exiting
+                    ZoneAlarmRateCondition.DirectionType.ENTERING_OR_EXITING
 
             rate_condition.append(ZoneAlarmRateCondition(
                 test=test_type,
@@ -181,11 +183,11 @@ class AlarmCreationDialog(QDialog):
         # Check to make sure the necessary combo boxes have selections. This
         # also prevents the user from creating alarms when no classes are
         # available
-        if self.condition_type == self.ConditionType.count:
+        if self.condition_type == ConditionType.COUNT:
             if self.countable_combo_box.currentIndex() == -1 or \
                     self.behavior_combo_box.currentIndex() == -1:
                 is_valid = False
-        elif self.condition_type == self.ConditionType.rate:
+        elif self.condition_type == ConditionType.RATE:
             if self.countable_combo_box.currentIndex() == -1 or \
                     self.direction_combo_box.currentIndex() == -1:
                 is_valid = False

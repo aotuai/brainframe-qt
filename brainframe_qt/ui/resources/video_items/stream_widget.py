@@ -93,7 +93,7 @@ class StreamWidget(QGraphicsView):
         pixmap = None
 
         # Video is streaming frames
-        if self.video_stream.status is StreamStatus.streaming:
+        if self.video_stream.status is StreamStatus.STREAMING:
             frame = self.video_stream.latest_processed_frame_rgb
             # Change image only we have a new one
             if frame and frame.tstamp > self.timestamp:
@@ -103,9 +103,9 @@ class StreamWidget(QGraphicsView):
 
         # Video is not streaming
         elif self.stream_status is not self.video_stream.status:
-            if self.video_stream.status is StreamStatus.halted:
+            if self.video_stream.status is StreamStatus.HALTED:
                 pixmap = self._static_pixmap(image_paths.connection_lost)
-            elif self.video_stream.status is StreamStatus.initializing:
+            elif self.video_stream.status is StreamStatus.INITIALIZING:
                 pixmap = self._static_pixmap(image_paths.connecting_to_stream)
             else:
                 raise ValueError("Unknown stream status")
@@ -248,7 +248,7 @@ class StreamWidget(QGraphicsView):
         """Returns True if there is an active stream that is giving frames
         at the moment."""
         return self.video_stream is not None \
-            and self.video_stream.status is StreamStatus.streaming
+            and self.video_stream.status is StreamStatus.STREAMING
 
     @pyqtProperty(int)
     def frame_rate(self):

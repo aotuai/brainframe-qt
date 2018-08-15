@@ -63,9 +63,9 @@ class ZoneAlarmRateCondition(Codec):
 
     DirectionType = codec_enums.DirectionType
 
-    direction_map = {DirectionType.entering: "entered",
-                     DirectionType.exiting: "exited",
-                     DirectionType.entering_or_exiting: "entered or exited"}
+    direction_map = {DirectionType.ENTERING: "entered",
+                     DirectionType.EXITING: "exited",
+                     DirectionType.ENTERING_OR_EXITING: "entered or exited"}
 
     def __init__(self, *, test, duration, change, direction, with_class_name,
                  with_attribute, id_=None):
@@ -88,7 +88,7 @@ class ZoneAlarmRateCondition(Codec):
         if self.with_attribute is not None:
             d["with_attribute"] = self.with_attribute.to_dict()
 
-        d["direction"] = self.direction.name
+        d["direction"] = self.direction.value
 
         return d
 
@@ -103,7 +103,7 @@ class ZoneAlarmRateCondition(Codec):
             test=d["test"],
             duration=d["duration"],
             change=d["change"],
-            direction=ZoneAlarmRateCondition.DirectionType[d["direction"]],
+            direction=ZoneAlarmRateCondition.DirectionType(d["direction"]),
             with_class_name=d["with_class_name"],
             with_attribute=with_attribute,
             id_=d["id"])

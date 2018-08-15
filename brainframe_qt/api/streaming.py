@@ -56,7 +56,7 @@ class SyncedStreamReader(StreamReader):
 
         self.wait_until_initialized()
 
-        while self.status != StreamStatus.closed:
+        while self.status != StreamStatus.CLOSED:
             # Wait for a new frame
             if not self.new_frame_event.wait(timeout=0.01):
                 continue
@@ -117,7 +117,7 @@ class StreamManager:
             self._stream_readers[url] = stream_reader
             return stream_reader
 
-        if self._stream_readers[url].status is StreamStatus.halted:
+        if self._stream_readers[url].status is StreamStatus.HALTED:
             # Stream not running. Starting a new one.
             self._stream_readers[url].close()
             stream_reader = SyncedStreamReader(

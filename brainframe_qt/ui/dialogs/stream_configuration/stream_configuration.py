@@ -40,11 +40,11 @@ class StreamConfigurationDialog(QDialog):
         if not result:
             return None
 
-        if dialog.connection_type == StreamConfiguration.ConnType.ip_camera:
+        if dialog.connection_type == StreamConfiguration.ConnType.IP_CAMERA:
             params = {"url": "{}".format(dialog.parameter_value.text())}
-        elif dialog.connection_type == StreamConfiguration.ConnType.webcam:
+        elif dialog.connection_type == StreamConfiguration.ConnType.WEBCAM:
             params = {"device_id": "{}".format(dialog.parameter_value.text())}
-        elif dialog.connection_type == StreamConfiguration.ConnType.file:
+        elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
             params = {"filepath": "{}".format(dialog.parameter_value.text())}
         else:
             raise NotImplementedError("Unrecognized connection type")
@@ -65,14 +65,14 @@ class StreamConfigurationDialog(QDialog):
         else:
 
             if connection_type == "IP Camera":
-                self.connection_type = StreamConfiguration.ConnType.ip_camera
+                self.connection_type = StreamConfiguration.ConnType.IP_CAMERA
                 self.parameter_label.setText("Camera web address")
             elif connection_type == "Webcam":
-                self.connection_type = StreamConfiguration.ConnType.webcam
+                self.connection_type = StreamConfiguration.ConnType.WEBCAM
                 self.parameter_label.setText("Device ID")
             elif connection_type == "File":
                 # TODO(Bryce Beagle): Use QFileDialog
-                self.connection_type = StreamConfiguration.ConnType.file
+                self.connection_type = StreamConfiguration.ConnType.FILE
                 self.parameter_label.setText("Filepath")
 
             # Show parameter widgets
@@ -90,7 +90,7 @@ class StreamConfigurationDialog(QDialog):
 
         # Hide the file selection button if selected connection type is not file
         self.select_file_button.setHidden(
-            self.connection_type != StreamConfiguration.ConnType.file)
+            self.connection_type != StreamConfiguration.ConnType.FILE)
 
     def _file_dialog(self):
         """Get the path to (presumably) a video file"""
