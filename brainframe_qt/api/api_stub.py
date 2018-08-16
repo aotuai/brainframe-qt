@@ -112,8 +112,8 @@ class API(metaclass=Singleton):
         """
         req = f"/api/streams/{stream_id}"
         self._delete(req)
-        # if self._stream_manager is not None:
-        #     self._stream_manager.close_stream_by_id(stream_id)
+        if self._stream_manager is not None:
+            self._stream_manager.close_stream_by_id(stream_id)
 
     # Stream Controls
     def get_stream_reader(self, stream_config: StreamConfiguration) \
@@ -367,8 +367,10 @@ class API(metaclass=Singleton):
         """Clean up the API. It may no longer be used after this call."""
         if self._status_poller is not None:
             self._status_poller.close()
+            self._status_poller = None
         if self._stream_manager is not None:
             self._stream_manager.close()
+            self._stream_manager = None
 
     # Private Functions
     def _get(self, api_url, params=None):

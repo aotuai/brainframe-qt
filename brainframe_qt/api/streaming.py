@@ -39,8 +39,9 @@ class SyncedStreamReader(StreamReader):
 
         self._latest_processed = None
 
-        self._thread = Thread(name="SyncedStreamReaderThread",
-                              target=self._sync_detections_with_stream)
+        self._thread = Thread(
+            name=f"SyncedStreamReader thread for stream ID {stream_id}",
+            target=self._sync_detections_with_stream)
         self._thread.start()
 
     @property
@@ -89,6 +90,10 @@ class SyncedStreamReader(StreamReader):
                 frame_buf.pop(0)
 
         logging.info("SyncedStreamReader: Closing")
+
+    def close(self):
+        super().close()
+        self._thread.join()
 
 
 class StreamManager:
