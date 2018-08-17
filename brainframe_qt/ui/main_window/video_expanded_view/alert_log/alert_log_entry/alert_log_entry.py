@@ -29,8 +29,7 @@ class AlertLogEntry(_Form, _Base):
 
         # TODO: Ensure support for more than one condition if implemented
         # Create text for alert
-        self.alert_text = "The following condition was triggered:\n\n"
-
+        self.alert_text = ""
         for condition in alarm.count_conditions + alarm.rate_conditions:
             self.alert_text += f"{repr(condition)} in region [{zone_name}]\n"
 
