@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.uic import loadUiType
-from PyQt5.QtCore import Qt
 
+from brainframe.client.ui.dialogs import AlertEntryPopup
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 
 # Preload the necessary icons for the AlertLogEntry
@@ -19,42 +19,43 @@ _Form, _Base = loadUiType(qt_ui_paths.alert_log_entry_ui)
 class AlertLogEntry(_Form, _Base):
     """An entry for the Alert Log"""
 
-    def __init__(self, *, start_time="", end_time=None,
-                 alarm_name="", alert_text=None,
-                 parent=None):
+    def __init__(self, alert, alarm, zone_name, parent=None):
 
         super().__init__(parent)
         self.setupUi(self)
 
-        self.start_time = start_time
-        self.end_time = end_time
-        self.alarm_name = alarm_name
-        self.alert_text = alert_text
+        self.alert = alert
+        self.alarm = alarm
+
+        # TODO: Ensure support for more than one condition if implemented
+        # Create text for alert
+        self.alert_text = "The following condition was triggered:\n\n"
+
+        for condition in alarm.count_conditions + alarm.rate_conditions:
+            self.alert_text += f"{repr(condition)} in region [{zone_name}]\n"
 
         self.setToolTip(self.alert_text)
 
         self.time_label.setText("")
-        self.alarm_name_label.setText(alarm_name)
+        self.alarm_name_label.setText(self.alarm.name)
 
         # Set the alert icon on the left of the log entry
         self.alert_icon_button.setText("")
         self.alert_icon_button.setIcon(alert_icon)
 
         # Update the time label for the alarm
-        self.update_time(self.start_time, self.end_time)
+        self.update(alert)
 
         self.alert_icon_button.clicked.connect(self.display_alert_info)
 
-    def update_time(self, start_time, end_time):
-        """Update the alert timestamp of the widget"""
+    def update(self, alert):
 
-        self.start_time = start_time
-        self.end_time = end_time
+        self.alert = alert
 
-        alert_start = datetime.fromtimestamp(self.start_time)
+        alert_start = datetime.fromtimestamp(alert.start_time)
         alert_start = alert_start.strftime('%H:%M')
-        if self.end_time is not None:
-            alert_end = datetime.fromtimestamp(self.end_time)
+        if alert.end_time is not None:
+            alert_end = datetime.fromtimestamp(alert.end_time)
             alert_end = " to " + alert_end.strftime('%H:%M')
         else:
             alert_end = "(Ongoing)"
@@ -62,6 +63,12 @@ class AlertLogEntry(_Form, _Base):
 
         self.time_label.setText(alert_time)
 
+    @pyqtSlot()
     def display_alert_info(self):
-        """Display a pop-up describing the alert"""
-        QMessageBox.information(self, "Alert Information", self.alert_text)
+        """Display a pop-up describing the alert
+
+        Connected to:
+        - AlertLogEntry -- Dynamic
+          self.alert_icon_button.clicked
+        """
+        AlertEntryPopup.show_alert(self.alert_text, self.alert.id)

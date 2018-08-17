@@ -8,8 +8,6 @@ from .alert_log_entry import AlertLogEntry
 
 
 class AlertLog(QWidget):
-    MAX_LOG_LENGTH = 25
-    """Limit the length of the Alert log for performance and sanity reasons"""
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -35,6 +33,9 @@ class AlertLog(QWidget):
             return
 
         existing_alert_ids = set(self.alert_widgets.keys())
+
+        # TODO: What exactly is a page? How long is a page?
+        # Get a page of the most recent alerts
         unverified_alerts = api.get_unverified_alerts(self.stream_id)[::-1]
         unverified_alert_ids = set(alert.id for alert in unverified_alerts)
 
@@ -59,16 +60,7 @@ class AlertLog(QWidget):
                 raise ValueError(f"Alarm ID {alert.alarm_id} "
                                  f"not found for alert ID {alert.id}")
 
-            # Create text for alert
-            alert_text = "One of the following conditions was triggered:\n\n"
-
-            for condition in alarm.count_conditions + alarm.rate_conditions:
-                alert_text += f"{repr(condition)} in region [{zone_name}]\n"
-
-            alert_widget = AlertLogEntry(start_time=alert.start_time,
-                                         end_time=alert.end_time,
-                                         alarm_name=alarm.name,
-                                         alert_text=alert_text)
+            alert_widget = AlertLogEntry(alert, alarm, zone_name)
             self.alert_log.layout().insertWidget(0, alert_widget)
             self.alert_widgets[alert.id] = alert_widget
 
@@ -77,8 +69,7 @@ class AlertLog(QWidget):
         update_alerts = [alert for alert in unverified_alerts
                          if alert.id in update_alert_ids]
         for alert in update_alerts:
-            alert_widget = self.alert_widgets[alert.id]
-            alert_widget.update_time(alert.start_time, alert.end_time)
+            self.alert_widgets[alert.id].update(alert)
             continue
 
         # Remove deleted alerts
