@@ -46,9 +46,8 @@ def _make_api_error(resp_content):
         return api_errors.kind_to_error_type[kind](description)
 
 
-class API(metaclass=Singleton):
-    """Singleton class instance of API
-
+class API:
+    """The class instance of API
     If server_url is not used in constructor, set_url MUST be used.
     """
     # For testing purposes
