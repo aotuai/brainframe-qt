@@ -17,6 +17,7 @@ from PyQt5.QtWidgets import QApplication
 from brainframe.client.api import api
 from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
 from brainframe.client.ui.resources.paths import image_paths
+from brainframe.client.api.api_errors import StreamNotOpenedError
 
 # Handle Keyboard Interrupt
 signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit("Exiting"))
@@ -65,7 +66,11 @@ with SplashScreen() as splash_screen:
         splash_screen.showMessage("Successfully connected to server. "
                                   "Starting UI")
         for config in configs:
-            success = api.start_analyzing(config.id)
+            try:
+                success = api.start_analyzing(config.id)
+            except StreamNotOpenedError:
+                logging.error(f"Stream {config.name} is not open so analysis "
+                              f"did not start")
 
         main_window = MainWindow()
         main_window.show()
