@@ -78,7 +78,10 @@ class ZoneAndTasks(QWidget):
         self.zone_deleted_signal.emit(self.zone.id)
 
     def update_zone_type(self):
-        if len(self.zone.coords) == 0:
+        if self.zone.coords is None:
+            # Treat stream-wide zones as regions
+            self.zone_widget.set_task_type(TaskType.REGION)
+        elif len(self.zone.coords) == 0:
             self.zone_widget.set_task_type(TaskType.IN_PROGRESS)
         elif len(self.zone.coords) == 2:
             self.zone_widget.set_task_type(TaskType.LINE)
