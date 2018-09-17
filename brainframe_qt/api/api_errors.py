@@ -133,16 +133,14 @@ class DuplicateIdentityNameError(BaseAPIError):
 
 @register_error_type
 class NotDetectableError(BaseAPIError):
-    """There was an attempt to use a @register_error_type
-class name that is not detectable."""
+    """There was an attempt to use a class name that is not detectable."""
     def __init__(self, description):
         super().__init__(error_kinds.NOT_DETECTABLE, description)
 
 
 @register_error_type
 class NoEncoderForClassError(BaseAPIError):
-    """There was an attempt to create an identity for a @register_error_type
-class that is not
+    """There was an attempt to create an identity for a class that is not
     encodable.
     """
     def __init__(self, description):
@@ -185,8 +183,7 @@ class AnalysisLimitExceededError(BaseAPIError):
 @register_error_type
 class NoDetectionsInImageError(BaseAPIError):
     """There was an attempt to encode an image with no objects of the given
-    @register_error_type
-class in the frame.
+    class in the frame.
     """
     def __init__(self, description):
         super().__init__(error_kinds.NO_DETECTIONS_IN_IMAGE, description)
@@ -195,8 +192,7 @@ class in the frame.
 @register_error_type
 class TooManyDetectionsInImageError(BaseAPIError):
     """There was an attempt to encode an image with more than one object of the
-    given @register_error_type
-class in the frame, causing ambiguity on which one to encode.
+    given class in the frame, causing ambiguity on which one to encode.
     """
     def __init__(self, description):
         super().__init__(error_kinds.TOO_MANY_DETECTIONS_IN_IMAGE, description)
