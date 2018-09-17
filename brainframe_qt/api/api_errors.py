@@ -132,10 +132,10 @@ class DuplicateIdentityNameError(BaseAPIError):
 
 
 @register_error_type
-class NotDetectableError(BaseAPIError):
+class NoDetectorForClassError(BaseAPIError):
     """There was an attempt to use a class name that is not detectable."""
     def __init__(self, description):
-        super().__init__(error_kinds.NOT_DETECTABLE, description)
+        super().__init__(error_kinds.NO_DETECTOR_FOR_CLASS, description)
 
 
 @register_error_type
