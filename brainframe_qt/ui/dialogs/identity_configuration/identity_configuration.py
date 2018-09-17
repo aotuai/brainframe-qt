@@ -40,11 +40,15 @@ class IdentityConfiguration(QDialog):
         self.thread = QThread(self)
         self.thread.setObjectName("ImageSenderWorkerThread")
         self.worker.moveToThread(self.thread)
+        # noinspection PyUnresolvedReferences
         self.worker.update_progress_bar.connect(self.update_progress_bar)
 
+        # noinspection PyUnresolvedReferences
         self.thread.started.connect(
             lambda: self.worker.send_images(self.identity_prototypes))
+        # noinspection PyUnresolvedReferences
         self.worker.done_sending.connect(self.images_done_sending)
+        # noinspection PyUnresolvedReferences
         self.worker.update_tree_view.connect(self.update_tree_view)
 
         self.add_identities_button.clicked.connect(self.create_new_identities)
@@ -123,7 +127,7 @@ class IdentityConfiguration(QDialog):
         if path is None:
             return None, 0
 
-        # TODO: Error is excessively vague. Should absolutely be within the function
+        # TODO: Error is excessively vague. Should be within the function
         try:
             num_images = cls.verify_directory_structure(path)
         except ValueError as err:
@@ -152,7 +156,7 @@ class IdentityConfiguration(QDialog):
             # TODO: Better regex to avoid if-else
             if '(' not in identity_dir.name:
                 identity_prototype.unique_name = identity_dir.name
-                identity_prototype.nickname = ""
+                identity_prototype.nickname = None
             else:
                 match = re.search(r"(.+?)\s*\((.*)\)", identity_dir.name)
 
@@ -259,6 +263,7 @@ class ImageSenderWorker(QObject):
                             image_bytes)
 
                         # Update UI's tree view if successful
+                        # noinspection PyUnresolvedReferences
                         self.update_tree_view.emit(
                             identity.unique_name,
                             class_name,
@@ -274,6 +279,7 @@ class ImageSenderWorker(QObject):
                         class_name_error.children.add(image_error)
 
                     processed_images += 1
+                    # noinspection PyUnresolvedReferences
                     self.update_progress_bar.emit(processed_images)
 
                 # If the current class has an error or children, add it to the
@@ -286,6 +292,7 @@ class ImageSenderWorker(QObject):
             if identity_error.error or identity_error.children:
                 errors.add(identity_error)
 
+        # noinspection PyUnresolvedReferences
         self.done_sending.emit()
 
         # If there are errors, show them to the user

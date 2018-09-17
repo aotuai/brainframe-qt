@@ -5,6 +5,8 @@ from io import BytesIO
 import requests
 import ujson
 from PIL import Image
+import cv2
+import numpy as np
 
 from brainframe.shared.singleton import Singleton
 from brainframe.client.api.streaming import SyncedStreamReader
@@ -44,9 +46,8 @@ def _make_api_error(resp_content):
         return api_errors.kind_to_error_type[kind](description)
 
 
-class API(metaclass=Singleton):
-    """Singleton class instance of API
-
+class API:
+    """The class instance of API
     If server_url is not used in constructor, set_url MUST be used.
     """
     # For testing purposes
@@ -67,7 +68,7 @@ class API(metaclass=Singleton):
     def get_status_poller(self) -> StatusPoller:
         """Returns the singleton StatusPoller object"""
         if self._status_poller is None or not self._status_poller.is_running:
-            self._status_poller = StatusPoller(self, 100)
+            self._status_poller = StatusPoller(self, 33)
         return self._status_poller
 
     def get_stream_manager(self) -> StreamManager:
@@ -112,6 +113,8 @@ class API(metaclass=Singleton):
         """
         req = f"/api/streams/{stream_id}"
         self._delete(req)
+        if self._stream_manager is not None:
+            self._stream_manager.close_stream_by_id(stream_id)
 
     # Stream Controls
     def get_stream_reader(self, stream_config: StreamConfiguration) \
@@ -200,16 +203,18 @@ class API(metaclass=Singleton):
         req = f"/api/alerts/{alert_id}"
         self._put_json(req, ujson.dumps(verified_as))
 
-    def get_alert_frame(self, alert_id: int) -> Union[bytes, None]:
+    def get_alert_frame(self, alert_id: int) -> Union[np.ndarray, None]:
         """Returns the frame saved for this alert, or None if no frame is
         recorded for this alert.
 
         :param alert_id: The ID of the alert to get a frame for.
-        :return: Raw image data of the frame
+        :return: The image as loaded by OpenCV, or None
         """
         req = f"/api/alerts/{alert_id}/frame"
         try:
-            return self._get_raw(req)
+            img_bytes = self._get_raw(req)
+            return cv2.imdecode(np.fromstring(img_bytes, np.uint8),
+                                cv2.IMREAD_COLOR)
         except api_errors.FrameNotFoundForAlertError:
             return None
 
@@ -304,7 +309,8 @@ class API(metaclass=Singleton):
         """Saves and encodes an image under the identity with the given ID.
 
         :param identity_id: Identity to associate the image with
-        :param class_name: The class name to encode this image for
+        :param class_name: The type of object this image shows and should be
+            encoded for
         :param image: The image to save
         :return: The image ID
         """
@@ -331,21 +337,38 @@ class API(metaclass=Singleton):
         image_id = self._put_raw(req, image, mime_type)
         return image_id
 
+    def new_identity_vector(self, identity_id: int, class_name: str,
+                            vector: List[float]) -> int:
+        """Saves the given vector under the identity with the given ID. In this
+        case, a vector is simply a list of one or more numbers that describe
+        some object in an image.
+
+        :param identity_id: Identity to associate the vector with
+        :param class_name: The type of object this vector describes
+        :param vector: The vector to save
+        :return: The vector ID
+        """
+        req = f"/api/identities/{identity_id}/classes/{class_name}/vectors"
+
+        return self._put_json(req, ujson.dumps(vector))
+
     def get_identity_image(self, identity_id: int, class_name: str,
-                           image_id: int) -> bytes:
+                           image_id: int) -> np.ndarray:
         """Returns the image with the given image ID.
 
         :param identity_id: The ID of the identity that the image is associated
             with
         :param class_name: The class name that this image was encoded for
         :param image_id: The ID of the image
-        :return: Bytes of the image
+        :return: The image as loaded by OpenCV
         """
         req = (f"/api/identities/{identity_id}"
                f"/classes/{class_name}"
                f"/images/{image_id}")
-        image = self._get_raw(req)
-        return image
+        image_bytes = self._get_raw(req)
+
+        return cv2.imdecode(np.fromstring(image_bytes, np.uint8),
+                            cv2.IMREAD_COLOR)
 
     def get_image_ids_for_identity(self, identity_id, class_name) -> List[int]:
         """Returns all IDs for the identity with the given ID that are for
@@ -365,8 +388,10 @@ class API(metaclass=Singleton):
         """Clean up the API. It may no longer be used after this call."""
         if self._status_poller is not None:
             self._status_poller.close()
+            self._status_poller = None
         if self._stream_manager is not None:
             self._stream_manager.close()
+            self._stream_manager = None
 
     # Private Functions
     def _get(self, api_url, params=None):

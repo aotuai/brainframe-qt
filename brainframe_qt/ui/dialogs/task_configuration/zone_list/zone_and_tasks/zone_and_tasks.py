@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QToolButton, QWidget, QGridLayout, QVBoxLayout
 
-from .tasks.task_widget import TaskWidget
+from .tasks.task_widget import TaskWidget, TaskType
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Zone, ZoneAlarm
 
@@ -15,7 +15,7 @@ class ZoneAndTasks(QWidget):
         super().__init__(parent)
 
         self.zone_name = zone.name
-        self.zone_type = TaskWidget.TaskType.in_progress
+        self.zone_type = TaskType.IN_PROGRESS
 
         self.zone = zone
 
@@ -57,7 +57,7 @@ class ZoneAndTasks(QWidget):
         # self.alarm_area.setStyleSheet("background-color:green;")
 
     def add_alarm(self, alarm: ZoneAlarm):
-        alarm_widget = TaskWidget(alarm.name, TaskWidget.TaskType.alarm)
+        alarm_widget = TaskWidget(alarm.name, TaskType.ALARM)
 
         # Connect alarm's delete_button_pressed
         alarm_widget.delete_button_pressed.connect(
@@ -78,9 +78,12 @@ class ZoneAndTasks(QWidget):
         self.zone_deleted_signal.emit(self.zone.id)
 
     def update_zone_type(self):
-        if len(self.zone.coords) == 0:
-            self.zone_widget.set_task_type(TaskWidget.TaskType.in_progress)
+        if self.zone.coords is None:
+            # Treat stream-wide zones as regions
+            self.zone_widget.set_task_type(TaskType.REGION)
+        elif len(self.zone.coords) == 0:
+            self.zone_widget.set_task_type(TaskType.IN_PROGRESS)
         elif len(self.zone.coords) == 2:
-            self.zone_widget.set_task_type(TaskWidget.TaskType.line)
+            self.zone_widget.set_task_type(TaskType.LINE)
         else:
-            self.zone_widget.set_task_type(TaskWidget.TaskType.region)
+            self.zone_widget.set_task_type(TaskType.REGION)

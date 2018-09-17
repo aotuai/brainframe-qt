@@ -16,7 +16,7 @@ class StatusPoller(Thread):
         """
         :param api: An API() object for interacting with the BrainFrame REST
         api.
-        :param ms_status_updates: Miliseconds between calling for a zone status
+        :param ms_status_updates: Milliseconds between calling for a zone status
         update
         """
         super().__init__(name="StatusPollerThread")

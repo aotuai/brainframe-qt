@@ -9,12 +9,14 @@ class Detection(Codec):
     example, a "person" can exhibit a behaviour. A Face can have a gender.
     """
 
-    def __init__(self, *, class_name, rect, children, attributes, with_identity):
+    def __init__(self, *, class_name, rect, children, attributes, with_identity,
+                 extra_data):
         self.class_name = class_name
         self.rect = rect
         self.children = children
         self.attributes = attributes
         self.with_identity: Union[Identity, None] = with_identity
+        self.extra_data = extra_data
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -52,7 +54,8 @@ class Detection(Codec):
                          rect=d["rect"],
                          children=children,
                          attributes=attributes,
-                         with_identity=with_identity)
+                         with_identity=with_identity,
+                         extra_data=d["extra_data"])
 
 
 class Attribute(Codec):
@@ -76,7 +79,7 @@ class Attribute(Codec):
 class Identity(Codec):
     """A specific, recognizable object or person."""
 
-    def __init__(self, *, unique_name, nickname, metadata={}, id_=None):
+    def __init__(self, *, unique_name, nickname, metadata=None, id_=None):
         self.unique_name = unique_name
         """The unique id of the identified detection.
         
@@ -89,7 +92,7 @@ class Identity(Codec):
         person's name.
         """
 
-        self.metadata = metadata
+        self.metadata = {} if metadata is None else metadata
         """Any additional user-defined information about the identity."""
 
         self.id = id_

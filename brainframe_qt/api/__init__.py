@@ -29,5 +29,4 @@ class APIWrapper(API):
 
 
 # API instance that is later monkeypatched to be a singleton
-# TODO: Use Py3.6 variable annotations when available
-api = APIWrapper()  # type: API
+api: API = APIWrapper()

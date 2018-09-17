@@ -36,7 +36,7 @@ class VideoSmall(StreamWidget):
         """Override the base StreamWidget implementation to add alert UI
         functionality
 
-        # TODO: Is this _really_ the best way of doing this?
+        TODO: Is this _really_ the best way of doing this?
         """
 
         frame = self.video_stream.latest_processed_frame_rgb

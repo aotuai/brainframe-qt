@@ -60,10 +60,10 @@ class MainWindow(QMainWindow):
             return
         try:
             stream_conf = api.set_stream_configuration(stream_conf)
+            self.video_thumbnail_view.new_stream(stream_conf)
 
             # Currently, we default to setting all new streams as 'active'
             api.start_analyzing(stream_conf.id)
-
         except api_errors.DuplicateStreamSourceError as err:
             message = "<b>Stream source already open</b>" \
                       "<br><br>" \
@@ -80,8 +80,6 @@ class MainWindow(QMainWindow):
                       "Error: <b>" + err.kind + "</b>"
             QMessageBox.information(self, "Error Opening Stream", message)
             return
-
-        self.video_thumbnail_view.new_stream(stream_conf)
 
     @pyqtSlot()
     def show_identities_dialog(self):

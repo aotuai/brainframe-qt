@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
     QSizePolicy
 )
 
-from .tasks.task_widget import TaskWidget
+from .tasks.task_widget import TaskWidget, TaskType
 from .tasks.zone_widget import ZoneWidget
 
 
@@ -109,7 +109,7 @@ class ZoneAndTasks(QWidget):
 
     def add_alarm(self, alarm):
         print("adding alarm")
-        alarm_widget = TaskWidget(alarm.alarm_name, TaskWidget.TaskType.alarm)
+        alarm_widget = TaskWidget(alarm.alarm_name, TaskType.ALARM)
         self.alarm_area_layout.addWidget(alarm_widget)
 
         self.set_content_layout()
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
 
     app = QApplication([])
-    zone_and_tasks = ZoneAndTasks("Locker Area", ZoneAndTasks.TaskType.region)
+    zone_and_tasks = ZoneAndTasks("Locker Area", TaskType.REGION)
     zone_and_tasks.show()
 
     app.exec_()

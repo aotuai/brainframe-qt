@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
     QSizePolicy
 )
 
-from .tasks.task_widget import TaskWidget
+from .tasks.task_widget import TaskWidget, TaskType
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Zone, ZoneAlarm
 
@@ -27,7 +27,7 @@ class ZoneAndTasks(QWidget):
         super().__init__(parent)
 
         self.zone_name = zone.name
-        self.zone_type = TaskWidget.TaskType.in_progress
+        self.zone_type = TaskType.IN_PROGRESS
 
         self.zone = zone
 
@@ -149,7 +149,7 @@ class ZoneAndTasks(QWidget):
             content_animation.setEndValue(content_height)
 
     def add_alarm(self, alarm: ZoneAlarm):
-        alarm_widget = TaskWidget(alarm.name, TaskWidget.TaskType.alarm)
+        alarm_widget = TaskWidget(alarm.name, TaskType.ALARM)
 
         # Connect alarm's delete_button_pressed
         alarm_widget.delete_button_pressed.connect(
@@ -170,9 +170,9 @@ class ZoneAndTasks(QWidget):
 
     def update_zone_type(self):
         if len(self.zone.coords) == 0:
-            self.zone_widget.set_task_type(TaskWidget.TaskType.in_progress)
+            self.zone_widget.set_task_type(TaskType.IN_PROGRESS)
         elif len(self.zone.coords) == 2:
-            self.zone_widget.set_task_type(TaskWidget.TaskType.line)
+            self.zone_widget.set_task_type(TaskType.LINE)
         else:
-            self.zone_widget.set_task_type(TaskWidget.TaskType.region)
+            self.zone_widget.set_task_type(TaskType.REGION)
 

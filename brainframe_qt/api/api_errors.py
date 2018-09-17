@@ -248,6 +248,17 @@ class ImageAlreadyEncodedError(BaseAPIError):
 kind_to_error_type[error_kinds.IMAGE_ALREADY_ENCODED] = ImageAlreadyEncodedError
 
 
+class DuplicateVectorError(BaseAPIError):
+    """There was an attempt to add a vector that already exists for the given
+    identity and class.
+    """
+    def __init__(self, description):
+        super().__init__(error_kinds.DUPLICATE_VECTOR, description)
+
+
+kind_to_error_type[error_kinds.DUPLICATE_VECTOR] = DuplicateVectorError
+
+
 class FrameNotFoundForAlertError(BaseAPIError):
     """There was an attempt to get a frame for an alert that has no frame."""
     def __init__(self, description):

@@ -14,8 +14,10 @@ from requests.exceptions import ConnectionError
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
-from brainframe.client import api, MainWindow, SplashScreen, LicenseAgreement
+from brainframe.client.api import api
+from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
 from brainframe.client.ui.resources.paths import image_paths
+from brainframe.client.api.api_errors import StreamNotOpenedError
 
 # Handle Keyboard Interrupt
 signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit("Exiting"))
@@ -30,7 +32,7 @@ parser.add_argument("-a", "--api-url", type=str,
 args = parser.parse_args()
 
 # Set the API url
-api.api.set_url(args.api_url)
+api.set_url(args.api_url)
 
 # Run the UI
 app = QApplication(sys.argv)
@@ -52,7 +54,7 @@ with SplashScreen() as splash_screen:
         try:
             # Set all stream analysis as "active" here, since there is currently
             # no way to in the UI
-            configs = api.api.get_stream_configurations()
+            configs = api.get_stream_configurations()
         except ConnectionError:
             # Server not started yet
             app.processEvents()
@@ -64,7 +66,11 @@ with SplashScreen() as splash_screen:
         splash_screen.showMessage("Successfully connected to server. "
                                   "Starting UI")
         for config in configs:
-            success = api.api.start_analyzing(config.id)
+            try:
+                success = api.start_analyzing(config.id)
+            except StreamNotOpenedError:
+                logging.error(f"Stream {config.name} is not open so analysis "
+                              f"did not start")
 
         main_window = MainWindow()
         main_window.show()
@@ -75,4 +81,4 @@ with SplashScreen() as splash_screen:
 app.exec_()
 
 # Close API threads
-api.api.close()
+api.close()

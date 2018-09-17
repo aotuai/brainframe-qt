@@ -1,12 +1,11 @@
 import logging
-from threading import Thread, RLock
-from time import sleep, time
-from typing import Union
+from threading import Thread
 
 import cv2
 
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.status_poller import StatusPoller
+from brainframe.shared.stream_utils import StreamReader, StreamStatus
 
 
 class ProcessedFrame:
@@ -18,17 +17,10 @@ class ProcessedFrame:
         self.zone_statuses = zone_statuses
 
 
-class SyncedStreamReader(Thread):
+class SyncedStreamReader(StreamReader):
     """Reads frames from a stream and syncs them up with zone statuses."""
 
     MAX_BUF_SIZE = 100
-    video_capture_lock = RLock()
-    """Lock that exists to solve a strange, occasional SIGSEGV in OpenCV when
-    multiple threads attempt to create VideoCapture instances at the same time.
-    
-    It is not certain if this is the proper solution to the problem, but it does
-    prevent it from happening
-    """
 
     def __init__(self,
                  url: str,
@@ -37,84 +29,43 @@ class SyncedStreamReader(Thread):
         """Creates a new SyncedStreamReader.
 
         :param url: The URL of the stream to read from
-        :param stream_config: The StreamConfiguration for this stream
+        :param stream_id: The ID of the stream to read from
         :param status_poller: The StatusPoller currently in use
         """
-        super().__init__(name="SyncedStreamReaderThread")
+        super().__init__(url)
         self.url = url
         self.stream_id = stream_id
         self.status_poller = status_poller
 
-        self._running = False
-        self._cap = None
-        self._latest = None
-        self._stream_initialized = False
+        self._latest_processed = None
 
-        self.start()
-
-    @property
-    def is_initialized(self):
-        """Call this to check if the stream ever initialized. There is a
-        startup period to even _starting_ to stream, and it is threaded.
-        """
-        return self._stream_initialized
+        self._thread = Thread(
+            name=f"SyncedStreamReader thread for stream ID {stream_id}",
+            target=self._sync_detections_with_stream)
+        self._thread.start()
 
     @property
-    def is_running(self):
-        """Once the stream HAS been initialized, you may want to check if it's
-        even running still. Streams _can_ crash and sometimes be closed by the
-        server, so keep an eye out if it's running. If the stream is no longer
-        running, it WILL NOT TRY TO OPEN AGAIN.
-        """
-        return self._running
+    def latest_processed_frame_rgb(self):
+        return self._latest_processed
 
-    @property
-    def latest_processed_frame_rgb(self) -> Union[ProcessedFrame, None]:
-        """Returns the processed frame, but in RGB instead of BGR."""
-        latest = self._latest
-        return latest
-
-    def wait_until_initialized(self):
-        """A convenience method to wait until the StreamReader has been
-        initialized. Do not use if you don't intentionally want to block.
-        """
-        while not self._stream_initialized:
-            if not self._running:
-                break
-            sleep(.001)  # To prevent busy loops
-
-    def run(self):
-        self._running = True
-
-        with type(self).video_capture_lock:
-            self._cap = cv2.VideoCapture(self.url)
-
-        # Get the first frame to prove the stream is up. If not, end the stream.
-        _, first_frame = self._cap.read()
-        if first_frame is None:
-            logging.warning("StreamReader: Unable to get first frame from "
-                            "stream. Closing.")
-            self._running = False
-            return
-        self._stream_initialized = True
-
+    def _sync_detections_with_stream(self):
         # The last time we got inference
         last_inference_tstamp = -1
 
         frame_buf = []
 
-        while self._running:
-            # Get a frame and buffer it
-            _, frame = self._cap.read()
-            tstamp = time()
-            if frame is None:
-                logging.info("SyncedStreamReader: No more frames in stream.")
-                break
-            frame_buf.append(ProcessedFrame(frame, tstamp, None))
+        self.wait_until_initialized()
 
-            # Get the latest zone statuses and the timestamp
-            zone_statuses = self.status_poller.latest_statuses(
-                self.stream_id)
+        while self.status != StreamStatus.CLOSED:
+            # Wait for a new frame
+            if not self.new_frame_event.wait(timeout=0.01):
+                continue
+            self.new_frame_event.clear()
+
+            frame_tstamp, frame = self.latest_frame
+            frame_buf.append(ProcessedFrame(frame, frame_tstamp, None))
+
+            zone_statuses = self.status_poller.latest_statuses(self.stream_id)
 
             tstamp = zone_statuses[-1].tstamp if zone_statuses else None
 
@@ -131,23 +82,18 @@ class SyncedStreamReader(Thread):
             if frame_buf and frame_buf[0].tstamp <= last_inference_tstamp:
                 frame = frame_buf.pop(0)
                 rgb = cv2.cvtColor(frame.frame, cv2.COLOR_BGR2RGB)
-                self._latest = ProcessedFrame(
-                    rgb,
-                    frame.tstamp,
-                    zone_statuses)
+                self._latest_processed = ProcessedFrame(
+                    rgb, frame.tstamp, zone_statuses)
 
             # Drain the buffer if it is getting too large
             while len(frame_buf) > self.MAX_BUF_SIZE:
                 frame_buf.pop(0)
 
         logging.info("SyncedStreamReader: Closing")
-        self._running = False
 
     def close(self):
-        self._running = False
-        self.join()
-        if self._cap is not None:
-            self._cap.release()
+        super().close()
+        self._thread.join()
 
 
 class StreamManager:
@@ -175,7 +121,7 @@ class StreamManager:
             self._stream_readers[url] = stream_reader
             return stream_reader
 
-        if not self._stream_readers[url].is_running:
+        if self._stream_readers[url].status is StreamStatus.HALTED:
             # Stream not running. Starting a new one.
             self._stream_readers[url].close()
             stream_reader = SyncedStreamReader(
@@ -184,13 +130,26 @@ class StreamManager:
 
         return self._stream_readers[url]
 
-    def close_stream(self, url):
-        """Close a specific stream and remove the reference """
+    def close_stream_by_url(self, url):
+        """Close a specific stream and remove the reference.
+
+        :param url: The URL of the stream to delete
+        """
         self._stream_readers[url].close()
         del self._stream_readers[url]
+
+    def close_stream_by_id(self, stream_id):
+        """Close a specific stream and remove the reference.
+
+        :param stream_id: The ID of the stream to delete
+        """
+        for url, stream_reader in self._stream_readers.items():
+            if stream_reader.stream_id == stream_id:
+                self.close_stream_by_url(url)
+                break
 
     def close(self):
         """Close all streams and remove references"""
         for url in self._stream_readers.copy().keys():
-            self.close_stream(url)
+            self.close_stream_by_url(url)
         self._stream_readers = {}

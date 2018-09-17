@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QIcon, QPixmap
@@ -13,11 +13,14 @@ from PyQt5.QtWidgets import (
 from brainframe.client.ui.resources.paths import image_paths
 
 
-class TaskWidget(QWidget):
-    # noinspection PyArgumentList
-    # PyCharm incorrectly complains
-    TaskType = Enum("TaskType", ["region", "line", "alarm", "in_progress"])
+class TaskType(Enum):
+    REGION = auto()
+    LINE = auto()
+    ALARM = auto()
+    IN_PROGRESS = auto()
 
+
+class TaskWidget(QWidget):
     delete_button_pressed = pyqtSignal()
 
     # TODO(Bryce Beagle): Use .ui files
@@ -58,7 +61,7 @@ class TaskWidget(QWidget):
         self.task_type = task_type
 
         # Don't allow Screen region to be deleted
-        if self.task_type == self.TaskType.region \
+        if self.task_type is TaskType.REGION \
                 and self.task_name == "Screen":
             self.delete_button.setDisabled(True)
 
@@ -70,10 +73,10 @@ class TaskWidget(QWidget):
 
     @classmethod
     def _get_icon(cls, zone_type):
-        icon_paths = {cls.TaskType.region: image_paths.region_icon,
-                      cls.TaskType.line: image_paths.line_icon,
-                      cls.TaskType.alarm: image_paths.alarm_icon,
-                      cls.TaskType.in_progress: image_paths.question_mark_icon}
+        icon_paths = {TaskType.REGION: image_paths.region_icon,
+                      TaskType.LINE: image_paths.line_icon,
+                      TaskType.ALARM: image_paths.alarm_icon,
+                      TaskType.IN_PROGRESS: image_paths.question_mark_icon}
 
         path = str(icon_paths[zone_type])
 
