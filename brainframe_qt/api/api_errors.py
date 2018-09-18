@@ -21,6 +21,7 @@ class BaseAPIError(BaseException):
     """All API errors subclass this error."""
     def __init__(self, kind, description):
         self.kind = kind
+        self.description = description
         super().__init__(f"{self.kind}: {description}")
 
     def __str__(self):

@@ -80,6 +80,13 @@ class MainWindow(QMainWindow):
 
             QMessageBox.information(self, "Error Opening Stream", message)
             return
+        except api_errors.StreamNotOpenedError as err:
+            message = "<b>Error encountered while opening stream</b>" \
+                      "<br><br>" \
+                      f"{err}<br><br>" \
+                      f"{err.description}<br><br>" \
+                      "Error: <b>" + err.kind + "</b>"
+            QMessageBox.information(self, "Error Opening Stream", message)
         except api_errors.BaseAPIError as err:
             message = "<b>Error encountered while opening stream</b>" \
                       "<br><br>" \
