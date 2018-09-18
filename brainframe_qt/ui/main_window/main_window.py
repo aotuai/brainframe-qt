@@ -42,6 +42,14 @@ class MainWindow(QMainWindow):
 
         self.hide_video_expanded_view()
 
+        self.setStyleSheet(
+            f"#centralwidget {{"
+            f"    background-image: url({image_paths.background});"
+            f"    background-position: right bottom;"
+            f"    background-repeat: no-repeat;"
+            f"}}"
+        )
+
     @pyqtSlot()
     def show_video_expanded_view(self):
         """Called by thumbnail_view when a thumbnail is clicked"""
