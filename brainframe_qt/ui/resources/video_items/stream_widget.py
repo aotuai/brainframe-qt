@@ -165,9 +165,15 @@ class StreamWidget(QGraphicsView):
 
                     interested_attributes[class_name].add(attribute.value)
 
+        # If we don't have a screen zone status
         if not screen_zone_status:
-            raise ValueError("A packet of ZoneStatuses must always include"
-                             " one with the name 'Screen'")
+            # But we do have a other zone statuses
+            if zone_statuses:
+                # We have a problem
+                raise ValueError("A packet of ZoneStatuses must always include"
+                                 " one with the name 'Screen'")
+            # Otherwise we can assume the stream is still initializing
+            return
 
         for detection in screen_zone_status.detections:
             attributes = set(attr.value for attr in detection.attributes)
