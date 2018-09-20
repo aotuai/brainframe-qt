@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, pyqtSlot, QStandardPaths
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QDialog, QFileDialog
+from PyQt5.QtWidgets import QDialog, QFileDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
@@ -11,7 +11,6 @@ class StreamConfigurationDialog(QDialog):
     """Dialog for configuring a Stream"""
 
     def __init__(self, parent=None, stream_conf=None):
-
         super().__init__(parent)
 
         loadUi(qt_ui_paths.stream_configuration_ui, self)
@@ -32,6 +31,13 @@ class StreamConfigurationDialog(QDialog):
 
         self.select_file_button.clicked.connect(self._file_dialog)
 
+        self.stream_name.textChanged.connect(self.verify_inputs_valid)
+        self.connection_type_combo_box.currentTextChanged.connect(
+            self.verify_inputs_valid)
+        self.parameter_value.textChanged.connect(
+            self.verify_inputs_valid)
+        self.verify_inputs_valid()
+
     @classmethod
     def configure_stream(cls, stream_conf=None):
         dialog = cls(stream_conf)
@@ -41,11 +47,11 @@ class StreamConfigurationDialog(QDialog):
             return None
 
         if dialog.connection_type == StreamConfiguration.ConnType.IP_CAMERA:
-            params = {"url": "{}".format(dialog.parameter_value.text())}
+            params = {"url": str(dialog.parameter_value.text())}
         elif dialog.connection_type == StreamConfiguration.ConnType.WEBCAM:
-            params = {"device_id": "{}".format(dialog.parameter_value.text())}
+            params = {"device_id": str(dialog.parameter_value.text())}
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
-            params = {"filepath": "{}".format(dialog.parameter_value.text())}
+            params = {"filepath": str(dialog.parameter_value.text())}
         else:
             raise NotImplementedError("Unrecognized connection type")
 
@@ -61,7 +67,6 @@ class StreamConfigurationDialog(QDialog):
 
             # Hide parameter widgets
             self._set_parameter_widgets_hidden(True)
-
         else:
 
             if connection_type == "IP Camera":
@@ -77,6 +82,29 @@ class StreamConfigurationDialog(QDialog):
 
             # Show parameter widgets
             self._set_parameter_widgets_hidden(False)
+
+    @pyqtSlot()
+    def verify_inputs_valid(self):
+        """Verify that the dialogs inputs have been filled. Allows the "OK"
+        button to be clicked if everything looks valid.
+
+        Connected to:
+        - QTextEdit -- Dynamic
+          self.stream_name.textChanged
+        - QComboBox -- Dynamic
+          self.connection_type_combo_box.currentTextChanged
+        - QTextEdit -- Dynamic
+          self.parameter_value.textChanged
+        """
+        is_valid = True
+
+        if self.stream_name.text().strip() == "":
+            is_valid = False
+
+        if self.connection_type is None or self.parameter_value.text() == "":
+            is_valid = False
+
+        self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(is_valid)
 
     def _set_parameter_widgets_hidden(self, hidden):
         """Hide or show the widgets related to the parameters
