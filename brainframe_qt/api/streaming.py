@@ -1,9 +1,9 @@
 import logging
 from threading import Thread
+from typing import Optional
 
 import cv2
 
-from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.shared.stream_utils import StreamReader, StreamStatus
 
@@ -23,17 +23,22 @@ class SyncedStreamReader(StreamReader):
     MAX_BUF_SIZE = 100
 
     def __init__(self,
-                 url: str,
                  stream_id: int,
+                 url: str,
+                 pipeline: Optional[str],
                  status_poller: StatusPoller):
         """Creates a new SyncedStreamReader.
 
-        :param url: The URL of the stream to read from
-        :param stream_id: The ID of the stream to read from
+        :param stream_id: The unique Id of this stream
+        :param url: The URL to connect to
+        :pipeline: A custom GStreamer pipeline, or None to use a default
+            configuration
         :param status_poller: The StatusPoller currently in use
         """
-        super().__init__(url)
+        super().__init__(url, pipeline)
+
         self.url = url
+        self.pipeline = pipeline
         self.stream_id = stream_id
         self.status_poller = status_poller
 
@@ -105,19 +110,24 @@ class StreamManager:
         self._stream_readers = {}
         self._status_poller = status_poller
 
-    def get_stream(self, url: str, stream_config: StreamConfiguration) \
-            -> SyncedStreamReader:
-        """Gets a specific stream object OR creates the connection and returns
-        it if it does not already exist
+    def start_streaming(self, stream_id: int,
+                        url: str,
+                        pipeline: Optional[str]) -> SyncedStreamReader:
+        """Starts reading from the stream using the given information, or
+        returns an existing reader if we're already reading this stream.
 
-        :param url: The URL of the stream to connect to
-        :param stream_config: The StreamConfiguration for this stream
+        :param stream_id: The unique ID of the stream
+        :param url: The URL to stream on
+        :param pipeline: A custom GStreamer pipeline, or None to use a default
+            configuration
         :return: A Stream object
         """
-
         if url not in self._stream_readers:
             stream_reader = SyncedStreamReader(
-                url, stream_config.id, self._status_poller)
+                stream_id,
+                url,
+                pipeline,
+                self._status_poller)
             self._stream_readers[url] = stream_reader
             return stream_reader
 
@@ -125,7 +135,7 @@ class StreamManager:
             # Stream not running. Starting a new one.
             self._stream_readers[url].close()
             stream_reader = SyncedStreamReader(
-                url, stream_config.id, self._status_poller)
+                stream_id, self._status_poller)
             return stream_reader
 
         return self._stream_readers[url]

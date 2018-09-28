@@ -59,8 +59,8 @@ class API:
         self._server_url = server_url
 
         # These are evaluated lazily
-        self._status_poller = None
         self._stream_manager = None
+        self._status_poller = None
 
     def set_url(self, server_url):
         self._server_url = server_url
@@ -80,8 +80,7 @@ class API:
     # Stream Configuration
     def get_stream_configurations(self) -> List[StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
-        :param stream_id: If set, returns only the StreamConfiguration
-        associated with that id
+
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
         req = "/api/streams/"
@@ -133,7 +132,12 @@ class API:
             return None
 
         logging.info("API: Opening stream on url " + url)
-        return self.get_stream_manager().get_stream(url, stream_config)
+
+        pipeline = None
+        if "pipeline" in stream_config.parameters:
+            pipeline = stream_config.parameters["pipeline"]
+        return self.get_stream_manager().start_streaming(
+            stream_config.id, url, pipeline)
 
     # Setting server analysis tasks
     def start_analyzing(self, stream_id) -> bool:
