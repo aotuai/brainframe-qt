@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
@@ -25,7 +26,6 @@ class DetectionPolygon(StreamPolygon):
     def __init__(self,
                  det: codecs.Detection,
                  text_size,
-                 attributes=set(),
                  seconds_old=0,
                  parent=None):
         """
@@ -58,11 +58,11 @@ class DetectionPolygon(StreamPolygon):
             else:
                 text += "\n" + "Name: " + det.with_identity.unique_name
 
-        if len(attributes):
+        if len(det.attributes):
             attributes_str_list = [a.category + ": " + a.value
-                                   for a in det.attributes if
-                                   a.value in attributes]
+                                   for a in det.attributes]
             attributes_str_list.sort()
+            print("About to add", attributes_str_list)
             text += "\n" + "\n".join(attributes_str_list)
 
         self.label_box = StreamLabelBox(text,

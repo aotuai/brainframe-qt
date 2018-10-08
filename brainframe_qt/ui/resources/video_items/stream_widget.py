@@ -149,21 +149,9 @@ class StreamWidget(QGraphicsView):
         screen_zone_status = None  # The status with all Detections in it
 
         # Get attributes of interest
-        interested_attributes = defaultdict(set)
         for zone_status in zone_statuses:
             if zone_status.zone.name == "Screen":
                 screen_zone_status = zone_status
-
-            for alarm in zone_status.zone.alarms:
-                for condition in alarm.count_conditions:
-                    class_name = condition.with_class_name
-                    attribute = condition.with_attribute
-
-                    # Nothing to add if no attributes with alarm
-                    if attribute is None:
-                        continue
-
-                    interested_attributes[class_name].add(attribute.value)
 
         # If we don't have a screen zone status
         if not screen_zone_status:
@@ -176,17 +164,11 @@ class StreamWidget(QGraphicsView):
             return
 
         for detection in screen_zone_status.detections:
-            attributes = set(attr.value for attr in detection.attributes)
-            class_name = detection.class_name
-
-            attributes_in_alarm = interested_attributes[class_name]
-            attributes_to_draw = attributes.intersection(attributes_in_alarm)
-
+            print("Attrs", detection.attributes)
             # Draw the detection on the screen
             polygon = DetectionPolygon(
                 detection,
                 text_size=int(self.scene().height() / 50),
-                attributes=attributes_to_draw,
                 seconds_old=0)  # Fading is currently disabled
             self.scene().addItem(polygon)
 
