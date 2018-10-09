@@ -62,7 +62,6 @@ class DetectionPolygon(StreamPolygon):
             attributes_str_list = [a.category + ": " + a.value
                                    for a in det.attributes]
             attributes_str_list.sort()
-            print("About to add", attributes_str_list)
             text += "\n" + "\n".join(attributes_str_list)
 
         self.label_box = StreamLabelBox(text,
