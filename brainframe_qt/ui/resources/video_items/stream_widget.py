@@ -164,7 +164,6 @@ class StreamWidget(QGraphicsView):
             return
 
         for detection in screen_zone_status.detections:
-            print("Attrs", detection.attributes)
             # Draw the detection on the screen
             polygon = DetectionPolygon(
                 detection,
