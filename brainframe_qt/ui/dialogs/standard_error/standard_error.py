@@ -1,6 +1,7 @@
 import logging
 import os
 import traceback
+import sys
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
@@ -30,14 +31,16 @@ class StandardError(QMessageBox):
 
     @classmethod
     def show_error(cls, exc_type, exc_obj, exc_tb):
+        if QApplication.instance():
+            # Ignore false exceptions thrown during init of QtDesigner
+            if cls._is_qt_designer_init_error(exc_obj):
+                return
 
-        # Ignore false exceptions thrown during init of QtDesigner
-        if cls._is_qt_designer_init_error(exc_obj):
-            return
-
-        dialog = cls(exc_type, exc_obj, exc_tb,
-                     close_client_button=exc_type is ConnectionError)
-        dialog.exec_()
+            dialog = cls(exc_type, exc_obj, exc_tb,
+                         close_client_button=exc_type is ConnectionError)
+            dialog.exec_()
+        else:
+            sys.__excepthook__(exc_type, exc_obj, exc_tb)
 
     def _init_text(self, exc_type, exc_obj, exc_tb):
 

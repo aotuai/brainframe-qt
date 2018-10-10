@@ -270,7 +270,7 @@ class ImageSenderWorker(QObject):
                             image_name.name)
 
                     except (api_errors.NoEncoderForClassError,
-                            api_errors.NotDetectableError) as err:
+                            api_errors.NoDetectorForClassError) as err:
                         class_name_error.error = err.kind
                     except api_errors.ImageAlreadyEncodedError:
                         pass

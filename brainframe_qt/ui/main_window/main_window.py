@@ -42,6 +42,14 @@ class MainWindow(QMainWindow):
 
         self.hide_video_expanded_view()
 
+        self.setStyleSheet(
+            f"#centralwidget {{"
+            f"    background-image: url({image_paths.background});"
+            f"    background-position: right bottom;"
+            f"    background-repeat: no-repeat;"
+            f"}}"
+        )
+
     @pyqtSlot()
     def show_video_expanded_view(self):
         """Called by thumbnail_view when a thumbnail is clicked"""
@@ -72,6 +80,13 @@ class MainWindow(QMainWindow):
 
             QMessageBox.information(self, "Error Opening Stream", message)
             return
+        except api_errors.StreamNotOpenedError as err:
+            message = "<b>Error encountered while opening stream</b>" \
+                      "<br><br>" \
+                      f"{err}<br><br>" \
+                      f"{err.description}<br><br>" \
+                      "Error: <b>" + err.kind + "</b>"
+            QMessageBox.information(self, "Error Opening Stream", message)
         except api_errors.BaseAPIError as err:
             message = "<b>Error encountered while opening stream</b>" \
                       "<br><br>" \

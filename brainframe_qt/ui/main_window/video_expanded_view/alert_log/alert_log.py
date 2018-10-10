@@ -56,9 +56,10 @@ class AlertLog(QWidget):
                     zone_name = status.zone.name
                     break
             else:
-                # If no alarm was found we have an issue
-                raise ValueError(f"Alarm ID {alert.alarm_id} "
-                                 f"not found for alert ID {alert.id}")
+                # If no alarm was found that means this stream isn't currently
+                # receiving Zone Statuses
+                # TODO: When we update the API, lets fix this
+                continue
 
             alert_widget = AlertLogEntry(alert, alarm, zone_name)
             self.alert_log.layout().insertWidget(0, alert_widget)
