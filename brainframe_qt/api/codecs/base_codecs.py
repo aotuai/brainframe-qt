@@ -22,3 +22,14 @@ class Codec(abc.ABC):
     def __repr__(self):
         return str(self.to_dict())
 
+    def __eq__(self, other):
+        if type(other) is not type(self):
+            return NotImplemented
+
+        return self.to_dict() == other.to_dict()
+
+    def __ne__(self, other):
+        if type(other) is not type(self):
+            return NotImplemented
+
+        return self.to_dict() != other.to_dict()
