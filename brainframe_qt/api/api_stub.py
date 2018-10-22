@@ -231,6 +231,8 @@ class API:
 
         :return: EngineConfiguration
         """
+        logging.warning("Deprecated: Engine configurations will be removed in "
+                        "a future release")
         req = "/api/engine-configuration"
         resp = self._get(req)
         return EngineConfiguration.from_dict(resp)
