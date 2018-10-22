@@ -429,8 +429,8 @@ class API:
         else:
             req = f"/api/streams/{stream_id}/plugins/{plugin_name}/options"
 
-        options_json = ujson.dumps(option_vals)
-        self._put_json(req, options_json)
+        option_values_json = ujson.dumps(option_vals)
+        self._put_json(req, option_values_json)
 
     def is_plugin_active(self, *, plugin_name, stream_id=None) -> bool:
         """Returns true if the plugin is active. If a plugin is not marked as
