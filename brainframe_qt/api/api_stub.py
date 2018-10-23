@@ -466,6 +466,7 @@ class API:
             req = f"/api/streams/{stream_id}/plugins/{plugin_name}/active"
 
         active_json = ujson.dumps(active)
+
         self._put_json(req, active_json)
 
     def close(self):
