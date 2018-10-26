@@ -9,12 +9,12 @@ from argparse import ArgumentParser
 from time import sleep
 import signal
 import sys
-import os
 
 from requests.exceptions import ConnectionError
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
+from brainframe.shared.ffmpeg_options import set_opencv_ffmpeg_capture_options
 from brainframe.client.api import api
 from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
 from brainframe.client.ui.resources.paths import image_paths
@@ -44,9 +44,9 @@ if __name__ == "__main__":
     args = parse_args()
 
     # Set the frame skipping environment variable if necessary
-    if args.skip_frames:
-        logging.warning("Frames will be skipped to improve performance")
-        os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "skip_frame;nonkey"
+    set_opencv_ffmpeg_capture_options(
+        skip_frames=args.skip_frames,
+        rtsp_transport="udp")
 
     # Set the API url
     api.set_url(args.api_url)
