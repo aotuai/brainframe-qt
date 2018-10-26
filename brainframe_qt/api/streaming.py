@@ -122,7 +122,7 @@ class StreamManager:
             configuration
         :return: A Stream object
         """
-        if url not in self._stream_readers:
+        if stream_id not in self._stream_readers:
             stream_reader = SyncedStreamReader(
                 stream_id=stream_id,
                 url=url,
