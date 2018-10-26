@@ -111,7 +111,7 @@ class API:
         req = f"/api/streams/{stream_id}"
         self._delete(req)
         if self._stream_manager is not None:
-            self._stream_manager.close_stream_by_id(stream_id)
+            self._stream_manager.close_stream(stream_id)
 
     # Stream Controls
     def get_stream_reader(self, stream_config: StreamConfiguration) \
