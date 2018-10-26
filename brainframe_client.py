@@ -28,7 +28,7 @@ def parse_args():
                         help="The URL that the server is currently running on. "
                              "This can be localhost, or a local IP, or a "
                              "remote IP depending on your setup.")
-    parser.add_argument("--skip-frames", action="store_true",
+    parser.add_argument("--skip-frames", action="store_true", default=False,
                         help="Configures all streams to skip intermediate "
                              "frames and process only keyframes. This is "
                              "useful when many streams are being processed.")
@@ -45,8 +45,7 @@ if __name__ == "__main__":
 
     # Set the frame skipping environment variable if necessary
     set_opencv_ffmpeg_capture_options(
-        skip_frames=args.skip_frames,
-        rtsp_transport="udp")
+        skip_frames=args.skip_frames)
 
     # Set the API url
     api.set_url(args.api_url)
