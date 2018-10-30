@@ -5,3 +5,4 @@ from .condition_codecs import ZoneAlarmCountCondition, ZoneAlarmRateCondition
 from .config_codecs import EngineConfiguration, StreamConfiguration
 from .detection_codecs import Attribute, Detection, Identity
 from .zone_codecs import Zone, ZoneAlarm, ZoneStatus
+from .plugin_codecs import PluginOption

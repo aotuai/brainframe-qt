@@ -36,7 +36,15 @@ class StreamConfigurationDialog(QDialog):
             self.verify_inputs_valid)
         self.parameter_value.textChanged.connect(
             self.verify_inputs_valid)
+        self.pipeline_value.textChanged.connect(
+            self.verify_inputs_valid)
+        self.advanced_options_checkbox.stateChanged.connect(
+            self.verify_inputs_valid)
         self.verify_inputs_valid()
+
+        self.advanced_options_checkbox.stateChanged.connect(
+            self.toggle_advanced_options)
+        self.toggle_advanced_options()
 
     @classmethod
     def configure_stream(cls, stream_conf=None):
@@ -48,6 +56,9 @@ class StreamConfigurationDialog(QDialog):
 
         if dialog.connection_type == StreamConfiguration.ConnType.IP_CAMERA:
             params = {"url": str(dialog.parameter_value.text())}
+            # Add the pipeline value if it was configured
+            if dialog.advanced_options_checkbox.isChecked():
+                params["pipeline"] = str(dialog.pipeline_value.text())
         elif dialog.connection_type == StreamConfiguration.ConnType.WEBCAM:
             params = {"device_id": str(dialog.parameter_value.text())}
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
@@ -72,13 +83,16 @@ class StreamConfigurationDialog(QDialog):
             if connection_type == "IP Camera":
                 self.connection_type = StreamConfiguration.ConnType.IP_CAMERA
                 self.parameter_label.setText("Camera web address")
+                self._set_advanced_options_section_hidden(False)
             elif connection_type == "Webcam":
                 self.connection_type = StreamConfiguration.ConnType.WEBCAM
                 self.parameter_label.setText("Device ID")
+                self._set_advanced_options_section_hidden(True)
             elif connection_type == "File":
                 # TODO(Bryce Beagle): Use QFileDialog
                 self.connection_type = StreamConfiguration.ConnType.FILE
                 self.parameter_label.setText("Filepath")
+                self._set_advanced_options_section_hidden(True)
 
             # Show parameter widgets
             self._set_parameter_widgets_hidden(False)
@@ -104,7 +118,27 @@ class StreamConfigurationDialog(QDialog):
         if self.connection_type is None or self.parameter_value.text() == "":
             is_valid = False
 
+        # Check that a URL field is in the pipeline if the pipeline is being
+        # used
+        if self.connection_type == StreamConfiguration.ConnType.IP_CAMERA \
+                and self.advanced_options_checkbox.isChecked() \
+                and "{url}" not in self.pipeline_value.text():
+            is_valid = False
+
         self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(is_valid)
+
+    @pyqtSlot()
+    def toggle_advanced_options(self):
+        """Changes whether or not the advanced options are hidden based on the
+        value of the "Advanced Options" checkbox.
+
+        Connected to:
+        - QCheckBox -- Dynamic
+          self.advanced_options_checkbox.stateChanged
+        """
+        hidden = not self.advanced_options_checkbox.isChecked()
+        self.pipeline_label.setHidden(hidden)
+        self.pipeline_value.setHidden(hidden)
 
     def _set_parameter_widgets_hidden(self, hidden):
         """Hide or show the widgets related to the parameters
@@ -112,13 +146,25 @@ class StreamConfigurationDialog(QDialog):
         This is used because we don't want to show the parameter options until
         we know what options to display. They are connection type dependent.
         """
-        self.stream_options_label.setHidden(hidden)
-        self.parameter_label.setHidden(hidden)
-        self.parameter_value.setHidden(hidden)
+        self.parameters_container.setHidden(hidden)
 
         # Hide the file selection button if selected connection type is not file
         self.select_file_button.setHidden(
             self.connection_type != StreamConfiguration.ConnType.FILE)
+
+    def _set_advanced_options_section_hidden(self, hidden):
+        """Hide or show the advanced options section.
+        """
+        self.advanced_options_checkbox.setHidden(hidden)
+        if hidden:
+            # If the whole advanced options section is hidden, hide the actual
+            # options regardless of the checkbox value
+            self.pipeline_label.setHidden(hidden)
+            self.pipeline_value.setHidden(hidden)
+        else:
+            # Even if the advanced options section should be shown, the actual
+            # options may or may not be visible based on the checkbox value
+            self.toggle_advanced_options()
 
     def _file_dialog(self):
         """Get the path to (presumably) a video file"""

@@ -146,7 +146,7 @@ class AlarmCreationDialog(QDialog):
             if direction == "enter":
                 direction = ZoneAlarmRateCondition.DirectionType.ENTERING
             elif direction == "exit":
-                direction = ZoneAlarmRateCondition.DirectionType.exiting
+                direction = ZoneAlarmRateCondition.DirectionType.EXITING
             elif direction == "enter/exit":
                 direction = \
                     ZoneAlarmRateCondition.DirectionType.ENTERING_OR_EXITING

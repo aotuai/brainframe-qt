@@ -222,3 +222,20 @@ class FrameNotFoundForAlertError(BaseAPIError):
     """There was an attempt to get a frame for an alert that has no frame."""
     def __init__(self, description):
         super().__init__(error_kinds.FRAME_NOT_FOUND_FOR_ALERT, description)
+
+
+@register_error_type
+class PluginNotFoundError(BaseAPIError):
+    """There was an attempt to reference a plugin that does not exist."""
+    def __init__(self, description):
+        super().__init__(error_kinds.PLUGIN_NOT_FOUND, description)
+
+
+@register_error_type
+class InvalidPluginOptionError(BaseAPIError):
+    """The provided plugin options do not work for the given plugin. This could
+    be because the option does not exist or the value for that option doesn't
+    fit the constraints.
+    """
+    def __init__(self, description):
+        super().__init__(error_kinds.INVALID_PLUGIN_OPTION, description)

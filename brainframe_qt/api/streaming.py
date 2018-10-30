@@ -122,36 +122,26 @@ class StreamManager:
             configuration
         :return: A Stream object
         """
-        if url not in self._stream_readers:
+        if stream_id not in self._stream_readers:
             stream_reader = SyncedStreamReader(
-                stream_id,
-                url,
-                pipeline,
-                self._status_poller)
-            self._stream_readers[url] = stream_reader
+                stream_id=stream_id,
+                url=url,
+                pipeline=pipeline,
+                status_poller=self._status_poller)
+            self._stream_readers[stream_id] = stream_reader
 
-        return self._stream_readers[url]
+        return self._stream_readers[stream_id]
 
-    def close_stream_by_url(self, url):
-        """Close a specific stream and remove the reference.
-
-        :param url: The URL of the stream to delete
-        """
-        self._stream_readers[url].close()
-        del self._stream_readers[url]
-
-    def close_stream_by_id(self, stream_id):
+    def close_stream(self, stream_id):
         """Close a specific stream and remove the reference.
 
         :param stream_id: The ID of the stream to delete
         """
-        for url, stream_reader in self._stream_readers.items():
-            if stream_reader.stream_id == stream_id:
-                self.close_stream_by_url(url)
-                break
+        self._stream_readers[stream_id].close()
+        del self._stream_readers[stream_id]
 
     def close(self):
         """Close all streams and remove references"""
-        for url in self._stream_readers.copy().keys():
-            self.close_stream_by_url(url)
+        for stream_id in self._stream_readers.copy().keys():
+            self.close_stream(stream_id)
         self._stream_readers = {}
