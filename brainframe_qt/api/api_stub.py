@@ -54,6 +54,7 @@ class API:
     # For testing purposes
     get = staticmethod(requests.get)
     put = staticmethod(requests.put)
+    post = staticmethod(requests.post)
     delete = staticmethod(requests.delete)
 
     def __init__(self, server_url=None):
@@ -98,7 +99,7 @@ class API:
         :return: StreamConfiguration, initialized with an ID
         """
         req = "/api/streams/"
-        data = self._put_codec(req, stream_configuration)
+        data = self._post_codec(req, stream_configuration)
         config = StreamConfiguration.from_dict(data)
         return config
 
@@ -263,7 +264,7 @@ class API:
         :return: Zone, initialized with an ID
         """
         req = f"/api/streams/{stream_id}/zones"
-        data = self._put_codec(req, zone)
+        data = self._post_codec(req, zone)
         new_zone = Zone.from_dict(data)
         return new_zone
 
@@ -305,7 +306,7 @@ class API:
         :return: the saved identity
         """
         req = f"/api/identities"
-        saved = self._put_codec(req, identity)
+        saved = self._post_codec(req, identity)
         return Identity.from_dict(saved)
 
     def new_identity_image(self, identity_id: int, class_name: str,
@@ -338,7 +339,7 @@ class API:
             # it. Figure out a better way.
             mime_type = "application/octet-stream"
 
-        image_id = self._put_raw(req, image, mime_type)
+        image_id = self._post_raw(req, image, mime_type)
         return image_id
 
     def new_identity_vector(self, identity_id: int, class_name: str,
@@ -354,7 +355,7 @@ class API:
         """
         req = f"/api/identities/{identity_id}/classes/{class_name}/vectors"
 
-        return self._put_json(req, ujson.dumps(vector))
+        return self._post_json(req, ujson.dumps(vector))
 
     def get_identity_image(self, identity_id: int, class_name: str,
                            image_id: int) -> np.ndarray:
@@ -532,6 +533,52 @@ class API:
         """
         data = codec.to_json()
         resp = self.put(self._full_url(api_url), data=data)
+        if not resp.ok:
+            raise _make_api_error(resp.content)
+
+        if resp.content:
+            return ujson.loads(resp.content)
+        return None
+
+    def _post_codec(self, api_url, codec: Codec):
+        """Send a POST request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param codec: A codec to convert to JSON and send
+        :return: The JSON response as a dict, or None if none was sent
+        """
+        data = codec.to_json()
+        resp = self.post(self._full_url(api_url), data=data)
+        if not resp.ok:
+            raise _make_api_error(resp.content)
+
+        if resp.content:
+            return ujson.loads(resp.content)
+        return None
+
+    def _post_raw(self, api_url, data: bytes, content_type: str):
+        """Send a POST request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base url
+        :param data: The raw data to send
+        :param content_type: The mime type of the data being sent
+        :return: The JSON response as a dict, or None of none was sent
+        """
+        resp = self.post(self._full_url(api_url),
+                         data=data,
+                         headers={'content-type': content_type})
+        if not resp.ok:
+            raise _make_api_error(resp.content)
+
+        if resp.content:
+            return ujson.loads(resp.content)
+        return None
+
+    def _post_json(self, api_url, json):
+        """Send a POST request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param json: Preformatted JSON to send
+        :return: The JSON response as a dict, or None if none was sent
+        """
+        resp = self.post(self._full_url(api_url), data=json)
         if not resp.ok:
             raise _make_api_error(resp.content)
 
