@@ -54,7 +54,7 @@ license_agreement_dir      = route_path(dialogs_dir               , "license_agr
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
 
 plugin_configuration_dir   = route_path(dialogs_dir               , "plugin_configuration"     )
-plugin_configuration_ui    = route_path(plugin_configuration_dir  , "plugin_configuration.ui"  )
+plugin_configuration_ui    = route_path(plugin_configuration_dir  , "plugin_config.ui"  )
 plugin_list_dir            = route_path(plugin_configuration_dir  , "plugin_list"              )
 plugin_list_ui             = route_path(plugin_list_dir           , "plugin_list.ui"           )
 plugin_list_item_dir       = route_path(plugin_list_dir           , "plugin_list_item"         )
