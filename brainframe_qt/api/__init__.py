@@ -17,6 +17,8 @@ class APIWrapper(API):
             return object.__getattribute__(self, "_" + item)
         if item == "get_status_poller":
             return object.__getattribute__(self, "_" + item)
+        if item == "get_plugin_names":
+            return lambda: []
         return None
 
     @staticmethod
@@ -30,3 +32,4 @@ class APIWrapper(API):
 
 # API instance that is later monkeypatched to be a singleton
 api: API = APIWrapper()
+

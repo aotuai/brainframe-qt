@@ -6,3 +6,5 @@ from .license_agreement.license_agreement import LicenseAgreement
 from .standard_error.standard_error import StandardError
 from .stream_configuration.stream_configuration import StreamConfigurationDialog
 from .task_configuration.task_configuration import TaskConfiguration
+from .plugin_configuration.global_config import GlobalPluginConfigDialog
+from .plugin_configuration.stream_config import StreamPluginConfigDialog

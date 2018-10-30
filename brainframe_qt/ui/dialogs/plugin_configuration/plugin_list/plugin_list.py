@@ -17,8 +17,9 @@ class PluginList(QListWidget):
         loadUi(qt_ui_paths.plugin_list_ui, self)
 
         # Things that exist
-        print(self.plugin_container)
+        # print(self.plugin_container)
 
         # Query API for existing plugins
 
         # Populate plugin_container layout with those plugins
+        # names = api.get_plugin_names()

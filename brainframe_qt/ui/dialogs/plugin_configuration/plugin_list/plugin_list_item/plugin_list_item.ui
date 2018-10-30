@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>633</width>
-    <height>256</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="text">
-   <string>Plugin Name</string>
+   <string>Plugin Name Here</string>
   </property>
  </widget>
  <resources/>
