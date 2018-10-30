@@ -14,3 +14,8 @@ class BasePluginConfigDialog(QDialog):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.plugin_configuration_ui, self)
+
+    @classmethod
+    def show_dialog(cls):
+        dialog = cls()
+        dialog.exec_()

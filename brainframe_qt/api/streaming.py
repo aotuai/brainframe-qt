@@ -145,3 +145,4 @@ class StreamManager:
         for stream_id in self._stream_readers.copy().keys():
             self.close_stream(stream_id)
         self._stream_readers = {}
+

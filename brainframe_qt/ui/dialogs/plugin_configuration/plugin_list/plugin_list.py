@@ -22,4 +22,5 @@ class PluginList(QListWidget):
         # Query API for existing plugins
 
         # Populate plugin_container layout with those plugins
-        # names = api.get_plugin_names()
+        names = api.get_plugin_names()
+        print("Names!", names)

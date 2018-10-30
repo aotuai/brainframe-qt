@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1045</width>
-    <height>658</height>
+    <width>1382</width>
+    <height>907</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -225,6 +225,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>plugin_config_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_global_plugin_config_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_video_expanded_view()</slot>
@@ -232,5 +248,6 @@
   <slot>show_identities_dialog()</slot>
   <slot>new_stream()</slot>
   <slot>show_about_page_dialog()</slot>
+  <slot>show_global_plugin_config_dialog()</slot>
  </slots>
 </ui>

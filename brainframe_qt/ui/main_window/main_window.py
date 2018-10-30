@@ -111,7 +111,7 @@ class MainWindow(QMainWindow):
         AboutPage.show_dialog()
 
     @pyqtSlot()
-    def show_global_plugin_configuration_dialog(self):
+    def show_global_plugin_config_dialog(self):
         GlobalPluginConfigDialog.show_dialog()
 
     sys.excepthook = StandardError.show_error
