@@ -10,8 +10,10 @@ from brainframe.client.ui.dialogs import (
     AboutPage,
     StandardError,
     StreamConfigurationDialog,
-    IdentityConfiguration
+    IdentityConfiguration,
+    GlobalPluginConfigDialog
 )
+
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
 
 
@@ -27,9 +29,12 @@ class MainWindow(QMainWindow):
         new_stream_icon = QIcon(str(image_paths.new_stream_icon))
         configure_identities_icon = QIcon(str(image_paths.settings_gear_icon))
         about_page_icon = QIcon(str(image_paths.information_icon))
+        plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
+
         self.add_stream_action.setIcon(new_stream_icon)
         self.configure_identity_action.setIcon(configure_identities_icon)
         self.show_about_page_action.setIcon(about_page_icon)
+        self.plugin_config_action.setIcon(plugin_config_icon)
 
         # Add a spacer to make the license button appear right justified
         spacer = QWidget()
@@ -42,6 +47,7 @@ class MainWindow(QMainWindow):
 
         self.hide_video_expanded_view()
 
+        # Add the Dilili logo to the bottom right
         self.setStyleSheet(
             f"#centralwidget {{"
             f"    background-image: url({image_paths.background});"
@@ -103,5 +109,9 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def show_about_page_dialog(self):
         AboutPage.show_dialog()
+
+    @pyqtSlot()
+    def show_global_plugin_config_dialog(self):
+        GlobalPluginConfigDialog.show_dialog()
 
     sys.excepthook = StandardError.show_error

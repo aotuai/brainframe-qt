@@ -47,12 +47,18 @@ directory_selector_ui      = route_path(directory_selector_dir    , "directory_s
 
 identity_error_popup_dir   = route_path(identity_configuration_dir, "identity_error_popup"     )
 identity_error_popup_ui    = route_path(identity_error_popup_dir  , "identity_error_popup.ui"  )
-
 tree_widget_dir            = route_path(identity_error_popup_dir  , "tree_widget"              )
 tree_widget_ui             = route_path(tree_widget_dir           , "tree_widget.ui"           )
 
 license_agreement_dir      = route_path(dialogs_dir               , "license_agreement"        )
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
+
+plugin_configuration_dir   = route_path(dialogs_dir               , "plugin_configuration"     )
+plugin_configuration_ui    = route_path(plugin_configuration_dir  , "plugin_config.ui"  )
+plugin_list_dir            = route_path(plugin_configuration_dir  , "plugin_list"              )
+plugin_list_ui             = route_path(plugin_list_dir           , "plugin_list.ui"           )
+plugin_list_item_dir       = route_path(plugin_list_dir           , "plugin_list_item"         )
+plugin_list_item_ui        = route_path(plugin_list_item_dir      , "plugin_list_item.ui"      )
 
 stream_configuration_dir   = route_path(dialogs_dir               , "stream_configuration"     )
 stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )
