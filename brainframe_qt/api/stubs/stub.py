@@ -1,5 +1,7 @@
+from typing import Tuple
 import ujson
 import requests
+import logging
 
 from brainframe.client.api import api_errors
 from brainframe.shared import error_kinds
@@ -28,18 +30,18 @@ class Stub:
             return ujson.loads(resp.content)
         return None
 
-    def _get_raw(self, api_url, params=None):
+    def _get_raw(self, api_url, params=None) -> Tuple[bytes, str]:
         """Send a GET request to the given URL.
         :param api_url: The /api/blah/blah to append to the base_url
         :param params: The "query_string" to add to the url. In the format
         of a dict, {"key": "value", ...} key and val must be a string
-        :return: The raw bytes of the response
+        :return: The raw bytes of the response and the content type
         """
         resp = self.get(self._full_url(api_url), params=params)
         if not resp.ok:
             raise _make_api_error(resp.content)
 
-        return resp.content
+        return resp.content, resp.content_type
 
     def _put_raw(self, api_url, data: bytes, content_type: str):
         """Send a PUT request to the given URL.
@@ -171,6 +173,7 @@ def _make_api_error(resp_content):
         description = resp_content["description"]
 
     if kind not in api_errors.kind_to_error_type:
+        logging.warning(f"Unknown error kind {kind}")
         return api_errors.UnknownError(description)
     else:
         return api_errors.kind_to_error_type[kind](description)

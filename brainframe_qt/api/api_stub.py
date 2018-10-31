@@ -1,22 +1,15 @@
-from brainframe.client.api.stubs import (
-    AlertStubMixin,
-    AnalysisStubMixin,
-    EngineConfigurationStubMixin,
-    IdentityStubMixin,
-    PluginStubMixin,
-    StreamStubMixin,
-    ZoneStatusStubMixin,
-    ZoneStubMixin)
+from brainframe.client.api import stubs
 
 
-class API(AlertStubMixin,
-          AnalysisStubMixin,
-          EngineConfigurationStubMixin,
-          IdentityStubMixin,
-          PluginStubMixin,
-          StreamStubMixin,
-          ZoneStatusStubMixin,
-          ZoneStubMixin):
+class API(stubs.AlertStubMixin,
+          stubs.AnalysisStubMixin,
+          stubs.EngineConfigurationStubMixin,
+          stubs.IdentityStubMixin,
+          stubs.PluginStubMixin,
+          stubs.StreamStubMixin,
+          stubs.ZoneStatusStubMixin,
+          stubs.ZoneStubMixin,
+          stubs.StorageStubMixin):
     """Provides access to BrainFrame API endpoints."""
 
     def __init__(self, server_url=None):
@@ -32,4 +25,4 @@ class API(AlertStubMixin,
 
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
-        StreamStubMixin.close(self)
+        stubs.StreamStubMixin.close(self)

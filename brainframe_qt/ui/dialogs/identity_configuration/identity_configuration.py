@@ -257,10 +257,11 @@ class ImageSenderWorker(QObject):
                 for image_name, image_bytes in images:
 
                     try:
+                        image_id = api.new_storage_as_image(image_bytes)
                         api.new_identity_image(
                             identity.id,
                             class_name,
-                            image_bytes)
+                            image_id)
 
                         # Update UI's tree view if successful
                         # noinspection PyUnresolvedReferences
