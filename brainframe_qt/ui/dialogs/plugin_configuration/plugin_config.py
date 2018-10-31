@@ -13,7 +13,7 @@ class BasePluginConfigDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        loadUi(qt_ui_paths.plugin_configuration_ui, self)
+        loadUi(qt_ui_paths.plugin_config_dialog_ui, self)
 
     @classmethod
     def show_dialog(cls):
