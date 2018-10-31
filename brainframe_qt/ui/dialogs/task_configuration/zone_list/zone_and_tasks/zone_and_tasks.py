@@ -72,7 +72,7 @@ class ZoneAndTasks(QWidget):
         except ValueError:
             pass
         alarm_widget.deleteLater()
-        self.zone = api.set_zone(self.zone.stream_id, self.zone)
+        self.zone = api.set_zone(self.zone)
 
     def zone_deleted(self):
         self.zone_deleted_signal.emit(self.zone.id)

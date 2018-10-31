@@ -48,37 +48,20 @@ class IdentityStubMixin(Stub):
         return Identity.from_dict(saved)
 
     def new_identity_image(self, identity_id: int, class_name: str,
-                           image: bytes) -> int:
+                           storage_id: int):
         """Saves and encodes an image under the identity with the given ID.
 
         :param identity_id: Identity to associate the image with
         :param class_name: The type of object this image shows and should be
             encoded for
-        :param image: The image to save
-        :return: The image ID
+        :param storage_id: The ID of the image in storage to encode
         """
-        req = f"/api/identities/{identity_id}/classes/{class_name}/images"
-
-        # Try to figure out the image type. If we can't figure it out, send it
-        # as raw data to the server in case the server supports it
-
-        try:
-            pil_image = Image.open(BytesIO(image))
-
-            if pil_image.format == "JPEG":
-                mime_type = "image/jpeg"
-            elif pil_image.format == "PNG":
-                mime_type = "image/png"
-            else:
-                mime_type = "application/octet-stream"
-        except IOError:
-            # TODO(Tyler Compton): This failure mode is stupid but I don't want
-            # two ways for this call to fail when an invalid image is passed to
-            # it. Figure out a better way.
-            mime_type = "application/octet-stream"
-
-        image_id = self._post_raw(req, image, mime_type)
-        return image_id
+        req = f"/api/identities/{identity_id}/images"
+        req_obj = {
+            "class_name": class_name,
+            "storage_id": storage_id
+        }
+        self._post_json(req, ujson.dumps(req_obj))
 
     def new_identity_vector(self, identity_id: int, class_name: str,
                             vector: List[float]) -> int:
@@ -91,38 +74,24 @@ class IdentityStubMixin(Stub):
         :param vector: The vector to save
         :return: The vector ID
         """
-        req = f"/api/identities/{identity_id}/classes/{class_name}/vectors"
+        req = f"/api/identities/{identity_id}/vectors"
 
-        return self._post_json(req, ujson.dumps(vector))
+        encoded_obj = {
+            "class_name": class_name,
+            "vector": vector
+        }
+        return self._post_json(req, ujson.dumps(encoded_obj))
 
-    def get_identity_image(self, identity_id: int, class_name: str,
-                           image_id: int) -> np.ndarray:
-        """Returns the image with the given image ID.
-
-        :param identity_id: The ID of the identity that the image is associated
-            with
-        :param class_name: The class name that this image was encoded for
-        :param image_id: The ID of the image
-        :return: The image as loaded by OpenCV
-        """
-        req = (f"/api/identities/{identity_id}"
-               f"/classes/{class_name}"
-               f"/images/{image_id}")
-        image_bytes = self._get_raw(req)
-
-        return cv2.imdecode(np.fromstring(image_bytes, np.uint8),
-                            cv2.IMREAD_COLOR)
-
-    def get_image_ids_for_identity(self, identity_id, class_name) -> List[int]:
-        """Returns all IDs for the identity with the given ID that are for
-        encodings of the given class name.
+    def get_image_ids_for_identity(self, identity_id, class_name=None) \
+            -> List[int]:
+        """Returns all image storage IDs that are encoded for this identity.
 
         :param identity_id: The ID of the identity to look for images under
-        :param class_name: The class name to look for images encoded for
-        :return: List of image IDs
+        :param class_name: Will filter images by ones that are encoded for this
+            class name, if provided
+        :return: List of storage IDs
         """
-        req = (f"/api/identities/{identity_id}"
-               f"/classes/{class_name}"
-               f"/images")
-        image_ids = self._get(req)
+        req = f"/api/identities/{identity_id}/images"
+        params = {"class_name": class_name} if class_name else None
+        image_ids = self._get(req, params=params)
         return image_ids

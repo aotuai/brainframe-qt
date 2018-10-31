@@ -49,7 +49,7 @@ class AlertStubMixin(Stub):
         """
         req = f"/api/alerts/{alert_id}/frame"
         try:
-            img_bytes = self._get_raw(req)
+            img_bytes, _ = self._get_raw(req)
             return cv2.imdecode(np.fromstring(img_bytes, np.uint8),
                                 cv2.IMREAD_COLOR)
         except api_errors.FrameNotFoundForAlertError:
