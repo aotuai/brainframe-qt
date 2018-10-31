@@ -97,7 +97,12 @@ class SyncedStreamReader(StreamReader):
         logging.info("SyncedStreamReader: Closing")
 
     def close(self):
+        """Sends a request to close the SyncedStreamReader."""
         super().close()
+
+    def wait_until_closed(self):
+        """Hangs until the SyncedStreamReader has been closed."""
+        super().wait_until_closed()
         self._thread.join()
 
 
@@ -137,12 +142,21 @@ class StreamManager:
 
         :param stream_id: The ID of the stream to delete
         """
-        self._stream_readers[stream_id].close()
-        del self._stream_readers[stream_id]
+        stream = self._close_stream_async(stream_id)
+        stream.wait_until_closed()
 
     def close(self):
         """Close all streams and remove references"""
+        closing_streams = []
         for stream_id in self._stream_readers.copy().keys():
-            self.close_stream(stream_id)
+            closing_streams.append(self._close_stream_async(stream_id))
         self._stream_readers = {}
+
+        for stream in closing_streams:
+            stream.wait_until_closed()
+
+    def _close_stream_async(self, stream_id) -> SyncedStreamReader:
+        stream = self._stream_readers.pop(stream_id)
+        stream.close()
+        return stream
 
