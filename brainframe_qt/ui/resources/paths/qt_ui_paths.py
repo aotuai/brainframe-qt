@@ -53,12 +53,14 @@ tree_widget_ui             = route_path(tree_widget_dir           , "tree_widget
 license_agreement_dir      = route_path(dialogs_dir               , "license_agreement"        )
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
 
-plugin_configuration_dir   = route_path(dialogs_dir               , "plugin_configuration"     )
-plugin_configuration_ui    = route_path(plugin_configuration_dir  , "plugin_config.ui"  )
-plugin_list_dir            = route_path(plugin_configuration_dir  , "plugin_list"              )
+plugin_config_dir          = route_path(dialogs_dir               , "plugin_configuration"     )
+plugin_config_dialog_ui    = route_path(plugin_config_dir         , "plugin_config.ui"         )
+plugin_list_dir            = route_path(plugin_config_dir         , "plugin_list"              )
 plugin_list_ui             = route_path(plugin_list_dir           , "plugin_list.ui"           )
 plugin_list_item_dir       = route_path(plugin_list_dir           , "plugin_list_item"         )
 plugin_list_item_ui        = route_path(plugin_list_item_dir      , "plugin_list_item.ui"      )
+plugin_options_dir         = route_path(plugin_config_dir         , "plugin_configs_dir.u"     )
+plugin_options_ui          = route_path(plugin_options_dir        , "plugin_options.ui"        )
 
 stream_configuration_dir   = route_path(dialogs_dir               , "stream_configuration"     )
 stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )
