@@ -8,7 +8,7 @@ from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-class BasePluginConfigDialog(QDialog):
+class PluginConfigDialog(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
