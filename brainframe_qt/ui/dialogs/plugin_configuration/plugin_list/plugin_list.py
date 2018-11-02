@@ -37,22 +37,19 @@ class PluginList(QListWidget):
             list_widget_item.setSizeHint(item_widget.sizeHint())
             self.setItemWidget(list_widget_item, item_widget)
 
+        self.currentItemChanged.connect(self.plugin_changed)
         # Always have an item selected
         if len(plugin_names):
             self.setCurrentRow(0)
 
-    def currentItemChanged(self, current: QListWidgetItem, previous: QListWidgetItem):
-        """When an item on the QListWidget is selected
+    def plugin_changed(self, current: QListWidgetItem,
+                       previous: QListWidgetItem):
+        """When an item on the QListWidget is selected, emit a signal with
+        the plugin name as the argument
 
         Connected to:
         - PluginList -- Dynamic
           self.currentItemChanged
         """
-        print("hmm item selected")
         plugin_list_item = self.itemWidget(current)
         self.plugin_selection_changed.emit(plugin_list_item.plugin_name)
-        print("Yes, it has changed")
-    #
-    # @pyqtSlot(QListWidgetItem)
-
-

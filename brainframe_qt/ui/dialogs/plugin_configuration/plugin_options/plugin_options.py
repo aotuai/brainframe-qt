@@ -26,7 +26,7 @@ class PluginOptionsWidget(QGroupBox):
 
         Connected to:
         - PluginList -- QtDesigner
-          [peer].item_selected
+          [peer].plugin_changed
         """
         print("Change the plugin: ", plugin_name)
         options = api.get_plugin_options(plugin_name)
