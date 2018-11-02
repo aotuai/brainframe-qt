@@ -41,7 +41,7 @@ class Stub:
         if not resp.ok:
             raise _make_api_error(resp.content)
 
-        return resp.content, resp.content_type
+        return resp.content, resp.headers["content-type"]
 
     def _put_raw(self, api_url, data: bytes, content_type: str):
         """Send a PUT request to the given URL.
