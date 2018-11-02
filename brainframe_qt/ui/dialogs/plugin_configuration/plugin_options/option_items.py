@@ -1,0 +1,44 @@
+from abc import ABC
+
+from brainframe.client.api.codecs import PluginOption
+
+
+class PluginOptionItem(ABC):
+    def __init__(self, name: str, option: PluginOption):
+        self.option_name = name
+        self.option = option
+
+
+class EnumOptionItem(PluginOptionItem):
+    """A plugin option that holds a choice from a discrete set of string values.
+    """
+
+    def __init__(self, name, option: PluginOption):
+        super().__init__(name, option)
+
+
+class FloatOptionItem(PluginOptionItem):
+    """A plugin option that holds a floating point value with defined
+    boundaries.
+
+    Can have min_val or max_val be None"""
+
+    def __init__(self, name, option: PluginOption):
+        super().__init__(name, option)
+
+
+class IntOptionItem(PluginOptionItem):
+    """A plugin option that holds an integer value.
+
+    Can have min_val and max_val be None
+    """
+
+    def __init__(self, name, option: PluginOption):
+        super().__init__(name, option)
+
+
+class BoolOptionItem(PluginOptionItem):
+    """A plugin option that holds an boolean value."""
+
+    def __init__(self, name, option: PluginOption):
+        super().__init__(name, option)
