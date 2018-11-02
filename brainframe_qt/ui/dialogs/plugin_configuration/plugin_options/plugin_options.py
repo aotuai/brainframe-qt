@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QGroupBox
@@ -22,7 +22,8 @@ class PluginOptionsWidget(QGroupBox):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.plugin_options_ui, self)
-        self.option_items = []
+        self.option_items: List[PluginOptionItem] = []
+        self.grid_layout = self.grid.layout()
 
     @pyqtSlot(str)
     def change_plugin(self, plugin_name):
@@ -32,6 +33,8 @@ class PluginOptionsWidget(QGroupBox):
         - PluginList -- QtDesigner
           [peer].plugin_changed
         """
+        self._remove_existing_widgets()
+
         print("Change the plugin: ", plugin_name)
         options = api.get_plugin_options(plugin_name)
         for option_name, option in options.items():
@@ -49,4 +52,18 @@ class PluginOptionsWidget(QGroupBox):
         else:
             raise TypeError("The plugin option of name " + str(name) +
                             " has an invalid type of type " + str(option.type))
+
+        _NAME_ROW = 0
+        _VALUE_ROW = 1
+        _ENABLE_ROW = 2
+
+        self.grid_layout.addWidget(item.label_widget,
+                                len(self.option_items) + 2,
+                                _NAME_ROW)
         self.option_items.append(item)
+
+    def _remove_existing_widgets(self):
+        for option_item in self.option_items:
+            option_item.label_widget.deleteLater()
+
+        self.option_items = []

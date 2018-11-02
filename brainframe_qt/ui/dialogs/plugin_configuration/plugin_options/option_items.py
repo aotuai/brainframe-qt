@@ -1,12 +1,18 @@
 from abc import ABC
 
+from PyQt5.QtWidgets import QLabel
+
 from brainframe.client.api.codecs import PluginOption
+from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
 
 
 class PluginOptionItem(ABC):
     def __init__(self, name: str, option: PluginOption):
         self.option_name = name
         self.option = option
+        
+        pretty_name = plugin_utils.pretty_plugin_name(self.option_name)
+        self.label_widget = QLabel(pretty_name)
 
 
 class EnumOptionItem(PluginOptionItem):
