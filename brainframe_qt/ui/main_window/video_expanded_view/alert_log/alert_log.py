@@ -47,21 +47,10 @@ class AlertLog(QWidget):
             statuses = self.status_poller.latest_statuses(self.stream_id)
         for alert in new_alerts:
             # Get the alarm that this alert belongs to
-            # noinspection PyUnboundLocalVariable
-            # ignoring warning -- in order to be in loop, new_alerts needs to
-            # have entries and statuses will be set
-            for status in statuses:
-                alarm = status.zone.get_alarm(alert.alarm_id)
-                if alarm:
-                    zone_name = status.zone.name
-                    break
-            else:
-                # If no alarm was found that means this stream isn't currently
-                # receiving Zone Statuses
-                # TODO: When we update the API, lets fix this
-                continue
+            alarm = api.get_zone_alarm(alert.alarm_id)
+            zone = api.get_zone(alarm.zone_id)
 
-            alert_widget = AlertLogEntry(alert, alarm, zone_name)
+            alert_widget = AlertLogEntry(alert, alarm, zone.name)
             self.alert_log.layout().insertWidget(0, alert_widget)
             self.alert_widgets[alert.id] = alert_widget
 

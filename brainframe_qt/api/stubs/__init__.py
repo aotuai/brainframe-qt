@@ -7,3 +7,4 @@ from .streams import StreamStubMixin
 from .zone_statuses import ZoneStatusStubMixin
 from .zones import ZoneStubMixin
 from .storage import StorageStubMixin
+from .alarms import ZoneAlarmStubMixin
