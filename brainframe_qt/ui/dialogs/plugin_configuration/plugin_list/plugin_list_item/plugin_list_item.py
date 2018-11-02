@@ -12,7 +12,6 @@ class PluginListItem(QLabel):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.plugin_list_item_ui, self)
-        print("Ahhh, the PluginListItem UI has been loaded indeed")
 
         # Make a prettier version of the plugin name, for display purposes
         display_name = (name

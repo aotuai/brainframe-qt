@@ -11,7 +11,7 @@ from brainframe.client.ui.dialogs import (
     StandardError,
     StreamConfigurationDialog,
     IdentityConfiguration,
-    GlobalPluginConfigDialog
+    PluginConfigDialog
 )
 
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
@@ -53,8 +53,7 @@ class MainWindow(QMainWindow):
             f"    background-image: url({image_paths.background});"
             f"    background-position: right bottom;"
             f"    background-repeat: no-repeat;"
-            f"}}"
-        )
+            f"}}")
 
     @pyqtSlot()
     def show_video_expanded_view(self):
@@ -112,6 +111,6 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def show_global_plugin_config_dialog(self):
-        GlobalPluginConfigDialog.show_dialog()
+        PluginConfigDialog.show_dialog()
 
     sys.excepthook = StandardError.show_error

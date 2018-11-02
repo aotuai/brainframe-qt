@@ -7,14 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>866</width>
-    <height>544</height>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
+   <item row="0" column="1">
+    <widget class="PluginOptionsWidget" name="PluginOptionsWidget"/>
+   </item>
+   <item row="1" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -31,6 +34,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PluginOptionsWidget</class>
+   <extends>QGroupBox</extends>
+   <header>brainframe.client.ui.dialogs.plugin_configuration.plugin_options.plugin_options</header>
+  </customwidget>
+  <customwidget>
    <class>PluginList</class>
    <extends>QListWidget</extends>
    <header>brainframe.client.ui.dialogs.plugin_configuration.plugin_list.plugin_list</header>
@@ -39,34 +47,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
+   <sender>PluginList</sender>
+   <signal>plugin_selection_changed(QString)</signal>
+   <receiver>PluginOptionsWidget</receiver>
+   <slot>change_plugin(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>219</x>
+     <y>256</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>645</x>
+     <y>256</y>
     </hint>
    </hints>
   </connection>

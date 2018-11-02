@@ -1,6 +1,6 @@
 from typing import Dict
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QListWidget, QListWidgetItem
 from PyQt5.uic import loadUi
 
@@ -10,16 +10,19 @@ from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class PluginList(QListWidget):
+    plugin_selection_changed = pyqtSignal(str)
+    """This is activated when the user changes the selected plugin in the
+    list.
+
+    Connected to:
+    - PluginOptionsWidget -- QtDesigner
+      [peer].ongoing_alerts_slot
+    """
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.plugin_list_ui, self)
-        print("Ahhh, the PluginList UI has been loaded indeed")
-        # Things that exist
-        # print(self.plugin_container)
-
-        # Query API for existing plugins
 
         # Populate plugin_container layout with those plugins
         plugin_names = api.get_plugin_names()
@@ -34,20 +37,19 @@ class PluginList(QListWidget):
             list_widget_item.setSizeHint(item_widget.sizeHint())
             self.setItemWidget(list_widget_item, item_widget)
 
+        self.currentItemChanged.connect(self.plugin_changed)
         # Always have an item selected
         if len(plugin_names):
             self.setCurrentRow(0)
 
-    @pyqtSlot(QListWidgetItem)
-    def item_selected(self, current_item):
-        """When an item on the QListWidget is selected
+    def plugin_changed(self, current: QListWidgetItem,
+                       previous: QListWidgetItem):
+        """When an item on the QListWidget is selected, emit a signal with
+        the plugin name as the argument
 
         Connected to:
-        - PluginList -- QtDesigner
+        - PluginList -- Dynamic
           self.currentItemChanged
         """
-        print("Clicked!")
-        plugin_list_item = self.itemWidget(current_item)
-
-        print("Ahh, an item has been selected indeed",
-              plugin_list_item.plugin_name)
+        plugin_list_item = self.itemWidget(current)
+        self.plugin_selection_changed.emit(plugin_list_item.plugin_name)

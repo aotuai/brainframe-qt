@@ -15,25 +15,5 @@
   </property>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>Form</sender>
-   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
-   <receiver>Form</receiver>
-   <slot>item_selected(QListWidgetItem*)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>157</x>
-     <y>69</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>197</x>
-     <y>117</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
- <slots>
-  <slot>item_selected(QListWidgetItem*)</slot>
- </slots>
+ <connections/>
 </ui>
