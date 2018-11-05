@@ -246,3 +246,10 @@ class StorageNotFoundError(BaseAPIError):
     """There was an attempt to access a storage object that does not exist."""
     def __init__(self, description):
         super().__init__(error_kinds.STORAGE_NOT_FOUND, description)
+
+
+@register_error_type
+class ZoneAlarmNotFoundError(BaseAPIError):
+    """There was an attempt to access a zone alarm that does not exist."""
+    def __init__(self, description):
+        super().__init__(error_kinds.ZONE_ALARM_NOT_FOUND, description)
