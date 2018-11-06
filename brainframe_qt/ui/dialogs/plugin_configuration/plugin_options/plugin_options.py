@@ -42,28 +42,31 @@ class PluginOptionsWidget(QGroupBox):
 
     def add_option(self, name: str, option: codecs.PluginOption):
         if option.type is OptionType.BOOL:
-            item = BoolOptionItem(name, option)
+            item = BoolOptionItem(name, option, parent=self)
         elif option.type is OptionType.ENUM:
-            item = EnumOptionItem(name, option)
+            item = EnumOptionItem(name, option, parent=self)
         elif option.type is OptionType.FLOAT:
-            item = FloatOptionItem(name, option)
+            item = FloatOptionItem(name, option, parent=self)
         elif option.type is OptionType.INT:
-            item = IntOptionItem(name, option)
+            item = IntOptionItem(name, option, parent=self)
         else:
             raise TypeError("The plugin option of name " + str(name) +
                             " has an invalid type of type " + str(option.type))
-
+        print(name, option)
         _NAME_ROW = 0
         _VALUE_ROW = 1
         _ENABLE_ROW = 2
 
-        self.grid_layout.addWidget(item.label_widget,
-                                len(self.option_items) + 2,
-                                _NAME_ROW)
+        option_row = len(self.option_items) + 2
+
+        self.grid_layout.addWidget(item.label_widget, option_row, _NAME_ROW)
+        self.grid_layout.addWidget(item.option_widget, option_row, _VALUE_ROW)
+
+        item.set_val(option.value)
         self.option_items.append(item)
 
     def _remove_existing_widgets(self):
         for option_item in self.option_items:
             option_item.label_widget.deleteLater()
-
+            option_item.option_widget.deleteLater()
         self.option_items = []

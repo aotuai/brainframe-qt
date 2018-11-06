@@ -1,4 +1,4 @@
-def pretty_plugin_name(name):
+def pretty_snakecase(name):
     # Make a prettier version of the plugin name, for display purposes
     name = (name
             .replace('_', ' ')

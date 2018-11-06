@@ -15,4 +15,4 @@ class PluginListItem(QLabel):
         loadUi(qt_ui_paths.plugin_list_item_ui, self)
 
         self.plugin_name = name
-        self.setText(plugin_utils.pretty_plugin_name(name))
+        self.setText(plugin_utils.pretty_snakecase(name))
