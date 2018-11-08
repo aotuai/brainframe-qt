@@ -6,23 +6,46 @@ from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
+from .plugin_options import StreamPluginOptionsWidget, GlobalPluginOptionsWidget
 
 
 class PluginConfigDialog(QDialog):
 
-    def __init__(self, parent=None):
+    def __init__(self, stream_id=None, parent=None):
+        """
+
+        :param stream_id: If not None, this will show options for a specific
+        stream and the plugin optinos will render with the checkboxes for
+        Override Global Configuration. Furthermore, when applied it will
+        set the options only for the specific stream.
+        :param parent:
+        """
         super().__init__(parent=parent)
         loadUi(qt_ui_paths.plugin_config_dialog_ui, self)
+
+        # Add the appropriate options widget
+        if stream_id:
+            options_widget = StreamPluginOptionsWidget(stream_id, parent=self)
+        else:
+            options_widget = GlobalPluginOptionsWidget(parent=self)
+        self.plugin_options_widget = options_widget
+        self.layout().addWidget(self.plugin_options_widget, 0, 1)
+
+        # Connect signals
         self.plugin_options_widget.plugin_options_changed.connect(
             self.is_inputs_valid)
+
+        self.stream_id = stream_id
 
         # self.dialog_button_box.apply.clicked.connect(self.apply)
         apply_btn = self.dialog_button_box.button(QDialogButtonBox.Apply)
         apply_btn.clicked.connect(self.plugin_options_widget.apply_changes)
 
+
+
     @classmethod
-    def show_dialog(cls):
-        dialog = cls()
+    def show_dialog(cls, stream_id=None):
+        dialog = cls(stream_id=stream_id)
         dialog.exec_()
 
     @pyqtSlot()
@@ -31,7 +54,7 @@ class PluginConfigDialog(QDialog):
         have not been changed.
 
         Connected to:
-        - PluginOptionsWidget -- Dynamic
+        - BasePluginOptionsWidget -- Dynamic
           [child].plugin_options_changed
         """
 
@@ -42,6 +65,18 @@ class PluginConfigDialog(QDialog):
         buttons = QDialogButtonBox
         self.dialog_button_box.button(buttons.Ok).setEnabled(is_valid)
         self.dialog_button_box.button(buttons.Apply).setEnabled(is_valid)
+
+    @pyqtSlot(str)
+    def on_plugin_change(self, plugin_name):
+        """
+        :param plugin_name: The name of the plugin that has been selected
+        by the plugin list.
+
+        Connected to:
+        - PluginList -- QtDesigner
+          [peer].plugin_selection_changed
+        """
+        self.plugin_options_widget.change_plugin(plugin_name, self.stream_id)
 
     def accept(self):
         """Close the window after applying the changes

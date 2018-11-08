@@ -4,7 +4,7 @@ from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.ui.dialogs import TaskConfiguration
+from brainframe.client.ui.dialogs import TaskConfiguration, PluginConfigDialog
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
@@ -37,7 +37,8 @@ class VideoExpandedView(QWidget):
 
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
-        """Signaled by thumbnail view when thumbnail video is clicked"""
+        """Signaled by thumbnail view when thumbnail video is clicked
+        """
 
         self.expanded_video.change_stream(stream_conf)
         self.alert_log.change_stream(stream_conf.id)
@@ -84,11 +85,22 @@ class VideoExpandedView(QWidget):
         self.stream_conf = None
 
     @pyqtSlot()
+    def open_stream_plugin_config(self):
+        """
+        Connected to:
+        - QPushButton -- QtDesigner
+          self.open_stream_plugin_config.clicked
+        """
+        PluginConfigDialog.show_dialog(self.stream_conf.id)
+
+
+    @pyqtSlot()
     def open_task_config(self):
-        print("Opening task configuration")
+        """Opens the task configuration for this stream
+        Connected to:
+        - QPushButton -- QtDesigner
+          self.task_config_button.clicked
+        """
         config = TaskConfiguration.open_configuration(self.stream_conf)
         if not config:
             return
-
-            # TODO(Bryce Beagle): Actually say what this TODO is for
-            # TODO

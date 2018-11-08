@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1017</width>
-    <height>572</height>
+    <height>527</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,9 +24,6 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="PluginOptionsWidget" name="plugin_options_widget"/>
-   </item>
    <item row="1" column="1">
     <widget class="QDialogButtonBox" name="dialog_button_box">
      <property name="orientation">
@@ -41,11 +38,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PluginOptionsWidget</class>
-   <extends>QGroupBox</extends>
-   <header>brainframe.client.ui.dialogs.plugin_configuration.plugin_options.plugin_options</header>
-  </customwidget>
-  <customwidget>
    <class>PluginList</class>
    <extends>QListWidget</extends>
    <header>brainframe.client.ui.dialogs.plugin_configuration.plugin_list.plugin_list</header>
@@ -54,34 +46,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>PluginList</sender>
-   <signal>plugin_selection_changed(QString)</signal>
-   <receiver>plugin_options_widget</receiver>
-   <slot>change_plugin(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>256</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>645</x>
-     <y>256</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>dialog_button_box</sender>
    <signal>accepted()</signal>
    <receiver>Dialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>810</x>
-     <y>551</y>
+     <x>1006</x>
+     <y>516</y>
     </hint>
     <hint type="destinationlabel">
      <x>301</x>
-     <y>548</y>
+     <y>526</y>
     </hint>
    </hints>
   </connection>
@@ -92,14 +68,33 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>552</x>
-     <y>551</y>
+     <x>968</x>
+     <y>516</y>
     </hint>
     <hint type="destinationlabel">
      <x>345</x>
-     <y>538</y>
+     <y>526</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>PluginList</sender>
+   <signal>plugin_selection_changed(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>on_plugin_change(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>265</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>123</x>
+     <y>512</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>on_plugin_change(QString)</slot>
+ </slots>
 </ui>

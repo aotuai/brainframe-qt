@@ -15,8 +15,8 @@ class PluginList(QListWidget):
     list.
 
     Connected to:
-    - PluginOptionsWidget -- QtDesigner
-      [peer].change_plugin
+    - PluginConfigDialog -- QtDesigner
+      [peer].on_plugin_change
     """
 
     def __init__(self, parent=None):
@@ -26,6 +26,7 @@ class PluginList(QListWidget):
 
         # Populate plugin_container layout with those plugins
         self.plugin_names = api.get_plugin_names()
+        self.current_plugin = None
 
         for plugin_name in self.plugin_names:
             list_widget_item = QListWidgetItem(parent=self)
@@ -55,4 +56,5 @@ class PluginList(QListWidget):
           self.currentItemChanged
         """
         plugin_list_item = self.itemWidget(current)
-        self.plugin_selection_changed.emit(plugin_list_item.plugin_name)
+        self.current_plugin = plugin_list_item.plugin_name
+        self.plugin_selection_changed.emit(self.current_plugin)

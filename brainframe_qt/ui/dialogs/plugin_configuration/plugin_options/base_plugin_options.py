@@ -16,7 +16,7 @@ from brainframe.client.api import api, codecs
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-class PluginOptionsWidget(QGroupBox):
+class BasePluginOptionsWidget(QGroupBox):
     plugin_options_changed = pyqtSignal()
     """Alerts the dialog holding the options widget that the current options
     have been modified by the user, such options may or may not be valid
@@ -26,12 +26,7 @@ class PluginOptionsWidget(QGroupBox):
       [parent].is_inputs_valid
     """
 
-    def __init__(self, stream_id=None, parent=None):
-        """
-        :param stream_id: If None, then this options widget is global.
-        If not None, this will be options for a specific stream.
-        :param parent:
-        """
+    def __init__(self, parent=None):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.plugin_options_ui, self)
@@ -49,16 +44,14 @@ class PluginOptionsWidget(QGroupBox):
 
         self.grid_layout = self.grid.layout()
 
-        self.stream_id = None
         self.current_plugin = None
 
-    @pyqtSlot(str)
-    def change_plugin(self, plugin_name):
+    def change_plugin(self, plugin_name, stream_id=None):
         """When an item on the QListWidget is selected
 
-        Connected to:
-        - PluginList -- QtDesigner
-          [peer].plugin_selection_changed
+        :param stream_id: If None, then this options widget is global.
+        If not None, this will be options for a specific stream.
+        :param plugin_name: The name of the plugin to edit options for
         """
         self._reset()
         self.current_plugin = plugin_name
@@ -67,12 +60,13 @@ class PluginOptionsWidget(QGroupBox):
         self.enabled_option = self.add_option(
             name="Plugin Enabled",
             type=OptionType.BOOL,
-            value=api.is_plugin_active(plugin_name, self.stream_id),
+            value=api.is_plugin_active(plugin_name, stream_id=None),
             constraints={})
         self.all_items.append(self.enabled_option)
 
         # Add options specific to this plugin
         options = api.get_plugin_options(plugin_name)
+        print("Thine said options", options)
         for option_name, option in options.items():
             item = self.add_option(
                 name=option_name,
@@ -130,11 +124,15 @@ class PluginOptionsWidget(QGroupBox):
         # Make sure that the options are valid
         if not self.options_valid():
             raise ValueError("Not all options are valid!")
+        if not len(self.all_items):
+            raise RuntimeError("You can't apply changes if the plugin never"
+                               " got set!")
+
         option_vals = {option_item.option_name: option_item.val
                        for option_item in self.option_items}
 
         api.set_plugin_option_vals(plugin_name=self.current_plugin,
-                                   stream_id=self.stream_id,
+                                   stream_id=None,
                                    option_vals=option_vals)
 
     def _on_inputs_changed(self):
