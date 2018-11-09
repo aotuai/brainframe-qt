@@ -41,8 +41,6 @@ class PluginConfigDialog(QDialog):
         apply_btn = self.dialog_button_box.button(QDialogButtonBox.Apply)
         apply_btn.clicked.connect(self.plugin_options_widget.apply_changes)
 
-
-
     @classmethod
     def show_dialog(cls, stream_id=None):
         dialog = cls(stream_id=stream_id)
@@ -87,4 +85,3 @@ class PluginConfigDialog(QDialog):
         """
         self.plugin_options_widget.apply_changes()
         super().accept()
-
