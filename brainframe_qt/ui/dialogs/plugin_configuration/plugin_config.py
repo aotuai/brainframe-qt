@@ -39,7 +39,8 @@ class PluginConfigDialog(QDialog):
 
         # self.dialog_button_box.apply.clicked.connect(self.apply)
         apply_btn = self.dialog_button_box.button(QDialogButtonBox.Apply)
-        apply_btn.clicked.connect(self.plugin_options_widget.apply_changes)
+        apply_func = lambda: self.plugin_options_widget.apply_changes(stream_id)
+        apply_btn.clicked.connect(apply_func)
 
     @classmethod
     def show_dialog(cls, stream_id=None):
@@ -74,7 +75,7 @@ class PluginConfigDialog(QDialog):
         - PluginList -- QtDesigner
           [peer].plugin_selection_changed
         """
-        self.plugin_options_widget.change_plugin(plugin_name, self.stream_id)
+        self.plugin_options_widget.change_plugin(plugin_name)
 
     def accept(self):
         """Close the window after applying the changes

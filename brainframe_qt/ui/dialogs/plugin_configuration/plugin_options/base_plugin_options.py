@@ -1,4 +1,5 @@
 from typing import Dict, List
+from abc import ABC, abstractmethod
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QGroupBox
@@ -46,18 +47,15 @@ class BasePluginOptionsWidget(QGroupBox):
 
         self.current_plugin = None
 
-    def change_plugin(self, plugin_name, stream_id=None):
+    def change_plugin(self, plugin_name):
         """When an item on the QListWidget is selected
-
-        :param stream_id: If None, then this options widget is global.
-        If not None, this will be options for a specific stream.
         :param plugin_name: The name of the plugin to edit options for
         """
         self._reset()
         self.current_plugin = plugin_name
 
         # Add configuration that every plugin _always_ has
-        self.enabled_option = self.add_option(
+        self.enabled_option = self._add_option(
             name="Plugin Enabled",
             type=OptionType.BOOL,
             value=api.is_plugin_active(plugin_name, stream_id=None),
@@ -66,13 +64,13 @@ class BasePluginOptionsWidget(QGroupBox):
 
         # Add options specific to this plugin
         options = api.get_plugin_options(plugin_name)
-        print("Thine said options", options)
         for option_name, option in options.items():
-            item = self.add_option(
+            item = self._add_option(
                 name=option_name,
                 type=option.type,
                 value=option.value,
                 constraints=option.constraints)
+
             # Keep track of the option
             self.option_items.append(item)
             self.all_items.append(item)
@@ -88,7 +86,8 @@ class BasePluginOptionsWidget(QGroupBox):
                 return False
         return True
 
-    def add_option(self, name: str, type: OptionType, value, constraints: Dict):
+    def _add_option(self, name: str, type: OptionType, value,
+                    constraints: Dict):
         if type is OptionType.BOOL:
             item = BoolOptionItem(name, value, constraints, parent=self)
         elif type is OptionType.ENUM:
@@ -103,19 +102,20 @@ class BasePluginOptionsWidget(QGroupBox):
 
         _NAME_ROW = 0
         _VALUE_ROW = 1
-        _ENABLE_ROW = 2
+        _ENABLE_ROW = 3
 
         option_row = len(self.all_items) + 2
 
         self.grid_layout.addWidget(item.label_widget, option_row, _NAME_ROW)
         self.grid_layout.addWidget(item.option_widget, option_row, _VALUE_ROW)
+        self.grid_layout.addWidget(item.lock_checkbox, option_row, _ENABLE_ROW)
 
         # Whenever this option is changed, make sure that our signal emits
         item.on_change(self._on_inputs_changed)
 
         return item
 
-    def apply_changes(self):
+    def apply_changes(self, stream_id=None):
         """This will send changes to the server for this plugin
         Connected to:
         - QButtonBox -- Dynamic
@@ -128,12 +128,26 @@ class BasePluginOptionsWidget(QGroupBox):
             raise RuntimeError("You can't apply changes if the plugin never"
                                " got set!")
 
-        option_vals = {option_item.option_name: option_item.val
-                       for option_item in self.option_items}
+        unlocked_option_vals = {option_item.option_name: option_item.val
+                                for option_item in self.option_items
+                                if not option_item.locked}
+        print("mmm", [o.locked for o in self.option_items])
+        print("Sending options", unlocked_option_vals)
+        api.set_plugin_option_vals(
+            plugin_name=self.current_plugin,
+            stream_id=stream_id,
+            option_vals=unlocked_option_vals)
 
-        api.set_plugin_option_vals(plugin_name=self.current_plugin,
-                                   stream_id=None,
-                                   option_vals=option_vals)
+        if not self.enabled_option.locked:
+            api.set_plugin_active(
+                plugin_name=self.current_plugin,
+                stream_id=stream_id,
+                active=self.enabled_option.val)
+        else:
+            api.set_plugin_active(
+                plugin_name=self.current_plugin,
+                stream_id=stream_id,
+                active=None)
 
     def _on_inputs_changed(self):
         """

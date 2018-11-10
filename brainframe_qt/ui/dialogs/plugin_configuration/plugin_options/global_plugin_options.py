@@ -1,5 +1,7 @@
 from .base_plugin_options import BasePluginOptionsWidget
 
+from brainframe.client.api import api
+
 
 class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
     def __init__(self, parent=None):
@@ -7,4 +9,3 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
 
         self.setTitle("Global Plugin Options")
         self.override_label.hide()
-

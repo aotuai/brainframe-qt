@@ -19,13 +19,26 @@ class PluginOptionItem(ABC):
 
     def __init__(self, name: str, initial_value, parent=None):
         self.option_name = name
+        self.locked = None
+        """When 'locked' is True or False, a checkbox will appear for allowing
+        the option to become locked or unlocked by the user. This is intended
+        for allowing global options to be explicitly overridden for a stream."""
 
         pretty_name = plugin_utils.pretty_snakecase(self.option_name)
 
         self.label_widget = QLabel(pretty_name, parent=parent)
+        self.lock_checkbox = QCheckBox(parent=parent)
         self.initial_value = initial_value
 
         self.set_val(self.initial_value)
+
+        # Connect the lock signals
+        self.lock_checkbox.clicked.connect(lambda e: self.set_locked(not e))
+        self.locked = False
+
+        # By default, we don't show the override checkbox.
+        self.set_locked(False)
+        self.show_lock(False)
 
     @abstractmethod
     def set_val(self, value):
@@ -36,18 +49,30 @@ class PluginOptionItem(ABC):
         """This should return the current value for the widget"""
         pass
 
-    def is_changed(self):
-        return not self.initial_value == self.val
-
     @abstractmethod
     def is_valid(self):
         """Should return True or False if the current value of the option is
         valid, or if it does not fit the rules set by the plugin."""
         raise NotImplementedError
 
+    def show_lock(self, status: bool):
+        """By default the override lock is hidden."""
+        self.lock_checkbox.setVisible(status)
+
+    def set_locked(self, status: bool):
+        """
+        Connected to:
+        - QCheckBox -- dynamic
+          self.lock_checkbox.clicked.connect
+        """
+        self.locked = status
+        self.option_widget.setEnabled(not status)
+        self.lock_checkbox.setChecked(not status)
+
     def delete(self):
         self.label_widget.deleteLater()
         self.option_widget.deleteLater()
+        self.lock_checkbox.deleteLater()
 
 
 class EnumOptionItem(PluginOptionItem):

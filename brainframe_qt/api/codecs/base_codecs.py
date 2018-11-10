@@ -27,7 +27,6 @@ class Codec(abc.ABC):
             return self.to_dict() == other
 
         if type(other) is not type(self):
-            print("Yes this is not implemented")
             return NotImplemented
 
         return self.to_dict() == other.to_dict()
