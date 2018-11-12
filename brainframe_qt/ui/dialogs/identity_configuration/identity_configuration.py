@@ -1,7 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 import re
-from typing import Dict, List, Set, Tuple, Union
+from typing import Dict, List, Set, Tuple, Optional
 
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QObject, QThread
 from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QMessageBox
@@ -115,7 +115,7 @@ class IdentityConfiguration(QDialog):
 
     @classmethod
     def get_new_identities_from_path(cls) \
-            -> Tuple[Union[None, List[IdentityPrototype]], int]:
+            -> Tuple[Optional[List[IdentityPrototype]], int]:
         """Get a list of IdentityPrototypes for sending to server, and the total
         number of images
 

@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Optional
 import logging
 
 from brainframe.client.api import api_errors
@@ -42,7 +42,7 @@ class StreamStubMixin(Stub):
         return configs
 
     def set_stream_configuration(self, stream_configuration) \
-            -> Union[None, StreamConfiguration]:
+            -> Optional[StreamConfiguration]:
         """Update an existing stream configuration or create a new one
         If creating a new one, the stream_configuration.id will be None
         :param stream_configuration: StreamConfiguration
@@ -65,7 +65,7 @@ class StreamStubMixin(Stub):
             self._stream_manager.close_stream(stream_id)
 
     def get_stream_reader(self, stream_config: StreamConfiguration) \
-            -> Union[None, SyncedStreamReader]:
+            -> Optional[SyncedStreamReader]:
         """Get the SyncedStreamReader for the given stream_id.
 
         :param stream_config: The stream configuration to open.

@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import ujson
 
@@ -72,7 +72,8 @@ class PluginStubMixin(Stub):
         plugins_active = self._get(req)
         return plugins_active
 
-    def set_plugin_active(self, *, plugin_name, stream_id=None, active: bool):
+    def set_plugin_active(self, *, plugin_name, stream_id=None,
+                          active: Optional[bool]):
         """Sets whether or not the plugin is active. If a plugin is active, it
         will be run on frames.
 

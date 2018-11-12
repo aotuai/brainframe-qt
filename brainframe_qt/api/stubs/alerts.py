@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Optional
 
 import cv2
 import numpy as np
@@ -40,7 +40,7 @@ class AlertStubMixin(Stub):
         req = f"/api/alerts/{alert_id}"
         self._put_json(req, ujson.dumps(verified_as))
 
-    def get_alert_frame(self, alert_id: int) -> Union[np.ndarray, None]:
+    def get_alert_frame(self, alert_id: int) -> Optional[np.ndarray]:
         """Returns the frame saved for this alert, or None if no frame is
         recorded for this alert.
 

@@ -17,7 +17,7 @@ class StreamPluginOptionsWidget(BasePluginOptionsWidget):
         # Get stream-specific option items
         stream_options = api.get_plugin_options(plugin_name, self.stream_id)
         enabled_option = api.is_plugin_active(plugin_name, self.stream_id)
-        print("yee ol stream options", stream_options)
+
         # Lock all options that are not overwritten by stream specific options
         for option_item in self.option_items:
             is_locked = option_item.option_name not in stream_options.keys()

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional
 
 from .base_codecs import Codec
 
@@ -15,7 +15,7 @@ class Detection(Codec):
         self.rect = rect
         self.children = children
         self.attributes = attributes
-        self.with_identity: Union[Identity, None] = with_identity
+        self.with_identity: Optional[Identity] = with_identity
         self.extra_data = extra_data
 
     def to_dict(self):
