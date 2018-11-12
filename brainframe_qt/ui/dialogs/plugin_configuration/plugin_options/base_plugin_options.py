@@ -131,8 +131,7 @@ class BasePluginOptionsWidget(QGroupBox):
         unlocked_option_vals = {option_item.option_name: option_item.val
                                 for option_item in self.option_items
                                 if not option_item.locked}
-        print("mmm", [o.locked for o in self.option_items])
-        print("Sending options", unlocked_option_vals)
+
         api.set_plugin_option_vals(
             plugin_name=self.current_plugin,
             stream_id=stream_id,
