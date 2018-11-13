@@ -62,6 +62,8 @@ class BasePluginOptionsWidget(QGroupBox):
             constraints={})
         self.all_items.append(self.enabled_option)
 
+        # Add a horizontal line to visually seperate
+
         # Add options specific to this plugin
         options = api.get_plugin_options(plugin_name)
         for option_name, option in options.items():
