@@ -58,6 +58,9 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
             # Change the options to default
             for option_item in self.option_items:
                 option_item.set_val(default_values[option_item.option_name])
+
+            # Change the 'enabled' to default
+            self.enabled_option.set_val(True)
         else:
             desc = "There are no changes to reset"
             QMessageBox.information(
