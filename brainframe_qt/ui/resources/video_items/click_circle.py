@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 from PyQt5.QtCore import Qt, QPointF
 from PyQt5.QtWidgets import QGraphicsEllipseItem
@@ -29,7 +29,7 @@ class ClickCircle(QGraphicsEllipseItem):
 
         self.setPos(x, y)
 
-    def setPos(self, x: Union[float, QPointF], y: Union[float, None] = None):
+    def setPos(self, x: Union[float, QPointF], y: Optional[float] = None):
         """Set position relative to center of circle instead of top left"""
 
         if isinstance(x, QPointF):

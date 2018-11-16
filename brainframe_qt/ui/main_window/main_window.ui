@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1045</width>
-    <height>658</height>
+    <width>1382</width>
+    <height>907</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,6 +47,7 @@
    </attribute>
    <addaction name="add_stream_action"/>
    <addaction name="configure_identity_action"/>
+   <addaction name="plugin_config_action"/>
    <addaction name="show_about_page_action"/>
   </widget>
   <action name="add_stream_action">
@@ -73,6 +74,14 @@
     <string>Open source licenses</string>
    </property>
   </action>
+  <action name="plugin_config_action">
+   <property name="text">
+    <string>Global Plugin Configuration</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit the options for plugins and apply it to all streams that don't have specific options set already.</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -95,8 +104,8 @@
    <slot>hide_video_expanded_view()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1043</x>
-     <y>136</y>
+     <x>1034</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
      <x>753</x>
@@ -115,8 +124,8 @@
      <y>122</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1043</x>
-     <y>121</y>
+     <x>1034</x>
+     <y>163</y>
     </hint>
    </hints>
   </connection>
@@ -127,8 +136,8 @@
    <slot>expand_thumbnail_layouts_slot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1043</x>
-     <y>152</y>
+     <x>1034</x>
+     <y>194</y>
     </hint>
     <hint type="destinationlabel">
      <x>108</x>
@@ -159,8 +168,8 @@
    <slot>delete_stream_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1043</x>
-     <y>330</y>
+     <x>1034</x>
+     <y>372</y>
     </hint>
     <hint type="destinationlabel">
      <x>108</x>
@@ -216,6 +225,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>plugin_config_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_global_plugin_config_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_video_expanded_view()</slot>
@@ -223,5 +248,6 @@
   <slot>show_identities_dialog()</slot>
   <slot>new_stream()</slot>
   <slot>show_about_page_dialog()</slot>
+  <slot>show_global_plugin_config_dialog()</slot>
  </slots>
 </ui>

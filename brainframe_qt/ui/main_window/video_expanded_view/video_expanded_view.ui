@@ -113,6 +113,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="plugin_stream_config_button">
+           <property name="text">
+            <string>Stream Plugin Config</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="delete_stream_button">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -125,6 +132,19 @@
            </property>
           </widget>
          </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </item>
       </layout>
@@ -135,14 +155,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VideoLarge</class>
-   <extends>QGraphicsView</extends>
-   <header>brainframe.client.ui.main_window.video_expanded_view.video_large.video_large</header>
-  </customwidget>
-  <customwidget>
    <class>AlertLog</class>
    <extends>QWidget</extends>
    <header>brainframe.client.ui.main_window.video_expanded_view.alert_log.alert_log</header>
+  </customwidget>
+  <customwidget>
+   <class>VideoLarge</class>
+   <extends>QGraphicsView</extends>
+   <header>brainframe.client.ui.main_window.video_expanded_view.video_large.video_large</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -154,8 +174,8 @@
    <slot>expanded_stream_closed_slot()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1064</x>
-     <y>31</y>
+     <x>1052</x>
+     <y>43</y>
     </hint>
     <hint type="destinationlabel">
      <x>339</x>
@@ -170,8 +190,8 @@
    <slot>open_task_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1063</x>
-     <y>734</y>
+     <x>1051</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>197</x>
@@ -186,12 +206,28 @@
    <slot>delete_stream_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>997</x>
-     <y>760</y>
+     <x>1051</x>
+     <y>266</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
      <y>719</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>plugin_stream_config_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>open_stream_plugin_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>954</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>240</y>
     </hint>
    </hints>
   </connection>
@@ -201,5 +237,6 @@
   <slot>open_task_config()</slot>
   <slot>open_source_config()</slot>
   <slot>delete_stream_button_clicked()</slot>
+  <slot>open_stream_plugin_config()</slot>
  </slots>
 </ui>

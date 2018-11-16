@@ -1,10 +1,13 @@
 import logging
+from typing import List
 from threading import Thread
 from typing import Optional
 
 import cv2
+import numpy as np
 
 from brainframe.client.api.status_poller import StatusPoller
+from brainframe.client.api.codecs import ZoneStatus
 from brainframe.shared.stream_utils import StreamReader, StreamStatus
 
 
@@ -12,9 +15,9 @@ class ProcessedFrame:
     """A frame that may or may not have undergone processing on the server."""
 
     def __init__(self, frame, tstamp, zone_statuses):
-        self.frame = frame
-        self.tstamp = tstamp
-        self.zone_statuses = zone_statuses
+        self.frame: np.ndarray = frame
+        self.tstamp: float = tstamp
+        self.zone_statuses: List[ZoneStatus] = zone_statuses
 
 
 class SyncedStreamReader(StreamReader):
@@ -42,7 +45,7 @@ class SyncedStreamReader(StreamReader):
         self.stream_id = stream_id
         self.status_poller = status_poller
 
-        self._latest_processed = None
+        self._latest_processed: ProcessedFrame = None
 
         self._thread = Thread(
             name=f"SyncedStreamReader thread for stream ID {stream_id}",
@@ -50,7 +53,7 @@ class SyncedStreamReader(StreamReader):
         self._thread.start()
 
     @property
-    def latest_processed_frame_rgb(self):
+    def latest_processed_frame_rgb(self) -> ProcessedFrame:
         return self._latest_processed
 
     def _sync_detections_with_stream(self):
@@ -97,7 +100,12 @@ class SyncedStreamReader(StreamReader):
         logging.info("SyncedStreamReader: Closing")
 
     def close(self):
+        """Sends a request to close the SyncedStreamReader."""
         super().close()
+
+    def wait_until_closed(self):
+        """Hangs until the SyncedStreamReader has been closed."""
+        super().wait_until_closed()
         self._thread.join()
 
 
@@ -137,11 +145,21 @@ class StreamManager:
 
         :param stream_id: The ID of the stream to delete
         """
-        self._stream_readers[stream_id].close()
-        del self._stream_readers[stream_id]
+        stream = self._close_stream_async(stream_id)
+        stream.wait_until_closed()
 
     def close(self):
         """Close all streams and remove references"""
+        closing_streams = []
         for stream_id in self._stream_readers.copy().keys():
-            self.close_stream(stream_id)
+            closing_streams.append(self._close_stream_async(stream_id))
         self._stream_readers = {}
+
+        for stream in closing_streams:
+            stream.wait_until_closed()
+
+    def _close_stream_async(self, stream_id) -> SyncedStreamReader:
+        stream = self._stream_readers.pop(stream_id)
+        stream.close()
+        return stream
+

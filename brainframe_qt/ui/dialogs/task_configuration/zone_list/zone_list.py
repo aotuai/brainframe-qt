@@ -42,7 +42,7 @@ class ZoneList(QScrollArea):
     @pyqtSlot(int)
     def delete_zone(self, zone_id):
         # Delete zone from database
-        api.delete_zone(self.stream_id, zone_id)
+        api.delete_zone(zone_id)
 
         # Delete the zone widget from list
         self.zones[zone_id].deleteLater()
