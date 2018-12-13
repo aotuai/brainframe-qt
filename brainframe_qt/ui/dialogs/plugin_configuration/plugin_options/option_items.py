@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod, abstractproperty
 from typing import List, Callable
 
@@ -140,7 +141,7 @@ class FloatOptionItem(PluginOptionItem):
             num = float(self.option_widget.text())
             return num
         except ValueError:
-            print(str(self.option_widget.text()) + " is not a float!")
+            logging.warning(str(self.option_widget.text()) + " is not a float!")
             return None
 
     def is_valid(self):
