@@ -108,7 +108,6 @@ class ZoneAndTasks(QWidget):
         content_animation.setEndValue(content_height)
 
     def add_alarm(self, alarm):
-        print("adding alarm")
         alarm_widget = TaskWidget(alarm.alarm_name, TaskType.ALARM)
         self.alarm_area_layout.addWidget(alarm_widget)
 

@@ -134,14 +134,11 @@ class IdentityConfiguration(QDialog):
             error_dialog = QMessageBox()
             error_dialog.setIcon(QMessageBox.Critical)
             error_dialog.setWindowTitle("Invalid Format")
-
-            # TODO: Use fstrings
             error_dialog.setText(f"Unable to parse this directory!\n\n"
                                  f"Reason:\n"
                                  f"{err}\n\n"
                                  f"Read the manual to learn about the required " 
                                  f"directory structure.")
-            print("Error")
             error_dialog.exec_()
             return None, 0
 

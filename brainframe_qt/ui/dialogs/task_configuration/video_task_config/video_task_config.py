@@ -1,3 +1,5 @@
+import logging
+
 from PyQt5.QtCore import pyqtSignal, QPointF, Qt
 from PyQt5.QtGui import QMouseEvent, QColor
 from shapely import geometry
@@ -50,7 +52,7 @@ class VideoTaskConfig(StreamWidget):
             # Don't allow the user to input an invalid polygon
             if len(self.unconfirmed_polygon.polygon) > 2:
                 if not self._is_polygon_valid(points, click):
-                    print("User tried to enter invalid point")
+                    logging.warning("User tried to enter invalid point")
                     return
 
             # Create new circle

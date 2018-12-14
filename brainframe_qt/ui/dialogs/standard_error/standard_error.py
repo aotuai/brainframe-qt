@@ -130,7 +130,7 @@ class StandardError(QMessageBox):
 
     @staticmethod
     def close_client():
-        print("Quitting")
+        logging.info("Quitting")
         QApplication.quit()
 
     @staticmethod
