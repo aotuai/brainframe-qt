@@ -14,10 +14,19 @@ from brainframe.shared.stream_utils import StreamReader, StreamStatus
 class ProcessedFrame:
     """A frame that may or may not have undergone processing on the server."""
 
-    def __init__(self, frame, tstamp, zone_statuses):
+    def __init__(self, frame, tstamp, zone_statuses, has_new_zone_statuses):
+        """
+        :param frame: RGB data on the frame
+        :param tstamp: The timestamp of the frame
+        :param zone_statuses: A zone status that is most relevant to this frame,
+            though it might not be a result of this frame specifically
+        :param has_new_zone_statuses: True if this processed frame contains new
+            zone statuses that have not appeared in previous processed frames
+        """
         self.frame: np.ndarray = frame
         self.tstamp: float = tstamp
         self.zone_statuses: List[ZoneStatus] = zone_statuses
+        self.has_new_zone_statuses = has_new_zone_statuses
 
 
 class SyncedStreamReader(StreamReader):
@@ -54,6 +63,11 @@ class SyncedStreamReader(StreamReader):
 
     @property
     def latest_processed_frame_rgb(self) -> ProcessedFrame:
+        """Returns the latest frame with the most relevant available
+        zone status information.
+
+        :return: The processed frame
+        """
         return self._latest_processed
 
     def _sync_detections_with_stream(self):
@@ -64,6 +78,8 @@ class SyncedStreamReader(StreamReader):
 
         self.wait_until_initialized()
 
+        last_used_zone_statuses = None
+
         while self.status != StreamStatus.CLOSED:
             # Wait for a new frame
             if not self.new_frame_event.wait(timeout=0.01):
@@ -71,7 +87,7 @@ class SyncedStreamReader(StreamReader):
             self.new_frame_event.clear()
 
             frame_tstamp, frame = self.latest_frame
-            frame_buf.append(ProcessedFrame(frame, frame_tstamp, None))
+            frame_buf.append(ProcessedFrame(frame, frame_tstamp, None, False))
 
             zone_statuses = self.status_poller.latest_statuses(self.stream_id)
 
@@ -90,8 +106,13 @@ class SyncedStreamReader(StreamReader):
             if frame_buf and frame_buf[0].tstamp <= last_inference_tstamp:
                 frame = frame_buf.pop(0)
                 rgb = cv2.cvtColor(frame.frame, cv2.COLOR_BGR2RGB)
+
                 self._latest_processed = ProcessedFrame(
-                    rgb, frame.tstamp, zone_statuses)
+                    rgb,
+                    frame.tstamp,
+                    zone_statuses,
+                    zone_statuses != last_used_zone_statuses)
+                last_used_zone_statuses = zone_statuses
 
             # Drain the buffer if it is getting too large
             while len(frame_buf) > self.MAX_BUF_SIZE:

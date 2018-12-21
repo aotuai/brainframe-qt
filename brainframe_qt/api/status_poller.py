@@ -22,10 +22,10 @@ class StatusPoller(Thread):
         super().__init__(name="StatusPollerThread")
         self._api = api
         self._seconds_between_updates = ms_status_updates / 1000
-        self._running = False
 
         # Get something before starting the thread
         self._latest = self._api.get_latest_zone_statuses()
+        self._running = True
         self.start()
 
     def run(self):

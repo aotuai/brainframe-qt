@@ -173,7 +173,8 @@ def _make_api_error(resp_content):
         description = resp_content["description"]
 
     if kind not in api_errors.kind_to_error_type:
-        logging.warning(f"Unknown error kind {kind}")
-        return api_errors.UnknownError(description)
+        info = f"Unknown error kind {kind}: " + description
+        logging.error(info)
+        return api_errors.UnknownError(info)
     else:
         return api_errors.kind_to_error_type[kind](description)

@@ -9,10 +9,10 @@ class Detection(Codec):
     example, a "person" can exhibit a behaviour. A Face can have a gender.
     """
 
-    def __init__(self, *, class_name, rect, children, attributes, with_identity,
-                 extra_data):
+    def __init__(self, *, class_name, coords, children, attributes,
+                 with_identity, extra_data):
         self.class_name = class_name
-        self.rect = rect
+        self.coords = coords
         self.children = children
         self.attributes = attributes
         self.with_identity: Optional[Identity] = with_identity
@@ -26,22 +26,6 @@ class Detection(Codec):
         d["attributes"] = [Attribute.to_dict(att) for att in self.attributes]
         return d
 
-    @property
-    def height(self):
-        return self.rect[3] - self.rect[1]
-
-    @property
-    def width(self):
-        return self.rect[2] - self.rect[0]
-
-    @property
-    def coords(self):
-        """Conveniently return a list of coordinates, polygon style"""
-        return [(self.rect[0], self.rect[1]),
-                (self.rect[2], self.rect[1]),
-                (self.rect[2], self.rect[3]),
-                (self.rect[0], self.rect[3])]
-
     @staticmethod
     def from_dict(d):
         with_identity = None
@@ -51,7 +35,7 @@ class Detection(Codec):
         children = [Detection.from_dict(det) for det in d["children"]]
         attributes = [Attribute.from_dict(att) for att in d["attributes"]]
         return Detection(class_name=d["class_name"],
-                         rect=d["rect"],
+                         coords=d["coords"],
                          children=children,
                          attributes=attributes,
                          with_identity=with_identity,
