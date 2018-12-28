@@ -1,10 +1,10 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QStyle, QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.ui.dialogs import TaskConfiguration, PluginConfigDialog
+from brainframe.client.ui.dialogs import PluginConfigDialog, TaskConfiguration
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
@@ -34,6 +34,10 @@ class VideoExpandedView(QWidget):
         # https://stackoverflow.com/a/43835396/8134178
         # 3 : 1 height ratio initially
         self.splitter.setSizes([self.height(), self.height() / 3])
+
+        # Set close button's icon to be a bundled icon
+        close_icon = self.style().standardIcon(QStyle.SP_TitleBarCloseButton)
+        self.hide_button.setIcon(close_icon)
 
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
@@ -92,7 +96,6 @@ class VideoExpandedView(QWidget):
           self.open_stream_plugin_config.clicked
         """
         PluginConfigDialog.show_dialog(self.stream_conf.id)
-
 
     @pyqtSlot()
     def open_task_config(self):
