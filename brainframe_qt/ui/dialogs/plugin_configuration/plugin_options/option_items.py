@@ -45,7 +45,8 @@ class PluginOptionItem(ABC):
     def set_val(self, value):
         pass
 
-    @abstractproperty
+    @abstractmethod
+    @property
     def val(self):
         """This should return the current value for the widget"""
         pass
