@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
 from brainframe.client.api import api
 from brainframe.client.api.streaming import SyncedStreamReader
-from brainframe.shared.stream_utils import StreamStatus
+from brainframe.shared.stream_reader import StreamStatus
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources.video_items import (
     DetectionPolygon,

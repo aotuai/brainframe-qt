@@ -8,7 +8,7 @@ import numpy as np
 
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.client.api.codecs import ZoneStatus
-from brainframe.shared.stream_utils import StreamReader, StreamStatus
+from brainframe.shared.stream_reader import StreamReader, StreamStatus
 
 
 class ProcessedFrame:
