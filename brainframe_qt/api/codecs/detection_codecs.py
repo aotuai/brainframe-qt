@@ -1,4 +1,5 @@
 from typing import Optional
+import uuid
 
 from .base_codecs import Codec
 
@@ -10,18 +11,21 @@ class Detection(Codec):
     """
 
     def __init__(self, *, class_name, coords, children, attributes,
-                 with_identity, extra_data):
+                 with_identity, extra_data, track_id):
         self.class_name = class_name
         self.coords = coords
         self.children = children
         self.attributes = attributes
         self.with_identity: Optional[Identity] = with_identity
         self.extra_data = extra_data
+        self.track_id: Optional[uuid.UUID] = track_id
 
     def to_dict(self):
         d = dict(self.__dict__)
         if self.with_identity:
             d["with_identity"] = Identity.to_dict(d["with_identity"])
+        if self.track_id:
+            d["track_id"] = str(self.track_id)
         d["children"] = [Detection.to_dict(det) for det in self.children]
         d["attributes"] = [Attribute.to_dict(att) for att in self.attributes]
         return d
@@ -31,6 +35,9 @@ class Detection(Codec):
         with_identity = None
         if d["with_identity"]:
             with_identity = Identity.from_dict(d["with_identity"])
+        track_id = None
+        if d["track_id"]:
+            track_id = uuid.UUID(d["track_id"])
 
         children = [Detection.from_dict(det) for det in d["children"]]
         attributes = [Attribute.from_dict(att) for att in d["attributes"]]
@@ -39,7 +46,8 @@ class Detection(Codec):
                          children=children,
                          attributes=attributes,
                          with_identity=with_identity,
-                         extra_data=d["extra_data"])
+                         extra_data=d["extra_data"],
+                         track_id=track_id)
 
 
 class Attribute(Codec):
