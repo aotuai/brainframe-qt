@@ -35,7 +35,6 @@ class VideoThumbnailView(QWidget):
 
         # Get all current streams
         for stream_conf in api.get_stream_configurations():
-
             # Create widgets for each
             self.new_stream(stream_conf)
 
@@ -139,8 +138,8 @@ class VideoThumbnailView(QWidget):
         self.all_stream_ids.add(stream_conf.id)
 
     def resizeEvent(self, event):
-        """Prevent the scrollbar from appearing and disappearing as the contents
-        of the scroll area try to fill the width
+        """Prevent the scrollbar from appearing and disappearing as the
+        contents of the scroll area try to fill the width
         """
         super().resizeEvent(event)
 
@@ -153,7 +152,8 @@ class VideoThumbnailView(QWidget):
 
         # If the height of the widget at the bottom is small, that means we're
         # either max height w/o scrollbar (the problem case) or >max height,
-        # where the scrollbar is always on. Regardless, we want the scrollbar on
+        # where the scrollbar is always on. Regardless, we want the scrollbar
+        # on
         if h <= self.thumbnail_scroll_area.verticalScrollBar().width() + magic:
             self.thumbnail_scroll_area.setVerticalScrollBarPolicy(
                 Qt.ScrollBarAlwaysOn)

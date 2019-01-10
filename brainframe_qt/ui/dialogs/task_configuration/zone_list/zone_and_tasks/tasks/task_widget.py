@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QLabel,
     QPushButton,
     QSizePolicy,
+    QStyle,
     QWidget
 )
 
@@ -42,9 +43,8 @@ class TaskWidget(QWidget):
         self.task_name_label.setSizePolicy(QSizePolicy.Expanding,
                                            QSizePolicy.Minimum)
 
-        # TODO: Use modular resource path approach Alex was talking about
         self.delete_button = QPushButton()
-        trash_icon = QIcon(QPixmap(str(image_paths.trash_icon)))
+        trash_icon = QIcon(self.style().standardIcon(QStyle.SP_TrashIcon))
         self.delete_button.setIcon(trash_icon)
 
         self.main_layout.addWidget(self.icon)
