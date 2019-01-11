@@ -26,6 +26,8 @@ class Detection(Codec):
             d["with_identity"] = Identity.to_dict(d["with_identity"])
         if self.track_id:
             d["track_id"] = str(self.track_id)
+        else:
+            d["track_id"] = None
         d["children"] = [Detection.to_dict(det) for det in self.children]
         d["attributes"] = [Attribute.to_dict(att) for att in self.attributes]
         return d
