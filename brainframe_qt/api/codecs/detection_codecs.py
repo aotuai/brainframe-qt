@@ -36,6 +36,7 @@ class Detection(Codec):
         if d["with_identity"]:
             with_identity = Identity.from_dict(d["with_identity"])
         track_id = None
+
         if d["track_id"]:
             track_id = uuid.UUID(d["track_id"])
 
