@@ -81,12 +81,30 @@
      </item>
      <item>
       <widget class="ZoneList" name="zone_list">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+       <attribute name="headerDefaultSectionSize">
+        <number>0</number>
+       </attribute>
+       <attribute name="headerMinimumSectionSize">
+        <number>0</number>
+       </attribute>
+       <attribute name="headerStretchLastSection">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string notr="true">2</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string notr="true">3</string>
+        </property>
+       </column>
       </widget>
      </item>
     </layout>
@@ -195,7 +213,7 @@
   </customwidget>
   <customwidget>
    <class>ZoneList</class>
-   <extends>QScrollArea</extends>
+   <extends>QTreeWidget</extends>
    <header>brainframe.client.ui.dialogs.task_configuration.zone_list.zone_list</header>
   </customwidget>
  </customwidgets>

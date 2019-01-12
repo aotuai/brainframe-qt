@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>ZoneList</class>
- <widget class="QScrollArea" name="ZoneList">
+ <widget class="QTreeWidget" name="ZoneList">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>110</width>
     <height>400</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="widgetResizable">
+  <property name="sizeAdjustPolicy">
+   <enum>QAbstractScrollArea::AdjustToContents</enum>
+  </property>
+  <property name="uniformRowHeights">
    <bool>true</bool>
   </property>
-  <widget class="QWidget" name="main_widget">
-   <layout class="QVBoxLayout" name="main_layout">
-    <property name="alignment">
-     <set>Qt::AlignTop</set>
-    </property>
-   </layout>
-  </widget>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <property name="headerHidden">
+   <bool>true</bool>
+  </property>
+  <attribute name="headerVisible">
+   <bool>false</bool>
+  </attribute>
+  <attribute name="headerDefaultSectionSize">
+   <number>45</number>
+  </attribute>
+  <attribute name="headerMinimumSectionSize">
+   <number>0</number>
+  </attribute>
+  <attribute name="headerStretchLastSection">
+   <bool>false</bool>
+  </attribute>
  </widget>
  <resources/>
  <connections/>

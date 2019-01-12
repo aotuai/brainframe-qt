@@ -1,53 +1,164 @@
+from enum import Enum
 from typing import Dict
 
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QScrollArea
+from PyQt5.QtCore import pyqtSlot, QModelIndex
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (
+    QHeaderView,
+    QPushButton,
+    QStyledItemDelegate,
+    QStyleOptionViewItem,
+    QTreeWidget
+)
 from PyQt5.uic import loadUi
 
-from .zone_and_tasks import ZoneAndTasks
 from brainframe.client.api import api
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
+from brainframe.client.api.codecs import Zone, ZoneAlarm
+
+from .zone_list_item import ZoneListItem
 
 
-class ZoneList(QScrollArea):
+class ZoneList(QTreeWidget):
+    EntryType = Enum('EntryType', "REGION LINE ALARM UNKNOWN")
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.zone_list_ui, self)
 
+        # Crashes when set in UI file for some reason
+        self.setColumnCount(3)
+
+        # Scale columns in view
+        self.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        self.header().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+
+        # Item delegate is used to force a custom row height
+        self.setItemDelegate(ZoneListItemDelegate(row_height=40))
+
         self.stream_id = None
-        self.zones: Dict[int, ZoneAndTasks] = {}  # Key is zone id
+
+        # Lookup table to get zone/alarm from id (used during deletion)
+        self.zones: Dict[int, ZoneListItem] = {}
+        self.alarms: Dict[int, ZoneListItem] = {}
 
     def init_zones(self, stream_id):
         """Initialize zone list with zones already in database"""
         self.stream_id = stream_id
+
+        # TODO: Async
         zones = api.get_zones(stream_id)
         for zone in zones:
-            zone_widget: ZoneAndTasks = self.add_zone(zone)
-            zone_widget.update_zone_type()
-            self.zones[zone.id] = zone_widget
-            zone_widget.zone_deleted_signal.connect(self.delete_zone)
+            self.add_zone(zone)
 
-    def add_zone(self, zone):
-        zone_widget = ZoneAndTasks(zone, self)
-        self.zones[zone.id] = zone_widget
-        self.main_layout.addWidget(zone_widget)
+    def add_zone(self, zone: Zone):
+        """Creates and returns the new ZoneListItem using the zone"""
+
+        if zone.name == "Screen" or len(zone.coords) > 2:
+            entry_type = self.EntryType.REGION
+        elif len(zone.coords) == 2:
+            entry_type = self.EntryType.LINE
+        else:
+            entry_type = self.EntryType.UNKNOWN
+
+        zone_item = self._new_row(zone.name, entry_type)
+        self.addTopLevelItem(zone_item)
+
+        self._add_trash_button(zone_item)
+        if zone.name == "Screen":
+            zone_item.trash_button.setDisabled(True)
+        else:
+            zone_item.trash_button.clicked.connect(
+                lambda: self.delete_zone(zone.id)
+            )
+
+        self.zones[zone.id] = zone_item
 
         for alarm in zone.alarms:
             self.add_alarm(zone, alarm)
 
-        return zone_widget
+        return zone_item
+
+    def add_alarm(self, zone: Zone, alarm: ZoneAlarm):
+        zone_item = self.zones[zone.id]
+        alarm_item = self._new_row(alarm.name, self.EntryType.ALARM)
+
+        zone_item.addChild(alarm_item)
+
+        self._add_trash_button(alarm_item)
+
+        alarm_item.trash_button.clicked.connect(
+            lambda: self.delete_alarm(zone.id, alarm.id)
+        )
+
+        self.alarms[alarm.id] = alarm_item
 
     @pyqtSlot(int)
-    def delete_zone(self, zone_id):
+    def delete_zone(self, zone_id: int):
+
         # Delete zone from database
-        api.delete_zone(zone_id)
+        if zone_id is not None:
+            api.delete_zone(zone_id)
 
-        # Delete the zone widget from list
-        self.zones[zone_id].deleteLater()
-        self.zones.pop(zone_id)
+        # Delete the zone ZoneListItem from tree
+        self.takeTopLevelItem(self.indexOfTopLevelItem(self.zones[zone_id]))
 
-    def add_alarm(self, zone, alarm):
-        """Add an alarm widget to a ZoneAndTasks widget"""
-        self.zones[zone.id].add_alarm(alarm)
+    @pyqtSlot(int, int)
+    def delete_alarm(self, zone_id: int, alarm_id: int):
+
+        zone_item = self.zones[zone_id]
+        alarm_item = self.alarms[alarm_id]
+
+        # Delete alarm from database
+        api.delete_zone_alarm(alarm_id)
+
+        # Delete the alarm ZoneListItem from tree
+        zone_item.removeChild(alarm_item)
+
+    def update_zone_type(self, zone_id: int, entry_type: EntryType):
+        zone_item = self.zones[zone_id]
+        icon = self._get_item_icon(entry_type)
+
+        zone_item.setIcon(0, icon)
+
+    def _new_row(self, name, entry_type: EntryType):
+        row = ZoneListItem(["", name, ""])
+        row.setIcon(0, self._get_item_icon(entry_type))
+
+        return row
+
+    def _get_item_icon(self, entry_type: EntryType):
+
+        if entry_type == self.EntryType.REGION:
+            entry_type_icon = QIcon(str(image_paths.region_icon))
+        elif entry_type == self.EntryType.LINE:
+            entry_type_icon = QIcon(str(image_paths.line_icon))
+        elif entry_type == self.EntryType.ALARM:
+            entry_type_icon = QIcon(str(image_paths.alarm_icon))
+        else:  # includes self.EntryType.UNKNOWN
+            entry_type_icon = QIcon(str(image_paths.question_mark_icon))
+
+        return entry_type_icon
+
+    def _add_trash_button(self, row_item: ZoneListItem):
+        trash_button = QPushButton()
+        trash_button.setIcon(QIcon(str(image_paths.trash_icon)))
+        self.setItemWidget(row_item, 2, trash_button)
+
+        row_item.trash_button = trash_button
+
+
+class ZoneListItemDelegate(QStyledItemDelegate):
+
+    def __init__(self, *, row_height):
+        super().__init__()
+
+        self.row_height = row_height
+
+    def sizeHint(self, option: QStyleOptionViewItem, index: QModelIndex):
+        size_hint = super().sizeHint(option, index)
+        size_hint.setHeight(self.row_height)
+
+        return size_hint

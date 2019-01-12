@@ -1,11 +1,11 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QDialog, QInputDialog, QDialogButtonBox, QMessageBox
+from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QInputDialog,
+                             QMessageBox)
 from PyQt5.uic import loadUi
-
 from brainframe.client.api import api
-from brainframe.client.api.codecs import Zone, StreamConfiguration
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.api.codecs import StreamConfiguration, Zone
 from brainframe.client.ui.dialogs import AlarmCreationDialog
+from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class TaskConfiguration(QDialog):
@@ -17,7 +17,7 @@ class TaskConfiguration(QDialog):
         loadUi(qt_ui_paths.task_configuration_ui, self)
 
         # If not running within QTDesigner, run logic
-        self.stream_conf = stream_conf  # type: StreamConfiguration
+        self.stream_conf: StreamConfiguration = stream_conf
         if stream_conf:
             self.video_task_config.change_stream(stream_conf)
             self.stream_name_label.setText(stream_conf.name)
@@ -25,12 +25,11 @@ class TaskConfiguration(QDialog):
             # Create TaskAndZone widgets in ZoneList for zones in database
             self.zone_list.init_zones(stream_conf.id)
 
-        self.unconfirmed_zone = None  # type: Zone
-        self.unconfirmed_zone_widget = None
+        self.unconfirmed_zone: Zone = None
 
         self._hide_operation_widgets(True)
 
-        self.cancel_op_button.clicked.connect(self._new_region_canceled_helper)
+        self.cancel_op_button.clicked.connect(self.new_region_canceled)
 
     @classmethod
     def open_configuration(cls, stream_conf):
@@ -48,12 +47,14 @@ class TaskConfiguration(QDialog):
         engine_config = api.get_engine_configuration()
         zones = api.get_zones(self.stream_conf.id)
 
-        zone, alarm = AlarmCreationDialog.new_alarm(zones=zones,
-                                                    engine_config=engine_config)
+        zone, alarm = AlarmCreationDialog.new_alarm(
+            zones=zones,
+            engine_config=engine_config
+        )
         if not alarm:
             return None
 
-        zone = api.set_zone(zone)
+        alarm = api.set_zone_alarm(alarm)
         self.zone_list.add_alarm(zone, alarm)
 
     @pyqtSlot()
@@ -87,43 +88,38 @@ class TaskConfiguration(QDialog):
         Eg. [(0, 0), (100, 0), (100, 100), (0, 100)]
         """
 
-        # Make ZoneAndTasks widget re-evaluate it's zone_type
-        self.unconfirmed_zone_widget.update_zone_type()
+        # Update zone type
+        if len(self.unconfirmed_zone.coords) == 2:
+            zone_type = self.zone_list.EntryType.LINE
+        elif len(self.unconfirmed_zone.coords) >= 2:
+            zone_type = self.zone_list.EntryType.REGION
+        else:
+            raise NotImplementedError("New zone cannot have fewer than 2 "
+                                      "points")
+
         # Add zone to database
         zone = api.set_zone(self.unconfirmed_zone)
-        self.unconfirmed_zone_widget.zone = zone
 
         self.zone_list.zones[zone.id] = self.zone_list.zones.pop(None)
-        self.unconfirmed_zone_widget.zone_deleted_signal.connect(
-            self.zone_list.delete_zone)
+        self.zone_list.update_zone_type(zone.id, zone_type)
 
-        # Clear unconfirmed zone now that we're done with it
+        self.zone_list.zones[zone.id].trash_button.clicked.connect(
+            lambda: self.zone_list.delete_zone(zone.id)
+        )
+
         self.unconfirmed_zone = None
-        self.unconfirmed_zone_widget = None
 
         self._set_widgets_enabled(True)
         self._hide_operation_widgets(True)
 
     @pyqtSlot()
-    def _new_region_canceled_helper(self):
-        """Called by cancel button. Immediately forwards signal to regular
-        new_region_canceled. This is done for typing purposes"""
-        self.new_region_canceled(self.unconfirmed_zone.id)
-
-    @pyqtSlot(int)
-    def new_region_canceled(self, zone_id=None):
-        """
-        :param zone_id: ID of zone being deleted for filtering purposes.
-        None if it should always be canceled
-        """
-        if self.unconfirmed_zone and zone_id == self.unconfirmed_zone.id:
+    def new_region_canceled(self):
+        if None in self.zone_list.zones:
             # Remove instruction text
             self.instruction_label.setText("")
 
             # Delete unconfirmed zone
-            self.unconfirmed_zone = None
-            self.unconfirmed_zone_widget.deleteLater()
-            self.unconfirmed_zone_widget = None
+            self.zone_list.delete_zone(None)
 
             # Instruct the VideoTaskConfig instance to delete its unconfirmed
             # polygon
@@ -140,17 +136,18 @@ class TaskConfiguration(QDialog):
                                      coords=[])
 
         # Set instruction text
-        self.instruction_label.setText(
-            'Add points until done, then press "Confirm" button')
+        self.instruction_label.setText('Add points until done, then press '
+                                       '"Confirm" button')
 
         # Add the a Zone widget to the sidebar
-        self.unconfirmed_zone_widget = self.zone_list.add_zone(
-            self.unconfirmed_zone)
+        unconfirmed_zone_item = self.zone_list.add_zone(self.unconfirmed_zone)
 
         # Allow delete button on new zone widget in zone list to cancel the new
         # zone
-        self.unconfirmed_zone_widget.zone_deleted_signal.connect(
-            self.new_region_canceled)
+        unconfirmed_zone_item.trash_button.clicked.disconnect()
+        unconfirmed_zone_item.trash_button.clicked.connect(
+            self.new_region_canceled
+        )
 
         # Instruct the VideoTaskConfig instance to start accepting mouseEvents
         self.video_task_config.start_new_polygon(max_points)
@@ -185,7 +182,8 @@ class TaskConfiguration(QDialog):
             zones = api.get_zones(self.stream_conf.id)
             if region_name in [zone.name for zone in zones]:
                 title = "Item Name Already Exists"
-                message = "Item {} already exists in Stream".format(region_name)
+                message = "Item {} already exists in Stream".format(
+                    region_name)
                 message += "<br>Please use another name."
                 QMessageBox.information(self, title, message)
                 continue
