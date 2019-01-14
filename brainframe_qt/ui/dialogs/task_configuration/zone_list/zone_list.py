@@ -53,6 +53,8 @@ class ZoneList(QTreeWidget):
         for zone in zones:
             self.add_zone(zone)
 
+        self.clearSelection()
+
     def add_zone(self, zone: Zone):
         """Creates and returns the new ZoneListItem using the zone"""
 
@@ -79,6 +81,9 @@ class ZoneList(QTreeWidget):
         for alarm in zone.alarms:
             self.add_alarm(zone, alarm)
 
+        self.clearSelection()
+        zone_item.setSelected(True)
+
         return zone_item
 
     def add_alarm(self, zone: Zone, alarm: ZoneAlarm):
@@ -94,6 +99,11 @@ class ZoneList(QTreeWidget):
         )
 
         self.alarms[alarm.id] = alarm_item
+
+        self.clearSelection()
+        zone_item.setExpanded(True)
+        alarm_item.setSelected(True)
+
 
     @pyqtSlot(int)
     def delete_zone(self, zone_id: int):
