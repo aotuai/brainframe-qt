@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>843</width>
-    <height>469</height>
+    <width>1066</width>
+    <height>629</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Task Configuration</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,5">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
    <item>
     <layout class="QVBoxLayout" name="sidebar_layout">
      <item>
@@ -81,8 +81,20 @@
      </item>
      <item>
       <widget class="ZoneList" name="zone_list">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>350</width>
+         <height>0</height>
+        </size>
+       </property>
        <attribute name="headerDefaultSectionSize">
-        <number>0</number>
+        <number>45</number>
        </attribute>
        <attribute name="headerMinimumSectionSize">
         <number>0</number>
