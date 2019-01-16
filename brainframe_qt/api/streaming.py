@@ -1,7 +1,8 @@
 import logging
+from uuid import UUID
 from typing import List
 from threading import Thread
-from typing import Optional
+from typing import Optional, Dict
 
 import cv2
 import numpy as np
@@ -9,24 +10,26 @@ import numpy as np
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.client.api.codecs import ZoneStatus
 from brainframe.shared.stream_reader import StreamReader, StreamStatus
+from brainframe.client.api.detection_tracks import DetectionTrack
 
 
 class ProcessedFrame:
     """A frame that may or may not have undergone processing on the server."""
 
-    def __init__(self, frame, tstamp, zone_statuses, has_new_zone_statuses):
+    def __init__(self, frame, tstamp, zone_statuses, has_new_statuses, tracks):
         """
         :param frame: RGB data on the frame
         :param tstamp: The timestamp of the frame
         :param zone_statuses: A zone status that is most relevant to this frame,
             though it might not be a result of this frame specifically
-        :param has_new_zone_statuses: True if this processed frame contains new
+        :param has_new_statuses: True if this processed frame contains new
             zone statuses that have not appeared in previous processed frames
         """
         self.frame: np.ndarray = frame
         self.tstamp: float = tstamp
         self.zone_statuses: List[ZoneStatus] = zone_statuses
-        self.has_new_zone_statuses = has_new_zone_statuses
+        self.has_new_zone_statuses = has_new_statuses
+        self.tracks: List[DetectionTrack] = tracks
 
 
 class SyncedStreamReader(StreamReader):
@@ -53,6 +56,7 @@ class SyncedStreamReader(StreamReader):
         self.pipeline = pipeline
         self.stream_id = stream_id
         self.status_poller = status_poller
+        self.tracks: Dict[UUID, DetectionTrack] = {}
 
         self._latest_processed: ProcessedFrame = None
 
@@ -74,8 +78,14 @@ class SyncedStreamReader(StreamReader):
         # The last time we got inference
         last_inference_tstamp = -1
 
-        frame_buf = []
-
+        buffer: List[ProcessedFrame] = []
+        """Holds a list of empty ProcessedFrames until a new status comes in
+        that is
+                                      sB
+        [Empty, Empty, Empty, Empty, Empty]
+        Turn the first index Empty into a nice and full frame, put it into
+        self._latest_processed
+        """
         self.wait_until_initialized()
 
         last_used_zone_statuses = None
@@ -87,38 +97,47 @@ class SyncedStreamReader(StreamReader):
             self.new_frame_event.clear()
 
             frame_tstamp, frame = self.latest_frame
-            frame_buf.append(ProcessedFrame(frame, frame_tstamp, None, False))
+            buffer.append(ProcessedFrame(frame, frame_tstamp, None, False))
 
-            zone_statuses = self.status_poller.latest_statuses(self.stream_id)
+            statuses = self.status_poller.latest_statuses(self.stream_id)
 
-            tstamp = zone_statuses[-1].tstamp if zone_statuses else None
+            # Get a timestamp from any of the zone statuses
+            tstamp = statuses[-1].tstamp if len(statuses) else None
 
             # Check if this is a fresh zone_status or not
-            if zone_statuses and last_inference_tstamp != tstamp:
+            if len(statuses) and last_inference_tstamp != tstamp:
                 # Catch up to the previous inference frame
-                while frame_buf[0].tstamp < last_inference_tstamp:
-                    frame_buf.pop(0)
-
+                while buffer[0].tstamp < last_inference_tstamp:
+                    buffer.pop(0)
                 last_inference_tstamp = tstamp
+
+                # TODO: Iterate over all new detections, and add them to/create
+                # DetectionTracks
 
             # If we have inference later than the current frame, update the
             # current frame
-            if frame_buf and frame_buf[0].tstamp <= last_inference_tstamp:
-                frame = frame_buf.pop(0)
+            if len(buffer) and buffer[0].tstamp <= last_inference_tstamp:
+                frame = buffer.pop(0)
                 rgb = cv2.cvtColor(frame.frame, cv2.COLOR_BGR2RGB)
 
+                # TODO: Get a list of DetectionTracks that had a detection for
+                # this timestamp
                 self._latest_processed = ProcessedFrame(
-                    rgb,
-                    frame.tstamp,
-                    zone_statuses,
-                    zone_statuses != last_used_zone_statuses)
-                last_used_zone_statuses = zone_statuses
+                    frame=rgb,
+                    tstamp=frame.tstamp,
+                    zone_statuses=statuses,
+                    has_new_statuses=statuses != last_used_zone_statuses)
+                last_used_zone_statuses = statuses
 
             # Drain the buffer if it is getting too large
-            while len(frame_buf) > self.MAX_BUF_SIZE:
-                frame_buf.pop(0)
+            while len(buffer) > self.MAX_BUF_SIZE:
+                buffer.pop(0)
+
+            # TODO: Prune DetectionTracks from self.track that haven't had a
+            # detection in a while
 
         logging.info("SyncedStreamReader: Closing")
+    def some_name(self):
 
     def close(self):
         """Sends a request to close the SyncedStreamReader."""
@@ -183,4 +202,3 @@ class StreamManager:
         stream = self._stream_readers.pop(stream_id)
         stream.close()
         return stream
-
