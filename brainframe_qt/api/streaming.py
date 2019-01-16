@@ -75,8 +75,42 @@ class SyncedStreamReader(StreamReader):
         return self._latest_processed
 
     def _sync_detections_with_stream(self):
-        # The last time we got inference
+        self.wait_until_initialized()
+
+        # Create the frame syncing generator and initialize it
+        frame_syncer = self.sync_frames()
+        next(frame_syncer)
+
+        while self.status != StreamStatus.CLOSED:
+            # Wait for a new frame from the StreamReader thread
+            if not self.new_frame_event.wait(timeout=0.01):
+                continue
+            self.new_frame_event.clear()
+
+            # Get the new frame + timestamp
+            frame_tstamp, frame = self.latest_frame
+
+            # Get the latest zone statuses from thread status poller thread
+            statuses = self.status_poller.latest_statuses(self.stream_id)
+
+            # Run the syncing algorithm
+            self._latest_processed = frame_syncer.send(
+                (frame_tstamp, frame, statuses))
+
+        logging.info("SyncedStreamReader: Closing")
+
+    def sync_frames(self):
         last_inference_tstamp = -1
+        """Keep track of the timestamp of the last new zonestatus that was 
+        received."""
+
+        last_used_zone_statuses = None
+        """The last zone statuse object that was put into a processed frame.
+        Useful for identifying if a ProcessFrame has new information, or is 
+        simply paired with old information."""
+
+        latest_processed = None
+        """Keeps track of the latest ProcessedFrame with information"""
 
         buffer: List[ProcessedFrame] = []
         """Holds a list of empty ProcessedFrames until a new status comes in
@@ -86,20 +120,13 @@ class SyncedStreamReader(StreamReader):
         Turn the first index Empty into a nice and full frame, put it into
         self._latest_processed
         """
-        self.wait_until_initialized()
 
-        last_used_zone_statuses = None
-
-        while self.status != StreamStatus.CLOSED:
-            # Wait for a new frame
-            if not self.new_frame_event.wait(timeout=0.01):
-                continue
-            self.new_frame_event.clear()
+        while True:
+            frame_tstamp, frame, statuses = yield latest_processed
 
             frame_tstamp, frame = self.latest_frame
-            buffer.append(ProcessedFrame(frame, frame_tstamp, None, False))
-
-            statuses = self.status_poller.latest_statuses(self.stream_id)
+            buffer.append(
+                ProcessedFrame(frame, frame_tstamp, None, False, None))
 
             # Get a timestamp from any of the zone statuses
             tstamp = statuses[-1].tstamp if len(statuses) else None
@@ -122,11 +149,12 @@ class SyncedStreamReader(StreamReader):
 
                 # TODO: Get a list of DetectionTracks that had a detection for
                 # this timestamp
-                self._latest_processed = ProcessedFrame(
+                latest_processed = ProcessedFrame(
                     frame=rgb,
                     tstamp=frame.tstamp,
                     zone_statuses=statuses,
-                    has_new_statuses=statuses != last_used_zone_statuses)
+                    has_new_statuses=statuses != last_used_zone_statuses,
+                    tracks=None)
                 last_used_zone_statuses = statuses
 
             # Drain the buffer if it is getting too large
@@ -135,9 +163,6 @@ class SyncedStreamReader(StreamReader):
 
             # TODO: Prune DetectionTracks from self.track that haven't had a
             # detection in a while
-
-        logging.info("SyncedStreamReader: Closing")
-    def some_name(self):
 
     def close(self):
         """Sends a request to close the SyncedStreamReader."""
