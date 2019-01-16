@@ -16,7 +16,12 @@ from PyQt5.QtWidgets import QApplication
 
 from brainframe.shared.ffmpeg_options import set_opencv_ffmpeg_capture_options
 from brainframe.client.api import api
-from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
+from brainframe.client.ui import (
+    MainWindow,
+    SplashScreen,
+    LicenseAgreement,
+    VideoConfiguration
+)
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.api.api_errors import StreamNotOpenedError
 from brainframe.shared import environment
@@ -70,14 +75,14 @@ if __name__ == "__main__":
     if not LicenseAgreement.get_agreement():
         sys.exit("Program Closing: License Not Accepted")
 
+    VideoConfiguration.initialize_settings()
+
     # Show splash screen while waiting for server connection
     with SplashScreen() as splash_screen:
         splash_screen.showMessage("Attempting to connect to server")
 
         while True:
             try:
-                # Set all stream analysis as "active" here, since there is
-                # currently no way to in the UI
                 configs = api.get_stream_configurations()
             except ConnectionError:
                 # Server not started yet
@@ -89,12 +94,6 @@ if __name__ == "__main__":
 
             splash_screen.showMessage("Successfully connected to server. "
                                       "Starting UI")
-            for config in configs:
-                try:
-                    success = api.start_analyzing(config.id)
-                except StreamNotOpenedError:
-                    logging.error(f"Stream {config.name} is not open so "
-                                  f"analysis did not start")
 
             main_window = MainWindow()
             main_window.show()

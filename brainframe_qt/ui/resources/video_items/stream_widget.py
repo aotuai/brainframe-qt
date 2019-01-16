@@ -1,8 +1,6 @@
-from collections import defaultdict
-
 # noinspection PyUnresolvedReferences
-# pyqtProperty is erroneously detected as unresolved
-from PyQt5.QtCore import pyqtProperty, Qt, QTimer
+from PyQt5.QtCore import pyqtProperty
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
@@ -31,7 +29,6 @@ class StreamWidget(QGraphicsView):
 
         # Remove ugly white background and border from QGraphicsView
         self.setStyleSheet("background-color: transparent; border: 0px")
-        # self.setFrameStyle(0)
 
         # Stream configuration for current widget
         self.stream_conf = None
@@ -236,7 +233,7 @@ class StreamWidget(QGraphicsView):
         """Returns True if there is an active stream that is giving frames
         at the moment."""
         return self.video_stream is not None \
-            and self.video_stream.status is StreamStatus.STREAMING
+               and self.video_stream.status is StreamStatus.STREAMING
 
     @pyqtProperty(int)
     def frame_rate(self):
@@ -267,7 +264,6 @@ class StreamWidget(QGraphicsView):
         """Lock the aspect ratio of the widget to match the aspect ratio of the
         scene and its video frame
         """
-
         if not self.scene().width():
             return 0
 

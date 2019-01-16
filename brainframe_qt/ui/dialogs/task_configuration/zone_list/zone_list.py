@@ -105,7 +105,6 @@ class ZoneList(QTreeWidget):
         zone_item.setExpanded(True)
         alarm_item.setSelected(True)
 
-
     @pyqtSlot(int)
     def delete_zone(self, zone_id: int):
 
