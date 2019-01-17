@@ -7,6 +7,7 @@ from typing import Optional, Dict
 import cv2
 import numpy as np
 
+from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.client.api.codecs import ZoneStatus
 from brainframe.shared.stream_reader import StreamReader, StreamStatus
