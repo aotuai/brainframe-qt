@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
-from brainframe.shared.constants import DEFAULT
+from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 from brainframe.client.api.codecs import Zone, ZoneAlarm
 
