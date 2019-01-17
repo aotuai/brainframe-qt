@@ -56,7 +56,6 @@ class SyncedStreamReader(StreamReader):
         self.pipeline = pipeline
         self.stream_id = stream_id
         self.status_poller = status_poller
-        self.tracks: Dict[UUID, DetectionTrack] = {}
 
         self._latest_processed: ProcessedFrame = None
 
@@ -84,6 +83,7 @@ class SyncedStreamReader(StreamReader):
         while self.status != StreamStatus.CLOSED:
             # Wait for a new frame from the StreamReader thread
             if not self.new_frame_event.wait(timeout=0.01):
+                # We time out so that we can check the stream status
                 continue
             self.new_frame_event.clear()
 
@@ -100,7 +100,11 @@ class SyncedStreamReader(StreamReader):
         logging.info("SyncedStreamReader: Closing")
 
     def sync_frames(self):
-        last_inference_tstamp = -1
+        """A generator where the input is frame_tstamp, frame, statuses and
+        it yields out ProcessedFrames where the zonestatus and frames are
+        synced up. """
+
+        last_status_tstamp = -1
         """Keep track of the timestamp of the last new zonestatus that was 
         received."""
 
@@ -121,40 +125,57 @@ class SyncedStreamReader(StreamReader):
         self._latest_processed
         """
 
+        tracks: Dict[UUID, DetectionTrack] = {}
+        """Keep a dict of Detection.track_id: DetectionTrack of all detections
+        that are ongoing. Then, every once in a while, prune DetectionTracks 
+        that haven't gotten updates in a while."""
+
+        # Type-hint the input to the generator
+        statuses: List[ZoneStatus]
+
         while True:
             frame_tstamp, frame, statuses = yield latest_processed
 
-            frame_tstamp, frame = self.latest_frame
+
             buffer.append(
                 ProcessedFrame(frame, frame_tstamp, None, False, None))
 
             # Get a timestamp from any of the zone statuses
-            tstamp = statuses[-1].tstamp if len(statuses) else None
+            status_tstamp = statuses[-1].tstamp if len(statuses) else None
 
             # Check if this is a fresh zone_status or not
-            if len(statuses) and last_inference_tstamp != tstamp:
+            if len(statuses) and last_status_tstamp != status_tstamp:
                 # Catch up to the previous inference frame
-                while buffer[0].tstamp < last_inference_tstamp:
+                while buffer[0].tstamp < last_status_tstamp:
                     buffer.pop(0)
-                last_inference_tstamp = tstamp
+                last_status_tstamp = status_tstamp
 
-                # TODO: Iterate over all new detections, and add them to/create
-                # DetectionTracks
+                # Iterate over all new detections, and add them to their tracks
+                dets = next(s.detections for s in statuses
+                            if s.zone.name == "Screen")
+                for det in dets:
+                    # Create new tracks where necessary
+                    if det.track_id not in tracks:
+                        tracks[det.track_id] = DetectionTrack()
+                    tracks[det.track_id].add_detection(det, status_tstamp)
 
             # If we have inference later than the current frame, update the
             # current frame
-            if len(buffer) and buffer[0].tstamp <= last_inference_tstamp:
+            if len(buffer) and buffer[0].tstamp <= last_status_tstamp:
                 frame = buffer.pop(0)
                 rgb = cv2.cvtColor(frame.frame, cv2.COLOR_BGR2RGB)
 
-                # TODO: Get a list of DetectionTracks that had a detection for
+                # Get a list of DetectionTracks that had a detection for
                 # this timestamp
+                relevant_dets = [dt.copy() for dt in tracks.values()
+                                 if dt.latest_tstamp == status_tstamp]
+
                 latest_processed = ProcessedFrame(
                     frame=rgb,
                     tstamp=frame.tstamp,
                     zone_statuses=statuses,
                     has_new_statuses=statuses != last_used_zone_statuses,
-                    tracks=None)
+                    tracks=relevant_dets)
                 last_used_zone_statuses = statuses
 
             # Drain the buffer if it is getting too large
