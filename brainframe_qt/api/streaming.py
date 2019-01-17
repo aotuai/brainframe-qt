@@ -152,7 +152,7 @@ class SyncedStreamReader(StreamReader):
 
                 # Iterate over all new detections, and add them to their tracks
                 dets = next(s.detections for s in statuses
-                            if s.zone.name == "Screen")
+                            if s.zone.name == DEFAULT_ZONE_NAME)
                 for det in dets:
                     # Create new tracks where necessary
                     if det.track_id not in tracks:

@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
+from brainframe.shared.constants import DEFAULT
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 from brainframe.client.api.codecs import Zone, ZoneAlarm
 
@@ -58,7 +59,7 @@ class ZoneList(QTreeWidget):
     def add_zone(self, zone: Zone):
         """Creates and returns the new ZoneListItem using the zone"""
 
-        if zone.name == "Screen" or len(zone.coords) > 2:
+        if zone.name == DEFAULT_ZONE_NAME or len(zone.coords) > 2:
             entry_type = self.EntryType.REGION
         elif len(zone.coords) == 2:
             entry_type = self.EntryType.LINE
@@ -69,7 +70,7 @@ class ZoneList(QTreeWidget):
         self.addTopLevelItem(zone_item)
 
         self._add_trash_button(zone_item)
-        if zone.name == "Screen":
+        if zone.name == DEFAULT_ZONE_NAME:
             zone_item.trash_button.setDisabled(True)
         else:
             zone_item.trash_button.clicked.connect(
