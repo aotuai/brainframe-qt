@@ -2,9 +2,10 @@ from uuid import UUID
 from typing import Tuple, Deque, Iterator
 from collections import deque
 
-from brainframe.client.api import codecs
+from brainframe.client.api.codecs import Detection
+from brainframe.shared.list_utils import closest_index
 
-DET_HIST_TYPE = Tuple[codecs.Detection, float]
+DET_HIST_TYPE = Tuple[Detection, float]
 
 
 class DetectionTrack:
@@ -34,6 +35,16 @@ class DetectionTrack:
         to the beginning of the list."""
         self._history.appendleft((detection, tstamp))
 
+    def get_interpolated_detection(self, interpolate_tstamp) -> Detection:
+        """
+        Returns a Detection codec whose coordinates are between those of the
+        detections at tstamp n-1 and n+1, where n is interpolate tstamp
+        :param interpolate_to_tstamp: The timestamp that we would like to
+        estimate the position of the detection at.
+        """
+        if len(self._history) == 1:
+            return self._history[0][0]
+
     @property
     def class_name(self) -> str:
         """Get the class name for this detection"""
@@ -49,7 +60,7 @@ class DetectionTrack:
         return self._history[0][1]
 
     @property
-    def latest_det(self) -> codecs.Detection:
+    def latest_det(self) -> Detection:
         return self._history[0][0]
 
     def copy(self) -> 'DetectionTrack':
