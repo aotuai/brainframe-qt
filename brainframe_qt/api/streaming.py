@@ -1,5 +1,5 @@
 import logging
-from uuid import UUID
+from uuid import UUID, uuid4
 from typing import List
 from threading import Thread
 from typing import Optional, Dict
@@ -137,7 +137,6 @@ class SyncedStreamReader(StreamReader):
         while True:
             frame_tstamp, frame, statuses = yield latest_processed
 
-
             buffer.append(
                 ProcessedFrame(frame, frame_tstamp, None, False, None))
 
@@ -156,9 +155,11 @@ class SyncedStreamReader(StreamReader):
                             if s.zone.name == DEFAULT_ZONE_NAME)
                 for det in dets:
                     # Create new tracks where necessary
+                    track_id = det.track_id if det.track_id else uuid4()
+
                     if det.track_id not in tracks:
-                        tracks[det.track_id] = DetectionTrack()
-                    tracks[det.track_id].add_detection(det, status_tstamp)
+                        tracks[track_id] = DetectionTrack()
+                    tracks[track_id].add_detection(det, status_tstamp)
 
             # If we have inference later than the current frame, update the
             # current frame
