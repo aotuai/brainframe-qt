@@ -1,5 +1,5 @@
 import logging
-logging.getLogger().setLevel(logging.INFO)
+import os
 
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
@@ -19,14 +19,22 @@ from brainframe.client.api import api
 from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.api.api_errors import StreamNotOpenedError
+from brainframe.shared import environment
+
+
+default_log_level = "INFO"
+if environment.in_production():
+    # Be less verbose in production
+    default_log_level = "WARN"
+logging.basicConfig(level=os.environ.get("LOGLEVEL", default_log_level))
 
 
 def parse_args():
     parser = ArgumentParser(description="This runs the BrainFrame client")
     parser.add_argument("-a", "--api-url", type=str,
                         default="http://localhost:8000",
-                        help="The URL that the server is currently running on. "
-                             "This can be localhost, or a local IP, or a "
+                        help="The URL that the server is currently running "
+                             "on. This can be localhost, or a local IP, or a "
                              "remote IP depending on your setup.")
     parser.add_argument("--skip-frames", action="store_true", default=False,
                         help="Configures all streams to skip intermediate "
