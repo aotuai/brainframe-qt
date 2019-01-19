@@ -7,6 +7,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 
 from brainframe.client.api import api
+from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from brainframe.client.api.streaming import SyncedStreamReader
 from brainframe.shared.stream_reader import StreamStatus
 from brainframe.client.ui.resources.paths import image_paths
@@ -130,9 +131,9 @@ class StreamWidget(QGraphicsView):
         if not self.render_zones:
             return
 
-        # Draw all of the zones (except the default zone, "screen")
+        # Draw all of the zones (except the default zone)
         for zone_status in zone_statuses:
-            if zone_status.zone.name != "Screen":
+            if zone_status.zone.name != DEFAULT_ZONE_NAME:
                 # Border thickness as % of screen size
                 border = self.scene().width() / 200
                 self.scene().addItem(ZoneStatusPolygon(
@@ -150,7 +151,7 @@ class StreamWidget(QGraphicsView):
 
         # Get attributes of interest
         for zone_status in zone_statuses:
-            if zone_status.zone.name == "Screen":
+            if zone_status.zone.name == DEFAULT_ZONE_NAME:
                 screen_zone_status = zone_status
 
         # If we don't have a screen zone status
