@@ -47,7 +47,7 @@ class ThumbnailGridLayout(QWidget):
         self.dropdown_button.clicked.connect(self.toggle_expansion)
 
     def new_stream_widget(self, stream_conf):
-        video = VideoSmall(self, stream_conf, 30)
+        video = VideoSmall(self, stream_conf)
 
         self.stream_widgets[stream_conf.id] = video
         self._add_widget_to_layout(video)

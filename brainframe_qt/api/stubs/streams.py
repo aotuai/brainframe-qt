@@ -66,7 +66,7 @@ class StreamStubMixin(Stub):
 
     def get_stream_reader(self, stream_config: StreamConfiguration) \
             -> Optional[SyncedStreamReader]:
-        """Get the SyncedStreamReader for the given stream_id.
+        """Get the SyncedStreamReader for the given stream_configuration.
 
         :param stream_config: The stream configuration to open.
         :return: A SyncedStreamReader object OR None, if the server was unable

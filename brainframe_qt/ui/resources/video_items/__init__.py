@@ -4,4 +4,4 @@ from .stream_label_box import StreamLabelBox
 
 from .stream_detections import DetectionPolygon, ZoneStatusPolygon
 
-from .stream_widget import StreamWidget
+from .stream_widget_nouveau import StreamWidget

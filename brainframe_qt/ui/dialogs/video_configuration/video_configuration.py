@@ -50,7 +50,7 @@ class VideoConfiguration(QDialog):
         self.bbox_radio_button.setChecked(not use_polygons)
         self.detection_labels_checkbox.setChecked(show_detection_labels)
         self.detection_attributes_checkbox.setChecked(show_attributes)
-        self.zones_checkbox.setChecked(show_zones)
+        self.regions_checkbox.setChecked(show_zones)
         self.lines_checkbox.setChecked(show_lines)
 
     @classmethod
@@ -71,7 +71,7 @@ class VideoConfiguration(QDialog):
         show_attributes = dialog.detection_attributes_checkbox.isChecked()
 
         # Zones
-        show_zones = dialog.zones_checkbox.isChecked()
+        show_zones = dialog.regions_checkbox.isChecked()
 
         # Lines
         show_lines = dialog.lines_checkbox.isChecked()

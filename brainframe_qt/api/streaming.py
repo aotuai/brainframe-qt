@@ -1,17 +1,20 @@
 import logging
 from uuid import UUID, uuid4
-from typing import List
-from threading import Thread
+from typing import Generator, List, Tuple
+from threading import Thread, RLock
 from typing import Optional, Dict
 
 import cv2
 import numpy as np
 
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.client.api.codecs import ZoneStatus
-from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.client.api.detection_tracks import DetectionTrack
+
+from brainframe.shared.constants import DEFAULT_ZONE_NAME
+from brainframe.shared.stream_reader import StreamReader, StreamStatus
+from brainframe.shared.stream_listener import StreamListener
+from brainframe.shared.utils import or_events
 
 
 class ProcessedFrame:
@@ -58,21 +61,50 @@ class SyncedStreamReader(StreamReader):
         self.stream_id = stream_id
         self.status_poller = status_poller
 
-        self._latest_processed: ProcessedFrame = None
+        self.latest_processed_frame_rgb: ProcessedFrame = None
 
         self._thread = Thread(
             name=f"SyncedStreamReader thread for stream ID {stream_id}",
             target=self._sync_detections_with_stream)
         self._thread.start()
 
-    @property
-    def latest_processed_frame_rgb(self) -> ProcessedFrame:
-        """Returns the latest frame with the most relevant available
-        zone status information.
+        self.stream_listeners = set()
+        self._stream_listeners_lock = RLock()
 
-        :return: The processed frame
-        """
-        return self._latest_processed
+    def alert_listeners(self):
+
+        print("Signaling ANYTHING: " + str(self.url))
+
+        with self._stream_listeners_lock:
+            if self.status is StreamStatus.INITIALIZING:
+                for listener in self.stream_listeners:
+                    listener.signal_stream_initializing()
+
+            elif self.status is StreamStatus.HALTED:
+                for listener in self.stream_listeners:
+                    print("Signaling HALTED: " + str(self.url))
+                    listener.signal_stream_halted()
+
+            elif self.status is StreamStatus.CLOSED:
+                for listener in self.stream_listeners:
+                    listener.signal_stream_closed()
+
+            elif self.status is StreamStatus.STREAMING:
+                for listener in self.stream_listeners:
+                    listener.signal_frame()
+
+            else:
+                for listener in self.stream_listeners:
+                    listener.signal_stream_error()
+
+    def add_listener(self, listener: StreamListener):
+        with self._stream_listeners_lock:
+            self.stream_listeners.add(listener)
+        self.alert_listeners()
+
+    def remove_listener(self, listener: StreamListener):
+        with self._stream_listeners_lock:
+            self.stream_listeners.remove(listener)
 
     def _sync_detections_with_stream(self):
         self.wait_until_initialized()
@@ -81,11 +113,29 @@ class SyncedStreamReader(StreamReader):
         frame_syncer = self.sync_frames()
         next(frame_syncer)
 
-        while self.status != StreamStatus.CLOSED:
-            # Wait for a new frame from the StreamReader thread
-            if not self.new_frame_event.wait(timeout=0.01):
-                # We time out so that we can check the stream status
-                continue
+        frame_or_status_event = or_events(self.new_frame_event,
+                                          self.new_status_event)
+
+        pf = None
+
+        # while self.status is not StreamStatus.CLOSED:
+        while True:
+
+            frame_or_status_event.wait()
+
+            if self.new_status_event.is_set():
+                print("new status: ", str(self.status))
+                self.new_status_event.clear()
+                if self.status is StreamStatus.CLOSED:
+                    break
+                if self.status is not StreamStatus.STREAMING:
+                    self.alert_listeners()
+
+                # If streaming is the new event we need to process the frame
+                if not self.new_frame_event.is_set():
+                    continue
+
+            # new_frame_event must have been triggered
             self.new_frame_event.clear()
 
             # Get the new frame + timestamp
@@ -95,12 +145,19 @@ class SyncedStreamReader(StreamReader):
             statuses = self.status_poller.latest_statuses(self.stream_id)
 
             # Run the syncing algorithm
-            self._latest_processed = frame_syncer.send(
+            self.latest_processed_frame_rgb = frame_syncer.send(
                 (frame_tstamp, frame, statuses))
+
+            if self.latest_processed_frame_rgb is not None:
+                self.alert_listeners()
 
         logging.info("SyncedStreamReader: Closing")
 
-    def sync_frames(self):
+    def sync_frames(self) -> Generator[ProcessedFrame,
+                                       Tuple[float,
+                                             np.ndarray,
+                                             List[ZoneStatus]],
+                                       None]:
         """A generator where the input is frame_tstamp, frame, statuses and
         it yields out ProcessedFrames where the zonestatus and frames are
         synced up. """
@@ -132,6 +189,7 @@ class SyncedStreamReader(StreamReader):
         that haven't gotten updates in a while."""
 
         # Type-hint the input to the generator
+        # noinspection PyUnusedLocal
         statuses: List[ZoneStatus]
 
         while True:

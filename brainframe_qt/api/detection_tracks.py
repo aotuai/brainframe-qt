@@ -5,7 +5,7 @@ from collections import deque
 import numpy as np
 
 from brainframe.client.api.codecs import Detection
-from brainframe.shared.list_utils import closest_index
+from brainframe.shared.utils import closest_index
 
 DET_TSTAMP_TUPLE = Tuple[Detection, float]
 

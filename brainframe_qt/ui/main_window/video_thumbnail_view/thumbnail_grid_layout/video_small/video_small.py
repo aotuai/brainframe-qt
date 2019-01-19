@@ -2,8 +2,10 @@ from PyQt5.QtCore import pyqtSignal, QRectF, Qt
 from PyQt5.QtGui import QPainter, QColor, QImage, QFontMetricsF
 
 from brainframe.client.ui.resources.paths import image_paths
-from brainframe.client.ui.resources.video_items.stream_widget import (
-    StreamWidget, DetectionPolygon, ZoneStatusPolygon
+from brainframe.client.ui.resources.video_items import (
+    StreamWidget,
+    DetectionPolygon,
+    ZoneStatusPolygon
 )
 
 
@@ -26,11 +28,19 @@ class VideoSmall(StreamWidget):
       [parent].ongoing_alerts_slot
     """
 
-    def __init__(self, parent=None, stream_conf=None, frame_rate=30):
+    def __init__(self, parent=None, stream_conf=None):
 
         self.ongoing_alerts: bool = False
 
-        super().__init__(stream_conf, frame_rate, parent=parent)
+        super().__init__(stream_conf, parent=parent)
+
+        self.stream_conf = stream_conf
+
+    def handle_frame(self):
+        super().handle_frame()
+
+        frame = self.stream_reader.latest_processed_frame_rgb
+        self.manage_alert_indication(frame.zone_statuses)
 
     def update_items(self):
         """Override the base StreamWidget implementation to add alert UI

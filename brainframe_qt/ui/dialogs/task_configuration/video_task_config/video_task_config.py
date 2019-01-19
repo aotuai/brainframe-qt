@@ -14,15 +14,19 @@ from brainframe.client.ui.resources.video_items import (
 class VideoTaskConfig(StreamWidget):
     polygon_is_valid_signal = pyqtSignal(bool)
 
-    def __init__(self, parent=None, stream_conf=None, frame_rate=30):
-        super().__init__(stream_conf, frame_rate, parent)
-        self.set_render_settings(detections=False, zones=True)
+    draw_detections = False
+    draw_lines = False
+    draw_zones = False
+
+    def __init__(self, parent=None, stream_conf=None):
+        super().__init__(stream_conf, parent)
 
         # Variables related to making a new polygon
         self.unconfirmed_polygon: StreamPolygon = None
         self.max_points = None
 
-        # Set when a mousePressEvent occurs on top of a ClickCircle during edits
+        # Set when a mousePressEvent occurs on top of a ClickCircle during
+        # edits
         self.clicked_circle = None  # type: ClickCircle
 
     def mousePressEvent(self, event: QMouseEvent):

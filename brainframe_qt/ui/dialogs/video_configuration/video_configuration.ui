@@ -108,9 +108,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="zones_checkbox">
+    <widget class="QCheckBox" name="regions_checkbox">
      <property name="text">
-      <string>Show zones</string>
+      <string>Show regions</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -159,7 +159,7 @@
  <tabstops>
   <tabstop>detections_checkbox</tabstop>
   <tabstop>bbox_radio_button</tabstop>
-  <tabstop>zones_checkbox</tabstop>
+  <tabstop>regions_checkbox</tabstop>
   <tabstop>lines_checkbox</tabstop>
  </tabstops>
  <resources/>
