@@ -1,1 +1,9 @@
-from .video_configuration import VideoConfiguration
+from .video_configuration import (
+    VideoConfiguration,
+    VIDEO_SHOW_DETECTIONS,
+    VIDEO_USE_POLYGONS,
+    VIDEO_SHOW_DETECTION_LABELS,
+    VIDEO_SHOW_ATTRIBUTES,
+    VIDEO_SHOW_ZONES,
+    VIDEO_SHOW_LINES
+)
