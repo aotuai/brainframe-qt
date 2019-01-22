@@ -73,7 +73,8 @@ class SyncedStreamReader(StreamReader):
 
     def alert_listeners(self):
 
-        print("Signaling ANYTHING: " + str(self.url))
+        if self.status is not StreamStatus.STREAMING:
+            print("Signaling ANYTHING: " + str(self.status))
 
         with self._stream_listeners_lock:
             if self.status is StreamStatus.INITIALIZING:
@@ -82,7 +83,6 @@ class SyncedStreamReader(StreamReader):
 
             elif self.status is StreamStatus.HALTED:
                 for listener in self.stream_listeners:
-                    print("Signaling HALTED: " + str(self.url))
                     listener.signal_stream_halted()
 
             elif self.status is StreamStatus.CLOSED:
@@ -91,7 +91,8 @@ class SyncedStreamReader(StreamReader):
 
             elif self.status is StreamStatus.STREAMING:
                 for listener in self.stream_listeners:
-                    listener.signal_frame()
+                    assert self.latest_processed_frame_rgb is not None
+                    listener.signal_frame(self.latest_processed_frame_rgb)
 
             else:
                 for listener in self.stream_listeners:
@@ -100,7 +101,7 @@ class SyncedStreamReader(StreamReader):
     def add_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
             self.stream_listeners.add(listener)
-        self.alert_listeners()
+            self.alert_listeners()
 
     def remove_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
@@ -116,8 +117,6 @@ class SyncedStreamReader(StreamReader):
         frame_or_status_event = or_events(self.new_frame_event,
                                           self.new_status_event)
 
-        pf = None
-
         # while self.status is not StreamStatus.CLOSED:
         while True:
 
@@ -130,6 +129,7 @@ class SyncedStreamReader(StreamReader):
                     break
                 if self.status is not StreamStatus.STREAMING:
                     self.alert_listeners()
+                    continue
 
                 # If streaming is the new event we need to process the frame
                 if not self.new_frame_event.is_set():

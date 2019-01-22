@@ -1,12 +1,9 @@
 from PyQt5.QtCore import pyqtSignal, QRectF, Qt
 from PyQt5.QtGui import QPainter, QColor, QImage, QFontMetricsF
 
+from brainframe.client.api.streaming import ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
-from brainframe.client.ui.resources.video_items import (
-    StreamWidget,
-    DetectionPolygon,
-    ZoneStatusPolygon
-)
+from brainframe.client.ui.resources.video_items import StreamWidget
 
 
 class VideoSmall(StreamWidget):
@@ -30,40 +27,16 @@ class VideoSmall(StreamWidget):
 
     def __init__(self, parent=None, stream_conf=None):
 
-        self.ongoing_alerts: bool = False
+        self._ongoing_alerts: bool = False
 
         super().__init__(stream_conf, parent=parent)
 
         self.stream_conf = stream_conf
 
-    def handle_frame(self):
-        super().handle_frame()
+    def handle_frame(self, processed_frame: ProcessedFrame):
+        super().handle_frame(processed_frame)
 
-        frame = self.stream_reader.latest_processed_frame_rgb
-        self.manage_alert_indication(frame.zone_statuses)
-
-    def update_items(self):
-        """Override the base StreamWidget implementation to add alert UI
-        functionality
-
-        TODO: Is this _really_ the best way of doing this?
-        """
-
-        frame = self.video_stream.latest_processed_frame_rgb
-
-        # Only update detections & zones when needed
-        if self.stream_is_up and frame is not None:
-            if frame.tstamp != self.timestamp:
-                self.update_latest_zones(frame.zone_statuses)
-                self.update_latest_detections(frame.zone_statuses)
-
-                self.manage_alert_indication(frame.zone_statuses)
-
-        else:
-            self.remove_items_by_type(DetectionPolygon)
-            self.remove_items_by_type(ZoneStatusPolygon)
-
-        self.update_frame()
+        self.manage_alert_indication(processed_frame.zone_statuses)
 
     def manage_alert_indication(self, zone_statuses):
 
@@ -167,3 +140,11 @@ class VideoSmall(StreamWidget):
     def remove_selection_border(self):
         """Remove border around stream"""
         pass
+
+    @property
+    def ongoing_alerts(self):
+        return self._ongoing_alerts
+
+    @ongoing_alerts.setter
+    def ongoing_alerts(self, ongoing_alerts):
+        self._ongoing_alerts = ongoing_alerts

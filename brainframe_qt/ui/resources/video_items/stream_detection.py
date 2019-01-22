@@ -1,7 +1,6 @@
 import random
 
 from PyQt5.QtGui import QColor
-from shapely.geometry import LineString, Point
 
 from brainframe.client.api.streaming import DetectionTrack
 from brainframe.client.api.codecs import Detection

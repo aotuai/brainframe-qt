@@ -1,12 +1,12 @@
 from typing import Callable
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QCoreApplication, QEvent
 from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.shared.stream_listener import StreamListener
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.api.streaming import SyncedStreamReader
+from brainframe.client.api.streaming import SyncedStreamReader, ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
 from .stream_graphics_scene import StreamGraphicsScene
 
@@ -35,8 +35,9 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     scene: Callable[[], StreamGraphicsScene]
 
     def __init__(self, stream_conf, parent=None):
-        QGraphicsView.__init__(self, parent)
+        # Order matters here, unfortunately
         StreamListener.__init__(self)
+        QGraphicsView.__init__(self, parent)
 
         # Remove ugly white background and border from QGraphicsView
         self.setStyleSheet("background-color: transparent; border: 0px")
@@ -48,23 +49,22 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
 
         self.change_stream(stream_conf)
 
-    def handle_frame(self):
-        frame = self.stream_reader.latest_processed_frame_rgb
+    def handle_frame(self, processed_frame: ProcessedFrame):
 
         self.scene().remove_all_items()
 
-        self.scene().set_frame(frame=frame.frame)
+        self.scene().set_frame(frame=processed_frame.frame)
 
         if self.draw_lines:
-            self.scene().draw_lines(frame.zone_statuses)
+            self.scene().draw_lines(processed_frame.zone_statuses)
 
         if self.draw_regions:
-            self.scene().draw_regions(frame.zone_statuses)
+            self.scene().draw_regions(processed_frame.zone_statuses)
 
         if self.draw_detections:
             self.scene().draw_detections(
-                frame_tstamp=frame.tstamp,
-                tracks=frame.tracks,
+                frame_tstamp=processed_frame.tstamp,
+                tracks=processed_frame.tracks,
                 use_bounding_boxes=self.use_bounding_boxes,
                 show_labels=self.show_labels,
                 show_attributes=self.show_attributes
@@ -74,11 +74,6 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         self.scene().remove_all_items()
         self.scene().set_frame(path=image_paths.connecting_to_stream)
         ...
-
-    def handle_stream_connected(self):
-        # This is called when a stream transitions from an unconnected state to
-        # a connected state. Currently we have nothing special to do here
-        pass
 
     def handle_stream_halted(self):
         self.scene().remove_all_items()
@@ -99,6 +94,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
 
         if self.stream_reader:
             self.stream_reader.remove_listener(self)
+            QCoreApplication.removePostedEvents(self)
         self.stream_reader = api.get_stream_reader(stream_conf)
         self.stream_reader.add_listener(self)
 
@@ -119,6 +115,34 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
             return 0
 
         return width * self.scene().height() / self.scene().width()
+
+    # Overrides qt's
+    def event(self, event: QEvent):
+        if event.type() == self.FrameEvent.event_type:
+            self.handle_frame(event.processed_frame)
+            return True
+        elif event.type() == self.StreamInitializingEvent.event_type:
+            if "VideoLarge" in str(type(self)):
+                print("Init Event")
+            self.handle_stream_initializing()
+            return True
+        elif event.type() == self.StreamHaltedEvent.event_type:
+            if "VideoLarge" in str(type(self)):
+                print("Halt Event")
+            self.handle_stream_halted()
+            return True
+        elif event.type() == self.StreamClosedEvent.event_type:
+            if "VideoLarge" in str(type(self)):
+                print("Close Event")
+            self.handle_stream_closed()
+            return True
+        elif event.type() == self.StreamErrorEvent:
+            if "VideoLarge" in str(type(self)):
+                print("Error Event")
+            self.handle_stream_error()
+            return True
+        else:
+            return super().event(event)
 
     def resizeEvent(self, event=None):
         """Take up entire width using aspect ratio of scene"""

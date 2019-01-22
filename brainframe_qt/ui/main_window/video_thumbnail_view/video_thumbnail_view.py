@@ -78,9 +78,9 @@ class VideoThumbnailView(QWidget):
         """
         # Delete stream from alert widget if it is there
         if stream_conf.id in self.alert_stream_ids:
-            self.remove_streams_from_alerts(stream_conf)
+            self.alert_streams_layout.pop_stream_widget(stream_conf.id)
         else:
-            self.alertless_streams_layout.delete_stream_widget(stream_conf.id)
+            self.alertless_streams_layout.pop_stream_widget(stream_conf.id)
 
     @pyqtSlot(object, bool)
     def ongoing_alerts_slot(self, stream_conf, alerts_ongoing):
@@ -94,41 +94,40 @@ class VideoThumbnailView(QWidget):
         """
 
         if alerts_ongoing and stream_conf.id not in self.alert_stream_ids:
-
-            self.add_stream_to_alerts(stream_conf)
-            self.alertless_streams_layout.delete_stream_widget(stream_conf.id)
+            self.add_stream_to_alerts(stream_conf.id)
 
         elif stream_conf.id in self.alert_stream_ids and not alerts_ongoing:
-
-            self.remove_streams_from_alerts(stream_conf)
-            self.alertless_streams_layout.new_stream_widget(stream_conf)
+            self.remove_streams_from_alerts(stream_conf.id)
 
         else:
-            raise RuntimeError("Inconsistent state with alert widgets")
+            print(1)
+            # raise RuntimeError("Inconsistent state with alert widgets")
 
-    def add_stream_to_alerts(self, stream_conf):
+    def add_stream_to_alerts(self, stream_id):
 
         # Expand alert layout if necessary
         if not self.alert_stream_ids:
             self.alert_streams_layout.show()
 
         # Add stream ID of alert to set
-        self.alert_stream_ids.add(stream_conf.id)
+        self.alert_stream_ids.add(stream_id)
 
-        # Create a widget for stream in the alert layout
-        self.alert_streams_layout.new_stream_widget(stream_conf)
+        # Move widget from alertless_streams_layout to alert_streams_layout
+        widget = self.alertless_streams_layout.pop_stream_widget(stream_id)
+        self.alert_streams_layout.add_video(widget)
 
-    def remove_streams_from_alerts(self, stream_conf):
+    def remove_streams_from_alerts(self, stream_id):
 
         # Remove stream ID of alert from set
-        self.alert_stream_ids.remove(stream_conf.id)
+        self.alert_stream_ids.remove(stream_id)
 
         # Hide alert layout if necessary
         if not self.alert_stream_ids:
             self.alert_streams_layout.hide()
 
-        # Remove widget for stream in the alert layout
-        self.alert_streams_layout.delete_stream_widget(stream_conf.id)
+        # Move widget from alert_streams_layout to alertless_streams_layout
+        widget = self.alert_streams_layout.pop_stream_widget(stream_id)
+        self.alertless_streams_layout.add_video(widget)
 
     def new_stream(self, stream_conf):
         """Create a new stream widget and remember its ID"""
