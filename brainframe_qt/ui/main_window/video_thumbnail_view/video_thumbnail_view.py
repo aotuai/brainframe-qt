@@ -78,9 +78,10 @@ class VideoThumbnailView(QWidget):
         """
         # Delete stream from alert widget if it is there
         if stream_conf.id in self.alert_stream_ids:
-            self.alert_streams_layout.pop_stream_widget(stream_conf.id)
-        else:
-            self.alertless_streams_layout.pop_stream_widget(stream_conf.id)
+            self.remove_streams_from_alerts(stream_conf.id)
+
+        video = self.alertless_streams_layout.pop_stream_widget(stream_conf.id)
+        video.deleteLater()
 
     @pyqtSlot(object, bool)
     def ongoing_alerts_slot(self, stream_conf, alerts_ongoing):
@@ -100,8 +101,7 @@ class VideoThumbnailView(QWidget):
             self.remove_streams_from_alerts(stream_conf.id)
 
         else:
-            print(1)
-            # raise RuntimeError("Inconsistent state with alert widgets")
+            raise RuntimeError("Inconsistent state with alert widgets")
 
     def add_stream_to_alerts(self, stream_id):
 

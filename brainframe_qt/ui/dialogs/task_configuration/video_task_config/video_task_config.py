@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal, QPointF, Qt
 from PyQt5.QtGui import QMouseEvent, QColor
 from shapely import geometry
 
+from brainframe.client.api.streaming import ProcessedFrame
 from brainframe.client.ui.resources.video_items import (
     ClickCircle,
     StreamWidget,
@@ -15,8 +16,8 @@ class VideoTaskConfig(StreamWidget):
     polygon_is_valid_signal = pyqtSignal(bool)
 
     draw_detections = False
-    draw_lines = False
-    draw_zones = False
+    draw_lines = True
+    draw_regions = True
 
     def __init__(self, parent=None, stream_conf=None):
         super().__init__(stream_conf, parent)
@@ -28,6 +29,14 @@ class VideoTaskConfig(StreamWidget):
         # Set when a mousePressEvent occurs on top of a ClickCircle during
         # edits
         self.clicked_circle = None  # type: ClickCircle
+
+    def handle_frame(self, processed_frame: ProcessedFrame,
+                     remove_items=False):
+
+        self.scene().set_frame(frame=processed_frame.frame)
+
+        if self.unconfirmed_polygon is None:
+            super().handle_frame(processed_frame)
 
     def mousePressEvent(self, event: QMouseEvent):
         item_at = self.itemAt(event.pos())
@@ -87,7 +96,7 @@ class VideoTaskConfig(StreamWidget):
         mouse_pos = self.mapToScene(event.pos())
         points = self.unconfirmed_polygon.points_list
 
-        self.remove_items_by_type(StreamPolygon)
+        self.scene().remove_items_by_type(StreamPolygon)
 
         # Draw current polygon
         self.scene().addItem(self.unconfirmed_polygon)
@@ -126,7 +135,12 @@ class VideoTaskConfig(StreamWidget):
             self.scene().addItem(preview_polygon)
 
     def start_new_polygon(self, max_points=None):
-        self.set_render_settings(zones=False)
+
+        self.draw_regions = False
+        self.draw_lines = False
+
+        self.scene().remove_all_items()
+
         self.setMouseTracking(True)  # Allow for realtime zone updating
         self.unconfirmed_polygon = StreamPolygon(
             border_thickness=self.scene().width() / 200,
@@ -144,11 +158,13 @@ class VideoTaskConfig(StreamWidget):
         creating a new polygon"""
         if self.unconfirmed_polygon is not None:
             self.scene().removeItem(self.unconfirmed_polygon)
-            self.remove_items_by_type(StreamPolygon)
-            self.remove_items_by_type(ClickCircle)
+            self.scene().remove_items_by_type(StreamPolygon)
+            self.scene().remove_items_by_type(ClickCircle)
             self.unconfirmed_polygon = None
             self.max_points = None
-        self.set_render_settings(zones=True)
+
+        self.draw_regions = True
+        self.draw_lines = True
 
     @staticmethod
     def _is_polygon_valid(point_list, new_point: QPointF = None):

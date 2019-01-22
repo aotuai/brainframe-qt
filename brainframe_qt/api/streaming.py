@@ -73,9 +73,6 @@ class SyncedStreamReader(StreamReader):
 
     def alert_listeners(self):
 
-        if self.status is not StreamStatus.STREAMING:
-            print("Signaling ANYTHING: " + str(self.status))
-
         with self._stream_listeners_lock:
             if self.status is StreamStatus.INITIALIZING:
                 for listener in self.stream_listeners:
@@ -91,8 +88,11 @@ class SyncedStreamReader(StreamReader):
 
             elif self.status is StreamStatus.STREAMING:
                 for listener in self.stream_listeners:
-                    assert self.latest_processed_frame_rgb is not None
-                    listener.signal_frame(self.latest_processed_frame_rgb)
+                    if self.latest_processed_frame_rgb is not None:
+                        listener.signal_frame(self.latest_processed_frame_rgb)
+                    else:
+                        # Still waiting on first processed frame
+                        listener.signal_stream_initializing()
 
             else:
                 for listener in self.stream_listeners:
@@ -117,13 +117,11 @@ class SyncedStreamReader(StreamReader):
         frame_or_status_event = or_events(self.new_frame_event,
                                           self.new_status_event)
 
-        # while self.status is not StreamStatus.CLOSED:
         while True:
 
             frame_or_status_event.wait()
 
             if self.new_status_event.is_set():
-                print("new status: ", str(self.status))
                 self.new_status_event.clear()
                 if self.status is StreamStatus.CLOSED:
                     break

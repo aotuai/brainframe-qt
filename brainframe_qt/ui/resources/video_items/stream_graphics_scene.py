@@ -87,41 +87,48 @@ class StreamGraphicsScene(QGraphicsScene):
                 seconds_old=0)  # Fading is currently disabled
             self.addItem(det_polygon)
 
+    def remove_items(self, items, condition=any):
+        for item in items:
+            if condition is any or condition(item):
+                self.removeItem(item)
+
+    def remove_items_by_type(self, item_type):
+
+        def condition(item):
+            return type(item) == item_type
+
+        self.remove_items(self.items(), condition)
 
     def remove_all_items(self):
-        for item in self.items():
-            # Ignore the frame pixmap
-            if item is self.current_frame:
-                continue
-            self.removeItem(item)
+
+        def condition(item):
+            return item is not self.current_frame
+
+        self.remove_items(self.items(), condition)
 
     def remove_detections(self):
-        detection_polygons = self._get_items_by_type(DetectionPolygon)
-
-        for detection_polygon in detection_polygons:
-            self.removeItem(detection_polygon)
+        self.remove_items_by_type(DetectionPolygon)
 
     def remove_regions(self):
-        region_polygons = self._get_items_by_type(ZoneStatusPolygon)
-
-        for region_polygon in region_polygons:
-            self.removeItem(region_polygon)
+        self.remove_items_by_type(ZoneStatusPolygon)
 
     def remove_lines(self):
-        region_polygons = self._get_items_by_type(ZoneStatusPolygon)
+        region_polygons = self.get_items_by_type(ZoneStatusPolygon)
 
-        for region_polygon in region_polygons:
-            if len(region_polygon.polygon) == 2:
-                self.removeItem(region_polygon)
+        def condition(item):
+            return len(item.polygon) == 2
+
+        self.remove_items(region_polygons, condition)
 
     def remove_zones(self):
-        region_polygons = self._get_items_by_type(ZoneStatusPolygon)
+        region_polygons = self.get_items_by_type(ZoneStatusPolygon)
 
-        for region_polygon in region_polygons:
-            if len(region_polygon.polygon) > 2:
-                self.removeItem(region_polygon)
+        def condition(item):
+            return len(item.polygon) > 2
 
-    def _get_items_by_type(self, item_type):
+        self.remove_items(region_polygons, condition)
+
+    def get_items_by_type(self, item_type):
         items = self.items()
         return filter(lambda item: type(item) == item_type, items)
 
