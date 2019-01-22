@@ -195,7 +195,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     def show_detection_confidence(self):
         if self._show_detection_confidence is not None:
             return self._show_detection_confidence
-        return settings.show_detection_confidence.val()
+        return settings.show_recognition_confidence.val()
 
     @show_detection_confidence.setter
     def show_detection_confidence(self, show_detection_confidence):

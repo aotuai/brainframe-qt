@@ -4,6 +4,11 @@ _settings = QSettings()
 
 
 class Setting:
+    """A small wrapper around QSettings that holds the name, type, and default,
+    and also allows you to 'import' settings around the project without having
+    to worry about keeping the name the same everywhere. It also helps refactor.
+    """
+
     def __init__(self, default, type, name):
         """Set the default if it doesn't exist yet"""
         self.default = default
@@ -11,12 +16,11 @@ class Setting:
         self.name = name
 
         # Record the setting officially if they don't exist yet
-        self.set(self.default)
         if default is not None and _settings.value(name) is None:
-            pass
+            self.set(self.default)
 
     def set(self, value):
-        assert isinstance(value, self.type)
+        _settings.setValue(self.name, value)
 
     def val(self):
         return _settings.value(self.name, type=self.type)
@@ -26,7 +30,7 @@ class Setting:
 client_license_accepted = Setting(
     False, type=bool, name="client_license_accepted")
 client_license_md5 = Setting(
-    None, type=bool, name="client_license_md5")
+    None, type=str, name="client_license_md5")
 
 # Video Configuration Settings
 draw_lines = Setting(
@@ -38,8 +42,8 @@ draw_detections = Setting(
 use_polygons = Setting(
     True, type=bool, name="video_use_polygons")
 show_detection_tracks = Setting(
-    True, type=bool, name="video_show_tracks"),
-show_detection_confidence = Setting(
+    True, type=bool, name="video_show_tracks")
+show_recognition_confidence = Setting(
     True, type=bool, name="video_show_confidence")
 show_detection_labels = Setting(
     True, type=bool, name="video_show_detection_labels")

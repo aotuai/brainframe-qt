@@ -34,7 +34,7 @@ class LicenseAgreement(QDialog):
         license_accepted = settings.client_license_accepted.val()
         license_accepted_md5 = settings.client_license_md5.val()
 
-        if license_accepted and strtobool(license_accepted):
+        if license_accepted:
             # Ensure that the license agreed to was the current version
             if license_accepted_md5 == license_md5:
                 return True

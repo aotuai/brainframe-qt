@@ -49,17 +49,28 @@ class DetectionPolygon(StreamPolygon):
                          border_color=class_color,
                          border_thickness=1,
                          parent=parent)
+        print(
+            "use_polygons", use_polygons,
+            "show_detection_labels", show_detection_labels,
+            "show_tracks", show_tracks,
+            "show_confidence", show_confidence,
+            "show_attributes", show_attributes
+        )
+        text = ""
 
-        # Create the description box
-        top_left = detection.coords[0]
-        text = detection.class_name
+        if show_detection_labels:
+            text += detection.class_name
 
         # Add "Identity" to the description box
         if detection.with_identity is not None:
             if detection.with_identity.nickname is not None:
-                text += "\n" + "Name: " + detection.with_identity.nickname
+                text += "\nName: " + detection.with_identity.nickname
             else:
-                text += "\n" + "Name: " + detection.with_identity.unique_name
+                text += "\nName: " + detection.with_identity.unique_name
+
+            if show_confidence:
+                confidence = detection.extra_data['encoding_distance']
+                text += f" ({round(confidence, 2)})"
 
         if len(detection.attributes) and show_attributes:
             attributes_str_list = [a.category + ": " + a.value
@@ -67,11 +78,16 @@ class DetectionPolygon(StreamPolygon):
             attributes_str_list.sort()
             text += "\n" + "\n".join(attributes_str_list)
 
-        if show_detection_labels:
-            self.label_box = StreamLabelBox(text,
-                                            top_left=top_left,
-                                            text_size=text_size,
-                                            parent=self)
+        # Remove all dual newlines
+        text = text.strip()
+        if len(text):
+            # Create the description box
+            top_left = coords[0]
+            self.label_box = StreamLabelBox(
+                title_text=text,
+                top_left=top_left,
+                text_size=text_size,
+                parent=self)
 
         if len(track) > 1 and show_tracks:
             # Draw a track for the detections history

@@ -91,8 +91,7 @@ class StreamGraphicsScene(QGraphicsScene):
                 show_confidence=show_confidence,
                 show_tracks=show_tracks,
                 show_detection_labels=show_detection_labels,
-                show_attributes=show_attributes
-            )  # Fading is currently disabled
+                show_attributes=show_attributes)
             self.addItem(det_polygon)
 
     def remove_items(self, items, condition=any):

@@ -35,6 +35,10 @@ class VideoConfiguration(QDialog):
             settings.draw_regions.val())
         self.lines_checkbox.setChecked(
             settings.draw_lines.val())
+        self.tracks_checkbox.setChecked(
+            settings.show_detection_tracks.val())
+        self.recognition_checkbox.setChecked(
+            settings.show_recognition_confidence.val())
 
     @classmethod
     def show_dialog(cls):
@@ -47,21 +51,23 @@ class VideoConfiguration(QDialog):
             return
 
         # Get new values from the UI
-        # Detections
-        draw_detections = dialog.detections_checkbox.isChecked()
         _detection_display_type = dialog.detection_radio_group.checkedButton()
         use_polygons = _detection_display_type is dialog.polygon_radio_button
-        show_detection_labels = dialog.detection_labels_checkbox.isChecked()
-        show_attributes = dialog.detection_attributes_checkbox.isChecked()
-
-        # Regions
-        draw_regions = dialog.regions_checkbox.isChecked()
-        draw_lines = dialog.lines_checkbox.isChecked()
 
         # Change the settings
-        settings.draw_regions.set(draw_regions)
-        settings.draw_lines.set(draw_lines)
-        settings.draw_detections.set(draw_detections)
-        settings.use_polygons.set(use_polygons)
-        settings.show_detection_labels.set(show_detection_labels)
-        settings.show_attributes.set(show_attributes)
+        settings.draw_regions.set(
+            dialog.regions_checkbox.isChecked())
+        settings.draw_lines.set(
+            dialog.lines_checkbox.isChecked())
+        settings.draw_detections.set(
+            dialog.detections_checkbox.isChecked())
+        settings.use_polygons.set(
+            use_polygons)
+        settings.show_detection_labels.set(
+            dialog.detection_labels_checkbox.isChecked())
+        settings.show_attributes.set(
+            dialog.detection_attributes_checkbox.isChecked())
+        settings.show_detection_tracks.set(
+            dialog.tracks_checkbox.isChecked())
+        settings.show_recognition_confidence.set(
+            dialog.recognition_checkbox.isChecked())

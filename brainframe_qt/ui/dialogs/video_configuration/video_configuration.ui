@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
-    <height>302</height>
+    <width>545</width>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,14 +42,14 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QRadioButton" name="bbox_radio_button">
+     <item row="5" column="1">
+      <widget class="QCheckBox" name="detection_labels_checkbox">
        <property name="text">
-        <string>Always use bounding boxes</string>
+        <string>Show labels</string>
        </property>
-       <attribute name="buttonGroup">
-        <string notr="true">detection_radio_group</string>
-       </attribute>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item row="0" column="0" rowspan="6">
@@ -81,20 +81,34 @@
        </attribute>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QCheckBox" name="detection_labels_checkbox">
-       <property name="text">
-        <string>Show labels</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="6" column="1">
       <widget class="QCheckBox" name="detection_attributes_checkbox">
        <property name="text">
         <string>Show attributes (e.g. gender/behavior for a person detection)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QCheckBox" name="tracks_checkbox">
+       <property name="text">
+        <string>Show tracking</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QRadioButton" name="bbox_radio_button">
+       <property name="text">
+        <string>Always use bounding boxes</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">detection_radio_group</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QCheckBox" name="recognition_checkbox">
+       <property name="text">
+        <string>Show recognition match distance (closer to 0 is better)</string>
        </property>
       </widget>
      </item>
