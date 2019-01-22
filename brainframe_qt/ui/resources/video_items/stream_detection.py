@@ -31,6 +31,7 @@ class DetectionPolygon(StreamPolygon):
                  use_polygons=True,
                  show_detection_labels=True,
                  show_tracks=True,
+                 show_confidence=True,
                  show_attributes=True,
                  parent=None):
         """

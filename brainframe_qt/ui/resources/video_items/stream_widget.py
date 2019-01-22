@@ -1,6 +1,6 @@
 from typing import Callable
 
-from PyQt5.QtCore import Qt, QCoreApplication, QEvent, QSettings
+from PyQt5.QtCore import Qt, QCoreApplication, QEvent
 from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.shared.stream_listener import StreamListener
@@ -8,14 +8,8 @@ from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.streaming import SyncedStreamReader, ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
-from brainframe.client.ui.dialogs.video_configuration import (
-    VIDEO_DRAW_DETECTIONS,
-    VIDEO_USE_POLYGONS,
-    VIDEO_SHOW_DETECTION_LABELS,
-    VIDEO_SHOW_ATTRIBUTES,
-    VIDEO_DRAW_REGIONS,
-    VIDEO_DRAW_LINES
-)
+from brainframe.client.ui.resources import settings
+
 from .stream_graphics_scene import StreamGraphicsScene
 
 
@@ -37,6 +31,8 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     _draw_detections = None
     _use_polygons = None
     _show_detection_labels = None
+    _show_detection_confidence = None
+    _show_detection_tracks = None
     _show_attributes = None
 
     # Type hint that self.scene() is more than just a QGraphicsScene
@@ -54,7 +50,6 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         self.setScene(StreamGraphicsScene())
 
         self.stream_reader: SyncedStreamReader = None  # Set in change_stream
-        self.settings = QSettings()
         self.change_stream(stream_conf)
 
     def handle_frame(self, processed_frame: ProcessedFrame):
@@ -74,6 +69,8 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
                 frame_tstamp=processed_frame.tstamp,
                 tracks=processed_frame.tracks,
                 use_polygons=self.use_polygons,
+                show_confidence=self.show_detection_confidence,
+                show_tracks=self.show_detection_tracks,
                 show_detection_labels=self.show_detection_labels,
                 show_attributes=self.show_attributes)
 
@@ -158,8 +155,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     def draw_lines(self):
         if self._draw_lines is not None:
             return self._draw_lines
-
-        return self.settings.value(VIDEO_DRAW_LINES, type=bool)
+        return settings.draw_lines.val()
 
     @draw_lines.setter
     def draw_lines(self, draw_lines):
@@ -169,8 +165,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     def draw_regions(self):
         if self._draw_regions is not None:
             return self._draw_regions
-
-        return self.settings.value(VIDEO_DRAW_REGIONS, type=bool)
+        return settings.draw_regions.val()
 
     @draw_regions.setter
     def draw_regions(self, draw_regions):
@@ -180,8 +175,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     def draw_detections(self):
         if self._draw_detections is not None:
             return self._draw_detections
-
-        return self.settings.value(VIDEO_DRAW_DETECTIONS, type=bool)
+        return settings.draw_detections.val()
 
     @draw_detections.setter
     def draw_detections(self, draw_detections):
@@ -191,19 +185,37 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     def use_polygons(self):
         if self._use_polygons is not None:
             return self._use_polygons
-
-        return self.settings.value(VIDEO_USE_POLYGONS, type=bool)
+        return settings.use_polygons.val()
 
     @use_polygons.setter
     def use_polygons(self, use_polygons):
         self._use_polygons = use_polygons
 
     @property
+    def show_detection_confidence(self):
+        if self._show_detection_confidence is not None:
+            return self._show_detection_confidence
+        return settings.show_detection_confidence.val()
+
+    @show_detection_confidence.setter
+    def show_detection_confidence(self, show_detection_confidence):
+        self._show_detection_confidence = show_detection_confidence
+
+    @property
+    def show_detection_tracks(self):
+        if self._show_detection_tracks is not None:
+            return self._show_detection_tracks
+        return settings.show_detection_tracks.val()
+
+    @show_detection_tracks.setter
+    def show_detection_tracks(self, show_detection_tracks):
+        self._show_detection_tracks = show_detection_tracks
+
+    @property
     def show_detection_labels(self):
         if self._show_detection_labels is not None:
             return self._show_detection_labels
-
-        return self.settings.value(VIDEO_SHOW_DETECTION_LABELS, type=bool)
+        return settings.show_detection_labels.val()
 
     @show_detection_labels.setter
     def show_detection_labels(self, show_detection_labels):
@@ -213,8 +225,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     def show_attributes(self):
         if self._show_attributes is not None:
             return self._show_attributes
-
-        return self.settings.value(VIDEO_SHOW_ATTRIBUTES, type=bool)
+        return settings.show_attributes.val()
 
     @show_attributes.setter
     def show_attributes(self, show_attributes):

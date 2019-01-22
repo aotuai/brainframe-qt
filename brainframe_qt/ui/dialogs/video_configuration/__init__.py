@@ -1,9 +1,1 @@
-from .video_configuration import (
-    VideoConfiguration,
-    VIDEO_DRAW_DETECTIONS,
-    VIDEO_USE_POLYGONS,
-    VIDEO_SHOW_DETECTION_LABELS,
-    VIDEO_SHOW_ATTRIBUTES,
-    VIDEO_DRAW_REGIONS,
-    VIDEO_DRAW_LINES
-)
+from .video_configuration import VideoConfiguration

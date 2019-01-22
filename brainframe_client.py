@@ -75,8 +75,6 @@ if __name__ == "__main__":
     if not LicenseAgreement.get_agreement():
         sys.exit("Program Closing: License Not Accepted")
 
-    VideoConfiguration.initialize_settings()
-
     # Show splash screen while waiting for server connection
     with SplashScreen() as splash_screen:
         splash_screen.showMessage("Attempting to connect to server")

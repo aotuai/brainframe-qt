@@ -1,16 +1,8 @@
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import QSettings
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
-
-# Keys for different QSettings
-VIDEO_DRAW_REGIONS = "video_show_zones"
-VIDEO_DRAW_LINES = "video_show_lines"
-VIDEO_DRAW_DETECTIONS = "video_show_detections"
-VIDEO_USE_POLYGONS = "video_use_polygons"
-VIDEO_SHOW_DETECTION_LABELS = "video_show_detection_labels"
-VIDEO_SHOW_ATTRIBUTES = "video_show_attributes"
+from brainframe.client.ui.resources import settings
 
 
 class VideoConfiguration(QDialog):
@@ -19,6 +11,8 @@ class VideoConfiguration(QDialog):
     draw_regions = True
     draw_detections = True
     use_polygons = True
+    show_detection_tracks = True,
+    show_detection_confidence = True
     show_detection_labels = True
     show_attributes = True
 
@@ -27,39 +21,20 @@ class VideoConfiguration(QDialog):
 
         loadUi(qt_ui_paths.video_configuration_ui, self)
 
-        self._settings = QSettings()
-
-        # Detections
-        draw_detections = self._settings.value(
-            VIDEO_DRAW_DETECTIONS,
-            type=bool)
-        use_polygons = self._settings.value(
-            VIDEO_USE_POLYGONS,
-            type=bool)
-        show_detection_labels = self._settings.value(
-            VIDEO_SHOW_DETECTION_LABELS,
-            type=bool)
-        show_attributes = self._settings.value(
-            VIDEO_SHOW_ATTRIBUTES,
-            type=bool)
-
-        # Regions
-        draw_regions = self._settings.value(
-            VIDEO_DRAW_REGIONS,
-            type=bool)
-
-        # Lines
-        draw_lines = self._settings.value(
-            VIDEO_DRAW_LINES,
-            type=bool)
-
-        self.detections_checkbox.setChecked(draw_detections)
-        self.polygon_radio_button.setChecked(use_polygons)
-        self.bbox_radio_button.setChecked(not use_polygons)
-        self.detection_labels_checkbox.setChecked(show_detection_labels)
-        self.detection_attributes_checkbox.setChecked(show_attributes)
-        self.regions_checkbox.setChecked(draw_regions)
-        self.lines_checkbox.setChecked(draw_lines)
+        self.detections_checkbox.setChecked(
+            settings.draw_detections.val())
+        self.polygon_radio_button.setChecked(
+            settings.use_polygons.val())
+        self.bbox_radio_button.setChecked(
+            not settings.use_polygons.val())
+        self.detection_labels_checkbox.setChecked(
+            settings.show_detection_labels.val())
+        self.detection_attributes_checkbox.setChecked(
+            settings.show_attributes.val())
+        self.regions_checkbox.setChecked(
+            settings.draw_regions.val())
+        self.lines_checkbox.setChecked(
+            settings.draw_lines.val())
 
     @classmethod
     def show_dialog(cls):
@@ -71,6 +46,7 @@ class VideoConfiguration(QDialog):
         if not result:
             return
 
+        # Get new values from the UI
         # Detections
         draw_detections = dialog.detections_checkbox.isChecked()
         _detection_display_type = dialog.detection_radio_group.checkedButton()
@@ -80,33 +56,12 @@ class VideoConfiguration(QDialog):
 
         # Regions
         draw_regions = dialog.regions_checkbox.isChecked()
-
-        # Lines
         draw_lines = dialog.lines_checkbox.isChecked()
 
-        dialog._settings.setValue(VIDEO_DRAW_LINES, draw_lines)
-        dialog._settings.setValue(VIDEO_DRAW_REGIONS, draw_regions)
-        dialog._settings.setValue(VIDEO_DRAW_DETECTIONS, draw_detections)
-        dialog._settings.setValue(VIDEO_USE_POLYGONS, use_polygons)
-        dialog._settings.setValue(VIDEO_SHOW_DETECTION_LABELS,
-                                  show_detection_labels)
-        dialog._settings.setValue(VIDEO_SHOW_ATTRIBUTES, show_attributes)
-
-
-    @classmethod
-    def initialize_settings(cls):
-        settings = QSettings()
-        if settings.value(VIDEO_DRAW_DETECTIONS) is None:
-            cls.set_default_settings()
-
-    @classmethod
-    def set_default_settings(cls):
-        settings = QSettings()
-
-        settings.setValue(VIDEO_DRAW_LINES, cls.draw_lines)
-        settings.setValue(VIDEO_DRAW_REGIONS, cls.draw_regions)
-        settings.setValue(VIDEO_DRAW_DETECTIONS, cls.draw_detections)
-        settings.setValue(VIDEO_USE_POLYGONS, cls.use_polygons)
-        settings.setValue(VIDEO_SHOW_DETECTION_LABELS,
-                          cls.show_detection_labels)
-        settings.setValue(VIDEO_SHOW_ATTRIBUTES, cls.show_attributes)
+        # Change the settings
+        settings.draw_regions.set(draw_regions)
+        settings.draw_lines.set(draw_lines)
+        settings.draw_detections.set(draw_detections)
+        settings.use_polygons.set(use_polygons)
+        settings.show_detection_labels.set(show_detection_labels)
+        settings.show_attributes.set(show_attributes)

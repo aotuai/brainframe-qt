@@ -76,6 +76,8 @@ class StreamGraphicsScene(QGraphicsScene):
     def draw_detections(self, frame_tstamp: float,
                         tracks: List[DetectionTrack], *,
                         use_polygons=True,
+                        show_confidence=True,
+                        show_tracks=True,
                         show_detection_labels=True,
                         show_attributes=True):
 
@@ -86,6 +88,8 @@ class StreamGraphicsScene(QGraphicsScene):
                 track=track,
                 text_size=self._item_text_size,
                 use_polygons=use_polygons,
+                show_confidence=show_confidence,
+                show_tracks=show_tracks,
                 show_detection_labels=show_detection_labels,
                 show_attributes=show_attributes
             )  # Fading is currently disabled

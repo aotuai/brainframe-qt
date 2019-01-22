@@ -2,10 +2,10 @@ from distutils.util import strtobool
 import hashlib
 
 from PyQt5.QtWidgets import QBoxLayout, QDialog, QDialogButtonBox
-from PyQt5.QtCore import QSettings
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths, text_paths
+from brainframe.client.ui.resources import settings
 
 
 class LicenseAgreement(QDialog):
@@ -31,8 +31,8 @@ class LicenseAgreement(QDialog):
         license_md5 = hashlib.md5(dialog.text.encode('utf-8')).hexdigest()
 
         # Check if the license was already agreed to
-        license_accepted = QSettings().value("client_license_accepted")
-        license_accepted_md5 = QSettings().value("client_license_md5")
+        license_accepted = settings.client_license_accepted.val()
+        license_accepted_md5 = settings.client_license_md5.val()
 
         if license_accepted and strtobool(license_accepted):
             # Ensure that the license agreed to was the current version
@@ -42,8 +42,8 @@ class LicenseAgreement(QDialog):
         # License has not been accepted. Prompt user
         result = dialog.exec_()
 
-        QSettings().setValue("client_license_accepted", result)
-        QSettings().setValue("client_license_md5", license_md5)
+        settings.client_license_accepted.set(result)
+        settings.client_license_md5.set(license_md5)
 
         return result
 
