@@ -30,6 +30,7 @@ class DetectionPolygon(StreamPolygon):
                  *,
                  use_polygons=True,
                  show_detection_labels=True,
+                 show_tracks=True,
                  show_attributes=True,
                  parent=None):
         """
@@ -59,19 +60,19 @@ class DetectionPolygon(StreamPolygon):
             else:
                 text += "\n" + "Name: " + detection.with_identity.unique_name
 
-        if len(detection.attributes):
+        if len(detection.attributes) and show_attributes:
             attributes_str_list = [a.category + ": " + a.value
                                    for a in detection.attributes]
             attributes_str_list.sort()
             text += "\n" + "\n".join(attributes_str_list)
 
-        self.label_box = StreamLabelBox(text,
-                                        top_left=top_left,
-                                        text_size=text_size,
-                                        parent=self)
+        if show_detection_labels:
+            self.label_box = StreamLabelBox(text,
+                                            top_left=top_left,
+                                            text_size=text_size,
+                                            parent=self)
 
-        self.line_item = None
-        if len(track) > 1:
+        if len(track) > 1 and show_tracks:
             # Draw a track for the detections history
             line_coords = []
             for prev_det, detection_tstamp in track:
