@@ -1,6 +1,6 @@
 from typing import Callable
 
-from PyQt5.QtCore import Qt, QCoreApplication, QEvent
+from PyQt5.QtCore import Qt, QCoreApplication, QEvent, QSettings
 from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.shared.stream_listener import StreamListener
@@ -8,6 +8,14 @@ from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.streaming import SyncedStreamReader, ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
+from brainframe.client.ui.dialogs.video_configuration import (
+    VIDEO_SHOW_DETECTIONS,
+    VIDEO_USE_POLYGONS,
+    VIDEO_SHOW_DETECTION_LABELS,
+    VIDEO_SHOW_ATTRIBUTES,
+    VIDEO_SHOW_ZONES,
+    VIDEO_SHOW_LINES
+)
 from .stream_graphics_scene import StreamGraphicsScene
 
 
@@ -46,7 +54,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         self.setScene(StreamGraphicsScene())
 
         self.stream_reader: SyncedStreamReader = None  # Set in change_stream
-
+        self.settings = QSettings()
         self.change_stream(stream_conf)
 
     def handle_frame(self, processed_frame: ProcessedFrame):
@@ -55,7 +63,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
 
         self.scene().set_frame(frame=processed_frame.frame)
 
-        if self.draw_lines:
+        if self.settings.value(VIDEO_SHOW_LINES):
             self.scene().draw_lines(processed_frame.zone_statuses)
 
         if self.draw_regions:
