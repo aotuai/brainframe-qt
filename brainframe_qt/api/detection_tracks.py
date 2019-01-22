@@ -17,6 +17,9 @@ class DetectionTrack:
         self._history: Deque[DET_TSTAMP_TUPLE]
         self._history = history if history else deque(maxlen=self._max_size)
 
+    def __len__(self):
+        return len(self._history)
+
     def __iter__(self) -> Iterator[DET_TSTAMP_TUPLE]:
         """
         The 0th index in track should be the latest

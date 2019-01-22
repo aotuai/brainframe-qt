@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Dict
 import uuid
 
 from .base_codecs import Codec
@@ -12,13 +12,20 @@ class Detection(Codec):
 
     def __init__(self, *, class_name, coords, children, attributes,
                  with_identity, extra_data, track_id):
-        self.class_name = class_name
-        self.coords = coords
-        self.children = children
-        self.attributes = attributes
+        self.class_name: str = class_name
+        self.coords: List[List[int]] = coords
+        self.children: List[Detection] = children
+        self.attributes: Dict[str: str] = attributes
         self.with_identity: Optional[Identity] = with_identity
         self.extra_data = extra_data
         self.track_id: Optional[uuid.UUID] = track_id
+
+    @property
+    def center(self):
+        """Return the center of the detections coordinates"""
+        x = [c[0] for c in self.coords]
+        y = [c[1] for c in self.coords]
+        return sum(x) / len(x), sum(y) / len(y)
 
     def to_dict(self):
         d = dict(self.__dict__)

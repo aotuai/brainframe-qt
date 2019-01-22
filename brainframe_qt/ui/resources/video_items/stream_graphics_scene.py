@@ -1,8 +1,16 @@
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QGraphicsScene
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
+from typing import List
 
-from .stream_detections import DetectionPolygon, ZoneStatusPolygon
+from PyQt5.QtGui import QImage, QPixmap, QColor
+from PyQt5.QtWidgets import QGraphicsScene
+
+from brainframe.shared.constants import DEFAULT_ZONE_NAME
+from brainframe.client.api.streaming import DetectionTrack
+
+from .stream_detection import (
+    DetectionPolygon,
+    StreamPolygon
+)
+from brainframe.client.ui.resources.video_items import ZoneStatusPolygon
 
 
 class StreamGraphicsScene(QGraphicsScene):
@@ -65,34 +73,20 @@ class StreamGraphicsScene(QGraphicsScene):
                 if len(zone_status.zone.coords) > 2:
                     self._new_zone_status_polygon(zone_status)
 
-    def draw_detections(self, zone_statuses, *, use_bounding_boxes=True,
-                        show_labels=True, show_attributes=True):
+    def draw_detections(self, frame_tstamp: float, tracks: List[DetectionTrack],
+                        *, use_bounding_boxes=True,
+                        show_labels=True,
+                        show_attributes=True):
 
-        screen_zone_status = None  # The zone with all detections in it
-
-        # Get attributes of interest
-        for zone_status in zone_statuses:
-            if zone_status.zone.name == DEFAULT_ZONE_NAME:
-                screen_zone_status = zone_status
-
-        # If we don't have a screen zone status
-        if not screen_zone_status:
-            # But we do have a other zone statuses
-            if zone_statuses:
-                # We have a problem
-                raise ValueError(
-                    "A packet of ZoneStatuses must always include"
-                    " one with the name 'Screen'")
-            # Otherwise we can assume the stream is still initializing
-            return
-
-        for detection in screen_zone_status.detections:
+        for track in tracks:
             # Draw the detection on the screen
-            polygon = DetectionPolygon(
-                detection,
+            det_polygon = DetectionPolygon(
+                detection=track.get_interpolated_detection(frame_tstamp),
+                track=track,
                 text_size=self._item_text_size,
                 seconds_old=0)  # Fading is currently disabled
-            self.addItem(polygon)
+            self.addItem(det_polygon)
+
 
     def remove_all_items(self):
         for item in self.items():

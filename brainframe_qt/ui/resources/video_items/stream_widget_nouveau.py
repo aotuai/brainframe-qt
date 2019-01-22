@@ -63,7 +63,8 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
 
         if self.draw_detections:
             self.scene().draw_detections(
-                frame.zone_statuses,
+                frame_tstamp=frame.tstamp,
+                tracks=frame.tracks,
                 use_bounding_boxes=self.use_bounding_boxes,
                 show_labels=self.show_labels,
                 show_attributes=self.show_attributes
