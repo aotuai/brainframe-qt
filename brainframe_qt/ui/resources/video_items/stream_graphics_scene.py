@@ -84,7 +84,6 @@ class StreamGraphicsScene(QGraphicsScene):
                 detection=track.get_interpolated_detection(frame_tstamp),
                 track=track,
                 text_size=self._item_text_size,
-                seconds_old=0,
                 use_polygons=use_polygons,
                 show_detection_labels=show_detection_labels,
                 show_attributes=show_attributes

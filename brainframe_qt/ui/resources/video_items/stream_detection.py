@@ -27,7 +27,10 @@ class DetectionPolygon(StreamPolygon):
                  detection: Detection,
                  track: DetectionTrack,
                  text_size,
-                 seconds_old=0,
+                 *,
+                 use_polygons=True,
+                 show_detection_labels=True,
+                 show_attributes=True,
                  parent=None):
         """
         :param detection: The Detection object to render
