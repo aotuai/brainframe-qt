@@ -75,8 +75,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
                 tracks=processed_frame.tracks,
                 use_polygons=self.use_polygons,
                 show_detection_labels=self.show_detection_labels,
-                show_attributes=self.show_attributes
-            )
+                show_attributes=self.show_attributes)
 
     def handle_stream_initializing(self):
         self.scene().remove_all_items()
