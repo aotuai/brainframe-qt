@@ -12,7 +12,7 @@ from brainframe.client.ui.dialogs import (
     StreamConfigurationDialog,
     IdentityConfiguration,
     PluginConfigDialog,
-    VideoConfiguration
+    RenderConfiguration
 )
 
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def show_video_configuration_dialog(self):
-        VideoConfiguration.show_dialog()
+        RenderConfiguration.show_dialog()
 
     @pyqtSlot()
     def show_identities_dialog(self):

@@ -1,1 +1,1 @@
-from .video_configuration import VideoConfiguration
+from .video_configuration import RenderConfiguration
