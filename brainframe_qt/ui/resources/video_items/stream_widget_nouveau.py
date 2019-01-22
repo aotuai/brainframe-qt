@@ -122,23 +122,15 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
             self.handle_frame(event.processed_frame)
             return True
         elif event.type() == self.StreamInitializingEvent.event_type:
-            if "VideoLarge" in str(type(self)):
-                print("Init Event")
             self.handle_stream_initializing()
             return True
         elif event.type() == self.StreamHaltedEvent.event_type:
-            if "VideoLarge" in str(type(self)):
-                print("Halt Event")
             self.handle_stream_halted()
             return True
         elif event.type() == self.StreamClosedEvent.event_type:
-            if "VideoLarge" in str(type(self)):
-                print("Close Event")
             self.handle_stream_closed()
             return True
         elif event.type() == self.StreamErrorEvent:
-            if "VideoLarge" in str(type(self)):
-                print("Error Event")
             self.handle_stream_error()
             return True
         else:

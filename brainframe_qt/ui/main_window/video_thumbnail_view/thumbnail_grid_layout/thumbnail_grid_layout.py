@@ -47,12 +47,12 @@ class ThumbnailGridLayout(QWidget):
         video = VideoSmall(self, stream_conf)
         self.add_video(video)
 
+        self._connect_widget_signals(video)
+
     def add_video(self, video):
 
         self.stream_widgets[video.stream_reader.stream_id] = video
         self._add_widget_to_layout(video)
-
-        self._connect_widget_signals(video)
 
         self._set_layout_equal_stretch()
 

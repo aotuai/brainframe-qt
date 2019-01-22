@@ -27,7 +27,7 @@ class VideoSmall(StreamWidget):
 
     def __init__(self, parent=None, stream_conf=None):
 
-        self._ongoing_alerts: bool = False
+        self.alerts_ongoing: bool = False
 
         super().__init__(stream_conf, parent=parent)
 
@@ -40,21 +40,16 @@ class VideoSmall(StreamWidget):
 
     def manage_alert_indication(self, zone_statuses):
 
-        # Get all alerts in each zone_status as a single list
-        # [Unused]. Might be helpful in future when we need to know more info
-        # alerts = [alert for zone_status in zone_statuses
-        #           for alert in zone_status.alerts]
-
         # Any active alerts?
         alerts = any(zone_status.alerts for zone_status in zone_statuses)
 
         # self.ongoing_alerts is used during every paint in drawForeground
-        if alerts and not self.ongoing_alerts:
-            self.ongoing_alerts = True
+        if alerts and not self.alerts_ongoing:
+            self.alerts_ongoing = True
             # noinspection PyUnresolvedReferences
             self.ongoing_alerts_signal.emit(True)
-        elif not alerts and self.ongoing_alerts:
-            self.ongoing_alerts = False
+        elif not alerts and self.alerts_ongoing:
+            self.alerts_ongoing = False
             # noinspection PyUnresolvedReferences
             self.ongoing_alerts_signal.emit(False)
 
@@ -89,7 +84,7 @@ class VideoSmall(StreamWidget):
                          painter.brush())
 
         image_width_with_margins = 0
-        if self.ongoing_alerts:
+        if self.alerts_ongoing:
             # Draw icon
             image_percent = 0.8
 
@@ -140,11 +135,3 @@ class VideoSmall(StreamWidget):
     def remove_selection_border(self):
         """Remove border around stream"""
         pass
-
-    @property
-    def ongoing_alerts(self):
-        return self._ongoing_alerts
-
-    @ongoing_alerts.setter
-    def ongoing_alerts(self, ongoing_alerts):
-        self._ongoing_alerts = ongoing_alerts
