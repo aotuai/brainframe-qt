@@ -1,260 +1,115 @@
-# noinspection PyUnresolvedReferences
-from PyQt5.QtCore import pyqtProperty
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
+from typing import Callable
 
+from PyQt5.QtCore import Qt, QCoreApplication, QEvent, QSettings
+from PyQt5.QtWidgets import QGraphicsView
+
+from brainframe.shared.stream_listener import StreamListener
 from brainframe.client.api import api
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
-from brainframe.client.api.streaming import SyncedStreamReader
-from brainframe.shared.stream_reader import StreamStatus
+from brainframe.client.api.codecs import StreamConfiguration
+from brainframe.client.api.streaming import SyncedStreamReader, ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
-from brainframe.client.ui.resources.video_items import (
-    DetectionPolygon,
-    ZoneStatusPolygon
+from brainframe.client.ui.dialogs.video_configuration import (
+    VIDEO_DRAW_DETECTIONS,
+    VIDEO_USE_POLYGONS,
+    VIDEO_SHOW_DETECTION_LABELS,
+    VIDEO_SHOW_ATTRIBUTES,
+    VIDEO_DRAW_REGIONS,
+    VIDEO_DRAW_LINES
 )
+from .stream_graphics_scene import StreamGraphicsScene
 
 
-class StreamWidget(QGraphicsView):
+class CommonMetaclass(type(QGraphicsView), type(StreamListener)):
+    """QObjects have their own metaclass which conflicts with the
+    StreamListener's metaclass. This forces them to get along.
+
+    https://stackoverflow.com/questions/28720217/multiple-inheritance-metaclass-conflict
+    """
+
+
+class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
     """Base widget that uses Stream object to get frames.
 
-    Makes use of a QTimer to get frames"""
+    Makes use of a QTimer to get frames
+    """
+    _draw_lines = None
+    _draw_regions = None
+    _draw_detections = None
+    _use_polygons = None
+    _show_detection_labels = None
+    _show_attributes = None
 
-    def __init__(self, stream_conf=None, frame_rate=30, parent=None):
-        """Init StreamWidget object
+    # Type hint that self.scene() is more than just a QGraphicsScene
+    scene: Callable[[], StreamGraphicsScene]
 
-        :param frame_rate: Frame rate of video in fps
-        """
-        super().__init__(parent)
+    def __init__(self, stream_conf, parent=None):
+        # Order matters here, unfortunately
+        StreamListener.__init__(self)
+        QGraphicsView.__init__(self, parent)
 
         # Remove ugly white background and border from QGraphicsView
         self.setStyleSheet("background-color: transparent; border: 0px")
 
-        # Stream configuration for current widget
-        self.stream_conf = None
-
-        # Render settings
-        self.render_detections = True
-        self.render_zones = True
-
         # Scene to draw items to
-        self.setScene(QGraphicsScene())
+        self.setScene(StreamGraphicsScene())
 
-        self.video_stream: SyncedStreamReader = None  # Set in change_stream
-        self.stream_status = None
-        """Tracks the current known state of the stream and prevents redrawing
-        if the state has not changed"""
-        self.current_frame = None
-        self.timestamp = -1
-
-        self._frame_rate = frame_rate
-
-        self.frame_size = None
-
-        self.frame_update_timer = QTimer()
-        # noinspection PyUnresolvedReferences
-        self.frame_update_timer.timeout.connect(self.update_items)
-
-        # Initialize stream configuration and get started
+        self.stream_reader: SyncedStreamReader = None  # Set in change_stream
+        self.settings = QSettings()
         self.change_stream(stream_conf)
 
-        # Get the Status poller
-        self.status_poller = api.get_status_poller()
+    def handle_frame(self, processed_frame: ProcessedFrame):
 
-        # For debugging. Easy to see true widget size
-        # self.setStyleSheet("background-color:green;")
+        self.scene().remove_all_items()
 
-    def update_items(self):
-        frame = self.video_stream.latest_processed_frame_rgb
+        self.scene().set_frame(frame=processed_frame.frame)
 
-        # Only update detections & zones when needed
-        if self.stream_is_up and frame is not None:
-            if frame.tstamp != self.timestamp:
-                self.update_latest_zones(frame.zone_statuses)
-                self.update_latest_detections(frame.zone_statuses)
-        else:
-            self.remove_items_by_type(DetectionPolygon)
-            self.remove_items_by_type(ZoneStatusPolygon)
+        if self.settings.value(VIDEO_DRAW_LINES):
+            self.scene().draw_lines(processed_frame.zone_statuses)
 
-        self.update_frame()
+        if self.draw_regions:
+            self.scene().draw_regions(processed_frame.zone_statuses)
 
-    def update_frame(self):
-        """Grab the newest frame from the Stream object"""
+        if self.draw_detections:
+            self.scene().draw_detections(
+                frame_tstamp=processed_frame.tstamp,
+                tracks=processed_frame.tracks,
+                use_polygons=self.use_polygons,
+                show_detection_labels=self.show_detection_labels,
+                show_attributes=self.show_attributes
+            )
 
-        # Check if the object actually has a stream
-        if self.video_stream is None:
-            pixmap = self._static_pixmap(image_paths.connection_lost)
-            self._set_frame(pixmap)
-            self.resizeEvent()
-            return
+    def handle_stream_initializing(self):
+        self.scene().remove_all_items()
+        self.scene().set_frame(path=image_paths.connecting_to_stream)
+        ...
 
-        pixmap = None
+    def handle_stream_halted(self):
+        self.scene().remove_all_items()
+        self.scene().set_frame(path=image_paths.connection_lost)
 
-        # Video is streaming frames
-        if self.video_stream.status is StreamStatus.STREAMING:
-            frame = self.video_stream.latest_processed_frame_rgb
-            # Change image only we have a new one
-            if frame and frame.tstamp > self.timestamp:
-                self.timestamp = frame.tstamp
-                pixmap = self._get_pixmap_from_numpy_frame(frame.frame)
-                self._set_frame(pixmap)
+    def handle_stream_closed(self):
+        self.handle_stream_halted()
 
-        # Video is not streaming
-        elif self.stream_status is not self.video_stream.status:
-            if self.video_stream.status is StreamStatus.HALTED:
-                pixmap = self._static_pixmap(image_paths.connection_lost)
-            elif self.video_stream.status is StreamStatus.INITIALIZING:
-                pixmap = self._static_pixmap(image_paths.connecting_to_stream)
-            else:
-                raise ValueError("Unknown stream status")
+    def handle_stream_error(self):
+        self.scene().remove_all_items()
+        self.scene().set_frame(path=image_paths.error)
 
-            self._set_frame(pixmap)
-
-        # Update viewport if the frame size has changed
-        if pixmap:
-            if self.frame_size != pixmap.size():
-                self.resizeEvent()
-                self.updateGeometry()
-            self.frame_size = pixmap.size()
-        else:
-            self.frame_size = None
-
-        # Keep track of current stream_status to monitor changes
-        self.stream_status = self.video_stream.status
-
-    def update_latest_zones(self, zone_statuses):
-        """Update the zones drawn on the frame"""
-        self.remove_items_by_type(ZoneStatusPolygon)
-        if not self.render_zones:
-            return
-
-        # Draw all of the zones (except the default zone)
-        for zone_status in zone_statuses:
-            if zone_status.zone.name != DEFAULT_ZONE_NAME:
-                # Border thickness as % of screen size
-                border = self.scene().width() / 200
-                self.scene().addItem(ZoneStatusPolygon(
-                    zone_status,
-                    text_size=int(self.scene().height() / 50),
-                    border_thickness=border))
-
-    def update_latest_detections(self, zone_statuses):
-        """Update the detections drawn on the frame"""
-        self.remove_items_by_type(DetectionPolygon)
-        if not self.render_detections:
-            return
-
-        screen_zone_status = None  # The status with all Detections in it
-
-        # Get attributes of interest
-        for zone_status in zone_statuses:
-            if zone_status.zone.name == DEFAULT_ZONE_NAME:
-                screen_zone_status = zone_status
-
-        # If we don't have a screen zone status
-        if not screen_zone_status:
-            # But we do have a other zone statuses
-            if zone_statuses:
-                # We have a problem
-                raise ValueError("A packet of ZoneStatuses must always include"
-                                 " one with the name 'Screen'")
-            # Otherwise we can assume the stream is still initializing
-            return
-
-        for detection in screen_zone_status.detections:
-            # Draw the detection on the screen
-            polygon = DetectionPolygon(
-                detection,
-                text_size=int(self.scene().height() / 50),
-                seconds_old=0)  # Fading is currently disabled
-            self.scene().addItem(polygon)
-
-    def change_stream(self, stream_conf):
-        """Change the stream source of the video
-
-        If stream_conf is None, the StreamWidget will stop grabbing frames"""
-        self.stream_conf = stream_conf
-
-        for item in self.scene().items():
-            self.scene().removeItem(item)
-            self.current_frame = None
-
+    def change_stream(self, stream_conf: StreamConfiguration):
         if not stream_conf:
-            # User should never see this image
-            self._set_frame(QPixmap(str(image_paths.error)))
-            self.frame_update_timer.stop()
-        else:
-            self.video_stream = api.get_stream_reader(stream_conf)
+            # User should never see this
+            self.handle_stream_error()
+            return
 
-            # Reset timestamp so that a frame is always drawn. The old stream
-            # may have had a newer frame than the new one.
-            self.timestamp = -1
+        if self.stream_reader:
+            self.stream_reader.remove_listener(self)
+            QCoreApplication.removePostedEvents(self)
+        self.stream_reader = api.get_stream_reader(stream_conf)
+        self.stream_reader.add_listener(self)
 
-            # Run immediately then start timer
-            self.update_items()
-            self.frame_update_timer.start(1000 // self._frame_rate)
-
-    def set_render_settings(self, *, detections=None, zones=None):
-        if detections is not None:
-            self.render_detections = detections
-        if zones is not None:
-            self.render_zones = zones
-
-    def _set_frame(self, pixmap: QPixmap):
-        """Set the current frame to the given pixmap"""
-        # Create new QGraphicsPixmapItem if there isn't one
-        if not self.current_frame:
-            self.current_frame = self.scene().addPixmap(pixmap)
-
-            # Fixes BF-319: Clicking a stream, closing it, and reopening it
-            # again resulted in a stream that wasn't displayed properly. This
-            # was because the resizeEvent() would be triggered before the frame
-            # was set from None->'actual frame' preventing the setSceneRect()
-            # from being called. The was not an issue if another stream was
-            # clicked because it would then get _another_ resize event after the
-            # frame was loaded because the frame size would be different.
-            self.resizeEvent()
-
-        # Otherwise modify the existing one
-        else:
-            self.current_frame.setPixmap(pixmap)
-
-    def remove_items_by_type(self, item_type):
-        # Find current zones polygons
-        items = self.scene().items()
-        polygons = filter(lambda item: type(item) == item_type, items)
-
-        # Delete current zones polygons
-        for polygon in polygons:
-            self.scene().removeItem(polygon)
-
-    @property
-    def stream_is_up(self):
-        """Returns True if there is an active stream that is giving frames
-        at the moment."""
-        return self.video_stream is not None \
-               and self.video_stream.status is StreamStatus.STREAMING
-
-    @pyqtProperty(int)
-    def frame_rate(self):
-        return self._frame_rate
-
-    @frame_rate.setter
-    def frame_rate(self, frame_rate):
-        self.frame_update_timer.setInterval(1000 // frame_rate)
-        self._frame_rate = frame_rate
-
-    @staticmethod
-    def _get_pixmap_from_numpy_frame(frame):
-        height, width, channel = frame.shape
-        bytes_per_line = width * 3
-        image = QImage(frame.data, width, height, bytes_per_line,
-                       QImage.Format_RGB888)
-        return QPixmap.fromImage(image)
-
-    @staticmethod
-    def _static_pixmap(path):
-        return QPixmap(str(path))
+        # Make sure video is unsubscribed before it is GCed
+        self.destroyed.disconnect()
+        self.destroyed.connect(lambda:
+                               self.stream_reader.remove_listener(self))
 
     def hasHeightForWidth(self):
         """Enable the use of heightForWidth"""
@@ -269,12 +124,99 @@ class StreamWidget(QGraphicsView):
 
         return width * self.scene().height() / self.scene().width()
 
+    # Overrides qt's
+    def event(self, event: QEvent):
+        if event.type() == self.FrameEvent.event_type:
+            self.handle_frame(event.processed_frame)
+            return True
+        elif event.type() == self.StreamInitializingEvent.event_type:
+            self.handle_stream_initializing()
+            return True
+        elif event.type() == self.StreamHaltedEvent.event_type:
+            self.handle_stream_halted()
+            return True
+        elif event.type() == self.StreamClosedEvent.event_type:
+            self.handle_stream_closed()
+            return True
+        elif event.type() == self.StreamErrorEvent:
+            self.handle_stream_error()
+            return True
+        else:
+            return super().event(event)
+
     def resizeEvent(self, event=None):
         """Take up entire width using aspect ratio of scene"""
 
-        if self.current_frame is not None:
+        current_frame = self.scene().current_frame
+
+        if current_frame is not None:
             # EXTREMELY IMPORTANT LINE!
             # The sceneRect grows but never shrinks automatically
-            self.scene().setSceneRect(self.current_frame.boundingRect())
-            self.fitInView(self.current_frame.boundingRect(),
-                           Qt.KeepAspectRatio)
+            self.scene().setSceneRect(current_frame.boundingRect())
+            self.fitInView(current_frame.boundingRect(), Qt.KeepAspectRatio)
+
+    @property
+    def draw_lines(self):
+        if self._draw_lines is not None:
+            return self._draw_lines
+
+        return self.settings.value(VIDEO_DRAW_LINES)
+
+    @draw_lines.setter
+    def draw_lines(self, draw_lines):
+        self._draw_lines = draw_lines
+
+    @property
+    def draw_regions(self):
+        if self._draw_regions is not None:
+            return self._draw_regions
+
+        return self.settings.value(VIDEO_DRAW_REGIONS)
+
+    @draw_regions.setter
+    def draw_regions(self, draw_regions):
+        self._draw_regions = draw_regions
+
+    @property
+    def draw_detections(self):
+        if self._draw_detections is not None:
+            return self._draw_detections
+
+        return self.settings.value(VIDEO_DRAW_DETECTIONS)
+
+    @draw_detections.setter
+    def draw_detections(self, draw_detections):
+        self._draw_detections = draw_detections
+
+    @property
+    def use_polygons(self):
+        if self._use_polygons is not None:
+            return self._use_polygons
+
+        return self.settings.value(VIDEO_USE_POLYGONS)
+
+    @use_polygons.setter
+    def use_polygons(self, use_polygons):
+        self._use_polygons = use_polygons
+
+    @property
+    def show_detection_labels(self):
+        if self._show_detection_labels is not None:
+            return self._show_detection_labels
+
+        return self.settings.value(VIDEO_SHOW_DETECTION_LABELS)
+
+    @show_detection_labels.setter
+    def show_detection_labels(self, show_detection_labels):
+        self._show_detection_labels = show_detection_labels
+
+    @property
+    def show_attributes(self):
+        if self._show_attributes is not None:
+            return self._show_attributes
+
+        return self.settings.value(VIDEO_SHOW_ATTRIBUTES)
+
+    @show_attributes.setter
+    def show_attributes(self, show_attributes):
+        self._show_attributes = show_attributes

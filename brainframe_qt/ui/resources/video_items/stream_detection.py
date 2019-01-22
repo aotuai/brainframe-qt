@@ -41,7 +41,9 @@ class DetectionPolygon(StreamPolygon):
         # Choose a color for this class name
         class_color = generate_unique_qcolor(detection.class_name)
 
-        super().__init__(detection.coords,
+        # Get the polygon to draw
+        coords = detection.coords if use_polygons else detection.bbox
+        super().__init__(coords,
                          border_color=class_color,
                          border_thickness=1,
                          parent=parent)

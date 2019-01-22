@@ -27,6 +27,15 @@ class Detection(Codec):
         y = [c[1] for c in self.coords]
         return sum(x) / len(x), sum(y) / len(y)
 
+    @property
+    def bbox(self):
+        sorted_x = sorted([c[0] for c in self.coords])
+        sorted_y = sorted([c[1] for c in self.coords])
+        return [[sorted_x[0], sorted_y[0]],
+                [sorted_x[-1], sorted_y[0]],
+                [sorted_x[-1], sorted_y[-1]],
+                [sorted_x[0], sorted_y[-1]]]
+
     def to_dict(self):
         d = dict(self.__dict__)
         if self.with_identity:

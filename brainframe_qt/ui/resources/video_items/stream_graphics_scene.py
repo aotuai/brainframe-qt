@@ -74,8 +74,9 @@ class StreamGraphicsScene(QGraphicsScene):
                     self._new_zone_status_polygon(zone_status)
 
     def draw_detections(self, frame_tstamp: float,
-                        tracks: List[DetectionTrack],
-                        *, use_polygons=True, show_detection_labels=True,
+                        tracks: List[DetectionTrack], *,
+                        use_polygons=True,
+                        show_detection_labels=True,
                         show_attributes=True):
 
         for track in tracks:

@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QSizePolicy
 
-from brainframe.client.ui.resources.video_items.stream_widget_nouveau import (
+from brainframe.client.ui.resources.video_items.stream_widget import (
     StreamWidget
 )
 
