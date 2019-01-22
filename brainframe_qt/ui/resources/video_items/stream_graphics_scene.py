@@ -73,9 +73,9 @@ class StreamGraphicsScene(QGraphicsScene):
                 if len(zone_status.zone.coords) > 2:
                     self._new_zone_status_polygon(zone_status)
 
-    def draw_detections(self, frame_tstamp: float, tracks: List[DetectionTrack],
-                        *, use_bounding_boxes=True,
-                        show_labels=True,
+    def draw_detections(self, frame_tstamp: float,
+                        tracks: List[DetectionTrack],
+                        *, use_polygons=True, show_detection_labels=True,
                         show_attributes=True):
 
         for track in tracks:
@@ -84,7 +84,11 @@ class StreamGraphicsScene(QGraphicsScene):
                 detection=track.get_interpolated_detection(frame_tstamp),
                 track=track,
                 text_size=self._item_text_size,
-                seconds_old=0)  # Fading is currently disabled
+                seconds_old=0,
+                use_polygons=use_polygons,
+                show_detection_labels=show_detection_labels,
+                show_attributes=show_attributes
+            )  # Fading is currently disabled
             self.addItem(det_polygon)
 
     def remove_items(self, items, condition=any):
