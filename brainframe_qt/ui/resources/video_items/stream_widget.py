@@ -63,7 +63,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
 
         self.scene().set_frame(frame=processed_frame.frame)
 
-        if self.settings.value(VIDEO_DRAW_LINES):
+        if self.draw_lines:
             self.scene().draw_lines(processed_frame.zone_statuses)
 
         if self.draw_regions:
@@ -159,7 +159,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         if self._draw_lines is not None:
             return self._draw_lines
 
-        return self.settings.value(VIDEO_DRAW_LINES)
+        return self.settings.value(VIDEO_DRAW_LINES, type=bool)
 
     @draw_lines.setter
     def draw_lines(self, draw_lines):
@@ -170,7 +170,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         if self._draw_regions is not None:
             return self._draw_regions
 
-        return self.settings.value(VIDEO_DRAW_REGIONS)
+        return self.settings.value(VIDEO_DRAW_REGIONS, type=bool)
 
     @draw_regions.setter
     def draw_regions(self, draw_regions):
@@ -181,7 +181,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         if self._draw_detections is not None:
             return self._draw_detections
 
-        return self.settings.value(VIDEO_DRAW_DETECTIONS)
+        return self.settings.value(VIDEO_DRAW_DETECTIONS, type=bool)
 
     @draw_detections.setter
     def draw_detections(self, draw_detections):
@@ -192,7 +192,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         if self._use_polygons is not None:
             return self._use_polygons
 
-        return self.settings.value(VIDEO_USE_POLYGONS)
+        return self.settings.value(VIDEO_USE_POLYGONS, type=bool)
 
     @use_polygons.setter
     def use_polygons(self, use_polygons):
@@ -203,7 +203,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         if self._show_detection_labels is not None:
             return self._show_detection_labels
 
-        return self.settings.value(VIDEO_SHOW_DETECTION_LABELS)
+        return self.settings.value(VIDEO_SHOW_DETECTION_LABELS, type=bool)
 
     @show_detection_labels.setter
     def show_detection_labels(self, show_detection_labels):
@@ -214,7 +214,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         if self._show_attributes is not None:
             return self._show_attributes
 
-        return self.settings.value(VIDEO_SHOW_ATTRIBUTES)
+        return self.settings.value(VIDEO_SHOW_ATTRIBUTES, type=bool)
 
     @show_attributes.setter
     def show_attributes(self, show_attributes):
