@@ -24,6 +24,7 @@ class VideoSmall(StreamWidget):
     - ThumbnailGridLayout -- Dynamic
       [parent].ongoing_alerts_slot
     """
+    _draw_detections = False
 
     def __init__(self, parent=None, stream_conf=None):
 

@@ -9,12 +9,12 @@ from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.streaming import SyncedStreamReader, ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.dialogs.video_configuration import (
-    VIDEO_SHOW_DETECTIONS,
+    VIDEO_DRAW_DETECTIONS,
     VIDEO_USE_POLYGONS,
     VIDEO_SHOW_DETECTION_LABELS,
     VIDEO_SHOW_ATTRIBUTES,
-    VIDEO_SHOW_ZONES,
-    VIDEO_SHOW_LINES
+    VIDEO_DRAW_REGIONS,
+    VIDEO_DRAW_LINES
 )
 from .stream_graphics_scene import StreamGraphicsScene
 
@@ -32,12 +32,12 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
 
     Makes use of a QTimer to get frames
     """
-    draw_lines = True
-    draw_regions = True
-    draw_detections = True
-    use_bounding_boxes = True
-    show_labels = True
-    show_attributes = True
+    _draw_lines = None
+    _draw_regions = None
+    _draw_detections = None
+    _use_polygons = None
+    _show_detection_labels = None
+    _show_attributes = None
 
     # Type hint that self.scene() is more than just a QGraphicsScene
     scene: Callable[[], StreamGraphicsScene]
@@ -63,7 +63,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
 
         self.scene().set_frame(frame=processed_frame.frame)
 
-        if self.settings.value(VIDEO_SHOW_LINES):
+        if self.settings.value(VIDEO_DRAW_LINES):
             self.scene().draw_lines(processed_frame.zone_statuses)
 
         if self.draw_regions:
@@ -73,8 +73,8 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
             self.scene().draw_detections(
                 frame_tstamp=processed_frame.tstamp,
                 tracks=processed_frame.tracks,
-                use_bounding_boxes=self.use_bounding_boxes,
-                show_labels=self.show_labels,
+                use_polygons=self.use_polygons,
+                show_detection_labels=self.show_detection_labels,
                 show_attributes=self.show_attributes
             )
 
@@ -154,3 +154,69 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
             # The sceneRect grows but never shrinks automatically
             self.scene().setSceneRect(current_frame.boundingRect())
             self.fitInView(current_frame.boundingRect(), Qt.KeepAspectRatio)
+
+    @property
+    def draw_lines(self):
+        if self._draw_lines is not None:
+            return self._draw_lines
+
+        return self.settings.value(VIDEO_DRAW_LINES)
+
+    @draw_lines.setter
+    def draw_lines(self, draw_lines):
+        self._draw_lines = draw_lines
+
+    @property
+    def draw_regions(self):
+        if self._draw_regions is not None:
+            return self._draw_regions
+
+        return self.settings.value(VIDEO_DRAW_REGIONS)
+
+    @draw_regions.setter
+    def draw_regions(self, draw_regions):
+        self._draw_regions = draw_regions
+
+    @property
+    def draw_detections(self):
+        if self._draw_detections is not None:
+            return self._draw_detections
+
+        return self.settings.value(VIDEO_DRAW_DETECTIONS)
+
+    @draw_detections.setter
+    def draw_detections(self, draw_detections):
+        self._draw_detections = draw_detections
+
+    @property
+    def use_polygons(self):
+        if self._use_polygons is not None:
+            return self._use_polygons
+
+        return self.settings.value(VIDEO_USE_POLYGONS)
+
+    @use_polygons.setter
+    def use_polygons(self, use_polygons):
+        self._use_polygons = use_polygons
+
+    @property
+    def show_detection_labels(self):
+        if self._show_detection_labels is not None:
+            return self._show_detection_labels
+
+        return self.settings.value(VIDEO_SHOW_DETECTION_LABELS)
+
+    @show_detection_labels.setter
+    def show_detection_labels(self, show_detection_labels):
+        self._show_detection_labels = show_detection_labels
+
+    @property
+    def show_attributes(self):
+        if self._show_attributes is not None:
+            return self._show_attributes
+
+        return self.settings.value(VIDEO_SHOW_ATTRIBUTES)
+
+    @show_attributes.setter
+    def show_attributes(self, show_attributes):
+        self._show_attributes = show_attributes
