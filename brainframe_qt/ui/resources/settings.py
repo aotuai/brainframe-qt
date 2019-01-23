@@ -32,7 +32,7 @@ client_license_accepted = Setting(
 client_license_md5 = Setting(
     None, type=str, name="client_license_md5")
 
-# Video Configuration Settings
+# Render Configuration Settings
 draw_lines = Setting(
     True, type=bool, name="video_draw_lines")
 draw_regions = Setting(

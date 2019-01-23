@@ -49,13 +49,7 @@ class DetectionPolygon(StreamPolygon):
                          border_color=class_color,
                          border_thickness=1,
                          parent=parent)
-        print(
-            "use_polygons", use_polygons,
-            "show_detection_labels", show_detection_labels,
-            "show_tracks", show_tracks,
-            "show_confidence", show_confidence,
-            "show_attributes", show_attributes
-        )
+
         text = ""
 
         if show_detection_labels:
@@ -96,15 +90,14 @@ class DetectionPolygon(StreamPolygon):
                 # Find the point of the detection closest to the screens bottom
                 if track.latest_tstamp - detection_tstamp > self.MAX_TRACK_AGE:
                     break
-                line_coords.append(prev_det.center)
+                coord_a, coord_b = sorted(prev_det.coords,
+                                          key=lambda pt: -pt[1])[:2]
 
-                # TODO: Find the bottom of the polygon, and draw the line there
-                # draw lines from there.
-                # poly = LineString(prev_det.coords)
-                # screen_bottom = Point([prev_det.center[0], 10000])
-                # nearest_point = list(poly.interpolate(
-                #     poly.project(screen_bottom)).coords)
-                # line_coords.append(nearest_point)
+                # The midpoint will be the next point in our line
+                midpoint = [(coord_a[0] + coord_b[0]) / 2,
+                            (coord_a[1] + coord_b[1]) / 2]
+                line_coords.append(midpoint)
+
             self.line_item = StreamPolygon(
                 points=line_coords,
                 border_color=class_color,

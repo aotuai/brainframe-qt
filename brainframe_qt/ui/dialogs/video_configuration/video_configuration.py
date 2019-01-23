@@ -5,7 +5,7 @@ from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources import settings
 
 
-class VideoConfiguration(QDialog):
+class RenderConfiguration(QDialog):
     # Default settings
     draw_lines = True
     draw_regions = True

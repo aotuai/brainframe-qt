@@ -30,8 +30,10 @@ class ZoneStatusPolygon(StreamPolygon):
         else:
             # If the zone is a region
             counts = status.detection_counts
-            text += "\n" + "\n".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
-                                      for k, v in counts.items()])
+            items = list(counts.items())
+            items.sort()
+            text += "\n" + "\n".join([f"{v} {k}{'s' * bool(v - 1)}"
+                                      for k, v in items])
         text = text.strip()
 
         if len(status.alerts):
