@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import QGraphicsView
 from brainframe.shared.stream_listener import StreamListener
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.api.streaming import SyncedStreamReader, ProcessedFrame
+from brainframe.client.api.synced_reader import ProcessedFrame, \
+    SyncedStreamReader
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources import settings
 
@@ -53,7 +54,6 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         self.change_stream(stream_conf)
 
     def handle_frame(self, processed_frame: ProcessedFrame):
-
         self.scene().remove_all_items()
 
         self.scene().set_frame(frame=processed_frame.frame)

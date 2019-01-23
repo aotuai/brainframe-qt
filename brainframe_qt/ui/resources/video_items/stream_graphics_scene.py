@@ -4,7 +4,7 @@ from PyQt5.QtGui import QImage, QPixmap, QColor
 from PyQt5.QtWidgets import QGraphicsScene
 
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
-from brainframe.client.api.streaming import DetectionTrack
+from brainframe.client.api.detection_tracks import DetectionTrack
 
 from .stream_detection import (
     DetectionPolygon,
@@ -153,8 +153,7 @@ class StreamGraphicsScene(QGraphicsScene):
         polygon = ZoneStatusPolygon(
             zone_status,
             text_size=self._item_text_size,
-            border_thickness=border
-        )
+            border_thickness=border)
 
         self.addItem(polygon)
 

@@ -2,7 +2,7 @@ import random
 
 from PyQt5.QtGui import QColor
 
-from brainframe.client.api.streaming import DetectionTrack
+from brainframe.client.api.detection_tracks import DetectionTrack
 from brainframe.client.api.codecs import Detection
 from brainframe.client.ui.resources.video_items import (
     StreamLabelBox,
