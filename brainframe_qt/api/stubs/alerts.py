@@ -26,7 +26,6 @@ class AlertStubMixin(Stub):
         req = "/api/alerts"
         data = self._get(req, params={"stream_id": str(stream_id),
                                       "page": str(page)})
-
         alerts = [Alert.from_dict(a) for a in data]
         return alerts
 

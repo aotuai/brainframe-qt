@@ -43,6 +43,7 @@ class AlertLog(QWidget):
         new_alerts_ids = unverified_alert_ids - existing_alert_ids
         new_alerts = [alert for alert in unverified_alerts
                       if alert.id in new_alerts_ids]
+
         for alert in new_alerts:
             # Get the alarm that this alert belongs to
             alarm = api.get_zone_alarm(alert.alarm_id)

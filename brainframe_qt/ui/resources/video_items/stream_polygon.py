@@ -20,7 +20,7 @@ class StreamPolygon(QGraphicsPathItem):
 
         self.close_polygon = close_polygon
 
-        self.polygon = QPolygonF()
+        self.polygon = None
         self.path: QPainterPath = None
 
         # Set the opacity of the polygon

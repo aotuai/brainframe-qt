@@ -14,6 +14,7 @@ class Setting:
         self.default = default
         self.type = type
         self.name = name
+        self._cache = None
 
         # Record the setting officially if they don't exist yet
         if default is not None and _settings.value(name) is None:
@@ -21,9 +22,12 @@ class Setting:
 
     def set(self, value):
         _settings.setValue(self.name, value)
+        self._cache = value
 
     def val(self):
-        return _settings.value(self.name, type=self.type)
+        if self._cache is None:
+            self._cache = _settings.value(self.name, type=self.type)
+        return self._cache
 
 
 # License settings

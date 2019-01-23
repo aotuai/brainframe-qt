@@ -9,12 +9,17 @@ from brainframe.client.ui.resources.video_items import (
     StreamPolygon
 )
 
+_qcolor_cache = {}
 
-def generate_unique_qcolor(name: str):
-    """Generate a unique QColor based on a string name"""
-    rand_seed = random.Random(name)
-    hue = rand_seed.random()
-    return QColor.fromHsvF(hue, 1.0, 1.0)
+
+def generate_unique_qcolor(seed: str):
+    """Generate a unique QColor based on a string seed"""
+    if seed not in _qcolor_cache:
+        rand_seed = random.Random(seed)
+        hue = rand_seed.random()
+        _qcolor_cache[seed] = QColor.fromHsvF(hue, 1.0, 1.0)
+
+    return _qcolor_cache[seed]
 
 
 class DetectionPolygon(StreamPolygon):

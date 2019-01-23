@@ -40,6 +40,7 @@ class SyncedStreamReader(StreamReader):
     """Reads frames from a stream and syncs them up with zone statuses."""
 
     MAX_BUF_SIZE = 100
+    MAX_CACHE_TRACK_SECONDS = 30
 
     def __init__(self,
                  stream_id: int,
@@ -240,8 +241,10 @@ class SyncedStreamReader(StreamReader):
             while len(buffer) > self.MAX_BUF_SIZE:
                 buffer.pop(0)
 
-            # TODO: Prune DetectionTracks from self.track that haven't had a
-            # detection in a while
+            # Prune DetectionTracks that haven't had a detection in a while
+            for uuid, track in list(tracks.items()):
+                if frame_tstamp - track.latest_tstamp > self.MAX_CACHE_TRACK_SECONDS:
+                    del tracks[uuid]
 
     def close(self):
         """Sends a request to close the SyncedStreamReader."""
