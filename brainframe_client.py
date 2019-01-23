@@ -19,9 +19,7 @@ from brainframe.client.api import api
 from brainframe.client.ui import (
     MainWindow,
     SplashScreen,
-    LicenseAgreement,
-    VideoConfiguration
-)
+    LicenseAgreement)
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.api.api_errors import StreamNotOpenedError
 from brainframe.shared import environment
