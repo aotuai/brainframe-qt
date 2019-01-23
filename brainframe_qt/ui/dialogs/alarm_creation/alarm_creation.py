@@ -164,6 +164,7 @@ class AlarmCreationDialog(QDialog):
                              f"'{condition_button.currentText()}'")
 
         alarm = ZoneAlarm(name=alarm_name,
+                          zone_id=zones[zone].id,
                           count_conditions=count_condition,
                           rate_conditions=rate_condition,
                           active_start_time=start_time,

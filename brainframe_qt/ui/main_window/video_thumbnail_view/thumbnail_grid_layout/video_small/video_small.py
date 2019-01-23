@@ -1,10 +1,9 @@
 from PyQt5.QtCore import pyqtSignal, QRectF, Qt
 from PyQt5.QtGui import QPainter, QColor, QImage, QFontMetricsF
 
+from brainframe.client.api.streaming import ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
-from brainframe.client.ui.resources.video_items.stream_widget import (
-    StreamWidget, DetectionPolygon, ZoneStatusPolygon
-)
+from brainframe.client.ui.resources.video_items import StreamWidget
 
 
 class VideoSmall(StreamWidget):
@@ -26,52 +25,31 @@ class VideoSmall(StreamWidget):
       [parent].ongoing_alerts_slot
     """
 
-    def __init__(self, parent=None, stream_conf=None, frame_rate=30):
+    def __init__(self, parent=None, stream_conf=None):
 
-        self.ongoing_alerts: bool = False
+        self.alerts_ongoing: bool = False
 
-        super().__init__(stream_conf, frame_rate, parent=parent)
+        super().__init__(stream_conf, parent=parent)
 
-    def update_items(self):
-        """Override the base StreamWidget implementation to add alert UI
-        functionality
+        self.stream_conf = stream_conf
 
-        TODO: Is this _really_ the best way of doing this?
-        """
+    def handle_frame(self, processed_frame: ProcessedFrame):
+        super().handle_frame(processed_frame)
 
-        frame = self.video_stream.latest_processed_frame_rgb
-
-        # Only update detections & zones when needed
-        if self.stream_is_up and frame is not None:
-            if frame.tstamp != self.timestamp:
-                self.update_latest_zones(frame.zone_statuses)
-                self.update_latest_detections(frame.zone_statuses)
-
-                self.manage_alert_indication(frame.zone_statuses)
-
-        else:
-            self.remove_items_by_type(DetectionPolygon)
-            self.remove_items_by_type(ZoneStatusPolygon)
-
-        self.update_frame()
+        self.manage_alert_indication(processed_frame.zone_statuses)
 
     def manage_alert_indication(self, zone_statuses):
-
-        # Get all alerts in each zone_status as a single list
-        # [Unused]. Might be helpful in future when we need to know more info
-        # alerts = [alert for zone_status in zone_statuses
-        #           for alert in zone_status.alerts]
 
         # Any active alerts?
         alerts = any(zone_status.alerts for zone_status in zone_statuses)
 
         # self.ongoing_alerts is used during every paint in drawForeground
-        if alerts and not self.ongoing_alerts:
-            self.ongoing_alerts = True
+        if alerts and not self.alerts_ongoing:
+            self.alerts_ongoing = True
             # noinspection PyUnresolvedReferences
             self.ongoing_alerts_signal.emit(True)
-        elif not alerts and self.ongoing_alerts:
-            self.ongoing_alerts = False
+        elif not alerts and self.alerts_ongoing:
+            self.alerts_ongoing = False
             # noinspection PyUnresolvedReferences
             self.ongoing_alerts_signal.emit(False)
 
@@ -106,7 +84,7 @@ class VideoSmall(StreamWidget):
                          painter.brush())
 
         image_width_with_margins = 0
-        if self.ongoing_alerts:
+        if self.alerts_ongoing:
             # Draw icon
             image_percent = 0.8
 

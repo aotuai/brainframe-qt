@@ -58,11 +58,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QToolButton" name="hide_button">
-        <property name="text">
-         <string>×</string>
-        </property>
-       </widget>
+       <widget class="QToolButton" name="hide_button"/>
       </item>
      </layout>
     </widget>

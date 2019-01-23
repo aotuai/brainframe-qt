@@ -1,5 +1,5 @@
 import logging
-logging.getLogger().setLevel(logging.INFO)
+import os
 
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
@@ -16,17 +16,28 @@ from PyQt5.QtWidgets import QApplication
 
 from brainframe.shared.ffmpeg_options import set_opencv_ffmpeg_capture_options
 from brainframe.client.api import api
-from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
+from brainframe.client.ui import (
+    MainWindow,
+    SplashScreen,
+    LicenseAgreement)
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.api.api_errors import StreamNotOpenedError
+from brainframe.shared import environment
+
+
+default_log_level = "INFO"
+if environment.in_production():
+    # Be less verbose in production
+    default_log_level = "WARN"
+logging.basicConfig(level=os.environ.get("LOGLEVEL", default_log_level))
 
 
 def parse_args():
     parser = ArgumentParser(description="This runs the BrainFrame client")
     parser.add_argument("-a", "--api-url", type=str,
                         default="http://localhost:8000",
-                        help="The URL that the server is currently running on. "
-                             "This can be localhost, or a local IP, or a "
+                        help="The URL that the server is currently running "
+                             "on. This can be localhost, or a local IP, or a "
                              "remote IP depending on your setup.")
     parser.add_argument("--skip-frames", action="store_true", default=False,
                         help="Configures all streams to skip intermediate "
@@ -68,8 +79,6 @@ if __name__ == "__main__":
 
         while True:
             try:
-                # Set all stream analysis as "active" here, since there is
-                # currently no way to in the UI
                 configs = api.get_stream_configurations()
             except ConnectionError:
                 # Server not started yet
@@ -81,12 +90,6 @@ if __name__ == "__main__":
 
             splash_screen.showMessage("Successfully connected to server. "
                                       "Starting UI")
-            for config in configs:
-                try:
-                    success = api.start_analyzing(config.id)
-                except StreamNotOpenedError:
-                    logging.error(f"Stream {config.name} is not open so "
-                                  f"analysis did not start")
 
             main_window = MainWindow()
             main_window.show()

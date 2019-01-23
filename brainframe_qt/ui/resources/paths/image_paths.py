@@ -7,7 +7,7 @@ image_dir = route_path("brainframe", "client", "ui", "resources", "images")
 connecting_to_stream      = route_path(image_dir, "connecting_to_stream.png")
 connection_lost           = route_path(image_dir, "connection_lost.png"     )
 splash_screen             = route_path(image_dir, "splash_screen.png"       )
-background                = route_path(image_dir, "background.png"          )
+background                = route_path(image_dir, "background.svg"          )
 error                     = route_path(image_dir, "error_message.png"       )
 
 # Icons
@@ -25,3 +25,4 @@ settings_gear_icon        = route_path( icon_dir, "settings_gear.svg"       )
 trash_icon                = route_path( icon_dir, "trash.svg"               )
 global_plugin_conf_icon   = route_path( icon_dir, "global_plugin_config.svg")
 stream_plugin_conf_icon   = route_path( icon_dir, "stream_plugin_config.svg")
+video_settings_icon       = route_path( icon_dir, "video_settings.svg"      )

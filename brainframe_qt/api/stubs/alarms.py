@@ -28,3 +28,12 @@ class ZoneAlarmStubMixin(Stub):
         data = self._post_codec(req, alarm)
 
         return ZoneAlarm.from_dict(data)
+
+    def delete_zone_alarm(self, alarm_id):
+        """Deletes the zone alarm with the given ID.
+
+        :param alarm_id: The ID of the zone alarm to delete
+        """
+        req = f"/api/zone_alarms/{alarm_id}"
+        self._delete(req)
+

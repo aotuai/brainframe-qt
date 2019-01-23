@@ -11,7 +11,8 @@ from brainframe.client.ui.dialogs import (
     StandardError,
     StreamConfigurationDialog,
     IdentityConfiguration,
-    PluginConfigDialog
+    PluginConfigDialog,
+    RenderConfiguration
 )
 
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
@@ -27,14 +28,16 @@ class MainWindow(QMainWindow):
 
         # Add icons to buttons in toolbar
         new_stream_icon = QIcon(str(image_paths.new_stream_icon))
-        configure_identities_icon = QIcon(str(image_paths.settings_gear_icon))
-        about_page_icon = QIcon(str(image_paths.information_icon))
+        video_config_icon = QIcon(str(image_paths.video_settings_icon))
+        identity_config_icon = QIcon(str(image_paths.settings_gear_icon))
         plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
+        about_page_icon = QIcon(str(image_paths.information_icon))
 
         self.add_stream_action.setIcon(new_stream_icon)
-        self.configure_identity_action.setIcon(configure_identities_icon)
+        self.video_configuration_action.setIcon(video_config_icon)
+        self.identity_configuration_action.setIcon(identity_config_icon)
+        self.plugin_configuration_action.setIcon(plugin_config_icon)
         self.show_about_page_action.setIcon(about_page_icon)
-        self.plugin_config_action.setIcon(plugin_config_icon)
 
         # Add a spacer to make the license button appear right justified
         spacer = QWidget()
@@ -100,6 +103,10 @@ class MainWindow(QMainWindow):
                       "Error: <b>" + err.kind + "</b>"
             QMessageBox.information(self, "Error Opening Stream", message)
             return
+
+    @pyqtSlot()
+    def show_video_configuration_dialog(self):
+        RenderConfiguration.show_dialog()
 
     @pyqtSlot()
     def show_identities_dialog(self):

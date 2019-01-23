@@ -46,8 +46,9 @@
     <bool>false</bool>
    </attribute>
    <addaction name="add_stream_action"/>
-   <addaction name="configure_identity_action"/>
-   <addaction name="plugin_config_action"/>
+   <addaction name="video_configuration_action"/>
+   <addaction name="identity_configuration_action"/>
+   <addaction name="plugin_configuration_action"/>
    <addaction name="show_about_page_action"/>
   </widget>
   <action name="add_stream_action">
@@ -58,7 +59,7 @@
     <string>Click here to add a new stream source!</string>
    </property>
   </action>
-  <action name="configure_identity_action">
+  <action name="identity_configuration_action">
    <property name="text">
     <string>Identity Configuration</string>
    </property>
@@ -74,7 +75,7 @@
     <string>Open source licenses</string>
    </property>
   </action>
-  <action name="plugin_config_action">
+  <action name="plugin_configuration_action">
    <property name="text">
     <string>Global Plugin Configuration</string>
    </property>
@@ -82,17 +83,25 @@
     <string>Edit the options for plugins and apply it to all streams that don't have specific options set already.</string>
    </property>
   </action>
+  <action name="video_configuration_action">
+   <property name="text">
+    <string>Render Configuration</string>
+   </property>
+   <property name="toolTip">
+    <string>Configure client UI for videos</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>VideoExpandedView</class>
-   <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.video_expanded_view.video_expanded_view</header>
-  </customwidget>
   <customwidget>
    <class>VideoThumbnailView</class>
    <extends>QWidget</extends>
    <header>brainframe.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
+  </customwidget>
+  <customwidget>
+   <class>VideoExpandedView</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_expanded_view.video_expanded_view</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -194,7 +203,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>configure_identity_action</sender>
+   <sender>identity_configuration_action</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>show_identities_dialog()</slot>
@@ -226,10 +235,26 @@
    </hints>
   </connection>
   <connection>
-   <sender>plugin_config_action</sender>
+   <sender>plugin_configuration_action</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>show_global_plugin_config_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>video_configuration_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_video_configuration_dialog()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -249,5 +274,6 @@
   <slot>new_stream()</slot>
   <slot>show_about_page_dialog()</slot>
   <slot>show_global_plugin_config_dialog()</slot>
+  <slot>show_video_configuration_dialog()</slot>
  </slots>
 </ui>

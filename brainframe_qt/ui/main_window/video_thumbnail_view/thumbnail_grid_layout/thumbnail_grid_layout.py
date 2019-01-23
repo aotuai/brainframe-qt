@@ -37,9 +37,6 @@ class ThumbnailGridLayout(QWidget):
         Dict is formatted as {stream_id: VideoSmall()}
         """
 
-        self.current_stream_id = None
-        """Currently expanded stream. None if no stream selected"""
-
         self._layout_name: str = "Grid Layout"
         """Text displayed on label on widget above grid"""
 
@@ -47,12 +44,15 @@ class ThumbnailGridLayout(QWidget):
         self.dropdown_button.clicked.connect(self.toggle_expansion)
 
     def new_stream_widget(self, stream_conf):
-        video = VideoSmall(self, stream_conf, 30)
-
-        self.stream_widgets[stream_conf.id] = video
-        self._add_widget_to_layout(video)
+        video = VideoSmall(self, stream_conf)
+        self.add_video(video)
 
         self._connect_widget_signals(video)
+
+    def add_video(self, video):
+
+        self.stream_widgets[video.stream_reader.stream_id] = video
+        self._add_widget_to_layout(video)
 
         self._set_layout_equal_stretch()
 
@@ -91,9 +91,6 @@ class ThumbnailGridLayout(QWidget):
         if isinstance(self.sender(), VideoSmall):
             self.thumbnail_stream_clicked_signal.emit(stream_conf)
 
-            # Store stream as current stream
-            self.current_stream_id = stream_conf.id
-
     @pyqtSlot(bool)
     def ongoing_alerts_slot(self, alerts_ongoing: bool):
         """Called by child stream widget when it has an ongoing alert
@@ -127,20 +124,16 @@ class ThumbnailGridLayout(QWidget):
                 # Hide columns that have nothing in them
                 self.grid_layout.setColumnStretch(col, 0)
 
-    def delete_stream_widget(self, stream_id):
+    def pop_stream_widget(self, stream_id):
         """Delete widget in layout with stream id = stream_id"""
 
         stream_widget = self.stream_widgets.pop(stream_id)
         self.grid_layout.removeWidget(stream_widget)
-        stream_widget.deleteLater()
 
         # Force a reflow in case it hasn't happened yet
         self.grid_num_columns = self._grid_num_columns
 
-        # Streams can currently only be deleted when they're selected (that's
-        # where the button is). Therefore, current_stream_id will always need to
-        # be set to None
-        self.current_stream_id = None
+        return stream_widget
 
     def expand_grid(self):
         """Called by outer widget when expanded video is explicitly closed
@@ -150,12 +143,6 @@ class ThumbnailGridLayout(QWidget):
         """
         # Resize GridLayout
         self.grid_num_columns = self._grid_num_columns_expanded
-
-        # Remove selection border from currently selected video
-        if self.current_stream_id:
-            self.stream_widgets[
-                self.current_stream_id
-            ].remove_selection_border()
 
     @pyqtSlot(bool)
     def toggle_expansion(self, expand):

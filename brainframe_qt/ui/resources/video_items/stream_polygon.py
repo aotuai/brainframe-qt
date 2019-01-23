@@ -13,11 +13,14 @@ class StreamPolygon(QGraphicsPathItem):
                  border_linetype=None,
                  fill_color=None,
                  opacity=1.0,
+                 close_polygon=True,
                  parent=None):
 
         super().__init__(parent=parent)
 
-        self.polygon = QPolygonF()
+        self.close_polygon = close_polygon
+
+        self.polygon = None
         self.path: QPainterPath = None
 
         # Set the opacity of the polygon
@@ -84,7 +87,7 @@ class StreamPolygon(QGraphicsPathItem):
         self.path = QPainterPath()
         self.path.addPolygon(self.polygon)
 
-        if len(self.polygon) > 2:
+        if len(self.polygon) > 2 and self.close_polygon:
             self.path.closeSubpath()
 
         self.setPath(self.path)
