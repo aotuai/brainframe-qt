@@ -4,7 +4,7 @@ from PyQt5.QtCore import pyqtSignal, QPointF, Qt
 from PyQt5.QtGui import QMouseEvent, QColor
 from shapely import geometry
 
-from brainframe.client.api.streaming import ProcessedFrame
+from brainframe.client.api.synced_reader import ProcessedFrame
 from brainframe.client.ui.resources.video_items import (
     ClickCircle,
     StreamWidget,
@@ -33,10 +33,10 @@ class VideoTaskConfig(StreamWidget):
     def handle_frame(self, processed_frame: ProcessedFrame,
                      remove_items=False):
 
-        self.scene().set_frame(frame=processed_frame.frame)
-
         if self.unconfirmed_polygon is None:
             super().handle_frame(processed_frame)
+        else:
+            self.scene().set_frame(frame=processed_frame.frame)
 
     def mousePressEvent(self, event: QMouseEvent):
         item_at = self.itemAt(event.pos())
