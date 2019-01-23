@@ -5,7 +5,8 @@ from brainframe.client.api import api_errors
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.streaming import (
-    StreamManager, StatusPoller, SyncedStreamReader)
+    StreamManager, StatusPoller)
+from brainframe.client.api.synced_reader import SyncedStreamReader
 
 
 class StreamStubMixin(Stub):
