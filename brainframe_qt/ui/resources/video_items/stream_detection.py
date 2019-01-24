@@ -36,7 +36,7 @@ class DetectionPolygon(StreamPolygon):
                  use_polygons=True,
                  show_detection_labels=True,
                  show_tracks=True,
-                 show_confidence=True,
+                 show_recognition=True,
                  show_attributes=True,
                  parent=None):
         """
@@ -61,15 +61,14 @@ class DetectionPolygon(StreamPolygon):
             text += detection.class_name
 
         # Add "Identity" to the description box
-        if detection.with_identity is not None:
+        if detection.with_identity is not None and show_recognition:
             if detection.with_identity.nickname is not None:
                 text += "\nName: " + detection.with_identity.nickname
             else:
                 text += "\nName: " + detection.with_identity.unique_name
 
-            if show_confidence:
-                confidence = detection.extra_data['encoding_distance']
-                text += f" ({round(confidence, 2)})"
+            confidence = detection.extra_data['encoding_distance']
+            text += f" ({round(confidence, 2)})"
 
         if len(detection.attributes) and show_attributes:
             attributes_str_list = [a.category + ": " + a.value
