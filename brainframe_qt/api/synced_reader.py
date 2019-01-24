@@ -114,7 +114,6 @@ class SyncedStreamReader(StreamReader):
                                           self.new_status_event)
 
         while True:
-
             frame_or_status_event.wait()
 
             if self.new_status_event.is_set():
