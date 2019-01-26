@@ -104,6 +104,7 @@ class DetectionPolygon(StreamPolygon):
 
             self.line_item = StreamPolygon(
                 points=line_coords,
+                border_thickness=3,
                 border_color=class_color,
                 close_polygon=False,
                 opacity=.5,
