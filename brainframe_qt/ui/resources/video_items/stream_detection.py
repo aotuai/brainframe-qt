@@ -36,7 +36,7 @@ class DetectionPolygon(StreamPolygon):
                  use_polygons=True,
                  show_detection_labels=True,
                  show_tracks=True,
-                 show_confidence=True,
+                 show_recognition=True,
                  show_attributes=True,
                  parent=None):
         """
@@ -59,15 +59,14 @@ class DetectionPolygon(StreamPolygon):
             text += detection.class_name
 
         # Add "Identity" to the description box
-        if detection.with_identity is not None:
+        if detection.with_identity is not None and show_recognition:
             if detection.with_identity.nickname is not None:
                 text += "\nName: " + detection.with_identity.nickname
             else:
                 text += "\nName: " + detection.with_identity.unique_name
 
-            if show_confidence:
-                confidence = detection.extra_data['encoding_distance']
-                text += f" ({round(confidence, 2)})"
+            confidence = detection.extra_data['encoding_distance']
+            text += f" ({round(confidence, 2)})"
 
         if detection.attributes and show_attributes:
             attributes_str_list = [a.category + ": " + a.value
@@ -86,24 +85,25 @@ class DetectionPolygon(StreamPolygon):
                 text_size=text_size,
                 parent=self)
 
-        # if len(track) > 1 and show_tracks:
-        #     # Draw a track for the detections history
-        #     line_coords = []
-        #     for prev_det, detection_tstamp in track:
-        #         # Find the point of the detection closest to the screens bottom
-        #         if track.latest_tstamp - detection_tstamp > self.MAX_TRACK_AGE:
-        #             break
-        #         coord_a, coord_b = sorted(prev_det.coords,
-        #                                   key=lambda pt: -pt[1])[:2]
-        #
-        #         # The midpoint will be the next point in our line
-        #         midpoint = [(coord_a[0] + coord_b[0]) / 2,
-        #                     (coord_a[1] + coord_b[1]) / 2]
-        #         line_coords.append(midpoint)
-        #
-        #     self.line_item = StreamPolygon(
-        #         points=line_coords,
-        #         border_color=class_color,
-        #         close_polygon=False,
-        #         opacity=.5,
-        #         parent=self)
+        if len(track) > 1 and show_tracks:
+            # Draw a track for the detections history
+            line_coords = []
+            for prev_det, detection_tstamp in track:
+                # Find the point of the detection closest to the screens bottom
+                if track.latest_tstamp - detection_tstamp > self.MAX_TRACK_AGE:
+                    break
+                coord_a, coord_b = sorted(prev_det.coords,
+                                          key=lambda pt: -pt[1])[:2]
+
+                # The midpoint will be the next point in our line
+                midpoint = [(coord_a[0] + coord_b[0]) / 2,
+                            (coord_a[1] + coord_b[1]) / 2]
+                line_coords.append(midpoint)
+
+            self.line_item = StreamPolygon(
+                points=line_coords,
+                border_thickness=3,
+                border_color=class_color,
+                close_polygon=False,
+                opacity=.5,
+                parent=self)

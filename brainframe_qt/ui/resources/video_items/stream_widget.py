@@ -23,7 +23,7 @@ class StreamWidget(QGraphicsView):
     _draw_detections = None
     _use_polygons = None
     _show_detection_labels = None
-    _show_detection_confidence = None
+    _show_recognition_label = None
     _show_detection_tracks = None
     _show_attributes = None
 
@@ -85,7 +85,7 @@ class StreamWidget(QGraphicsView):
                 frame_tstamp=processed_frame.tstamp,
                 tracks=processed_frame.tracks,
                 use_polygons=self.use_polygons,
-                show_confidence=self.show_detection_confidence,
+                show_recognition=self.show_recognition_label,
                 show_tracks=self.show_detection_tracks,
                 show_detection_labels=self.show_detection_labels,
                 show_attributes=self.show_attributes)
@@ -188,14 +188,14 @@ class StreamWidget(QGraphicsView):
         self._use_polygons = use_polygons
 
     @property
-    def show_detection_confidence(self):
-        if self._show_detection_confidence is not None:
-            return self._show_detection_confidence
+    def show_recognition_label(self):
+        if self._show_recognition_label is not None:
+            return self._show_recognition_label
         return settings.show_recognition_confidence.val()
 
-    @show_detection_confidence.setter
-    def show_detection_confidence(self, show_detection_confidence):
-        self._show_detection_confidence = show_detection_confidence
+    @show_recognition_label.setter
+    def show_recognition_label(self, show_detection_confidence):
+        self._show_recognition_label = show_detection_confidence
 
     @property
     def show_detection_tracks(self):

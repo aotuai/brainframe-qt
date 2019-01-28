@@ -45,6 +45,7 @@ class StreamPolygon(QGraphicsPathItem):
         # Apply thickness
         pen.setWidth(border_thickness)
         pen.setJoinStyle(Qt.RoundJoin)
+        pen.setCapStyle(Qt.RoundCap)
 
         # Apply the styles
         self.setPen(pen)
