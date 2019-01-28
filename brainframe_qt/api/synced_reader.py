@@ -69,30 +69,29 @@ class SyncedStreamReader(StreamReader):
         self.stream_listeners = set()
         self._stream_listeners_lock = RLock()
 
-    def alert_frame_listeners(self, processed_frame):
-
+    def alert_frame_listeners(self):
         with self._stream_listeners_lock:
             if self.status is StreamStatus.STREAMING:
                 for listener in self.stream_listeners:
-                    listener.signal_frame(processed_frame)
+                    listener.frame_event.set()
 
     def alert_status_listeners(self, status: StreamStatus):
         """This should be called whenever the StreamStatus has changed"""
         with self._stream_listeners_lock:
             if status is StreamStatus.INITIALIZING:
                 for listener in self.stream_listeners:
-                    listener.signal_stream_initializing()
+                    listener.stream_initializing_event.set()
             elif status is StreamStatus.HALTED:
                 for listener in self.stream_listeners:
-                    listener.signal_stream_halted()
+                    listener.stream_halted_event.set()
             elif status is StreamStatus.CLOSED:
                 for listener in self.stream_listeners:
-                    listener.signal_stream_closed()
+                    listener.stream_closed_event.set()
             else:
                 logging.critical("SyncedStreamReader: An event was called, but"
                                  " was not actually necessary!")
                 for listener in self.stream_listeners:
-                    listener.signal_stream_error()
+                    listener.stream_error_event.set()
 
     def add_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
@@ -100,9 +99,9 @@ class SyncedStreamReader(StreamReader):
             if not self.status.STREAMING:
                 self.alert_status_listeners(self.status)
             elif self.latest_processed_frame is not None:
-                self.alert_frame_listeners(self.latest_processed_frame)
+                self.alert_frame_listeners()
             else:
-                self.alert_status_listeners(StreamStatus.INITIALIZING)
+                listener.stream_initializing_event.set()
 
     def remove_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
@@ -148,7 +147,8 @@ class SyncedStreamReader(StreamReader):
 
             if new_processed_frame is not None:
                 if new_processed_frame != self.latest_processed_frame:
-                    self.alert_frame_listeners(new_processed_frame)
+                    self.alert_frame_listeners()
+
                 self.latest_processed_frame = new_processed_frame
 
         logging.info("SyncedStreamReader: Closing")
