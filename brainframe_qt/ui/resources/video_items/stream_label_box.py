@@ -19,6 +19,7 @@ class StreamLabelBox(StreamPolygon):
         font = self.label_text.font()
         font.setPointSizeF(text_size)
         self.label_text.setFont(font)
+        self.label_text.adjustSize()
 
         rect = self.label_text.sceneBoundingRect().getCoords()
         coords = [QPointF(rect[0], rect[1]),
@@ -34,4 +35,3 @@ class StreamLabelBox(StreamPolygon):
                          parent=parent)
 
         self.label_text.setZValue(self.zValue() + 1)
-        self.label_text.adjustSize()

@@ -1,16 +1,13 @@
 from typing import List
 
-from PyQt5.QtGui import QImage, QPixmap, QColor
+from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene
 
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from brainframe.client.api.detection_tracks import DetectionTrack
-
-from .stream_detection import (
-    DetectionPolygon,
-    StreamPolygon
-)
 from brainframe.client.ui.resources.video_items import ZoneStatusPolygon
+
+from .stream_detection import DetectionPolygon
 
 
 class StreamGraphicsScene(QGraphicsScene):

@@ -33,9 +33,10 @@ class VideoSmall(StreamWidget):
 
         self.stream_conf = stream_conf
 
-    def handle_frame(self, processed_frame: ProcessedFrame):
-        super().handle_frame(processed_frame)
+    def handle_frame(self):
+        super().handle_frame()
 
+        processed_frame = self.stream_reader.latest_processed_frame
         self.manage_alert_indication(processed_frame.zone_statuses)
 
     def manage_alert_indication(self, zone_statuses):

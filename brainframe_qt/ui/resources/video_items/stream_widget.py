@@ -1,28 +1,19 @@
 from typing import Callable
 
-from PyQt5.QtCore import Qt, QCoreApplication, QEvent
+from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.shared.stream_listener import StreamListener
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.api.synced_reader import ProcessedFrame, \
-    SyncedStreamReader
+from brainframe.client.api.synced_reader import SyncedStreamReader
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources import settings
 
 from .stream_graphics_scene import StreamGraphicsScene
 
 
-class CommonMetaclass(type(QGraphicsView), type(StreamListener)):
-    """QObjects have their own metaclass which conflicts with the
-    StreamListener's metaclass. This forces them to get along.
-
-    https://stackoverflow.com/questions/28720217/multiple-inheritance-metaclass-conflict
-    """
-
-
-class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
+class StreamWidget(QGraphicsView):
     """Base widget that uses Stream object to get frames.
 
     Makes use of a QTimer to get frames
@@ -41,8 +32,7 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
 
     def __init__(self, stream_conf, parent=None):
         # Order matters here, unfortunately
-        StreamListener.__init__(self)
-        QGraphicsView.__init__(self, parent)
+        super().__init__(parent)
 
         # Remove ugly white background and border from QGraphicsView
         self.setStyleSheet("background-color: transparent; border: 0px")
@@ -50,12 +40,38 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
         # Scene to draw items to
         self.setScene(StreamGraphicsScene())
 
+        self.stream_listener = StreamListener()
         self.stream_reader: SyncedStreamReader = None  # Set in change_stream
         self.change_stream(stream_conf)
 
-    def handle_frame(self, processed_frame: ProcessedFrame):
+        self.startTimer(1000 // 30)
+
+    def timerEvent(self, a0):
+        if self.stream_listener.frame_event.is_set():
+            self.stream_listener.frame_event.clear()
+            self.handle_frame()
+
+        if self.stream_listener.stream_initializing_event.is_set():
+            self.stream_listener.stream_initializing_event.clear()
+            self.handle_stream_initializing()
+
+        if self.stream_listener.stream_halted_event.is_set():
+            self.stream_listener.stream_halted_event.clear()
+            self.handle_stream_halted()
+
+        if self.stream_listener.stream_closed_event.is_set():
+            self.stream_listener.stream_closed_event.clear()
+            self.handle_stream_closed()
+
+        if self.stream_listener.stream_error_event.is_set():
+            self.stream_listener.stream_error_event.clear()
+            self.handle_stream_error()
+
+    def handle_frame(self):
+
         self.scene().remove_all_items()
 
+        processed_frame = self.stream_reader.latest_processed_frame
         self.scene().set_frame(frame=processed_frame.frame)
 
         if self.draw_lines:
@@ -97,15 +113,15 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
             return
 
         if self.stream_reader:
-            self.stream_reader.remove_listener(self)
+            self.stream_reader.remove_listener(self.stream_listener)
             QCoreApplication.removePostedEvents(self)
         self.stream_reader = api.get_stream_reader(stream_conf)
-        self.stream_reader.add_listener(self)
+        self.stream_reader.add_listener(self.stream_listener)
 
         # Make sure video is unsubscribed before it is GCed
         self.destroyed.disconnect()
-        self.destroyed.connect(lambda:
-                               self.stream_reader.remove_listener(self))
+        self.destroyed.connect(
+            lambda: self.stream_reader.remove_listener(self.stream_listener))
 
     def hasHeightForWidth(self):
         """Enable the use of heightForWidth"""
@@ -119,26 +135,6 @@ class StreamWidget(QGraphicsView, StreamListener, metaclass=CommonMetaclass):
             return 0
 
         return width * self.scene().height() / self.scene().width()
-
-    # Overrides qt's
-    def event(self, event: QEvent):
-        if event.type() == self.FrameEvent.event_type:
-            self.handle_frame(event.processed_frame)
-            return True
-        elif event.type() == self.StreamInitializingEvent.event_type:
-            self.handle_stream_initializing()
-            return True
-        elif event.type() == self.StreamHaltedEvent.event_type:
-            self.handle_stream_halted()
-            return True
-        elif event.type() == self.StreamClosedEvent.event_type:
-            self.handle_stream_closed()
-            return True
-        elif event.type() == self.StreamErrorEvent:
-            self.handle_stream_error()
-            return True
-        else:
-            return super().event(event)
 
     def resizeEvent(self, event=None):
         """Take up entire width using aspect ratio of scene"""
