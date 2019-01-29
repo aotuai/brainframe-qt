@@ -30,12 +30,12 @@ class VideoTaskConfig(StreamWidget):
         # edits
         self.clicked_circle = None  # type: ClickCircle
 
-    def handle_frame(self, processed_frame: ProcessedFrame,
-                     remove_items=False):
+    def handle_frame(self):
 
         if self.unconfirmed_polygon is None:
-            super().handle_frame(processed_frame)
+            super().handle_frame()
         else:
+            processed_frame = self.stream_reader.latest_processed_frame
             self.scene().set_frame(frame=processed_frame.frame)
 
     def mousePressEvent(self, event: QMouseEvent):
