@@ -1,7 +1,6 @@
-from typing import Optional
-
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.client.api.synced_reader import SyncedStreamReader
+from brainframe.client.api.codecs import StreamConfiguration
 
 
 class StreamManager:
@@ -9,31 +8,42 @@ class StreamManager:
     necessary.
     """
 
+    REHOSTED_VIDEO_TYPES = [StreamConfiguration.ConnType.WEBCAM,
+                            StreamConfiguration.ConnType.FILE]
+    """These video types are re-hosted by the server."""
+
     def __init__(self, status_poller: StatusPoller):
         self._stream_readers = {}
         self._status_poller = status_poller
 
-    def start_streaming(self, stream_id: int,
-                        url: str,
-                        pipeline: Optional[str]) -> SyncedStreamReader:
+    def start_streaming(self,
+                        stream_config: StreamConfiguration,
+                        url: str) -> SyncedStreamReader:
         """Starts reading from the stream using the given information, or
         returns an existing reader if we're already reading this stream.
 
-        :param stream_id: The unique ID of the stream
+        :param stream_config: The stream to connect to
         :param url: The URL to stream on
-        :param pipeline: A custom GStreamer pipeline, or None to use a default
-            configuration
         :return: A Stream object
         """
-        if stream_id not in self._stream_readers:
-            stream_reader = SyncedStreamReader(
-                stream_id=stream_id,
-                url=url,
-                pipeline=pipeline,
-                status_poller=self._status_poller)
-            self._stream_readers[stream_id] = stream_reader
+        if stream_config.id not in self._stream_readers:
+            pipeline = None
+            if "pipeline" in stream_config.parameters:
+                pipeline = stream_config.parameters["pipeline"]
 
-        return self._stream_readers[stream_id]
+            latency = SyncedStreamReader.DEFAULT_LATENCY
+            if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:
+                latency = SyncedStreamReader.REHOSTED_LATENCY
+
+            stream_reader = SyncedStreamReader(
+                stream_id=stream_config.id,
+                url=url,
+                status_poller=self._status_poller,
+                latency=latency,
+                pipeline=pipeline)
+            self._stream_readers[stream_config.id] = stream_reader
+
+        return self._stream_readers[stream_config.id]
 
     def close_stream(self, stream_id):
         """Close a specific stream and remove the reference.

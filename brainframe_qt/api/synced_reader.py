@@ -42,17 +42,22 @@ class SyncedStreamReader(StreamReader):
     def __init__(self,
                  stream_id: int,
                  url: str,
-                 pipeline: Optional[str],
-                 status_poller: StatusPoller):
+                 status_poller: StatusPoller, *,
+                 latency: int = StreamReader.DEFAULT_LATENCY,
+                 pipeline: Optional[str]):
         """Creates a new SyncedStreamReader.
 
         :param stream_id: The unique Id of this stream
         :param url: The URL to connect to
+        :param status_poller: The StatusPoller currently in use
+        :param latency: The latency to apply during streaming. A higher latency
+            can lead to a smoother stream if the connection is unstable, but
+            is generally unnecessary when the stream source is localized. If
+            a custom pipeline is specified, this value will be ignored
         :pipeline: A custom GStreamer pipeline, or None to use a default
             configuration
-        :param status_poller: The StatusPoller currently in use
         """
-        super().__init__(url, pipeline)
+        super().__init__(url, latency=latency, pipeline=pipeline)
 
         self.url = url
         self.pipeline = pipeline

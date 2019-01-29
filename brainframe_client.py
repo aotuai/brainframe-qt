@@ -3,7 +3,7 @@ import os
 
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
-from brainframe.shared import custom_libraries_lgpl
+from brainframe.shared import preimport_hooks
 
 from argparse import ArgumentParser
 from time import sleep
