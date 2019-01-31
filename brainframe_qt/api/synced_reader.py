@@ -57,7 +57,6 @@ class SyncedStreamReader(StreamReader):
         :pipeline: A custom GStreamer pipeline, or None to use a default
             configuration
         """
-        super().__init__(url, latency=latency, pipeline=pipeline)
 
         self.url = url
         self.pipeline = pipeline
@@ -66,13 +65,15 @@ class SyncedStreamReader(StreamReader):
 
         self.latest_processed_frame: ProcessedFrame = None
 
+        self.stream_listeners = set()
+        self._stream_listeners_lock = RLock()
+
+        # Start threads, now that the object is all set up
+        super().__init__(url, latency=latency, pipeline=pipeline)
         self._thread = Thread(
             name=f"SyncedStreamReader thread for stream ID {stream_id}",
             target=self._sync_detections_with_stream)
         self._thread.start()
-
-        self.stream_listeners = set()
-        self._stream_listeners_lock = RLock()
 
     def alert_frame_listeners(self):
         with self._stream_listeners_lock:
