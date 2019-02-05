@@ -73,11 +73,13 @@ class Plugin(Codec):
     """Metadata on a loaded plugin."""
     def __init__(self, *,
                  name: str,
+                 description: str,
                  input_type: NodeDescription,
                  output_type: NodeDescription,
                  capability: NodeDescription,
                  options: Dict[str, PluginOption]):
         self.name = name
+        self.description = description
         self.input_type = input_type
         self.output_type = output_type
         self.capability = capability
@@ -86,6 +88,7 @@ class Plugin(Codec):
     def to_dict(self):
         return {
             "name": self.name,
+            "description": self.description,
             "input_type": self.input_type.to_dict(),
             "output_type": self.output_type.to_dict(),
             "capability": self.capability.to_dict(),
@@ -97,6 +100,7 @@ class Plugin(Codec):
     def from_dict(d):
         return Plugin(
             name=d["name"],
+            description=d["description"],
             input_type=NodeDescription.from_dict(d["input_type"]),
             output_type=NodeDescription.from_dict(d["output_type"]),
             capability=NodeDescription.from_dict(d["capability"]),
