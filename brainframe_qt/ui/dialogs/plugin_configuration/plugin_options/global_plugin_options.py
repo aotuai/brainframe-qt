@@ -38,7 +38,7 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
 
         default_values = {key: option.default
                           for key, option in
-                          api.get_plugin_options(self.current_plugin).items()}
+                          api.get_plugin_option_vals(self.current_plugin).items()}
 
         # Check if there are any changed options
         changed_options = []
@@ -80,7 +80,7 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
         changed_stream_ids = []
         for stream_id in all_stream_ids:
             # Check if plugin options or plugin activity is changed server-side
-            opts = api.get_plugin_options(
+            opts = api.get_plugin_option_vals(
                 plugin_name=self.current_plugin,
                 stream_id=stream_id)
             is_active = api.is_plugin_active(

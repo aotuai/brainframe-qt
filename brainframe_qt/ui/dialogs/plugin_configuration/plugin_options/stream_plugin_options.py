@@ -15,7 +15,8 @@ class StreamPluginOptionsWidget(BasePluginOptionsWidget):
         super().change_plugin(plugin_name)
 
         # Get stream-specific option items
-        stream_options = api.get_plugin_options(plugin_name, self.stream_id)
+        stream_options = api.get_plugin_option_vals(plugin_name,
+                                                    self.stream_id)
         enabled_option = api.is_plugin_active(plugin_name, self.stream_id)
 
         # Lock all options that are not overwritten by stream specific options
@@ -34,7 +35,7 @@ class StreamPluginOptionsWidget(BasePluginOptionsWidget):
         for option_name, option_patch in stream_options.items():
             option_item = next(o for o in self.option_items
                                if o.option_name == option_name)
-            option_item.set_val(option_patch.value)
+            option_item.set_val(option_patch)
 
     def apply_changes(self, stream_id=None):
         super().apply_changes(stream_id=self.stream_id)

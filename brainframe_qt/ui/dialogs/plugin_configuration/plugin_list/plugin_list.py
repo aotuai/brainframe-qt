@@ -25,14 +25,14 @@ class PluginList(QListWidget):
         loadUi(qt_ui_paths.plugin_list_ui, self)
 
         # Populate plugin_container layout with those plugins
-        self.plugin_names = api.get_plugin_names()
+        self.plugins = api.get_plugins()
         self.current_plugin = None
 
-        for plugin_name in self.plugin_names:
+        for plugin in self.plugins:
             list_widget_item = QListWidgetItem(parent=self)
             self.addItem(list_widget_item)
 
-            item_widget = PluginListItem(name=plugin_name, parent=self)
+            item_widget = PluginListItem(name=plugin.name, parent=self)
 
             # Fix sizing
             list_widget_item.setSizeHint(item_widget.sizeHint())
@@ -41,7 +41,7 @@ class PluginList(QListWidget):
         self.currentItemChanged.connect(self.plugin_changed)
 
         # # Always have an item selected
-        if len(self.plugin_names):
+        if len(self.plugins):
             # Let other widgets be initialized, then call setCurrentRow
             QTimer.singleShot(0, lambda: self.setCurrentRow(0))
             # TODO: Find a clever way of doing this with self.connectNotify
