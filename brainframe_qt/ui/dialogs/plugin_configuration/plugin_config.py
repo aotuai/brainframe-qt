@@ -1,7 +1,7 @@
 from typing import Dict, Callable
 
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QPushButton
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
@@ -29,7 +29,7 @@ class PluginConfigDialog(QDialog):
         else:
             options_widget = GlobalPluginOptionsWidget(parent=self)
         self.plugin_options_widget = options_widget
-        self.layout().addWidget(self.plugin_options_widget, 0, 1)
+        self.layout().addWidget(self.plugin_options_widget, 1, 1)
 
         # Connect signals
         self.plugin_options_widget.plugin_options_changed.connect(
@@ -38,9 +38,19 @@ class PluginConfigDialog(QDialog):
         self.stream_id = stream_id
 
         # self.dialog_button_box.apply.clicked.connect(self.apply)
-        apply_btn = self.dialog_button_box.button(QDialogButtonBox.Apply)
-        apply_func = lambda: self.plugin_options_widget.apply_changes(stream_id)
-        apply_btn.clicked.connect(apply_func)
+        apply_btn: QPushButton = self.dialog_button_box.button(
+            QDialogButtonBox.Apply)
+        apply_btn.clicked.connect(
+            lambda: self.plugin_options_widget.apply_changes(stream_id))
+
+        # Set all buttons that require a plugin to be loaded to disabled,
+        # until a plugin is 'set' they shouldn't be usable.
+        self.set_buttons_disabled(True)
+
+    def set_buttons_disabled(self, val: bool):
+        self.dialog_button_box.button(QDialogButtonBox.Apply).setDisabled(val)
+        self.dialog_button_box.button(QDialogButtonBox.Ok).setDisabled(val)
+        self.plugin_options_widget.setDisabled(val)
 
     @classmethod
     def show_dialog(cls, stream_id=None):
@@ -76,6 +86,9 @@ class PluginConfigDialog(QDialog):
           [peer].plugin_selection_changed
         """
         self.plugin_options_widget.change_plugin(plugin_name)
+
+        # Now that a plugin is loaded, allow the user to interact with buttons
+        self.set_buttons_disabled(False)
 
     def accept(self):
         """Close the window after applying the changes

@@ -1,6 +1,6 @@
 import logging
-from threading import Thread, RLock
-from typing import List, Optional, Generator, Tuple, Dict
+from threading import Thread, RLock, Event
+from typing import List, Optional, Generator, Tuple, Dict, Set
 from uuid import UUID, uuid4
 
 import cv2
@@ -10,9 +10,28 @@ from brainframe.client.api.codecs import ZoneStatus
 from brainframe.client.api.detection_tracks import DetectionTrack
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
-from brainframe.shared.stream_listener import StreamListener
 from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.utils import or_events
+
+
+class StreamListener:
+    """This is used by SyncedStreamReader to pass events to the UI"""
+
+    def __init__(self):
+        self.frame_event = Event()
+        """Called when a new ProcessedFrame is ready"""
+
+        self.stream_initializing_event = Event()
+        """Called when the stream starts initializing"""
+
+        self.stream_halted_event = Event()
+        """Called when the stream has halted"""
+
+        self.stream_closed_event = Event()
+        """Called when the stream connection has closed"""
+
+        self.stream_error_event = Event()
+        """Called upon serious error (this shouldn't happen?)"""
 
 
 class ProcessedFrame:
@@ -58,14 +77,12 @@ class SyncedStreamReader(StreamReader):
             configuration
         """
 
-        self.url = url
-        self.pipeline = pipeline
         self.stream_id = stream_id
         self.status_poller = status_poller
 
         self.latest_processed_frame: ProcessedFrame = None
 
-        self.stream_listeners = set()
+        self.stream_listeners: Set[StreamListener] = set()
         self._stream_listeners_lock = RLock()
 
         # Start threads, now that the object is all set up
@@ -152,10 +169,16 @@ class SyncedStreamReader(StreamReader):
                 (frame_tstamp, frame, statuses))
 
             if new_processed_frame is not None:
-                if new_processed_frame != self.latest_processed_frame:
-                    self.alert_frame_listeners()
+                is_new = new_processed_frame != self.latest_processed_frame
 
+                # This value must be set before alerting frame listeners
+                # this prevents a race condition where latest_processed_frame
+                #  is None
                 self.latest_processed_frame = new_processed_frame
+
+                # Alert frame listeners if this a new frame
+                if is_new:
+                    self.alert_frame_listeners()
 
         logging.info("SyncedStreamReader: Closing")
 
@@ -184,7 +207,7 @@ class SyncedStreamReader(StreamReader):
         """Holds a list of empty ProcessedFrames until a new status comes in
         that is
                                       sB
-        [Empty, Empty, Empty, Empty, Empty]
+        [empty, empty, empty, empty, empty]
         Turn the first index Empty into a nice and full frame, put it into
         self._latest_processed
         """

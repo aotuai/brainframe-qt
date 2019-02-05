@@ -3,10 +3,10 @@ from typing import Callable
 from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtWidgets import QGraphicsView
 
-from brainframe.shared.stream_listener import StreamListener
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.api.synced_reader import SyncedStreamReader
+from brainframe.client.api.synced_reader import SyncedStreamReader, \
+    StreamListener
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources import settings
 
@@ -68,10 +68,9 @@ class StreamWidget(QGraphicsView):
             self.handle_stream_error()
 
     def handle_frame(self):
+        processed_frame = self.stream_reader.latest_processed_frame
 
         self.scene().remove_all_items()
-
-        processed_frame = self.stream_reader.latest_processed_frame
         self.scene().set_frame(frame=processed_frame.frame)
 
         if self.draw_lines:
@@ -115,6 +114,8 @@ class StreamWidget(QGraphicsView):
         if self.stream_reader:
             self.stream_reader.remove_listener(self.stream_listener)
             QCoreApplication.removePostedEvents(self)
+
+        self.stream_listener = StreamListener()
         self.stream_reader = api.get_stream_reader(stream_conf)
         self.stream_reader.add_listener(self.stream_listener)
 
