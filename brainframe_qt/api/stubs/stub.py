@@ -121,6 +121,20 @@ class Stub:
             return ujson.loads(resp.content)
         return None
 
+    def _post_multipart(self, api_url, files):
+        """Send a POST request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param files: A tuple in Requests format for a multipart body
+        :return: The JSON response as a dict, or None if none was sent
+        """
+        resp = self.post(self._full_url(api_url), files=files)
+        if not resp.ok:
+            raise _make_api_error(resp.content)
+
+        if resp.content:
+            return ujson.loads(resp.content)
+        return None
+
     def _put_json(self, api_url, json):
         """Send a PUT request to the given URL.
         :param api_url: The /api/blah/blah to append to the base_url
