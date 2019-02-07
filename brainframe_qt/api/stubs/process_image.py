@@ -12,23 +12,24 @@ class ProcessImageStubMixIn(Stub):
     """Provides stubs to call APIs that run processing on a single frame."""
 
     def process_image(self, img_bgr: np.ndarray,
-                      plugins: List[str],
-                      options: Dict[str, Dict[str, object]]) \
+                      plugin_names: List[str],
+                      option_vals: Dict[str, Dict[str, object]]) \
             -> List[Detection]:
         """Process a single image using the given configuration.
         :param img_bgr: The image to process
-        :param plugins: The plugins to enable while processing the image
-        :param options: Plugin options, where the key is a plugin name and the
-            value is a dict with key-value pairs for each option and its
-            corresponding value. Any specified options will override the global
-            option values
+        :param plugin_names: The plugin names to enable while processing the
+            image
+        :param option_vals: Plugin option values, where the key is a plugin
+            name and the value is a dict with key-value pairs for each option
+            and its corresponding value. Any specified options will override
+            the global option values for that plugin
         :return: All detections in the image
         """
         req = f"/api/process_image"
 
         metadata = {
-            "plugins": plugins,
-            "options": options
+            "plugins": plugin_names,
+            "options": option_vals
         }
         metadata = ujson.dumps(metadata)
 
