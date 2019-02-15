@@ -3,39 +3,46 @@ from typing import Dict, List, Optional
 import ujson
 
 from brainframe.client.api.stubs.stub import Stub
-from brainframe.client.api.codecs import PluginOption
+from brainframe.client.api.codecs import PluginOption, Plugin
 
 
 class PluginStubMixin(Stub):
     """Provides stubs to call APIs to inspect and configure plugins."""
 
-    def get_plugin_names(self) -> List[str]:
+    def get_plugin(self, name) -> Plugin:
         """
-        :return: The names of all available plugins
+        :param name: The name of the plugin to get
+        :return: Plugin with the given name
+        """
+        req = f"/api/plugins/{name}"
+        plugin = self._get(req)
+        return Plugin.from_dict(plugin)
+
+    def get_plugins(self) -> List[Plugin]:
+        """
+        :return: All available plugins
         """
         req = "/api/plugins"
-        plugin_names = self._get(req)
-        return plugin_names
+        plugins = self._get(req)
+        return [Plugin.from_dict(d) for d in plugins]
 
-    def get_plugin_options(self, plugin_name, stream_id=None) \
+    def get_plugin_option_vals(self, plugin_name, stream_id=None) \
             -> Dict[str, PluginOption]:
-        """Gets all available options for a plugin and their current
-        configuration. See the documentation for the PluginOption codec for more
-        info about global and stream level options and how they interact.
+        """Gets the current values for every plugin option. See the
+        documentation for the PluginOption codec for more info about global and
+        stream level options and how they interact.
 
         :param plugin_name: The plugin to find options for
         :param stream_id: The ID of the stream. If this value is None, then the
             global options are returned for that plugin
         :return: A dict where the key is the option name and the value is the
-            PluginOption
+            option's current value
         """
         if stream_id is None:
             req = f"/api/plugins/{plugin_name}/options"
         else:
             req = f"/api/streams/{stream_id}/plugins/{plugin_name}/options"
-        plugin_configs_json = self._get(req)
-        return {name: PluginOption.from_dict(pc)
-                for name, pc in plugin_configs_json.items()}
+        return self._get(req)
 
     def set_plugin_option_vals(self, *, plugin_name, stream_id=None,
                                option_vals: Dict[str, object]):

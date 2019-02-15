@@ -5,7 +5,8 @@ from brainframe.client.api import api_errors
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.streaming import (
-    StreamManager, StatusPoller, SyncedStreamReader)
+    StreamManager, StatusPoller)
+from brainframe.client.api.synced_reader import SyncedStreamReader
 
 
 class StreamStubMixin(Stub):
@@ -81,11 +82,9 @@ class StreamStubMixin(Stub):
 
         logging.info("API: Opening stream on url " + url)
 
-        pipeline = None
-        if "pipeline" in stream_config.parameters:
-            pipeline = stream_config.parameters["pipeline"]
         return self.get_stream_manager().start_streaming(
-            stream_config.id, url, pipeline)
+            stream_config,
+            url)
 
     def close(self):
         if self._status_poller is not None:

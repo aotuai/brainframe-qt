@@ -2,7 +2,7 @@ import random
 
 from PyQt5.QtGui import QColor
 
-from brainframe.client.api.streaming import DetectionTrack
+from brainframe.client.api.detection_tracks import DetectionTrack
 from brainframe.client.api.codecs import Detection
 from brainframe.client.ui.resources.video_items import (
     StreamLabelBox,
@@ -36,13 +36,11 @@ class DetectionPolygon(StreamPolygon):
                  use_polygons=True,
                  show_detection_labels=True,
                  show_tracks=True,
-                 show_confidence=True,
+                 show_recognition=True,
                  show_attributes=True,
                  parent=None):
         """
         :param detection: The Detection object to render
-        :param seconds_old: Fades the detection by a standard amount based on
-        it's age.
         :param parent:
         """
         # Choose a color for this class name
@@ -61,17 +59,16 @@ class DetectionPolygon(StreamPolygon):
             text += detection.class_name
 
         # Add "Identity" to the description box
-        if detection.with_identity is not None:
+        if detection.with_identity is not None and show_recognition:
             if detection.with_identity.nickname is not None:
                 text += "\nName: " + detection.with_identity.nickname
             else:
                 text += "\nName: " + detection.with_identity.unique_name
 
-            if show_confidence:
-                confidence = detection.extra_data['encoding_distance']
-                text += f" ({round(confidence, 2)})"
+            confidence = detection.extra_data['encoding_distance']
+            text += f" ({round(confidence, 2)})"
 
-        if len(detection.attributes) and show_attributes:
+        if detection.attributes and show_attributes:
             attributes_str_list = [a.category + ": " + a.value
                                    for a in detection.attributes]
             attributes_str_list.sort()
@@ -79,7 +76,7 @@ class DetectionPolygon(StreamPolygon):
 
         # Remove all dual newlines
         text = text.strip()
-        if len(text):
+        if text:
             # Create the description box
             top_left = coords[0]
             self.label_box = StreamLabelBox(
@@ -105,6 +102,7 @@ class DetectionPolygon(StreamPolygon):
 
             self.line_item = StreamPolygon(
                 points=line_coords,
+                border_thickness=3,
                 border_color=class_color,
                 close_polygon=False,
                 opacity=.5,

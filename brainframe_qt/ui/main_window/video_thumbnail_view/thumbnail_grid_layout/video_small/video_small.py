@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSignal, QRectF, Qt
 from PyQt5.QtGui import QPainter, QColor, QImage, QFontMetricsF
 
-from brainframe.client.api.streaming import ProcessedFrame
+from brainframe.client.api.synced_reader import ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources.video_items import StreamWidget
 
@@ -33,9 +33,10 @@ class VideoSmall(StreamWidget):
 
         self.stream_conf = stream_conf
 
-    def handle_frame(self, processed_frame: ProcessedFrame):
-        super().handle_frame(processed_frame)
+    def handle_frame(self):
+        super().handle_frame()
 
+        processed_frame = self.stream_reader.latest_processed_frame
         self.manage_alert_indication(processed_frame.zone_statuses)
 
     def manage_alert_indication(self, zone_statuses):

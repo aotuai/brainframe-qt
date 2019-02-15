@@ -1,10 +1,6 @@
 from typing import List
 
-from io import BytesIO
-from PIL import Image
 import ujson
-import numpy as np
-import cv2
 
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.codecs import Identity
