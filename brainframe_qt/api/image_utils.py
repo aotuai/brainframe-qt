@@ -28,9 +28,6 @@ def encode(format: str, image_bgr_arr: np.ndarray):
     image.save(img_bytes, format=format)
     img_bytes = img_bytes.getvalue()
 
-    # import cv2
-    # cv2.imshow("ayy", decode(img_bytes))
-    # cv2.waitKey(10000)
     return img_bytes
 
 
