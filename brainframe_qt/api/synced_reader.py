@@ -3,7 +3,6 @@ from threading import Thread, RLock, Event
 from typing import List, Optional, Generator, Tuple, Dict, Set
 from uuid import UUID, uuid4
 
-import cv2
 import numpy as np
 
 from brainframe.client.api.codecs import ZoneStatus
@@ -51,6 +50,16 @@ class ProcessedFrame:
         self.zone_statuses: List[ZoneStatus] = zone_statuses
         self.has_new_zone_statuses = has_new_statuses
         self.tracks: List[DetectionTrack] = tracks
+
+        # Cachable properties
+        self._frame_rgb = None
+
+    @property
+    def frame_rgb(self):
+        """Flip the BGR channels to RGB"""
+        if not self._frame_rgb:
+            self._frame_rgb = self.frame[..., ::-1].copy()
+        return self._frame_rgb
 
 
 class SyncedStreamReader(StreamReader):
@@ -252,7 +261,6 @@ class SyncedStreamReader(StreamReader):
             # current frame
             if len(buffer) and buffer[0].tstamp <= last_status_tstamp:
                 frame = buffer.pop(0)
-                rgb = cv2.cvtColor(frame.frame, cv2.COLOR_BGR2RGB)
 
                 # Get a list of DetectionTracks that had a detection for
                 # this timestamp
@@ -260,7 +268,7 @@ class SyncedStreamReader(StreamReader):
                                  if dt.latest_tstamp == status_tstamp]
 
                 latest_processed = ProcessedFrame(
-                    frame=rgb,
+                    frame=frame.frame_rgb,
                     tstamp=frame.tstamp,
                     zone_statuses=statuses,
                     has_new_statuses=statuses != last_used_zone_statuses,

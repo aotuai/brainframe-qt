@@ -1,11 +1,11 @@
 from typing import List, Optional
 
-import cv2
 import numpy as np
 import ujson
 
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.codecs import Alert
+from brainframe.client.api import image_utils
 from brainframe.client.api import api_errors
 
 
@@ -49,7 +49,6 @@ class AlertStubMixin(Stub):
         req = f"/api/alerts/{alert_id}/frame"
         try:
             img_bytes, _ = self._get_raw(req)
-            return cv2.imdecode(np.fromstring(img_bytes, np.uint8),
-                                cv2.IMREAD_COLOR)
+            return image_utils.decode(img_bytes)
         except api_errors.FrameNotFoundForAlertError:
             return None
