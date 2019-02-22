@@ -7,6 +7,8 @@ from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.status_poller import StatusPoller
 
 
+# Avoid importing stream code where possible to avoid unnecessary OpenCV
+# dependencies
 if TYPE_CHECKING:
     from brainframe.client.api.streaming import (
         SyncedStreamReader, StreamManager)
@@ -28,7 +30,7 @@ class StreamStubMixin(Stub):
             self._status_poller = StatusPoller(self, 33)
         return self._status_poller
 
-    def get_stream_manager(self) -> StreamManager:
+    def get_stream_manager(self) -> "StreamManager":
         """Returns the singleton StreamManager object"""
         # Lazily import streaming code to avoid OpenCV dependencies unless
         # necessary
@@ -73,7 +75,7 @@ class StreamStubMixin(Stub):
             self._stream_manager.close_stream(stream_id)
 
     def get_stream_reader(self, stream_config: StreamConfiguration) \
-            -> Optional[SyncedStreamReader]:
+            -> Optional["SyncedStreamReader"]:
         """Get the SyncedStreamReader for the given stream_configuration.
 
         :param stream_config: The stream configuration to open.
