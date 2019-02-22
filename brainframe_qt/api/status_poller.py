@@ -15,9 +15,9 @@ class StatusPoller(Thread):
     def __init__(self, api, ms_status_updates):
         """
         :param api: An API() object for interacting with the BrainFrame REST
-        api.
-        :param ms_status_updates: Milliseconds between calling for a zone status
-        update
+            api
+        :param ms_status_updates: Milliseconds between calling for a zone
+            status update
         """
         super().__init__(name="StatusPollerThread")
         self._api = api
@@ -29,7 +29,7 @@ class StatusPoller(Thread):
         self.start()
 
     def run(self):
-        """Polls Brainserver for ZoneStatuses at a constant rate"""
+        """Polls BrainFrame for ZoneStatuses at a constant rate"""
         self._running = True
         call_time = 0
         while self._running:

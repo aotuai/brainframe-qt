@@ -1,6 +1,6 @@
 from brainframe.client.api.status_poller import StatusPoller
-from brainframe.client.api.synced_reader import SyncedStreamReader
 from brainframe.client.api.codecs import StreamConfiguration
+from .synced_reader import SyncedStreamReader
 
 
 class StreamManager:

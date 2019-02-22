@@ -1,7 +1,6 @@
 from PyQt5.QtCore import pyqtSignal, QRectF, Qt
 from PyQt5.QtGui import QPainter, QColor, QImage, QFontMetricsF
 
-from brainframe.client.api.synced_reader import ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources.video_items import StreamWidget
 
