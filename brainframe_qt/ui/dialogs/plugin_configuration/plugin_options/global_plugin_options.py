@@ -38,7 +38,7 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
 
         default_values = {key: option.default
                           for key, option in
-                          api.get_plugin_option_vals(self.current_plugin).items()}
+                          api.get_plugin(self.current_plugin).options.items()}
 
         # Check if there are any changed options
         changed_options = []
