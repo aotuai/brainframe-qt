@@ -27,7 +27,7 @@ class PluginStubMixin(Stub):
         return [Plugin.from_dict(d) for d in plugins]
 
     def get_plugin_option_vals(self, plugin_name, stream_id=None) \
-            -> Dict[str, PluginOption]:
+            -> Dict[str, object]:
         """Gets the current values for every plugin option. See the
         documentation for the PluginOption codec for more info about global and
         stream level options and how they interact.
