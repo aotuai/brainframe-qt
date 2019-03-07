@@ -5,14 +5,12 @@ from collections import deque
 import numpy as np
 
 from brainframe.client.api.codecs import Detection
-from brainframe.shared.utils import closest_index
 
 DET_TSTAMP_TUPLE = Tuple[Detection, float]
 
 
 class DetectionTrack:
     def __init__(self, history=None, max_size=1000):
-        """"""
         self._max_size = max_size
         self._history: Deque[DET_TSTAMP_TUPLE]
         self._history = history if history else deque(maxlen=self._max_size)
