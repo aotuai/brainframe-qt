@@ -45,37 +45,45 @@ class ZoneStatus(Codec):
     """The current status of everything going on inside a zone.
     """
 
-    def __init__(self, *, zone, tstamp, detections, alerts,
+    def __init__(self, *, zone, tstamp, within, entering, exiting, alerts,
                  total_entered, total_exited):
         self.zone: Zone = zone
         self.tstamp: float = tstamp
         self.total_entered: dict = total_entered
         self.total_exited: dict = total_exited
-        self.detections: List[Detection] = detections
+        self.within: List[Detection] = within
+        self.entering: List[Detection] = entering
+        self.exiting: List[Detection] = exiting
         self.alerts: List[Alert] = alerts
 
     @property
-    def detection_counts(self) -> dict:
+    def detection_within_counts(self) -> dict:
         """The current count of each class type detected in the video
         :returns: {'class_name': int count, ...} """
-        counter = Counter([det.class_name for det in self.detections])
+        counter = Counter([det.class_name for det in self.within])
         return counter
 
     def to_dict(self):
         d = dict(self.__dict__)
         d["zone"] = self.zone.to_dict()
-        d["detections"] = [det.to_dict() for det in self.detections]
+        d["within"] = [det.to_dict() for det in self.within]
+        d["entering"] = [det.to_dict() for det in self.entering]
+        d["exiting"] = [det.to_dict() for det in self.exiting]
         d["alerts"] = [alert.to_dict() for alert in self.alerts]
         return d
 
     @staticmethod
     def from_dict(d):
         zone = Zone.from_dict(d["zone"])
-        detections = [Detection.from_dict(det) for det in d["detections"]]
+        within = [Detection.from_dict(det) for det in d["within"]]
+        entering = [Detection.from_dict(det) for det in d["entering"]]
+        exiting = [Detection.from_dict(det) for det in d["exiting"]]
         alerts = [Alert.from_dict(alert) for alert in d["alerts"]]
         return ZoneStatus(zone=zone,
                           tstamp=d["tstamp"],
                           total_entered=d["total_entered"],
                           total_exited=d["total_exited"],
-                          detections=detections,
+                          within=within,
+                          entering=entering,
+                          exiting=exiting,
                           alerts=alerts)

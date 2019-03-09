@@ -247,7 +247,7 @@ class SyncedStreamReader(StreamReader):
                 last_status_tstamp = status_tstamp
 
                 # Iterate over all new detections, and add them to their tracks
-                dets = next(s.detections for s in statuses
+                dets = next(s.within for s in statuses
                             if s.zone.name == DEFAULT_ZONE_NAME)
                 for det in dets:
                     # Create new tracks where necessary
