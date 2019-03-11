@@ -58,14 +58,14 @@ class StreamGraphicsScene(QGraphicsScene):
 
     def draw_lines(self, zone_statuses):
         # Draw all of the zones (except the default zone)
-        for zone_status in zone_statuses:
+        for zone_status in zone_statuses.values():
             if zone_status.zone.name != DEFAULT_ZONE_NAME:
                 if len(zone_status.zone.coords) == 2:
                     self._new_zone_status_polygon(zone_status)
 
     def draw_regions(self, zone_statuses):
         # Draw all of the zones (except the default zone)
-        for zone_status in zone_statuses:
+        for zone_status in zone_statuses.values():
             if zone_status.zone.name != DEFAULT_ZONE_NAME:
                 if len(zone_status.zone.coords) > 2:
                     self._new_zone_status_polygon(zone_status)

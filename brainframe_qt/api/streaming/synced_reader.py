@@ -194,7 +194,7 @@ class SyncedStreamReader(StreamReader):
     def sync_frames(self) -> Generator[ProcessedFrame,
                                        Tuple[float,
                                              np.ndarray,
-                                             List[ZoneStatus]],
+                                             Dict[str, ZoneStatus]],
                                        None]:
         """A generator where the input is frame_tstamp, frame, statuses and
         it yields out ProcessedFrames where the zonestatus and frames are
@@ -228,7 +228,7 @@ class SyncedStreamReader(StreamReader):
 
         # Type-hint the input to the generator
         # noinspection PyUnusedLocal
-        statuses: List[ZoneStatus]
+        statuses: Dict[str, ZoneStatus]
 
         while True:
             frame_tstamp, frame, statuses = yield latest_processed
@@ -237,7 +237,8 @@ class SyncedStreamReader(StreamReader):
                 ProcessedFrame(frame, frame_tstamp, None, False, None))
 
             # Get a timestamp from any of the zone statuses
-            status_tstamp = statuses[-1].tstamp if len(statuses) else None
+            status_tstamp = (statuses[DEFAULT_ZONE_NAME].tstamp
+                             if len(statuses) else None)
 
             # Check if this is a fresh zone_status or not
             if len(statuses) and last_status_tstamp != status_tstamp:
@@ -247,8 +248,7 @@ class SyncedStreamReader(StreamReader):
                 last_status_tstamp = status_tstamp
 
                 # Iterate over all new detections, and add them to their tracks
-                dets = next(s.within for s in statuses
-                            if s.zone.name == DEFAULT_ZONE_NAME)
+                dets = statuses[DEFAULT_ZONE_NAME].within
                 for det in dets:
                     # Create new tracks where necessary
                     track_id = det.track_id if det.track_id else uuid4()

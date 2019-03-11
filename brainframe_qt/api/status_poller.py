@@ -1,7 +1,7 @@
 import logging
 from threading import Thread
 from time import sleep, time
-from typing import List
+from typing import Dict
 
 from requests.exceptions import ConnectionError as RequestsConnectionError
 
@@ -55,11 +55,11 @@ class StatusPoller(Thread):
     def is_running(self):
         return self._running
 
-    def latest_statuses(self, stream_id) -> List[codecs.ZoneStatus]:
+    def latest_statuses(self, stream_id) -> Dict[str, codecs.ZoneStatus]:
         """Returns the latest cached list of ZoneStatuses for that stream_id"""
         latest = self._latest
         if stream_id not in latest:
-            return []
+            return {}
         return latest[stream_id]
 
     def close(self):
