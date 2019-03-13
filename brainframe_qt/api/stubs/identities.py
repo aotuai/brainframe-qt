@@ -43,6 +43,13 @@ class IdentityStubMixin(Stub):
         saved = self._post_codec(req, identity)
         return Identity.from_dict(saved)
 
+    def delete_identity(self, identity_id: int):
+        """Deletes the identity with the given ID.
+        :param identity_id: The ID of the identity to delete
+        """
+        req = f"/api/identities/{identity_id}"
+        self._delete(req)
+
     def new_identity_image(self, identity_id: int, class_name: str,
                            storage_id: int):
         """Saves and encodes an image under the identity with the given ID.

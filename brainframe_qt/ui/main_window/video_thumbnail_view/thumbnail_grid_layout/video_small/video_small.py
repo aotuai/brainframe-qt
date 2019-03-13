@@ -1,7 +1,6 @@
 from PyQt5.QtCore import pyqtSignal, QRectF, Qt
 from PyQt5.QtGui import QPainter, QColor, QImage, QFontMetricsF
 
-from brainframe.client.api.synced_reader import ProcessedFrame
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources.video_items import StreamWidget
 
@@ -42,7 +41,8 @@ class VideoSmall(StreamWidget):
     def manage_alert_indication(self, zone_statuses):
 
         # Any active alerts?
-        alerts = any(zone_status.alerts for zone_status in zone_statuses)
+        alerts = any(zone_status.alerts
+                     for zone_status in zone_statuses.values())
 
         # self.ongoing_alerts is used during every paint in drawForeground
         if alerts and not self.alerts_ongoing:

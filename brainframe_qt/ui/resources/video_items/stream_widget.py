@@ -5,8 +5,7 @@ from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.api.synced_reader import SyncedStreamReader, \
-    StreamListener
+from brainframe.client.api.streaming import SyncedStreamReader, StreamListener
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.client.ui.resources import settings
 

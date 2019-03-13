@@ -29,7 +29,7 @@ class ZoneStatusPolygon(StreamPolygon):
                                if v > 0])
         else:
             # If the zone is a region
-            counts = status.detection_counts
+            counts = status.detection_within_counts
             items = list(counts.items())
             items.sort()
             text += "\n" + "\n".join([f"{v} {k}{'s' * bool(v - 1)}"
@@ -41,7 +41,7 @@ class ZoneStatusPolygon(StreamPolygon):
 
         # Set opacity based on alert status and detection status
         opacity = 0.3
-        if len(status.alerts) or len(status.detections):
+        if len(status.alerts) or len(status.within):
             opacity = 1
 
         # Set the color based on whether or not there is an ongoing alert

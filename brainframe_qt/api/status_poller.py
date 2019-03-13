@@ -1,7 +1,7 @@
 import logging
 from threading import Thread
 from time import sleep, time
-from typing import List
+from typing import Dict
 
 from requests.exceptions import ConnectionError as RequestsConnectionError
 
@@ -15,9 +15,9 @@ class StatusPoller(Thread):
     def __init__(self, api, ms_status_updates):
         """
         :param api: An API() object for interacting with the BrainFrame REST
-        api.
-        :param ms_status_updates: Milliseconds between calling for a zone status
-        update
+            api
+        :param ms_status_updates: Milliseconds between calling for a zone
+            status update
         """
         super().__init__(name="StatusPollerThread")
         self._api = api
@@ -29,7 +29,7 @@ class StatusPoller(Thread):
         self.start()
 
     def run(self):
-        """Polls Brainserver for ZoneStatuses at a constant rate"""
+        """Polls BrainFrame for ZoneStatuses at a constant rate"""
         self._running = True
         call_time = 0
         while self._running:
@@ -55,11 +55,11 @@ class StatusPoller(Thread):
     def is_running(self):
         return self._running
 
-    def latest_statuses(self, stream_id) -> List[codecs.ZoneStatus]:
+    def latest_statuses(self, stream_id) -> Dict[str, codecs.ZoneStatus]:
         """Returns the latest cached list of ZoneStatuses for that stream_id"""
         latest = self._latest
         if stream_id not in latest:
-            return []
+            return {}
         return latest[stream_id]
 
     def close(self):

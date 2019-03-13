@@ -2,10 +2,10 @@ from typing import List, Dict
 import ujson
 
 import numpy as np
-import cv2
 
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.codecs import Detection
+from brainframe.client.api import image_utils
 
 
 class ProcessImageStubMixIn(Stub):
@@ -34,8 +34,7 @@ class ProcessImageStubMixIn(Stub):
         metadata = ujson.dumps(metadata)
 
         # Encode the image
-        _, img_bytes = cv2.imencode(".jpg", img_bgr)
-        img_bytes = bytes(img_bytes.tostring())
+        img_bytes = image_utils.encode("jpeg", img_bgr)
 
         files = {
             "image": ("image.jpg",

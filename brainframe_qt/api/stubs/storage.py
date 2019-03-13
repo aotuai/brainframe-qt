@@ -1,10 +1,10 @@
 from typing import Tuple
 from io import BytesIO
 
-from PIL import Image
 import numpy as np
-import cv2
+from PIL import Image
 
+from brainframe.client.api import image_utils
 from brainframe.client.api.stubs.stub import Stub
 
 
@@ -28,8 +28,7 @@ class StorageStubMixin(Stub):
         :return: A numpy array in OpenCV format
         """
         data, _ = self.get_storage_data(storage_id)
-        return cv2.imdecode(np.fromstring(data, np.uint8),
-                            cv2.IMREAD_COLOR)
+        return image_utils.decode(data)
 
     def new_storage(self, data: bytes, mime_type: str) -> int:
         """Stores the given data.

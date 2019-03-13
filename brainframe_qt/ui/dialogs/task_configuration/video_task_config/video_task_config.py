@@ -4,7 +4,6 @@ from PyQt5.QtCore import pyqtSignal, QPointF, Qt
 from PyQt5.QtGui import QMouseEvent, QColor
 from shapely import geometry
 
-from brainframe.client.api.synced_reader import ProcessedFrame
 from brainframe.client.ui.resources.video_items import (
     ClickCircle,
     StreamWidget,
