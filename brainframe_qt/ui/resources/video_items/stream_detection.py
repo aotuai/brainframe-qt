@@ -43,7 +43,7 @@ class DetectionPolygon(StreamPolygon):
         :param detection: The Detection object to render
         :param parent:
         """
-        # Choose a color for this class name
+        # Choose a color for this class name (or track id, if tracked)
         class_color = generate_unique_qcolor(detection.class_name)
 
         # Get the polygon to draw
@@ -86,6 +86,8 @@ class DetectionPolygon(StreamPolygon):
                 parent=self)
 
         if len(track) > 1 and show_tracks:
+            line_color = generate_unique_qcolor(str(detection.track_id))
+
             # Draw a track for the detections history
             line_coords = []
             for prev_det, detection_tstamp in track:
@@ -103,7 +105,7 @@ class DetectionPolygon(StreamPolygon):
             self.line_item = StreamPolygon(
                 points=line_coords,
                 border_thickness=3,
-                border_color=class_color,
+                border_color=line_color,
                 close_polygon=False,
                 opacity=.5,
                 parent=self)
