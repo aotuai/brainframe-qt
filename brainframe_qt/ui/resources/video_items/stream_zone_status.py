@@ -23,14 +23,23 @@ class ZoneStatusPolygon(StreamPolygon):
         text = status.zone.name
         if len(status.zone.coords) == 2:
             # If the zone is a line
-            text = status.zone.name + "\nEntering: "
-            text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
-                               for k, v in status.total_entered.items()
-                               if v > 0])
-            text += "\nExiting: "
-            text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
-                               for k, v in status.total_exited.items()
-                               if v > 0])
+            if len(status.total_entered):
+                text = status.zone.name + "\nEntering: "
+                text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
+                                   for k, v in status.total_entered.items()
+                                   if v > 0])
+            if len(status.total_exited):
+                text += "\nExiting: "
+                text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
+                                   for k, v in status.total_exited.items()
+                                   if v > 0])
+            counts = status.detection_within_counts
+            if len(counts):
+                text += "\nWithin: "
+                items = list(counts.items())
+                items.sort()
+                text += "\n" + "\n".join([f"{v} {k}{'s' * bool(v - 1)}"
+                                          for k, v in items])
         else:
             # If the zone is a region
             counts = status.detection_within_counts
