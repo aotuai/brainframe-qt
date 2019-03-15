@@ -45,11 +45,13 @@ class ZoneStatusPolygon(StreamPolygon):
 
         # Set opacity based on alert status and detection status
         opacity = 0.3
-        if len(status.alerts) or len(status.within):
+        if len(status.alerts) or len(status.within) or len(status.entering) \
+                or len(status.exiting):
             opacity = 1
 
         # Set the color based on whether or not there is an ongoing alert
-        color = self.ALERTING_COLOR if len(status.alerts) else self.NORMAL_COLOR
+        color = (self.ALERTING_COLOR if len(status.alerts)
+                 else self.NORMAL_COLOR)
 
         # Create the polygon
         super().__init__(points=status.zone.coords,
