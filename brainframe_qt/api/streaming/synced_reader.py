@@ -40,8 +40,8 @@ class ProcessedFrame:
         """
         :param frame: RGB data on the frame
         :param tstamp: The timestamp of the frame
-        :param zone_statuses: A zone status that is most relevant to this frame,
-            though it might not be a result of this frame specifically
+        :param zone_statuses: A zone status that is most relevant to this
+            frame, though it might not be a result of this frame specifically
         :param has_new_statuses: True if this processed frame contains new
             zone statuses that have not appeared in previous processed frames
         """
