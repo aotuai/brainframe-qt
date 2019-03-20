@@ -17,7 +17,7 @@ def register_error_type(cls):
     return cls
 
 
-class BaseAPIError(BaseException):
+class BaseAPIError(Exception):
     """All API errors subclass this error."""
     def __init__(self, kind, description):
         self.kind = kind
