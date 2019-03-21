@@ -7,8 +7,8 @@ from brainframe.client.api.codecs import Identity
 
 
 class IdentityStubMixin(Stub):
-    """Provides stubs to call APIs that create and update identities, as well as
-    add new examples of the identity in image or vector form.
+    """Provides stubs to call APIs that create and update identities, as well
+    as add new examples of the identity in image or vector form.
     """
 
     def get_identity(self, identity_id: int) -> Identity:
