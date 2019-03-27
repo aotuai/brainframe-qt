@@ -56,10 +56,11 @@ class DetectionTrack:
         if interp_to_tstamp > self.latest_tstamp:
             raise ValueError("You can't interpolate to a timestamp that's "
                              "higher than the current tracks latest timestamp!")
+
         recent: DET_TSTAMP_TUPLE = None
         older: DET_TSTAMP_TUPLE = None
         for det, tstamp in self:
-            if tstamp >= interp_to_tstamp:
+            if tstamp > interp_to_tstamp:
                 recent = det, tstamp
             else:
                 older = det, tstamp
