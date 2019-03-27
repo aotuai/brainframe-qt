@@ -66,7 +66,7 @@ class ProcessedFrame:
         return self._frame_rgb
 
 
-class SyncedStreamReader:
+class SyncedStreamReader(StreamReader):
     """Reads frames from a stream and syncs them up with zone statuses."""
     MAX_BUF_SIZE = 100
     MAX_CACHE_TRACK_SECONDS = 30
@@ -133,6 +133,22 @@ class SyncedStreamReader:
     def remove_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
             self.stream_listeners.remove(listener)
+
+    @property
+    def status(self) -> StreamStatus:
+        return self._stream_reader.status
+
+    @property
+    def latest_frame(self):
+        return self._stream_reader.latest_frame
+
+    @property
+    def new_frame_event(self):
+        return self._stream_reader.new_frame_event
+
+    @property
+    def new_status_event(self):
+        return self._stream_reader.new_status_event
 
     def _sync_detections_with_stream(self):
         while self._stream_reader.status != StreamStatus.INITIALIZING:
