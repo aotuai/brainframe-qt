@@ -70,7 +70,8 @@ class StreamConfigurationDialog(QDialog):
 
         return StreamConfiguration(name=dialog.stream_name.text(),
                                    connection_type=dialog.connection_type,
-                                   parameters=params)
+                                   connection_options=params,
+                                   runtime_options={})
 
     @pyqtSlot(str)
     def connection_type_changed_slot(self, connection_type):

@@ -150,6 +150,9 @@ class SyncedStreamReader(StreamReader):
     def new_status_event(self):
         return self._stream_reader.new_status_event
 
+    def set_runtime_option_vals(self, runtime_options: dict):
+        self._stream_reader.set_runtime_option_vals(runtime_options)
+
     def _sync_detections_with_stream(self):
         while self._stream_reader.status != StreamStatus.INITIALIZING:
             sleep(0.01)

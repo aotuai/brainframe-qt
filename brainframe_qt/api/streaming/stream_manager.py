@@ -30,8 +30,8 @@ class StreamManager:
         """
         if stream_config.id not in self._stream_readers:
             pipeline = None
-            if "pipeline" in stream_config.parameters:
-                pipeline = stream_config.parameters["pipeline"]
+            if "pipeline" in stream_config.connection_options:
+                pipeline = stream_config.connection_options["pipeline"]
 
             latency = StreamReader.DEFAULT_LATENCY
             if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:

@@ -94,6 +94,11 @@ class OpenCVStreamReader(StreamReader):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         return timestamp, frame
 
+    def set_runtime_option_vals(self, runtime_options: dict):
+        # Ignore options, since this is a minimalist stream reader meant to
+        # stream no matter what
+        pass
+
     def close(self):
         """Sends a request to stop the StreamReader."""
         self._close_requested = True
