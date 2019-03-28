@@ -1,5 +1,6 @@
-from typing import List, Optional, TYPE_CHECKING
+from typing import List, Optional, Dict, TYPE_CHECKING
 import logging
+import ujson
 
 from brainframe.client.api import api_errors
 from brainframe.client.api.codecs import StreamConfiguration
@@ -94,6 +95,29 @@ class StreamStubMixin(Stub):
         return self.get_stream_manager().start_streaming(
             stream_config,
             url)
+
+    def get_runtime_options(self, stream_id: int) -> Dict[str, object]:
+        """Returns the runtime options for the stream with the given ID. This
+        can also be read from a StreamConfiguration object.
+
+        :param stream_id: The ID of the stream to get runtime options from
+        :return: Runtime options
+        """
+        req = f"/api/streams/{stream_id}/runtime_options"
+        runtime_options = self._get(req)
+
+        return runtime_options
+
+    def set_runtime_option_vals(self, stream_id: int,
+                                runtime_options: Dict[str, object]):
+        """Sets a stream's runtime options to the given values.
+
+        :param stream_id: The ID of the stream to set runtime options for
+        :param runtime_options: The runtime options
+        """
+        req = f"/api/streams/{stream_id}/runtime_options"
+        runtime_options_json = ujson.dumps(runtime_options)
+        self._put_json(req, runtime_options_json)
 
     def close(self):
         if self._status_poller is not None:

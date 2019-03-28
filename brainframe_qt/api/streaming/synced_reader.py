@@ -1,7 +1,8 @@
 import logging
 from threading import Thread, RLock, Event
-from typing import List, Optional, Generator, Tuple, Dict, Set
+from typing import List, Generator, Tuple, Dict, Set
 from uuid import UUID, uuid4
+from time import sleep
 
 import numpy as np
 
@@ -9,7 +10,10 @@ from brainframe.client.api.codecs import ZoneStatus
 from brainframe.client.api.detection_tracks import DetectionTrack
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
-from brainframe.shared.stream_reader import StreamReader, StreamStatus
+from brainframe.shared.stream_reader import (
+    StreamReader,
+    StreamStatus
+)
 from brainframe.shared.utils import or_events
 
 
@@ -40,8 +44,8 @@ class ProcessedFrame:
         """
         :param frame: RGB data on the frame
         :param tstamp: The timestamp of the frame
-        :param zone_statuses: A zone status that is most relevant to this frame,
-            though it might not be a result of this frame specifically
+        :param zone_statuses: A zone status that is most relevant to this
+            frame, though it might not be a result of this frame specifically
         :param has_new_statuses: True if this processed frame contains new
             zone statuses that have not appeared in previous processed frames
         """
@@ -69,24 +73,16 @@ class SyncedStreamReader(StreamReader):
 
     def __init__(self,
                  stream_id: int,
-                 url: str,
-                 status_poller: StatusPoller, *,
-                 latency: int = StreamReader.DEFAULT_LATENCY,
-                 pipeline: Optional[str]):
+                 stream_reader: StreamReader,
+                 status_poller: StatusPoller):
         """Creates a new SyncedStreamReader.
 
-        :param stream_id: The unique Id of this stream
-        :param url: The URL to connect to
+        :param stream_id: The stream ID that this synced stream reader is for
+        :param stream_reader: The stream reader to get frames from
         :param status_poller: The StatusPoller currently in use
-        :param latency: The latency to apply during streaming. A higher latency
-            can lead to a smoother stream if the connection is unstable, but
-            is generally unnecessary when the stream source is localized. If
-            a custom pipeline is specified, this value will be ignored
-        :pipeline: A custom GStreamer pipeline, or None to use a default
-            configuration
         """
-
         self.stream_id = stream_id
+        self._stream_reader = stream_reader
         self.status_poller = status_poller
 
         self.latest_processed_frame: ProcessedFrame = None
@@ -95,15 +91,14 @@ class SyncedStreamReader(StreamReader):
         self._stream_listeners_lock = RLock()
 
         # Start threads, now that the object is all set up
-        super().__init__(url, latency=latency, pipeline=pipeline)
         self._thread = Thread(
-            name=f"SyncedStreamReader thread for stream ID {stream_id}",
+            name=f"SyncedStreamReader thread for stream ID {stream_reader}",
             target=self._sync_detections_with_stream)
         self._thread.start()
 
     def alert_frame_listeners(self):
         with self._stream_listeners_lock:
-            if self.status is StreamStatus.STREAMING:
+            if self._stream_reader.status is StreamStatus.STREAMING:
                 for listener in self.stream_listeners:
                     listener.frame_event.set()
 
@@ -128,8 +123,8 @@ class SyncedStreamReader(StreamReader):
     def add_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
             self.stream_listeners.add(listener)
-            if not self.status.STREAMING:
-                self.alert_status_listeners(self.status)
+            if not self._stream_reader.status.STREAMING:
+                self.alert_status_listeners(self._stream_reader.status)
             elif self.latest_processed_frame is not None:
                 self.alert_frame_listeners()
             else:
@@ -139,39 +134,60 @@ class SyncedStreamReader(StreamReader):
         with self._stream_listeners_lock:
             self.stream_listeners.remove(listener)
 
+    @property
+    def status(self) -> StreamStatus:
+        return self._stream_reader.status
+
+    @property
+    def latest_frame(self):
+        return self._stream_reader.latest_frame
+
+    @property
+    def new_frame_event(self):
+        return self._stream_reader.new_frame_event
+
+    @property
+    def new_status_event(self):
+        return self._stream_reader.new_status_event
+
+    def set_runtime_option_vals(self, runtime_options: dict):
+        self._stream_reader.set_runtime_option_vals(runtime_options)
+
     def _sync_detections_with_stream(self):
-        self.wait_until_initialized()
+        while self._stream_reader.status != StreamStatus.INITIALIZING:
+            sleep(0.01)
 
         # Create the frame syncing generator and initialize it
         frame_syncer = self.sync_frames()
         next(frame_syncer)
 
-        frame_or_status_event = or_events(self.new_frame_event,
-                                          self.new_status_event)
+        frame_or_status_event = or_events(self._stream_reader.new_frame_event,
+                                          self._stream_reader.new_status_event)
 
         while True:
             frame_or_status_event.wait()
 
-            if self.new_status_event.is_set():
-                self.new_status_event.clear()
-                if self.status is StreamStatus.CLOSED:
+            if self._stream_reader.new_status_event.is_set():
+                self._stream_reader.new_status_event.clear()
+                if self._stream_reader.status is StreamStatus.CLOSED:
                     break
-                if self.status is not StreamStatus.STREAMING:
-                    self.alert_status_listeners(self.status)
+                if self._stream_reader.status is not StreamStatus.STREAMING:
+                    self.alert_status_listeners(self._stream_reader.status)
                     continue
 
             # If streaming is the new event we need to process the frame
-            if not self.new_frame_event.is_set():
+            if not self._stream_reader.new_frame_event.is_set():
                 continue
 
             # new_frame_event must have been triggered
-            self.new_frame_event.clear()
+            self._stream_reader.new_frame_event.clear()
 
             # Get the new frame + timestamp
-            frame_tstamp, frame = self.latest_frame
+            frame_tstamp, frame = self._stream_reader.latest_frame
 
             # Get the latest zone statuses from thread status poller thread
-            statuses = self.status_poller.latest_statuses(self.stream_id)
+            statuses = self.status_poller.latest_statuses(
+                self.stream_id)
 
             # Run the syncing algorithm
             new_processed_frame = frame_syncer.send(
@@ -288,9 +304,9 @@ class SyncedStreamReader(StreamReader):
 
     def close(self):
         """Sends a request to close the SyncedStreamReader."""
-        super().close()
+        self._stream_reader.close()
 
     def wait_until_closed(self):
         """Hangs until the SyncedStreamReader has been closed."""
-        super().wait_until_closed()
+        self._stream_reader.wait_until_closed()
         self._thread.join()

@@ -253,3 +253,12 @@ class ZoneAlarmNotFoundError(BaseAPIError):
     """There was an attempt to access a zone alarm that does not exist."""
     def __init__(self, description):
         super().__init__(error_kinds.ZONE_ALARM_NOT_FOUND, description)
+
+
+@register_error_type
+class InvalidRuntimeOptionError(BaseAPIError):
+    """There was an attempt to set a runtime option that is not supported or is
+    of the wrong type.
+    """
+    def __init__(self, description):
+        super().__init__(error_kinds.INVALID_RUNTIME_OPTION, description)
