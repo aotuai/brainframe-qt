@@ -8,18 +8,22 @@ class StreamConfiguration(Codec):
 
     Connection Types:
         "webcam"
-        parameters: {"device_id": 0}
+        connection_options: {"device_id": 0}
 
         "ip_camera"
-        parameters: {"url": "http://185.10.80.33:8082"}
+        connection_options: {"url": "http://185.10.80.33:8082"}
 
         "file"
-        parameters: {"filepath": "/home/usr/videos/my_vid.mp4"}
+        connection_options: {"filepath": "/home/usr/videos/my_vid.mp4"}
     """
 
     ConnType = codec_enums.ConnType
 
-    def __init__(self, *, name, connection_type, parameters, id_=None):
+    def __init__(self, *, name: str,
+                 connection_type: ConnType,
+                 connection_options: dict,
+                 runtime_options: dict,
+                 id_=None):
         assert connection_type in StreamConfiguration.ConnType, \
             "You must feed StreamConfiguration.ConnType into connection_type" \
             " You used a " + str(type(connection_type)) + " instead!"
@@ -27,7 +31,8 @@ class StreamConfiguration(Codec):
         self.name = name
         self.id = id_
         self.connection_type = connection_type
-        self.parameters = parameters
+        self.connection_options = connection_options
+        self.runtime_options = runtime_options
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -40,7 +45,8 @@ class StreamConfiguration(Codec):
         return StreamConfiguration(name=d["name"],
                                    id_=d["id"],
                                    connection_type=connection_t,
-                                   parameters=d["parameters"])
+                                   connection_options=d["connection_options"],
+                                   runtime_options=d["runtime_options"])
 
 
 # Engine related stuff

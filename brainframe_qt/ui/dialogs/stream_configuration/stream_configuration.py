@@ -55,12 +55,14 @@ class StreamConfigurationDialog(QDialog):
             return None
 
         if dialog.connection_type == StreamConfiguration.ConnType.IP_CAMERA:
-            params = {"url": str(dialog.parameter_value.text())}
+            url = str(dialog.parameter_value.text()).strip()
+            params = {"url": url}
             # Add the pipeline value if it was configured
             if dialog.advanced_options_checkbox.isChecked():
                 params["pipeline"] = str(dialog.pipeline_value.text())
         elif dialog.connection_type == StreamConfiguration.ConnType.WEBCAM:
-            params = {"device_id": str(dialog.parameter_value.text())}
+            device_id = str(dialog.parameter_value.text()).strip()
+            params = {"device_id": device_id}
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
             params = {"filepath": str(dialog.parameter_value.text())}
         else:
@@ -68,7 +70,8 @@ class StreamConfigurationDialog(QDialog):
 
         return StreamConfiguration(name=dialog.stream_name.text(),
                                    connection_type=dialog.connection_type,
-                                   parameters=params)
+                                   connection_options=params,
+                                   runtime_options={})
 
     @pyqtSlot(str)
     def connection_type_changed_slot(self, connection_type):

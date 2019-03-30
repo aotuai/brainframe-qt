@@ -23,10 +23,23 @@ class ZoneStatusPolygon(StreamPolygon):
         text = status.zone.name
         if len(status.zone.coords) == 2:
             # If the zone is a line
-            text = status.zone.name + "\nCrossed: "
-            text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
-                               for k, v in status.total_exited.items()
-                               if v > 0])
+            if len(status.total_entered):
+                text = status.zone.name + "\nEntering: "
+                text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
+                                   for k, v in status.total_entered.items()
+                                   if v > 0])
+            if len(status.total_exited):
+                text += "\nExiting: "
+                text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
+                                   for k, v in status.total_exited.items()
+                                   if v > 0])
+            counts = status.detection_within_counts
+            if len(counts):
+                text += "\nWithin: "
+                items = list(counts.items())
+                items.sort()
+                text += "\n" + "\n".join([f"{v} {k}{'s' * bool(v - 1)}"
+                                          for k, v in items])
         else:
             # If the zone is a region
             counts = status.detection_within_counts
@@ -41,11 +54,13 @@ class ZoneStatusPolygon(StreamPolygon):
 
         # Set opacity based on alert status and detection status
         opacity = 0.3
-        if len(status.alerts) or len(status.within):
+        if len(status.alerts) or len(status.within) or len(status.entering) \
+                or len(status.exiting):
             opacity = 1
 
         # Set the color based on whether or not there is an ongoing alert
-        color = self.ALERTING_COLOR if len(status.alerts) else self.NORMAL_COLOR
+        color = (self.ALERTING_COLOR if len(status.alerts)
+                 else self.NORMAL_COLOR)
 
         # Create the polygon
         super().__init__(points=status.zone.coords,

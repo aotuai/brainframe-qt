@@ -1,6 +1,8 @@
 from brainframe.client.api.status_poller import StatusPoller
 from brainframe.client.api.codecs import StreamConfiguration
+from brainframe.shared.stream_reader import StreamReader
 from .synced_reader import SyncedStreamReader
+from .opencv_stream_reader import OpenCVStreamReader
 
 
 class StreamManager:
@@ -28,20 +30,22 @@ class StreamManager:
         """
         if stream_config.id not in self._stream_readers:
             pipeline = None
-            if "pipeline" in stream_config.parameters:
-                pipeline = stream_config.parameters["pipeline"]
+            if "pipeline" in stream_config.connection_options:
+                pipeline = stream_config.connection_options["pipeline"]
 
-            latency = SyncedStreamReader.DEFAULT_LATENCY
+            latency = StreamReader.DEFAULT_LATENCY
             if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:
-                latency = SyncedStreamReader.REHOSTED_LATENCY
+                latency = StreamReader.REHOSTED_LATENCY
 
-            stream_reader = SyncedStreamReader(
-                stream_id=stream_config.id,
-                url=url,
-                status_poller=self._status_poller,
+            stream_reader = OpenCVStreamReader(
+                url,
                 latency=latency,
                 pipeline=pipeline)
-            self._stream_readers[stream_config.id] = stream_reader
+            synced_stream_reader = SyncedStreamReader(
+                stream_config.id,
+                stream_reader,
+                self._status_poller)
+            self._stream_readers[stream_config.id] = synced_stream_reader
 
         return self._stream_readers[stream_config.id]
 
