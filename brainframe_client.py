@@ -14,7 +14,6 @@ from requests.exceptions import ConnectionError
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
-from brainframe.shared.ffmpeg_options import set_opencv_ffmpeg_capture_options
 from brainframe.client.api import api
 from brainframe.client.ui import (
     MainWindow,
@@ -39,10 +38,6 @@ def parse_args():
                         help="The URL that the server is currently running "
                              "on. This can be localhost, or a local IP, or a "
                              "remote IP depending on your setup.")
-    parser.add_argument("--skip-frames", action="store_true", default=False,
-                        help="Configures all streams to skip intermediate "
-                             "frames and process only keyframes. This is "
-                             "useful when many streams are being processed.")
     args = parser.parse_args()
 
     return args
@@ -53,10 +48,6 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit("Exiting"))
 
     args = parse_args()
-
-    # Set the frame skipping environment variable if necessary
-    set_opencv_ffmpeg_capture_options(
-        skip_frames=args.skip_frames)
 
     # Set the API url
     api.set_url(args.api_url)
