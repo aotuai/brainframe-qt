@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>524</width>
-    <height>256</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,16 +29,13 @@
    </item>
    <item>
     <layout class="QGridLayout" name="if_layout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="stream_name_label">
+     <item row="0" column="1" colspan="2">
+      <widget class="QLineEdit" name="stream_name">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Name:</string>
        </property>
       </widget>
      </item>
@@ -58,6 +55,19 @@
        </property>
        <property name="text">
         <string>Connection Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="stream_name_label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Name:</string>
        </property>
       </widget>
      </item>
@@ -100,26 +110,26 @@
        </item>
       </widget>
      </item>
-     <item row="0" column="1" colspan="2">
-      <widget class="QLineEdit" name="stream_name">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QWidget" name="parameters_container" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
       <property name="leftMargin">
        <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>32</number>
       </property>
       <property name="rightMargin">
        <number>0</number>
@@ -140,8 +150,26 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
-       <widget class="QLineEdit" name="pipeline_value"/>
+      <item row="4" column="1">
+       <widget class="QLabel" name="pipeline_label">
+        <property name="text">
+         <string>Pipeline</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" colspan="4">
+       <widget class="QCheckBox" name="keyframe_only_checkbox">
+        <property name="text">
+         <string>Keyframe-only streaming</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2" colspan="2">
+       <widget class="QLineEdit" name="pipeline_value">
+        <property name="placeholderText">
+         <string>None</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="2">
        <widget class="QLineEdit" name="parameter_value">
@@ -153,27 +181,37 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="pipeline_label">
+      <item row="4" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>30</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="0" colspan="5">
+       <widget class="QCheckBox" name="advanced_options_checkbox">
         <property name="text">
-         <string>Pipeline</string>
+         <string>Advanced Options</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="stream_options_label">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Stream Options</string>
+      <item row="2" column="0" colspan="5">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="1" column="0" colspan="2">
        <widget class="QLabel" name="parameter_label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -186,10 +224,16 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="advanced_options_checkbox">
+      <item row="0" column="0" colspan="5">
+       <widget class="QLabel" name="stream_options_label">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
-         <string>Advanced Options</string>
+         <string>Stream Options</string>
         </property>
        </widget>
       </item>
@@ -224,8 +268,6 @@
  <tabstops>
   <tabstop>stream_name</tabstop>
   <tabstop>connection_type_combo_box</tabstop>
-  <tabstop>parameter_value</tabstop>
-  <tabstop>pipeline_value</tabstop>
   <tabstop>select_file_button</tabstop>
  </tabstops>
  <resources/>

@@ -44,6 +44,8 @@ class StreamConfigurationDialog(QDialog):
 
         self.advanced_options_checkbox.stateChanged.connect(
             self.toggle_advanced_options)
+
+        # Start with advanced options hidden
         self.toggle_advanced_options()
 
     @classmethod
@@ -58,8 +60,9 @@ class StreamConfigurationDialog(QDialog):
             url = str(dialog.parameter_value.text()).strip()
             params = {"url": url}
             # Add the pipeline value if it was configured
-            if dialog.advanced_options_checkbox.isChecked():
-                params["pipeline"] = str(dialog.pipeline_value.text())
+            pipeline = str(dialog.pipeline_value.text())
+            if dialog.advanced_options_checkbox.isChecked() and pipeline:
+                params["pipeline"] = pipeline
         elif dialog.connection_type == StreamConfiguration.ConnType.WEBCAM:
             device_id = str(dialog.parameter_value.text()).strip()
             params = {"device_id": device_id}
@@ -68,10 +71,15 @@ class StreamConfigurationDialog(QDialog):
         else:
             raise NotImplementedError("Unrecognized connection type")
 
+        keyframes_only = dialog.advanced_options_checkbox.isChecked() \
+                         and dialog.keyframe_only_checkbox.isChecked()
+
         return StreamConfiguration(name=dialog.stream_name.text(),
                                    connection_type=dialog.connection_type,
                                    connection_options=params,
-                                   runtime_options={})
+                                   runtime_options={
+                                       "keyframes_only": keyframes_only
+                                   })
 
     @pyqtSlot(str)
     def connection_type_changed_slot(self, connection_type):
@@ -110,6 +118,8 @@ class StreamConfigurationDialog(QDialog):
           self.stream_name.textChanged
         - QComboBox -- Dynamic
           self.connection_type_combo_box.currentTextChanged
+        - QCheckBox -- Dynamic
+          self.advanced_options_checkbox.stateChanged
         - QTextEdit -- Dynamic
           self.parameter_value.textChanged
         """
@@ -125,6 +135,7 @@ class StreamConfigurationDialog(QDialog):
         # used
         if self.connection_type == StreamConfiguration.ConnType.IP_CAMERA \
                 and self.advanced_options_checkbox.isChecked() \
+                and self.pipeline_value.text() \
                 and "{url}" not in self.pipeline_value.text():
             is_valid = False
 
@@ -142,6 +153,7 @@ class StreamConfigurationDialog(QDialog):
         hidden = not self.advanced_options_checkbox.isChecked()
         self.pipeline_label.setHidden(hidden)
         self.pipeline_value.setHidden(hidden)
+        self.keyframe_only_checkbox.setHidden(hidden)
 
     def _set_parameter_widgets_hidden(self, hidden):
         """Hide or show the widgets related to the parameters
@@ -175,8 +187,9 @@ class StreamConfigurationDialog(QDialog):
         # Second return value is ignored. PyQt5 returns what appears to be a
         # filter as a string as well, differing from the C++ implementation
         file_path, _ = QFileDialog().getOpenFileName(self,
-            "Select video file",
-            QStandardPaths.writableLocation(QStandardPaths.HomeLocation))
+                                                     "Select video file",
+                                                     QStandardPaths.writableLocation(
+                                                         QStandardPaths.HomeLocation))
 
         self.parameter_value.setText(file_path)
 
