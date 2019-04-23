@@ -75,6 +75,16 @@ class StreamStubMixin(Stub):
         if self._stream_manager is not None:
             self._stream_manager.close_stream(stream_id)
 
+    def get_stream_url(self, stream_id) -> str:
+        """Gets the URL that the stream is available at.
+
+        :param stream_id: The ID of the stream to get a URL for
+        :return: The URL
+        """
+        req = f"/api/streams/{stream_id}/url"
+        url = self._get(req)
+        return url
+
     def get_stream_reader(self, stream_config: StreamConfiguration) \
             -> Optional["SyncedStreamReader"]:
         """Get the SyncedStreamReader for the given stream_configuration.
@@ -83,9 +93,8 @@ class StreamStubMixin(Stub):
         :return: A SyncedStreamReader object OR None, if the server was unable
             to open a stream.
         """
-        req = f"/api/streams/{stream_config.id}/url"
         try:
-            url = self._get(req)
+            url = self.get_stream_url(stream_config.id)
         except api_errors.StreamNotFoundError:
             logging.warning("API: Requested stream that doesn't exist!")
             return None

@@ -68,7 +68,7 @@ class ProcessedFrame:
 
 class SyncedStreamReader(StreamReader):
     """Reads frames from a stream and syncs them up with zone statuses."""
-    MAX_BUF_SIZE = 100
+    MAX_BUF_SIZE = 500
     MAX_CACHE_TRACK_SECONDS = 30
 
     def __init__(self,

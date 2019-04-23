@@ -2,7 +2,7 @@ from brainframe.client.api.status_poller import StatusPoller
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.shared.stream_reader import StreamReader
 from .synced_reader import SyncedStreamReader
-from .opencv_stream_reader import OpenCVStreamReader
+from brainframe.shared.gstreamer.stream_reader import GSTStreamReader
 
 
 class StreamManager:
@@ -37,9 +37,10 @@ class StreamManager:
             if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:
                 latency = StreamReader.REHOSTED_LATENCY
 
-            stream_reader = OpenCVStreamReader(
+            stream_reader = GSTStreamReader(
                 url,
                 latency=latency,
+                runtime_options=stream_config.runtime_options,
                 pipeline=pipeline)
             synced_stream_reader = SyncedStreamReader(
                 stream_config.id,
