@@ -20,7 +20,7 @@ from brainframe.client.ui import (
     SplashScreen,
     LicenseAgreement)
 from brainframe.client.ui.resources.paths import image_paths
-from brainframe.shared.gstreamer.gobject_initializer import GObjectInitializer
+from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared import environment
 
 
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     if not LicenseAgreement.get_agreement():
         sys.exit("Program Closing: License Not Accepted")
 
-    gobject_initializer = GObjectInitializer()
+    gobject_init.start()
 
     # Show splash screen while waiting for server connection
     with SplashScreen() as splash_screen:
@@ -95,4 +95,4 @@ if __name__ == "__main__":
     # Close API threads
     api.close()
 
-    gobject_initializer.close()
+    gobject_init.close()
