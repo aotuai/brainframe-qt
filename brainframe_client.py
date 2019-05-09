@@ -1,5 +1,6 @@
 import logging
 import os
+import multiprocessing
 
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
@@ -44,6 +45,11 @@ def parse_args():
 
 
 if __name__ == "__main__":
+    # This tells the multiprocessing package that we use a freezing tool
+    # (PyInstaller). This is necessary when we or one of our libraries use
+    # multiprocessing because otherwise BrainFrame will be run twice.
+    multiprocessing.freeze_support()
+
     # Handle Keyboard Interrupt
     signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit("Exiting"))
 
