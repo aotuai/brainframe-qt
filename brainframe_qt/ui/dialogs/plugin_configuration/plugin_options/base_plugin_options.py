@@ -111,7 +111,7 @@ class BasePluginOptionsWidget(QGroupBox):
 
         self.grid_layout.addWidget(item.label_widget, option_row, _NAME_ROW)
         self.grid_layout.addWidget(item.option_widget, option_row, _VALUE_ROW)
-        self.grid_layout.addWidget(item.lock_checkbox, option_row, _ENABLE_ROW)
+        self.grid_layout.addWidget(item.override_checkbox, option_row, _ENABLE_ROW)
 
         # Whenever this option is changed, make sure that our signal emits
         item.on_change(self._on_inputs_changed)

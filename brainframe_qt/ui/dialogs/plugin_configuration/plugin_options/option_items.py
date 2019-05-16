@@ -1,6 +1,5 @@
 import logging
-from abc import ABC, abstractmethod, abstractproperty
-from typing import List, Callable
+from abc import ABC, abstractmethod
 
 from PyQt5.QtWidgets import (
     QLabel,
@@ -28,14 +27,14 @@ class PluginOptionItem(ABC):
         pretty_name = plugin_utils.pretty_snakecase(self.option_name)
 
         self.label_widget = QLabel(pretty_name, parent=parent)
-        self.lock_checkbox = QCheckBox(parent=parent)
+        self.override_checkbox = QCheckBox(parent=parent)
         self.initial_value = initial_value
 
         self.set_val(self.initial_value)
 
         # Connect the lock signals
-        self.lock_checkbox.clicked.connect(lambda e: self.set_locked(not e))
-        self.locked = False
+        self.override_checkbox.clicked.connect(
+            lambda checked: self.set_locked(not checked))
 
         # By default, we don't show the override checkbox.
         self.set_locked(False)
@@ -59,22 +58,22 @@ class PluginOptionItem(ABC):
 
     def show_lock(self, status: bool):
         """By default the override lock is hidden."""
-        self.lock_checkbox.setVisible(status)
+        self.override_checkbox.setVisible(status)
 
-    def set_locked(self, status: bool):
+    def set_locked(self, locked: bool):
         """
         Connected to:
         - QCheckBox -- dynamic
           self.lock_checkbox.clicked.connect
         """
-        self.locked = status
-        self.option_widget.setEnabled(not status)
-        self.lock_checkbox.setChecked(not status)
+        self.locked = locked
+        self.option_widget.setEnabled(not locked)
+        self.override_checkbox.setChecked(not locked)
 
     def delete(self):
         self.label_widget.deleteLater()
         self.option_widget.deleteLater()
-        self.lock_checkbox.deleteLater()
+        self.override_checkbox.deleteLater()
 
 
 class EnumOptionItem(PluginOptionItem):
@@ -170,7 +169,7 @@ class IntOptionItem(FloatOptionItem):
 class BoolOptionItem(PluginOptionItem):
     """A plugin option that holds an boolean value."""
 
-    def __init__(self, name: str, value: bool, constraints, parent=None):
+    def __init__(self, name: str, value: bool, _, parent=None):
         self.option_widget = QCheckBox(parent=parent)
         self.on_change = self.option_widget.stateChanged.connect
 
