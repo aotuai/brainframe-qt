@@ -141,7 +141,7 @@ class FloatOptionItem(PluginOptionItem):
             num = float(self.option_widget.text())
             return num
         except ValueError:
-            logging.warning(str(self.option_widget.text()) + " is not a float!")
+            logging.warning(f"{self.option_widget.text()} is not a float!")
             return None
 
     def is_valid(self):
