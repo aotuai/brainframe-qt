@@ -17,7 +17,7 @@ class APIWrapper(API):
             return object.__getattribute__(self, "_" + item)
         if item == "get_status_poller":
             return object.__getattribute__(self, "_" + item)
-        if item == "get_plugin_names":
+        if item == "get_plugins":
             return lambda: []
         return None
 
