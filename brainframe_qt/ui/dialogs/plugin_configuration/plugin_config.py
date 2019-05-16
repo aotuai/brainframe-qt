@@ -1,10 +1,7 @@
-from typing import Dict, Callable
-
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QPushButton
 from PyQt5.uic import loadUi
 
-from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from .plugin_options import StreamPluginOptionsWidget, GlobalPluginOptionsWidget
 
