@@ -127,7 +127,7 @@ class BasePluginOptionsWidget(QGroupBox):
                                    Qt.AlignRight)
 
         # Whenever this option is changed, make sure that our signal emits
-        item.on_change(self._on_inputs_changed)
+        item.change_signal.connect(self._on_inputs_changed)
 
         return item
 
@@ -172,7 +172,7 @@ class BasePluginOptionsWidget(QGroupBox):
 
         Connected to:
         - PluginOptionItem -- Dynamic
-         [child].on_change
+         [child].change_signal
         """
         self.plugin_options_changed.emit()
 

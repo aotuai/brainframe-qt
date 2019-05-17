@@ -13,7 +13,7 @@ from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
 class PluginOptionItem(ABC):
     # To be filled in by subclass
     option_widget: QWidget = None
-    """To be filled in by subclass"""
+    change_signal = None
 
     def __init__(self, name: str, initial_value,
                  description: Optional[str] = None,
@@ -127,7 +127,7 @@ class EnumOptionItem(PluginOptionItem):
                  description: Optional[str] = None,
                  parent=None):
         self.option_widget = QComboBox(parent=parent)
-        self.on_change = self.option_widget.currentIndexChanged.connect
+        self.change_signal = self.option_widget.currentIndexChanged
 
         # Get constraints
         self._choices = constraints["choices"]
@@ -161,7 +161,7 @@ class FloatOptionItem(PluginOptionItem):
                  description: Optional[str] = None,
                  parent=None):
         self.option_widget = QLineEdit(parent=parent)
-        self.on_change = self.option_widget.textChanged.connect
+        self.change_signal = self.option_widget.textChanged
 
         # Get constraints
         self._min_val = constraints["min_val"]
@@ -222,7 +222,7 @@ class BoolOptionItem(PluginOptionItem):
                  description: Optional[str] = None,
                  parent=None):
         self.option_widget = QCheckBox(parent=parent)
-        self.on_change = self.option_widget.stateChanged.connect
+        self.change_signal = self.option_widget.stateChanged
 
         super().__init__(name, value, description, parent=parent)
 
