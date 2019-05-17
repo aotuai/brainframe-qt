@@ -19,9 +19,9 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QWidget" name="grid" native="true">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="3">
-       <widget class="QLabel" name="override_label">
+     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,1,0">
+      <item row="0" column="1">
+       <widget class="QLabel" name="option_label">
         <property name="font">
          <font>
           <weight>75</weight>
@@ -29,17 +29,14 @@
          </font>
         </property>
         <property name="text">
-         <string>Override Global</string>
+         <string>Option</string>
         </property>
         <property name="margin">
          <number>10</number>
         </property>
-        <property name="indent">
-         <number>5</number>
-        </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="0" column="2">
        <widget class="QLabel" name="value_label">
         <property name="font">
          <font>
@@ -58,8 +55,8 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="option_label">
+      <item row="0" column="4">
+       <widget class="QLabel" name="override_label">
         <property name="font">
          <font>
           <weight>75</weight>
@@ -67,14 +64,17 @@
          </font>
         </property>
         <property name="text">
-         <string>Option</string>
+         <string>Override Global</string>
         </property>
         <property name="margin">
          <number>10</number>
         </property>
+        <property name="indent">
+         <number>5</number>
+        </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="0" column="3">
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -86,6 +86,9 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="0">
+       <widget class="QWidget" name="empty" native="true"/>
       </item>
      </layout>
     </widget>
