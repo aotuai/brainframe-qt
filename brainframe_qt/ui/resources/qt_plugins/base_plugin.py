@@ -18,9 +18,9 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
             raise AssertionError(f"widget_type for {name} is a module,"
                                  f"not a class. Check your imports")
 
-        if cls is None:
-            print("IGNORE THIS ERROR. QT DESIGNER IS DUMB:")
-            return
+        # if cls is None:
+        #     print("IGNORE THIS ERROR. QT DESIGNER IS DUMB:")
+        #     return
 
         super().__init__()
 
