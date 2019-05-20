@@ -6,7 +6,6 @@ from abc import ABC, abstractmethod
 from brainframe.client.api.codecs import Identity
 from brainframe.client.api.api_stub import API
 
-
 VECTOR = List[float]
 
 
@@ -36,6 +35,11 @@ class IdentityPrototype:
         class name, and the value is all vectors that should be encoded under
         that class name for this identity.
         """
+
+    def __repr__(self):
+        return f"IdentityPrototype(unique_name={self.unique_name}, " \
+            f"nickname={self.nickname}, " \
+            f"images_by_class_name={list(self.images_by_class_name.keys())}))"
 
 
 class IdentityFinder(ABC):

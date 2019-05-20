@@ -2,7 +2,7 @@ from brainframe.client.api.status_poller import StatusPoller
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.shared.stream_reader import StreamReader
 from .synced_reader import SyncedStreamReader
-from brainframe.shared.gstreamer.stream_reader import GSTStreamReader
+from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 
 
 class StreamManager:
@@ -37,7 +37,7 @@ class StreamManager:
             if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:
                 latency = StreamReader.REHOSTED_LATENCY
 
-            stream_reader = GSTStreamReader(
+            stream_reader = GstStreamReader(
                 url,
                 latency=latency,
                 runtime_options=stream_config.runtime_options,

@@ -14,10 +14,11 @@ class PluginOption(Codec):
     """
     OptionType = codec_enums.OptionType
 
-    def __init__(self, *, type_, default, constraints):
+    def __init__(self, *, type_, default, constraints, description):
         self.type = type_
         self.default = default
         self.constraints = constraints
+        self.description = description
 
     def to_dict(self):
         d = dict(self.__dict__)
@@ -29,7 +30,8 @@ class PluginOption(Codec):
         type_ = PluginOption.OptionType(d["type"])
         return PluginOption(type_=type_,
                             default=d["default"],
-                            constraints=d["constraints"])
+                            constraints=d["constraints"],
+                            description=d["description"])
 
 
 class NodeDescription(Codec):

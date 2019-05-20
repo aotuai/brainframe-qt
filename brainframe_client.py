@@ -1,5 +1,6 @@
 import logging
 import os
+import multiprocessing
 
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
@@ -20,7 +21,7 @@ from brainframe.client.ui import (
     SplashScreen,
     LicenseAgreement)
 from brainframe.client.ui.resources.paths import image_paths
-from brainframe.shared.gstreamer.gobject_initializer import GObjectInitializer
+from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared import environment
 
 
@@ -44,6 +45,11 @@ def parse_args():
 
 
 if __name__ == "__main__":
+    # This tells the multiprocessing package that we use a freezing tool
+    # (PyInstaller). This is necessary when we or one of our libraries use
+    # multiprocessing because otherwise BrainFrame will be run twice.
+    multiprocessing.freeze_support()
+
     # Handle Keyboard Interrupt
     signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit("Exiting"))
 
@@ -64,7 +70,7 @@ if __name__ == "__main__":
     if not LicenseAgreement.get_agreement():
         sys.exit("Program Closing: License Not Accepted")
 
-    gobject_initializer = GObjectInitializer()
+    gobject_init.start()
 
     # Show splash screen while waiting for server connection
     with SplashScreen() as splash_screen:
@@ -95,4 +101,4 @@ if __name__ == "__main__":
     # Close API threads
     api.close()
 
-    gobject_initializer.close()
+    gobject_init.close()

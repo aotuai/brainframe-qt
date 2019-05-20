@@ -1,45 +1,85 @@
+from abc import ABC, abstractmethod
 import logging
-from abc import ABC, abstractmethod, abstractproperty
-from typing import List, Callable
+from typing import Optional
 
-from PyQt5.QtWidgets import (
-    QLabel,
-    QWidget,
-    QComboBox,
-    QCheckBox,
-    QLineEdit
-)
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIntValidator, QDoubleValidator
+from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
+    QPushButton, QSizePolicy, QStyle, QStyleOptionButton
 
 from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
 
 
 class PluginOptionItem(ABC):
+    # To be filled in by subclass
     option_widget: QWidget = None
-    """To be filled in by subclass"""
+    change_signal = None
 
-    def __init__(self, name: str, initial_value, parent=None):
+    def __init__(self, name: str, initial_value,
+                 description: Optional[str] = None,
+                 parent=None):
+
         self.option_name = name
+        self.description = description
+        self.parent = parent
+
+        self.label_widget: QLabel = None
+        self.override_checkbox: QCheckBox = None
+        self.tooltip_button: QPushButton = None
+
+        pretty_name = plugin_utils.pretty_snakecase(self.option_name)
+        self.init_ui(pretty_name, description, parent)
+
         self.locked = None
         """When 'locked' is True or False, a checkbox will appear for allowing
         the option to become locked or unlocked by the user. This is intended
         for allowing global options to be explicitly overridden for a stream."""
 
-        pretty_name = plugin_utils.pretty_snakecase(self.option_name)
-
-        self.label_widget = QLabel(pretty_name, parent=parent)
-        self.lock_checkbox = QCheckBox(parent=parent)
         self.initial_value = initial_value
-
         self.set_val(self.initial_value)
-
-        # Connect the lock signals
-        self.lock_checkbox.clicked.connect(lambda e: self.set_locked(not e))
-        self.locked = False
 
         # By default, we don't show the override checkbox.
         self.set_locked(False)
         self.show_lock(False)
+
+    def init_ui(self, pretty_name, description, parent):
+        self.label_widget = QLabel(pretty_name, parent=parent)
+        self.override_checkbox = QCheckBox(parent=parent)
+
+        self.label_widget.setSizePolicy(QSizePolicy.Expanding,
+                                        QSizePolicy.Preferred)
+
+        # Set tooltip of description button and disable button, otherwise no
+        # button
+        if description:
+            self.tooltip_button = QPushButton("❓", parent=parent)
+            self.tooltip_button.setToolTip(description)
+            self.tooltip_button.setDisabled(True)
+            self.tooltip_button.setToolTipDuration(0)
+
+            # Set min width of button properly
+            # https://stackoverflow.com/a/19502467/8134178
+            text_size = self.tooltip_button.fontMetrics().size(
+                Qt.TextShowMnemonic,
+                self.tooltip_button.text())
+            options = QStyleOptionButton()
+            options.initFrom(self.tooltip_button)
+            options.rect.setSize(text_size)
+            button_size = self.tooltip_button.style().sizeFromContents(
+                QStyle.CT_PushButton,
+                options,
+                text_size,
+                self.tooltip_button)
+            self.tooltip_button.setMaximumSize(button_size)
+
+            self.tooltip_button.setSizePolicy(QSizePolicy.Maximum,
+                                              QSizePolicy.Preferred)
+        else:
+            self.tooltip_button = None
+
+        # Connect the lock signals
+        self.override_checkbox.clicked.connect(
+            lambda checked: self.set_locked(not checked))
 
     @abstractmethod
     def set_val(self, value):
@@ -59,31 +99,35 @@ class PluginOptionItem(ABC):
 
     def show_lock(self, status: bool):
         """By default the override lock is hidden."""
-        self.lock_checkbox.setVisible(status)
+        self.override_checkbox.setVisible(status)
 
-    def set_locked(self, status: bool):
+    def set_locked(self, locked: bool):
         """
         Connected to:
         - QCheckBox -- dynamic
           self.lock_checkbox.clicked.connect
         """
-        self.locked = status
-        self.option_widget.setEnabled(not status)
-        self.lock_checkbox.setChecked(not status)
+        self.locked = locked
+        self.option_widget.setEnabled(not locked)
+        self.override_checkbox.setChecked(not locked)
 
     def delete(self):
         self.label_widget.deleteLater()
         self.option_widget.deleteLater()
-        self.lock_checkbox.deleteLater()
+        self.override_checkbox.deleteLater()
+        if self.tooltip_button:
+            self.tooltip_button.deleteLater()
 
 
 class EnumOptionItem(PluginOptionItem):
     """A plugin option that holds a choice from a discrete set of string values.
     """
 
-    def __init__(self, name: str, value: str, constraints, parent=None):
+    def __init__(self, name: str, value: str, constraints,
+                 description: Optional[str] = None,
+                 parent=None):
         self.option_widget = QComboBox(parent=parent)
-        self.on_change = self.option_widget.currentIndexChanged.connect
+        self.change_signal = self.option_widget.currentIndexChanged
 
         # Get constraints
         self._choices = constraints["choices"]
@@ -92,7 +136,7 @@ class EnumOptionItem(PluginOptionItem):
             pretty_choice = plugin_utils.pretty_snakecase(choice_text)
             self.option_widget.addItem(pretty_choice)
 
-        super().__init__(name, value, parent=parent)
+        super().__init__(name, value, description, parent=parent)
 
     def set_val(self, value: str):
         index = self._choices.index(value)
@@ -113,9 +157,11 @@ class FloatOptionItem(PluginOptionItem):
     Can have min_val or max_val be None"""
     _validator_type = QDoubleValidator
 
-    def __init__(self, name: str, value: float, constraints, parent=None):
+    def __init__(self, name: str, value: float, constraints,
+                 description: Optional[str] = None,
+                 parent=None):
         self.option_widget = QLineEdit(parent=parent)
-        self.on_change = self.option_widget.textChanged.connect
+        self.change_signal = self.option_widget.textChanged
 
         # Get constraints
         self._min_val = constraints["min_val"]
@@ -131,7 +177,7 @@ class FloatOptionItem(PluginOptionItem):
             validator.setNotation(QDoubleValidator.StandardNotation)
 
         self.option_widget.setValidator(validator)
-        super().__init__(name, value, parent=parent)
+        super().__init__(name, value, description, parent=parent)
 
     def set_val(self, value: float):
         self.option_widget.setText(str(value))
@@ -142,7 +188,7 @@ class FloatOptionItem(PluginOptionItem):
             num = float(self.option_widget.text())
             return num
         except ValueError:
-            logging.warning(str(self.option_widget.text()) + " is not a float!")
+            logging.warning(f"{self.option_widget.text()} is not a float!")
             return None
 
     def is_valid(self):
@@ -159,8 +205,10 @@ class IntOptionItem(FloatOptionItem):
     """
     _validator_type = QIntValidator
 
-    def __init__(self, name: str, value: int, constraints, parent=None):
-        super().__init__(name, value, constraints, parent=parent)
+    def __init__(self, name: str, value: int, constraints,
+                 description: Optional[str] = None,
+                 parent=None):
+        super().__init__(name, value, constraints, description, parent=parent)
 
     @property
     def val(self):
@@ -170,11 +218,13 @@ class IntOptionItem(FloatOptionItem):
 class BoolOptionItem(PluginOptionItem):
     """A plugin option that holds an boolean value."""
 
-    def __init__(self, name: str, value: bool, constraints, parent=None):
+    def __init__(self, name: str, value: bool, _,
+                 description: Optional[str] = None,
+                 parent=None):
         self.option_widget = QCheckBox(parent=parent)
-        self.on_change = self.option_widget.stateChanged.connect
+        self.change_signal = self.option_widget.stateChanged
 
-        super().__init__(name, value, parent=parent)
+        super().__init__(name, value, description, parent=parent)
 
     def set_val(self, value: bool):
         self.option_widget.setChecked(value)

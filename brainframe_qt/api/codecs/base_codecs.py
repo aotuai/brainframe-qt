@@ -7,8 +7,7 @@ class Codec(abc.ABC):
     def to_dict(self) -> dict:
         pass
 
-    @staticmethod
-    @abc.abstractmethod
+    @abc.abstractstaticmethod
     def from_dict(d: dict):
         pass
 

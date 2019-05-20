@@ -1,8 +1,7 @@
-from typing import Dict, List
-from abc import ABC, abstractmethod
+from typing import Dict, List, Optional
 
-from PyQt5.QtCore import pyqtSlot, pyqtSignal
-from PyQt5.QtWidgets import QGroupBox
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QGridLayout, QGroupBox
 from PyQt5.uic import loadUi
 
 from .option_items import (
@@ -13,7 +12,7 @@ from .option_items import (
     BoolOptionItem
 )
 from brainframe.shared.codec_enums import OptionType
-from brainframe.client.api import api, codecs
+from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
@@ -43,7 +42,11 @@ class BasePluginOptionsWidget(QGroupBox):
         self.enabled_option: BoolOptionItem = None
         """This holds the option for enabling and disabling a plugin."""
 
-        self.grid_layout = self.grid.layout()
+        self.grid_layout: QGridLayout = self.grid.layout()
+        # self.grid_layout.setColumnStretch(0, 0)
+        # self.grid_layout.setColumnStretch(1, 1)
+        # self.grid_layout.setColumnStretch(2, 1)
+        # self.grid_layout.setColumnStretch(3, 1)
 
         self.current_plugin = None
 
@@ -57,7 +60,7 @@ class BasePluginOptionsWidget(QGroupBox):
         # Add configuration that every plugin _always_ has
         self.enabled_option = self._add_option(
             name="Plugin Enabled",
-            type=OptionType.BOOL,
+            type_=OptionType.BOOL,
             value=api.is_plugin_active(plugin_name, stream_id=None),
             constraints={})
         self.all_items.append(self.enabled_option)
@@ -70,9 +73,10 @@ class BasePluginOptionsWidget(QGroupBox):
         for option_name, option in plugin.options.items():
             item = self._add_option(
                 name=option_name,
-                type=option.type,
+                type_=option.type,
                 value=option_values[option_name],
-                constraints=option.constraints)
+                constraints=option.constraints,
+                description=option.description)
 
             # Keep track of the option
             self.option_items.append(item)
@@ -89,32 +93,41 @@ class BasePluginOptionsWidget(QGroupBox):
                 return False
         return True
 
-    def _add_option(self, name: str, type: OptionType, value,
-                    constraints: Dict):
-        if type is OptionType.BOOL:
-            item = BoolOptionItem(name, value, constraints, parent=self)
-        elif type is OptionType.ENUM:
-            item = EnumOptionItem(name, value, constraints, parent=self)
-        elif type is OptionType.FLOAT:
-            item = FloatOptionItem(name, value, constraints, parent=self)
-        elif type is OptionType.INT:
-            item = IntOptionItem(name, value, constraints, parent=self)
+    def _add_option(self, name: str, type_: OptionType, value,
+                    constraints: Dict, description: Optional[str] = None):
+
+        parent = self
+        args = name, value, constraints, description, parent
+
+        if type_ is OptionType.BOOL:
+            item = BoolOptionItem(*args)
+        elif type_ is OptionType.ENUM:
+            item = EnumOptionItem(*args)
+        elif type_ is OptionType.FLOAT:
+            item = FloatOptionItem(*args)
+        elif type_ is OptionType.INT:
+            item = IntOptionItem(*args)
         else:
-            raise TypeError("The plugin option of name " + str(name) +
-                            " has an invalid type of type " + str(type))
+            raise TypeError(f"The plugin option of name {name} has an invalid "
+                            f"type of type {type_}")
 
-        _NAME_ROW = 0
-        _VALUE_ROW = 1
-        _ENABLE_ROW = 3
+        _TOOLTIP_COL = 0
+        _NAME_COL = 1
+        _VALUE_COL = 2
+        _SPACER_COL = 3
+        _ENABLE_COL = 4
 
-        option_row = len(self.all_items) + 2
+        row = len(self.all_items) + 2
 
-        self.grid_layout.addWidget(item.label_widget, option_row, _NAME_ROW)
-        self.grid_layout.addWidget(item.option_widget, option_row, _VALUE_ROW)
-        self.grid_layout.addWidget(item.lock_checkbox, option_row, _ENABLE_ROW)
+        self.grid_layout.addWidget(item.label_widget, row, _NAME_COL)
+        if item.tooltip_button:
+            self.grid_layout.addWidget(item.tooltip_button, row, _TOOLTIP_COL)
+        self.grid_layout.addWidget(item.option_widget, row, _VALUE_COL)
+        self.grid_layout.addWidget(item.override_checkbox, row, _ENABLE_COL,
+                                   Qt.AlignRight)
 
         # Whenever this option is changed, make sure that our signal emits
-        item.on_change(self._on_inputs_changed)
+        item.change_signal.connect(self._on_inputs_changed)
 
         return item
 
@@ -159,7 +172,7 @@ class BasePluginOptionsWidget(QGroupBox):
 
         Connected to:
         - PluginOptionItem -- Dynamic
-         [child].on_change
+         [child].change_signal
         """
         self.plugin_options_changed.emit()
 
