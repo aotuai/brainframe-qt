@@ -8,7 +8,6 @@ from brainframe.shared import preimport_hooks
 
 from argparse import ArgumentParser
 from time import sleep
-import signal
 import sys
 
 from requests.exceptions import ConnectionError
@@ -25,13 +24,6 @@ from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared import environment
 
 
-default_log_level = "INFO"
-if environment.in_production():
-    # Be less verbose in production
-    default_log_level = "WARN"
-logging.basicConfig(level=os.environ.get("LOGLEVEL", default_log_level))
-
-
 def parse_args():
     parser = ArgumentParser(description="This runs the BrainFrame client")
     parser.add_argument("-a", "--api-url", type=str,
@@ -45,14 +37,9 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    # This tells the multiprocessing package that we use a freezing tool
-    # (PyInstaller). This is necessary when we or one of our libraries use
-    # multiprocessing because otherwise BrainFrame will be run twice.
-    multiprocessing.freeze_support()
+    environment.set_up_environment()
 
     # Handle Keyboard Interrupt
-    signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit("Exiting"))
-
     args = parse_args()
 
     # Set the API url
