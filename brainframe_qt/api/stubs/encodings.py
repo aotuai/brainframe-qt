@@ -39,3 +39,11 @@ class EncodingStubMixIn(Stub):
 
         encoding = self._get(req)
         return Encoding.from_dict(encoding)
+
+    def delete_encoding(self, encoding_id):
+        """Deletes the encoding with the given ID.
+
+        :param encoding_id: The ID of the encoding to delete
+        """
+        req = f"/api/encodings/{encoding_id}"
+        self._delete(req)

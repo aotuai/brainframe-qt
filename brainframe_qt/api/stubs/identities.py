@@ -3,7 +3,7 @@ from typing import List
 import ujson
 
 from brainframe.client.api.stubs.stub import Stub
-from brainframe.client.api.codecs import Identity
+from brainframe.client.api.codecs import Identity, Encoding
 
 
 class IdentityStubMixin(Stub):
@@ -64,7 +64,8 @@ class IdentityStubMixin(Stub):
             "class_name": class_name,
             "storage_id": storage_id
         }
-        self._post_json(req, ujson.dumps(req_obj))
+        encoding = self._post_json(req, ujson.dumps(req_obj))
+        return Encoding.from_dict(encoding)
 
     def new_identity_vector(self, identity_id: int, class_name: str,
                             vector: List[float]) -> int:
@@ -83,4 +84,5 @@ class IdentityStubMixin(Stub):
             "class_name": class_name,
             "vector": vector
         }
-        return self._post_json(req, ujson.dumps(encoded_obj))
+        encoding = self._post_json(req, ujson.dumps(encoded_obj))
+        return Encoding.from_dict(encoding)
