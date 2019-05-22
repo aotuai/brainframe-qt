@@ -84,17 +84,3 @@ class IdentityStubMixin(Stub):
             "vector": vector
         }
         return self._post_json(req, ujson.dumps(encoded_obj))
-
-    def get_image_ids_for_identity(self, identity_id, class_name=None) \
-            -> List[int]:
-        """Returns all image storage IDs that are encoded for this identity.
-
-        :param identity_id: The ID of the identity to look for images under
-        :param class_name: Will filter images by ones that are encoded for this
-            class name, if provided
-        :return: List of storage IDs
-        """
-        req = f"/api/identities/{identity_id}/images"
-        params = {"class_name": class_name} if class_name else None
-        image_ids = self._get(req, params=params)
-        return image_ids
