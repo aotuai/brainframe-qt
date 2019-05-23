@@ -92,10 +92,7 @@ class BasePluginOptionsWidget(QGroupBox):
         Essentially, it checks the validator for each option and verifies that
         they are all within the correct types and ranges.
         """
-        for option in self.all_items:
-            if not option.is_valid():
-                return False
-        return True
+        return all(option.is_valid() for option in self.all_items)
 
     def _add_option(self, name: str, type_: OptionType, value,
                     constraints: Dict, description: Optional[str] = None):
