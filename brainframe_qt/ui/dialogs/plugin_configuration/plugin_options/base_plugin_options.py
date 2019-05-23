@@ -13,6 +13,7 @@ from .option_items import (
 )
 from brainframe.shared.codec_enums import OptionType
 from brainframe.client.api import api
+from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
@@ -57,6 +58,10 @@ class BasePluginOptionsWidget(QGroupBox):
         self._reset()
         self.current_plugin = plugin_name
 
+        # Change name of description
+        title = f"[{plugin_utils.pretty_snakecase(plugin_name)}] Options"
+        self.setTitle(title)
+
         # Add configuration that every plugin _always_ has
         self.enabled_option = self._add_option(
             name="Plugin Enabled",
@@ -64,8 +69,6 @@ class BasePluginOptionsWidget(QGroupBox):
             value=api.is_plugin_active(plugin_name, stream_id=None),
             constraints={})
         self.all_items.append(self.enabled_option)
-
-        # Add a horizontal line to visually seperate
 
         # Add options specific to this plugin
         plugin = api.get_plugin(plugin_name)

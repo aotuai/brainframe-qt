@@ -9,11 +9,12 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        self.setTitle("Global Plugin Options")
+        self.window().setWindowTitle("Global Plugin Options")
         self.override_label.hide()
 
-        self._reset_overriding_btn = QPushButton("Reset All Overriding Streams",
-                                                 parent=self)
+        self._reset_overriding_btn = QPushButton(
+            "Reset All Overriding Streams",
+            parent=self)
         self._reset_to_defaults_btn = QPushButton("Reset to Defaults",
                                                   parent=self)
         # Add the button to the buttons grid
