@@ -262,3 +262,10 @@ class InvalidRuntimeOptionError(BaseAPIError):
     """
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_RUNTIME_OPTION, description)
+
+
+@register_error_type
+class EncodingNotFoundError(BaseAPIError):
+    """There was an attempt to access an encoding that does not exist."""
+    def __init__(self, description):
+        super().__init__(error_kinds.ENCODING_NOT_FOUND, description)
