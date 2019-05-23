@@ -44,10 +44,6 @@ class BasePluginOptionsWidget(QGroupBox):
         """This holds the option for enabling and disabling a plugin."""
 
         self.grid_layout: QGridLayout = self.grid.layout()
-        # self.grid_layout.setColumnStretch(0, 0)
-        # self.grid_layout.setColumnStretch(1, 1)
-        # self.grid_layout.setColumnStretch(2, 1)
-        # self.grid_layout.setColumnStretch(3, 1)
 
         self.current_plugin = None
 
@@ -57,10 +53,16 @@ class BasePluginOptionsWidget(QGroupBox):
         """
         self._reset()
         self.current_plugin = plugin_name
+        plugin = api.get_plugin(plugin_name)
 
-        # Change name of description
+        # Change name of plugin
         title = f"[{plugin_utils.pretty_snakecase(plugin_name)}] Options"
         self.setTitle(title)
+
+        # Set plugin description
+        plugin_description = plugin.description or ""
+        self.plugin_description_area.setVisible(bool(plugin_description))
+        self.plugin_description_label.setText(plugin_description)
 
         # Add configuration that every plugin _always_ has
         self.enabled_option = self._add_option(
@@ -71,7 +73,6 @@ class BasePluginOptionsWidget(QGroupBox):
         self.all_items.append(self.enabled_option)
 
         # Add options specific to this plugin
-        plugin = api.get_plugin(plugin_name)
         option_values = api.get_plugin_option_vals(plugin_name)
         for option_name, option in plugin.options.items():
             item = self._add_option(
