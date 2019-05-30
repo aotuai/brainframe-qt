@@ -14,21 +14,21 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
   - name: Stream Control
-    description: NA
+    description: Endpoints for controlling streams and their configuration
   - name: Alarm Control
-    description: NA
+    description: Endpoints for creating and modifying alarms
   - name: Alert Control
-    description: NA
+    description: Endpoints for fetching and validating alerts
   - name: Zone Control
-    description: NA
+    description: Endpoints for controlling zones
   - name: Storage Control
-    description: NA
+    description: Endpoints for fetching and storing data
   - name: Identity Control
-    description: NA
+    description: Endpoints for controlling identities and encodings
   - name: Plugin Control
-    description: NA
+    description: Endpoints for fetching plugin information and changing their configuration
   - name: Miscellaneous
-    description: NA
+    description: Endpoints for doing other miscellaneous things
 
 paths:
   /api/streams:
