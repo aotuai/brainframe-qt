@@ -1,0 +1,1690 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/BestDriverCN/BrainFrame_v0/1.0.0
+info:
+  description: This document describes all available endpoints for the BrainFrame REST API. This API is used by the provided client to monitor and configure streams and alarms. It can also be used by a custom client.
+  version: "0.18.0"
+  title: BrainFrame API Documentation
+  contact:
+    email: zhao.wang@dilililabs.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: Stream Control
+    description: NA
+  - name: Alarm Control
+    description: NA
+  - name: Alert Control
+    description: NA
+  - name: Zone Control
+    description: NA
+  - name: Storage Control
+    description: NA
+  - name: Identity Control
+    description: NA
+  - name: Plugin Control
+    description: NA
+  - name: Miscellaneous
+    description: NA
+    
+paths:
+  /api/streams:
+    get:
+      tags:
+        - Stream Control
+      summary: Provides an array of StreamConfiguration objects describing all available streams.
+      responses:
+        '200':
+          description: An array of StreamConfiguration objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StreamConfiguration'
+    post:
+      tags:
+        - Stream Control
+      summary: Creates a new stream or updates an existing stream. A new stream is only created if no ID field is provided in the body
+      requestBody:
+        description: A StreamConfiguration object with an optional ID value.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamConfiguration'
+      responses:
+        '200':
+            description: The stream was successfully created or updated
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/StreamConfiguration'
+        '404':
+            description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error'
+                  
+  /api/streams/{stream_id}:
+    delete:
+      tags:
+        - Stream Control
+      summary: Deletes the stream with the given stream ID.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id of the stream you want to delete
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: The stream was successfully deleted
+        '409':
+          description: 'StreamConfigurationNotFoundError: No stream with the given ID exists'
+          content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error'
+                  
+  /api/streams/{stream_id}/url:
+    get:
+      tags:
+        - Stream Control
+      summary: Returns a URL that can be used to connect to the video feed of the given stream ID. For webcam and video file sources, the server creates an MJPEG video stream that this endpoint returns a URL to. For IP camera sources, the original IP camera URL is returned and will be in whatever format the IP camera is configured to use.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id of the stream you want to delete
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: The URL to connect to the video feed on
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "http://210.54.39.237:8888/video"
+        '404':
+            description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error'
+        '500':
+            description: 'StreamNotOpenedError: The stream has disappeared, likely due to a connection issue between the server and the source'
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error'
+                  
+  /api/streams/{stream_id}/analyze:
+    put:
+      tags:
+        - Stream Control
+      summary: Toggles analysis of the given stream. If off, the stream will not look for objects in the stream and no alerts will come from the stream. Depending on the license conditions, the server may limit the amount of streams that can be analyzing at once. The accuracy and performance of stream analysis will go down as the amount of streams being analyzed goes up, and the optimal configuration will depend on the platform's hardware.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id of the stream you want to put
+          required: true
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        description: Either true or false. A true will start analysis on the stream, a false will stop it
+        content:
+          application/json:
+            schema:
+              type: boolean
+              example: true
+      responses:
+        '200':
+          description: Either true or false, indicating whether or not analysis has been performed. Note that it's not an error if the server refuses to start analysis for whatever reason.
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: false
+        '404':
+          description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'StreamNotOpenedError: The stream has disappeared, likely due to a connection issue between the server and the source'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'   
+        '503':
+          description: 'AnalysisLimitExceededError: The maximum number of concurrent streams with analysis enabled has been reached.'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error' 
+                
+  /api/streams/{stream_id}/runtime_options:
+    get:
+      tags:
+        - Stream Control
+      summary: Returns the current runtime option values for the stream with the given ID. This information is also available in the StreamConfiguration object.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id of the stream you want to get
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: All current values for runtime options for this stream
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                example: {"keyframes_only": true}
+        '404':
+          description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Stream Control     
+      summary: Sets the runtime option values for the stream with the given ID.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id of the stream you want to get
+          required: true
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        description: The runtime options as key-value pairs, where the key is the name and the value is the option value.
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+              example: {"keyframes_only": true}
+      responses:
+        '200':
+          description: The runtime options has been set for this stream.
+        '400':
+          description: 'InvalidRuntimeOptionError: An unknown option was specified or an option’s value is of an unexpected type'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error' 
+        '404':
+          description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error' 
+                
+  /api/streams/status:
+    get:
+      tags:
+        - Stream Control    
+      summary: Returns the current status of all zones in every stream in the form of ZoneStatus objects. ZoneStatus objects provide quite a bit of information on what's being looked for and what has been found. This is done to reduce round trips as much as possible. See the ZoneStatus documentation for more information.
+      responses:
+        '200':
+          description: ZoneStatus objects representing the current status of each zone for each stream. ZoneStatus objects are sectioned off by their stream ID and keyed by their name.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/ZoneStatus' 
+                example:
+                  '2':
+                    'Screen': 
+                    - $ref: '#/components/schemas/ZoneStatus' 
+                    'Back Door': 
+                    - $ref: '#/components/schemas/ZoneStatus' 
+                    'Kitchen': 
+                    - $ref: '#/components/schemas/ZoneStatus' 
+                    'Front Door': 
+                    - $ref: '#/components/schemas/ZoneStatus' 
+                  '3':
+                    'Screen': 
+                    - $ref: '#/components/schemas/ZoneStatus' 
+                    'Washroom': 
+                    - $ref: '#/components/schemas/ZoneStatus' 
+                  
+  /api/zone_alarms/{alarm_id}:
+    get:
+      tags:
+        - Alarm Control
+      summary: Gets the ZoneAlarm with the corresponding ID.
+      parameters:
+          - in: path
+            name: alarm_id
+            description: The unique alarm_id you want to get
+            required: true
+            schema:
+              type: integer
+            example: 1
+      responses:
+          '200':
+              description: A ZoneAlarm object
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/ZoneAlarm'
+          '404':
+              description: 'ZoneAlarmNotFoundError: No zone alarm with the given ID exists'
+              content:
+                application/json:
+                  schema: 
+                    $ref: '#/components/schemas/Error'
+                    
+  /api/zone_alarms/:
+    post:
+      tags:
+        - Alarm Control
+      summary: Creates or updates the given ZoneAlarm. A new ZoneAlarm is created if the given object’s ID field is null.
+      requestBody:
+        description: A ZoneAlarm object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneAlarm'
+      responses:
+          '200':
+              description: The saved ZoneAlarm object
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/ZoneAlarm'
+          '404':
+              description: 'ZoneNotFoundError: The zone that this ZoneAlarm is supposed to be for does not exist'
+              content:
+                application/json:
+                  schema: 
+                    $ref: '#/components/schemas/Error'      
+                    
+  /api/alerts:
+    get:
+      tags:
+        - Alert Control
+      summary: Returns Alert objects that have yet to be verified as correct. This endpoint paginates responses in chunks of 100. If the requester wants alerts that are older than the most recent 100, the page query parameter should be used.
+      parameters:
+          - in: query
+            name: stream_id
+            description: If supplied, only alerts for the given stream ID are returned
+            required: false
+            schema:
+              type: integer
+            example: 1
+          - in: query
+            name: page
+            description: The page of alerts to access. Page 1 contains the most recent 100 alerts, page 2 contains the next 100 and so on. The default page is 1.
+            required: false
+            schema:
+              type: integer
+            example: 1     
+      responses:
+          '200':
+              description: An array of unverified alerts
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Alert'
+          '404':
+              description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+              content:
+                application/json:
+                  schema: 
+                    $ref: '#/components/schemas/Error'   
+                    
+  /api/alerts/{alert_id}:
+    put:
+      tags:
+        - Alert Control
+      summary: Sets the verification status of the alert specified by the alert ID.
+      parameters:
+        - in: path
+          name: alert_id
+          description: The unique alert_id of the alert you want to put
+          required: true
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        description: True of the alert should be verified, false otherwise.
+        content:
+          application/json:
+            schema:
+              type: boolean
+              example: true            
+      responses:
+          '200':
+              description: The operation was a success
+          '404':
+              description: 'AlertNotFoundError: An alert with the given ID does not exist'
+              content:
+                application/json:
+                  schema: 
+                    $ref: '#/components/schemas/Error' 
+                    
+  /api/zones:
+    get:
+      tags:
+        - Zone Control
+      summary: Returns all zones.
+      parameters:
+          - in: query
+            name: stream_id
+            description: If supplied, only zones in the given stream ID are returned
+            required: false
+            schema:
+              type: integer
+      responses:
+          '200':
+              description: A list of zones configured for the streams
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Zone'  
+          '404':
+              description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+              content:
+                application/json:
+                  schema: 
+                    $ref: '#/components/schemas/Error'   
+    post:
+      tags:
+        - Zone Control
+      summary: Updates an existing zone or creates a new one. A new Zone object will be created if the "id" parameter is not included in the Zone object.
+      requestBody:
+        description: A Zone object to be updated or created. If the "id" parameter is set to null, a new zone will be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zone'
+      responses:
+          '200':
+              description: The zone that was saved
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Zone'  
+          '409':
+              description: 'DuplicateZoneNameError: A zone for the given stream with the given name already exists'
+              content:
+                application/json:
+                  schema: 
+                    $ref: '#/components/schemas/Error' 
+                    
+  /api/zones/{zone_id}:
+    delete:
+      tags: 
+        - Zone Control
+      summary: Deletes the zone with the given zone ID.
+      parameters:
+        - in: path
+          name: zone_id
+          description: The unique zone_id you want to delete
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: The zone was deleted
+        '400':
+          description: 'ZoneNotFoundError: A zone with the given ID does not exist'
+          content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error'
+        '404':
+          description: 'ZoneNotDeletableError: The zone is the default "Screen" zone, which is created for all streams and cannot be deleted'
+          content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error'
+                  
+  /api/storage/{storage_id}:
+    get:
+      tags:
+        - Storage Control
+      summary: Responds with the data associated with the given ID. The content type header of the response will be set accordingly.
+      parameters:
+        - in: path
+          name: storage_id
+          description: The unique storage_id you want to get
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+            description: The data was retrieved
+            content:
+              application/octet-stream:
+                schema:
+                  type: string
+                  format: binary
+        '404':
+            description: 'StorageNotFoundError: No storage with the given ID exists'
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error'  
+                  
+  /api/storage:
+    post:
+      tags:
+        - Storage Control
+      summary: Stores the given data. The content type header of the request should be set to express the kind of data this is.
+      requestBody:
+        description: Bytes of data you wan to store.
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+            description: The storage ID for later access
+            content:
+              application/json:
+                schema:
+                  type: integer
+                example: 4
+
+  /api/identities:
+    get:
+      tags: 
+        - Identity Control
+      summary: Fetches all Identity objects.
+      parameters:
+        - in: query
+          name: unique_name
+          description: An optional parameter. Filters identities by a unique name
+          required: false
+          schema:
+              type: string
+      responses:
+        '200':
+          description: An array of Identity objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Identity'
+    post:
+      tags: 
+        - Identity Control
+      summary: Updates or creates an Identity object. A new identity will be created if the "id" field is set to null.
+      requestBody:
+        description: An Identity object to be updated or created. If the "id" field is not set, a new Identity will be made.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identity'
+      responses:
+        '200':
+          description: The saved identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity' 
+        '404':
+            description: 'DuplicateIdentityNameError: An identity with the given name already exists.'
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error' 
+                  
+  /api/identities/{identity_id}:
+    get:
+      tags:
+        - Identity Control
+      summary: Fetches the Identity object with the given identity ID.
+      parameters:
+        - in: path
+          name: identity_id
+          description: The unique identity_id you want to get.
+          required: true
+          schema:
+              type: integer
+      responses:
+        '200':
+          description: The Identity with the given ID.
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Identity'
+        '404':
+            description: 'IdentityNotFoundError: No Identity object with the given ID exists.'
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error' 
+    delete:
+      tags: 
+        - Identity Control
+      summary: Deletes the Identity object with the given identity ID.
+      parameters:
+        - in: path
+          name: identity_id
+          description: The unique identity_id to delete.
+          required: true
+          schema:
+              type: integer
+      responses:
+        '200':
+          description: The Identity was deleted
+        '404':
+            description: 'IdentityNotFoundError: No Identity object with the given ID exists.'
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/Error' 
+                  
+  /api/identities/{identity_id}/images:    
+    post: 
+      tags:
+        - Identity Control
+      summary: "Associates a new image in storage with an identity with the given ID and encodes it for the given class name. For instance, if you made an identity for a person and you want to recognise them by their face in the given image, \"face\" would be the class_name value.\n Adding a brand new image to an identity is a two-step process. First, upload the image to BrainFrame using the POST /api/storage endpoint, then use this endpoint with the new storage ID."
+      parameters:
+        - in: path
+          name: identity_id
+          description: The unique identity_id you want to post
+          required: true
+          schema:
+              type: integer 
+      requestBody:
+        description: The storage ID of the image and the class name to encode the image for.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - class_name
+              - storage_id
+              properties:
+                class_name:
+                  type: string
+                  example: "person"
+                storage_id:
+                  type: integer
+                  example: 3
+      responses:
+        '200':
+          description: The image was successfully encoded and associated with the identity
+        '404':
+          description: 'IdentityNotFoundError: No identity with the given ID exists.'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: "You may have one of the following error message:\n\n\nNoDetectorForClassError: The server does not know how to detect the given class. This is likely because the client provided an invalid class name.\n\nNoEncoderForClassError: The server does not know how to encode the given class, so it's not possible to identify.\n\nImageAlreadyEncodedError: The image has already been encoded for this class and identity.\n\nNoDetectionsInImage: The server could not find an instance of the desired object in the image.\n\nTooManyDetectionsInImage: The server found multiple instances of the desired object in the image and it is ambiguous as to which one should be encoded.\n\nInvalidImageTypeError: Bytes for this image could not be decoded."
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'          
+    get:
+      tags:
+        - Identity Control
+      summary: Retrieves a list of image storage IDs associated with the given identity.
+      parameters:
+        - in: path
+          name: identity_id
+          description: The unique identity_id you want to get
+          required: true
+          schema:
+              type: integer 
+        - in: query
+          name: class_name
+          description: An optional parameter. Filters identity images by the class they are encoded for.
+          required: false
+          schema:
+              type: integer
+      responses:
+        '200':
+          description: A list of data storage IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+        '404':
+          description: 'IdentityNotFoundError: No identity with the given ID exists.'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+                
+  /api/identities/{identity_id}/vectors:
+    post:
+      tags:
+        - Identity Control
+      summary: "Associates a new vector with an identity that has the given ID for the given class name. This endpoint is intended for object types with a known encoded value. \n\n For situations where the encoded value of an object is not known to the client, use this endpoint instead."
+      parameters:
+        - in: path
+          name: identity_id
+          description: The unique identity_id you want to post
+          required: true
+          schema:
+              type: integer 
+      requestBody:
+        description: A JSON object specifying the class that this vector is an encoding of and the vector itself. A vector in this case is an array of one or more floating point numbers. The actual meaning and amount of those numbers will depend on the type of object being encoded.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - class_name
+              - vector
+              properties:
+                class_name:
+                  type: string
+                  example: "person"
+                vector:
+                  type: array
+                  items:
+                    type: number
+                    format: float
+                    example: [0.1, 0.2, 0.3, 0.4]
+      responses:
+        '200':
+          description: The ID of the saved vector
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 3
+        '404':
+          description: 'IdentityNotFoundError: No identity with the given ID exists.'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: "NoEncoderForClassError: The server does not know how to encode the given class, so it's not possible to identify.\n\n Or \n\n DuplicateVectorError: The vector has already been added for this class and identity"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'  
+  
+  /api/plugins:
+    get:
+      tags:
+        - Plugin Control
+      summary: Gets a list of all loaded plugins as Plugin objects
+      responses:
+        '200':
+          description: A list of Plugins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Plugin'
+                  
+  /api/plugins/{plugin_name}:
+    get:
+      tags:
+        - Plugin Control
+      summary: Gets the Plugin object with the given name.
+      parameters:
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to get
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      responses:
+        '200':
+          description: A plugin object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plugin'  
+        '404':
+          description: 'PluginNotFoundError: No plugin is loaded with the given name'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+                  
+  /api/plugins/{plugin_name}/active:
+    get:
+      tags:
+        - Plugin Control
+      summary: Gets the current global activity value of the plugin with the given name. This value decides whether or not the plugin will be run for all streams, but may be overridden on a per-stream basis with stream-level configuration.
+      parameters:
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to get
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      responses:
+        '200':
+          description: A “true” value if the plugin is active, “false” if not
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+        '404':
+          description: 'PluginNotFoundError: No plugin is loaded with the given name'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Plugin Control  
+      summary: Sets the global activity value of the plugin with the given name. This value decides whether or not the plugin will be run for all streams, but may be overridden on a per-stream basis with stream-level configuration.
+      parameters:
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to put
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      requestBody:
+        description: A “true” value to make the plugin active, “false” otherwise.
+        content:
+          application/json:
+            schema:
+              type: boolean
+              example: true
+      responses:
+        '200':
+          description: The plugin activity value has been changed
+        '404':
+          description: 'PluginNotFoundError: No plugin is loaded with the given name'
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+    
+  /api/streams/{stream_id}/plugins/{plugin_name}/active:
+    get:
+      tags:
+        - Plugin Control  
+      summary: Gets this stream’s activity value for the plugin with the given name. If this value is not null, its value will override this plugin’s active value for this stream. If it is null, the active value for this plugin is decided by the global configuration.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id you want to get
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to get
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      responses:
+        '200':
+          description: A “true” value if the plugin is active, “false” if it’s inactive, or “null” if there’s no stream-level configuration
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+                nullable: true
+        '404':
+          description: "StreamConfigurationNotFoundError: No stream with the given ID exists\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Plugin Control  
+      summary: Sets this stream’s activity value for the plugin with the given name. If this value is not null, its value will override this plugin’s active value for this stream.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id you want to put
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to put
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      requestBody:
+        description: A “true” value to make the plugin active, “false” if it’s inactive, or “null” to use the global configuration.
+        content:
+          application/json:
+            schema:
+              type: boolean
+              example: true
+              nullable: true
+      responses:
+        '200':
+          description: The activity value was set
+        '404':
+          description: "StreamConfigurationNotFoundError: No stream with the given ID exists\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+                
+  /api/plugins/{plugin_name}/options:
+    get:
+      tags:
+        - Plugin Control  
+      summary: Gets the global values of all options for the plugin with the given name. These global values apply to all streams unless they are overridden by a stream-level option configuration.
+      parameters:
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to get
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      responses:
+        '200':
+          description: Key-value pairs, where the key is the option name and the value is the option’s global value.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"threshold": 0.7, "tradeoff": "fast"}
+                additionalProperties: {}
+        '404':
+          description: "PluginNotFoundError: No plugin is loaded with the given name"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Plugin Control  
+      summary: Sets the global values of the plugin’s options. These global values apply to all streams unless they are overridden by a stream-level option configuration. All available options must be supplied here.
+      parameters:
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to put
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      requestBody:
+        description: An object that acts as key-value pairs. The key is the name of the option to change and the value is the value to set the option to.
+        content:
+          application/json:
+            schema:
+                type: object
+                example: {"threshold": 0.75, "tradeoff": "accurate"}
+                additionalProperties: {}
+      responses:
+        '200':
+          description: The options have been set
+        '400':
+          description: "InvalidPluginOptionError: The given option value does not fit within the option’s constraints"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: "PluginNotFoundError: No plugin is loaded with the given name"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+                
+  /api/streams/{stream_id}/plugins/{plugin_name}/options:
+    get:
+      tags:
+        - Plugin Control  
+      summary: Gets the stream-level values of the plugin’s options. This values only apply to this stream and will override the global configuration. Any unspecified options will defer to the global configuration.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id you want to get
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to get
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      responses:
+        '200':
+          description: Key-value pairs, where the key is the option name and the value the current stream-configured value for that option
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"threshold": 0.3, "tradeoff": "accurate"}
+                additionalProperties: {}
+        '404':
+          description: "PluginNotFoundError: No plugin is loaded with the given name\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Plugin Control  
+      summary: Sets the stream-level values of the plugin’s options. This values only apply to this stream and will override the global configuration.
+      parameters:
+        - in: path
+          name: stream_id
+          description: The unique stream_id you want to put
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: plugin_name
+          description: The name of plugin you want to put
+          required: true
+          schema:
+            type: string
+          example: "detector_people_and_vehicles_fast"
+      requestBody:
+        description: An object that acts as key-value pairs. The key is the name of the option to change and the value is the value to set the option to.
+        content:
+          application/json:
+            schema:
+                type: object
+                example: {"threshold": 0.75, "tradeoff": "accurate"}
+                additionalProperties: {}
+      responses:
+        '200':
+          description: The options have been set
+        '400':
+          description: "InvalidPluginOptionError: The given option value does not fit within the option’s constraints"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: "PluginNotFoundError: No plugin is loaded with the given name\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'              
+                
+  /api/alerts/{alert_id}/frame:
+    get:
+      tags:
+        - Miscellaneous
+      summary: Retrieves an image showing the point in the stream that the given alert was triggered. This can be used to help humans verify alerts.
+      parameters:
+        - in: path
+          name: alert_id
+          description: The unique alert_id you want to put
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Image data with an encoding identified by the MIME type header
+          content:       
+            image/*:   
+             schema: 
+               type: string
+               format: binary
+        '404':
+          description: "AlertNotFoundError: No alert with the given ID exists.\n\nor\n\nFrameNotFoundForAlertError: The alert with the given ID does not have a frame attached to it. Alerts that were made before this feature was introduced will not have frames."
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'   
+                
+  /api/engine-configuration:
+    get:
+      tags:
+        - Miscellaneous
+      summary: Returns an EngineConfiguration, which specifies the detection capabilities of the server. It contains information on the type of objects that can be detected and the attributes that can be detected for each object type.
+      responses:
+        '200':
+          description: The EngineConfiguration for this server
+          content:       
+            application/json:   
+             schema: 
+               $ref: '#/components/schemas/EngineConfiguration' 
+
+  /api/process_image:
+    post:
+      tags:
+        - Miscellaneous
+      summary: Process a single image with the given plugins enabled and with the given options.
+      requestBody:
+        description: A multipart/form-data body with a “metadata” section and an “image” section. The “image” section is an image formatted as a JPEG or PNG file. The “metadata” section contains a list of plugin names to enable during processing and a key-value store of options, where the key is a plugin name and the value is a key-value store of option values. If an option has no specified value, it will default to the plugin’s global configuration. 
+        content:
+          image/*:   
+            schema: 
+              type: string
+              format: binary
+          application/json:   
+            schema:
+              type: object
+              required:
+              - plugins
+              - options
+              properties:
+                plugins:
+                  type: array
+                  items:
+                    type: string
+                  example: ["detector_people_and_vehicles_fast", "detector_face_fast", "classifier_gender_closeup"]
+                options:
+                  type: object
+                  additionalProperties: {}
+                  example: {
+                    "detector_people_and_vehicles_fast": {
+                      "filter_mode": "only_people"
+                    },
+                    "classifier_gender_closeup": {
+                      "confidence_threshold": 0.8
+                    }
+                  }
+      responses:
+        '200':
+          description: A list of all Detection objects found in the image
+          content:       
+            application/json:   
+             schema: 
+               type: array
+               items:
+                $ref: '#/components/schemas/Detection'
+        '400':
+          description: "InvalidImageTypeError: The image format is invalid and could not be decoded"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'  
+        '404':
+          description: "PluginNotFoundError: No plugin with the given name is loaded"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Error'   
+                              
+
+components:
+  schemas:
+    Error:
+      type: object
+      description: An Error represents a failure to do the requested task. The failure could be on the part of the client or the server. Any endpoint can return an Error object. Error objects are always accompanied by a 4xx or 5xx HTTP status code."   
+      required: 
+      - title
+      - description
+      properties:
+        title:
+          type: string
+          example: "DuplicateStreamSourceError"
+          description: The type of error being reported. This value can be inspected so that a client can respond differently to different types of errors.
+        description:
+          type: string
+          example: A stream configuration that points to the same stream source exists! They would stream the same video.
+          description: A description of what happened. This is for humans and should not be depended on in code.
+          
+    StreamConfiguration:
+      type: object
+      description: Contains information on a stream that can be configured by the client.
+      required:
+      - id
+      - name
+      - connection_type
+      - connection_options
+      properties:
+        id:
+          type: integer
+          nullable: true
+          example: 1
+          description: The stream's unique identifier. Can be null when creating a new one.
+        name:
+          type: string
+          example: "Manukau City: Beach Lot"
+          description: "The display name of the stream."
+        connection_type:
+          type: string
+          enum: ["webcam",
+                 "ip_cream",
+                 "file"]
+          example: "ip_camera"
+          description: The type of device that is being streamed from. May be \"webcam\", \"ip_camera\", or \"file\".
+        connection_options:
+          oneOf: 
+            - $ref: '#/components/schemas/web_camera_conncetion_option'
+            - $ref: '#/components/schemas/ip_camera_conncetion_option'
+            - $ref: '#/components/schemas/file_conncetion_option'
+          description: "Key-value pairs of configuration information for connecting to the stream. Its contents depend on the connection type in use.\n\n If connection_type == \"webcam\" \ndevice_id (integer): The OpenCV ID of the webcam to use.\n\n If connection_type == \"ip_camera\" \nurl (string): The URL of the IP camera to connect to, including port number. \npipeline (string): An optional custom GStreamer pipeline to stream using. A pipeline is a string and MUST include the string {url} inside of it, wherein BrainFrame will insert the stream’s URL.  \n\nIf connection_type == \"file\" \nfilepath (string): A full path to the video file to stream. The path is relative to the machine the server is running on, not the client."
+        runtime_options:
+          type: object
+          description: Key-value pairs of configuration information that changes the runtime behavior of the video stream from its defaults. These options can be set dynamically with an endpoint.
+          properties:
+            keyframes_only:
+              type: boolean
+              example: true
+              
+    web_camera_conncetion_option:
+      type: object
+      required: 
+      - device_id
+      properties:
+        device_id:
+          type: integer
+          example: 0
+          description: The OpenCV ID of the webcam to use.
+          
+    ip_camera_conncetion_option:
+      type: object
+      required: 
+      - url
+      properties:
+        url:
+          type: string
+          example: "http://210.54.39.237:8888/video"
+          description: "The URL of the IP camera to connect to, including port number."
+        pipeline:
+          type: string
+          example: "`rtspsrc location={url} ! rtph264depay ! decodebin ! appsink name=main_sink`"
+          description: An optional custom GStreamer pipeline to stream using. A pipeline is a string and MUST include the string {url} inside of it, wherein BrainFrame will insert the stream’s URL. 
+          
+    file_conncetion_option:
+      type: object
+      required:
+      - filepath
+      properties:
+        filepath:
+          type: string
+          example: "/home/videos/example.mp4"
+          description: A full path to the video file to stream. The path is relative to the machine the server is running on, not the client.
+          
+    Zone:
+      type: object
+      description: A designated line or area within a stream that alarms can be attached to.
+      required: 
+      - id
+      - name
+      - stream_id
+      - alarms
+      - coords
+      properties:
+        id:
+          type: integer
+          nullable: true
+          description: The unique identifier of the zone. Can be null when creating a new one.
+          example: 2
+        name:
+          type: string
+          description: The display name of the zone
+          example: "Screen"
+        stream_id:
+          type: integer
+          description: The ID of the stream that this zone is inside of
+          example: 2
+        alarms:
+          type: array
+          description: All alarms that are attached to the zone
+          items:
+            $ref: '#/components/schemas/ZoneAlarm'
+        coords:
+          type: array
+          description: An array of x,y pairs that describe where the zone is in the stream. A line zone will only have two pairs, but a polygon zone can have many more. If the field is null, the zone covers the entire area of the frame regardless of the frame's size.
+          example: [[0,0], [1280,0], [1280,720], [0,720]]
+          items:
+            type: array
+            items: 
+              type: integer
+              
+    ZoneStatus:
+      type: object
+      description: The current status of a Zone at a specific point in time.
+      required: 
+      - zone
+      - tstamp
+      - total_entered
+      - total_exited
+      - within
+      - entering
+      - exiting
+      - alerts
+      properties:
+        zone:
+          description: Information on the zone that this ZoneStatus is for.
+          $ref: '#/components/schemas/Zone'
+        tstamp:
+          description: The time that the ZoneStatus was recorded, as the time in seconds since the epoch.
+          type: number
+          format: float
+          example: 1525218275.5498976707
+        total_entered:
+          description: A set of key-value pairs indicating how many objects have exited the zone. The key is the object type, and the value is the count.
+          type: object
+          additionalProperties: {}
+          example: {"person":909, "car":347, "motorcycle":0, "train":353}
+        total_exited:
+          description: A set of key-value pairs indicating how many objects have exited the zone. The key is the object type, and the value is the count.
+          type: object
+          additionalProperties: {}
+          example: {"person":908, "car":347, "motorcycle":0, "train":353}
+        within:
+          description: An array of Detection objects that were found within this zone.
+          type: array
+          items:
+            $ref: "#/components/schemas/Detection"
+        entering:
+          description: An array of Detection objects that were found entering the zone.
+          type: array
+          items:
+            $ref: "#/components/schemas/Detection"        
+        exiting:
+          description: An array of Detection objects that were found exiting the zone.
+          type: array
+          items:
+            $ref: "#/components/schemas/Detection"          
+        alerts:
+          description: An array of Alert objects that are going on during the time this ZoneStatus was recorded
+          type: array
+          items:
+            $ref: "#/components/schemas/Alert"
+            
+    ZoneAlarm:
+      description: Configures the server to look for a set of conditions within a zone and send alerts out when those conditions are met.
+      type: object
+      required:
+      - id
+      - zone_id
+      - name
+      - count_conditions
+      - rate_conditions
+      - active_start_time
+      - active_end_time
+      properties:
+        id:
+          description: The alert's unique identifier. Can be null when creating a new one.
+          type: integer
+          nullable: true
+          example: null
+        zone_id: 
+          description: The ID of the zone alarm that this alert came from
+          type: integer
+          example: 2
+        name:
+          description: The name of the alarm
+          type: string
+          example: "Some alarm"
+        count_conditions:
+          description: The count-based conditions that must be met in order for this alarm to be triggered
+          type: array
+          items:
+            $ref: "#/components/schemas/ZoneAlarmCountCondition"
+        rate_conditions:
+          description: The rate-based conditions that must be met in order for this alarm to be triggered
+          type: array
+          items:
+            $ref: "#/components/schemas/ZoneAlarmRateCondition"
+        active_start_time:
+          description: The start time where this alarm is active, in the format “hh:mm:ss”
+          type: string
+          example: "00:00:00"
+        active_end_time:
+          description: The start time where this alarm is active, in the format “hh:mm:ss”
+          type: string
+          example: "12:00:00"      
+          
+    ZoneAlarmCountCondition:
+      description: This is a condition type that goes into an alarm, and it specifies the number of objects in a specific zone.
+      type: object
+      required:
+      - id
+      - test
+      - check_value
+      - with_class_name
+      - with_attribute
+      properties:
+        id:
+          description: The unique identifier for this ZoneAlarmCountCondition. Can be null when creating a new one.
+          type: integer
+          nullable: true
+          example: 1
+        test:
+          description: Controls how we’re testing the number of objects in the zone, either “>” or “<” or “=” or “!=”.
+          type: string
+          example: ">"
+          enum: [">", "<", "=", "!="]
+        check_value:
+          description: The value to compare against in the test
+          type: integer
+          example: 5
+        with_class_name:
+          description: The class of object to count for, like “person”.
+          type: string
+          example: "person"
+        with_attribute:
+          description: If this is not null, then only objects exhibiting this attribute will be counted. eg, only "smoking" people.
+          type: string
+          nullable: true
+          example: null
+          
+    ZoneAlarmRateCondition:
+      description: This is a Condition type that goes into an alarm, and it specifies the rate of objects entering, exiting, or entering/exiting a Zone.
+      type: object
+      required:
+      - id
+      - test
+      - duration
+      - change
+      - direction
+      - with_class_name
+      - with_attribute
+      properties:
+        id: 
+          description: The unique identifier for this ZoneAlarmRateCondition. Can be null when creating a new one.
+          type: integer
+          example: 1
+        test:
+          description: Controls how we’re testing the number of objects in the zone, either “>=” or “<=”.
+          type: string
+          example: ">="
+          enum: [">=", "<="]
+        duration:
+          description: The timespan that will be looked at
+          type: number
+          format: float
+          example: 10.732
+        change: 
+          description: The numerical count amount of change in objects in a region that will trigger the test
+          type: integer
+          example: 7
+        direction: 
+          description: "Possible values: \"entering\", \"exiting\", or \"entering_or_exiting\""
+          type: string
+          example: "entering_or_exiting"
+          enum: ["entering", "exiting", "entering_or_exiting"]
+        with_class_name:
+          description: The class of object to count for, like “person”.
+          type: string
+          example: "person"
+        with_attribute:
+          description: If this is not None, then only objects exhibiting this attribute will be taken into account. eg, only "running" people.
+          type: string
+          nullable: true
+          example: null
+          
+    Alert:
+      description: An indication that an alarm has been triggered.
+      type: object     
+      required:
+      - id
+      - alarm_id
+      - start_time
+      - end_time
+      - verified_as
+      properties:
+        id:
+          description: The alert's unique identifier.
+          type: integer
+          example: 1
+        ararm_id:
+          description: The ID of the alarm that this Alert is for
+          type: integer
+          example: 1
+        start_time:
+          description: When the event started happening, as the time in seconds since the epoch
+          type: integer
+          example: 1525219522 
+        end_time:
+          description: When the event stopped happening, as the time in seconds since the epoch
+          type: integer
+          example: 1525219542
+        verified_as:
+          description: Whether or not the alert is valid, based on human input. If the alert has not been verified yet, this value is null.
+          type: boolean
+          nullable: true
+          example: null
+          
+    Detection:
+      description: A recognized object within a frame, like a person or a flower pot. Detections are positioned within a frame using a polygon. Detections may have attributes that further describe aspects of the detection.
+      type: object
+      required:
+      - class_name
+      - coords
+      - with_identity
+      - children
+      - attributes
+      - extra_data
+      - track_id
+      properties:
+        class_name:
+          description: The name of the type of detection that was found, like "person"
+          type: string
+          example: "person"
+        coords:
+          description: An array of arrays, each with a pair of x,y coordinates.
+          type: array
+          items:
+            type: array
+            items: 
+              type: number
+              format: float
+          example: [[501, 221], [1053, 221], [1053, 712], [501, 712]]
+        with_identity:
+          description: The Identity object that this detection was identified as, or null if the detection was not identified
+          $ref: "#/components/schemas/Identity"
+          nullable: true
+          example: null
+        children:
+          description: An array of Detection objects which are children of this detection. For instance, a face detection might be a child of a person detection.
+          type: array
+          items: 
+            $ref: "#/components/schemas/Detection"
+        attributes:
+          description: An object of key→value pairs where both key and value are strings. These represent classifications that were performed on this detection to extract more information from them.
+          type: object
+          additionalProperties: {}
+          example: {"Gait": "Running", "Gender": "Male", "Hat": "Not Wearing Hat"}
+        extra_data:
+          description: An object of key→ value pairs where the key is a string and the values can be integers, strings, null, or other objects. The extra_data API is specifically intended to allow for fulfilling customer specific needs without changing the official BrainFrame API. Information such as face recognition accuracy, dtag ID, detection confidence, classification confidence, may all be stored here.
+          type: object
+          additionalProperties: {}
+          example: {"detection_confidence": 0.65}
+        track_id:
+          description: A string-formatted UUID, or null. Detections that have the same track_id refer to the same object according to the tracking algorithm being used. This can be used to find the path of a single object throughout a video stream. If null, then the detection has not been successfully tracked.
+          type: string
+          nullable: true
+          example: "c41f75a6-22c8-427c-8b37-b0217e7c0ca2"
+          
+    EngineConfiguration:
+      description: Describes the detection capabilities of the server. Contains information on the type of objects that can be detected and the attributes that can be detected for those objects.
+      required:
+      - version
+      - max_streams
+      - attributes
+      - attribute_ownership
+      properties:
+        version:
+          description: The server's current version
+          type: string
+          example: "v0.1.0"
+        max_streams:
+          description: The maximum amount of allowed streams that can be analyzed at once
+          type: integer
+          example: 4
+        attributes:
+          description: Key-value pairs describing the available attributes. The key is the name of the attribute and the value is an array of possible values
+          type: object
+          additionalProperties: {}
+          example: {"Gait":["Running", "Walking", "Unknown Gait"], "Hat":["Wearing Hat", "Not Wearing Hat"]}
+        attribute_ownership:
+          description: Key-value pairs tying attributes to the objects they apply to. The keys are detectable objects and the values are arrays containing the names of the attributes that can be detected for that object.
+          type: object
+          additionalProperties: {}
+          example: {"person":["Gait", "Hat"], "car":[], "motorcycle":[], "train":[], "truck":[], "boat":[], "stop sign":[], "parking meter":[],}
+          
+    Identity:
+      description: Describes a registered identity. Identities are uniquely identifiable objects of some class type. For instance, one might make an identity for a specific person to specifically identify him among other people.
+      type: object
+      required:
+      - id
+      - unique_name
+      - nickname
+      - metadata
+      properties:
+        id:
+          description: A unique identifier. Can be null when creating a new one.
+          type: integer
+          nullable: true
+          example: 2
+        unique_name: 
+          description: Some unique name for the identity. This could be a person's employee number, for example.
+          type: string
+          example: "EID-0001"
+        nickname:
+          description: A display name for the identity that might not be unique, like the person's name.
+          type: string
+          example: "Jane Deo"
+        metadata:
+          description: Key-value pairs containing some custom user-defined set of data to further describe the identity.
+          type: object
+          additionalProperties: {}
+          example: {"custom_option_1": "something", "some_other_option": "something else"}
+          
+    Plugin:
+      description: A description of a currently loaded plugin.
+      required:
+      - name
+      - description
+      - input_type
+      - output_type
+      - capability
+      - options
+      properties:
+        name:
+          description: The unique name of the plugin.
+          type: string
+          example: "detector_people_and_vehicles_fast"
+        description:
+          description: A human-readable description of what the plugin does.
+          type: string
+          example: "Detects people and various vehicle types"
+        input_type:
+          description: A NodeDescription which describes the kind of input the plugin takes.
+          $ref: "#/components/schemas/NodeDescription"
+        output_type:
+          description: A NodeDescription which describes the kind of output the plugin provides.
+          $ref: "#/components/schemas/NodeDescription"
+        capability:
+          description: A NodeDescription which describes what this plugin does to its input. It is the difference between the input and output NodeDescriptions. This field is useful for inspecting a plugin to find what it can do.
+          $ref: "#/components/schemas/NodeDescription"
+        options:
+          description: Key-value pairs whose key is the name of a configurable option and whose value is a PluginOption object.
+          type: object
+          additionalProperties: {}
+          example: {"threshold":PluginOption, "filter_mode":PluginOption}
+          
+    PluginOption:
+      description: A configurable plugin option. Contains a description of the option, its default value, and its constraints.
+      required: 
+      - type
+      - default
+      - constraints
+      - description
+      properties:
+        type:
+          description: The type of option this is. Current available values are “float”, “enum”, “bool” and “int”. Options of the “float” and “int” type contain values of that type. Options of the “enum” type contain one of a discrete set of string values
+          type: string
+          example: "enmu"
+          enum: ["float", "int", "enum", "bool"]
+        default:
+          description: The default value of this option if no user configuration is specified. The type of this value depends on the “type” field.
+          oneOf:
+            - type: number
+              format: float
+            - type: integer
+            - type: string
+            - type: boolean
+          example: "fast"
+        constraints:
+          description: "Describes the range of valid values for this option. The content of this object depends on the type field.\n\n type=“float”: This object has “max_val” and “min_val” fields to specify a range of valid floats\n\ntype=“int”: Like with “float”, this object has “max_val” and “min_val” fields to specify a range of valid ints.\n\ntype=”enum”: This object has a “choices” field, which is an array of strings. The option’s value must be one of these strings.\n\ntype=”bool”: This object has no constraints- it’s either true or false"
+          type: object
+          additionalProperties: {}
+          example: {"choices": ["fast", "accurate"]}
+        description: 
+          description: Description of the option. null if the option does not have a description.
+          type: string
+          nullable: true
+          example: null 
+          
+    NodeDescription:
+      description: Describes the inputs and outputs of a plugin. Internally, plugins pass information to each other using DetectionNode objects, and these DetectionNodes can satisfy NodeDescriptions by having the necessary data.
+      type: object
+      required: 
+      - size
+      - detections
+      - attributes
+      - encoded
+      - tracked
+      - extra_data
+      properties:
+        size:
+          description: "size=”none”: A NodeDescription that does not take in or produce DetectionNodes.\n\nsize=”single”: A NodeDescription that takes in or produces a single DetectionNode.\n\n size=”all”: A NodeDescription that takes in all available DetectionNodes or produces any number of DetectionNodes."
+          type: string
+          example: "all"
+        detections:
+          description: An array of detection class names, like “person” or “vehicle”. A DetectionNode that meets this description must have a class name that is present in this list.
+          type: array
+          items:
+            type: string
+          example: ["person", "car"]
+        attributes:
+          description: Key-value pairs whose key is the classification type and whose value is a list of possible attributes. A DetectionNode that meets this description must have a classification for each classification type listed here.
+          type: object
+          additionalProperties: {}
+          example: {"shirt_color": ["red", "blue"]}
+        encoded:
+          description: If true, the DetectionNode must be encoded to meet this description.
+          type: boolean
+          example: false
+        tracked:
+          description: If true, the DetectionNode is being tracked.
+          type: boolean
+          example: false
+        extra_data:
+          description: A list of keys in a NodeDescription's extra_data. A DetectionNode that meets this description must have extra data for each name listed here.
+          type: array
+          items:
+            type: string
+          example: ["detection_confidence"]
