@@ -29,13 +29,14 @@ tags:
     description: NA
   - name: Miscellaneous
     description: NA
-    
+
 paths:
   /api/streams:
     get:
       tags:
         - Stream Control
-      summary: Provides an array of StreamConfiguration objects describing all available streams.
+      summary: Get stream configurations
+      description: Provides an array of StreamConfiguration objects describing all available streams.
       responses:
         '200':
           description: An array of StreamConfiguration objects
@@ -48,7 +49,8 @@ paths:
     post:
       tags:
         - Stream Control
-      summary: Creates a new stream or updates an existing stream. A new stream is only created if no ID field is provided in the body
+      summary: Create or update stream configuration
+      description: Creates a new stream or updates an existing stream. A new stream is only created if no ID field is provided in the body
       requestBody:
         description: A StreamConfiguration object with an optional ID value.
         content:
@@ -66,14 +68,15 @@ paths:
             description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
             content:
               application/json:
-                schema: 
+                schema:
                   $ref: '#/components/schemas/Error'
-                  
+
   /api/streams/{stream_id}:
     delete:
       tags:
         - Stream Control
-      summary: Deletes the stream with the given stream ID.
+      summary: Delete stream configuration
+      description: Deletes the stream with the given stream ID.
       parameters:
         - in: path
           name: stream_id
@@ -89,14 +92,19 @@ paths:
           description: 'StreamConfigurationNotFoundError: No stream with the given ID exists'
           content:
               application/json:
-                schema: 
+                schema:
                   $ref: '#/components/schemas/Error'
-                  
+
   /api/streams/{stream_id}/url:
     get:
       tags:
         - Stream Control
-      summary: Returns a URL that can be used to connect to the video feed of the given stream ID. For webcam and video file sources, the server creates an MJPEG video stream that this endpoint returns a URL to. For IP camera sources, the original IP camera URL is returned and will be in whatever format the IP camera is configured to use.
+      summary: Get stream URL
+      description: "Returns a URL that can be used to connect to the video
+      feed of the given stream ID. For webcam and video file sources, the
+      server creates an MJPEG video stream that this endpoint returns a URL to.
+      For IP camera sources, the original IP camera URL is returned and will be
+      in whatever format the IP camera is configured to use."
       parameters:
         - in: path
           name: stream_id
@@ -117,20 +125,27 @@ paths:
             description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
             content:
               application/json:
-                schema: 
+                schema:
                   $ref: '#/components/schemas/Error'
         '500':
             description: 'StreamNotOpenedError: The stream has disappeared, likely due to a connection issue between the server and the source'
             content:
               application/json:
-                schema: 
+                schema:
                   $ref: '#/components/schemas/Error'
-                  
+
   /api/streams/{stream_id}/analyze:
     put:
       tags:
         - Stream Control
-      summary: Toggles analysis of the given stream. If off, the stream will not look for objects in the stream and no alerts will come from the stream. Depending on the license conditions, the server may limit the amount of streams that can be analyzing at once. The accuracy and performance of stream analysis will go down as the amount of streams being analyzed goes up, and the optimal configuration will depend on the platform's hardware.
+      summary: Set stream analysis
+      description: "Toggles analysis of the given stream. If off, the stream
+      will not look for objects in the stream and no alerts will come from the
+      stream. Depending on the license conditions, the server may limit the
+      amount of streams that can be analyzing at once. The accuracy and
+      performance of stream analysis will go down as the amount of stream
+      being analyzed goes up, and the optimal configuration will depend on the
+      platform's hardware."
       parameters:
         - in: path
           name: stream_id
@@ -158,26 +173,29 @@ paths:
           description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
         '500':
           description: 'StreamNotOpenedError: The stream has disappeared, likely due to a connection issue between the server and the source'
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error'   
+              schema:
+                $ref: '#/components/schemas/Error'
         '503':
           description: 'AnalysisLimitExceededError: The maximum number of concurrent streams with analysis enabled has been reached.'
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error' 
-                
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/streams/{stream_id}/runtime_options:
     get:
       tags:
         - Stream Control
-      summary: Returns the current runtime option values for the stream with the given ID. This information is also available in the StreamConfiguration object.
+      summary: Get stream runtime options
+      description: "Returns the current runtime option values for the stream
+      with the given ID. This information is also available in the
+      StreamConfiguration object."
       parameters:
         - in: path
           name: stream_id
@@ -199,12 +217,13 @@ paths:
           description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
     put:
       tags:
-        - Stream Control     
-      summary: Sets the runtime option values for the stream with the given ID.
+        - Stream Control
+      summary: Set stream runtime options
+      description: Sets the runtime option values for the stream with the given ID.
       parameters:
         - in: path
           name: stream_id
@@ -228,20 +247,25 @@ paths:
           description: 'InvalidRuntimeOptionError: An unknown option was specified or an option’s value is of an unexpected type'
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error' 
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error' 
-                
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/streams/status:
     get:
       tags:
-        - Stream Control    
-      summary: Returns the current status of all zones in every stream in the form of ZoneStatus objects. ZoneStatus objects provide quite a bit of information on what's being looked for and what has been found. This is done to reduce round trips as much as possible. See the ZoneStatus documentation for more information.
+        - Stream Control
+      summary: Get zone statuses
+      description: "Returns the current status of all zones in every stream in
+      the form of ZoneStatus objects. ZoneStatus objects provide quite a bit of
+      information on what's being looked for and what has been found. This is
+      done to reduce round trips as much as possible. See the ZoneStatus
+      documentation for more information."
       responses:
         '200':
           description: ZoneStatus objects representing the current status of each zone for each stream. ZoneStatus objects are sectioned off by their stream ID and keyed by their name.
@@ -252,28 +276,29 @@ paths:
                 additionalProperties:
                   type: object
                   additionalProperties:
-                    $ref: '#/components/schemas/ZoneStatus' 
+                    $ref: '#/components/schemas/ZoneStatus'
                 example:
                   '2':
-                    'Screen': 
-                    - $ref: '#/components/schemas/ZoneStatus' 
-                    'Back Door': 
-                    - $ref: '#/components/schemas/ZoneStatus' 
-                    'Kitchen': 
-                    - $ref: '#/components/schemas/ZoneStatus' 
-                    'Front Door': 
-                    - $ref: '#/components/schemas/ZoneStatus' 
+                    'Screen':
+                    - $ref: '#/components/schemas/ZoneStatus'
+                    'Back Door':
+                    - $ref: '#/components/schemas/ZoneStatus'
+                    'Kitchen':
+                    - $ref: '#/components/schemas/ZoneStatus'
+                    'Front Door':
+                    - $ref: '#/components/schemas/ZoneStatus'
                   '3':
-                    'Screen': 
-                    - $ref: '#/components/schemas/ZoneStatus' 
-                    'Washroom': 
-                    - $ref: '#/components/schemas/ZoneStatus' 
-                  
+                    'Screen':
+                    - $ref: '#/components/schemas/ZoneStatus'
+                    'Washroom':
+                    - $ref: '#/components/schemas/ZoneStatus'
+
   /api/zone_alarms/{alarm_id}:
     get:
       tags:
         - Alarm Control
-      summary: Gets the ZoneAlarm with the corresponding ID.
+      summary: Get zone alarm
+      description: Gets the ZoneAlarm with the corresponding ID.
       parameters:
           - in: path
             name: alarm_id
@@ -293,14 +318,15 @@ paths:
               description: 'ZoneAlarmNotFoundError: No zone alarm with the given ID exists'
               content:
                 application/json:
-                  schema: 
+                  schema:
                     $ref: '#/components/schemas/Error'
-                    
-  /api/zone_alarms/:
+
+  /api/zone_alarms:
     post:
       tags:
         - Alarm Control
-      summary: Creates or updates the given ZoneAlarm. A new ZoneAlarm is created if the given object’s ID field is null.
+      summary: Create or update zone alarm
+      description: Creates or updates the given ZoneAlarm. A new ZoneAlarm is created if the given object’s ID field is null.
       requestBody:
         description: A ZoneAlarm object
         content:
@@ -318,14 +344,18 @@ paths:
               description: 'ZoneNotFoundError: The zone that this ZoneAlarm is supposed to be for does not exist'
               content:
                 application/json:
-                  schema: 
-                    $ref: '#/components/schemas/Error'      
-                    
+                  schema:
+                    $ref: '#/components/schemas/Error'
+
   /api/alerts:
     get:
       tags:
         - Alert Control
-      summary: Returns Alert objects that have yet to be verified as correct. This endpoint paginates responses in chunks of 100. If the requester wants alerts that are older than the most recent 100, the page query parameter should be used.
+      summary: Get unverified alerts
+      description: "Returns Alert objects that have yet to be verified as
+      correct. This endpoint paginates responses in chunks of 100. If the
+      requester wants alerts that are older than the most recent 100, the page
+      query parameter should be used."
       parameters:
           - in: query
             name: stream_id
@@ -340,7 +370,7 @@ paths:
             required: false
             schema:
               type: integer
-            example: 1     
+            example: 1
       responses:
           '200':
               description: An array of unverified alerts
@@ -354,14 +384,15 @@ paths:
               description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
               content:
                 application/json:
-                  schema: 
-                    $ref: '#/components/schemas/Error'   
-                    
+                  schema:
+                    $ref: '#/components/schemas/Error'
+
   /api/alerts/{alert_id}:
     put:
       tags:
         - Alert Control
-      summary: Sets the verification status of the alert specified by the alert ID.
+      summary: Set alert verification
+      description: Sets the verification status of the alert specified by the alert ID.
       parameters:
         - in: path
           name: alert_id
@@ -376,7 +407,7 @@ paths:
           application/json:
             schema:
               type: boolean
-              example: true            
+              example: true
       responses:
           '200':
               description: The operation was a success
@@ -384,14 +415,14 @@ paths:
               description: 'AlertNotFoundError: An alert with the given ID does not exist'
               content:
                 application/json:
-                  schema: 
-                    $ref: '#/components/schemas/Error' 
-                    
+                  schema:
+                    $ref: '#/components/schemas/Error'
+
   /api/zones:
     get:
       tags:
         - Zone Control
-      summary: Returns all zones.
+      summary: Get zones
       parameters:
           - in: query
             name: stream_id
@@ -407,17 +438,20 @@ paths:
                   schema:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Zone'  
+                      $ref: '#/components/schemas/Zone'
           '404':
               description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
               content:
                 application/json:
-                  schema: 
-                    $ref: '#/components/schemas/Error'   
+                  schema:
+                    $ref: '#/components/schemas/Error'
     post:
       tags:
         - Zone Control
-      summary: Updates an existing zone or creates a new one. A new Zone object will be created if the "id" parameter is not included in the Zone object.
+      summary: Create or update zone
+      description: "Updates an existing zone or creates a new one. A new Zone
+      object will be created if the \"id\" parameter is not included in the
+      Zone object."
       requestBody:
         description: A Zone object to be updated or created. If the "id" parameter is set to null, a new zone will be created.
         content:
@@ -430,19 +464,20 @@ paths:
               content:
                 application/json:
                   schema:
-                    $ref: '#/components/schemas/Zone'  
+                    $ref: '#/components/schemas/Zone'
           '409':
               description: 'DuplicateZoneNameError: A zone for the given stream with the given name already exists'
               content:
                 application/json:
-                  schema: 
-                    $ref: '#/components/schemas/Error' 
-                    
+                  schema:
+                    $ref: '#/components/schemas/Error'
+
   /api/zones/{zone_id}:
     delete:
-      tags: 
+      tags:
         - Zone Control
-      summary: Deletes the zone with the given zone ID.
+      summary: Delete zone
+      description: Deletes the zone with the given zone ID.
       parameters:
         - in: path
           name: zone_id
@@ -458,20 +493,22 @@ paths:
           description: 'ZoneNotFoundError: A zone with the given ID does not exist'
           content:
               application/json:
-                schema: 
+                schema:
                   $ref: '#/components/schemas/Error'
         '404':
           description: 'ZoneNotDeletableError: The zone is the default "Screen" zone, which is created for all streams and cannot be deleted'
           content:
               application/json:
-                schema: 
+                schema:
                   $ref: '#/components/schemas/Error'
-                  
+
   /api/storage/{storage_id}:
     get:
       tags:
         - Storage Control
-      summary: Responds with the data associated with the given ID. The content type header of the response will be set accordingly.
+      summary: Get storage data
+      description: "Responds with the data associated with the given ID. The
+      content type header of the response will be set accordingly."
       parameters:
         - in: path
           name: storage_id
@@ -492,14 +529,16 @@ paths:
             description: 'StorageNotFoundError: No storage with the given ID exists'
             content:
               application/json:
-                schema: 
-                  $ref: '#/components/schemas/Error'  
-                  
+                schema:
+                  $ref: '#/components/schemas/Error'
+
   /api/storage:
     post:
       tags:
         - Storage Control
-      summary: Stores the given data. The content type header of the request should be set to express the kind of data this is.
+      summary: Create storage
+      description: "Stores the given data. The content type header of the
+      request should be set to express the kind of data this is."
       requestBody:
         description: Bytes of data you wan to store.
         content:
@@ -518,9 +557,10 @@ paths:
 
   /api/identities:
     get:
-      tags: 
+      tags:
         - Identity Control
-      summary: Fetches all Identity objects.
+      summary: Get identities
+      description: Fetches all Identity objects.
       parameters:
         - in: query
           name: unique_name
@@ -535,12 +575,14 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Identity'
     post:
-      tags: 
+      tags:
         - Identity Control
-      summary: Updates or creates an Identity object. A new identity will be created if the "id" field is set to null.
+      summary: Update or create identity
+      description: "Updates or creates an Identity object. A new identity will
+      be created if the \"id\" field is set to null."
       requestBody:
         description: An Identity object to be updated or created. If the "id" field is not set, a new Identity will be made.
         content:
@@ -553,19 +595,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Identity' 
+                $ref: '#/components/schemas/Identity'
         '404':
             description: 'DuplicateIdentityNameError: An identity with the given name already exists.'
             content:
               application/json:
-                schema: 
-                  $ref: '#/components/schemas/Error' 
-                  
+                schema:
+                  $ref: '#/components/schemas/Error'
+
   /api/identities/{identity_id}:
     get:
       tags:
         - Identity Control
-      summary: Fetches the Identity object with the given identity ID.
+      summary: Get identity
+      description: Fetches the Identity object with the given ID.
       parameters:
         - in: path
           name: identity_id
@@ -584,12 +627,13 @@ paths:
             description: 'IdentityNotFoundError: No Identity object with the given ID exists.'
             content:
               application/json:
-                schema: 
-                  $ref: '#/components/schemas/Error' 
+                schema:
+                  $ref: '#/components/schemas/Error'
     delete:
-      tags: 
+      tags:
         - Identity Control
-      summary: Deletes the Identity object with the given identity ID.
+      summary: Delete identity
+      description: Deletes the Identity object with the given identity ID.
       parameters:
         - in: path
           name: identity_id
@@ -604,21 +648,28 @@ paths:
             description: 'IdentityNotFoundError: No Identity object with the given ID exists.'
             content:
               application/json:
-                schema: 
-                  $ref: '#/components/schemas/Error' 
-                  
-  /api/identities/{identity_id}/images:    
-    post: 
+                schema:
+                  $ref: '#/components/schemas/Error'
+
+  /api/identities/{identity_id}/images:
+    post:
       tags:
         - Identity Control
-      summary: "Associates a new image in storage with an identity with the given ID and encodes it for the given class name. For instance, if you made an identity for a person and you want to recognise them by their face in the given image, \"face\" would be the class_name value.\n Adding a brand new image to an identity is a two-step process. First, upload the image to BrainFrame using the POST /api/storage endpoint, then use this endpoint with the new storage ID."
+      summary: New image encoding
+      description: "Associates a new image in storage with an identity with the
+      given ID and encodes it for the given class name. For instance, if you
+      made an identity for a person and you want to recognise them by their
+      face in the given image, \"face\" would be the class_name value.\n
+      Adding a brand new image to an identity is a two-step process. First,
+      upload the image to BrainFrame using the POST /api/storage endpoint, then
+      use this endpoint with the new storage ID."
       parameters:
         - in: path
           name: identity_id
           description: The unique identity_id you want to post
           required: true
           schema:
-              type: integer 
+              type: integer
       requestBody:
         description: The storage ID of the image and the class name to encode the image for.
         content:
@@ -642,59 +693,31 @@ paths:
           description: 'IdentityNotFoundError: No identity with the given ID exists.'
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
         '400':
           description: "You may have one of the following error message:\n\n\nNoDetectorForClassError: The server does not know how to detect the given class. This is likely because the client provided an invalid class name.\n\nNoEncoderForClassError: The server does not know how to encode the given class, so it's not possible to identify.\n\nImageAlreadyEncodedError: The image has already been encoded for this class and identity.\n\nNoDetectionsInImage: The server could not find an instance of the desired object in the image.\n\nTooManyDetectionsInImage: The server found multiple instances of the desired object in the image and it is ambiguous as to which one should be encoded.\n\nInvalidImageTypeError: Bytes for this image could not be decoded."
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error'          
-    get:
-      tags:
-        - Identity Control
-      summary: Retrieves a list of image storage IDs associated with the given identity.
-      parameters:
-        - in: path
-          name: identity_id
-          description: The unique identity_id you want to get
-          required: true
-          schema:
-              type: integer 
-        - in: query
-          name: class_name
-          description: An optional parameter. Filters identity images by the class they are encoded for.
-          required: false
-          schema:
-              type: integer
-      responses:
-        '200':
-          description: A list of data storage IDs.
-          content:
-            application/json:
               schema:
-                type: array
-                items:
-                  type: integer
-        '404':
-          description: 'IdentityNotFoundError: No identity with the given ID exists.'
-          content:
-            application/json:
-              schema: 
                 $ref: '#/components/schemas/Error'
-                
+
   /api/identities/{identity_id}/vectors:
     post:
       tags:
         - Identity Control
-      summary: "Associates a new vector with an identity that has the given ID for the given class name. This endpoint is intended for object types with a known encoded value. \n\n For situations where the encoded value of an object is not known to the client, use this endpoint instead."
+      summary: New vector encoding
+      description: "Associates a new vector with an identity that has the given
+      ID for the given class name. This endpoint is intended for object types
+      with a known encoded value. \n\n For situations where the encoded value
+      of an object is not known to the client, use this endpoint instead."
       parameters:
         - in: path
           name: identity_id
           description: The unique identity_id you want to post
           required: true
           schema:
-              type: integer 
+              type: integer
       requestBody:
         description: A JSON object specifying the class that this vector is an encoding of and the vector itself. A vector in this case is an array of one or more floating point numbers. The actual meaning and amount of those numbers will depend on the type of object being encoded.
         content:
@@ -726,20 +749,21 @@ paths:
           description: 'IdentityNotFoundError: No identity with the given ID exists.'
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
         '400':
           description: "NoEncoderForClassError: The server does not know how to encode the given class, so it's not possible to identify.\n\n Or \n\n DuplicateVectorError: The vector has already been added for this class and identity"
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error'  
-  
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/plugins:
     get:
       tags:
         - Plugin Control
-      summary: Gets a list of all loaded plugins as Plugin objects
+      summary: Get plugins
+      description: Gets a list of all loaded plugins as Plugin objects
       responses:
         '200':
           description: A list of Plugins
@@ -749,12 +773,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Plugin'
-                  
+
   /api/plugins/{plugin_name}:
     get:
       tags:
         - Plugin Control
-      summary: Gets the Plugin object with the given name.
+      summary: Get plugin
+      description: Gets the Plugin object with the given name.
       parameters:
         - in: path
           name: plugin_name
@@ -769,19 +794,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Plugin'  
+                $ref: '#/components/schemas/Plugin'
         '404':
           description: 'PluginNotFoundError: No plugin is loaded with the given name'
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
-                  
+
   /api/plugins/{plugin_name}/active:
     get:
       tags:
         - Plugin Control
-      summary: Gets the current global activity value of the plugin with the given name. This value decides whether or not the plugin will be run for all streams, but may be overridden on a per-stream basis with stream-level configuration.
+      summary: Get global plugin active state
+      description: "Gets the current global activity value of the plugin with
+      the given name. This value decides whether or not the plugin will be run
+      for all streams, but may be overridden on a per-stream basis with
+      stream-level configuration."
       parameters:
         - in: path
           name: plugin_name
@@ -802,12 +831,16 @@ paths:
           description: 'PluginNotFoundError: No plugin is loaded with the given name'
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
     put:
       tags:
-        - Plugin Control  
-      summary: Sets the global activity value of the plugin with the given name. This value decides whether or not the plugin will be run for all streams, but may be overridden on a per-stream basis with stream-level configuration.
+        - Plugin Control
+      summary: Set global plugin active state
+      description: "Sets the global activity value of the plugin with the given
+      name. This value decides whether or not the plugin will be run for all
+      streams, but may be overridden on a per-stream basis with stream-level
+      configuration."
       parameters:
         - in: path
           name: plugin_name
@@ -830,14 +863,18 @@ paths:
           description: 'PluginNotFoundError: No plugin is loaded with the given name'
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
-    
+
   /api/streams/{stream_id}/plugins/{plugin_name}/active:
     get:
       tags:
-        - Plugin Control  
-      summary: Gets this stream’s activity value for the plugin with the given name. If this value is not null, its value will override this plugin’s active value for this stream. If it is null, the active value for this plugin is decided by the global configuration.
+        - Plugin Control
+      summary: Get stream plugin active state
+      description: "Gets this stream’s activity value for the plugin with the
+      given name. If this value is not null, its value will override this
+      plugin’s active value for this stream. If it is null, the active value
+      for this plugin is decided by the global configuration."
       parameters:
         - in: path
           name: stream_id
@@ -865,12 +902,15 @@ paths:
           description: "StreamConfigurationNotFoundError: No stream with the given ID exists\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
     put:
       tags:
-        - Plugin Control  
-      summary: Sets this stream’s activity value for the plugin with the given name. If this value is not null, its value will override this plugin’s active value for this stream.
+        - Plugin Control
+      summary: Set stream plugin active state
+      description: "Sets this stream’s activity value for the plugin with the
+      given name. If this value is not null, its value will override this
+      plugin’s active value for this stream."
       parameters:
         - in: path
           name: stream_id
@@ -900,14 +940,17 @@ paths:
           description: "StreamConfigurationNotFoundError: No stream with the given ID exists\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
-                
+
   /api/plugins/{plugin_name}/options:
     get:
       tags:
-        - Plugin Control  
-      summary: Gets the global values of all options for the plugin with the given name. These global values apply to all streams unless they are overridden by a stream-level option configuration.
+        - Plugin Control
+      summary: Get global plugin options
+      description: "Gets the global values of all options for the plugin with
+      the given name. These global values apply to all streams unless they are
+      overridden by a stream-level option configuration."
       parameters:
         - in: path
           name: plugin_name
@@ -929,12 +972,16 @@ paths:
           description: "PluginNotFoundError: No plugin is loaded with the given name"
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
     put:
       tags:
-        - Plugin Control  
-      summary: Sets the global values of the plugin’s options. These global values apply to all streams unless they are overridden by a stream-level option configuration. All available options must be supplied here.
+        - Plugin Control
+      summary: Set global plugin options
+      description: "Sets the global values of the plugin’s options. These
+      global values apply to all streams unless they are overridden by a
+      stream-level option configuration. All available options must be supplied
+      here."
       parameters:
         - in: path
           name: plugin_name
@@ -958,20 +1005,24 @@ paths:
           description: "InvalidPluginOptionError: The given option value does not fit within the option’s constraints"
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
         '404':
           description: "PluginNotFoundError: No plugin is loaded with the given name"
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
-                
+
   /api/streams/{stream_id}/plugins/{plugin_name}/options:
     get:
       tags:
-        - Plugin Control  
-      summary: Gets the stream-level values of the plugin’s options. This values only apply to this stream and will override the global configuration. Any unspecified options will defer to the global configuration.
+        - Plugin Control
+      summary: Get stream plugin options
+      description: "Gets the stream-level values of the plugin’s options. This
+      values only apply to this stream and will override the global
+      configuration. Any unspecified options will defer to the global
+      configuration."
       parameters:
         - in: path
           name: stream_id
@@ -999,12 +1050,15 @@ paths:
           description: "PluginNotFoundError: No plugin is loaded with the given name\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
     put:
       tags:
-        - Plugin Control  
-      summary: Sets the stream-level values of the plugin’s options. This values only apply to this stream and will override the global configuration.
+        - Plugin Control
+      summary: Set stream plugin options
+      description: "Sets the stream-level values of the plugin’s options. This
+      values only apply to this stream and will override the global
+      configuration."
       parameters:
         - in: path
           name: stream_id
@@ -1034,20 +1088,23 @@ paths:
           description: "InvalidPluginOptionError: The given option value does not fit within the option’s constraints"
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Error'
         '404':
           description: "PluginNotFoundError: No plugin is loaded with the given name\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error'              
-                
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/alerts/{alert_id}/frame:
     get:
       tags:
         - Miscellaneous
-      summary: Retrieves an image showing the point in the stream that the given alert was triggered. This can be used to help humans verify alerts.
+      summary: Get alert image
+      description: "Retrieves an image showing the point in the stream that the
+      given alert was triggered. This can be used to help humans verify
+      alerts."
       parameters:
         - in: path
           name: alert_id
@@ -1058,38 +1115,49 @@ paths:
       responses:
         '200':
           description: Image data with an encoding identified by the MIME type header
-          content:       
-            image/*:   
-             schema: 
+          content:
+            image/*:
+             schema:
                type: string
                format: binary
         '404':
           description: "AlertNotFoundError: No alert with the given ID exists.\n\nor\n\nFrameNotFoundForAlertError: The alert with the given ID does not have a frame attached to it. Alerts that were made before this feature was introduced will not have frames."
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error'   
-                
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/engine-configuration:
     get:
       tags:
         - Miscellaneous
-      summary: Returns an EngineConfiguration, which specifies the detection capabilities of the server. It contains information on the type of objects that can be detected and the attributes that can be detected for each object type.
+      summary: Get engine configuration
+      description: "Returns an EngineConfiguration, which specifies the
+      detection capabilities of the server. It contains information on the type
+      of objects that can be detected and the attributes that can be detected
+      for each object type."
       responses:
         '200':
           description: The EngineConfiguration for this server
-          content:       
-            application/json:   
-             schema: 
-               $ref: '#/components/schemas/EngineConfiguration' 
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/EngineConfiguration'
 
   /api/process_image:
     post:
       tags:
         - Miscellaneous
-      summary: Process a single image with the given plugins enabled and with the given options.
+      summary: Process image
+      description: Process a single image with the given plugins enabled and with the given options.
       requestBody:
-        description: A multipart/form-data body with a “metadata” section and an “image” section. The “image” section is an image formatted as a JPEG or PNG file. The “metadata” section contains a list of plugin names to enable during processing and a key-value store of options, where the key is a plugin name and the value is a key-value store of option values. If an option has no specified value, it will default to the plugin’s global configuration. 
+        description: "A multipart/form-data body with a \"metadata\" section
+        and an “image” section. The “image” section is an image formatted as a
+        JPEG or PNG file. The “metadata” section contains a list of plugin
+        names to enable during processing and a key-value store of options,
+        where the key is a plugin name and the value is a key-value store of
+        option values. If an option has no specified value, it will default to
+        the plugin’s global configuration."
         content:
           image/*:   
             schema: 
