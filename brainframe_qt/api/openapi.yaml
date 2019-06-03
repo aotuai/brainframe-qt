@@ -49,7 +49,7 @@ paths:
     post:
       tags:
         - Stream Control
-      summary: Create or update stream configuration
+      summary: Create or update a stream configuration
       description: Creates a new stream or updates an existing stream. A new stream is only created if no ID field is provided in the body
       requestBody:
         description: A StreamConfiguration object with an optional ID value.
@@ -325,7 +325,7 @@ paths:
     post:
       tags:
         - Alarm Control
-      summary: Create or update zone alarm
+      summary: Create or update a zone alarm
       description: Creates or updates the given ZoneAlarm. A new ZoneAlarm is created if the given object’s ID field is null.
       requestBody:
         description: A ZoneAlarm object
@@ -448,7 +448,7 @@ paths:
     post:
       tags:
         - Zone Control
-      summary: Create or update zone
+      summary: Create or update a zone
       description: "Updates an existing zone or creates a new one. A new Zone
       object will be created if the \"id\" parameter is not included in the
       Zone object."
