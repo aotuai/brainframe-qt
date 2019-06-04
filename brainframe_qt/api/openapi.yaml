@@ -1159,11 +1159,11 @@ paths:
         option values. If an option has no specified value, it will default to
         the plugin’s global configuration."
         content:
-          image/*:   
-            schema: 
+          image/*:
+            schema:
               type: string
               format: binary
-          application/json:   
+          application/json:
             schema:
               type: object
               required:
@@ -1189,9 +1189,9 @@ paths:
       responses:
         '200':
           description: A list of all Detection objects found in the image
-          content:       
-            application/json:   
-             schema: 
+          content:
+            application/json:
+             schema:
                type: array
                items:
                 $ref: '#/components/schemas/Detection'
@@ -1199,22 +1199,22 @@ paths:
           description: "InvalidImageTypeError: The image format is invalid and could not be decoded"
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error'  
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: "PluginNotFoundError: No plugin with the given name is loaded"
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Error'   
-                              
+              schema:
+                $ref: '#/components/schemas/Error'
+
 
 components:
   schemas:
     Error:
       type: object
-      description: An Error represents a failure to do the requested task. The failure could be on the part of the client or the server. Any endpoint can return an Error object. Error objects are always accompanied by a 4xx or 5xx HTTP status code."   
-      required: 
+      description: An Error represents a failure to do the requested task. The failure could be on the part of the client or the server. Any endpoint can return an Error object. Error objects are always accompanied by a 4xx or 5xx HTTP status code."
+      required:
       - title
       - description
       properties:
@@ -1226,7 +1226,7 @@ components:
           type: string
           example: A stream configuration that points to the same stream source exists! They would stream the same video.
           description: A description of what happened. This is for humans and should not be depended on in code.
-          
+
     StreamConfiguration:
       type: object
       description: Contains information on a stream that can be configured by the client.
@@ -1253,7 +1253,7 @@ components:
           example: "ip_camera"
           description: The type of device that is being streamed from. May be \"webcam\", \"ip_camera\", or \"file\".
         connection_options:
-          oneOf: 
+          oneOf:
             - $ref: '#/components/schemas/web_camera_conncetion_option'
             - $ref: '#/components/schemas/ip_camera_conncetion_option'
             - $ref: '#/components/schemas/file_conncetion_option'
@@ -1265,20 +1265,20 @@ components:
             keyframes_only:
               type: boolean
               example: true
-              
+
     web_camera_conncetion_option:
       type: object
-      required: 
+      required:
       - device_id
       properties:
         device_id:
           type: integer
           example: 0
           description: The OpenCV ID of the webcam to use.
-          
+
     ip_camera_conncetion_option:
       type: object
-      required: 
+      required:
       - url
       properties:
         url:
@@ -1288,8 +1288,8 @@ components:
         pipeline:
           type: string
           example: "`rtspsrc location={url} ! rtph264depay ! decodebin ! appsink name=main_sink`"
-          description: An optional custom GStreamer pipeline to stream using. A pipeline is a string and MUST include the string {url} inside of it, wherein BrainFrame will insert the stream’s URL. 
-          
+          description: An optional custom GStreamer pipeline to stream using. A pipeline is a string and MUST include the string {url} inside of it, wherein BrainFrame will insert the stream’s URL.
+
     file_conncetion_option:
       type: object
       required:
@@ -1299,11 +1299,11 @@ components:
           type: string
           example: "/home/videos/example.mp4"
           description: A full path to the video file to stream. The path is relative to the machine the server is running on, not the client.
-          
+
     Zone:
       type: object
       description: A designated line or area within a stream that alarms can be attached to.
-      required: 
+      required:
       - id
       - name
       - stream_id
@@ -1334,13 +1334,13 @@ components:
           example: [[0,0], [1280,0], [1280,720], [0,720]]
           items:
             type: array
-            items: 
+            items:
               type: integer
-              
+
     ZoneStatus:
       type: object
       description: The current status of a Zone at a specific point in time.
-      required: 
+      required:
       - zone
       - tstamp
       - total_entered
@@ -1377,18 +1377,18 @@ components:
           description: An array of Detection objects that were found entering the zone.
           type: array
           items:
-            $ref: "#/components/schemas/Detection"        
+            $ref: "#/components/schemas/Detection"
         exiting:
           description: An array of Detection objects that were found exiting the zone.
           type: array
           items:
-            $ref: "#/components/schemas/Detection"          
+            $ref: "#/components/schemas/Detection"
         alerts:
           description: An array of Alert objects that are going on during the time this ZoneStatus was recorded
           type: array
           items:
             $ref: "#/components/schemas/Alert"
-            
+
     ZoneAlarm:
       description: Configures the server to look for a set of conditions within a zone and send alerts out when those conditions are met.
       type: object
@@ -1406,7 +1406,7 @@ components:
           type: integer
           nullable: true
           example: null
-        zone_id: 
+        zone_id:
           description: The ID of the zone alarm that this alert came from
           type: integer
           example: 2
@@ -1431,8 +1431,8 @@ components:
         active_end_time:
           description: The start time where this alarm is active, in the format “hh:mm:ss”
           type: string
-          example: "12:00:00"      
-          
+          example: "12:00:00"
+
     ZoneAlarmCountCondition:
       description: This is a condition type that goes into an alarm, and it specifies the number of objects in a specific zone.
       type: object
@@ -1466,7 +1466,7 @@ components:
           type: string
           nullable: true
           example: null
-          
+
     ZoneAlarmRateCondition:
       description: This is a Condition type that goes into an alarm, and it specifies the rate of objects entering, exiting, or entering/exiting a Zone.
       type: object
@@ -1479,7 +1479,7 @@ components:
       - with_class_name
       - with_attribute
       properties:
-        id: 
+        id:
           description: The unique identifier for this ZoneAlarmRateCondition. Can be null when creating a new one.
           type: integer
           example: 1
@@ -1493,11 +1493,11 @@ components:
           type: number
           format: float
           example: 10.732
-        change: 
+        change:
           description: The numerical count amount of change in objects in a region that will trigger the test
           type: integer
           example: 7
-        direction: 
+        direction:
           description: "Possible values: \"entering\", \"exiting\", or \"entering_or_exiting\""
           type: string
           example: "entering_or_exiting"
@@ -1511,10 +1511,10 @@ components:
           type: string
           nullable: true
           example: null
-          
+
     Alert:
       description: An indication that an alarm has been triggered.
-      type: object     
+      type: object
       required:
       - id
       - alarm_id
@@ -1533,7 +1533,7 @@ components:
         start_time:
           description: When the event started happening, as the time in seconds since the epoch
           type: integer
-          example: 1525219522 
+          example: 1525219522
         end_time:
           description: When the event stopped happening, as the time in seconds since the epoch
           type: integer
@@ -1543,7 +1543,7 @@ components:
           type: boolean
           nullable: true
           example: null
-          
+
     Detection:
       description: A recognized object within a frame, like a person or a flower pot. Detections are positioned within a frame using a polygon. Detections may have attributes that further describe aspects of the detection.
       type: object
@@ -1565,7 +1565,7 @@ components:
           type: array
           items:
             type: array
-            items: 
+            items:
               type: number
               format: float
           example: [[501, 221], [1053, 221], [1053, 712], [501, 712]]
@@ -1577,7 +1577,7 @@ components:
         children:
           description: An array of Detection objects which are children of this detection. For instance, a face detection might be a child of a person detection.
           type: array
-          items: 
+          items:
             $ref: "#/components/schemas/Detection"
         attributes:
           description: An object of key→value pairs where both key and value are strings. These represent classifications that were performed on this detection to extract more information from them.
@@ -1594,7 +1594,7 @@ components:
           type: string
           nullable: true
           example: "c41f75a6-22c8-427c-8b37-b0217e7c0ca2"
-          
+
     EngineConfiguration:
       description: Describes the detection capabilities of the server. Contains information on the type of objects that can be detected and the attributes that can be detected for those objects.
       required:
@@ -1621,7 +1621,7 @@ components:
           type: object
           additionalProperties: {}
           example: {"person":["Gait", "Hat"], "car":[], "motorcycle":[], "train":[], "truck":[], "boat":[], "stop sign":[], "parking meter":[],}
-          
+
     Identity:
       description: Describes a registered identity. Identities are uniquely identifiable objects of some class type. For instance, one might make an identity for a specific person to specifically identify him among other people.
       type: object
@@ -1636,7 +1636,7 @@ components:
           type: integer
           nullable: true
           example: 2
-        unique_name: 
+        unique_name:
           description: Some unique name for the identity. This could be a person's employee number, for example.
           type: string
           example: "EID-0001"
@@ -1649,7 +1649,7 @@ components:
           type: object
           additionalProperties: {}
           example: {"custom_option_1": "something", "some_other_option": "something else"}
-          
+
     Plugin:
       description: A description of a currently loaded plugin.
       required:
@@ -1682,10 +1682,10 @@ components:
           type: object
           additionalProperties: {}
           example: {"threshold":PluginOption, "filter_mode":PluginOption}
-          
+
     PluginOption:
       description: A configurable plugin option. Contains a description of the option, its default value, and its constraints.
-      required: 
+      required:
       - type
       - default
       - constraints
@@ -1710,16 +1710,16 @@ components:
           type: object
           additionalProperties: {}
           example: {"choices": ["fast", "accurate"]}
-        description: 
+        description:
           description: Description of the option. null if the option does not have a description.
           type: string
           nullable: true
-          example: null 
-          
+          example: null
+
     NodeDescription:
       description: Describes the inputs and outputs of a plugin. Internally, plugins pass information to each other using DetectionNode objects, and these DetectionNodes can satisfy NodeDescriptions by having the necessary data.
       type: object
-      required: 
+      required:
       - size
       - detections
       - attributes

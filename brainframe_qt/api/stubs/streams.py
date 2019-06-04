@@ -46,7 +46,7 @@ class StreamStubMixin(Stub):
 
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
-        req = "/api/streams/"
+        req = "/api/streams"
         data = self._get(req)
 
         configs = [StreamConfiguration.from_dict(d) for d in data]
@@ -59,7 +59,7 @@ class StreamStubMixin(Stub):
         :param stream_configuration: StreamConfiguration
         :return: StreamConfiguration, initialized with an ID
         """
-        req = "/api/streams/"
+        req = "/api/streams"
         data = self._post_codec(req, stream_configuration)
         config = StreamConfiguration.from_dict(data)
         return config

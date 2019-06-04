@@ -20,7 +20,7 @@ class ZoneStatusStubMixin(Stub):
             stream_id2: {"Entrance": ZoneStatus}
         }
         """
-        req = "/api/streams/status/"
+        req = "/api/streams/status"
         data = self._get(req)
 
         # Convert ZoneStatuses to Codecs
