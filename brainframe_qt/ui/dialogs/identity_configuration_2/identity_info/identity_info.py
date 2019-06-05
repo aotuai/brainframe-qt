@@ -29,8 +29,8 @@ class IdentityInfo(QWidget):
     def init_identity(self, identity):
         self.identity = identity
 
-        self.unique_name.setText(identity.unique_name)
-        self.nickname.setText(identity.nickname)
+        self.unique_name.setText(f"Unique Name: {identity.unique_name}")
+        self.nickname.setText(f"Nickname: {identity.nickname}")
 
         encodings_codecs = api.get_encodings(identity_id=identity.id)
         encodings: Dict[str, List[Encoding]] = defaultdict(list)
