@@ -33,7 +33,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="IdentitySearchFilter" name="IdentitySearchFilter"/>
+    <widget class="IdentitySearchFilter" name="identity_search_filter"/>
    </item>
    <item>
     <widget class="QScrollArea" name="scrollArea">
