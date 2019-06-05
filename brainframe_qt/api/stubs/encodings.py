@@ -29,6 +29,25 @@ class EncodingStubMixIn(Stub):
 
         return encodings
 
+    def get_encoding_class_names(self, identity_id: Optional[int] = None) \
+            -> List[str]:
+        """Get all unique class names for encodings that match the given
+        filter.
+
+        :param identity_id: If specified, only class names for encodings
+            attached to this identity will be returned
+        :return: All class names from encodings that match this filter
+        """
+        req = f"/api/encodings"
+        params = {"fields": "class_name"}
+        if identity_id is not None:
+            params["identity_id"] = identity_id
+
+        encodings = self._get(req, params=params)
+        class_names = [e["class_name"] for e in encodings]
+
+        return class_names
+
     def get_encoding(self, encoding_id) -> Encoding:
         """Get the encoding with the given ID.
 
