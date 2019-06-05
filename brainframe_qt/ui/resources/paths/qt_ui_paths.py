@@ -47,6 +47,10 @@ directory_selector_ui      = route_path(directory_selector_dir    , "directory_s
 
 identity_configuration_dir2 = route_path(dialogs_dir               , "identity_configuration_2"   )
 identity_configuration_ui2 = route_path(identity_configuration_dir2, "identity_configuration_2.ui")
+identity_grid_dir          = route_path(identity_configuration_dir2, "identity_grid"            )
+identity_grid_ui           = route_path(identity_grid_dir         , "identity_grid.ui"         )
+identity_entry_dir         = route_path(identity_grid_dir         , "identity_entry"           )
+identity_entry_ui          = route_path(identity_entry_dir        , "identity_entry.ui"        )
 identity_search_filter_dir = route_path(identity_configuration_dir2, "identity_search_filter"   )
 identity_search_filter_ui  = route_path(identity_search_filter_dir, "identity_search_filter.ui")
 encoding_list_dir          = route_path(identity_search_filter_dir, "encoding_list"            )
