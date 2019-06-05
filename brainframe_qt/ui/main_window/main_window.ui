@@ -100,14 +100,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VideoExpandedView</class>
-   <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.video_expanded_view.video_expanded_view</header>
-  </customwidget>
-  <customwidget>
    <class>VideoThumbnailView</class>
    <extends>QWidget</extends>
    <header>brainframe.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
+  </customwidget>
+  <customwidget>
+   <class>VideoExpandedView</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_expanded_view.video_expanded_view</header>
   </customwidget>
  </customwidgets>
  <resources/>

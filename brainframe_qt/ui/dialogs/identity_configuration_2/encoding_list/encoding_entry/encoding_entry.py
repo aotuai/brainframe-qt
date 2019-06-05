@@ -8,13 +8,13 @@ from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class EncodingEntry(QWidget):
-    def __init__(self, encoding: str, parent=None, ):
+    def __init__(self, encoding_class_name: str, parent=None, ):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.encoding_entry_ui, self)
 
         self.encoding_class_name: QLabel
-        self.encoding_class_name.setText(encoding)
+        self.encoding_class_name.setText(encoding_class_name)
 
         self._fix_button_width()
         self.delete_button: QPushButton

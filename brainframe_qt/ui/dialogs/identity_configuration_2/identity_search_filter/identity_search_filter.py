@@ -20,11 +20,12 @@ class IdentitySearchFilter(QWidget):
     def init_encoding_list(self):
         plugins = api.get_plugins()
 
-        encodings = []
+        # Get names of all classes that encodable
+        encoding_class_names = []
         for plugin in plugins:
             output_type = plugin.output_type
             if not output_type.encoded:
                 continue
-            encodings.extend(output_type.detections)
+            encoding_class_names.extend(output_type.detections)
 
-        self.encoding_list.init_encodings(encodings)
+        self.encoding_list.init_encodings(encoding_class_names)

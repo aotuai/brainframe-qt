@@ -8,7 +8,7 @@ from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 
 
 class IdentityEntry(QWidget):
-    identity_clicked_signal = pyqtSignal(int)
+    identity_clicked_signal = pyqtSignal(object)
 
     def __init__(self, identity: Identity, parent=None):
         super().__init__(parent=parent)
@@ -26,7 +26,7 @@ class IdentityEntry(QWidget):
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         # noinspection PyUnresolvedReferences
-        self.identity_clicked_signal.emit(self.identity.id)
+        self.identity_clicked_signal.emit(self.identity)
 
     def init_names(self):
         self.identity_unique_name.setText(self.identity.unique_name)
