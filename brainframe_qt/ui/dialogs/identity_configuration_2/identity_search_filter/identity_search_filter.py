@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
@@ -14,6 +14,9 @@ class IdentitySearchFilter(QWidget):
         loadUi(qt_ui_paths.identity_search_filter_ui, self)
 
         self.encoding_list: EncodingList
+        self.search_line_edit: QLineEdit
+
+        self.search_line_edit.setContentsMargins(10, 5, 10, 5)
 
         self.init_encoding_list()
 
