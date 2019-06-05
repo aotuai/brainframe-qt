@@ -14,22 +14,15 @@ class APIWrapper(API):
         if server_url or item == "set_url":
             return object.__getattribute__(self, item)
         if item == "get_stream_configurations":
-            return object.__getattribute__(self, "_" + item)
+            return lambda: []
         if item == "get_status_poller":
-            return object.__getattribute__(self, "_" + item)
+            return lambda: None
         if item == "get_plugins":
             return lambda: []
-        return None
-
-    @staticmethod
-    def _get_stream_configurations():
-        return []
-
-    @staticmethod
-    def _get_status_poller():
+        if item == "get_identities":
+            return lambda: []
         return None
 
 
 # API instance that is later monkeypatched to be a singleton
 api: API = APIWrapper()
-
