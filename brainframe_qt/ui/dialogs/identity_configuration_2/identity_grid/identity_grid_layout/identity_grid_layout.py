@@ -12,7 +12,6 @@ class IdentityGridLayout(QGridLayout):
         self.num_cols = 1
 
     def addWidget(self, widget: QWidget):
-        print("Here")
         self.widgets.append(widget)
 
     def setGeometry(self, rect: QRect):
