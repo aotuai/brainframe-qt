@@ -60,7 +60,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="IdentityGrid" name="IdentityGrid"/>
+        <widget class="IdentityGrid" name="identity_grid"/>
        </item>
        <item>
         <spacer name="verticalSpacer">
@@ -102,5 +102,25 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>identity_grid</sender>
+   <signal>identity_clicked(PyQt_PyObject)</signal>
+   <receiver>Dialog</receiver>
+   <slot>show_identity_info_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>671</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>720</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>show_identity_info_slot(PyQt_PyObject)</slot>
+ </slots>
 </ui>

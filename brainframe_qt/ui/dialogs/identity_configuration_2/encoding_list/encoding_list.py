@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -12,20 +12,24 @@ class EncodingList(QWidget):
 
         loadUi(qt_ui_paths.encoding_list_ui, self)
 
+        self.encoding_list_layout: QVBoxLayout
+
         if encodings:
             self.init_encodings(encodings)
 
     def init_encodings(self, encodings):
+        self.clear_encodings()
         for encoding in encodings:
-            self._add_encoding(encoding)
+            self.add_encoding(encoding)
 
     def clear_encodings(self):
-        for index in reversed(range(self.layout().count())):
-            self.layout().takeAt(index)
+        for index in reversed(range(self.encoding_list_layout.count())):
+            encoding_item = self.encoding_list_layout.takeAt(index)
+            encoding_item.widget().deleteLater()
 
-    def _add_encoding(self, encoding: str):
+    def add_encoding(self, encoding: str):
         encoding_entry = EncodingEntry(encoding, self)
-        self.layout().addWidget(encoding_entry)
+        self.encoding_list_layout.addWidget(encoding_entry)
 
     def remove_encoding(self, encoding):
-        pass
+        raise NotImplementedError
