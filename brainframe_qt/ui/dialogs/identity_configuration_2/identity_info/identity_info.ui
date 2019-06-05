@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>312</width>
-    <height>446</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -27,23 +27,27 @@
     <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>10</number>
    </property>
    <item>
-    <widget class="QLineEdit" name="search_line_edit">
-     <property name="frame">
-      <bool>true</bool>
+    <widget class="QLabel" name="unique_name">
+     <property name="text">
+      <string>Unique Name:</string>
      </property>
-     <property name="placeholderText">
-      <string>Search</string>
-     </property>
-     <property name="clearButtonEnabled">
-      <bool>true</bool>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="nickname">
+     <property name="text">
+      <string>Nickname:</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="EncodingList" name="encoding_list"/>
+   </item>
+   <item>
+    <widget class="QWidget" name="metadata_widget" native="true"/>
    </item>
    <item>
     <spacer name="verticalSpacer">

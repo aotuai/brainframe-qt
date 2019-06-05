@@ -53,10 +53,12 @@ identity_entry_dir         = route_path(identity_grid_dir         , "identity_en
 identity_entry_ui          = route_path(identity_entry_dir        , "identity_entry.ui"        )
 identity_search_filter_dir = route_path(identity_configuration_dir2, "identity_search_filter"   )
 identity_search_filter_ui  = route_path(identity_search_filter_dir, "identity_search_filter.ui")
-encoding_list_dir          = route_path(identity_search_filter_dir, "encoding_list"            )
+encoding_list_dir          = route_path(identity_configuration_dir2, "encoding_list"            )
 encoding_list_ui           = route_path(encoding_list_dir         , "encoding_list.ui"         )
 encoding_entry_dir         = route_path(encoding_list_dir         , "encoding_entry"           )
 encoding_entry_ui          = route_path(encoding_entry_dir        , "encoding_entry.ui"        )
+identity_info_dir          = route_path(identity_configuration_dir2, "identity_info"            )
+identity_info_ui           = route_path(identity_info_dir         , "identity_info.ui"         )
 
 identity_error_popup_dir   = route_path(identity_configuration_dir, "identity_error_popup"     )
 identity_error_popup_ui    = route_path(identity_error_popup_dir  , "identity_error_popup.ui"  )

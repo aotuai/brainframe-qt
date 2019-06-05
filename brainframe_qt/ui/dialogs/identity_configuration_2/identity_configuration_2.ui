@@ -80,7 +80,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="identity_information_widget" native="true"/>
+    <widget class="IdentityInfo" name="identity_info"/>
    </item>
   </layout>
  </widget>
@@ -94,6 +94,11 @@
    <class>IdentitySearchFilter</class>
    <extends>QWidget</extends>
    <header>brainframe.client.ui.dialogs.identity_configuration_2.identity_search_filter.identity_search_filter</header>
+  </customwidget>
+  <customwidget>
+   <class>IdentityInfo</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.dialogs.identity_configuration_2.identity_info.identity_info</header>
   </customwidget>
  </customwidgets>
  <resources/>
