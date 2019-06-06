@@ -1151,41 +1151,44 @@ paths:
       summary: Process image
       description: Process a single image with the given plugins enabled and with the given options.
       requestBody:
-        description: "A multipart/form-data body with a \"metadata\" section
-        and an “image” section. The “image” section is an image formatted as a
-        JPEG or PNG file. The “metadata” section contains a list of plugin
-        names to enable during processing and a key-value store of options,
-        where the key is a plugin name and the value is a key-value store of
-        option values. If an option has no specified value, it will default to
-        the plugin’s global configuration."
+        description: A multipart/form-data body with a "metadata" section and an "image" section.
         content:
-          image/*:
-            schema:
-              type: string
-              format: binary
-          application/json:
+          multipart/form-data:
             schema:
               type: object
-              required:
-              - plugins
-              - options
               properties:
-                plugins:
-                  type: array
-                  items:
-                    type: string
-                  example: ["detector_people_and_vehicles_fast", "detector_face_fast", "classifier_gender_closeup"]
-                options:
+                image:
+                  type: string
+                  format: binary
+                  description: The image to process as either a JPEG or PNG file
+                metadata:
                   type: object
-                  additionalProperties: {}
-                  example: {
-                    "detector_people_and_vehicles_fast": {
-                      "filter_mode": "only_people"
-                    },
-                    "classifier_gender_closeup": {
-                      "confidence_threshold": 0.8
-                    }
-                  }
+                  description: Metadata specifying how the image will be processed
+                  required:
+                    - plugins
+                    - options
+                  properties:
+                    plugins:
+                      type: array
+                      items:
+                        type: string
+                      description: A list plugin names to enable during processing
+                      example: ["detector_people_and_vehicles_fast", "detector_face_fast", "classifier_gender_closeup"]
+                    options:
+                      type: object
+                      additionalProperties: {}
+                      description: "A key-value store of options, where the key
+                      is a plugin name and the value is a key-value store of
+                      option values. If an option has no specified value, it
+                      will default to the plugin’s global configuration."
+                      example: {
+                        "detector_people_and_vehicles_fast": {
+                          "filter_mode": "only_people"
+                        },
+                        "classifier_gender_closeup": {
+                          "confidence_threshold": 0.8
+                        }
+                      }
       responses:
         '200':
           description: A list of all Detection objects found in the image
