@@ -18,7 +18,12 @@ class EncodingEntry(QWidget):
 
         self._fix_button_width()
         self.delete_button: QPushButton
-        self.delete_button.setHidden(True)
+
+        # Set this before hiding the button, as the button is taller than the
+        # rest of the widget. Not doing this will make this widget height
+        # change when the button is hidden/shown
+        self.setMinimumHeight(self.sizeHint().height())
+        self.delete_button.hide()
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         print("I was clicked")
