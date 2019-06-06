@@ -18,15 +18,25 @@ class EncodingList(QWidget):
     - IdentitySearchFilter <-- Dynamic
       [parent].filter_by_encoding_class_signal
     """
+    delete_encoding_signal = pyqtSignal(str)
+    """Emitted when an encoding entry requests to be deleted
+
+    Connected to:
+    - EncodingEntry --> Dynamic
+    [child].delete_encoding_signal
+    - IdentitySearchFilter <-- Dynamic
+    [parent].delete_encoding_slot
+    """
 
     def __init__(self, parent=None, encodings=()):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.encoding_list_ui, self)
-        self.init_ui()
 
         self.encoding_list_layout: QVBoxLayout
         self.none_label: QLabel
+
+        self.init_ui()
 
         if encodings:
             self.init_encodings(encodings)
@@ -53,6 +63,8 @@ class EncodingList(QWidget):
         encoding_entry = EncodingEntry(encoding, self)
         encoding_entry.encoding_entry_clicked_signal.connect(
             self.encoding_entry_clicked_signal)
+        encoding_entry.delete_encoding_signal.connect(
+            self.delete_encoding_signal)
         self.encoding_list_layout.addWidget(encoding_entry)
         self.none_label.hide()
 

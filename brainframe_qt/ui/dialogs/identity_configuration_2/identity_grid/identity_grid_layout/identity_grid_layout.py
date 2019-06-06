@@ -1,7 +1,8 @@
 from typing import List
 
 from PyQt5.QtCore import QRect, Qt, QSize
-from PyQt5.QtWidgets import QWidget, QGridLayout
+from PyQt5.QtWidgets import QWidget, QGridLayout, QLayoutItem, QSpacerItem, \
+    QSizePolicy
 
 
 class IdentityGridLayout(QGridLayout):
@@ -13,6 +14,7 @@ class IdentityGridLayout(QGridLayout):
 
     def addWidget(self, widget: QWidget):
         self.widgets.append(widget)
+        self.update_grid()
 
     def setGeometry(self, rect: QRect):
         super().setGeometry(rect)
@@ -33,10 +35,16 @@ class IdentityGridLayout(QGridLayout):
             self.num_cols = num_cols
             self.update_grid()
 
+    def takeAt(self, index: int) -> QLayoutItem:
+        item = super().takeAt(index)
+        widget = item.widget()
+        self.widgets.remove(widget)
+        return item
+
     def update_grid(self):
         # Remove all items from layout
         for index in reversed(range(self.count())):
-            self.takeAt(index)
+            super().takeAt(index)
 
         # Add them back, after calculating proper number of columns
         for index, widget in enumerate(self.widgets):
@@ -48,14 +56,11 @@ class IdentityGridLayout(QGridLayout):
         return self.minimumSize()
 
     def minimumSize(self) -> QSize:
+        """For whatever reason this is needed to let the layout shrink down to
+        1 column wide.
         """
-        The flow layout example added the margins, using a deprecated property.
-        The documentation for QLayout.minimumSize says that it shouldn't
-        include the space required by self.setContentsMargins. I'm guessing
-        adding the margin space was made unnecessary, so I removed it here
-        """
-        min_width = 0
-        for widget in self.widgets:
-            min_width = max(min_width, widget.minimumSize().width())
+        min_width = min(self.widgets,
+                        key=lambda w: w.sizeHint().width(),
+                        default=super()).width()
 
         return QSize(min_width, super().sizeHint().height())

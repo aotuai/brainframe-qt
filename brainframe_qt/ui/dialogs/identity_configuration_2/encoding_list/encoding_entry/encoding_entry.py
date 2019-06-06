@@ -12,8 +12,15 @@ class EncodingEntry(QWidget):
     """Emitted when the widget (excluding delete button) is clicked
 
     Connected to:
-    - Encoding List <-- Dynamic
+    - EncodingList <-- Dynamic
       [parent].encoding_entry_clicked_signal
+    """
+    delete_encoding_signal = pyqtSignal(str)
+    """Emitted when the delete button is pressed
+    
+    Connected to:
+    - EncodingList <-- Dynamic
+    [parent].delete_encoding_signal
     """
 
     def __init__(self, encoding_class_name: str, parent=None, ):
@@ -23,20 +30,26 @@ class EncodingEntry(QWidget):
 
         self.encoding_class_name_label: QLabel
         self.encoding_class_name_label.setText(encoding_class_name)
+        self.delete_button: QPushButton
 
         self.encoding_class_name = encoding_class_name
 
-        self._fix_button_width()
-        self.delete_button: QPushButton
-
         self.init_ui()
+        self.init_slots_and_signals()
 
     def init_ui(self):
+        self._fix_button_width()
+
         # Set this before hiding the button, as the button is taller than the
         # rest of the widget. Not doing this will make this widget height
         # change when the button is hidden/shown
         self.setMinimumHeight(self.sizeHint().height())
         self.delete_button.hide()
+
+    def init_slots_and_signals(self):
+        # noinspection PyUnresolvedReferences
+        self.delete_button.clicked.connect(
+            lambda: self.delete_encoding_signal.emit(self.encoding_class_name))
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         # noinspection PyUnresolvedReferences
@@ -53,8 +66,10 @@ class EncodingEntry(QWidget):
         super().leaveEvent(event)
 
     def _fix_button_width(self):
-        # Set min width of delete button properly
+        """Set min width of delete button properly
+
         # https://stackoverflow.com/a/19502467/8134178
+        """
         text_size = self.delete_button.fontMetrics().size(
             Qt.TextShowMnemonic,
             self.delete_button.text())

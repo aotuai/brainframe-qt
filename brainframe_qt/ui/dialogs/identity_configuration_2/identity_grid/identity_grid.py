@@ -35,6 +35,7 @@ class IdentityGrid(QWidget):
 
     def add_identities(self, identities):
         for identity in identities:
+            print(identity.unique_name)
             identity = IdentityEntry(identity, self)
             identity.identity_clicked_signal.connect(
                 self.identity_clicked_signal)
@@ -54,5 +55,7 @@ class IdentityGrid(QWidget):
         If encoding_class is an empty string, all encoding class types will be
         shown
         """
-        # TODO: Wait for API to support this
-        print("Filter request received")
+        self.clear_identities()
+
+        identities = api.get_identities(encoded_for_class=encoding_class)
+        self.add_identities(identities)

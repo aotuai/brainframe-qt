@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.uic import loadUi
 
@@ -14,7 +14,7 @@ class IdentitySearchFilter(QWidget):
     
     Connected to:
     - EncodingList --> Dynamic
-      [child].encoding_entry_clicked_signal
+      self.encoding_list.encoding_entry_clicked_signal
     - IdentityGrid <-- QtDesigner
       [peer].filter_by_encoding_class_slot
     """
@@ -34,6 +34,7 @@ class IdentitySearchFilter(QWidget):
 
     def init_ui(self):
         self.search_line_edit.setContentsMargins(10, 5, 10, 5)
+        self.encoding_list.setContentsMargins(9, 9, 9, 9)
 
     def init_slots_and_signals(self):
         self.encoding_list.encoding_entry_clicked_signal.connect(
