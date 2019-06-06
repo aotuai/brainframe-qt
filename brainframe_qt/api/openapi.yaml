@@ -688,7 +688,11 @@ paths:
                   example: 3
       responses:
         '200':
-          description: The image was successfully encoded and associated with the identity
+          description: The newly created encoding object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Encoding'
         '404':
           description: 'IdentityNotFoundError: No identity with the given ID exists.'
           content:
@@ -739,12 +743,11 @@ paths:
                     example: [0.1, 0.2, 0.3, 0.4]
       responses:
         '200':
-          description: The ID of the saved vector
+          description: The newly created encoding object
           content:
             application/json:
               schema:
-                type: integer
-                example: 3
+                $ref: '#/components/schemas/Encoding'
         '404':
           description: 'IdentityNotFoundError: No identity with the given ID exists.'
           content:
@@ -753,6 +756,83 @@ paths:
                 $ref: '#/components/schemas/Error'
         '400':
           description: "NoEncoderForClassError: The server does not know how to encode the given class, so it's not possible to identify.\n\n Or \n\n DuplicateVectorError: The vector has already been added for this class and identity"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/encodings:
+    get:
+      tags:
+        - Identity Control
+      summary: Get encodings
+      description: Fetches all encoding objects
+      parameters:
+        - in: query
+          name: identity_id
+          description: Filters encodings by the identity ID that they are associated with
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: class_name
+          description: Filters encodings by the class name that they are encoded for
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An array of Encoding objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Encoding'
+
+  /api/encodings/{encoding_id}:
+    get:
+      tags:
+        - Identity Control
+      summary: Get encoding
+      description: Fetches an encoding object with the given ID.
+      parameters:
+        - in: path
+          name: encoding_id
+          description: The ID of the encoding to fetch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The encoding object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Encoding"
+        '404':
+          description: "EncodingNotFoundError: No encoding with the given ID exists"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Identity Control
+      summary: Delete encoding
+      description: Deletes the encoding with the given ID.
+      parameters:
+        - in: path
+          name: encoding_id
+          description: The ID of the encoding to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The encoding was deleted
+        '404':
+          description: "EncodingNotFoundError: No encoding with the given ID exists"
           content:
             application/json:
               schema:
@@ -1251,7 +1331,7 @@ components:
         connection_type:
           type: string
           enum: ["webcam",
-                 "ip_cream",
+                 "ip_camera",
                  "file"]
           example: "ip_camera"
           description: The type of device that is being streamed from. May be \"webcam\", \"ip_camera\", or \"file\".
@@ -1626,7 +1706,10 @@ components:
           example: {"person":["Gait", "Hat"], "car":[], "motorcycle":[], "train":[], "truck":[], "boat":[], "stop sign":[], "parking meter":[],}
 
     Identity:
-      description: Describes a registered identity. Identities are uniquely identifiable objects of some class type. For instance, one might make an identity for a specific person to specifically identify him among other people.
+      description: "Describes a registered identity. Identities are uniquely
+      identifiable objects of some class type. For instance, one might make an
+      identity for a specific person to specifically identify him among other
+      people."
       type: object
       required:
       - id
@@ -1652,6 +1735,47 @@ components:
           type: object
           additionalProperties: {}
           example: {"custom_option_1": "something", "some_other_option": "something else"}
+
+    Encoding:
+      description: "Encodings provide the necessary information to recognize a
+      detected object as an identity. If a detected object matches an encoding,
+      it can be said that the object has the identity the encoding is
+      associated with."
+      type: object
+      required:
+      - id
+      - identity_id
+      - class_name
+      - from_image
+      - vector
+      properties:
+        id:
+          description: A unique identifier
+          type: integer
+          nullable: false
+          example: 2
+        identity_id:
+          description: The ID of the identity that this encoding is associated with
+          type: integer
+          example: 5
+        class_name:
+          description: The class of object that this encoding describes
+          type: string
+          example: "face"
+        from_image:
+          description: The storage ID of the image that this encoding was created from, if this encoding was created from an image
+          type: int
+          nullable: true
+          example: 8
+        vector:
+          description: "A low-dimentional representation of the object's
+          appearance. This is what objects found in streams will be compared to
+          in order to decide if the object is of the identity this encoding is
+          associated with."
+          type: array
+          items:
+            type: float
+          example: [1.32, 12.11, 93.004]
 
     Plugin:
       description: A description of a currently loaded plugin.
