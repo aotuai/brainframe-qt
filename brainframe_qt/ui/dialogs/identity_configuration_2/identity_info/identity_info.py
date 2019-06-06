@@ -1,6 +1,7 @@
 from collections import defaultdict
 from typing import Dict, List
 
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.uic import loadUi
 
@@ -24,9 +25,16 @@ class IdentityInfo(QWidget):
         self.identity: Identity = None
 
         if identity:
-            self.init_identity(identity)
+            self.display_identity_slot(identity)
 
-    def init_identity(self, identity):
+    @pyqtSlot(object)
+    def display_identity_slot(self, identity: Identity):
+        """Called to display the information for the specified identity
+
+        Connected to:
+        - IdentityGrid --> QtDesigner
+          [peer].identity_clicked_signal
+        """
         self.identity = identity
 
         self.unique_name.setText(f"Unique Name: {identity.unique_name}")

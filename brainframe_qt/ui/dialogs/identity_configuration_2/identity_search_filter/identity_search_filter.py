@@ -1,3 +1,4 @@
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.uic import loadUi
 
@@ -8,6 +9,16 @@ from ..encoding_list import EncodingList
 
 
 class IdentitySearchFilter(QWidget):
+    filter_by_encoding_class_signal = pyqtSignal(str)
+    """Emitted when it is desired to filter by an encoding class name
+    
+    Connected to:
+    - EncodingList --> Dynamic
+      [child].encoding_entry_clicked_signal
+    - IdentityGrid <-- QtDesigner
+      [peer].filter_by_encoding_class_slot
+    """
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
@@ -16,9 +27,17 @@ class IdentitySearchFilter(QWidget):
         self.encoding_list: EncodingList
         self.search_line_edit: QLineEdit
 
-        self.search_line_edit.setContentsMargins(10, 5, 10, 5)
+        self.init_ui()
+        self.init_slots_and_signals()
 
         self.init_encoding_list()
+
+    def init_ui(self):
+        self.search_line_edit.setContentsMargins(10, 5, 10, 5)
+
+    def init_slots_and_signals(self):
+        self.encoding_list.encoding_entry_clicked_signal.connect(
+            self.filter_by_encoding_class_signal)
 
     def init_encoding_list(self):
         plugins = api.get_plugins()

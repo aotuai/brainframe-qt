@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt, QEvent
+from PyQt5.QtCore import Qt, QEvent, pyqtSignal
 from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QStyle, \
     QStyleOptionButton
@@ -8,17 +8,30 @@ from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class EncodingEntry(QWidget):
+    encoding_entry_clicked_signal = pyqtSignal(str)
+    """Emitted when the widget (excluding delete button) is clicked
+
+    Connected to:
+    - Encoding List <-- Dynamic
+      [parent].encoding_entry_clicked_signal
+    """
+
     def __init__(self, encoding_class_name: str, parent=None, ):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.encoding_entry_ui, self)
 
-        self.encoding_class_name: QLabel
-        self.encoding_class_name.setText(encoding_class_name)
+        self.encoding_class_name_label: QLabel
+        self.encoding_class_name_label.setText(encoding_class_name)
+
+        self.encoding_class_name = encoding_class_name
 
         self._fix_button_width()
         self.delete_button: QPushButton
 
+        self.init_ui()
+
+    def init_ui(self):
         # Set this before hiding the button, as the button is taller than the
         # rest of the widget. Not doing this will make this widget height
         # change when the button is hidden/shown
@@ -26,7 +39,8 @@ class EncodingEntry(QWidget):
         self.delete_button.hide()
 
     def mouseReleaseEvent(self, event: QMouseEvent):
-        print("I was clicked")
+        # noinspection PyUnresolvedReferences
+        self.encoding_entry_clicked_signal.emit(self.encoding_class_name)
 
     def enterEvent(self, event: QEvent):
         self.delete_button.show()

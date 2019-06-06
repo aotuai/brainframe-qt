@@ -1,9 +1,7 @@
-from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPalette
 from PyQt5.QtWidgets import QDialog, QLineEdit, QScrollArea
 from PyQt5.uic import loadUi
 
-from brainframe.client.api.codecs import Identity
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.floating_action_button import \
     FloatingActionButton
@@ -65,13 +63,3 @@ class IdentityConfiguration(QDialog):
         palette.setColor(QPalette.Window, palette.alternateBase().color())
         self.identity_info.setPalette(palette)
         self.identity_info.setAutoFillBackground(True)
-
-    @pyqtSlot(object)
-    def show_identity_info_slot(self, identity: Identity):
-        """Shows the information for an identity.
-
-        Connected to:
-        - IdentityGrid -- QtDesigner
-          self.identity_grid.identity_clicked
-        """
-        self.identity_info.init_identity(identity)

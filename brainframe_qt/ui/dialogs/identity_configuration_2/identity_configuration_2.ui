@@ -107,18 +107,34 @@
  <resources/>
  <connections>
   <connection>
-   <sender>identity_grid</sender>
-   <signal>identity_clicked(PyQt_PyObject)</signal>
-   <receiver>Dialog</receiver>
-   <slot>show_identity_info_slot(PyQt_PyObject)</slot>
+   <sender>identity_search_filter</sender>
+   <signal>filter_by_encoding_class_signal(QString)</signal>
+   <receiver>identity_grid</receiver>
+   <slot>filter_by_encoding_class_slot(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>671</x>
-     <y>16</y>
+     <x>93</x>
+     <y>121</y>
     </hint>
     <hint type="destinationlabel">
-     <x>720</x>
-     <y>-8</y>
+     <x>428</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>identity_grid</sender>
+   <signal>identity_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>identity_info</receiver>
+   <slot>display_identity_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>850</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1235</x>
+     <y>128</y>
     </hint>
    </hints>
   </connection>
