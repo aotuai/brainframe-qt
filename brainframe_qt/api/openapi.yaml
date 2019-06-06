@@ -564,10 +564,16 @@ paths:
       parameters:
         - in: query
           name: unique_name
-          description: An optional parameter. Filters identities by a unique name
+          description: If provided, only identities with this unique name will be retreived
           required: false
           schema:
-              type: string
+            type: string
+        - in: query
+          name: encoded_for_class
+          description: If provided, only identities that have been encoded at least once for this class name will be retreived
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: An array of Identity objects.

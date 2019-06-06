@@ -21,12 +21,22 @@ class IdentityStubMixin(Stub):
 
         return Identity.from_dict(identity)
 
-    def get_identities(self, unique_name=None) -> List[Identity]:
+    def get_identities(self, unique_name=None,
+                       encoded_for_class=None) -> List[Identity]:
         """Returns all identities from the server.
+
+        :param unique_name: If provided, identities will be filtered by only
+            those who have the given unique name
+        :param encoded_for_class: If provided, identities will be filtered for
+            only those that have been encoded at least once for the given class
         :return: List of identities
         """
         req = f"/api/identities"
-        params = {"unique_name": unique_name} if unique_name else None
+        params = {}
+        if unique_name is not None:
+            params["unique_name"] = unique_name
+        if encoded_for_class is not None:
+            params["encoded_for_class"] = encoded_for_class
         identities = self._get(req, params=params)
         identities = [Identity.from_dict(d) for d in identities]
 
