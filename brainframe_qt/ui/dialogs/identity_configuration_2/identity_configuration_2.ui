@@ -36,7 +36,7 @@
     <widget class="IdentitySearchFilter" name="identity_search_filter"/>
    </item>
    <item>
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="QScrollArea" name="identity_grid_area">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -46,10 +46,13 @@
      <property name="lineWidth">
       <number>0</number>
      </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents_3">
+     <widget class="QWidget" name="identity_grid_widget">
       <property name="geometry">
        <rect>
         <x>0</x>
