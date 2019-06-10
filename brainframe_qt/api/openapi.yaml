@@ -1213,23 +1213,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /api/engine-configuration:
-    get:
-      tags:
-        - Miscellaneous
-      summary: Get engine configuration
-      description: "Returns an EngineConfiguration, which specifies the
-      detection capabilities of the server. It contains information on the type
-      of objects that can be detected and the attributes that can be detected
-      for each object type."
-      responses:
-        '200':
-          description: The EngineConfiguration for this server
-          content:
-            application/json:
-             schema:
-               $ref: '#/components/schemas/EngineConfiguration'
-
   /api/process_image:
     post:
       tags:
@@ -1683,33 +1666,6 @@ components:
           type: string
           nullable: true
           example: "c41f75a6-22c8-427c-8b37-b0217e7c0ca2"
-
-    EngineConfiguration:
-      description: Describes the detection capabilities of the server. Contains information on the type of objects that can be detected and the attributes that can be detected for those objects.
-      required:
-      - version
-      - max_streams
-      - attributes
-      - attribute_ownership
-      properties:
-        version:
-          description: The server's current version
-          type: string
-          example: "v0.1.0"
-        max_streams:
-          description: The maximum amount of allowed streams that can be analyzed at once
-          type: integer
-          example: 4
-        attributes:
-          description: Key-value pairs describing the available attributes. The key is the name of the attribute and the value is an array of possible values
-          type: object
-          additionalProperties: {}
-          example: {"Gait":["Running", "Walking", "Unknown Gait"], "Hat":["Wearing Hat", "Not Wearing Hat"]}
-        attribute_ownership:
-          description: Key-value pairs tying attributes to the objects they apply to. The keys are detectable objects and the values are arrays containing the names of the attributes that can be detected for that object.
-          type: object
-          additionalProperties: {}
-          example: {"person":["Gait", "Hat"], "car":[], "motorcycle":[], "train":[], "truck":[], "boat":[], "stop sign":[], "parking meter":[],}
 
     Identity:
       description: "Describes a registered identity. Identities are uniquely

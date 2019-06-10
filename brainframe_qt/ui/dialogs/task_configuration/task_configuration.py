@@ -43,13 +43,12 @@ class TaskConfiguration(QDialog):
 
     @pyqtSlot()
     def new_alarm(self):
-
-        engine_config = api.get_engine_configuration()
+        plugins = api.get_plugins()
         zones = api.get_zones(self.stream_conf.id)
 
         zone, alarm = AlarmCreationDialog.new_alarm(
             zones=zones,
-            engine_config=engine_config
+            plugins=plugins
         )
         if not alarm:
             return None

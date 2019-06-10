@@ -3,7 +3,6 @@ from brainframe.client.api import stubs
 
 class API(stubs.AlertStubMixin,
           stubs.AnalysisStubMixin,
-          stubs.EngineConfigurationStubMixin,
           stubs.IdentityStubMixin,
           stubs.PluginStubMixin,
           stubs.StreamStubMixin,
@@ -12,7 +11,8 @@ class API(stubs.AlertStubMixin,
           stubs.StorageStubMixin,
           stubs.ZoneAlarmStubMixin,
           stubs.ProcessImageStubMixIn,
-          stubs.EncodingStubMixIn):
+          stubs.EncodingStubMixIn,
+          stubs.VersionStubMixIn):
     """Provides access to BrainFrame API endpoints."""
 
     def __init__(self, server_url=None):
