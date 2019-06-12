@@ -23,6 +23,11 @@ class ConditionType(Enum):
 
 class AlarmCreationDialog(QDialog):
 
+    WINDOW_DURATION = 5.0
+    """The default window duration for count events."""
+    WINDOW_THRESHOLD = 0.5
+    """The default window threshold for count events."""
+
     def __init__(self, zones: List[Zone],
                  plugins: List[Plugin],
                  parent=None):
@@ -122,7 +127,6 @@ class AlarmCreationDialog(QDialog):
             # Find the category that the attribute value is a part of
             attribute_category = None
             for plugin in plugins:
-                print(plugin.capability.attributes.values())
                 for category, values in plugin.capability.attributes.items():
                     if behavior in values:
                         attribute_category = category
@@ -139,7 +143,9 @@ class AlarmCreationDialog(QDialog):
                 test=test_type,
                 check_value=count,
                 with_class_name=countable,
-                with_attribute=attribute))
+                with_attribute=attribute,
+                window_duration=AlarmCreationDialog.WINDOW_DURATION,
+                window_threshold=AlarmCreationDialog.WINDOW_THRESHOLD))
 
         elif condition_button is dialog.rate_based_button:
             direction = dialog.direction_combo_box.currentText()

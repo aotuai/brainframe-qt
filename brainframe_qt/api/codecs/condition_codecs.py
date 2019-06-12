@@ -18,11 +18,13 @@ class ZoneAlarmCountCondition(Codec):
     TestType = codec_enums.CountConditionTestType
 
     def __init__(self, *, test, check_value, with_class_name, with_attribute,
-                 id_=None):
+                 window_duration, window_threshold, id_=None):
         self.test = test
         self.check_value = check_value
         self.with_class_name = with_class_name
         self.with_attribute = with_attribute
+        self.window_duration = window_duration
+        self.window_threshold = window_threshold
         self.id = id_
 
     def __repr__(self):
@@ -51,6 +53,8 @@ class ZoneAlarmCountCondition(Codec):
             check_value=d["check_value"],
             with_class_name=d["with_class_name"],
             with_attribute=with_attribute,
+            window_duration=d["window_duration"],
+            window_threshold=d["window_threshold"],
             id_=d["id"])
 
 

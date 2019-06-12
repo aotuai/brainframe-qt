@@ -1514,6 +1514,8 @@ components:
       - check_value
       - with_class_name
       - with_attribute
+      - window_duration
+      - window_threshold
       properties:
         id:
           description: The unique identifier for this ZoneAlarmCountCondition. Can be null when creating a new one.
@@ -1538,6 +1540,15 @@ components:
           type: string
           nullable: true
           example: null
+        window_duration:
+          description: The size of the sliding window used for this condition. A larger sliding window size may reduce false positives but increase latency.
+          type: float
+          nullable: false
+          example: 5.0
+        window_threshold:
+          description: A value between 0.0 and 1.0 that controls what portion of the sliding window results must evaluate to true for the alarm to trigger.
+          type: float
+          example: 0.5
 
     ZoneAlarmRateCondition:
       description: This is a Condition type that goes into an alarm, and it specifies the rate of objects entering, exiting, or entering/exiting a Zone.
