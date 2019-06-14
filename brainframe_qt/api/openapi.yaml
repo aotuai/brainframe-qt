@@ -574,6 +574,16 @@ paths:
           required: false
           schema:
             type: string
+        - in: query
+          name: search
+          description: "If provided, only identities that in some way contain
+          the given search query are retrieved. This is intended for UIs that
+          provide a search feature for identities. For that reason, the
+          specific semantics of how the search is performed are subject to
+          change."
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: An array of Identity objects.
