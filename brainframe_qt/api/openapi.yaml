@@ -365,12 +365,17 @@ paths:
               type: integer
             example: 1
           - in: query
-            name: page
-            description: The page of alerts to access. Page 1 contains the most recent 100 alerts, page 2 contains the next 100 and so on. The default page is 1.
+            name: limit
+            description: If provided, the number of retreived alerts is limited to this value. If this is provided, an offset must also be provided.
             required: false
             schema:
-              type: integer
-            example: 1
+              type: int
+          - in: query
+            name: offset
+            description: If provided, the section of retreived alerts is offset by this value. If this is provided, a limit must also be provided.
+            required: false
+            schema:
+              type: int
       responses:
           '200':
               description: An array of unverified alerts
@@ -584,6 +589,18 @@ paths:
           required: false
           schema:
             type: string
+        - in: query
+          name: limit
+          description: If provided, the number of retreived identities is limited to this value. If this is provided, an offset must also be provided.
+          required: false
+          schema:
+            type: int
+        - in: query
+          name: offset
+          description: If provided, the section of retreived identities is offset by this value. If this is provided, a limit must also be provided.
+          required: false
+          schema:
+            type: int
       responses:
         '200':
           description: An array of Identity objects.

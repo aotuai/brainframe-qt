@@ -23,7 +23,9 @@ class IdentityStubMixin(Stub):
 
     def get_identities(self, unique_name=None,
                        encoded_for_class=None,
-                       search=None) -> List[Identity]:
+                       search=None,
+                       limit=None,
+                       offset=None) -> List[Identity]:
         """Returns all identities from the server.
 
         :param unique_name: If provided, identities will be filtered by only
@@ -34,6 +36,10 @@ class IdentityStubMixin(Stub):
             the given search query are returned. This is intended for UI search
             features, and as such the specific semantics of how the search is
             performed are subject to change.
+        :param limit: If provided, the number of returned identities is limited
+            to this value.
+        :param offset: The offset to start limiting results from. This is only
+            useful when providing a limit.
         :return: List of identities
         """
         req = f"/api/identities"
@@ -45,6 +51,10 @@ class IdentityStubMixin(Stub):
             params["encoded_for_class"] = encoded_for_class
         if search is not None:
             params["search"] = search
+        if limit is not None:
+            params["limit"] = limit
+        if offset is not None:
+            params["offset"] = offset
 
         identities = self._get(req, params=params)
         identities = [Identity.from_dict(d) for d in identities]
