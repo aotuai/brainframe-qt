@@ -1,5 +1,5 @@
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QMouseEvent, QPixmap, QPalette
+from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtGui import QMouseEvent, QPixmap, QPalette, QFontMetrics
 from PyQt5.QtWidgets import QLabel
 from PyQt5.uic import loadUiType
 
@@ -38,10 +38,17 @@ class IdentityEntry(_Form, _Base):
         self.identity_clicked_signal.emit(self.identity)
 
     def init_names(self):
-        self.identity_unique_name.setText(self.identity.unique_name)
 
+        label_width = self.maximumWidth()
+
+        self._apply_elided_text(self.identity_unique_name,
+                                self.identity.unique_name,
+                                label_width)
+
+        self.identity_nickname: QLabel
         text = f"({self.identity.nickname})" if self.identity.nickname else ""
-        self.identity_nickname.setText(text)
+        self._apply_elided_text(self.identity_nickname, text, label_width)
+
         self.identity_image: QLabel
         self.identity_unique_name: QLabel
         self.identity_nickname: QLabel
@@ -51,3 +58,22 @@ class IdentityEntry(_Form, _Base):
         text_color = palette.placeholderText().color()
         palette.setColor(QPalette.WindowText, text_color)
         self.identity_nickname.setPalette(palette)
+
+    @staticmethod
+    def _apply_elided_text(label: QLabel, text: str, width: int):
+        """Apply text to label eliding so as to not surpass a desired width
+
+        Modeled after
+        https://api.kde.org/frameworks/kwidgetsaddons/html/classKSqueezedTextLabel.html#ac87795fc4ddf998331b82f3e061ced1a
+        """
+        # Elide text from middle to have fixed width
+        metric = QFontMetrics(label.font())
+        line_width = metric.width(text)
+
+        if line_width > width:
+            elided_text = metric.elidedText(text, Qt.ElideMiddle, width)
+            label.setText(elided_text)
+            label.setToolTip(text)
+        else:
+            label.setText(text)
+            label.setToolTip("")
