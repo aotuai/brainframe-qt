@@ -1,19 +1,26 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QMouseEvent, QPixmap, QPalette
-from PyQt5.QtWidgets import QWidget, QLabel
-from PyQt5.uic import loadUi
+from PyQt5.QtWidgets import QLabel, QWidget
+from PyQt5.uic import loadUiType
 
 from brainframe.client.api.codecs import Identity
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 
+# Preload & parse the UI file into memory, for performance reasons
+_Form, _Base = loadUiType(qt_ui_paths.identity_entry_ui)
 
-class IdentityEntry(QWidget):
+
+class IdentityEntry(_Form, _Base):
     identity_clicked_signal = pyqtSignal(object)
+
+    def __new__(cls, *args, **kwargs):
+        cls.icon = QPixmap(str(image_paths.person_icon))
+        return super().__new__(cls, *args, **kwargs)
 
     def __init__(self, identity: Identity, parent=None):
         super().__init__(parent=parent)
 
-        loadUi(qt_ui_paths.identity_entry_ui, self)
+        self.setupUi(self)
 
         self.identity_image: QLabel
         self.identity_unique_name: QLabel
@@ -22,7 +29,8 @@ class IdentityEntry(QWidget):
         self.identity: Identity = identity
 
         self.init_names()
-        self.identity_image.setPixmap(QPixmap(str(image_paths.person_icon)))
+
+        self.identity_image.setPixmap(self.icon)
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         # noinspection PyUnresolvedReferences

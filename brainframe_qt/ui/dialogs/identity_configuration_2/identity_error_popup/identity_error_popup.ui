@@ -59,7 +59,7 @@
   <customwidget>
    <class>TreeWidget</class>
    <extends>QTreeWidget</extends>
-   <header>brainframe.client.ui.dialogs.identity_configuration.identity_error_popup.tree_widget.tree_widget</header>
+   <header>brainframe.client.ui.dialogs.identity_configuration_2.identity_error_popup.tree_widget.tree_widget</header>
   </customwidget>
  </customwidgets>
  <resources/>

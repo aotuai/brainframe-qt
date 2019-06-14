@@ -42,11 +42,14 @@ alert_entry_popup_ui       = route_path(alert_entry_popup_dir     , "alert_entry
 identity_configuration_dir = route_path(dialogs_dir               , "identity_configuration"   )
 identity_configuration_ui  = route_path(identity_configuration_dir, "identity_configuration.ui")
 
-directory_selector_dir     = route_path(identity_configuration_dir, "directory_selector"       )
-directory_selector_ui      = route_path(directory_selector_dir    , "directory_selector.ui"    )
-
 identity_configuration_dir2 = route_path(dialogs_dir               , "identity_configuration_2"   )
 identity_configuration_ui2 = route_path(identity_configuration_dir2, "identity_configuration_2.ui")
+identity_error_popup_dir   = route_path(identity_configuration_dir2, "identity_error_popup"     )
+identity_error_popup_ui    = route_path(identity_error_popup_dir  , "identity_error_popup.ui"  )
+tree_widget_dir            = route_path(identity_error_popup_dir  , "tree_widget"              )
+tree_widget_ui             = route_path(tree_widget_dir           , "tree_widget.ui"           )
+directory_selector_dir     = route_path(identity_configuration_dir2, "directory_selector"       )
+directory_selector_ui      = route_path(directory_selector_dir    , "directory_selector.ui"    )
 identity_grid_dir          = route_path(identity_configuration_dir2, "identity_grid"            )
 identity_grid_ui           = route_path(identity_grid_dir         , "identity_grid.ui"         )
 identity_entry_dir         = route_path(identity_grid_dir         , "identity_entry"           )
@@ -59,11 +62,6 @@ encoding_entry_dir         = route_path(encoding_list_dir         , "encoding_en
 encoding_entry_ui          = route_path(encoding_entry_dir        , "encoding_entry.ui"        )
 identity_info_dir          = route_path(identity_configuration_dir2, "identity_info"            )
 identity_info_ui           = route_path(identity_info_dir         , "identity_info.ui"         )
-
-identity_error_popup_dir   = route_path(identity_configuration_dir, "identity_error_popup"     )
-identity_error_popup_ui    = route_path(identity_error_popup_dir  , "identity_error_popup.ui"  )
-tree_widget_dir            = route_path(identity_error_popup_dir  , "tree_widget"              )
-tree_widget_ui             = route_path(tree_widget_dir           , "tree_widget.ui"           )
 
 license_agreement_dir      = route_path(dialogs_dir               , "license_agreement"        )
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
