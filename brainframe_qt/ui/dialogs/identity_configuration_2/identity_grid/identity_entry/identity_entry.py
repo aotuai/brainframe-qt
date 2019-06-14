@@ -1,6 +1,6 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QMouseEvent, QPixmap, QPalette
-from PyQt5.QtWidgets import QLabel, QWidget
+from PyQt5.QtWidgets import QLabel
 from PyQt5.uic import loadUiType
 
 from brainframe.client.api.codecs import Identity
@@ -32,6 +32,7 @@ class IdentityEntry(_Form, _Base):
 
         self.identity_image.setPixmap(self.icon)
 
+    # noinspection PyPep8Naming
     def mouseReleaseEvent(self, event: QMouseEvent):
         # noinspection PyUnresolvedReferences
         self.identity_clicked_signal.emit(self.identity)
