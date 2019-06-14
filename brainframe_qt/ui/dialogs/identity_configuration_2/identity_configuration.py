@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPalette
 from PyQt5.QtWidgets import QDialog, QLineEdit, QScrollArea, QProgressBar
 from PyQt5.uic import loadUi
@@ -14,6 +14,16 @@ from .identity_adder_worker import AddNewIdentitiesWorker
 
 
 class IdentityConfiguration(QDialog):
+    display_new_identity_signal = pyqtSignal(object)
+    """Emitted when we want to add/display a new Identity on the IdentityGrid
+    
+    Connected to:
+    - IdentityAdderWorker --> Dynamic
+    self.identity_adder.identity_uploaded_signal
+    - IdentityGrid <-- QtDesigner
+    self.identity_grid.add_new_identity
+    """
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
@@ -28,13 +38,17 @@ class IdentityConfiguration(QDialog):
 
         # Identity Uploader
         self.identity_adder = AddNewIdentitiesWorker(self)
+        # noinspection PyUnresolvedReferences
         self.identity_adder.started.connect(
             lambda: self.show_progress_bar(self.identity_upload_progress_bar))
         self.identity_adder.identity_upload_progress_signal.connect(
             lambda current, max_: self.update_progress_bar(
                 self.identity_upload_progress_bar, current, max_))
+        # noinspection PyUnresolvedReferences
         self.identity_adder.finished.connect(
             lambda: self.hide_progress_bar(self.identity_upload_progress_bar))
+        self.identity_adder.identity_uploaded_signal.connect(
+            self.display_new_identity_signal)
 
         # Identity Loader
         self.identity_grid.identity_load_started_signal.connect(

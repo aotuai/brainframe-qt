@@ -150,8 +150,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>Dialog</sender>
+   <signal>display_new_identity_signal(PyQt_PyObject)</signal>
+   <receiver>identity_grid</receiver>
+   <slot>add_new_identity(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>298</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>377</x>
+     <y>190</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
+  <signal>display_new_identity(PyQt_PyObject)</signal>
   <slot>show_identity_info_slot(PyQt_PyObject)</slot>
  </slots>
 </ui>

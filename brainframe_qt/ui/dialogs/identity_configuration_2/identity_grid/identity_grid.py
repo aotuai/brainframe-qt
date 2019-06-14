@@ -111,3 +111,13 @@ class IdentityGrid(QWidget):
 
         identities = api.get_identities(encoded_for_class=encoding_class)
         self.add_identities(identities)
+
+    @pyqtSlot(object)
+    def add_new_identity(self, identity: Identity):
+        """Called when we want to dynamically add a new Identity to the grid
+
+        Connected to:
+        - IdentityConfiguration --> QtDesigner
+          [parent].display_new_identity
+        """
+        self._identities_to_add.append(identity)

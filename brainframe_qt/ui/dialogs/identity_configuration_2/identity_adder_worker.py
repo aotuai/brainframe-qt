@@ -13,6 +13,8 @@ from .identity_error_popup import IdentityError, IdentityErrorPopup
 
 
 class AddNewIdentitiesWorker(QThread):
+    identity_uploaded_signal = pyqtSignal(object)
+    """Emitted whenever a new identity is uploaded to the database"""
     identity_upload_progress_signal = pyqtSignal(int, int)
     """Emits number of identities that have been uploaded so far."""
 
@@ -62,7 +64,6 @@ class AddNewIdentitiesWorker(QThread):
             self.errors = set()
 
     def run(self):
-        print("Running")
 
         processed_encodings = 0
         while self.identity_prototypes:
@@ -102,13 +103,6 @@ class AddNewIdentitiesWorker(QThread):
                             class_name,
                             image_id)
 
-                        # Update UI's tree view if successful
-                        # noinspection PyUnresolvedReferences
-                        # self.update_tree_view.emit(
-                        #     identity.unique_name,
-                        #     class_name,
-                        #     image_name.name)
-
                     except (api_errors.NoEncoderForClassError,
                             api_errors.NoDetectorForClassError) as err:
                         class_name_error.error = err.kind
@@ -141,12 +135,6 @@ class AddNewIdentitiesWorker(QThread):
                                                 class_name,
                                                 vector)
 
-                        # Update UI's tree view if successful
-                        # noinspection PyUnresolvedReferences
-                        # self.update_tree_view.emit(
-                        #     identity.unique_name,
-                        #     class_name,
-                        #     file_name.name)
                     except api_errors.NoEncoderForClassError as err:
                         class_name_error.error = err.kind
                     except api_errors.DuplicateVectorError:
@@ -158,7 +146,6 @@ class AddNewIdentitiesWorker(QThread):
 
                 processed_encodings += 1
                 # noinspection PyUnresolvedReferences
-                print("Emitting")
                 self.identity_upload_progress_signal.emit(processed_encodings,
                                                           self.num_images)
 
@@ -166,3 +153,6 @@ class AddNewIdentitiesWorker(QThread):
             # set of errors
             if identity_error.error or identity_error.children:
                 self.errors.add(identity_error)
+
+            # noinspection PyUnresolvedReferences
+            self.identity_uploaded_signal.emit(identity)
