@@ -591,16 +591,25 @@ paths:
             type: string
         - in: query
           name: limit
-          description: If provided, the number of retreived identities is limited to this value. If this is provided, an offset must also be provided.
+          description: If provided, the number of retrieved identities is limited to this value. If this is provided, an offset must also be provided.
           required: false
           schema:
             type: int
         - in: query
           name: offset
-          description: If provided, the section of retreived identities is offset by this value. If this is provided, a limit must also be provided.
+          description: If provided, the section of retrieved identities is offset by this value. If this is provided, a limit must also be provided.
           required: false
           schema:
             type: int
+        - in: query
+          name: sort_by
+          description: "If provided, the retrieved identities will be sorted by
+          the given criteria. This parameter comes in the format
+          'field_name:ordering'. Valid ordering values are 'asc' or 'desc'."
+          required: false
+          schema:
+            type: string
+            example: "unique_name:desc"
       responses:
         '200':
           description: An array of Identity objects.
