@@ -1,9 +1,10 @@
-from typing import List
+from typing import List, Optional
 
 import ujson
 
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.codecs import Identity, Encoding
+from brainframe.client.api.sorting import SortOptions
 
 
 class IdentityStubMixin(Stub):
@@ -21,11 +22,12 @@ class IdentityStubMixin(Stub):
 
         return Identity.from_dict(identity)
 
-    def get_identities(self, unique_name=None,
-                       encoded_for_class=None,
-                       search=None,
-                       limit=None,
-                       offset=None) -> List[Identity]:
+    def get_identities(self, unique_name: str = None,
+                       encoded_for_class: str = None,
+                       search: Optional[str] = None,
+                       limit: int = None,
+                       offset: int = None,
+                       sort_by: SortOptions = None) -> List[Identity]:
         """Returns all identities from the server.
 
         :param unique_name: If provided, identities will be filtered by only
@@ -40,6 +42,8 @@ class IdentityStubMixin(Stub):
             to this value.
         :param offset: The offset to start limiting results from. This is only
             useful when providing a limit.
+        :param sort_by: If provided, the results will be sorted by the given
+            configuration
         :return: List of identities
         """
         req = f"/api/identities"
@@ -55,6 +59,8 @@ class IdentityStubMixin(Stub):
             params["limit"] = limit
         if offset is not None:
             params["offset"] = offset
+        if sort_by is not None:
+            params["sort_by"] = sort_by.query_format()
 
         identities = self._get(req, params=params)
         identities = [Identity.from_dict(d) for d in identities]
