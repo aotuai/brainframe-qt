@@ -1,255 +1,123 @@
-from collections import defaultdict
-from pathlib import Path
-import re
-from typing import Dict, List, Set, Tuple, Optional
-
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QObject, QThread
-from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QMessageBox
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QPalette
+from PyQt5.QtWidgets import QDialog, QLineEdit, QScrollArea, QProgressBar
 from PyQt5.uic import loadUi
 
-from .directory_selector import DirectorySelector
-from .identity_error_popup import IdentityError, IdentityErrorPopup
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.api import api, api_errors
-from brainframe.client.api.codecs import Identity
-from brainframe.client.api.identities import (
-    FileTreeIdentityFinder,
-    IdentityPrototype
-)
+from brainframe.client.ui.resources.ui_elements.floating_action_button import \
+    FloatingActionButton
+
+from .identity_grid import IdentityGrid
+from .identity_info import IdentityInfo
+from .identity_search_filter import IdentitySearchFilter
+from .identity_adder_worker import AddNewIdentitiesWorker
 
 
 class IdentityConfiguration(QDialog):
+    display_new_identity_signal = pyqtSignal(object)
+    """Emitted when we want to add/display a new Identity on the IdentityGrid
+    
+    Connected to:
+    - IdentityAdderWorker --> Dynamic
+    self.identity_adder.identity_uploaded_signal
+    - IdentityGrid <-- QtDesigner
+    self.identity_grid.add_new_identity
+    """
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.identity_configuration_ui, self)
 
-        self.progress_bar.setHidden(True)
+        self.identity_grid: IdentityGrid
+        self.identity_info: IdentityInfo
+        self.identity_search_filter: IdentitySearchFilter
+        self.identity_upload_progress_bar: QProgressBar
+        self.identity_load_progress_bar: QProgressBar
+        self.fab: FloatingActionButton = None
 
-        # Create thread to send images
-        self.worker = ImageSenderWorker()
-        self.thread = QThread(self)
-        self.thread.setObjectName("ImageSenderWorkerThread")
-        self.worker.moveToThread(self.thread)
+        # Identity Uploader
+        self.identity_adder = AddNewIdentitiesWorker(self)
         # noinspection PyUnresolvedReferences
-        self.worker.update_progress_bar.connect(self.update_progress_bar)
-
+        self.identity_adder.started.connect(
+            lambda: self.show_progress_bar(self.identity_upload_progress_bar))
+        self.identity_adder.identity_upload_progress_signal.connect(
+            lambda current, max_: self.update_progress_bar(
+                self.identity_upload_progress_bar, current, max_))
         # noinspection PyUnresolvedReferences
-        self.thread.started.connect(
-            lambda: self.worker.send_images(self.identity_prototypes))
-        # noinspection PyUnresolvedReferences
-        self.worker.done_sending.connect(self.images_done_sending)
-        # noinspection PyUnresolvedReferences
-        self.worker.update_tree_view.connect(self.update_tree_view)
+        self.identity_adder.finished.connect(
+            lambda: self.hide_progress_bar(self.identity_upload_progress_bar))
+        self.identity_adder.identity_uploaded_signal.connect(
+            self.display_new_identity_signal)
 
-        self.add_identities_button.clicked.connect(self.create_new_identities)
+        # Identity Loader
+        self.identity_grid.identity_load_started_signal.connect(
+            lambda: self.show_progress_bar(self.identity_load_progress_bar))
+        self.identity_grid.identity_load_progress_signal.connect(
+            lambda current, max_: self.update_progress_bar(
+                self.identity_load_progress_bar, current, max_))
+        self.identity_grid.identity_load_finished_signal.connect(
+            lambda: self.hide_progress_bar(self.identity_load_progress_bar))
 
-        self.add_db_identities_to_tree()
-
-        self.identity_prototypes = None
+        self.init_ui()
 
     @classmethod
     def show_dialog(cls):
         dialog = cls()
         dialog.exec_()
 
-    def create_new_identities(self):
+    def init_ui(self):
+        self.setWindowFlags(Qt.Window)
 
-        # Get a all identities to add to server and the number of images.
-        # Change the function called here to be different method of adding
-        # identities if desired
-        self.identity_prototypes, num_images = \
-            self.get_new_identities_from_path()
+        self.identity_info: IdentityInfo
+        self.identity_search_filter: IdentitySearchFilter
 
-        # User canceled
-        if self.identity_prototypes is None:
-            return
+        self.init_theming()
+        self.init_fab()
 
-        self.thread.start()
+        self.identity_info.hide()
+        self.identity_load_progress_bar.hide()
+        self.identity_upload_progress_bar.hide()
 
-        # Set max value for progress bar
-        self.progress_bar.setHidden(False)
-        self.progress_bar.setMaximum(num_images)
-
-    @pyqtSlot(str, str, str)
-    def update_tree_view(self, unique_name, class_name, image_name):
-
-        identity_tree_item = self.identity_tree.findItems(
-            unique_name,
-            Qt.MatchExactly)
-
-        if not identity_tree_item:
-            QTreeWidgetItem(self.identity_tree, [unique_name])
-
-            # TODO: This line resolves BF-220.
-            # It might be a hack instead of a fix
-            self.repaint()
-
-        # TODO: Encodings and images
-
-    @pyqtSlot(int)
-    def update_progress_bar(self, value):
-        self.progress_bar.setValue(value)
-
-    @pyqtSlot()
-    def images_done_sending(self):
-        self.thread.quit()
-        self.progress_bar.setHidden(True)
-
-    def add_db_identities_to_tree(self):
-
-        identities = api.get_identities()
-
-        for identity in identities:
-            QTreeWidgetItem(self.identity_tree, [identity.unique_name])
-
-    @classmethod
-    def get_new_identities_from_path(cls) \
-            -> Tuple[Optional[List[IdentityPrototype]], int]:
-        """Get a list of IdentityPrototypes for sending to server, and the
-        total number of images
-
-        :returns Tuple[List[IdentityPrototype], int]
-        """
-        path = DirectorySelector().get_path()
-
-        # User canceled
-        if path is None:
-            return None, 0
-
-        # TODO: Error is excessively vague. Should be within the function
-        try:
-            identity_finder = FileTreeIdentityFinder(path)
-            num_images = identity_finder.num_encodings
-        except ValueError as err:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Critical)
-            error_dialog.setWindowTitle("Invalid Format")
-            error_dialog.setText(f"Unable to parse this directory!\n\n"
-                                 f"Reason:\n"
-                                 f"{err}\n\n"
-                                 f"Read the manual to learn about the required " 
-                                 f"directory structure.")
-            error_dialog.exec_()
-            return None, 0
-
-        identity_prototypes = identity_finder.find()
-
-        return identity_prototypes, num_images
-
-
-class ImageSenderWorker(QObject):
-    update_tree_view = pyqtSignal(str, str, str)
-    update_progress_bar = pyqtSignal(int)
-    done_sending = pyqtSignal()
-
-    @pyqtSlot(object)
-    def send_images(self, prototypes: List[IdentityPrototype]):
-
-        errors: Set[IdentityError] = set()
-
-        processed_encodings = 0
-        for prototype in prototypes:
-
-            identity = Identity(
-                unique_name=prototype.unique_name,
-                nickname=prototype.nickname,
-                metadata={})
-
-            identity_error = IdentityError(identity.unique_name)
-
-            try:
-                identity = api.set_identity(identity)
-            except api_errors.DuplicateIdentityNameError:
-                # Identity already exists
-                identity = api.get_identities(
-                    unique_name=prototype.unique_name
-                )[0]
-
-                # This error is a warning. Don't show it to user
-                pass
-            except api_errors.BaseAPIError as err:
-                identity_error.error = err.kind
-
-            # Associate images with the identity
-            for class_name, images in prototype.images_by_class_name.items():
-                # Create an error object for the class so it can be used if
-                # necessary
-                class_name_error = IdentityError(class_name)
-
-                for image_name, image_bytes in images:
-                    try:
-                        image_id = api.new_storage_as_image(image_bytes)
-                        api.new_identity_image(
-                            identity.id,
-                            class_name,
-                            image_id)
-
-                        # Update UI's tree view if successful
-                        # noinspection PyUnresolvedReferences
-                        self.update_tree_view.emit(
-                            identity.unique_name,
-                            class_name,
-                            image_name.name)
-
-                    except (api_errors.NoEncoderForClassError,
-                            api_errors.NoDetectorForClassError) as err:
-                        class_name_error.error = err.kind
-                    except api_errors.ImageAlreadyEncodedError:
-                        pass
-                    except api_errors.BaseAPIError as err:
-                        image_error = IdentityError(image_name.name,
-                                                    err.pretty_name)
-                        class_name_error.children.add(image_error)
-
-                    processed_encodings += 1
-                    # noinspection PyUnresolvedReferences
-                    self.update_progress_bar.emit(processed_encodings)
-
-                # If the current class has an error or children, add it to the
-                # identity's set of errors
-                if class_name_error.error or class_name_error.children:
-                    identity_error.children.add(class_name_error)
-
-            # Associate vectors with the identity
-            for class_name, vectors in prototype.vectors_by_class_name.items():
-                # Create an error object for the class so it can be used if
-                # necessary
-                class_name_error = IdentityError(class_name)
-
-                for file_name, vector in vectors:
-                    try:
-                        api.new_identity_vector(identity.id,
-                                                class_name,
-                                                vector)
-
-                        # Update UI's tree view if successful
-                        # noinspection PyUnresolvedReferences
-                        self.update_tree_view.emit(
-                            identity.unique_name,
-                            class_name,
-                            file_name.name)
-                    except api_errors.NoEncoderForClassError as err:
-                        class_name_error.error = err.kind
-                    except api_errors.DuplicateVectorError:
-                        pass
-                    except api_errors.BaseAPIError as err:
-                        image_error = IdentityError(file_name.name,
-                                                    err.pretty_name)
-                        class_name_error.children.add(image_error)
-
-                processed_encodings += 1
-                # noinspection PyUnresolvedReferences
-                self.update_progress_bar.emit(processed_encodings)
-
-            # If the current identity has an error or children, add it to the
-            # set of errors
-            if identity_error.error or identity_error.children:
-                errors.add(identity_error)
-
+    def init_fab(self):
+        self.identity_grid_area: QScrollArea
+        self.fab = FloatingActionButton(28, 25,
+                                        self.identity_grid_area.viewport())
         # noinspection PyUnresolvedReferences
-        self.done_sending.emit()
+        self.fab.clicked.connect(self.identity_adder.add_identities_from_file)
 
-        # If there are errors, show them to the user
-        if errors:
-            IdentityErrorPopup.show_errors(errors)
+    def init_theming(self):
+        """Change color palettes"""
+
+        palette = self.identity_search_filter.palette()
+        palette.setColor(QPalette.Window, palette.alternateBase().color())
+        self.identity_search_filter.setPalette(palette)
+        self.identity_search_filter.setAutoFillBackground(True)
+
+        line_edit: QLineEdit = self.identity_search_filter.search_line_edit
+        palette = line_edit.palette()
+        palette.setColor(QPalette.Base, self.palette().window().color())
+        line_edit.setPalette(palette)
+        line_edit.setAutoFillBackground(True)
+
+        palette = self.identity_info.palette()
+        palette.setColor(QPalette.Window, palette.alternateBase().color())
+        self.identity_info.setPalette(palette)
+        self.identity_info.setAutoFillBackground(True)
+
+    # noinspection PyMethodMayBeStatic
+    def show_progress_bar(self, progress_bar: QProgressBar):
+        progress_bar.show()
+        progress_bar.setValue(0)
+
+    # noinspection PyMethodMayBeStatic
+    def update_progress_bar(self, progress_bar: QProgressBar,
+                            current: int, max_: int):
+        progress_bar.show()
+        progress_bar.setValue(current)
+        progress_bar.setMaximum(max_)
+
+    # noinspection PyMethodMayBeStatic
+    def hide_progress_bar(self, progress_bar: QProgressBar):
+        progress_bar.hide()
+        progress_bar.setValue(0)

@@ -141,8 +141,14 @@ class IdentityGrid(QWidget):
         self._identities_to_add.append(identity)
 
     def init_identities(self):
-        identities = api.get_identities()
-        self.add_identities(identities)
+
+        def func():
+            return api.get_identities()
+
+        def callback(identities):
+            self.add_identities(identities)
+
+        QTAsyncWorker(self, func, callback).start()
 
     def add_identities(self, identities):
         self._identities_to_add.extend(identities)
