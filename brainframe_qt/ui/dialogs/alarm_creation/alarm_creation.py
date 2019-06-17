@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import List
+from typing import List, Dict
 
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox
@@ -7,7 +7,7 @@ from PyQt5.uic import loadUi
 
 from brainframe.client.api.codecs import (
     Attribute,
-    EngineConfiguration,
+    Plugin,
     Zone,
     ZoneAlarm,
     ZoneAlarmCountCondition,
@@ -23,19 +23,23 @@ class ConditionType(Enum):
 
 class AlarmCreationDialog(QDialog):
 
+    WINDOW_DURATION = 5.0
+    """The default window duration for count events."""
+    WINDOW_THRESHOLD = 0.5
+    """The default window threshold for count events."""
+
     def __init__(self, zones: List[Zone],
-                 engine_config: EngineConfiguration,
+                 plugins: List[Plugin],
                  parent=None):
         super().__init__(parent)
 
         loadUi(qt_ui_paths.alarm_creation_ui, self)
 
-        self.engine_conf = engine_config
+        self.plugins = plugins
         self.zones = zones
 
-        detection_classes = self.engine_conf.attribute_ownership
         self._update_combo_box(self.countable_combo_box,
-                               detection_classes.keys())
+                               self._detection_classes())
 
         # Set the behavior combo box to have initial attributes values
         detection_class = self.countable_combo_box.currentText()
@@ -96,8 +100,8 @@ class AlarmCreationDialog(QDialog):
         self.seconds_label.setHidden(hidden)
 
     @classmethod
-    def new_alarm(cls, *, zones, engine_config):
-        dialog = cls(zones, engine_config, None)
+    def new_alarm(cls, *, zones, plugins: List[Plugin]):
+        dialog = cls(zones, plugins, None)
         result = dialog.exec_()
 
         zones = {zone.name: zone for zone in zones}  # type: List[Zone]
@@ -120,24 +124,28 @@ class AlarmCreationDialog(QDialog):
         if condition_button is dialog.count_based_button:
             behavior = dialog.behavior_combo_box.currentText()
 
-            # Find category that attribute value is a part of
-            for category in engine_config.attribute_ownership[countable]:
-                if behavior in engine_config.attributes[category]:
-                    break
-            else:
-                category = None
+            # Find the category that the attribute value is a part of
+            attribute_category = None
+            for plugin in plugins:
+                for category, values in plugin.capability.attributes.items():
+                    if behavior in values:
+                        attribute_category = category
+                        break
 
             if behavior in ["", "[any]"]:
                 # No behavior was selected
                 attribute = None
             else:
-                attribute = Attribute(category=category, value=behavior)
+                attribute = Attribute(category=attribute_category,
+                                      value=behavior)
 
             count_condition.append(ZoneAlarmCountCondition(
                 test=test_type,
                 check_value=count,
                 with_class_name=countable,
-                with_attribute=attribute))
+                with_attribute=attribute,
+                window_duration=AlarmCreationDialog.WINDOW_DURATION,
+                window_threshold=AlarmCreationDialog.WINDOW_THRESHOLD))
 
         elif condition_button is dialog.rate_based_button:
             direction = dialog.direction_combo_box.currentText()
@@ -198,7 +206,7 @@ class AlarmCreationDialog(QDialog):
     @pyqtSlot(str)
     def countable_index_changed(self, countable):
         self._update_combo_box(self.behavior_combo_box,
-                               self.engine_conf.attributes[countable])
+                               self._attribute_values(countable))
 
     @classmethod
     def _update_combo_box(cls, combo_box, items):
@@ -206,15 +214,60 @@ class AlarmCreationDialog(QDialog):
         combo_box.insertItems(0, items)
 
     def _update_attribute_values(self, detection_class):
-        detection_classes = self.engine_conf.attribute_ownership
-        attributes = self.engine_conf.attributes
+        attributes_for_class = self._attributes_for_class(detection_class)
 
         if detection_class:
             # Get all attribute values a detection_class can have
-            attribute_values = [attributes[category] for category in
-                                detection_classes[detection_class]]
+            attribute_values = [vals for vals in attributes_for_class.values()]
 
             # Sum all lists and add also add empty entry
             attribute_values = sum(attribute_values, ['[any]'])
             self._update_combo_box(self.behavior_combo_box,
                                    attribute_values)
+
+    def _detection_classes(self) -> List[str]:
+        """Inspects plugins to find all detectable classes.
+
+        :return: All currently detectable class names
+        """
+        detection_classes = set()
+        for plugin in self.plugins:
+            for det_class in plugin.capability.detections:
+                detection_classes.add(det_class)
+
+        return list(detection_classes)
+
+    def _attributes_for_class(self, class_name) -> Dict[str, List[str]]:
+        """Gets all attributes the given class name can have alongside all
+        possible values.
+
+        {
+            "gender": ["masculine", "feminine", "unknown"],
+            "age": ["old", "young"]
+        }
+
+        :param class_name: The class name to find attributes for
+        :return: A dict whose keys are attribute categories and whose values
+            are the corresponding list of possible attribute values
+        """
+        attributes = {}
+        for plugin in self.plugins:
+            if class_name in plugin.output_type.detections:
+                for category, values in plugin.capability.attributes.items():
+                    attributes[category] = values
+
+        return attributes
+
+    def _attribute_values(self, category) -> List[str]:
+        """Gets all possible values for the given attribute category.
+
+        :param category: The attribute category to find values for
+        :return: All possible values
+        """
+        values = set()
+        for plugin in self.plugins:
+            if category in plugin.capability.attributes:
+                for value in plugin.capability.attributes[category]:
+                    values.add(value)
+
+        return list(values)

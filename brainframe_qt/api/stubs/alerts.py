@@ -14,18 +14,27 @@ class AlertStubMixin(Stub):
     alerts.
     """
 
-    def get_unverified_alerts(self, stream_id, page=1) -> List[Alert]:
+    def get_unverified_alerts(self, stream_id,
+                              limit: Optional[int] = None,
+                              offset: Optional[int] = None) -> List[Alert]:
         """Gets all alerts that have not been verified or rejected
 
         :param stream_id: The stream ID to get unverified alerts for
-        :param page: Which "page" of alerts to get. Alerts are paginated in
-            sections of 100. The first page gets the first 100, the second page
-            gets the second 100, and so on.
+        :param limit: The maximum number of alerts to return. If None, no limit
+            will be applied
+        :param offset: The offset from the most recent alerts to return. This
+            is only useful when providing a limit.
         :return:
         """
         req = "/api/alerts"
-        data = self._get(req, params={"stream_id": str(stream_id),
-                                      "page": str(page)})
+
+        params = {"stream_id": stream_id}
+        if limit is not None:
+            params["limit"] = limit
+        if offset is not None:
+            params["offset"] = offset
+
+        data = self._get(req, params=params)
         alerts = [Alert.from_dict(a) for a in data]
         return alerts
 

@@ -1,9 +1,10 @@
-from typing import List
+from typing import List, Optional
 
 import ujson
 
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.codecs import Identity, Encoding
+from brainframe.client.api.sorting import SortOptions
 
 
 class IdentityStubMixin(Stub):
@@ -21,22 +22,46 @@ class IdentityStubMixin(Stub):
 
         return Identity.from_dict(identity)
 
-    def get_identities(self, unique_name=None,
-                       encoded_for_class=None) -> List[Identity]:
+    def get_identities(self, unique_name: str = None,
+                       encoded_for_class: str = None,
+                       search: Optional[str] = None,
+                       limit: int = None,
+                       offset: int = None,
+                       sort_by: SortOptions = None) -> List[Identity]:
         """Returns all identities from the server.
 
         :param unique_name: If provided, identities will be filtered by only
             those who have the given unique name
         :param encoded_for_class: If provided, identities will be filtered for
             only those that have been encoded at least once for the given class
+        :param search: If provided, only identities that in some way contain
+            the given search query are returned. This is intended for UI search
+            features, and as such the specific semantics of how the search is
+            performed are subject to change.
+        :param limit: If provided, the number of returned identities is limited
+            to this value.
+        :param offset: The offset to start limiting results from. This is only
+            useful when providing a limit.
+        :param sort_by: If provided, the results will be sorted by the given
+            configuration
         :return: List of identities
         """
         req = f"/api/identities"
+
         params = {}
         if unique_name is not None:
             params["unique_name"] = unique_name
         if encoded_for_class is not None:
             params["encoded_for_class"] = encoded_for_class
+        if search is not None:
+            params["search"] = search
+        if limit is not None:
+            params["limit"] = limit
+        if offset is not None:
+            params["offset"] = offset
+        if sort_by is not None:
+            params["sort_by"] = sort_by.query_format()
+
         identities = self._get(req, params=params)
         identities = [Identity.from_dict(d) for d in identities]
 

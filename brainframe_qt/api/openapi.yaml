@@ -365,12 +365,17 @@ paths:
               type: integer
             example: 1
           - in: query
-            name: page
-            description: The page of alerts to access. Page 1 contains the most recent 100 alerts, page 2 contains the next 100 and so on. The default page is 1.
+            name: limit
+            description: If provided, the number of retreived alerts is limited to this value. If this is provided, an offset must also be provided.
             required: false
             schema:
-              type: integer
-            example: 1
+              type: int
+          - in: query
+            name: offset
+            description: If provided, the section of retreived alerts is offset by this value. If this is provided, a limit must also be provided.
+            required: false
+            schema:
+              type: int
       responses:
           '200':
               description: An array of unverified alerts
@@ -574,6 +579,37 @@ paths:
           required: false
           schema:
             type: string
+        - in: query
+          name: search
+          description: "If provided, only identities that in some way contain
+          the given search query are retrieved. This is intended for UIs that
+          provide a search feature for identities. For that reason, the
+          specific semantics of how the search is performed are subject to
+          change."
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: If provided, the number of retrieved identities is limited to this value. If this is provided, an offset must also be provided.
+          required: false
+          schema:
+            type: int
+        - in: query
+          name: offset
+          description: If provided, the section of retrieved identities is offset by this value. If this is provided, a limit must also be provided.
+          required: false
+          schema:
+            type: int
+        - in: query
+          name: sort_by
+          description: "If provided, the retrieved identities will be sorted by
+          the given criteria. This parameter comes in the format
+          'field_name:ordering'. Valid ordering values are 'asc' or 'desc'."
+          required: false
+          schema:
+            type: string
+            example: "unique_name:desc"
       responses:
         '200':
           description: An array of Identity objects.
@@ -1213,23 +1249,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /api/engine-configuration:
-    get:
-      tags:
-        - Miscellaneous
-      summary: Get engine configuration
-      description: "Returns an EngineConfiguration, which specifies the
-      detection capabilities of the server. It contains information on the type
-      of objects that can be detected and the attributes that can be detected
-      for each object type."
-      responses:
-        '200':
-          description: The EngineConfiguration for this server
-          content:
-            application/json:
-             schema:
-               $ref: '#/components/schemas/EngineConfiguration'
-
   /api/process_image:
     post:
       tags:
@@ -1531,6 +1550,8 @@ components:
       - check_value
       - with_class_name
       - with_attribute
+      - window_duration
+      - window_threshold
       properties:
         id:
           description: The unique identifier for this ZoneAlarmCountCondition. Can be null when creating a new one.
@@ -1555,6 +1576,15 @@ components:
           type: string
           nullable: true
           example: null
+        window_duration:
+          description: The size of the sliding window used for this condition. A larger sliding window size may reduce false positives but increase latency.
+          type: float
+          nullable: false
+          example: 5.0
+        window_threshold:
+          description: A value between 0.0 and 1.0 that controls what portion of the sliding window results must evaluate to true for the alarm to trigger.
+          type: float
+          example: 0.5
 
     ZoneAlarmRateCondition:
       description: This is a Condition type that goes into an alarm, and it specifies the rate of objects entering, exiting, or entering/exiting a Zone.
@@ -1683,33 +1713,6 @@ components:
           type: string
           nullable: true
           example: "c41f75a6-22c8-427c-8b37-b0217e7c0ca2"
-
-    EngineConfiguration:
-      description: Describes the detection capabilities of the server. Contains information on the type of objects that can be detected and the attributes that can be detected for those objects.
-      required:
-      - version
-      - max_streams
-      - attributes
-      - attribute_ownership
-      properties:
-        version:
-          description: The server's current version
-          type: string
-          example: "v0.1.0"
-        max_streams:
-          description: The maximum amount of allowed streams that can be analyzed at once
-          type: integer
-          example: 4
-        attributes:
-          description: Key-value pairs describing the available attributes. The key is the name of the attribute and the value is an array of possible values
-          type: object
-          additionalProperties: {}
-          example: {"Gait":["Running", "Walking", "Unknown Gait"], "Hat":["Wearing Hat", "Not Wearing Hat"]}
-        attribute_ownership:
-          description: Key-value pairs tying attributes to the objects they apply to. The keys are detectable objects and the values are arrays containing the names of the attributes that can be detected for that object.
-          type: object
-          additionalProperties: {}
-          example: {"person":["Gait", "Hat"], "car":[], "motorcycle":[], "train":[], "truck":[], "boat":[], "stop sign":[], "parking meter":[],}
 
     Identity:
       description: "Describes a registered identity. Identities are uniquely
