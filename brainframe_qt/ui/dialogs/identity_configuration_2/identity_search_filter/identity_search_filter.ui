@@ -83,5 +83,42 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>search_line_edit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>filter_by_search_string_signal(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>356</x>
+     <y>-7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>encoding_list</sender>
+   <signal>encoding_entry_clicked_signal(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>filter_by_encoding_class_signal(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>43</x>
+     <y>-7</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>filter_by_search_string_signal(QString)</slot>
+  <slot>filter_by_encoding_class_signal(QString)</slot>
+ </slots>
 </ui>

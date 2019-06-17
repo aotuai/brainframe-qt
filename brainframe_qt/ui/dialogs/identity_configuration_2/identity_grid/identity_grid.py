@@ -1,11 +1,12 @@
 from typing import List
 
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QTimerEvent
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Identity
+from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 from .identity_entry import IdentityEntry
@@ -59,10 +60,6 @@ class IdentityGrid(QWidget):
 
         self.init_identities()
 
-    def init_identities(self):
-        identities = api.get_identities()
-        self.add_identities(identities)
-
     def timerEvent(self, timer_event: QTimerEvent):
         if not self._identities_to_add:
             return
@@ -91,26 +88,47 @@ class IdentityGrid(QWidget):
             # noinspection PyUnresolvedReferences
             self.identity_load_finished_signal.emit()
 
-    def add_identities(self, identities):
-        self._identities_to_add.extend(identities)
-
-    def clear_identities(self):
-        for index in reversed(range(self.layout().count())):
-            widget = self.layout().takeAt(index).widget()
-            widget.deleteLater()
-
     @pyqtSlot(str)
     def filter_by_encoding_class_slot(self, encoding_class: str):
         """
-        Called when we want to only show encodings of a specific class type.
+        Called when we want to only show identities with a specific class type.
 
         If encoding_class is an empty string, all encoding class types will be
         shown
+
+        Connected to:
+        - IdentitySearchFilter --> QtDesigner
+          [peer].filter_by_encoding_class_signal
         """
         self.clear_identities()
 
-        identities = api.get_identities(encoded_for_class=encoding_class)
-        self.add_identities(identities)
+        def func():
+            return api.get_identities(encoded_for_class=encoding_class)
+
+        def callback(identities):
+            self.add_identities(identities)
+
+        QTAsyncWorker(self, func, callback).start()
+
+    @pyqtSlot(str)
+    def filter_by_search_string_slot(self, search_string):
+        """Called when we want to filter identities by their name
+
+        Searches both unique names and nicknames.
+
+        Connected to:
+        - IdentitySearchFilter --> QtDesigner
+          [peer].filter_by_search_string_signal
+        """
+        self.clear_identities()
+
+        def func():
+            return api.get_identities(search=search_string)
+
+        def callback(identities):
+            self.add_identities(identities)
+
+        QTAsyncWorker(self, func, callback).start()
 
     @pyqtSlot(object)
     def add_new_identity(self, identity: Identity):
@@ -121,3 +139,20 @@ class IdentityGrid(QWidget):
           [parent].display_new_identity
         """
         self._identities_to_add.append(identity)
+
+    def init_identities(self):
+        identities = api.get_identities()
+        self.add_identities(identities)
+
+    def add_identities(self, identities):
+        self._identities_to_add.extend(identities)
+
+    def clear_identities(self):
+
+        self._identities_to_add.clear()
+        # noinspection PyUnresolvedReferences
+        self.identity_load_finished_signal.emit()
+
+        for index in reversed(range(self.layout().count())):
+            widget = self.layout().takeAt(index).widget()
+            widget.deleteLater()

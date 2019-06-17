@@ -29,6 +29,8 @@ class APIWrapper(API):
             return lambda: []
         if item == "get_encodings":
             return lambda: []
+        if item == "get_encoding_class_names":
+            return lambda: []
 
         return None
 

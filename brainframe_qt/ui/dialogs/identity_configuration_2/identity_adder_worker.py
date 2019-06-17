@@ -18,7 +18,7 @@ class AddNewIdentitiesWorker(QThread):
     identity_upload_progress_signal = pyqtSignal(int, int)
     """Emits number of identities that have been uploaded so far."""
 
-    def __init__(self, parent: QThread = None):
+    def __init__(self, parent: QObject = None):
         super().__init__(parent=parent)
 
         self.identity_prototypes: List[IdentityPrototype] = []

@@ -113,6 +113,7 @@ class IdentityConfiguration(QDialog):
     # noinspection PyMethodMayBeStatic
     def update_progress_bar(self, progress_bar: QProgressBar,
                             current: int, max_: int):
+        progress_bar.show()
         progress_bar.setValue(current)
         progress_bar.setMaximum(max_)
 

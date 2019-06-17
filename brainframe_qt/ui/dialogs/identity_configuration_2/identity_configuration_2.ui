@@ -166,6 +166,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>identity_search_filter</sender>
+   <signal>filter_by_search_string_signal(QString)</signal>
+   <receiver>identity_grid</receiver>
+   <slot>filter_by_search_string_slot(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>297</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>display_new_identity(PyQt_PyObject)</signal>
