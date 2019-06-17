@@ -92,6 +92,9 @@ class IdentityGridLayout(QLayout):
 
     def do_layout(self, rect: QRect):
 
+        m_left, m_top, m_right, m_bottom = self.getContentsMargins()
+        rect.adjust(+m_left, +m_right, -m_right, -m_bottom)
+
         # Naive implementation. Num cols is just how many times we can fit
         # widest widget
         widget_width = self.min_widget_size.width()
@@ -127,10 +130,10 @@ class IdentityGridLayout(QLayout):
 
                 # Force widgets to the left if there's not enough to fill a row
                 if len(self.items) < self.num_cols:
-                    x = current_col * (widget_width + h_spacing)
+                    x = m_left + current_col * (widget_width + h_spacing)
                 else:
-                    x = current_col * (col_width + h_spacing)
-                y = current_row * (row_height + y_spacing)
+                    x = m_left + current_col * (col_width + h_spacing)
+                y = m_top + current_row * (row_height + y_spacing)
 
                 item.setGeometry(QRect(x, y, col_width, row_height))
 
@@ -140,7 +143,22 @@ class IdentityGridLayout(QLayout):
         return self.minimumSize()
 
     def minimumSize(self) -> QSize:
-        return self.min_widget_size
+        min_width = self.min_widget_size.width()
+
+        if self.items:
+            # Docs recommend avoiding using QRect.bottom
+            geometry = self.items[-1].geometry()
+            min_height = geometry.y() + geometry.height()
+        else:
+            min_height = super().minimumSize().height()
+
+        m_left, m_top, m_right, m_bottom = self.getContentsMargins()
+
+        # Add contents margins
+        min_width += m_left + m_right
+        min_height += m_top + m_bottom
+
+        return QSize(min_width, min_height)
 
     def _calc_min_widget_size(self):
         self.min_widget_size = super().minimumSize()
