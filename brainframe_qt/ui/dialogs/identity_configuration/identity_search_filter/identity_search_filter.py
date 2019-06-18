@@ -1,9 +1,10 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources import QTAsyncWorker
 
 from ..encoding_list import EncodingList
 
@@ -14,7 +15,7 @@ class IdentitySearchFilter(QWidget):
     
     Connected to:
     - EncodingList --> QtDesigner
-      self.encoding_list.encoding_entry_clicked_signal
+      self.encoding_list.encoding_entry_selected_signal
     - IdentityGrid <-- QtDesigner
       [peer].filter_by_encoding_class_slot
     """
@@ -42,19 +43,26 @@ class IdentitySearchFilter(QWidget):
 
     def init_ui(self):
         self.search_line_edit.setContentsMargins(10, 5, 10, 5)
-        self.encoding_list.setContentsMargins(9, 9, 9, 9)
+        self.encoding_list.setContentsMargins(0, 9, 0, 9)
 
     def init_encoding_list(self):
-        plugins = api.get_plugins()
 
-        # Get names of all classes that encodable
-        encoding_class_names = []
-        for plugin in plugins:
-            output_type = plugin.output_type
-            if not output_type.encoded:
-                continue
-            encoding_class_names.extend(output_type.detections)
+        def func():
+            plugins = api.get_plugins()
 
-        encoding_class_names.extend(api.get_encoding_class_names())
+            # Get names of all classes that encodable
+            encoding_class_names = []
+            for plugin in plugins:
+                output_type = plugin.output_type
+                if not output_type.encoded:
+                    continue
+                encoding_class_names.extend(output_type.detections)
 
-        self.encoding_list.init_encodings(encoding_class_names)
+            encoding_class_names.extend(api.get_encoding_class_names())
+
+            return encoding_class_names
+
+        def callback(encoding_class_names):
+            self.encoding_list.init_encodings(encoding_class_names)
+
+        QTAsyncWorker(self, func, callback).start()

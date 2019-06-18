@@ -102,7 +102,7 @@
   </connection>
   <connection>
    <sender>encoding_list</sender>
-   <signal>encoding_entry_clicked_signal(QString)</signal>
+   <signal>encoding_entry_selected_signal(QString)</signal>
    <receiver>Form</receiver>
    <slot>filter_by_encoding_class_signal(QString)</slot>
    <hints>

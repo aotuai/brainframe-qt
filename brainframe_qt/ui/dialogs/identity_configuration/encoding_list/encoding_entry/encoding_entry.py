@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, QEvent, pyqtSignal
-from PyQt5.QtGui import QMouseEvent
+from PyQt5.QtGui import QMouseEvent, QPalette
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QStyle, \
     QStyleOptionButton
 from PyQt5.uic import loadUi
@@ -8,12 +8,14 @@ from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class EncodingEntry(QWidget):
-    encoding_entry_clicked_signal = pyqtSignal(str)
-    """Emitted when the widget (excluding delete button) is clicked
+    encoding_entry_selected_signal = pyqtSignal(bool, str)
+    """Emitted when the widget (excluding delete button) is selected (clicked)
+
+    Only emitted when self.selectable == True
 
     Connected to:
     - EncodingList <-- Dynamic
-      [parent].encoding_entry_clicked_signal
+      [parent].encoding_entry_selected_slot
     """
     delete_encoding_signal = pyqtSignal(str)
     """Emitted when the delete button is pressed
@@ -28,11 +30,14 @@ class EncodingEntry(QWidget):
 
         loadUi(qt_ui_paths.encoding_entry_ui, self)
 
+        self.encoding_class_name = encoding_class_name
+
         self.encoding_class_name_label: QLabel
-        self.encoding_class_name_label.setText(encoding_class_name)
+        self.encoding_class_name_label.setText(self.encoding_class_name)
         self.delete_button: QPushButton
 
-        self.encoding_class_name = encoding_class_name
+        self.selectable = True
+        self._selected = False
 
         self.init_ui()
         self.init_slots_and_signals()
@@ -52,8 +57,11 @@ class EncodingEntry(QWidget):
             lambda: self.delete_encoding_signal.emit(self.encoding_class_name))
 
     def mouseReleaseEvent(self, event: QMouseEvent):
-        # noinspection PyUnresolvedReferences
-        self.encoding_entry_clicked_signal.emit(self.encoding_class_name)
+        if self.selectable:
+            self.selected = not self.selected
+            # noinspection PyUnresolvedReferences
+            self.encoding_entry_selected_signal.emit(self.selected,
+                                                     self.encoding_class_name)
 
     def enterEvent(self, event: QEvent):
         self.delete_button.show()
@@ -64,6 +72,22 @@ class EncodingEntry(QWidget):
         self.delete_button.hide()
 
         super().leaveEvent(event)
+
+    @property
+    def selected(self):
+        return self._selected
+
+    @selected.setter
+    def selected(self, selected):
+        self._selected = selected
+
+        palette = self.parent().palette()
+        if self._selected:
+            background_color = palette.dark().color()
+        else:
+            background_color = palette.alternateBase().color()
+        palette.setColor(QPalette.Background, background_color)
+        self.setPalette(palette)
 
     def _fix_button_width(self):
         """Set min width of delete button properly

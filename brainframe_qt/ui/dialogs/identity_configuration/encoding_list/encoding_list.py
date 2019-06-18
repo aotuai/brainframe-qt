@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QPalette
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt5.uic import loadUi
@@ -9,12 +9,10 @@ from .encoding_entry import EncodingEntry
 
 
 class EncodingList(QWidget):
-    encoding_entry_clicked_signal = pyqtSignal(str)
-    """Emitted when a child EncodingEntry is clicked
+    encoding_entry_selected_signal = pyqtSignal(str)
+    """Emitted when a child EncodingEntry is selected
 
     Connected to:
-    - EncodingEntry --> Dynamic
-      [child].encoding_entry_clicked_signal
     - IdentitySearchFilter <-- Dynamic
       [parent].filter_by_encoding_class_signal
     """
@@ -61,8 +59,8 @@ class EncodingList(QWidget):
 
     def add_encoding(self, encoding: str):
         encoding_entry = EncodingEntry(encoding, self)
-        encoding_entry.encoding_entry_clicked_signal.connect(
-            self.encoding_entry_clicked_signal)
+        encoding_entry.encoding_entry_selected_signal.connect(
+            self.encoding_entry_selected_slot)
         encoding_entry.delete_encoding_signal.connect(
             self.delete_encoding_signal)
         self.encoding_list_layout.addWidget(encoding_entry)
@@ -70,3 +68,23 @@ class EncodingList(QWidget):
 
     def remove_encoding(self, encoding):
         raise NotImplementedError
+
+    @pyqtSlot(bool, str)
+    def encoding_entry_selected_slot(self, selected: bool,
+                                     encoding_class: str):
+        """Called whenever an encoding is selected/deselected
+
+        Connected to:
+        - EncodingEntry --> Dynamic
+          [child].delete_encoding_signal"""
+        if selected:
+            for index in range(self.encoding_list_layout.count()):
+                item = self.encoding_list_layout.itemAt(index)
+                widget: EncodingEntry = item.widget()
+                if widget.encoding_class_name != encoding_class:
+                    widget.selected = False
+        else:
+            encoding_class = ""
+
+        # noinspection PyUnresolvedReferences
+        self.encoding_entry_selected_signal.emit(encoding_class)

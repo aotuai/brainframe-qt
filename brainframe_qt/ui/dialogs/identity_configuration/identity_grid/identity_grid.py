@@ -100,7 +100,10 @@ class IdentityGrid(QWidget):
         self.clear_identities()
 
         def func():
-            return api.get_identities(encoded_for_class=encoding_class)
+            if encoding_class == "":
+                return api.get_identities()
+            else:
+                return api.get_identities(encoded_for_class=encoding_class)
 
         def callback(identities):
             self.add_identities(identities)
