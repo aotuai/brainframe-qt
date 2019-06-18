@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QDialog, QLineEdit, QScrollArea, QProgressBar
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.ui.resources.ui_elements.floating_action_button import \
+from brainframe.client.ui.resources.ui_elements.buttons import \
     FloatingActionButton
 
 from .identity_grid import IdentityGrid
@@ -81,8 +81,7 @@ class IdentityConfiguration(QDialog):
 
     def init_fab(self):
         self.identity_grid_area: QScrollArea
-        self.fab = FloatingActionButton(28, 25,
-                                        self.identity_grid_area.viewport())
+        self.fab = FloatingActionButton(self.identity_grid_area.viewport())
         # noinspection PyUnresolvedReferences
         self.fab.clicked.connect(self.identity_adder.add_identities_from_file)
 
