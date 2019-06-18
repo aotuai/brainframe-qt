@@ -53,11 +53,6 @@ class FloatingActionButton(FloatingButton):
         self._draw_button(painter)
         self._draw_plus(painter)
 
-    def mousePressEvent(self, event: QMouseEvent):
-        print(event.pos())
-        print(self.hitButton(event.pos()))
-        super().mousePressEvent(event)
-
     def _draw_button(self, painter: QPainter):
         palette = self.palette()
         # I have no clue why isDown needs to be flipped here
