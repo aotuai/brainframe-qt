@@ -1,46 +1,15 @@
-import math
+from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtGui import QBrush, QLinearGradient, QPainter, QPaintEvent
 
-from PyQt5.QtCore import Qt, QPoint, QSize
-from PyQt5.QtGui import QBrush, QLinearGradient, QPainter, QPaintEvent, \
-    QMouseEvent, QRegion, QResizeEvent
-
-from . import FloatingButton
+from . import FloatingCircleButton
 
 
-class FloatingActionButton(FloatingButton):
-    def __init__(self, parent, radius=28,
+class FloatingActionButton(FloatingCircleButton):
+    def __init__(self, parent, radius,
                  alignment=Qt.AlignBottom | Qt.AlignRight,
                  m_left=28, m_top=28, m_right=28, m_bottom=28):
-        super().__init__(alignment, parent=parent)
-
-        self.radius = radius
-
-        size = QSize(self.radius * 2, self.radius * 2)
-        size += QSize(m_left + m_right, m_top + m_bottom)
-        self.resize(size)
-
-        self.setContentsMargins(m_left, m_top, m_right, m_bottom)
-
-        self.parent().installEventFilter(self)
-
-    def resizeEvent(self, event: QResizeEvent) -> None:
-        """On resize we need to adjust the mask to fit around the button circle
-
-        This allows mouse presses to pass through to widgets behind if they're
-        not on the button, but within the space of the widget's rect (ie.
-        the corner)
-
-        This also means we do not need to override buttonHit because we can
-        only click on the button if it's within the mask
-        """
-        # Remove margins
-        m_left, m_top, m_right, m_bottom = self.getContentsMargins()
-        button_rect = self.rect().adjusted(m_left, m_top, -m_right, -m_bottom)
-
-        # Add some extra pixels for anti-aliasing
-        button_rect.adjust(-1, -1, 1, 1)
-        self.setMask(QRegion(button_rect, QRegion.Ellipse))
-        super().resizeEvent(event)
+        super().__init__(parent, radius, alignment,
+                         m_left, m_top, m_right, m_bottom)
 
     def paintEvent(self, paint_event: QPaintEvent):
         painter = QPainter(self)
