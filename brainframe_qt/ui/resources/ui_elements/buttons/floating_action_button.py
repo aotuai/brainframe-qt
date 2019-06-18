@@ -1,38 +1,30 @@
-from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QBrush, QLinearGradient, QPainter, QPaintEvent
 
 from . import FloatingCircleButton
 
 
 class FloatingActionButton(FloatingCircleButton):
-    def __init__(self, parent, radius,
+    def __init__(self, parent, radius=28,
                  alignment=Qt.AlignBottom | Qt.AlignRight,
-                 m_left=28, m_top=28, m_right=28, m_bottom=28):
+                 m_left=0, m_top=0, m_right=28, m_bottom=28):
         super().__init__(parent, radius, alignment,
                          m_left, m_top, m_right, m_bottom)
 
     def paintEvent(self, paint_event: QPaintEvent):
+        super().paintEvent(paint_event)
+
+        # self._draw_shadow(painter)
+        self._draw_plus()
+
+    def _draw_plus(self):
+
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
         pen = Qt.NoPen
         painter.setPen(pen)
 
-        # self._draw_shadow(painter)
-        self._draw_button(painter)
-        self._draw_plus(painter)
-
-    def _draw_button(self, painter: QPainter):
-        palette = self.palette()
-        # I have no clue why isDown needs to be flipped here
-        brush = palette.text() if not self.isDown() else palette.shadow()
-        painter.setBrush(brush)
-
-        m_left, m_top, _, _ = self.getContentsMargins()
-        painter.drawEllipse(QPoint(self.radius + m_left, self.radius + m_top),
-                            self.radius, self.radius)
-
-    def _draw_plus(self, painter: QPainter):
         palette = self.palette()
         brush = palette.window()
         painter.setBrush(brush)

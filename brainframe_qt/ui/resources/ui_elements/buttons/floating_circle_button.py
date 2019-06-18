@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QResizeEvent, QRegion
+from PyQt5.QtCore import QSize, QPoint, Qt
+from PyQt5.QtGui import QResizeEvent, QRegion, QPainter, QPaintEvent
 
 from . import FloatingButton
 
@@ -17,7 +17,8 @@ class FloatingCircleButton(FloatingButton):
 
         self.setContentsMargins(m_left, m_top, m_right, m_bottom)
 
-        self.parent().installEventFilter(self)
+    def paintEvent(self, event: QPaintEvent):
+        self._draw_circle()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """On resize we need to adjust the mask to fit around the button circle
@@ -35,5 +36,24 @@ class FloatingCircleButton(FloatingButton):
 
         # Add some extra pixels for anti-aliasing
         button_rect.adjust(-1, -1, 1, 1)
+
+        # Circle mask
         self.setMask(QRegion(button_rect, QRegion.Ellipse))
+
         super().resizeEvent(event)
+
+    def _draw_circle(self):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+
+        pen = Qt.NoPen
+        painter.setPen(pen)
+
+        palette = self.palette()
+        # I have no clue why isDown needs to be flipped here
+        brush = palette.text() if not self.isDown() else palette.shadow()
+        painter.setBrush(brush)
+
+        m_left, m_top, _, _ = self.getContentsMargins()
+        painter.drawEllipse(QPoint(self.radius + m_left, self.radius + m_top),
+                            self.radius, self.radius)

@@ -71,10 +71,7 @@ class IdentityGrid(QWidget):
             self.identity_load_started_signal.emit()
 
         identity = self._identities_to_add.pop()
-        identity_entry = IdentityEntry(identity, self)
-        identity_entry.identity_clicked_signal.connect(
-            self.identity_clicked_signal)
-        self.layout().addWidget(identity_entry)
+        self._new_identity_widget(identity)
 
         # Signal load progress
         uploaded_so_far = self._to_upload - len(self._identities_to_add)
@@ -162,3 +159,10 @@ class IdentityGrid(QWidget):
         for index in reversed(range(self.layout().count())):
             widget = self.layout().takeAt(index).widget()
             widget.deleteLater()
+
+    def _new_identity_widget(self, identity: Identity):
+        identity_entry = IdentityEntry(identity, self)
+
+        identity_entry.identity_clicked_signal.connect(
+            self.identity_clicked_signal)
+        self.layout().addWidget(identity_entry)

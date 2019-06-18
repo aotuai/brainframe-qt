@@ -12,17 +12,14 @@ class FloatingButton(QAbstractButton):
 
         self.alignment: Qt.AlignmentFlag = alignment
 
+        self.parent().installEventFilter(self)
+        self.update_location()
+
     def eventFilter(self, obj: QObject, event: QEvent):
         if obj is self.parent():
             if event.type() in [QEvent.Resize, QEvent.Move]:
                 self.update_location()
         return False
-
-    def hitButton(self, pos: QPoint) -> bool:
-        return super().hitButton(pos)
-
-    def paintEvent(self, event: QPaintEvent):
-        return super().paintEvent(event)
 
     def update_location(self):
 
