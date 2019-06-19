@@ -46,6 +46,10 @@ class EncodingEntry(QWidget):
     def init_ui(self):
         self._fix_button_width()
 
+        self.delete_button.setToolTip(
+            f"Delete all [{self.encoding_class_name}] encodings from the "
+            f"database")
+
         # Set this before hiding the button, as the button is taller than the
         # rest of the widget. Not doing this will make this widget height
         # change when the button is hidden/shown
