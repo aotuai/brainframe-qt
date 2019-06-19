@@ -3,7 +3,6 @@ from brainframe.client.ui.resources import BasePlugin
 
 class IdentityInfo(BasePlugin):
 
-    # noinspection PyUnresolvedReferences
     from brainframe.client.ui.dialogs.identity_configuration.identity_info \
         import IdentityInfo as Widget
 

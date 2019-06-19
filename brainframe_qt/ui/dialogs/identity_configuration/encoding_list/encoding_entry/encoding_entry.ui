@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="delete_button">
+    <widget class="TextIconButton" name="delete_button">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -49,9 +49,6 @@
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="toolTip">
-      <string>Delete encoding from database</string>
      </property>
      <property name="text">
       <string>🗑️</string>
@@ -63,6 +60,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TextIconButton</class>
+   <extends>QPushButton</extends>
+   <header>brainframe.client.ui.resources.ui_elements.buttons.icon_button</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
