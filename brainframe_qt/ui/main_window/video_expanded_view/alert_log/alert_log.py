@@ -35,7 +35,7 @@ class AlertLog(QWidget):
         existing_alert_ids = set(self.alert_widgets.keys())
 
         # Get a page of the 100 most recent alerts
-        unverified_alerts = api.get_unverified_alerts(
+        unverified_alerts, total_count = api.get_unverified_alerts(
             self.stream_id, limit=100, offset=0)[::-1]
         unverified_alert_ids = set(alert.id for alert in unverified_alerts)
 

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import numpy as np
 import ujson
@@ -16,7 +16,8 @@ class AlertStubMixin(Stub):
 
     def get_unverified_alerts(self, stream_id,
                               limit: Optional[int] = None,
-                              offset: Optional[int] = None) -> List[Alert]:
+                              offset: Optional[int] = None) \
+            -> Tuple[List[Alert], int]:
         """Gets all alerts that have not been verified or rejected
 
         :param stream_id: The stream ID to get unverified alerts for
@@ -24,7 +25,8 @@ class AlertStubMixin(Stub):
             will be applied
         :param offset: The offset from the most recent alerts to return. This
             is only useful when providing a limit.
-        :return:
+        :return:  A list of alerts, and the total number of alerts that
+            fit this criteria, ignoring pagination (the limit and offset)
         """
         req = "/api/alerts"
 
@@ -34,9 +36,12 @@ class AlertStubMixin(Stub):
         if offset is not None:
             params["offset"] = offset
 
-        data = self._get(req, params=params)
+        data, headers = self._get_with_headers(req, params=params)
         alerts = [Alert.from_dict(a) for a in data]
-        return alerts
+
+        total_count = int(headers["Total-Count"])
+
+        return alerts, total_count
 
     def set_alert_verification(self, alert_id, verified_as: bool):
         """Sets an alert verified as True or False.
