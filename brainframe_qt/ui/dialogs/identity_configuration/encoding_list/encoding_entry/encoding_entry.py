@@ -38,6 +38,7 @@ class EncodingEntry(QWidget):
 
         self.selectable = True
         self._selected = False
+        self._hovered = False
 
         self.init_ui()
         self.init_slots_and_signals()
@@ -59,19 +60,32 @@ class EncodingEntry(QWidget):
     def mouseReleaseEvent(self, event: QMouseEvent):
         if self.selectable:
             self.selected = not self.selected
+            self._update_background_color()
+
             # noinspection PyUnresolvedReferences
             self.encoding_entry_selected_signal.emit(self.selected,
                                                      self.encoding_class_name)
 
     def enterEvent(self, event: QEvent):
         self.delete_button.show()
+        self.hovered = True
 
         super().enterEvent(event)
 
     def leaveEvent(self, event: QEvent):
         self.delete_button.hide()
+        self.hovered = False
 
         super().leaveEvent(event)
+
+    @property
+    def hovered(self):
+        return self._hovered
+
+    @hovered.setter
+    def hovered(self, hovered):
+        self._hovered = hovered
+        self._update_background_color()
 
     @property
     def selected(self):
@@ -81,13 +95,7 @@ class EncodingEntry(QWidget):
     def selected(self, selected):
         self._selected = selected
 
-        palette = self.parent().palette()
-        if self._selected:
-            background_color = palette.dark().color()
-        else:
-            background_color = palette.alternateBase().color()
-        palette.setColor(QPalette.Background, background_color)
-        self.setPalette(palette)
+        self._update_background_color()
 
     def _fix_button_width(self):
         """Set min width of delete button properly
@@ -106,3 +114,20 @@ class EncodingEntry(QWidget):
             text_size,
             self.delete_button)
         self.delete_button.setMaximumSize(button_size)
+
+    def _update_background_color(self):
+        palette = self.parent().palette()
+        if not self.selected and not self.hovered:
+            print("1")
+            background_color = palette.alternateBase().color()
+        elif self.hovered and not self.selected:
+            print("2")
+            background_color = palette.button().color()
+        elif self.selected and not self.hovered:
+            print("3")
+            background_color = palette.dark().color()
+        else:
+            print("4")
+            background_color = palette.shadow().color()
+        palette.setColor(QPalette.Background, background_color)
+        self.setPalette(palette)
