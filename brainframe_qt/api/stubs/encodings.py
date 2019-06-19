@@ -66,3 +66,21 @@ class EncodingStubMixIn(Stub):
         """
         req = f"/api/encodings/{encoding_id}"
         self._delete(req)
+
+    def delete_encodings(self, identity_id=None, class_name=None):
+        """Deletes all encodings that match the given filter.
+
+        :param identity_id: If specified, only encodings that are associated
+            with this identity will be deleted
+        :param class_name: If specified, only encodings that are for this class
+            will be deleted
+        """
+        req = f"/api/encodings"
+
+        params = {}
+        if identity_id is not None:
+            params["identity_id"] = identity_id
+        if class_name is not None:
+            params["class_name"] = class_name
+
+        self._delete(req, params)
