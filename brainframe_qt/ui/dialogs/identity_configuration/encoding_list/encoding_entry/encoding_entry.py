@@ -118,16 +118,12 @@ class EncodingEntry(QWidget):
     def _update_background_color(self):
         palette = self.parent().palette()
         if not self.selected and not self.hovered:
-            print("1")
             background_color = palette.alternateBase().color()
         elif self.hovered and not self.selected:
-            print("2")
             background_color = palette.button().color()
         elif self.selected and not self.hovered:
-            print("3")
             background_color = palette.dark().color()
         else:
-            print("4")
             background_color = palette.shadow().color()
         palette.setColor(QPalette.Background, background_color)
         self.setPalette(palette)
