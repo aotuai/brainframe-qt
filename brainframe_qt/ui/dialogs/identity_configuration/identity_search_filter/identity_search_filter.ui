@@ -116,9 +116,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>encoding_list</sender>
+   <signal>delete_encoding_class_signal(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>delete_encoding_class_slot(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>255</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>248</x>
+     <y>-15</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>filter_by_search_string_signal(QString)</slot>
   <slot>filter_by_encoding_class_signal(QString)</slot>
+  <slot>delete_encoding_class_slot(QString)</slot>
  </slots>
 </ui>

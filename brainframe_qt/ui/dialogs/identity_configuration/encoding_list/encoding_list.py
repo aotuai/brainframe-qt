@@ -16,14 +16,14 @@ class EncodingList(QWidget):
     - IdentitySearchFilter <-- Dynamic
       [parent].filter_by_encoding_class_signal
     """
-    delete_encoding_signal = pyqtSignal(str)
+    delete_encoding_class_signal = pyqtSignal(str)
     """Emitted when an encoding entry requests to be deleted
 
     Connected to:
     - EncodingEntry --> Dynamic
-    [child].delete_encoding_signal
-    - IdentitySearchFilter <-- Dynamic
-    [parent].delete_encoding_slot
+    [child].delete_encoding_class_signal
+    - IdentitySearchFilter <-- QtDesigner
+    [parent].delete_encoding_class_slot
     """
 
     def __init__(self, parent=None, encodings=()):
@@ -36,8 +36,7 @@ class EncodingList(QWidget):
 
         self.init_ui()
 
-        if encodings:
-            self.init_encodings(encodings)
+        self.init_encodings(encodings)
 
     def init_ui(self):
         # Make [None] label use alt text color from theme
@@ -61,8 +60,8 @@ class EncodingList(QWidget):
         encoding_entry = EncodingEntry(encoding, self)
         encoding_entry.encoding_entry_selected_signal.connect(
             self.encoding_entry_selected_slot)
-        encoding_entry.delete_encoding_signal.connect(
-            self.delete_encoding_signal)
+        encoding_entry.delete_encoding_class_signal.connect(
+            self.delete_encoding_class_signal)
         self.encoding_list_layout.addWidget(encoding_entry)
         self.none_label.hide()
 
@@ -76,7 +75,7 @@ class EncodingList(QWidget):
 
         Connected to:
         - EncodingEntry --> Dynamic
-          [child].delete_encoding_signal"""
+          [child].encoding_entry_selected_signal"""
         if selected:
             for index in range(self.encoding_list_layout.count()):
                 item = self.encoding_list_layout.itemAt(index)

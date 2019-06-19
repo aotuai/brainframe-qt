@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QLineEdit
 from PyQt5.uic import loadUi
 
@@ -64,5 +64,26 @@ class IdentitySearchFilter(QWidget):
 
         def callback(encoding_class_names):
             self.encoding_list.init_encodings(encoding_class_names)
+
+        QTAsyncWorker(self, func, callback).start()
+
+    @pyqtSlot(str)
+    def delete_encoding_class_slot(self, encoding_class: str):
+        """Delete event encoding of a class type from all identities on the
+        database"""
+
+        self.encoding_list: EncodingList
+
+        def func():
+            api.delete_encodings(class_name=encoding_class)
+
+        def callback(_):
+            # Refresh the encoding class list. The one we just deleted could be
+            # gone if there is no corresponding encoder plugin loaded
+            self.init_encoding_list()
+
+            # Tell the grid to not filter by anything anymore
+            # noinspection PyUnresolvedReferences
+            self.filter_by_encoding_class_signal.emit("")
 
         QTAsyncWorker(self, func, callback).start()

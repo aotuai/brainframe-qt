@@ -16,12 +16,12 @@ class EncodingEntry(QWidget):
     - EncodingList <-- Dynamic
       [parent].encoding_entry_selected_slot
     """
-    delete_encoding_signal = pyqtSignal(str)
+    delete_encoding_class_signal = pyqtSignal(str)
     """Emitted when the delete button is pressed
     
     Connected to:
     - EncodingList <-- Dynamic
-    [parent].delete_encoding_signal
+    [parent].delete_encoding_class_signal
     """
 
     def __init__(self, encoding_class_name: str, parent=None, ):
@@ -57,7 +57,7 @@ class EncodingEntry(QWidget):
     def init_slots_and_signals(self):
         # noinspection PyUnresolvedReferences
         self.delete_button.clicked.connect(
-            lambda: self.delete_encoding_signal.emit(self.encoding_class_name))
+            lambda: self.delete_encoding_class_signal.emit(self.encoding_class_name))
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         if self.selectable:
