@@ -51,14 +51,14 @@ class IdentitySearchFilter(QWidget):
             plugins = api.get_plugins()
 
             # Get names of all classes that encodable
-            encoding_class_names = []
+            encoding_class_names = set()
             for plugin in plugins:
                 output_type = plugin.output_type
                 if not output_type.encoded:
                     continue
-                encoding_class_names.extend(output_type.detections)
+                encoding_class_names.update(output_type.detections)
 
-            encoding_class_names.extend(api.get_encoding_class_names())
+            encoding_class_names.update(api.get_encoding_class_names())
 
             return encoding_class_names
 
