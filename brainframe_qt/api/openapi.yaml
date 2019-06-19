@@ -831,6 +831,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Encoding'
+    delete:
+      tags:
+        - Identity Control
+      summary: Delete encodings
+      description: Deletes encodings by the given criteria, or all encodings if no criteria is provided.
+      parameters:
+        - in: query
+          name: identity_id
+          description: Deletes encodings by the identity ID that they are associated with
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: class_name
+          description: Deletes encodings by the class name that they are encoded for
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The encodings have been deleted
 
   /api/encodings/{encoding_id}:
     get:
