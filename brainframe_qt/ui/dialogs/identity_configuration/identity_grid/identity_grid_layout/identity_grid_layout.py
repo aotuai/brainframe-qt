@@ -15,8 +15,7 @@ class IdentityGridLayout(QLayout):
         self.aligned_items = 0
         self.num_cols = 1
 
-        self.min_widget_size = QSize()
-        self._calc_min_widget_size()
+        self._min_widget_size: QSize = None
 
         self.width = 0
         self.need_redraw = False
@@ -46,15 +45,33 @@ class IdentityGridLayout(QLayout):
 
         return (num_rows * row_height) + (num_rows - 1 * y_spacing)
 
-    def spacing(self) -> int:
-        return -1
-
     def itemAt(self, index: int) -> Optional[QLayoutItem]:
         try:
             return self.items[index]
         except IndexError:
             # Must return equiv of nullptr if index out of bounds
             return None
+
+    def minimumSize(self) -> QSize:
+        min_width = self.min_widget_size.width()
+
+        if self.items:
+            # Docs recommend avoiding using QRect.bottom
+            geometry = self.items[-1].geometry()
+            min_height = geometry.y() + geometry.height()
+        else:
+            min_height = super().minimumSize().height()
+
+        m_left, m_top, m_right, m_bottom = self.getContentsMargins()
+
+        # Add contents margins
+        min_width += m_left + m_right
+        min_height += m_top + m_bottom
+
+        return QSize(min_width, min_height)
+
+    def sizeHint(self) -> QSize:
+        return self.minimumSize()
 
     def setGeometry(self, rect: QRect):
         if rect.width() != self.width:
@@ -64,13 +81,8 @@ class IdentityGridLayout(QLayout):
             self.do_layout(rect)
             super().setGeometry(rect)
 
-    def takeAt(self, index: int) -> QLayoutItem:
-        item = self.items.pop(index)
-        self._calc_min_widget_size()
-
-        self.need_redraw = True
-
-        return item
+    def spacing(self) -> int:
+        return -1
 
     # noinspection PyPep8Naming
     def horizontalSpacing(self) -> int:
@@ -89,6 +101,13 @@ class IdentityGridLayout(QLayout):
             parent_as_widget = QWidget.style(self.parent())
             return parent_as_widget.pixelMetric(pm, None, self.parent())
         return self.spacing()
+
+    def takeAt(self, index: int) -> QLayoutItem:
+        item = self.items.pop(index)
+
+        self.need_redraw = True
+
+        return item
 
     def do_layout(self, rect: QRect):
 
@@ -139,28 +158,14 @@ class IdentityGridLayout(QLayout):
 
             self.aligned_items = index
 
-    def sizeHint(self) -> QSize:
-        return self.minimumSize()
+    @property
+    def min_widget_size(self) -> QSize:
+        if self._min_widget_size is None:
+            self._min_widget_size = super().minimumSize()
+            for item in self.items:
+                self._min_widget_size.expandedTo(item.minimumSize())
+        return self._min_widget_size
 
-    def minimumSize(self) -> QSize:
-        min_width = self.min_widget_size.width()
-
-        if self.items:
-            # Docs recommend avoiding using QRect.bottom
-            geometry = self.items[-1].geometry()
-            min_height = geometry.y() + geometry.height()
-        else:
-            min_height = super().minimumSize().height()
-
-        m_left, m_top, m_right, m_bottom = self.getContentsMargins()
-
-        # Add contents margins
-        min_width += m_left + m_right
-        min_height += m_top + m_bottom
-
-        return QSize(min_width, min_height)
-
-    def _calc_min_widget_size(self):
-        self.min_widget_size = super().minimumSize()
-        for item in self.items:
-            self.min_widget_size.expandedTo(item.minimumSize())
+    @min_widget_size.setter
+    def min_widget_size(self, min_widget_size: QSize):
+        self._min_widget_size = min_widget_size
