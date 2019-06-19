@@ -1,6 +1,5 @@
 from PyQt5.QtCore import Qt, QEvent
-from PyQt5.QtWidgets import QPushButton, QStyleOptionButton, QStyle, \
-    QStylePainter
+from PyQt5.QtWidgets import QPushButton, QStyleOptionButton, QStyle
 
 
 class TextIconButton(QPushButton):

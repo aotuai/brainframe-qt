@@ -1,7 +1,6 @@
-from PyQt5.QtCore import Qt, QEvent, pyqtSignal
+from PyQt5.QtCore import QEvent, pyqtSignal
 from PyQt5.QtGui import QMouseEvent, QPalette
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QStyle, \
-    QStyleOptionButton
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
