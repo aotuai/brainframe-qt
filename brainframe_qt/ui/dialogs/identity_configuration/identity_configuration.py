@@ -6,8 +6,9 @@ from PyQt5.uic import loadUi
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import \
     FloatingActionButton
+from brainframe.client.ui.resources.ui_elements.containers import Paginator
 
-from .identity_grid import IdentityGrid
+from .identity_grid_paginator.identity_grid import IdentityGrid
 from .identity_info import IdentityInfo
 from .identity_search_filter import IdentitySearchFilter
 from .identity_adder_worker import AddNewIdentitiesWorker
@@ -20,8 +21,8 @@ class IdentityConfiguration(QDialog):
     Connected to:
     - IdentityAdderWorker --> Dynamic
     self.identity_adder.identity_uploaded_signal
-    - IdentityGrid <-- QtDesigner
-    self.identity_grid.add_new_identity
+    - IdentityGridPaginator <-- QtDesigner
+    self.identity_grid_paginator.add_new_identity_slot
     """
 
     def __init__(self, parent=None):
@@ -34,6 +35,7 @@ class IdentityConfiguration(QDialog):
         self.identity_search_filter: IdentitySearchFilter
         self.identity_upload_progress_bar: QProgressBar
         self.identity_load_progress_bar: QProgressBar
+        self.identity_grid_paginator: Paginator
         self.fab: FloatingActionButton = None
 
         # Identity Uploader
@@ -51,12 +53,12 @@ class IdentityConfiguration(QDialog):
             self.display_new_identity_signal)
 
         # Identity Loader
-        self.identity_grid.identity_load_started_signal.connect(
+        self.identity_grid_paginator.identity_grid.identity_load_started_signal.connect(
             lambda: self.show_progress_bar(self.identity_load_progress_bar))
-        self.identity_grid.identity_load_progress_signal.connect(
+        self.identity_grid_paginator.identity_grid.identity_load_progress_signal.connect(
             lambda current, max_: self.update_progress_bar(
                 self.identity_load_progress_bar, current, max_))
-        self.identity_grid.identity_load_finished_signal.connect(
+        self.identity_grid_paginator.identity_grid.identity_load_finished_signal.connect(
             lambda: self.hide_progress_bar(self.identity_load_progress_bar))
 
         self.init_ui()
@@ -80,8 +82,7 @@ class IdentityConfiguration(QDialog):
         self.identity_upload_progress_bar.hide()
 
     def init_fab(self):
-        self.identity_grid_area: QScrollArea
-        self.fab = FloatingActionButton(self.identity_grid_area.viewport())
+        self.fab = FloatingActionButton(self.identity_grid_paginator)
         # noinspection PyUnresolvedReferences
         self.fab.clicked.connect(self.identity_adder.add_identities_from_file)
 

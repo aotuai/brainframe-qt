@@ -47,7 +47,8 @@ tree_widget_dir            = route_path(identity_error_popup_dir  , "tree_widget
 tree_widget_ui             = route_path(tree_widget_dir           , "tree_widget.ui"           )
 directory_selector_dir     = route_path(identity_configuration_dir, "directory_selector"       )
 directory_selector_ui      = route_path(directory_selector_dir    , "directory_selector.ui"    )
-identity_grid_dir          = route_path(identity_configuration_dir, "identity_grid"            )
+identity_paginator_dir     = route_path(identity_configuration_dir, "identity_grid_paginator"  )
+identity_grid_dir          = route_path(identity_paginator_dir    , "identity_grid"            )
 identity_grid_ui           = route_path(identity_grid_dir         , "identity_grid.ui"         )
 identity_entry_dir         = route_path(identity_grid_dir         , "identity_entry"           )
 identity_entry_ui          = route_path(identity_entry_dir        , "identity_entry.ui"        )
@@ -83,3 +84,9 @@ video_configuration_ui     = route_path(video_configuration_dir   , "video_confi
 
 zone_list_dir              = route_path(task_configuration_dir    , "zone_list"                )
 zone_list_ui               = route_path(zone_list_dir             , "zone_list.ui"             )
+
+# Resources
+ui_elements_dir            = route_path(ui_dir                    , "resources", "ui_elements" )
+button_resources_dir       = route_path(ui_elements_dir           , "buttons"                  )
+containers_resources_dir   = route_path(ui_elements_dir           , "containers"               )
+paginator_ui               = route_path(containers_resources_dir  , "paginator.ui"             )

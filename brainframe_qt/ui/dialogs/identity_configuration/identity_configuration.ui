@@ -38,39 +38,7 @@
       <widget class="IdentitySearchFilter" name="identity_search_filter"/>
      </item>
      <item>
-      <widget class="QScrollArea" name="identity_grid_area">
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="IdentityGrid" name="identity_grid">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>883</width>
-          <height>923</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </widget>
+      <widget class="IdentityGridPaginator" name="identity_grid_paginator"/>
      </item>
      <item>
       <widget class="IdentityInfo" name="identity_info"/>
@@ -101,9 +69,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>IdentityGrid</class>
+   <class>IdentityGridPaginator</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.dialogs.identity_configuration.identity_grid.identity_grid</header>
+   <header>brainframe.client.ui.dialogs.identity_configuration.identity_grid_paginator.identity_grid_paginator</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>IdentitySearchFilter</class>
@@ -121,8 +90,8 @@
   <connection>
    <sender>identity_search_filter</sender>
    <signal>filter_by_encoding_class_signal(QString)</signal>
-   <receiver>identity_grid</receiver>
-   <slot>filter_by_encoding_class_slot(QString)</slot>
+   <receiver>identity_grid_paginator</receiver>
+   <slot>set_encoding_class(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>93</x>
@@ -135,7 +104,23 @@
    </hints>
   </connection>
   <connection>
-   <sender>identity_grid</sender>
+   <sender>identity_search_filter</sender>
+   <signal>filter_by_search_string_signal(QString)</signal>
+   <receiver>identity_grid_paginator</receiver>
+   <slot>set_search_string(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>297</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>identity_grid_paginator</sender>
    <signal>identity_clicked_signal(PyQt_PyObject)</signal>
    <receiver>identity_info</receiver>
    <slot>display_identity_slot(PyQt_PyObject)</slot>
@@ -153,8 +138,8 @@
   <connection>
    <sender>Dialog</sender>
    <signal>display_new_identity_signal(PyQt_PyObject)</signal>
-   <receiver>identity_grid</receiver>
-   <slot>add_new_identity(PyQt_PyObject)</slot>
+   <receiver>identity_grid_paginator</receiver>
+   <slot>add_new_identities_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>298</x>
@@ -163,22 +148,6 @@
     <hint type="destinationlabel">
      <x>377</x>
      <y>190</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>identity_search_filter</sender>
-   <signal>filter_by_search_string_signal(QString)</signal>
-   <receiver>identity_grid</receiver>
-   <slot>filter_by_search_string_slot(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>297</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>581</x>
-     <y>264</y>
     </hint>
    </hints>
   </connection>

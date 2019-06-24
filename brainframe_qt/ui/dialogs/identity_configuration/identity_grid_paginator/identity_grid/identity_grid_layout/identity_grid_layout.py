@@ -1,7 +1,7 @@
 from typing import List, Optional
 
-from PyQt5.QtCore import QRect, Qt, QSize, QPoint
-from PyQt5.QtWidgets import QWidget, QLayout, QLayoutItem, QStyle, QSizePolicy
+from PyQt5.QtCore import QRect, Qt, QSize
+from PyQt5.QtWidgets import QWidget, QLayout, QLayoutItem, QStyle
 
 
 class IdentityGridLayout(QLayout):
@@ -43,7 +43,9 @@ class IdentityGridLayout(QLayout):
         y_spacing = self.verticalSpacing()
         row_height = self.min_widget_size.height()
 
-        return (num_rows * row_height) + (num_rows - 1 * y_spacing)
+        height = (num_rows * row_height) + (num_rows - 1 * y_spacing)
+
+        return height
 
     def itemAt(self, index: int) -> Optional[QLayoutItem]:
         try:
@@ -56,8 +58,10 @@ class IdentityGridLayout(QLayout):
         min_width = self.min_widget_size.width()
 
         if self.items:
+            index = max(0, self.aligned_items - 1)
+            last_aligned_item = self.items[index]
+            geometry = last_aligned_item.geometry()
             # Docs recommend avoiding using QRect.bottom
-            geometry = self.items[-1].geometry()
             min_height = geometry.y() + geometry.height()
         else:
             min_height = super().minimumSize().height()
@@ -84,6 +88,13 @@ class IdentityGridLayout(QLayout):
     def spacing(self) -> int:
         return -1
 
+    def takeAt(self, index: int) -> QLayoutItem:
+        item = self.items.pop(index)
+
+        self.need_redraw = True
+
+        return item
+
     # noinspection PyPep8Naming
     def horizontalSpacing(self) -> int:
         return self.smartSpacing(QStyle.PM_LayoutHorizontalSpacing)
@@ -101,13 +112,6 @@ class IdentityGridLayout(QLayout):
             parent_as_widget = QWidget.style(self.parent())
             return parent_as_widget.pixelMetric(pm, None, self.parent())
         return self.spacing()
-
-    def takeAt(self, index: int) -> QLayoutItem:
-        item = self.items.pop(index)
-
-        self.need_redraw = True
-
-        return item
 
     def do_layout(self, rect: QRect):
 

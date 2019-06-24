@@ -58,8 +58,6 @@ class IdentityGrid(QWidget):
         self._to_upload = 0
         self.startTimer(0)
 
-        self.init_identities()
-
     def timerEvent(self, timer_event: QTimerEvent):
         if not self._identities_to_add:
             return
@@ -124,26 +122,6 @@ class IdentityGrid(QWidget):
 
         def func():
             return api.get_identities(search=search_string)
-
-        def callback(identities):
-            self.add_identities(identities)
-
-        QTAsyncWorker(self, func, callback).start()
-
-    @pyqtSlot(object)
-    def add_new_identity(self, identity: Identity):
-        """Called when we want to dynamically add a new Identity to the grid
-
-        Connected to:
-        - IdentityConfiguration --> QtDesigner
-          [parent].display_new_identity
-        """
-        self._identities_to_add.append(identity)
-
-    def init_identities(self):
-
-        def func():
-            return api.get_identities()
 
         def callback(identities):
             self.add_identities(identities)
