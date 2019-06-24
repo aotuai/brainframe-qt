@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Tuple, Optional
 
 import ujson
 
@@ -27,7 +27,8 @@ class IdentityStubMixin(Stub):
                        search: Optional[str] = None,
                        limit: int = None,
                        offset: int = None,
-                       sort_by: SortOptions = None) -> List[Identity]:
+                       sort_by: SortOptions = None) \
+            -> Tuple[List[Identity], int]:
         """Returns all identities from the server.
 
         :param unique_name: If provided, identities will be filtered by only
@@ -44,7 +45,8 @@ class IdentityStubMixin(Stub):
             useful when providing a limit.
         :param sort_by: If provided, the results will be sorted by the given
             configuration
-        :return: List of identities
+        :return: A list of identities, and the total number of identities that
+            fit this criteria, ignoring pagination (the limit and offset)
         """
         req = f"/api/identities"
 
@@ -62,10 +64,12 @@ class IdentityStubMixin(Stub):
         if sort_by is not None:
             params["sort_by"] = sort_by.query_format()
 
-        identities = self._get(req, params=params)
+        identities, headers = self._get_with_headers(req, params=params)
         identities = [Identity.from_dict(d) for d in identities]
 
-        return identities
+        total_count = int(headers["Total-Count"])
+
+        return identities, total_count
 
     def set_identity(self, identity: Identity) -> Identity:
         """Updates or creates an identity. If the identity does not already

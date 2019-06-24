@@ -30,6 +30,21 @@ class Stub:
             return ujson.loads(resp.content)
         return None
 
+    def _get_with_headers(self, api_url, params=None) -> Tuple[object, dict]:
+        """Sends a GET request to the given URL.
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param params: The "query_string" to add to the url. In the format
+        of a dict, {"key": "value", ...} key and val must be a string
+        :return: The JSON decoded response, and a dict of headers
+        """
+        resp = self.get(self._full_url(api_url), params=params)
+        if not resp.ok:
+            raise _make_api_error(resp.content)
+
+        if resp.content:
+            return ujson.loads(resp.content), resp.headers
+        return None, resp.headers
+
     def _get_raw(self, api_url, params=None) -> Tuple[bytes, str]:
         """Send a GET request to the given URL.
         :param api_url: The /api/blah/blah to append to the base_url

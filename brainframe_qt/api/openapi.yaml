@@ -377,20 +377,29 @@ paths:
             schema:
               type: int
       responses:
-          '200':
-              description: An array of unverified alerts
-              content:
-                application/json:
-                  schema:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Alert'
-          '404':
-              description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Error'
+        '200':
+          description: An array of unverified alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alert'
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+              description: "The total number of available alerts that fit
+              the given criteria, ignoring pagination. This information can be
+              used to determine how many 'pages' of data are available or to
+              find what percent of the total alerts were received after
+              pagination."
+        '404':
+            description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
 
   /api/alerts/{alert_id}:
     put:
@@ -619,6 +628,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Identity'
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+              description: "The total number of available identities that fit
+              the given criteria, ignoring pagination. This information can be
+              used to determine how many 'pages' of data are available or to
+              find what percent of the total identities were received after
+              pagination."
+
     post:
       tags:
         - Identity Control
