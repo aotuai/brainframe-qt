@@ -21,7 +21,7 @@ class IdentityConfiguration(QDialog):
     - IdentityAdderWorker --> Dynamic
     self.identity_adder.identity_uploaded_signal
     - IdentityGridPaginator <-- QtDesigner
-    self.identity_grid_paginator.add_new_identity_slot
+    self.identity_grid_paginator.add_new_identities_slot
     """
 
     def __init__(self, parent=None):

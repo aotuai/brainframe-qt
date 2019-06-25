@@ -21,15 +21,6 @@ class IdentityGridPaginator(Paginator):
     - IdentityInfo <-- QtDesigner
       [peer].display_identity_slot
     """
-    add_new_identity_slot = pyqtSignal(object)
-    """Emitted when child IdentityGrid has an identity that is clicked
-    
-    Connected to:
-    - IdentityGrid --> Dynamic
-      self.identity_grid.identity_clicked_signal
-    - IdentityInfo <-- QtDesigner
-      [peer].display_identity_slot
-    """
     identity_load_started_signal = pyqtSignal()
     """Emits when identities are loading
 
