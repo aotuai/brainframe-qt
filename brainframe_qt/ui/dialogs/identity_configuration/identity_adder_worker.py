@@ -80,9 +80,10 @@ class AddNewIdentitiesWorker(QThread):
                 identity = api.set_identity(identity)
             except api_errors.DuplicateIdentityNameError:
                 # Identity already exists
-                identity = api.get_identities(
+                identities, _ = api.get_identities(
                     unique_name=prototype.unique_name
-                )[0]
+                )
+                identity = identities[0]
 
                 # This error is a warning. Don't show it to user
                 pass

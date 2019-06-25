@@ -33,13 +33,7 @@ class IdentityGridLayout(QLayout):
         return True
 
     def heightForWidth(self, width: int) -> int:
-
-        # Naive implementation. Num cols is just how many times we can fit
-        # widest widget
-        widget_width = self.min_widget_size.width()
-        num_cols = width // widget_width if widget_width > 0 else 1
-
-        num_rows = len(self.items) // num_cols
+        num_rows = len(self.items) // self.num_cols
         y_spacing = self.verticalSpacing()
         row_height = self.min_widget_size.height()
 
@@ -146,8 +140,7 @@ class IdentityGridLayout(QLayout):
             col_width = (rect.width() - total_h_spacing) // self.num_cols
 
             index = 0
-            for index, item in enumerate(self.items[self.aligned_items:],
-                                         start=self.aligned_items):
+            for index, item in enumerate(self.items):
 
                 current_row, current_col = divmod(index, self.num_cols)
 

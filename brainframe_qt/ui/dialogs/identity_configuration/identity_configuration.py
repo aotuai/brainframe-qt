@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QDialog, QLineEdit, QScrollArea, QProgressBar
+from PyQt5.QtWidgets import QDialog, QLineEdit, QProgressBar
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -8,7 +8,6 @@ from brainframe.client.ui.resources.ui_elements.buttons import \
     FloatingActionButton
 from brainframe.client.ui.resources.ui_elements.containers import Paginator
 
-from .identity_grid_paginator.identity_grid import IdentityGrid
 from .identity_info import IdentityInfo
 from .identity_search_filter import IdentitySearchFilter
 from .identity_adder_worker import AddNewIdentitiesWorker
@@ -30,7 +29,6 @@ class IdentityConfiguration(QDialog):
 
         loadUi(qt_ui_paths.identity_configuration_ui, self)
 
-        self.identity_grid: IdentityGrid
         self.identity_info: IdentityInfo
         self.identity_search_filter: IdentitySearchFilter
         self.identity_upload_progress_bar: QProgressBar
@@ -53,12 +51,12 @@ class IdentityConfiguration(QDialog):
             self.display_new_identity_signal)
 
         # Identity Loader
-        self.identity_grid_paginator.identity_grid.identity_load_started_signal.connect(
+        self.identity_grid_paginator.identity_load_started_signal.connect(
             lambda: self.show_progress_bar(self.identity_load_progress_bar))
-        self.identity_grid_paginator.identity_grid.identity_load_progress_signal.connect(
+        self.identity_grid_paginator.identity_load_progress_signal.connect(
             lambda current, max_: self.update_progress_bar(
                 self.identity_load_progress_bar, current, max_))
-        self.identity_grid_paginator.identity_grid.identity_load_finished_signal.connect(
+        self.identity_grid_paginator.identity_load_finished_signal.connect(
             lambda: self.hide_progress_bar(self.identity_load_progress_bar))
 
         self.init_ui()

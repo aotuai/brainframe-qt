@@ -13,30 +13,25 @@ from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
 
 # Hack to allow class to inherit from both QObject (type=sip.wrappertype) and
 # abc.ABC (type=type)
-class PaginatorMeta(type(QWidget), type(abc.ABCMeta)):
+class PaginatorMeta(type(QWidget), type(abc.ABC)):
     pass
 
 
-class PaginatorClass(QWidget):
-    pass
-
-
-class Paginator(PaginatorClass, metaclass=PaginatorMeta):
+class Paginator(QWidget, metaclass=PaginatorMeta):
 
     def __init__(self, page_size: int, parent=None):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.paginator_ui, self)
 
-        self._widget: QWidget = None
         self._page_size: int = page_size
+        self._current_page: int = 0
+        self._total_items: int = 0
 
-        self.current_page: int = 0
-        self.total_items: int = 0
-
-        self._container_widget: QWidget
-        self.displaying_label: QLabel
-        self.of_label: QLabel
+        self.scroll_area_widget: QWidget
+        self.range_lower_label: QLabel
+        self.range_upper_label: QLabel
+        self.item_total_label: QLabel
         self.prev_page_button: TextIconButton
         self.next_page_button: TextIconButton
 
@@ -46,7 +41,6 @@ class Paginator(PaginatorClass, metaclass=PaginatorMeta):
     def __init_ui(self):
         self.of_label.setContentsMargins(5, 0, 5, 0)
 
-        self.displaying_label: QLabel
         self.displaying_label.setContentsMargins(0, 0, 5, 0)
 
         self.prev_page_button.setIcon(
@@ -54,28 +48,58 @@ class Paginator(PaginatorClass, metaclass=PaginatorMeta):
         self.next_page_button.setIcon(
             self.style().standardIcon(QStyle.SP_ArrowForward))
 
-        self.prev_page_button: TextIconButton
-        self.prev_page_button.setEnabled(True)
-
     def __init_slots_and_signals(self):
         self.prev_page_button.clicked.connect(self.prev_page)
         self.next_page_button.clicked.connect(self.next_page)
 
-    @property
-    def container_widget(self) -> QWidget:
-        return self._container_widget
+    @abc.abstractmethod
+    def add_item(self, item):
+        raise NotImplementedError
 
-    @container_widget.setter
-    def container_widget(self, container_widget: QWidget):
-        layout = self.layout()
-        if self._container_widget:
-            layout.replaceWidget(self._container_widget, container_widget)
-            # No idea why deleteLater does not work here
-            self._container_widget.setParent(None)
-        else:
-            layout.addWidget(container_widget)
-        # noinspection PyAttributeOutsideInit
-        self._container_widget = container_widget
+    def add_widget(self, widget):
+        self.container_layout.addWidget(widget)
+
+    @abc.abstractmethod
+    def clear_layout(self):
+        raise NotImplementedError
+
+    @property
+    def container_layout(self) -> QWidget:
+        return self.scroll_area_widget.layout()
+
+    @container_layout.setter
+    def container_layout(self, container_layout: QWidget):
+        if self.container_layout:
+            self.scroll_area_widget.layout().deleteLater()
+        self.scroll_area_widget.setLayout(container_layout)
+
+        self.current_page = 0
+
+    @property
+    def current_page(self) -> int:
+        return self._current_page
+
+    @current_page.setter
+    def current_page(self, current_page: int):
+        self._current_page = current_page
+        self.display_page(self._current_page)
+
+        self.range_lower_label.setText(str(self.range_lower))
+        self.range_upper_label.setText(str(self.range_upper))
+
+        self.prev_page_button.setDisabled(self.range_lower <= 0)
+
+    @abc.abstractmethod
+    def display_page(self, page: int):
+        raise NotImplementedError
+
+    @pyqtSlot()
+    def next_page(self):
+        self.current_page += 1
+
+    @pyqtSlot()
+    def prev_page(self):
+        self.current_page -= 1
 
     @pyqtProperty(int)
     def page_size(self) -> int:
@@ -85,27 +109,29 @@ class Paginator(PaginatorClass, metaclass=PaginatorMeta):
     def page_size(self, page_size: int):
         self._page_size = page_size
 
+        # Refresh with new page size
+        self.current_page = self.current_page
+
     @property
-    def widget(self) -> QWidget:
-        return self._widget
+    def range_lower(self):
+        # noinspection PyPropertyAccess
+        page_size = self.page_size
+        return self.current_page * page_size
 
-    @widget.setter
-    def widget(self, widget):
-        self._widget = widget
+    @property
+    def range_upper(self):
+        # noinspection PyPropertyAccess
+        page_size = self.page_size
+        return min(self.total_items, self.range_lower + page_size)
 
-    @pyqtSlot()
-    def next_page(self):
-        self.current_page += 1
-        self.get_page(self.current_page)
+    @property
+    def total_items(self) -> int:
+        return self._total_items
 
-    @pyqtSlot()
-    def prev_page(self):
-        self.current_page -= 1
-        self.get_page(self.current_page)
-
-    @abc.abstractmethod
-    def get_page(self, page: int):
-        raise NotImplementedError
+    @total_items.setter
+    def total_items(self, total_items: int):
+        self._total_items = total_items
+        self.item_total_label.setText(str(self._total_items))
 
 
 if __name__ == '__main__':
