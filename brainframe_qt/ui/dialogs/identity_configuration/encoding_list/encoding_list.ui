@@ -46,7 +46,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Encodings Classes:</string>
+        <string>Encoding Classes:</string>
        </property>
       </widget>
      </item>

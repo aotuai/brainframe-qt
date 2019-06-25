@@ -59,6 +59,12 @@ class IdentityGridPaginator(Paginator):
 
     def add_item(self, identity: Identity):
 
+        # Don't add any more widgets if page is already full
+        # noinspection PyPropertyAccess
+        page_size = self.page_size
+        if self.container_layout.count() >= page_size:
+            return
+
         identity_entry = IdentityEntry(identity, self)
         identity_entry.identity_clicked_signal.connect(
             self.identity_clicked_signal)
@@ -95,10 +101,12 @@ class IdentityGridPaginator(Paginator):
         def callback(args):
             identities, total_count = args
 
-            self.add_new_identities_slot(identities)
+            for identity in identities:
+                self.add_item(identity)
             self.total_items = total_count
             self.next_page_button.setDisabled(
                 self.range_upper >= self.total_items)
+            self.range_upper_label.setText(str(self.range_upper))
 
         QTAsyncWorker(self, func, callback).start()
 
@@ -113,13 +121,6 @@ class IdentityGridPaginator(Paginator):
             self.identity_load_started_signal.emit()
 
         identity = self._identities_to_add.pop()
-
-        # Don't add any more widgets if page is already full
-        # noinspection PyPropertyAccess
-        page_size = self.page_size
-        if self.container_layout.count() >= page_size:
-            return
-
         self.add_item(identity)
 
         # Signal load progress
@@ -147,17 +148,3 @@ class IdentityGridPaginator(Paginator):
         # Empty string results in no filtering
         self.encoding_class = encoding_class or None
         self.display_page(0)
-
-    # noinspection PyPropertyAccess
-    @pyqtSlot(object)
-    def add_new_identities_slot(self, identities: List[Identity]):
-        """Called when we want to dynamically add a new identities to the grid
-
-        Connected to:
-        - IdentityConfiguration --> QtDesigner
-          [parent].display_new_identity_signal
-        """
-        if not isinstance(identities, list):
-            identities = [identities]
-        if self.container_layout.count() + 1 < self.page_size:
-            self._identities_to_add.extend(identities)

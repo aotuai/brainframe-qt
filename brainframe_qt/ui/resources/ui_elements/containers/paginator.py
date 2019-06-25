@@ -25,7 +25,7 @@ class Paginator(QWidget, metaclass=PaginatorMeta):
         loadUi(qt_ui_paths.paginator_ui, self)
 
         self._page_size: int = page_size
-        self._current_page: int = 0
+        self.current_page: int = 0
         self._total_items: int = 0
 
         self.scroll_area_widget: QWidget
@@ -73,21 +73,16 @@ class Paginator(QWidget, metaclass=PaginatorMeta):
             self.scroll_area_widget.layout().deleteLater()
         self.scroll_area_widget.setLayout(container_layout)
 
-        self.current_page = 0
+        self.set_current_page(0)
 
-    @property
-    def current_page(self) -> int:
-        return self._current_page
-
-    @current_page.setter
-    def current_page(self, current_page: int):
-        self._current_page = current_page
-        self.display_page(self._current_page)
+    def set_current_page(self, current_page: int):
+        self.current_page = current_page
+        self.display_page(self.current_page)
 
         self.range_lower_label.setText(str(self.range_lower))
         self.range_upper_label.setText(str(self.range_upper))
 
-        self.prev_page_button.setDisabled(self.range_lower <= 0)
+        self.prev_page_button.setDisabled(self.range_lower <= 1)
 
     @abc.abstractmethod
     def display_page(self, page: int):
@@ -95,11 +90,11 @@ class Paginator(QWidget, metaclass=PaginatorMeta):
 
     @pyqtSlot()
     def next_page(self):
-        self.current_page += 1
+        self.set_current_page(self.current_page + 1)
 
     @pyqtSlot()
     def prev_page(self):
-        self.current_page -= 1
+        self.set_current_page(self.current_page - 1)
 
     @pyqtProperty(int)
     def page_size(self) -> int:
@@ -108,21 +103,21 @@ class Paginator(QWidget, metaclass=PaginatorMeta):
     @page_size.setter
     def page_size(self, page_size: int):
         self._page_size = page_size
-
-        # Refresh with new page size
-        self.current_page = self.current_page
+        self.set_current_page(0)
 
     @property
     def range_lower(self):
+        """Inclusive"""
         # noinspection PyPropertyAccess
         page_size = self.page_size
-        return self.current_page * page_size
+        return self.current_page * page_size + 1
 
     @property
     def range_upper(self):
+        """Inclusive"""
         # noinspection PyPropertyAccess
         page_size = self.page_size
-        return min(self.total_items, self.range_lower + page_size)
+        return min(self.total_items, (self.current_page + 1) * page_size)
 
     @property
     def total_items(self) -> int:

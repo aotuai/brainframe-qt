@@ -47,8 +47,9 @@ class IdentityConfiguration(QDialog):
         # noinspection PyUnresolvedReferences
         self.identity_adder.finished.connect(
             lambda: self.hide_progress_bar(self.identity_upload_progress_bar))
-        self.identity_adder.identity_uploaded_signal.connect(
-            self.display_new_identity_signal)
+        # noinspection PyUnresolvedReferences
+        self.identity_adder.finished.connect(
+            lambda: self.identity_grid_paginator.set_current_page(0))
 
         # Identity Loader
         self.identity_grid_paginator.identity_load_started_signal.connect(
