@@ -64,5 +64,25 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>encoding_list</sender>
+   <signal>delete_encoding_class_signal(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>delete_encoding_class_slot(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>delete_encoding_class_slot(QString)</slot>
+ </slots>
 </ui>

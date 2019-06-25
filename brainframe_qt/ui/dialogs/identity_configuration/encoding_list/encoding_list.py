@@ -24,6 +24,8 @@ class EncodingList(QWidget):
     [child].delete_encoding_class_signal
     - IdentitySearchFilter <-- QtDesigner
     [parent].delete_encoding_class_slot
+    - IdentityInfo <-- QtDesigner
+    [parent].delete_encoding_class_slot
     """
 
     def __init__(self, parent=None, encodings=()):

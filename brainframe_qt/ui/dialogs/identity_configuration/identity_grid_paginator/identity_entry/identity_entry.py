@@ -12,6 +12,12 @@ _Form, _Base = loadUiType(qt_ui_paths.identity_entry_ui)
 
 class IdentityEntry(_Form, _Base):
     identity_clicked_signal = pyqtSignal(object)
+    """Emitted whenever the body of the widget is clicked
+    
+    Connected to:
+    - IdentityGridPaginator <-- Dynamic
+      [parent].identity_clicked_signal
+    """
 
     def __new__(cls, *args, **kwargs):
         cls.icon = QPixmap(str(image_paths.person_icon))

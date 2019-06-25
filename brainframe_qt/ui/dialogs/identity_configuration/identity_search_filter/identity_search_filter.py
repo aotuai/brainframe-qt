@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget, QLineEdit
+from PyQt5.QtWidgets import QWidget, QLineEdit, QMessageBox
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
@@ -70,11 +70,21 @@ class IdentitySearchFilter(QWidget):
     @pyqtSlot(str)
     def delete_encoding_class_slot(self, encoding_class: str):
         """Delete event encoding of a class type from all identities on the
-        database"""
+        database
+
+        Connected to:
+        - EncodingList --> Dynamic
+          [child].delete_encoding_class_signal
+        """
 
         self.encoding_list: EncodingList
 
+        # Make sure that user actually wants to delete the entire class
+        if not self._prompt_encoding_class_deletion(encoding_class):
+            return
+
         def func():
+
             api.delete_encodings(class_name=encoding_class)
 
         def callback(_):
@@ -87,3 +97,14 @@ class IdentitySearchFilter(QWidget):
             self.filter_by_encoding_class_signal.emit("")
 
         QTAsyncWorker(self, func, callback).start()
+
+    def _prompt_encoding_class_deletion(self, encoding_class: str) -> bool:
+        message_box = QMessageBox(self)
+        message_box.setText(
+            f"Are you sure you want to delete all encodings with class "
+            f"{encoding_class} from the database?")
+        message_box.setInformativeText("This operation cannot be undone.")
+        message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
+        message_box.setDefaultButton(QMessageBox.Abort)
+
+        return message_box.exec_() == QMessageBox.Yes
