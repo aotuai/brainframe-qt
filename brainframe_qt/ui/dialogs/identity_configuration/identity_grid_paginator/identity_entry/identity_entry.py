@@ -61,7 +61,7 @@ class IdentityEntry(_Form, _Base):
 
         # Make nickname use alt text color from theme
         palette = self.identity_nickname.palette()
-        text_color = palette.placeholderText().color()
+        text_color = palette.mid().color()
         palette.setColor(QPalette.WindowText, text_color)
         self.identity_nickname.setPalette(palette)
 

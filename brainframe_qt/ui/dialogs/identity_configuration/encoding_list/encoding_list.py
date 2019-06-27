@@ -43,7 +43,7 @@ class EncodingList(QWidget):
     def init_ui(self):
         # Make [None] label use alt text color from theme
         palette = self.none_label.palette()
-        text_color = palette.placeholderText().color()
+        text_color = palette.mid().color()
         palette.setColor(QPalette.WindowText, text_color)
         self.none_label.setPalette(palette)
 

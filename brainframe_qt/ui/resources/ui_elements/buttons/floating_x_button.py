@@ -24,7 +24,7 @@ class FloatingXButton(FloatingCircleButton):
         painter.setPen(pen)
 
         palette = self.palette()
-        brush = palette.linkVisited()
+        brush = palette.mid()
         painter.setBrush(brush)
 
         rect_width = self.radius / 6
