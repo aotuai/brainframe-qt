@@ -49,13 +49,11 @@ class IdentityGridPaginator(Paginator):
         self.search_string: str = None
         self.encoding_class: str = None
 
-        self._identities_to_add: List[Identity] = []
         # Stores total number of identities that are to be loading. Also used
         # as a check to see if we're known to be uploading
         self._to_upload = 0
 
         self.container_layout = IdentityGridLayout()
-        self.startTimer(0)
 
     def add_item(self, identity: Identity):
 
@@ -73,7 +71,6 @@ class IdentityGridPaginator(Paginator):
         self.range_upper_label.setText(str(self.range_upper))
 
     def clear_layout(self):
-        self._identities_to_add.clear()
         # noinspection PyUnresolvedReferences
         self.identity_load_finished_signal.emit()
 
@@ -109,31 +106,6 @@ class IdentityGridPaginator(Paginator):
             self.range_upper_label.setText(str(self.range_upper))
 
         QTAsyncWorker(self, func, callback).start()
-
-    def timerEvent(self, timer_event: QTimerEvent):
-        if not self._identities_to_add:
-            return
-
-        # Signal start of loading
-        if self._to_upload == 0:
-            self._to_upload = len(self._identities_to_add)
-            # noinspection PyUnresolvedReferences
-            self.identity_load_started_signal.emit()
-
-        identity = self._identities_to_add.pop()
-        self.add_item(identity)
-
-        # Signal load progress
-        uploaded_so_far = self._to_upload - len(self._identities_to_add)
-        # noinspection PyUnresolvedReferences
-        self.identity_load_progress_signal.emit(
-            uploaded_so_far, self._to_upload)
-
-        # Signal end of uploading
-        if not self._identities_to_add:
-            self._to_upload = 0
-            # noinspection PyUnresolvedReferences
-            self.identity_load_finished_signal.emit()
 
     # Not using a simple property so that Qt can use it as a slot
     @pyqtSlot(str)
