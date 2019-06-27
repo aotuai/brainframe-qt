@@ -151,7 +151,11 @@ class IdentityGridLayout(QLayout):
                     x = m_left + current_col * (col_width + h_spacing)
                 y = m_top + current_row * (row_height + y_spacing)
 
-                item.setGeometry(QRect(x, y, col_width, row_height))
+                # Would like to use item.setGeometry, but for whatever reason,
+                # it does not call item.widget().setGeometry and results in
+                # widgets that are in a grid, but do not fill their space
+                # (i.e. do not expand horizontally)
+                item.widget().setGeometry(QRect(x, y, col_width, row_height))
 
             self.aligned_items = index
 
