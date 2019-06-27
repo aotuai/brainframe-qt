@@ -5,10 +5,11 @@ from . import FloatingCircleButton
 
 
 class FloatingActionButton(FloatingCircleButton):
-    def __init__(self, parent, radius=28,
+    def __init__(self, parent, color, radius=28,
                  alignment=Qt.AlignBottom | Qt.AlignRight,
                  m_left=0, m_top=0, m_right=28, m_bottom=28):
-        super().__init__(parent, radius, alignment,
+
+        super().__init__(parent, radius, alignment, color,
                          m_left, m_top, m_right, m_bottom)
 
     def paintEvent(self, paint_event: QPaintEvent):

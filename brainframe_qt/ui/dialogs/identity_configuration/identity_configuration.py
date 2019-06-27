@@ -81,7 +81,8 @@ class IdentityConfiguration(QDialog):
         self.identity_upload_progress_bar.hide()
 
     def init_fab(self):
-        self.fab = FloatingActionButton(self.identity_grid_paginator)
+        self.fab = FloatingActionButton(self.identity_grid_paginator,
+                                        self.palette().highlight().color())
         # noinspection PyUnresolvedReferences
         self.fab.clicked.connect(self.identity_adder.add_identities_from_file)
 

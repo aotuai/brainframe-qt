@@ -1,15 +1,16 @@
 from PyQt5.QtCore import QSize, QPoint, Qt
-from PyQt5.QtGui import QResizeEvent, QRegion, QPainter, QPaintEvent
+from PyQt5.QtGui import QResizeEvent, QRegion, QPainter, QPaintEvent, QColor
 
 from . import FloatingButton
 
 
 class FloatingCircleButton(FloatingButton):
-    def __init__(self, parent, radius, alignment,
+    def __init__(self, parent, radius, alignment, color: QColor,
                  m_left=0, m_top=0, m_right=0, m_bottom=0):
         super().__init__(alignment, parent=parent)
 
         self.radius = radius
+        self.color = color
 
         size = QSize(self.radius * 2, self.radius * 2)
         size += QSize(m_left + m_right, m_top + m_bottom)
@@ -51,7 +52,7 @@ class FloatingCircleButton(FloatingButton):
 
         palette = self.palette()
         # I have no clue why isDown needs to be flipped here
-        brush = palette.text() if not self.isDown() else palette.shadow()
+        brush = self.color if not self.isDown() else palette.shadow()
         painter.setBrush(brush)
 
         m_left, m_top, _, _ = self.getContentsMargins()
