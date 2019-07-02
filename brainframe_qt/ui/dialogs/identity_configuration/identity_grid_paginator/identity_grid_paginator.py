@@ -1,6 +1,5 @@
-from typing import List
-
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QTimerEvent
+from PyQt5.QtCore import pyqtSlot, pyqtSignal
+from PyQt5.QtWidgets import QWidget
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Identity
@@ -63,12 +62,7 @@ class IdentityGridPaginator(Paginator):
         if self.container_layout.count() >= page_size:
             return
 
-        identity_entry = IdentityEntry(identity, self)
-        identity_entry.identity_clicked_signal.connect(
-            self.identity_clicked_signal)
-        self.add_widget(identity_entry)
-
-        self.range_upper_label.setText(str(self.range_upper))
+        self._create_identity_entry(identity)
 
     def clear_layout(self):
         # noinspection PyUnresolvedReferences
@@ -107,6 +101,23 @@ class IdentityGridPaginator(Paginator):
 
         QTAsyncWorker(self, func, callback).start()
 
+    @pyqtSlot(object)
+    def delete_identity_slot(self, identity: Identity):
+        """Called when we want to delete an Identity from the database
+
+        Connected to:
+        - IdentityEntry --> Dynamic
+        [child].identity_delete_signal
+        """
+
+        def func():
+            api.delete_identity(identity.id)
+
+        def callback(_):
+            self.display_page(self.current_page)
+
+        QTAsyncWorker(self, func, callback).start()
+
     # Not using a simple property so that Qt can use it as a slot
     @pyqtSlot(str)
     def set_search_string(self, search_string: str):
@@ -120,3 +131,13 @@ class IdentityGridPaginator(Paginator):
         # Empty string results in no filtering
         self.encoding_class = encoding_class or None
         self.display_page(0)
+
+    def _create_identity_entry(self, identity: Identity):
+        identity_entry: QWidget = IdentityEntry(identity, self)
+        identity_entry.identity_clicked_signal.connect(
+            self.identity_clicked_signal)
+        identity_entry.identity_delete_signal.connect(
+            self.delete_identity_slot)
+
+        self.add_widget(identity_entry)
+        self.range_upper_label.setText(str(self.range_upper))

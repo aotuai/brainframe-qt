@@ -1,10 +1,12 @@
-from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtCore import pyqtSignal, Qt, QEvent
 from PyQt5.QtGui import QMouseEvent, QPixmap, QPalette, QFontMetrics
 from PyQt5.QtWidgets import QLabel
 from PyQt5.uic import loadUiType
 
 from brainframe.client.api.codecs import Identity
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
+from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
+
 
 # Preload & parse the UI file into memory, for performance reasons
 _Form, _Base = loadUiType(qt_ui_paths.identity_entry_ui)
@@ -17,6 +19,15 @@ class IdentityEntry(_Form, _Base):
     Connected to:
     - IdentityGridPaginator <-- Dynamic
       [parent].identity_clicked_signal
+    """
+    identity_delete_signal = pyqtSignal(object)
+    """Emitted whenever the delete button is clicked
+    
+    Connected to:
+    - FloatingXButton --> Dynamic
+      lambda: self.identity_delete_button.clicked
+    - IdentityGridPaginator <-- Dynamic
+      [parent].delete_identity_slot
     """
 
     def __new__(cls, *args, **kwargs):
@@ -32,9 +43,12 @@ class IdentityEntry(_Form, _Base):
         self.identity_unique_name: QLabel
         self.identity_nickname: QLabel
 
+        self.identity_delete_button: FloatingXButton = None
+
         self.identity: Identity = identity
 
-        self.init_names()
+        self._init_ui()
+        self._init_names()
 
         self.identity_image.setPixmap(self.icon)
 
@@ -43,7 +57,7 @@ class IdentityEntry(_Form, _Base):
         # noinspection PyUnresolvedReferences
         self.identity_clicked_signal.emit(self.identity)
 
-    def init_names(self):
+    def _init_names(self):
 
         label_width = self.maximumWidth()
 
@@ -64,6 +78,25 @@ class IdentityEntry(_Form, _Base):
         text_color = palette.mid().color()
         palette.setColor(QPalette.WindowText, text_color)
         self.identity_nickname.setPalette(palette)
+
+    def _init_ui(self):
+        self.identity_delete_button = FloatingXButton(
+            self, self.palette().highlight())
+        self.identity_delete_button.hide()
+
+        # noinspection PyUnresolvedReferences
+        self.identity_delete_button.clicked.connect(
+            lambda: self.identity_delete_signal.emit(self.identity))
+
+    # noinspection PyPep8Naming
+    def enterEvent(self, event: QEvent) -> bool:
+        self.identity_delete_button.show()
+        return super().enterEvent(event)
+
+    # noinspection PyPep8Naming
+    def leaveEvent(self, event: QEvent) -> bool:
+        self.identity_delete_button.hide()
+        return super().leaveEvent(event)
 
     @staticmethod
     def _apply_elided_text(label: QLabel, text: str, width: int):

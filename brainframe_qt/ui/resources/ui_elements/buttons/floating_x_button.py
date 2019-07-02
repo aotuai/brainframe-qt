@@ -1,14 +1,14 @@
-from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtGui import QPaintEvent, QPainter, QTransform
+from PyQt5.QtCore import Qt, QPointF
+from PyQt5.QtGui import QPaintEvent, QPainter, QPen
 
 from . import FloatingCircleButton
 
 
 class FloatingXButton(FloatingCircleButton):
-    def __init__(self, parent, radius=10,
+    def __init__(self, parent, color, radius=10,
                  alignment=Qt.AlignTop | Qt.AlignRight,
                  m_left=0, m_top=0, m_right=0, m_bottom=0):
-        super().__init__(parent, radius, alignment,
+        super().__init__(parent, radius, alignment, color,
                          m_left, m_top, m_right, m_bottom)
 
     def paintEvent(self, paint_event: QPaintEvent):
@@ -20,26 +20,22 @@ class FloatingXButton(FloatingCircleButton):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        pen = Qt.NoPen
-        painter.setPen(pen)
-
         palette = self.palette()
-        brush = palette.mid()
+        brush = palette.alternateBase()
         painter.setBrush(brush)
 
-        rect_width = self.radius / 6
+        rect_width = self.radius / 5
         rect_length = self.radius
 
         m_left, m_top, _, _ = self.getContentsMargins()
         center_x, center_y = self.radius + m_left, self.radius + m_top
 
-        rect1 = QRect(center_x - (rect_width / 2),
-                      center_y - (rect_length / 2),
-                      rect_width, rect_length)
+        painter.translate(center_x, center_y)
+        painter.rotate(45)
 
-        rect1 = QTransform().rotate(45).mapRect(rect1)
-
-        painter.drawRect(rect1)
-        painter.drawRect(center_x - (rect_length / 2),
-                         center_y - (rect_width / 2),
-                         rect_length, rect_width)
+        pen = QPen(brush, rect_width)
+        painter.setPen(pen)
+        painter.drawLine(QPointF(0, -rect_length / 2),
+                         QPointF(0, rect_length / 2))
+        painter.drawLine(QPointF(-rect_length / 2, 0),
+                         QPointF(rect_length / 2, 0))
