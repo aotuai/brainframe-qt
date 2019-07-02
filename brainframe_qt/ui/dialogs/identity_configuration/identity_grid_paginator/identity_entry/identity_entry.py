@@ -1,24 +1,24 @@
 from PyQt5.QtCore import pyqtSignal, Qt, QEvent
-from PyQt5.QtGui import QMouseEvent, QPixmap, QPalette, QFontMetrics
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QMouseEvent, QPixmap, QPalette, QFontMetrics, \
+    QPaintEvent
+from PyQt5.QtWidgets import QLabel, QStyle, QStyleOption
 from PyQt5.uic import loadUiType
 
 from brainframe.client.api.codecs import Identity
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
 
-
 # Preload & parse the UI file into memory, for performance reasons
 _Form, _Base = loadUiType(qt_ui_paths.identity_entry_ui)
 
 
 class IdentityEntry(_Form, _Base):
-    identity_clicked_signal = pyqtSignal(object)
+    identity_clicked_signal = pyqtSignal(object, bool)
     """Emitted whenever the body of the widget is clicked
     
     Connected to:
     - IdentityGridPaginator <-- Dynamic
-      [parent].identity_clicked_signal
+      [parent].identity_clicked_slot
     """
     identity_delete_signal = pyqtSignal(object)
     """Emitted whenever the delete button is clicked
@@ -46,16 +46,12 @@ class IdentityEntry(_Form, _Base):
         self.identity_delete_button: FloatingXButton = None
 
         self.identity: Identity = identity
+        self._selected: bool = False
 
         self._init_ui()
         self._init_names()
 
         self.identity_image.setPixmap(self.icon)
-
-    # noinspection PyPep8Naming
-    def mouseReleaseEvent(self, event: QMouseEvent):
-        # noinspection PyUnresolvedReferences
-        self.identity_clicked_signal.emit(self.identity)
 
     def _init_names(self):
 
@@ -80,8 +76,9 @@ class IdentityEntry(_Form, _Base):
         self.identity_nickname.setPalette(palette)
 
     def _init_ui(self):
+
         self.identity_delete_button = FloatingXButton(
-            self, self.palette().highlight())
+            self, self.palette().mid())
         self.identity_delete_button.hide()
 
         # noinspection PyUnresolvedReferences
@@ -97,6 +94,45 @@ class IdentityEntry(_Form, _Base):
     def leaveEvent(self, event: QEvent) -> bool:
         self.identity_delete_button.hide()
         return super().leaveEvent(event)
+
+    # noinspection PyPep8Naming
+    def mouseReleaseEvent(self, event: QMouseEvent):
+
+        self.selected = not self.selected
+
+        # noinspection PyUnresolvedReferences
+        self.identity_clicked_signal.emit(self.identity, self.selected)
+
+    # noinspection PyPep8Naming
+    def paintEvent(self, event: QPaintEvent):
+        self._update_background_color()
+
+    @property
+    def selected(self):
+        return self._selected
+
+    @selected.setter
+    def selected(self, selected: bool):
+        self._selected = selected
+        self.repaint()
+
+    def _update_background_color(self):
+        option = QStyleOption()
+        option.initFrom(self)
+
+        hovered = option.state & QStyle.State_MouseOver
+
+        palette = self.parent().palette()
+        if not self.selected and not hovered:
+            background_color = palette.window().color()
+        elif hovered and not self.selected:
+            background_color = palette.alternateBase().color()
+        elif self.selected and not hovered:
+            background_color = palette.dark().color()
+        else:
+            background_color = palette.shadow().color()
+        palette.setColor(QPalette.Window, background_color)
+        self.setPalette(palette)
 
     @staticmethod
     def _apply_elided_text(label: QLabel, text: str, width: int):

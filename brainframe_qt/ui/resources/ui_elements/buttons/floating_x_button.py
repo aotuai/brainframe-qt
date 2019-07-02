@@ -7,7 +7,7 @@ from . import FloatingCircleButton
 class FloatingXButton(FloatingCircleButton):
     def __init__(self, parent, color, radius=10,
                  alignment=Qt.AlignTop | Qt.AlignRight,
-                 m_left=0, m_top=0, m_right=0, m_bottom=0):
+                 m_left=0, m_top=5, m_right=5, m_bottom=0):
         super().__init__(parent, radius, alignment, color,
                          m_left, m_top, m_right, m_bottom)
 
