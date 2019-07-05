@@ -17,5 +17,8 @@ class QTAsyncWorker(QThread):
         # noinspection PyUnresolvedReferences
         self.finished.connect(lambda: callback(self.result))
 
+        # noinspection PyUnresolvedReferences
+        self.finished.connect(self.deleteLater)
+
     def run(self):
         self.result = self.func(*self.args, **self.kwargs)
