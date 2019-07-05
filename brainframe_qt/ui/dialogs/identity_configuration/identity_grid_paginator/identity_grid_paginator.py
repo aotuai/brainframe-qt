@@ -15,8 +15,6 @@ class IdentityGridPaginator(Paginator):
     """Emitted when child IdentityGrid has an identity that is clicked
     
     Connected to:
-    - IdentityEntry --> Dynamic
-      [child].identity_clicked_signal
     - IdentityInfo <-- QtDesigner
       [peer].display_identity_slot
     """
@@ -47,6 +45,9 @@ class IdentityGridPaginator(Paginator):
 
         self.search_string: str = None
         self.encoding_class: str = None
+
+        self._selected_identity_entry: IdentityEntry = None
+        """Currently selected identity entry"""
 
         # Stores total number of identities that are to be loading. Also used
         # as a check to see if we're known to be uploading
@@ -107,7 +108,7 @@ class IdentityGridPaginator(Paginator):
 
         Connected to:
         - IdentityEntry --> Dynamic
-        [child].identity_delete_signal
+          [child].identity_delete_signal
         """
 
         def func():
@@ -117,6 +118,26 @@ class IdentityGridPaginator(Paginator):
             self.display_page(self.current_page)
 
         QTAsyncWorker(self, func, callback).start()
+
+    @pyqtSlot(object, bool)
+    def identity_clicked_slot(self, identity: Identity, selected: bool):
+        """Called whenever an IdentityEntry widget is clicked
+
+        :param identity: The Identity codec of the selected entry
+        :param selected: Whether the entry was selected or deselected
+
+        Connected to:
+        - IdentityEntry --> Dynamic
+          [child].identity_clicked_signal
+        """
+        if selected:
+            if self._selected_identity_entry:
+                self._selected_identity_entry.selected = False
+            self._selected_identity_entry = self.sender()
+            self.identity_clicked_signal.emit(identity)
+        else:
+            self._selected_identity_entry = None
+            self.identity_clicked_signal.emit(None)
 
     # Not using a simple property so that Qt can use it as a slot
     @pyqtSlot(str)
@@ -135,7 +156,7 @@ class IdentityGridPaginator(Paginator):
     def _create_identity_entry(self, identity: Identity):
         identity_entry: QWidget = IdentityEntry(identity, self)
         identity_entry.identity_clicked_signal.connect(
-            self.identity_clicked_signal)
+            self.identity_clicked_slot)
         identity_entry.identity_delete_signal.connect(
             self.delete_identity_slot)
 

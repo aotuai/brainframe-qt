@@ -109,5 +109,5 @@ class EncodingEntry(QWidget):
             background_color = palette.dark().color()
         else:
             background_color = palette.shadow().color()
-        palette.setColor(QPalette.Background, background_color)
+        palette.setColor(QPalette.Window, background_color)
         self.setPalette(palette)

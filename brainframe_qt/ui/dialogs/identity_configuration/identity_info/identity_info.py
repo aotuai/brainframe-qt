@@ -70,10 +70,16 @@ class IdentityInfo(QWidget):
     def display_identity_slot(self, identity: Identity):
         """Called to display the information for the specified identity
 
+        If identity == None, the widget is hidden
+
         Connected to:
         - IdentityGridPaginator --> QtDesigner
           [peer].identity_clicked_signal
         """
+        if identity is None:
+            self.hide()
+            return
+
         self.identity = identity
 
         self.unique_name.setText(f"Unique Name: {identity.unique_name}")
