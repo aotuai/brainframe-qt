@@ -7,8 +7,9 @@ import multiprocessing
 from brainframe.shared import preimport_hooks
 
 from argparse import ArgumentParser
-from time import sleep
+import faulthandler
 import sys
+from time import sleep
 
 from requests.exceptions import ConnectionError
 from PyQt5.QtGui import QIcon
@@ -37,6 +38,8 @@ def parse_args():
 
 
 if __name__ == "__main__":
+    faulthandler.enable()
+
     environment.set_up_environment()
 
     # Handle Keyboard Interrupt

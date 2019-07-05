@@ -6,75 +6,138 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
-    <height>512</height>
+    <width>1487</width>
+    <height>975</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Identity Configuration</string>
+   <string>Identities</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="1" colspan="2">
-    <widget class="QProgressBar" name="progress_bar">
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="main_layout" stretch="1,3,1">
+     <item>
+      <widget class="IdentitySearchFilter" name="identity_search_filter"/>
+     </item>
+     <item>
+      <widget class="IdentityGridPaginator" name="identity_grid_paginator"/>
+     </item>
+     <item>
+      <widget class="IdentityInfo" name="identity_info"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="identity_upload_progress_bar">
      <property name="value">
       <number>0</number>
      </property>
-     <property name="invertedAppearance">
-      <bool>false</bool>
+     <property name="format">
+      <string>Uploading Identities: %p%</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="identity_load_progress_bar">
+     <property name="value">
+      <number>0</number>
      </property>
      <property name="format">
-      <string>Uploading Images: %p%</string>
+      <string>Loading Identities: %p%</string>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Identities currently in database:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QPushButton" name="add_identities_button">
-     <property name="text">
-      <string>Add Identities</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" rowspan="2">
-    <widget class="TreeWidget" name="identity_tree">
-     <attribute name="headerVisible">
-      <bool>false</bool>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>Element</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TreeWidget</class>
-   <extends>QTreeWidget</extends>
-   <header>brainframe.client.ui.dialogs.identity_configuration.identity_error_popup.tree_widget.tree_widget</header>
+   <class>IdentityGridPaginator</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.dialogs.identity_configuration.identity_grid_paginator.identity_grid_paginator</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>IdentitySearchFilter</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.dialogs.identity_configuration.identity_search_filter.identity_search_filter</header>
+  </customwidget>
+  <customwidget>
+   <class>IdentityInfo</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.dialogs.identity_configuration.identity_info.identity_info</header>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>identity_search_filter</sender>
+   <signal>filter_by_encoding_class_signal(QString)</signal>
+   <receiver>identity_grid_paginator</receiver>
+   <slot>set_encoding_class(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>121</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>identity_search_filter</sender>
+   <signal>filter_by_search_string_signal(QString)</signal>
+   <receiver>identity_grid_paginator</receiver>
+   <slot>set_search_string(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>297</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>identity_grid_paginator</sender>
+   <signal>identity_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>identity_info</receiver>
+   <slot>display_identity_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>850</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1235</x>
+     <y>128</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>display_new_identity(PyQt_PyObject)</signal>
+  <slot>show_identity_info_slot(PyQt_PyObject)</slot>
+ </slots>
 </ui>

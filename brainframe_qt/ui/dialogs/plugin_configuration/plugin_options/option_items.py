@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
     QPushButton, QSizePolicy, QStyle, QStyleOptionButton
 
 from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
+from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
 
 
 class PluginOptionItem(ABC):
@@ -52,28 +53,11 @@ class PluginOptionItem(ABC):
         # Set tooltip of description button and disable button, otherwise no
         # button
         if description:
-            self.tooltip_button = QPushButton("❓", parent=parent)
+            self.tooltip_button = TextIconButton("❓", parent=parent)
+            self.tooltip_button.setFlat(True)
             self.tooltip_button.setToolTip(description)
             self.tooltip_button.setDisabled(True)
             self.tooltip_button.setToolTipDuration(0)
-
-            # Set min width of button properly
-            # https://stackoverflow.com/a/19502467/8134178
-            text_size = self.tooltip_button.fontMetrics().size(
-                Qt.TextShowMnemonic,
-                self.tooltip_button.text())
-            options = QStyleOptionButton()
-            options.initFrom(self.tooltip_button)
-            options.rect.setSize(text_size)
-            button_size = self.tooltip_button.style().sizeFromContents(
-                QStyle.CT_PushButton,
-                options,
-                text_size,
-                self.tooltip_button)
-            self.tooltip_button.setMaximumSize(button_size)
-
-            self.tooltip_button.setSizePolicy(QSizePolicy.Maximum,
-                                              QSizePolicy.Preferred)
         else:
             self.tooltip_button = None
 

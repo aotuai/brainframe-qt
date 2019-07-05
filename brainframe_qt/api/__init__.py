@@ -11,25 +11,29 @@ class APIWrapper(API):
     def __getattribute__(self, item):
         """If __getattribute__ fails, this is called"""
         server_url = object.__getattribute__(self, "_server_url")
+
+        # If the server url is set (or we're accessing it), return the real
+        # attribute
         if server_url or item == "set_url":
             return object.__getattribute__(self, item)
+
+        # Otherwise return an empty shell of a function. Everything below is
+        # used somewhere in QtDesigner plugin, so it needs to be faked
         if item == "get_stream_configurations":
-            return object.__getattribute__(self, "_" + item)
+            return lambda: []
         if item == "get_status_poller":
-            return object.__getattribute__(self, "_" + item)
+            return lambda: None
         if item == "get_plugins":
             return lambda: []
-        return None
+        if item == "get_identities":
+            return lambda: []
+        if item == "get_encodings":
+            return lambda: []
+        if item == "get_encoding_class_names":
+            return lambda: []
 
-    @staticmethod
-    def _get_stream_configurations():
-        return []
-
-    @staticmethod
-    def _get_status_poller():
         return None
 
 
 # API instance that is later monkeypatched to be a singleton
 api: API = APIWrapper()
-
