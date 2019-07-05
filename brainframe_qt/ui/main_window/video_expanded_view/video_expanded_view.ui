@@ -57,9 +57,6 @@
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QToolButton" name="hide_button"/>
-      </item>
      </layout>
     </widget>
    </item>
@@ -151,34 +148,18 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AlertLog</class>
-   <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.video_expanded_view.alert_log.alert_log</header>
-  </customwidget>
-  <customwidget>
    <class>VideoLarge</class>
    <extends>QGraphicsView</extends>
    <header>brainframe.client.ui.main_window.video_expanded_view.video_large.video_large</header>
   </customwidget>
+  <customwidget>
+   <class>AlertLog</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_expanded_view.alert_log.alert_log</header>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>hide_button</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>expanded_stream_closed_slot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1052</x>
-     <y>43</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>1</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>task_config_button</sender>
    <signal>clicked()</signal>
