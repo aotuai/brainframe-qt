@@ -86,14 +86,14 @@ class IdentityEntry(_Form, _Base):
             lambda: self.identity_delete_signal.emit(self.identity))
 
     # noinspection PyPep8Naming
-    def enterEvent(self, event: QEvent) -> bool:
+    def enterEvent(self, event: QEvent):
         self.identity_delete_button.show()
-        return super().enterEvent(event)
+        super().enterEvent(event)
 
     # noinspection PyPep8Naming
-    def leaveEvent(self, event: QEvent) -> bool:
+    def leaveEvent(self, event: QEvent):
         self.identity_delete_button.hide()
-        return super().leaveEvent(event)
+        super().leaveEvent(event)
 
     # noinspection PyPep8Naming
     def mouseReleaseEvent(self, event: QMouseEvent):
