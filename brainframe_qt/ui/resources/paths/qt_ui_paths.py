@@ -71,6 +71,9 @@ plugin_list_item_ui        = route_path(plugin_list_item_dir      , "plugin_list
 plugin_options_dir         = route_path(plugin_config_dir         , "plugin_options"           )
 plugin_options_ui          = route_path(plugin_options_dir        , "plugin_options.ui"        )
 
+server_configuration_dir   = route_path(dialogs_dir               , "server_configuration"     )
+server_configuration_ui    = route_path(server_configuration_dir  , "server_configuration.ui"  )
+
 stream_configuration_dir   = route_path(dialogs_dir               , "stream_configuration"     )
 stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )
 

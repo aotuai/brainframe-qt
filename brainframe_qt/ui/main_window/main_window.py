@@ -12,9 +12,9 @@ from brainframe.client.ui.dialogs import (
     StreamConfigurationDialog,
     IdentityConfiguration,
     PluginConfigDialog,
-    RenderConfiguration
+    RenderConfiguration,
+    ServerConfigurationDialog
 )
-
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
 
 
@@ -33,6 +33,7 @@ class MainWindow(QMainWindow):
         plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
         about_page_icon = QIcon(str(image_paths.information_icon))
 
+        self.server_configuration_action.setIcon(identity_config_icon)
         self.add_stream_action.setIcon(new_stream_icon)
         self.video_configuration_action.setIcon(video_config_icon)
         self.identity_configuration_action.setIcon(identity_config_icon)
@@ -67,6 +68,10 @@ class MainWindow(QMainWindow):
     def hide_video_expanded_view(self):
         """Called by expanded_view when expanded video is closed"""
         self.video_expanded_view.setHidden(True)
+
+    @pyqtSlot()
+    def show_server_configuration_dialog_slot(self):
+        ServerConfigurationDialog.show_dialog(self)
 
     @pyqtSlot()
     def new_stream(self):

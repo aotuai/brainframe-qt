@@ -66,6 +66,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="server_configuration_action"/>
    <addaction name="add_stream_action"/>
    <addaction name="video_configuration_action"/>
    <addaction name="identity_configuration_action"/>
@@ -110,6 +111,14 @@
    </property>
    <property name="toolTip">
     <string>Configure client UI for videos</string>
+   </property>
+  </action>
+  <action name="server_configuration_action">
+   <property name="text">
+    <string>Server Configuration</string>
+   </property>
+   <property name="toolTip">
+    <string>Configure the settings for the BrainFrame server</string>
    </property>
   </action>
  </widget>
@@ -206,6 +215,12 @@
      <y>272</y>
     </hint>
    </hints>
+  </connection>
+  <connection>
+   <sender>server_configuration_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_server_configuration_dialog_slot()</slot>
   </connection>
   <connection>
    <sender>add_stream_action</sender>

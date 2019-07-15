@@ -1,6 +1,11 @@
+import sys
+
 from PyQt5.QtCore import QSettings
 
-_settings = QSettings()
+_settings = QSettings(
+    # MacOS uses internet domain instead of organization name
+    'dilililabs.com' if sys.platform == 'darwin' else 'dilili-labs',
+    'brainframe')
 
 
 class Setting:
@@ -9,10 +14,10 @@ class Setting:
     to worry about keeping the name the same everywhere. It also helps refactor.
     """
 
-    def __init__(self, default, type, name):
+    def __init__(self, default, type_, name):
         """Set the default if it doesn't exist yet"""
         self.default = default
-        self.type = type
+        self.type = type_
         self.name = name
         self._cache = None
 
@@ -30,26 +35,31 @@ class Setting:
         return self._cache
 
 
+# System configuration settings
+server_url = Setting(
+    "http://localhost:8000", type_=str, name="server_url"
+)
+
 # License settings
 client_license_accepted = Setting(
-    False, type=bool, name="client_license_accepted")
+    False, type_=bool, name="client_license_accepted")
 client_license_md5 = Setting(
-    None, type=str, name="client_license_md5")
+    None, type_=str, name="client_license_md5")
 
 # Render Configuration Settings
 draw_lines = Setting(
-    True, type=bool, name="video_draw_lines")
+    True, type_=bool, name="video_draw_lines")
 draw_regions = Setting(
-    True, type=bool, name="video_draw_regions")
+    True, type_=bool, name="video_draw_regions")
 draw_detections = Setting(
-    True, type=bool, name="video_draw_detections")
+    True, type_=bool, name="video_draw_detections")
 use_polygons = Setting(
-    True, type=bool, name="video_use_polygons")
+    True, type_=bool, name="video_use_polygons")
 show_detection_tracks = Setting(
-    True, type=bool, name="video_show_tracks")
+    True, type_=bool, name="video_show_tracks")
 show_recognition_confidence = Setting(
-    True, type=bool, name="video_show_confidence")
+    True, type_=bool, name="video_show_confidence")
 show_detection_labels = Setting(
-    True, type=bool, name="video_show_detection_labels")
+    True, type_=bool, name="video_show_detection_labels")
 show_attributes = Setting(
-    True, type=bool, name="video_show_attributes")
+    True, type_=bool, name="video_show_attributes")

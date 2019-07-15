@@ -1,12 +1,7 @@
-import logging
-import os
-import multiprocessing
-
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
 from brainframe.shared import preimport_hooks
 
-from argparse import ArgumentParser
 import faulthandler
 import sys
 from time import sleep
@@ -16,45 +11,23 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
 from brainframe.client.api import api
-from brainframe.client.ui import (
-    MainWindow,
-    SplashScreen,
-    LicenseAgreement)
+from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
+from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared import environment
 
-
-def parse_args():
-    parser = ArgumentParser(description="This runs the BrainFrame client")
-    parser.add_argument("-a", "--api-url", type=str,
-                        default="http://localhost:8000",
-                        help="The URL that the server is currently running "
-                             "on. This can be localhost, or a local IP, or a "
-                             "remote IP depending on your setup.")
-    args = parser.parse_args()
-
-    return args
-
-
 if __name__ == "__main__":
+
     faulthandler.enable()
 
     environment.set_up_environment()
-
-    # Handle Keyboard Interrupt
-    args = parse_args()
-
-    # Set the API url
-    api.set_url(args.api_url)
 
     # Run the UI
     app = QApplication(sys.argv)
 
     app.setWindowIcon(QIcon(str(image_paths.application_icon)))
-    app.setOrganizationName('dilili-labs')
     app.setOrganizationDomain('dilililabs.com')
-    app.setApplicationName('brainframe')
 
     # Ensure that user has accepted license agreement. Otherwise close program
     if not LicenseAgreement.get_agreement():
@@ -64,12 +37,20 @@ if __name__ == "__main__":
 
     # Show splash screen while waiting for server connection
     with SplashScreen() as splash_screen:
-        splash_screen.showMessage("Attempting to connect to server")
 
         while True:
             try:
-                configs = api.get_stream_configurations()
-            except ConnectionError:
+
+                server_url = settings.server_url.val()
+
+                splash_screen.showMessage(f"Attempting to connect to server "
+                                          f"at {server_url}")
+
+                # Set the API url (in the event that it has been reconfigured
+                # since launch
+                api.set_url(server_url)
+                api.get_stream_configurations()
+            except (ConnectionError, ConnectionRefusedError):
                 # Server not started yet
                 app.processEvents()
 
