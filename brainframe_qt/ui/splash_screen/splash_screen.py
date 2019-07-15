@@ -15,7 +15,7 @@ class SplashScreen(QSplashScreen):
 
         # Force window to be borderless (like a splashscreen, but also let it
         # have a taskbar icon and be draggable)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
 
         self.current_message = super().message()
         """Message without the ellipses"""
