@@ -32,8 +32,10 @@ class MainWindow(QMainWindow):
         identity_config_icon = QIcon(str(image_paths.settings_gear_icon))
         plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
         about_page_icon = QIcon(str(image_paths.information_icon))
+        server_configuration_icon = \
+            QIcon(str(image_paths.server_configuration_icon))
 
-        self.server_configuration_action.setIcon(identity_config_icon)
+        self.server_configuration_action.setIcon(server_configuration_icon)
         self.add_stream_action.setIcon(new_stream_icon)
         self.video_configuration_action.setIcon(video_config_icon)
         self.identity_configuration_action.setIcon(identity_config_icon)
