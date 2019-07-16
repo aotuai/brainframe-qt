@@ -1,7 +1,4 @@
-from abc import ABC, abstractmethod
-
-from PyQt5.QtCore import Qt, QEvent, QObject, QPoint, QRect
-from PyQt5.QtGui import QPaintEvent, QMouseEvent, QRegion
+from PyQt5.QtCore import Qt, QEvent, QObject
 from PyQt5.QtWidgets import QAbstractButton
 
 

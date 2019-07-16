@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget, QSizePolicy
 from PyQt5.uic import loadUi
@@ -16,6 +16,8 @@ from brainframe.client.ui.dialogs import (
     ServerConfigurationDialog
 )
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
+from brainframe.client.ui.resources.ui_elements.buttons import \
+    FloatingActionButton
 
 
 class MainWindow(QMainWindow):
@@ -26,19 +28,17 @@ class MainWindow(QMainWindow):
 
         loadUi(qt_ui_paths.main_window_ui, self).show()
 
-        # Add icons to buttons in toolbar
-        new_stream_icon = QIcon(str(image_paths.new_stream_icon))
-        video_config_icon = QIcon(str(image_paths.video_settings_icon))
-        identity_config_icon = QIcon(str(image_paths.settings_gear_icon))
-        plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
-        about_page_icon = QIcon(str(image_paths.information_icon))
+        self._init_ui()
 
-        self.server_configuration_action.setIcon(identity_config_icon)
-        self.add_stream_action.setIcon(new_stream_icon)
-        self.video_configuration_action.setIcon(video_config_icon)
-        self.identity_configuration_action.setIcon(identity_config_icon)
-        self.plugin_configuration_action.setIcon(plugin_config_icon)
-        self.show_about_page_action.setIcon(about_page_icon)
+    def _init_ui(self):
+
+        self._setup_toolbar()
+
+        self.add_new_stream_button = FloatingActionButton(
+            self.video_thumbnail_view,
+            self.palette().highlight())
+        self.add_new_stream_button.show()  # No idea why this is necessary
+        self.add_new_stream_button.clicked.connect(self.add_new_stream_slot)
 
         # Add a spacer to make the license button appear right justified
         spacer = QWidget()
@@ -59,6 +59,20 @@ class MainWindow(QMainWindow):
             f"    background-repeat: no-repeat;"
             f"}}")
 
+    def _setup_toolbar(self):
+        # Add icons to buttons in toolbar
+        new_stream_icon = QIcon(str(image_paths.new_stream_icon))
+        video_config_icon = QIcon(str(image_paths.video_settings_icon))
+        identity_config_icon = QIcon(str(image_paths.settings_gear_icon))
+        plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
+        about_page_icon = QIcon(str(image_paths.information_icon))
+
+        self.server_configuration_action.setIcon(identity_config_icon)
+        self.video_configuration_action.setIcon(video_config_icon)
+        self.identity_configuration_action.setIcon(identity_config_icon)
+        self.plugin_configuration_action.setIcon(plugin_config_icon)
+        self.show_about_page_action.setIcon(about_page_icon)
+
     @pyqtSlot()
     def show_video_expanded_view(self):
         """Called by thumbnail_view when a thumbnail is clicked"""
@@ -74,7 +88,8 @@ class MainWindow(QMainWindow):
         ServerConfigurationDialog.show_dialog(self)
 
     @pyqtSlot()
-    def new_stream(self):
+    def add_new_stream_slot(self):
+        """Open dialog to add a new stream and then send it to the server"""
 
         stream_conf = StreamConfigurationDialog.configure_stream()
         if stream_conf is None:
