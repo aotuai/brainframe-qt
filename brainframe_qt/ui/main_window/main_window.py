@@ -34,11 +34,12 @@ class MainWindow(QMainWindow):
 
         self._setup_toolbar()
 
-        self.add_new_stream_button = FloatingActionButton(
+        add_new_stream_button = FloatingActionButton(
             self.video_thumbnail_view,
             self.palette().highlight())
-        self.add_new_stream_button.show()  # No idea why this is necessary
-        self.add_new_stream_button.clicked.connect(self.add_new_stream_slot)
+        add_new_stream_button.show()  # No idea why this is necessary
+        add_new_stream_button.clicked.connect(self.add_new_stream_slot)
+        add_new_stream_button.setToolTip("Add new stream")
 
         # Add a spacer to make the license button appear right justified
         spacer = QWidget()
