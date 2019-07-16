@@ -61,13 +61,14 @@ class MainWindow(QMainWindow):
 
     def _setup_toolbar(self):
         # Add icons to buttons in toolbar
-        new_stream_icon = QIcon(str(image_paths.new_stream_icon))
         video_config_icon = QIcon(str(image_paths.video_settings_icon))
         identity_config_icon = QIcon(str(image_paths.settings_gear_icon))
         plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
         about_page_icon = QIcon(str(image_paths.information_icon))
+        server_configuration_icon = \
+            QIcon(str(image_paths.server_configuration_icon))
 
-        self.server_configuration_action.setIcon(identity_config_icon)
+        self.server_configuration_action.setIcon(server_configuration_icon)
         self.video_configuration_action.setIcon(video_config_icon)
         self.identity_configuration_action.setIcon(identity_config_icon)
         self.plugin_configuration_action.setIcon(plugin_config_icon)
