@@ -15,7 +15,7 @@ class ZoneStubMixin(Stub):
         """
         req = "/api/zones"
         params = {"stream_id": stream_id} if stream_id else None
-        data = self._get(req, params=params)
+        data, _ = self._get_json(req, params=params)
         zones = [Zone.from_dict(j) for j in data]
         return zones
 
@@ -24,7 +24,7 @@ class ZoneStubMixin(Stub):
         :param zone_id: The ID of the zone to get
         """
         req = f"/api/zones/{zone_id}"
-        data = self._get(req)
+        data, _ = self._get_json(req)
         return Zone.from_dict(data)
 
     def set_zone(self, zone: Zone):

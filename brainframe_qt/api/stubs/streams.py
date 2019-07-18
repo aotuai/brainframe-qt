@@ -47,7 +47,7 @@ class StreamStubMixin(Stub):
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
         req = "/api/streams"
-        data = self._get(req)
+        data, _ = self._get_json(req)
 
         configs = [StreamConfiguration.from_dict(d) for d in data]
         return configs
@@ -82,7 +82,7 @@ class StreamStubMixin(Stub):
         :return: The URL
         """
         req = f"/api/streams/{stream_id}/url"
-        url = self._get(req)
+        url, _ = self._get_json(req)
         return url
 
     def get_stream_reader(self, stream_config: StreamConfiguration) \
@@ -113,7 +113,7 @@ class StreamStubMixin(Stub):
         :return: Runtime options
         """
         req = f"/api/streams/{stream_id}/runtime_options"
-        runtime_options = self._get(req)
+        runtime_options, _ = self._get_json(req)
 
         return runtime_options
 

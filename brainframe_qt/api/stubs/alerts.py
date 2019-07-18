@@ -36,7 +36,7 @@ class AlertStubMixin(Stub):
         if offset is not None:
             params["offset"] = offset
 
-        data, headers = self._get_with_headers(req, params=params)
+        data, headers = self._get_json(req, params=params)
         alerts = [Alert.from_dict(a) for a in data]
 
         total_count = int(headers["Total-Count"])
@@ -62,7 +62,7 @@ class AlertStubMixin(Stub):
         """
         req = f"/api/alerts/{alert_id}/frame"
         try:
-            img_bytes, _ = self._get_raw(req)
+            img_bytes, _ = self._get(req)
             return image_utils.decode(img_bytes)
         except api_errors.FrameNotFoundForAlertError:
             return None

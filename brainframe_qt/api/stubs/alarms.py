@@ -12,7 +12,7 @@ class ZoneAlarmStubMixin(Stub):
         :return: The alarm
         """
         req = f"/api/zone_alarms/{alarm_id}"
-        data = self._get(req)
+        data, _ = self._get_json(req)
 
         return ZoneAlarm.from_dict(data)
 

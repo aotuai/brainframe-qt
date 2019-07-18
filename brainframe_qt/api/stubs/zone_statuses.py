@@ -21,7 +21,7 @@ class ZoneStatusStubMixin(Stub):
         }
         """
         req = "/api/streams/status"
-        data = self._get(req)
+        data, _ = self._get_json(req)
 
         # Convert ZoneStatuses to Codecs
         out = {int(s_id): {key: ZoneStatus.from_dict(val)

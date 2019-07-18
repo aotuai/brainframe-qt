@@ -49,6 +49,7 @@ if __name__ == "__main__":
                 # Set the API url (in the event that it has been reconfigured
                 # since launch
                 api.set_url(server_url)
+                api.set_credentials("user", "password")
                 api.get_stream_configurations()
             except (ConnectionError, ConnectionRefusedError):
                 # Server not started yet

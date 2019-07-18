@@ -18,7 +18,7 @@ class IdentityStubMixin(Stub):
         :return: Identity
         """
         req = f"/api/identities/{identity_id}"
-        identity = self._get(req)
+        identity, _ = self._get_json(req)
 
         return Identity.from_dict(identity)
 
@@ -64,7 +64,7 @@ class IdentityStubMixin(Stub):
         if sort_by is not None:
             params["sort_by"] = sort_by.query_format()
 
-        identities, headers = self._get_with_headers(req, params=params)
+        identities, headers = self._get_json(req, params=params)
         identities = [Identity.from_dict(d) for d in identities]
 
         total_count = int(headers["Total-Count"])

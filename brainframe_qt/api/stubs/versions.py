@@ -12,5 +12,5 @@ class VersionStubMixIn(Stub):
         """
         req = f"/api/version"
 
-        resp = self._get(req)
+        resp, _ = self._get_json(req)
         return resp

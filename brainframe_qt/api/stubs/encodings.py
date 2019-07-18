@@ -24,7 +24,7 @@ class EncodingStubMixIn(Stub):
         if class_name is not None:
             params["class_name"] = class_name
 
-        encodings = self._get(req, params=params)
+        encodings, _ = self._get_json(req, params=params)
         encodings = [Encoding.from_dict(e) for e in encodings]
 
         return encodings
@@ -43,7 +43,7 @@ class EncodingStubMixIn(Stub):
         if identity_id is not None:
             params["identity_id"] = identity_id
 
-        encodings = self._get(req, params=params)
+        encodings, _ = self._get_json(req, params=params)
         class_names = [e["class_name"] for e in encodings]
 
         return class_names
@@ -56,7 +56,7 @@ class EncodingStubMixIn(Stub):
         """
         req = f"/api/encodings/{encoding_id}"
 
-        encoding = self._get(req)
+        encoding, _ = self._get_json(req)
         return Encoding.from_dict(encoding)
 
     def delete_encoding(self, encoding_id):
