@@ -11,14 +11,16 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
 from brainframe.client.api import api
+from brainframe.client.api import api_errors
 from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import image_paths
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared import environment
+from brainframe.shared.secret import decrypt
 
-if __name__ == "__main__":
 
+def main():
     faulthandler.enable()
 
     environment.set_up_environment()
@@ -35,23 +37,18 @@ if __name__ == "__main__":
 
     gobject_init.start()
 
+    init_server_settings()
+
     # Show splash screen while waiting for server connection
     with SplashScreen() as splash_screen:
 
         while True:
             try:
-
-                server_url = settings.server_url.val()
-
                 splash_screen.showMessage(f"Attempting to connect to server "
-                                          f"at {server_url}")
-
-                # Set the API url (in the event that it has been reconfigured
-                # since launch
-                api.set_url(server_url)
-                api.set_credentials("user", "password")
-                api.get_stream_configurations()
-            except (ConnectionError, ConnectionRefusedError):
+                                          f"at {settings.server_url.val()}")
+                api.version()
+            except (ConnectionError, ConnectionRefusedError,
+                    api_errors.UnauthorizedError):
                 # Server not started yet
                 app.processEvents()
 
@@ -74,3 +71,17 @@ if __name__ == "__main__":
     api.close()
 
     gobject_init.close()
+
+
+def init_server_settings():
+    api.set_url(settings.server_url.val())
+
+    username = settings.server_username.val()
+
+    if username:
+        password = decrypt(settings.server_password.val())
+        api.set_credentials((username, password))
+
+
+if __name__ == '__main__':
+    main()

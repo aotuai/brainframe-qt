@@ -34,10 +34,20 @@ class Setting:
             self._cache = _settings.value(self.name, type=self.type)
         return self._cache
 
+    def delete(self):
+        _settings.remove(self.name)
+        self._cache = None
+
 
 # System configuration settings
 server_url = Setting(
     "http://localhost:8000", type_=str, name="server_url"
+)
+server_username = Setting(
+    None, type_=str, name="server_username"
+)
+server_password = Setting(
+    None, type_=bytes, name="server_password"
 )
 
 # License settings
