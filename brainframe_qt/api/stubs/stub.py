@@ -1,4 +1,4 @@
-from typing import Tuple, Any
+from typing import Tuple, Any, Optional
 import ujson
 import requests
 import logging
@@ -14,16 +14,20 @@ class Stub:
     communicating with the API easier.
     """
     _server_url = None
-    _username = None
-    _password = None
+    _credentials = None
     _session_id = None
 
     def set_url(self, url):
         self._server_url = url
 
-    def set_credentials(self, username, password):
-        self._username = username
-        self._password = password
+    def set_credentials(self, credentials: Optional[Tuple[str, str]]):
+        """Start authorizing requests with the given credentials for all future
+        requests.
+
+        :param credentials: The username and password in a tuple, or None to
+            not use authorization on requests
+        """
+        self._credentials = credentials
 
         # Stop using the old session with outdated credentials
         self._session_id = None
@@ -198,7 +202,7 @@ class Stub:
         :param request: The request to send
         :return: The body of the request, and all response headers
         """
-        if self._username is None:
+        if self._credentials is None:
             # No credentials provided, send the request without any auth
             resp = self._send_no_auth(request)
         elif self._session_id is None:
@@ -221,7 +225,7 @@ class Stub:
     def _send_with_credentials(self, request: requests.Request) \
             -> requests.Response:
         """Sends the given request with HTTP Basic Authorization."""
-        request.auth = (self._username, self._password)
+        request.auth = self._credentials
 
         resp = self._send_request(request)
         if not resp.ok:
