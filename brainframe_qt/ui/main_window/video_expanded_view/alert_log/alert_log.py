@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSlot, QTimer
 from PyQt5.QtWidgets import QVBoxLayout, QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.client.api import api
+from brainframe.client.api import api, api_errors
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from .alert_log_entry import AlertLogEntry
 
@@ -34,9 +34,14 @@ class AlertLog(QWidget):
 
         existing_alert_ids = set(self.alert_widgets.keys())
 
-        # Get a page of the 100 most recent alerts
-        unverified_alerts, total_count = api.get_unverified_alerts(
-            self.stream_id, limit=100, offset=0)
+        try:
+            # Get a page of the 100 most recent alerts
+            unverified_alerts, total_count = api.get_unverified_alerts(
+                self.stream_id, limit=100, offset=0)
+        except api_errors.StreamConfigNotFoundError:
+            self._delete_alerts(existing_alert_ids)
+            return
+
         unverified_alerts = unverified_alerts[::-1]
         unverified_alert_ids = set(alert.id for alert in unverified_alerts)
 
@@ -64,7 +69,10 @@ class AlertLog(QWidget):
 
         # Remove deleted alerts
         deleted_alert_ids = existing_alert_ids - unverified_alert_ids
-        for alert_id in deleted_alert_ids:
+        self._delete_alerts(deleted_alert_ids)
+
+    def _delete_alerts(self, alert_ids):
+        for alert_id in alert_ids:
             self.alert_widgets[alert_id].deleteLater()
             self.alert_widgets.pop(alert_id)
 

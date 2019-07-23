@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent, QTimerEvent
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
@@ -57,6 +57,14 @@ class VideoExpandedView(QWidget):
     def leaveEvent(self, event: QEvent):
         self.hide_button.hide()
         super().leaveEvent(event)
+
+    def timerEvent(self, timer_event: QTimerEvent):
+        """Close the expanded view if the currently open stream no longer
+        exists on the server"""
+        for stream_conf in api.get_stream_configurations():
+            if self.stream_conf.id == stream_conf.id:
+                return
+        self.expanded_stream_closed_slot()
 
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
