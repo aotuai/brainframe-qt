@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>IdentitySearchFilter</class>
+ <widget class="QWidget" name="IdentitySearchFilter">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">IdentitySearchFilter</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0">
    <property name="leftMargin">
@@ -87,7 +87,7 @@
   <connection>
    <sender>search_line_edit</sender>
    <signal>textChanged(QString)</signal>
-   <receiver>Form</receiver>
+   <receiver>IdentitySearchFilter</receiver>
    <slot>filter_by_search_string_signal(QString)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -103,7 +103,7 @@
   <connection>
    <sender>encoding_list</sender>
    <signal>encoding_entry_selected_signal(QString)</signal>
-   <receiver>Form</receiver>
+   <receiver>IdentitySearchFilter</receiver>
    <slot>filter_by_encoding_class_signal(QString)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -119,7 +119,7 @@
   <connection>
    <sender>encoding_list</sender>
    <signal>delete_encoding_class_signal(QString)</signal>
-   <receiver>Form</receiver>
+   <receiver>IdentitySearchFilter</receiver>
    <slot>delete_encoding_class_slot(QString)</slot>
    <hints>
     <hint type="sourcelabel">

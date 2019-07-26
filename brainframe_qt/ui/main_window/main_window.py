@@ -93,7 +93,7 @@ class MainWindow(QMainWindow):
     def add_new_stream_slot(self):
         """Open dialog to add a new stream and then send it to the server"""
 
-        stream_conf = StreamConfigurationDialog.configure_stream()
+        stream_conf = StreamConfigurationDialog.configure_stream(self)
         if stream_conf is None:
             return
         try:

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>AlertLogEntry</class>
+ <widget class="QWidget" name="AlertLogEntry">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">AlertLogEntry</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <property name="topMargin">
@@ -29,7 +29,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Alert Icon</string>
+      <string notr="true">[Alert Icon]</string>
      </property>
     </widget>
    </item>

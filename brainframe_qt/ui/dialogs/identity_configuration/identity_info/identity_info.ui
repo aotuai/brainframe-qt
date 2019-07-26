@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>IdentityInfo</class>
+ <widget class="QWidget" name="IdentityInfo">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">IdentityInfo</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -68,7 +68,7 @@
   <connection>
    <sender>encoding_list</sender>
    <signal>delete_encoding_class_signal(QString)</signal>
-   <receiver>Form</receiver>
+   <receiver>IdentityInfo</receiver>
    <slot>delete_encoding_class_slot(QString)</slot>
    <hints>
     <hint type="sourcelabel">

@@ -58,17 +58,18 @@ class TaskConfiguration(QDialog):
 
     @pyqtSlot()
     def new_line(self):
-        line_name = self.get_new_zone_name("New Line",
-                                           "Name for new line:")
-
+        line_name = self.get_new_zone_name(
+            self.tr("New Line"),
+            self.tr("Name for new line:"))
         if line_name is None:
             return
         self.new_zone(line_name, max_points=2)
 
     @pyqtSlot()
     def new_region(self):
-        region_name = self.get_new_zone_name("New Region",
-                                             "Name for new region:")
+        region_name = self.get_new_zone_name(
+            self.tr("New Region"),
+            self.tr("Name for new region:"))
         if region_name is None:
             return
         self.new_zone(region_name)
@@ -93,8 +94,8 @@ class TaskConfiguration(QDialog):
         elif len(self.unconfirmed_zone.coords) >= 2:
             zone_type = self.zone_list.EntryType.REGION
         else:
-            raise NotImplementedError("New zone cannot have fewer than 2 "
-                                      "points")
+            message = self.tr("New zone cannot have fewer than 2 points")
+            raise NotImplementedError(message)
 
         # Add zone to database
         zone = api.set_zone(self.unconfirmed_zone)
@@ -135,8 +136,8 @@ class TaskConfiguration(QDialog):
                                      coords=[])
 
         # Set instruction text
-        self.instruction_label.setText('Add points until done, then press '
-                                       '"Confirm" button')
+        text = self.tr('Add points until done, then press "Confirm" button')
+        self.instruction_label.setText(text)
 
         # Add the a Zone widget to the sidebar
         unconfirmed_zone_item = self.zone_list.add_zone(self.unconfirmed_zone)
@@ -180,10 +181,10 @@ class TaskConfiguration(QDialog):
 
             zones = api.get_zones(self.stream_conf.id)
             if region_name in [zone.name for zone in zones]:
-                title = "Item Name Already Exists"
-                message = "Item {} already exists in Stream".format(
+                title = self.tr("Item Name Already Exists")
+                message = self.tr("Item {} already exists in Stream").format(
                     region_name)
-                message += "<br>Please use another name."
+                message += "<br>" + self.tr("Please use another name.")
                 QMessageBox.information(self, title, message)
                 continue
 

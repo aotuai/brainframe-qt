@@ -35,10 +35,12 @@ def main():
     app.setOrganizationDomain('dilililabs.com')
 
     app.installTranslator(init_translator(app))
+    # Bind tr to use global context
+    tr = partial(QApplication.translate, "@default")
 
     # Ensure that user has accepted license agreement. Otherwise close program
     if not LicenseAgreement.get_agreement():
-        sys.exit("Program Closing: License Not Accepted")
+        sys.exit(tr("Program Closing: License Not Accepted"))
 
     gobject_init.start()
 
@@ -47,13 +49,10 @@ def main():
     # Show splash screen while waiting for server connection
     with SplashScreen() as splash_screen:
 
-        # Bind tr to use global context
-        tr = partial(QApplication.translate, "@default")
-
         while True:
             try:
-                message = (tr("Attempting to connect to server at") +
-                           f" {settings.server_url.val()}")
+                message = tr("Attempting to connect to server at {}") \
+                    .format(settings.server_url.val())
                 splash_screen.showMessage(message)
                 api.version()
             except (ConnectionError, ConnectionRefusedError,

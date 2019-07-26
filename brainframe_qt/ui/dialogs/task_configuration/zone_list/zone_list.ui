@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>110</width>
+    <width>117</width>
     <height>400</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">ZoneList</string>
   </property>
   <property name="sizeAdjustPolicy">
    <enum>QAbstractScrollArea::AdjustToContents</enum>

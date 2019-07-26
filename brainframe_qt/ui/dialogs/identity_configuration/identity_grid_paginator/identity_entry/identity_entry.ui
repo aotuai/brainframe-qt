@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>IdentityEntry</class>
+ <widget class="QWidget" name="IdentityEntry">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">IdentityEntry</string>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -47,7 +47,7 @@
    <item>
     <widget class="QLabel" name="identity_image">
      <property name="text">
-      <string>Identity Image</string>
+      <string notr="true">Identity Image</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -63,7 +63,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Identity Name</string>
+      <string notr="true">Identity Name</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -79,7 +79,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Identity Nickname</string>
+      <string notr="true">Identity Nickname</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

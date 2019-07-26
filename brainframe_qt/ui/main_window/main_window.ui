@@ -52,7 +52,7 @@
   </widget>
   <widget class="QToolBar" name="tool_bar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string notr="true">ToolBar</string>
    </property>
    <property name="movable">
     <bool>false</bool>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>group_box</class>
- <widget class="QGroupBox" name="group_box">
+ <class>PluginOptions</class>
+ <widget class="QGroupBox" name="PluginOptions">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,10 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>GroupBox</string>
+   <string notr="true"/>
   </property>
   <property name="title">
-   <string>GroupBox</string>
+   <string notr="true">GroupBox</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -41,7 +41,7 @@
          <x>0</x>
          <y>0</y>
          <width>887</width>
-         <height>95</height>
+         <height>97</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -77,7 +77,7 @@
          <x>0</x>
          <y>0</y>
          <width>887</width>
-         <height>336</height>
+         <height>334</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
