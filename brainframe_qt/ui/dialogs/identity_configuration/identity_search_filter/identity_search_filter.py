@@ -84,7 +84,6 @@ class IdentitySearchFilter(QWidget):
             return
 
         def func():
-
             api.delete_encodings(class_name=encoding_class)
 
         def callback(_):
@@ -98,12 +97,15 @@ class IdentitySearchFilter(QWidget):
 
         QTAsyncWorker(self, func, callback).start()
 
+    # noinspection DuplicatedCode
     def _prompt_encoding_class_deletion(self, encoding_class: str) -> bool:
+        message = self.tr("Are you sure you want to delete all encodings with"
+                          "class {} from the database?").format(encoding_class)
+        info_text = self.tr("This operation cannot be undone.")
+
         message_box = QMessageBox(self)
-        message_box.setText(
-            f"Are you sure you want to delete all encodings with class "
-            f"{encoding_class} from the database?")
-        message_box.setInformativeText("This operation cannot be undone.")
+        message_box.setText(message)
+        message_box.setInformativeText(info_text)
         message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
         message_box.setDefaultButton(QMessageBox.Abort)
 

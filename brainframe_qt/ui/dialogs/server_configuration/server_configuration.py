@@ -39,7 +39,8 @@ class ServerConfigurationDialog(QDialog):
                     decrypt_password = decrypt(settings_password)
                     self.server_password_line_edit.setText(decrypt_password)
                 except ValueError:
-                    message = "Invalid password saved in QSettings. Clearing"
+                    message = self.tr(
+                        "Invalid password saved in QSettings. Clearing.")
                     logging.error(message)
                     settings.server_password.delete()
 
@@ -90,13 +91,15 @@ class ServerConfigurationDialog(QDialog):
             super().accept()
             return
         except api_errors.UnauthorizedError:
-            title = "Server Authentication Error"
-            message = "Unable to authenticate with the BrainFrame server. \n" \
-                      "Please recheck the entered credentials."
+            title = self.tr("Server Authentication Error")
+            message = self.tr(
+                "Unable to authenticate with the BrainFrame server. \n"
+                "Please recheck the entered credentials.")
         except ConnectionError:
-            title = "Connection Error"
-            message = "Unable to connect to the BrainFrame server. \n" \
-                      "Please recheck the entered server address."
+            title = self.tr("Connection Error")
+            message = self.tr(
+                "Unable to connect to the BrainFrame server. \n"
+                "Please recheck the entered server address.")
 
         buttons = QMessageBox.Ok | QMessageBox.Ignore
 

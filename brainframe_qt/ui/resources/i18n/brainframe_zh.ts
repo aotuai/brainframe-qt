@@ -32,6 +32,24 @@
     </message>
 </context>
 <context>
+    <name>AddNewIdentitiesWorker</name>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="46"/>
+        <source>Unable to parse this directory!
+
+Reason:
+{}
+
+Read the manual to learn about the required directory structure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="54"/>
+        <source>Invalid Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AlarmCreationDialog</name>
     <message>
         <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="14"/>
@@ -147,6 +165,57 @@
         <source>Alarm Name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="34"/>
+        <source>{} in region [{}]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="62"/>
+        <source>(Ongoing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
+        <source>{} to {}</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BasePluginOptionsWidget</name>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="60"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="69"/>
+        <source>Plugin Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="113"/>
+        <source>The plugin option of name {} has an invalid type of type {}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="147"/>
+        <source>Not all options are valid!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="152"/>
+        <source>You can&apos;t apply changes if the plugin never got set!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DetectionPolygon</name>
+    <message>
+        <location filename="../video_items/stream_detection.py" line="63"/>
+        <source>Name: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DirectorySelector</name>
@@ -163,6 +232,11 @@
     <message>
         <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.ui" line="39"/>
         <source>Select a directory to load identities from:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.py" line="39"/>
+        <source>Select directory containing identities</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -184,6 +258,57 @@
     <message>
         <location filename="../../dialogs/identity_configuration/encoding_list/encoding_list.ui" line="68"/>
         <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FloatOptionItem</name>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/option_items.py" line="174"/>
+        <source>{} is not a float!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GlobalPluginOptionsWidget</name>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="12"/>
+        <source>Global Plugin Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="15"/>
+        <source>Reset All Overriding Streams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="39"/>
+        <source>Reset to Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="53"/>
+        <source>The following options will be reset to default):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="67"/>
+        <source>There are no changes to reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="94"/>
+        <source>Reset to Stream Overrides</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="96"/>
+        <source>The following streams have overrides that will be cleared:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="120"/>
+        <source>There are no streams that override the global options for this plugin.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -233,11 +358,35 @@
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.ui" line="20"/>
         <source>Unique Name:</source>
+        <comment>Before setting</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.ui" line="27"/>
         <source>Nickname:</source>
+        <comment>Before setting</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="81"/>
+        <source>Unique Name: {}</source>
+        <comment>After setting</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="83"/>
+        <source>Nickname: {}</source>
+        <comment>After setting</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
+        <source>Are you sure you want to delete all encodings withclass {} from identity for {}?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="102"/>
+        <source>This operation cannot be undone.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,6 +395,16 @@
     <message>
         <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.ui" line="46"/>
         <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
+        <source>Are you sure you want to delete all encodings withclass {} from the database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="104"/>
+        <source>This operation cannot be undone.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -259,6 +418,16 @@
     <message>
         <location filename="../../dialogs/license_agreement/license_agreement.ui" line="43"/>
         <source>Do you accept all of the terms of the preceding License Agreement? If you choose Decline, the program will close. To run the BrainFrame client application, you must accept this agreement.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_agreement/license_agreement.py" line="18"/>
+        <source>Decline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_agreement/license_agreement.py" line="20"/>
+        <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -319,6 +488,46 @@
         <source>Configure the settings for the BrainFrame server</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../main_window/main_window.py" line="42"/>
+        <source>Add new stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window.py" line="127"/>
+        <source>Error Opening Stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window.py" line="107"/>
+        <source>Stream source already open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window.py" line="108"/>
+        <source>You already have the stream source open.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window.py" line="131"/>
+        <source>Error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window.py" line="128"/>
+        <source>Error encountered while opening stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window.py" line="129"/>
+        <source>Is stream already open?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window.py" line="130"/>
+        <source>Is this a valid stream source?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Paginator</name>
@@ -342,14 +551,14 @@
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui_elements/containers/paginator.ui" line="105"/>
-        <source>–</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="119"/>
         <source>of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui_elements/containers/paginator.ui" line="105"/>
+        <source>–</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -419,6 +628,66 @@
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="14"/>
         <source>Server Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="42"/>
+        <source>Invalid password saved in QSettings. Clearing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="94"/>
+        <source>Server Authentication Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="95"/>
+        <source>Unable to authenticate with the BrainFrame server. 
+Please recheck the entered credentials.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <source>Connection Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="100"/>
+        <source>Unable to connect to the BrainFrame server. 
+Please recheck the entered server address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>StandardError</name>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="60"/>
+        <source>An exception has occurred</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="55"/>
+        <source>Connection to server lost. Client must be closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="78"/>
+        <source>Copy to Clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="86"/>
+        <source>Close Client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="130"/>
+        <source>Error copied to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="134"/>
+        <source>Quitting</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -507,6 +776,14 @@
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="236"/>
         <source>Stream Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>StreamPluginOptionsWidget</name>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/stream_plugin_options.py" line="10"/>
+        <source>Stream Plugin Options</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -668,6 +945,11 @@
         <source>Delete Stream</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="47"/>
+        <source>Close expanded video view</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoThumbnailView</name>
@@ -679,6 +961,11 @@
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.ui" line="90"/>
         <source>Streams without alerts:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="125"/>
+        <source>Inconsistent state with alert widgets.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

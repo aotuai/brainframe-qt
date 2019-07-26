@@ -43,18 +43,14 @@ class IdentityInfo(QWidget):
             return
 
         def func():
-
             api.delete_encodings(identity_id=self.identity.id,
                                  class_name=encoding_class)
 
         def callback(_):
-
             def func2():
-
                 return api.get_identity(self.identity.id)
 
             def callback2(identity: Identity):
-
                 # Call the slot, but from the correct (UI) thread
                 QMetaObject.invokeMethod(
                     self, "display_identity_slot",
@@ -82,8 +78,10 @@ class IdentityInfo(QWidget):
 
         self.identity = identity
 
-        self.unique_name.setText(f"Unique Name: {identity.unique_name}")
-        self.nickname.setText(f"Nickname: {identity.nickname}")
+        self.unique_name.setText(self.tr("Unique Name: {}", "After setting")
+                                 .format(identity.unique_name))
+        self.nickname.setText(self.tr("Nickname: {}", "After setting")
+                              .format(identity.nickname))
 
         encodings_codecs = api.get_encodings(identity_id=identity.id)
         encodings: Dict[str, List[Encoding]] = defaultdict(list)
@@ -96,12 +94,16 @@ class IdentityInfo(QWidget):
 
         self.show()
 
+    # noinspection DuplicatedCode
     def _prompt_encoding_class_deletion(self, encoding_class: str) -> bool:
+        message = self.tr("Are you sure you want to delete all encodings with"
+                          "class {} from identity for {}?") \
+            .format(encoding_class, self.identity.unique_name)
+        info_text = self.tr("This operation cannot be undone.")
+
         message_box = QMessageBox(self)
-        message_box.setText(
-            f"Are you sure you want to delete all encodings with class "
-            f"{encoding_class} from identity for {self.identity.unique_name}?")
-        message_box.setInformativeText("This operation cannot be undone.")
+        message_box.setText(message)
+        message_box.setInformativeText(info_text)
         message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
         message_box.setDefaultButton(QMessageBox.Abort)
 

@@ -2,10 +2,9 @@ from abc import ABC, abstractmethod
 import logging
 from typing import Optional
 
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIntValidator, QDoubleValidator
 from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
-    QPushButton, QSizePolicy, QStyle, QStyleOptionButton
+    QPushButton, QSizePolicy, QApplication
 
 from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
 from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
@@ -172,7 +171,9 @@ class FloatOptionItem(PluginOptionItem):
             num = float(self.option_widget.text())
             return num
         except ValueError:
-            logging.warning(f"{self.option_widget.text()} is not a float!")
+            logging.warning(QApplication.translate("FloatOptionItem",
+                                                   "{} is not a float!")
+                            .format(self.option_widget.text()))
             return None
 
     def is_valid(self):

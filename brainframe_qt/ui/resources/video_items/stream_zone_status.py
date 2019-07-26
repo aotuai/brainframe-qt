@@ -24,18 +24,18 @@ class ZoneStatusPolygon(StreamPolygon):
         if len(status.zone.coords) == 2:
             # If the zone is a line
             if len(status.total_entered):
-                text = status.zone.name + "\nEntering: "
+                text = status.zone.name + "\n" + self.tr("Entering: ")
                 text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
                                    for k, v in status.total_entered.items()
                                    if v > 0])
             if len(status.total_exited):
-                text += "\nExiting: "
+                text += "\n" + self.tr("Exiting: ")
                 text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
                                    for k, v in status.total_exited.items()
                                    if v > 0])
             counts = status.detection_within_counts
             if len(counts):
-                text += "\nWithin: "
+                text += "\n" + self.tr("Within: ")
                 items = list(counts.items())
                 items.sort()
                 text += "\n" + "\n".join([f"{v} {k}{'s' * bool(v - 1)}"
@@ -50,7 +50,7 @@ class ZoneStatusPolygon(StreamPolygon):
         text = text.strip()
 
         if len(status.alerts):
-            text += "\nAlert!"
+            text += "\n" + self.tr("Alert!")
 
         # Set opacity based on alert status and detection status
         opacity = 0.3

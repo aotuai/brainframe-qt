@@ -44,7 +44,7 @@ class VideoExpandedView(QWidget):
         self.hide_button = FloatingXButton(self, self.palette().mid(),
                                            m_top=15, m_right=15)
         self.hide_button.hide()
-        self.hide_button.setToolTip("Close expanded video view")
+        self.hide_button.setToolTip(self.tr("Close expanded video view"))
         # noinspection PyUnresolvedReferences
         self.hide_button.clicked.connect(self.expanded_stream_closed_slot)
 

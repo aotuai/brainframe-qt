@@ -60,10 +60,11 @@ class DetectionPolygon(StreamPolygon):
 
         # Add "Identity" to the description box
         if detection.with_identity is not None and show_recognition:
+            text += self.tr("Name: ")
             if detection.with_identity.nickname is not None:
-                text += "\nName: " + detection.with_identity.nickname
+                text += detection.with_identity.nickname
             else:
-                text += "\nName: " + detection.with_identity.unique_name
+                text += detection.with_identity.unique_name
 
             confidence = detection.extra_data['encoding_distance']
             text += f" ({round(confidence, 2)})"

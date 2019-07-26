@@ -148,14 +148,14 @@ class AlarmCreationDialog(QDialog):
                 window_threshold=AlarmCreationDialog.WINDOW_THRESHOLD))
 
         elif condition_button is dialog.rate_based_button:
-            direction = dialog.direction_combo_box.currentText()
+            direction_index: int = dialog.direction_combo_box.currentIndex()
             duration = dialog.duration_spin_box.value()
 
-            if direction == "enter":
+            if direction_index == 0:  # enter
                 direction = ZoneAlarmRateCondition.DirectionType.ENTERING
-            elif direction == "exit":
+            elif direction_index == 1:  # exit
                 direction = ZoneAlarmRateCondition.DirectionType.EXITING
-            elif direction == "enter/exit":
+            elif direction_index == 2:  # enter/exit
                 direction = \
                     ZoneAlarmRateCondition.DirectionType.ENTERING_OR_EXITING
 

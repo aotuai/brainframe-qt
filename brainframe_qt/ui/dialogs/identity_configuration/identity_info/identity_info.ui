@@ -17,14 +17,14 @@
    <item>
     <widget class="QLabel" name="unique_name">
      <property name="text">
-      <string>Unique Name:</string>
+      <string comment="Before setting">Unique Name:</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="nickname">
      <property name="text">
-      <string>Nickname:</string>
+      <string comment="Before setting">Nickname:</string>
      </property>
     </widget>
    </item>

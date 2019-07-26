@@ -42,14 +42,17 @@ class AddNewIdentitiesWorker(QThread):
             identity_finder = FileTreeIdentityFinder(path)
             self.num_images = identity_finder.num_encodings
         except ValueError as err:
+
+            message = self.tr("Unable to parse this directory!\n\n"
+                              "Reason:\n"
+                              "{}\n\n"
+                              "Read the manual to learn about the required "
+                              "directory structure.").format(err)
+
             error_dialog = QMessageBox()
             error_dialog.setIcon(QMessageBox.Critical)
-            error_dialog.setWindowTitle("Invalid Format")
-            error_dialog.setText(f"Unable to parse this directory!\n\n"
-                                 f"Reason:\n"
-                                 f"{err}\n\n"
-                                 f"Read the manual to learn about the required "
-                                 f"directory structure.")
+            error_dialog.setWindowTitle(self.tr("Invalid Format"))
+            error_dialog.setText(message)
             error_dialog.exec_()
             return
 

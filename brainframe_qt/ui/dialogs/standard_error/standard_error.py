@@ -50,13 +50,14 @@ class StandardError(QMessageBox):
         tb_message_text = "".join(tb_message[:-1])
         tb_message_info = tb_message[-1].rstrip()
 
-        self.setWindowTitle("An exception has occurred")
+        self.setWindowTitle(self.tr("An exception has occurred"))
         if exc_type is ConnectionError:
-            self.setText("Connection to server lost. Client must be closed")
+            text = self.tr("Connection to server lost. Client must be closed")
+            self.setText(text)
         else:
             # Only show info if the connection was not closed. This makes the
             # dialog a little clearer
-            self.setText("An exception has occurred")
+            self.setText(self.tr("An exception has occurred"))
             self.setInformativeText(tb_message_info)
 
         self.setDetailedText(tb_message_text)
@@ -74,7 +75,7 @@ class StandardError(QMessageBox):
         self._create_traceback_view()
 
         # Button to allow user to copy exception to clipboard
-        copy_button = self.addButton("Copy to Clipboard",
+        copy_button = self.addButton(self.tr("Copy to Clipboard"),
                                      QMessageBox.ActionRole)
         copy_button.disconnect()
         # noinspection PyUnresolvedReferences
@@ -82,7 +83,7 @@ class StandardError(QMessageBox):
 
         # Button that forces the client to close
         if close_client_button:
-            close_button = self.addButton("Close Client",
+            close_button = self.addButton(self.tr("Close Client"),
                                           QMessageBox.DestructiveRole)
             # noinspection PyUnresolvedReferences
             close_button.clicked.connect(self.close_client)
@@ -113,8 +114,8 @@ class StandardError(QMessageBox):
         try:
             self.findChildren(QTextEdit)[0].setFixedHeight(200)
         except IndexError:
-            # Why is this exception raised when QtDesigner has another Exception
-            # during its initialization
+            # Why is this exception raised when QtDesigner has another
+            # Exception during its initialization
             pass
 
     def copy_to_clipboard(self):
@@ -126,11 +127,11 @@ class StandardError(QMessageBox):
 
         clipboard.setText(clipboard_text)
 
-        logging.info("Error copied to clipboard")
+        logging.info(self.tr("Error copied to clipboard"))
 
     @staticmethod
     def close_client():
-        logging.info("Quitting")
+        logging.info(QApplication.translate("StandardError", "Quitting"))
         QApplication.quit()
 
     @staticmethod

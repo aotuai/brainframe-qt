@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QGridLayout, QGroupBox
+from PyQt5.QtWidgets import QGridLayout, QGroupBox, QApplication
 from PyQt5.uic import loadUi
 
 from .option_items import (
@@ -56,7 +56,8 @@ class BasePluginOptionsWidget(QGroupBox):
         plugin = api.get_plugin(plugin_name)
 
         # Change name of plugin
-        title = f"[{plugin_utils.pretty_snakecase(plugin_name)}] Options"
+        title = f"[{plugin_utils.pretty_snakecase(plugin_name)}] "
+        title += self.tr("Options")
         self.setTitle(title)
 
         # Set plugin description
@@ -66,7 +67,7 @@ class BasePluginOptionsWidget(QGroupBox):
 
         # Add configuration that every plugin _always_ has
         self.enabled_option = self._add_option(
-            name="Plugin Enabled",
+            name=self.tr("Plugin Enabled"),
             type_=OptionType.BOOL,
             value=api.is_plugin_active(plugin_name, stream_id=None),
             constraints={})
@@ -109,8 +110,11 @@ class BasePluginOptionsWidget(QGroupBox):
         elif type_ is OptionType.INT:
             item = IntOptionItem(*args)
         else:
-            raise TypeError(f"The plugin option of name {name} has an invalid "
-                            f"type of type {type_}")
+            message = QApplication.translate(
+                "BasePluginOptionsWidget",
+                "The plugin option of name {} has an invalid type of type {}")
+            message = message.format(name, type_)
+            raise TypeError(message)
 
         _TOOLTIP_COL = 0
         _NAME_COL = 1
@@ -140,10 +144,15 @@ class BasePluginOptionsWidget(QGroupBox):
         """
         # Make sure that the options are valid
         if not self.options_valid():
-            raise ValueError("Not all options are valid!")
+            message = QApplication.translate(
+                "BasePluginOptionsWidget",
+                "Not all options are valid!")
+            raise ValueError(message)
         if not len(self.all_items):
-            raise RuntimeError("You can't apply changes if the plugin never"
-                               " got set!")
+            message = QApplication.translate(
+                "BasePluginOptionsWidget",
+                "You can't apply changes if the plugin never got set!")
+            raise RuntimeError(message)
 
         unlocked_option_vals = {option_item.option_name: option_item.val
                                 for option_item in self.option_items
