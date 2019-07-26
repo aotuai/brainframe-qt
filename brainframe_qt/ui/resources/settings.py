@@ -41,7 +41,7 @@ class Setting:
 
 # System configuration settings
 server_url = Setting(
-    "http://localhost:8000", type_=str, name="server_url"
+    "http://localhost", type_=str, name="server_url"
 )
 server_username = Setting(
     None, type_=str, name="server_username"
