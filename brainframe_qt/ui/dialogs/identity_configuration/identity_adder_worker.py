@@ -31,7 +31,7 @@ class AddNewIdentitiesWorker(QThread):
 
     def add_identities_from_file(self):
 
-        path = DirectorySelector.get_path()
+        path = DirectorySelector.get_path(self.parent())
 
         # User canceled
         if path is None:
@@ -49,7 +49,7 @@ class AddNewIdentitiesWorker(QThread):
                               "Read the manual to learn about the required "
                               "directory structure.").format(err)
 
-            error_dialog = QMessageBox()
+            error_dialog = QMessageBox(self)
             error_dialog.setIcon(QMessageBox.Critical)
             error_dialog.setWindowTitle(self.tr("Invalid Format"))
             error_dialog.setText(message)
@@ -63,7 +63,7 @@ class AddNewIdentitiesWorker(QThread):
     def show_errors(self):
         # If there are errors, show them to the user
         if self.errors:
-            IdentityErrorPopup.show_errors(self.errors)
+            IdentityErrorPopup.show_errors(self.errors, self.parent())
             self.errors = set()
 
     def run(self):

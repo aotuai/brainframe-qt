@@ -24,8 +24,8 @@ class AlertEntryPopup(QDialog):
         # self.setMaximumSize(1000, 1000)
 
     @classmethod
-    def show_alert(cls, alert_message, alert_id):
-        dialog = cls(alert_message, alert_id)
+    def show_alert(cls, alert_message, alert_id, parent):
+        dialog = cls(alert_message, alert_id, parent=parent)
         dialog.exec_()
 
     def get_frame(self, alert_id):

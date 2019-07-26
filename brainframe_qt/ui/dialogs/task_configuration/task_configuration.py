@@ -32,8 +32,8 @@ class TaskConfiguration(QDialog):
         self.cancel_op_button.clicked.connect(self.new_region_canceled)
 
     @classmethod
-    def open_configuration(cls, stream_conf):
-        dialog = cls(stream_conf=stream_conf)
+    def open_configuration(cls, stream_conf, parent):
+        dialog = cls(parent=parent, stream_conf=stream_conf)
 
         dialog.video_task_config.change_stream(stream_conf)
 
@@ -46,10 +46,9 @@ class TaskConfiguration(QDialog):
         plugins = api.get_plugins()
         zones = api.get_zones(self.stream_conf.id)
 
-        zone, alarm = AlarmCreationDialog.new_alarm(
-            zones=zones,
-            plugins=plugins
-        )
+        zone, alarm = AlarmCreationDialog.new_alarm(self,
+                                                    zones=zones,
+                                                    plugins=plugins)
         if not alarm:
             return None
 
