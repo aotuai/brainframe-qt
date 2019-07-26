@@ -659,6 +659,14 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>SplashScreen</name>
+    <message>
+        <location filename="../../splash_screen/splash_screen.py" line="68"/>
+        <source>Configure</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>StandardError</name>
     <message>
         <location filename="../../dialogs/standard_error/standard_error.py" line="60"/>
@@ -966,6 +974,29 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="125"/>
         <source>Inconsistent state with alert widgets.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ZoneStatusPolygon</name>
+    <message>
+        <location filename="../video_items/stream_zone_status.py" line="28"/>
+        <source>Entering: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../video_items/stream_zone_status.py" line="36"/>
+        <source>Exiting: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../video_items/stream_zone_status.py" line="45"/>
+        <source>Within: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../video_items/stream_zone_status.py" line="63"/>
+        <source>Alert!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
