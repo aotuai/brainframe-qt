@@ -39,7 +39,7 @@ def main():
     tr = partial(QApplication.translate, "@default")
 
     # Ensure that user has accepted license agreement. Otherwise close program
-    if not LicenseAgreement.get_agreement():
+    if not LicenseAgreement.get_agreement(parent=None):
         sys.exit(tr("Program Closing: License Not Accepted"))
 
     gobject_init.start()

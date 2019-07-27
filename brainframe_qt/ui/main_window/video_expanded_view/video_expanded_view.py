@@ -122,7 +122,7 @@ class VideoExpandedView(QWidget):
         - QPushButton -- QtDesigner
           self.open_stream_plugin_config.clicked
         """
-        PluginConfigDialog.show_dialog(self.stream_conf.id)
+        PluginConfigDialog.show_dialog(self, self.stream_conf.id)
 
     @pyqtSlot()
     def open_task_config(self):
@@ -131,6 +131,6 @@ class VideoExpandedView(QWidget):
         - QPushButton -- QtDesigner
           self.task_config_button.clicked
         """
-        config = TaskConfiguration.open_configuration(self.stream_conf)
+        config = TaskConfiguration.open_configuration(self.stream_conf, self)
         if not config:
             return

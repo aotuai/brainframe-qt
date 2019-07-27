@@ -138,18 +138,18 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def show_video_configuration_dialog(self):
-        RenderConfiguration.show_dialog()
+        RenderConfiguration.show_dialog(self)
 
     @pyqtSlot()
     def show_identities_dialog(self):
-        IdentityConfiguration.show_dialog()
+        IdentityConfiguration.show_dialog(self)
 
     @pyqtSlot()
     def show_about_page_dialog(self):
-        AboutPage.show_dialog()
+        AboutPage.show_dialog(self)
 
     @pyqtSlot()
     def show_global_plugin_config_dialog(self):
-        PluginConfigDialog.show_dialog()
+        PluginConfigDialog.show_dialog(self)
 
     sys.excepthook = StandardError.show_error

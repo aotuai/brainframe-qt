@@ -27,9 +27,9 @@ class LicenseAgreement(QDialog):
         self.license_text.setPlainText(self.text)
 
     @classmethod
-    def get_agreement(cls):
+    def get_agreement(cls, parent):
 
-        dialog = cls()
+        dialog = cls(parent)
         license_md5 = hashlib.md5(dialog.text.encode('utf-8')).hexdigest()
 
         # Check if the license was already agreed to

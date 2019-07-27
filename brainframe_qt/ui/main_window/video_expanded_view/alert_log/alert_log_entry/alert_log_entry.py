@@ -72,4 +72,4 @@ class AlertLogEntry(_Form, _Base):
         - AlertLogEntry -- Dynamic
           self.alert_icon_button.clicked
         """
-        AlertEntryPopup.show_alert(self.alert_text, self.alert.id)
+        AlertEntryPopup.show_alert(self.alert_text, self.alert.id, self)

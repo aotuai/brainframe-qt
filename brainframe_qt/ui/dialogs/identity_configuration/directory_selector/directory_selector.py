@@ -24,10 +24,10 @@ class DirectorySelector(QDialog):
         self.select_directory_button.clicked.connect(self._file_dialog)
 
     @classmethod
-    def get_path(cls):
+    def get_path(cls, parent):
         # TODO: Verify path is a real path
 
-        dialog = cls()
+        dialog = cls(parent)
         result = dialog.exec_()
 
         if not result:
