@@ -1,6 +1,7 @@
 import random
 
 from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QApplication
 
 from brainframe.client.api.detection_tracks import DetectionTrack
 from brainframe.client.api.codecs import Detection
@@ -60,7 +61,7 @@ class DetectionPolygon(StreamPolygon):
 
         # Add "Identity" to the description box
         if detection.with_identity is not None and show_recognition:
-            text += self.tr("Name: ")
+            text += QApplication.translate("StreamPolygon", "Name: ")
             if detection.with_identity.nickname is not None:
                 text += detection.with_identity.nickname
             else:
