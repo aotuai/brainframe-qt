@@ -36,6 +36,8 @@ class VideoExpandedView(QWidget):
 
         self._init_ui()
 
+        self.timer: int = None
+
     def _init_ui(self):
         # https://stackoverflow.com/a/43835396/8134178
         # 3 : 1 height ratio initially
@@ -78,9 +80,13 @@ class VideoExpandedView(QWidget):
         # Set displayed title of stream
         self.stream_name_label.setText(stream_conf.name)
 
+        self.timer = self.startTimer(1000)
+
     @pyqtSlot()
     def expanded_stream_closed_slot(self):
         """Signaled by close button"""
+
+        self.killTimer(self.timer)
 
         # Stop attempting to display a stream
         self.expanded_video.change_stream(None)
