@@ -4,7 +4,8 @@ from typing import List, Optional
 
 from requests.exceptions import ConnectionError
 
-from PyQt5.QtCore import QLocale, QTranslator
+from PyQt5.QtCore import pyqtSlot, Qt, Q_ARG, QLocale, QMetaObject, QThread, \
+    QTranslator
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
@@ -96,6 +97,50 @@ class BrainFrameApplication(QApplication):
 
         super().exec()
 
+    @pyqtSlot(object, object, object, bool)
+    def _handle_error(self, exc_type, exc_obj, exc_tb, other_thread=False):
+        """Shows a dialog when an error occurs"""
+
+        # Check if exception occurred in the UI thread
+        if QThread.currentThread() is self.thread():
+
+            # Close the client if the exception was thrown in another thread,
+            # or if it was not an BaseAPIError
+            close_client = other_thread \
+                           or not isinstance(exc_obj, api_errors.BaseAPIError)
+            StandardError.show_error(exc_type, exc_obj, exc_tb, close_client)
+        else:
+            # Call this function again, but from the correct (UI) thread
+            # If a QWidget (the StandardError dialog) is used from another
+            # thread we WILL segfault. This is undesirable
+            QMetaObject.invokeMethod(
+                self, "_handle_error",
+                Qt.BlockingQueuedConnection,
+                Q_ARG("PyQt_PyObject", exc_type),
+                Q_ARG("PyQt_PyObject", exc_obj),
+                Q_ARG("PyQt_PyObject", exc_tb),
+
+                # Note: other_thread is now set true
+                Q_ARG("bool", True)
+            )
+
+    @staticmethod
+    def _handle_error_(*args):
+        """Alright so this is kinda ugly but...
+
+        1. QMetaObject.invokeMethod for some reason doesn't work with static
+        methods
+        2. sys.excepthook needs a static/unbound method
+        3. I can't have both
+
+        So what I do is use the convenient fact that QApplications are
+        singletons. The static method simply calls the instance method of the
+        QApplication
+        """
+
+        # noinspection PyProtectedMember
+        return QApplication.instance()._handle_error(*args)
+
     # noinspection PyMethodMayBeStatic
     def _init_server_settings(self):
         api.set_url(settings.server_url.val())
@@ -117,4 +162,7 @@ class BrainFrameApplication(QApplication):
         if not LicenseAgreement.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
 
-    sys.excepthook = StandardError.show_error
+    # Handle all exceptions using a graphical handler
+    # https://stackoverflow.com/a/41921291/8134178
+    # noinspection PyUnresolvedReferences
+    sys.excepthook = _handle_error_.__func__

@@ -5,11 +5,9 @@ import traceback
 
 from requests.exceptions import ConnectionError
 
-from PyQt5.QtCore import Qt, QThread
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMessageBox, QSizePolicy, \
     QSpacerItem, QTextEdit
-
-from brainframe.client.api import api_errors
 
 
 class StandardError(QMessageBox):
@@ -19,46 +17,23 @@ class StandardError(QMessageBox):
     QMessageBox widgets
     """
 
-    def __init__(self, exc_type, exc_obj, exc_tb, close_client_button=False,
+    def __init__(self, exc_type, exc_obj, exc_tb, close_client=False,
                  parent=None):
         super().__init__(parent=parent)
 
-        self._init_text(exc_type, exc_obj, exc_tb)
-        self._init_ui(close_client_button)
+        self._init_text(exc_type, exc_obj, exc_tb, close_client=close_client)
+        self._init_ui(close_client)
 
     @classmethod
-    def show_error(cls, exc_type, exc_obj, exc_tb):
-        app = QApplication.instance()
+    def show_error(cls, exc_type, exc_obj, exc_tb, close_client=False):
+        # Ignore false exceptions thrown during init of QtDesigner
+        if cls._is_qt_designer_init_error(exc_obj):
+            return
 
-        if app and QThread.currentThread() is app.thread():
-            # Ignore false exceptions thrown during init of QtDesigner
-            if cls._is_qt_designer_init_error(exc_obj):
-                return
+        dialog = cls(exc_type, exc_obj, exc_tb, close_client=close_client)
+        dialog.exec_()
 
-            dialog = cls(exc_type, exc_obj, exc_tb,
-                         close_client_button=exc_type is ConnectionError)
-            dialog.exec_()
-
-        # Settle for UI-less error if error was on another thread
-        elif app:
-
-            tb_message = traceback.format_exception(
-                exc_type, exc_obj, exc_tb)
-
-            tb_message_text = "".join(tb_message[:-1])
-            tb_message_info = tb_message[-1].rstrip()
-
-            logging.error(tb_message_text)
-            logging.error(tb_message_info)
-
-        else:
-            sys.__excepthook__(exc_type, exc_obj, exc_tb)
-
-        if not isinstance(exc_obj, api_errors.BaseAPIError):
-            # noinspection PyProtectedMember
-            os._exit(-1)
-
-    def _init_text(self, exc_type, exc_obj, exc_tb):
+    def _init_text(self, exc_type, exc_obj, exc_tb, close_client=False):
 
         tb_message = traceback.format_exception(
             exc_type, exc_obj, exc_tb)
@@ -74,18 +49,20 @@ class StandardError(QMessageBox):
             # Only show info if the connection was not closed. This makes the
             # dialog a little clearer
             text = self.tr("An exception has occurred.")
-            if not isinstance(exc_obj, api_errors.BaseAPIError):
+            if close_client:
                 text += " " + self.tr("The client must be closed.")
             self.setText(text)
             self.setInformativeText(tb_message_info)
 
         self.setDetailedText(tb_message_text)
 
-        # Log exception as well as show it to user
-        logging.error(tb_message_info)
-        logging.error(tb_message_text)
+        log_func = logging.critical if close_client else logging.error
 
-    def _init_ui(self, close_client_button=False):
+        # Log exception as well as show it to user
+        log_func(tb_message_info)
+        log_func(tb_message_text)
+
+    def _init_ui(self, close_client=False):
         self.setIcon(QMessageBox.Critical)
         self.setTextFormat(Qt.RichText)
         self.setTextInteractionFlags(Qt.TextSelectableByMouse)
@@ -101,7 +78,7 @@ class StandardError(QMessageBox):
         copy_button.clicked.connect(self.copy_to_clipboard)
 
         # Button that forces the client to close
-        if close_client_button:
+        if close_client:
             close_button = self.addButton(self.tr("Close Client"),
                                           QMessageBox.DestructiveRole)
             # noinspection PyUnresolvedReferences
@@ -151,7 +128,13 @@ class StandardError(QMessageBox):
     @staticmethod
     def close_client():
         logging.info(QApplication.translate("StandardError", "Quitting"))
-        QApplication.quit()
+
+        # TODO: Why does QApplication.exit not work
+        QApplication.exit(-1)
+
+        # TODO: Should not be necessary but QApplication.exit doesn't work
+        # noinspection PyProtectedMember
+        os._exit(-1)
 
     @staticmethod
     def _is_qt_designer_init_error(exc_obj):
