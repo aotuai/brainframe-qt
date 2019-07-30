@@ -1,4 +1,5 @@
 SOURCES += ../../__init__.py
+SOURCES += ../../brainframe_app.py
 SOURCES += ../../dialogs/__init__.py
 SOURCES += ../../dialogs/about_page/about_page.py
 SOURCES += ../../dialogs/alarm_creation/alarm_creation.py

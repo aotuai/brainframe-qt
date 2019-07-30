@@ -6,15 +6,9 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget, QSizePolicy
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
-from brainframe.client.ui.dialogs import (
-    AboutPage,
-    StandardError,
-    StreamConfigurationDialog,
-    IdentityConfiguration,
-    PluginConfigDialog,
-    RenderConfiguration,
-    ServerConfigurationDialog
-)
+from brainframe.client.ui.dialogs import AboutPage, \
+    IdentityConfiguration, PluginConfigDialog, RenderConfiguration, \
+    ServerConfigurationDialog, StreamConfigurationDialog
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import \
     FloatingActionButton
@@ -38,6 +32,7 @@ class MainWindow(QMainWindow):
             self.video_thumbnail_view,
             self.palette().highlight())
         add_new_stream_button.show()  # No idea why this is necessary
+        # noinspection PyUnresolvedReferences
         add_new_stream_button.clicked.connect(self.add_new_stream_slot)
         add_new_stream_button.setToolTip(self.tr("Add new stream"))
 
@@ -151,5 +146,3 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def show_global_plugin_config_dialog(self):
         PluginConfigDialog.show_dialog(self)
-
-    sys.excepthook = StandardError.show_error

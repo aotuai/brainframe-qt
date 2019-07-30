@@ -1,18 +1,15 @@
 import logging
 import os
-import traceback
 import sys
-
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (
-    QApplication,
-    QMessageBox,
-    QSizePolicy,
-    QSpacerItem,
-    QTextEdit
-)
+import traceback
 
 from requests.exceptions import ConnectionError
+
+from PyQt5.QtCore import Qt, QThread
+from PyQt5.QtWidgets import QApplication, QMessageBox, QSizePolicy, \
+    QSpacerItem, QTextEdit
+
+from brainframe.client.api import api_errors
 
 
 class StandardError(QMessageBox):
@@ -31,7 +28,9 @@ class StandardError(QMessageBox):
 
     @classmethod
     def show_error(cls, exc_type, exc_obj, exc_tb):
-        if QApplication.instance():
+        app = QApplication.instance()
+
+        if app and QThread.currentThread() is app.thread():
             # Ignore false exceptions thrown during init of QtDesigner
             if cls._is_qt_designer_init_error(exc_obj):
                 return
@@ -39,8 +38,25 @@ class StandardError(QMessageBox):
             dialog = cls(exc_type, exc_obj, exc_tb,
                          close_client_button=exc_type is ConnectionError)
             dialog.exec_()
+
+        # Settle for UI-less error if error was on another thread
+        elif app:
+
+            tb_message = traceback.format_exception(
+                exc_type, exc_obj, exc_tb)
+
+            tb_message_text = "".join(tb_message[:-1])
+            tb_message_info = tb_message[-1].rstrip()
+
+            logging.error(tb_message_text)
+            logging.error(tb_message_info)
+
         else:
             sys.__excepthook__(exc_type, exc_obj, exc_tb)
+
+        if not isinstance(exc_obj, api_errors.BaseAPIError):
+            # noinspection PyProtectedMember
+            os._exit(-1)
 
     def _init_text(self, exc_type, exc_obj, exc_tb):
 
@@ -57,12 +73,15 @@ class StandardError(QMessageBox):
         else:
             # Only show info if the connection was not closed. This makes the
             # dialog a little clearer
-            self.setText(self.tr("An exception has occurred"))
+            text = self.tr("An exception has occurred.")
+            if not isinstance(exc_obj, api_errors.BaseAPIError):
+                text += " " + self.tr("The client must be closed.")
+            self.setText(text)
             self.setInformativeText(tb_message_info)
 
         self.setDetailedText(tb_message_text)
 
-        # Log warning as well as show it to user
+        # Log exception as well as show it to user
         logging.error(tb_message_info)
         logging.error(tb_message_text)
 

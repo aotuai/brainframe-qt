@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh" sourcelanguage="en">
-<context>
-    <name>@default</name>
-    <message>
-        <location filename="../../../../../brainframe_client.py" line="67"/>
-        <source>Successfully connected to server. Starting UI</source>
-        <translation>连接服务器成功</translation>
-    </message>
-    <message>
-        <location filename="../../../../../brainframe_client.py" line="43"/>
-        <source>Program Closing: License Not Accepted</source>
-        <translation>程序正在关闭：授权不符</translation>
-    </message>
-    <message>
-        <location filename="../../../../../brainframe_client.py" line="54"/>
-        <source>Attempting to connect to server at {}</source>
-        <translation>尝试连接至服务器地址{}</translation>
-    </message>
-</context>
+<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -42,7 +23,6 @@ Reason:
 {}
 
 Read the manual to learn about the required directory structure.</source>
-        <translatorcomment>fix new line </translatorcomment>
         <translation>无法解析此目录
 
 原因：
@@ -87,7 +67,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="107"/>
         <source>Condition Type</source>
-        <translatorcomment>I translated as ”conditon parameter“. Make more sense to me. If you prefer the old one, replace with “条件类型”</translatorcomment>
         <translation>条件变量</translation>
     </message>
     <message>
@@ -113,7 +92,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="220"/>
         <source>in</source>
-        <translatorcomment>can you make these two &quot;in&quot; as different word, it&apos;s hard to translate to chinese in this structure.</translatorcomment>
         <translation>在</translation>
     </message>
     <message>
@@ -201,7 +179,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="69"/>
         <source>Plugin Enabled</source>
-        <translatorcomment>Is this a key of a map? If so, this key has to be consist.</translatorcomment>
         <translation>已启用插件</translation>
     </message>
     <message>
@@ -221,11 +198,21 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>DetectionPolygon</name>
+    <name>BrainFrameApplication</name>
     <message>
-        <location filename="../video_items/stream_detection.py" line="63"/>
-        <source>Name: </source>
-        <translation>名称： </translation>
+        <location filename="../../brainframe_app.py" line="69"/>
+        <source>Attempting to connect to server at {}</source>
+        <translation type="unfinished">尝试连接至服务器地址{}</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="87"/>
+        <source>Successfully connected to server. Starting UI</source>
+        <translation type="unfinished">连接服务器成功</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="118"/>
+        <source>Program Closing: License Not Accepted</source>
+        <translation type="unfinished">程序正在关闭：授权不符</translation>
     </message>
 </context>
 <context>
@@ -310,7 +297,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="94"/>
         <source>Reset to Stream Overrides</source>
-        <translatorcomment>Reset All Overriding Streams</translatorcomment>
         <translation>重置所有覆盖全局选项的流</translation>
     </message>
     <message>
@@ -352,7 +338,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="39"/>
         <source>Element</source>
-        <translatorcomment>Not sure what does element mean here</translatorcomment>
         <translation>项目</translation>
     </message>
     <message>
@@ -395,7 +380,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
         <source>Are you sure you want to delete all encodings withclass {} from identity for {}?</source>
-        <translatorcomment>order of {} has been changed Missing space</translatorcomment>
         <translation>您确定要从{}的标识中删除所有带有类别为{}的编码吗？</translation>
     </message>
     <message>
@@ -414,7 +398,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
         <source>Are you sure you want to delete all encodings withclass {} from the database?</source>
-        <translatorcomment>Missing space</translatorcomment>
         <translation>您确定要从数据库中删除所有类别为{}的编码吗？</translation>
     </message>
     <message>
@@ -451,7 +434,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../main_window/main_window.ui" line="20"/>
         <source>Dilili BrainFrame</source>
-        <translatorcomment>Shold we use English name or Chinese name. It will be 嘀哩哩 if it is chinese</translatorcomment>
         <translation>Dilili BrainFrame</translation>
     </message>
     <message>
@@ -505,42 +487,42 @@ Read the manual to learn about the required directory structure.</source>
         <translation>配置BrainFrame服务器</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="42"/>
+        <location filename="../../main_window/main_window.py" line="37"/>
         <source>Add new stream</source>
         <translation>添加新视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="127"/>
+        <location filename="../../main_window/main_window.py" line="122"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="107"/>
+        <location filename="../../main_window/main_window.py" line="102"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="108"/>
+        <location filename="../../main_window/main_window.py" line="103"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="131"/>
+        <location filename="../../main_window/main_window.py" line="126"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="128"/>
+        <location filename="../../main_window/main_window.py" line="123"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="129"/>
+        <location filename="../../main_window/main_window.py" line="124"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="130"/>
+        <location filename="../../main_window/main_window.py" line="125"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
@@ -570,13 +552,12 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="119"/>
         <source>of</source>
-        <translatorcomment>not sure how to translate this</translatorcomment>
         <translation>的</translation>
     </message>
-    <message>
+    <message encoding="UTF-8">
         <location filename="../ui_elements/containers/paginator.ui" line="105"/>
         <source>–</source>
-        <translation>-</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -612,7 +593,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="155"/>
         <source>Override Global</source>
-        <translatorcomment>Should this be Overrided Global?</translatorcomment>
         <translation>覆盖全局选项</translation>
     </message>
 </context>
@@ -662,7 +642,6 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="95"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
-        <translatorcomment>May not be accurate</translatorcomment>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
@@ -690,34 +669,44 @@ Please recheck the entered server address.</source>
 <context>
     <name>StandardError</name>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="60"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="69"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="55"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="71"/>
         <source>Connection to server lost. Client must be closed</source>
         <translation>与服务器的连接丢失。客户必须关闭</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="78"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="97"/>
         <source>Copy to Clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="86"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="105"/>
         <source>Close Client</source>
         <translation>关闭客户端</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="130"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="149"/>
         <source>Error copied to clipboard</source>
         <translation>错误信息已复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="134"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="153"/>
         <source>Quitting</source>
         <translation>正在推出</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="76"/>
+        <source>An exception has occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="78"/>
+        <source>The client must be closed.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -785,7 +774,6 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="156"/>
         <source>Pipeline</source>
-        <translatorcomment>I would rather keep this English</translatorcomment>
         <translation>流水线</translation>
     </message>
     <message>
@@ -818,49 +806,57 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>StreamPolygon</name>
+    <message>
+        <location filename="../video_items/stream_detection.py" line="64"/>
+        <source>Name: </source>
+        <translation type="unfinished">名称： </translation>
+    </message>
+</context>
+<context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="61"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="60"/>
         <source>New Line</source>
         <translation>新检测线段</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="61"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="60"/>
         <source>Name for new line:</source>
         <translation>新检测线段名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="70"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="69"/>
         <source>New Region</source>
         <translation>新检测区域</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="70"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="69"/>
         <source>Name for new region:</source>
         <translation>新检测区域名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="97"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="96"/>
         <source>New zone cannot have fewer than 2 points</source>
         <translation>新检测区域不能由于少于两个点组成</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="139"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="138"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="184"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="183"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="185"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="184"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="187"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="186"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>
@@ -978,7 +974,6 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="47"/>
         <source>Close expanded video view</source>
-        <translatorcomment>what dose this mean</translatorcomment>
         <translation>关闭扩展视频视图</translation>
     </message>
 </context>

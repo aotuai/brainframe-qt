@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="2.0" language="en" sourcelanguage="en">
 <context>
-    <name>@default</name>
-    <message>
-        <location filename="../../../../../brainframe_client.py" line="67"/>
-        <source>Successfully connected to server. Starting UI</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../../../brainframe_client.py" line="43"/>
-        <source>Program Closing: License Not Accepted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../../brainframe_client.py" line="54"/>
-        <source>Attempting to connect to server at {}</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AboutPage</name>
     <message>
         <location filename="../../dialogs/about_page/about_page.ui" line="14"/>
@@ -210,10 +192,20 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>DetectionPolygon</name>
+    <name>BrainFrameApplication</name>
     <message>
-        <location filename="../video_items/stream_detection.py" line="63"/>
-        <source>Name: </source>
+        <location filename="../../brainframe_app.py" line="69"/>
+        <source>Attempting to connect to server at {}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="87"/>
+        <source>Successfully connected to server. Starting UI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="118"/>
+        <source>Program Closing: License Not Accepted</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -489,42 +481,42 @@ Read the manual to learn about the required directory structure.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="42"/>
+        <location filename="../../main_window/main_window.py" line="37"/>
         <source>Add new stream</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="127"/>
+        <location filename="../../main_window/main_window.py" line="122"/>
         <source>Error Opening Stream</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="107"/>
+        <location filename="../../main_window/main_window.py" line="102"/>
         <source>Stream source already open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="108"/>
+        <location filename="../../main_window/main_window.py" line="103"/>
         <source>You already have the stream source open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="131"/>
+        <location filename="../../main_window/main_window.py" line="126"/>
         <source>Error: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="128"/>
+        <location filename="../../main_window/main_window.py" line="123"/>
         <source>Error encountered while opening stream</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="129"/>
+        <location filename="../../main_window/main_window.py" line="124"/>
         <source>Is stream already open?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="130"/>
+        <location filename="../../main_window/main_window.py" line="125"/>
         <source>Is this a valid stream source?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -669,33 +661,43 @@ Please recheck the entered server address.</source>
 <context>
     <name>StandardError</name>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="60"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="69"/>
         <source>An exception has occurred</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="55"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="71"/>
         <source>Connection to server lost. Client must be closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="78"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="97"/>
         <source>Copy to Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="86"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="105"/>
         <source>Close Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="130"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="149"/>
         <source>Error copied to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="134"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="153"/>
         <source>Quitting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="76"/>
+        <source>An exception has occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="78"/>
+        <source>The client must be closed.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -796,49 +798,57 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>StreamPolygon</name>
+    <message>
+        <location filename="../video_items/stream_detection.py" line="64"/>
+        <source>Name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="61"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="60"/>
         <source>New Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="61"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="60"/>
         <source>Name for new line:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="70"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="69"/>
         <source>New Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="70"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="69"/>
         <source>Name for new region:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="97"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="96"/>
         <source>New zone cannot have fewer than 2 points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="139"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="138"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="184"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="183"/>
         <source>Item Name Already Exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="185"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="184"/>
         <source>Item {} already exists in Stream</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="187"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="186"/>
         <source>Please use another name.</source>
         <translation type="unfinished"></translation>
     </message>
