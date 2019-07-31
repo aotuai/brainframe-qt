@@ -73,6 +73,8 @@ class IdentityGridPaginator(Paginator):
             widget = self.container_layout.takeAt(index).widget()
             widget.deleteLater()
 
+        self._selected_identity_entry = None
+
     def display_page(self, page: int):
 
         self.clear_layout()
@@ -95,6 +97,7 @@ class IdentityGridPaginator(Paginator):
 
             for identity in identities:
                 self.add_item(identity)
+
             self.total_items = total_count
             self.next_page_button.setDisabled(
                 self.range_upper >= self.total_items)
