@@ -39,28 +39,27 @@ class BrainFrameApplication(QApplication):
         translator = QTranslator(self)
         i18n_dir = str(text_paths.i18n_dir)
         if not translator.load(locale, "brainframe", '_', i18n_dir):
-            # TODO: Find a better way that doesn't rely on a _list of
-            #  preferences_. If, say, zh_BA (which isn't a thing) is used,
-            #  locale.name() returns zh_CN (which _is_ a real language). If
-            #  there is no `zh` language, we want to throw a warning with
-            #  zh_BA specified, not zh_CN. We settle for
-            #  locale.uiLanguages() because it returns ['zh_BA']. Not sure if
-            #  it might have other entries under some conditions.
-            locale = locale.uiLanguages()[0]
-            title = "Error loading language files"
-            message = (f"Unable to load translation file for {locale} locale. "
-                       f"Using English as a fallback.")
 
-            # noinspection PyTypeChecker
-            QMessageBox.warning(None, title, message)
+            if locale.language() != locale.English:
+                # TODO: Find a better way that doesn't rely on a _list of
+                #  preferences_. If, say, zh_BA (which isn't a thing) is
+                #  used, locale.name() returns zh_CN (which _is_ a real
+                #  language). If there is no `zh` language, we want to throw
+                #  a warning with zh_BA specified, not zh_CN. We settle for
+                #  locale.uiLanguages() because it returns ['zh_BA']. Not
+                #  sure if it might have other entries under some conditions.
+                locale_str = locale.uiLanguages()[0]
 
-            english_locale = QLocale(QLocale.English, QLocale.UnitedStates)
-            if not translator.load(english_locale, "brainframe", '_',
-                                   i18n_dir):
-                raise RuntimeError("Unable to set locale to even en_US. "
-                                   "Something is wrong")
+                title = "Error loading language files"
+                message = (f"Unable to load translation file for "
+                           f"[{locale_str}] locale. Using English as a "
+                           f"fallback.")
 
-        self.installTranslator(translator)
+                # noinspection PyTypeChecker
+                QMessageBox.warning(None, title, message)
+
+        else:
+            self.installTranslator(translator)
 
     def exec(self):
 
