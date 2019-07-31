@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
+<!DOCTYPE TS>
+<TS version="2.1" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -207,12 +208,12 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../brainframe_app.py" line="88"/>
         <source>Successfully connected to server. Starting UI</source>
-        <translation type="unfinished">连接服务器成功</translation>
+        <translation>连接服务器成功，正在启动UI。</translation>
     </message>
     <message>
         <location filename="../../brainframe_app.py" line="163"/>
         <source>Program Closing: License Not Accepted</source>
-        <translation type="unfinished">程序正在关闭：授权不符</translation>
+        <translation>程序正在关闭：授权不符</translation>
     </message>
 </context>
 <context>
@@ -375,7 +376,7 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
         <source>Are you sure you want to delete all encodings with class {} from identity for {}?</source>
-        <translation type="unfinished">您确定要从 {2} 的标识中删除所有带有类别为 {1} 的编码吗？</translation>
+        <translation>您确定要从 {2} 的标识中删除所有带有类别为 {1} 的编码吗？</translation>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="102"/>
@@ -547,7 +548,7 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="119"/>
         <source>of</source>
-        <translation>的</translation>
+        <translation>中的</translation>
     </message>
 </context>
 <context>
@@ -611,7 +612,7 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="93"/>
         <source>Save password between sessions</source>
-        <translation>在会话之间保存密码</translation>
+        <translation>保存密码</translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="14"/>
@@ -691,12 +692,12 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/standard_error/standard_error.py" line="51"/>
         <source>An exception has occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>发生了一个例外。</translation>
     </message>
     <message>
         <location filename="../../dialogs/standard_error/standard_error.py" line="53"/>
         <source>The client must be closed.</source>
-        <translation type="unfinished"></translation>
+        <translation>必须关闭客户端。</translation>
     </message>
 </context>
 <context>
@@ -800,7 +801,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../video_items/stream_detection.py" line="64"/>
         <source>Name: </source>
-        <translation type="unfinished">名称： </translation>
+        <translation>名称： </translation>
     </message>
 </context>
 <context>
@@ -926,7 +927,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/video_configuration/video_configuration.ui" line="101"/>
         <source>Always use bounding boxes</source>
-        <translation>始终使用四边形检测框</translation>
+        <translation>始终使用长方形检测框</translation>
     </message>
     <message>
         <location filename="../../dialogs/video_configuration/video_configuration.ui" line="111"/>
@@ -972,7 +973,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.ui" line="80"/>
         <source>Streams with ongoing alerts:</source>
-        <translation>持续警报的视频流：</translation>
+        <translation>正在警报的视频流：</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.ui" line="90"/>
