@@ -97,7 +97,7 @@ class IdentityInfo(QWidget):
     # noinspection DuplicatedCode
     def _prompt_encoding_class_deletion(self, encoding_class: str) -> bool:
         message = self.tr("Are you sure you want to delete all encodings with "
-                          "class {} from identity for {}?") \
+                          "class {0} from identity for {1}?") \
             .format(encoding_class, self.identity.unique_name)
         info_text = self.tr("This operation cannot be undone.")
 

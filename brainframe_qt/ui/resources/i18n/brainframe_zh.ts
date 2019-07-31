@@ -375,8 +375,8 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
-        <source>Are you sure you want to delete all encodings with class {} from identity for {}?</source>
-        <translation>您确定要从 {2} 的标识中删除所有带有类别为 {1} 的编码吗？</translation>
+        <source>Are you sure you want to delete all encodings with class {0} from identity for {1}?</source>
+        <translation type="unfinished">您确定要从 {1} 的标识中删除所有带有类别为 {0} 的编码吗？</translation>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="102"/>
