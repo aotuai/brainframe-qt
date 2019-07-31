@@ -2,6 +2,8 @@ from .all_resource_paths import route_path
 
 # Translation paths
 i18n_dir = route_path("brainframe", "client", "ui", "resources", "i18n")
+for translation_file in i18n_dir.glob("*.qm"):
+    route_path(translation_file)
 
 # License paths
 license_agreement_txt = route_path("license.txt")
