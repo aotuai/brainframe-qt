@@ -79,7 +79,6 @@ SOURCES += ../paths/image_paths.py
 SOURCES += ../paths/qt_ui_paths.py
 SOURCES += ../paths/text_paths.py
 SOURCES += ../qt_async_worker.py
-SOURCES += ../qt_plugins/base_container_plugin.py
 SOURCES += ../qt_plugins/base_plugin.py
 SOURCES += ../settings.py
 SOURCES += ../ui_elements/buttons/__init__.py

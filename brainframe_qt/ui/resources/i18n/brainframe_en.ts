@@ -194,17 +194,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="69"/>
+        <location filename="../../brainframe_app.py" line="70"/>
         <source>Attempting to connect to server at {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="87"/>
+        <location filename="../../brainframe_app.py" line="88"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="118"/>
+        <location filename="../../brainframe_app.py" line="163"/>
         <source>Program Closing: License Not Accepted</source>
         <translation type="unfinished"></translation>
     </message>
@@ -269,7 +269,7 @@ Read the manual to learn about the required directory structure.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="15"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="94"/>
         <source>Reset All Overriding Streams</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,11 +286,6 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="67"/>
         <source>There are no changes to reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="94"/>
-        <source>Reset to Stream Overrides</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -373,7 +368,7 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
-        <source>Are you sure you want to delete all encodings withclass {} from identity for {}?</source>
+        <source>Are you sure you want to delete all encodings with class {} from identity for {}?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -391,7 +386,7 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
-        <source>Are you sure you want to delete all encodings withclass {} from the database?</source>
+        <source>Are you sure you want to delete all encodings with class {} from the database?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -548,11 +543,6 @@ Read the manual to learn about the required directory structure.</source>
         <source>of</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui_elements/containers/paginator.ui" line="105"/>
-        <source>–</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PluginConfigDialog</name>
@@ -661,42 +651,42 @@ Please recheck the entered server address.</source>
 <context>
     <name>StandardError</name>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="69"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="44"/>
         <source>An exception has occurred</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="71"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="46"/>
         <source>Connection to server lost. Client must be closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="97"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="74"/>
         <source>Copy to Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="105"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="82"/>
         <source>Close Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="149"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="126"/>
         <source>Error copied to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="153"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="130"/>
         <source>Quitting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="76"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="51"/>
         <source>An exception has occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="78"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="53"/>
         <source>The client must be closed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -740,7 +730,7 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="70"/>
-        <source>Name:</source>
+        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -964,7 +954,7 @@ Please recheck the entered server address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="47"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="49"/>
         <source>Close expanded video view</source>
         <translation type="unfinished"></translation>
     </message>

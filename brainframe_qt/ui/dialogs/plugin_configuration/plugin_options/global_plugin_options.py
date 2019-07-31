@@ -91,7 +91,7 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
             if len(opts) or is_active is not None:
                 changed_stream_ids.append(stream_id)
 
-        title = self.tr("Reset to Stream Overrides")
+        title = self.tr("Reset All Overriding Streams")
         if len(changed_stream_ids):
             desc = self.tr("The following streams have overrides that will be "
                            "cleared:")

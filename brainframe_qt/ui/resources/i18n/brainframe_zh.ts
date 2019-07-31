@@ -156,17 +156,17 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="34"/>
         <source>{} in region [{}]</source>
-        <translation>{}在区域{}内</translation>
+        <translation>{} 在区域 [{}] 内</translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="62"/>
         <source>(Ongoing)</source>
-        <translation>仍在持续</translation>
+        <translation>(仍在持续)</translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
         <source>{} to {}</source>
-        <translation>{}至{}</translation>
+        <translation>{} 至 {}</translation>
     </message>
 </context>
 <context>
@@ -184,7 +184,7 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="113"/>
         <source>The plugin option of name {} has an invalid type of type {}</source>
-        <translation>名称为{}的插件选项的类型{}类型无效</translation>
+        <translation>名称为 {} 的插件选项的类型 {} 类型无效</translation>
     </message>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="147"/>
@@ -200,17 +200,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="69"/>
+        <location filename="../../brainframe_app.py" line="70"/>
         <source>Attempting to connect to server at {}</source>
-        <translation type="unfinished">尝试连接至服务器地址{}</translation>
+        <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="87"/>
+        <location filename="../../brainframe_app.py" line="88"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation type="unfinished">连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="118"/>
+        <location filename="../../brainframe_app.py" line="163"/>
         <source>Program Closing: License Not Accepted</source>
         <translation type="unfinished">程序正在关闭：授权不符</translation>
     </message>
@@ -275,7 +275,7 @@ Read the manual to learn about the required directory structure.</source>
         <translation>全局插件选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="15"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="94"/>
         <source>Reset All Overriding Streams</source>
         <translation>重置所有覆盖全局选项的流</translation>
     </message>
@@ -293,11 +293,6 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="67"/>
         <source>There are no changes to reset</source>
         <translation>无需重置</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="94"/>
-        <source>Reset to Stream Overrides</source>
-        <translation>重置所有覆盖全局选项的流</translation>
     </message>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="96"/>
@@ -379,8 +374,8 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
-        <source>Are you sure you want to delete all encodings withclass {} from identity for {}?</source>
-        <translation>您确定要从{}的标识中删除所有带有类别为{}的编码吗？</translation>
+        <source>Are you sure you want to delete all encodings with class {} from identity for {}?</source>
+        <translation type="unfinished">您确定要从 {2} 的标识中删除所有带有类别为 {1} 的编码吗？</translation>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="102"/>
@@ -397,7 +392,7 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
-        <source>Are you sure you want to delete all encodings withclass {} from the database?</source>
+        <source>Are you sure you want to delete all encodings with class {} from the database?</source>
         <translation>您确定要从数据库中删除所有类别为{}的编码吗？</translation>
     </message>
     <message>
@@ -554,11 +549,6 @@ Read the manual to learn about the required directory structure.</source>
         <source>of</source>
         <translation>的</translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui_elements/containers/paginator.ui" line="105"/>
-        <source>–</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PluginConfigDialog</name>
@@ -669,42 +659,42 @@ Please recheck the entered server address.</source>
 <context>
     <name>StandardError</name>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="69"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="44"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="71"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="46"/>
         <source>Connection to server lost. Client must be closed</source>
         <translation>与服务器的连接丢失。客户必须关闭</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="97"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="74"/>
         <source>Copy to Clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="105"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="82"/>
         <source>Close Client</source>
         <translation>关闭客户端</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="149"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="126"/>
         <source>Error copied to clipboard</source>
         <translation>错误信息已复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="153"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="130"/>
         <source>Quitting</source>
         <translation>正在推出</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="76"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="51"/>
         <source>An exception has occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="78"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="53"/>
         <source>The client must be closed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -748,8 +738,8 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="70"/>
-        <source>Name:</source>
-        <translation>名称：</translation>
+        <source>Name</source>
+        <translation>名称</translation>
     </message>
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="98"/>
@@ -774,7 +764,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="156"/>
         <source>Pipeline</source>
-        <translation>流水线</translation>
+        <translation>Pipeline</translation>
     </message>
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="163"/>
@@ -972,7 +962,7 @@ Please recheck the entered server address.</source>
         <translation>删除视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="47"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="49"/>
         <source>Close expanded video view</source>
         <translation>关闭扩展视频视图</translation>
     </message>

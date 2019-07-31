@@ -67,7 +67,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Name:</string>
+        <string>Name</string>
        </property>
       </widget>
      </item>
