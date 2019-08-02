@@ -100,11 +100,11 @@ class AlarmCreationDialog(QDialog):
         self.seconds_label.setHidden(hidden)
 
     @classmethod
-    def new_alarm(cls, *, zones, plugins: List[Plugin]):
-        dialog = cls(zones, plugins, None)
+    def new_alarm(cls, parent, *, zones, plugins: List[Plugin]):
+        dialog = cls(zones, plugins, parent=parent)
         result = dialog.exec_()
 
-        zones = {zone.name: zone for zone in zones}  # type: List[Zone]
+        zones: Dict[str, Zone] = {zone.name: zone for zone in zones}
 
         if not result:
             return None, None
@@ -148,14 +148,14 @@ class AlarmCreationDialog(QDialog):
                 window_threshold=AlarmCreationDialog.WINDOW_THRESHOLD))
 
         elif condition_button is dialog.rate_based_button:
-            direction = dialog.direction_combo_box.currentText()
+            direction_index: int = dialog.direction_combo_box.currentIndex()
             duration = dialog.duration_spin_box.value()
 
-            if direction == "enter":
+            if direction_index == 0:  # enter
                 direction = ZoneAlarmRateCondition.DirectionType.ENTERING
-            elif direction == "exit":
+            elif direction_index == 1:  # exit
                 direction = ZoneAlarmRateCondition.DirectionType.EXITING
-            elif direction == "enter/exit":
+            elif direction_index == 2:  # enter/exit
                 direction = \
                     ZoneAlarmRateCondition.DirectionType.ENTERING_OR_EXITING
 
@@ -208,8 +208,8 @@ class AlarmCreationDialog(QDialog):
         self._update_combo_box(self.behavior_combo_box,
                                self._attribute_values(countable))
 
-    @classmethod
-    def _update_combo_box(cls, combo_box, items):
+    @staticmethod
+    def _update_combo_box(combo_box, items):
         combo_box.clear()
         combo_box.insertItems(0, items)
 

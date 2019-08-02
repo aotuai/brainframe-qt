@@ -9,14 +9,15 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        self.window().setWindowTitle("Global Plugin Options")
+        self.window().setWindowTitle(self.tr("Global Plugin Options"))
         self.override_label.hide()
 
         self._reset_overriding_btn = QPushButton(
-            "Reset All Overriding Streams",
+            self.tr("Reset All Overriding Streams"),
             parent=self)
-        self._reset_to_defaults_btn = QPushButton("Reset to Defaults",
-                                                  parent=self)
+        self._reset_to_defaults_btn = QPushButton(
+            self.tr("Reset to Defaults"),
+            parent=self)
         # Add the button to the buttons grid
         self.buttons_grid.addWidget(self._reset_to_defaults_btn, 0, 1)
         self.buttons_grid.addWidget(self._reset_overriding_btn, 1, 1)
@@ -35,7 +36,7 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
         - QPushButton -- Dynamic
           self._reset_to_defaults_btn.clicked.connect
         """
-        TITLE = "Reset to Defaults"
+        title = self.tr("Reset to Defaults")
 
         default_values = {key: option.default
                           for key, option in
@@ -49,9 +50,9 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
 
         # Prompt the user appropriately
         if len(changed_options):
-            desc = "The following options will be reset to default:\n\t"
-            desc += ", \n\t".join(changed_options)
-            result = QMessageBox.question(self, TITLE, desc)
+            desc = self.tr("The following options will be reset to default):")
+            desc += "\n\t, \n\t".join(changed_options)
+            result = QMessageBox.question(self, title, desc)
             if result != QMessageBox.Yes:
                 # The user cancelled, so exit early.
                 return
@@ -63,9 +64,8 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
             # Change the 'enabled' to default
             self.enabled_option.set_val(True)
         else:
-            desc = "There are no changes to reset"
-            QMessageBox.information(
-                self, TITLE, desc)
+            desc = self.tr("There are no changes to reset")
+            QMessageBox.information(self, title, desc)
 
     def on_reset_overriding_streams(self):
         """
@@ -91,16 +91,17 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
             if len(opts) or is_active is not None:
                 changed_stream_ids.append(stream_id)
 
-        TITLE = "Reset to Stream Overrides"
+        title = self.tr("Reset All Overriding Streams")
         if len(changed_stream_ids):
-            desc = "The following streams have overrides " \
-                   "that will be cleared:\n\t"
+            desc = self.tr("The following streams have overrides that will be "
+                           "cleared:")
+            desc += "\n\t"
 
             stream_names = [s.name for s in api.get_stream_configurations()
                             if s.id in changed_stream_ids]
 
             desc += ", \n\t".join(stream_names)
-            result = QMessageBox.question(self, TITLE, desc)
+            result = QMessageBox.question(self, title, desc)
             if result != QMessageBox.Yes:
                 # The user cancelled, so exit early.
                 return
@@ -116,7 +117,7 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
                     stream_id=stream_id,
                     active=None)
         else:
-            desc = "There are no streams that override the global options " \
-                   "for this plugin."
+            desc = self.tr("There are no streams that override the global "
+                           "options for this plugin.")
             QMessageBox.information(
-                self, TITLE, desc)
+                self, title, desc)

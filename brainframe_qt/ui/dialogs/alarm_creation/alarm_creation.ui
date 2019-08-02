@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>AlarmCreationDialog</class>
+ <widget class="QDialog" name="AlarmCreationDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -385,7 +385,7 @@
   <connection>
    <sender>dialog_button_box</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>AlarmCreationDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -401,7 +401,7 @@
   <connection>
    <sender>dialog_button_box</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>AlarmCreationDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

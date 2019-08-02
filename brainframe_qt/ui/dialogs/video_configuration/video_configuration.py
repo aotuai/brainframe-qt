@@ -41,10 +41,10 @@ class RenderConfiguration(QDialog):
             settings.show_recognition_confidence.val())
 
     @classmethod
-    def show_dialog(cls):
+    def show_dialog(cls, parent):
         ...
 
-        dialog = cls()
+        dialog = cls(parent)
 
         result = dialog.exec_()
         if not result:

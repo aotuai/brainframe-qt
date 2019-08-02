@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>AlertEntryPopup</class>
+ <widget class="QDialog" name="AlertEntryPopup">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -33,7 +33,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>[Alert Text]</string>
+      <string notr="true">[Alert Text]</string>
      </property>
     </widget>
    </item>
@@ -64,7 +64,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>AlertEntryPopup</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -80,7 +80,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>AlertEntryPopup</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

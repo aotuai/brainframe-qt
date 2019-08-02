@@ -65,7 +65,7 @@ class SplashScreen(QSplashScreen):
 
     def show_configuration_button(self):
         self.setLayout(QVBoxLayout())
-        button = QPushButton("Configure")
+        button = QPushButton(self.tr("Configure"))
         button.setFocusPolicy(Qt.NoFocus)
         # noinspection PyUnresolvedReferences
         button.clicked.connect(

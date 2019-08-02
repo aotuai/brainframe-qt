@@ -31,7 +31,7 @@ class AddNewIdentitiesWorker(QThread):
 
     def add_identities_from_file(self):
 
-        path = DirectorySelector.get_path()
+        path = DirectorySelector.get_path(self.parent())
 
         # User canceled
         if path is None:
@@ -42,14 +42,17 @@ class AddNewIdentitiesWorker(QThread):
             identity_finder = FileTreeIdentityFinder(path)
             self.num_images = identity_finder.num_encodings
         except ValueError as err:
-            error_dialog = QMessageBox()
+
+            message = self.tr("Unable to parse this directory!\n\n"
+                              "Reason:\n"
+                              "{}\n\n"
+                              "Read the manual to learn about the required "
+                              "directory structure.").format(err)
+
+            error_dialog = QMessageBox(self)
             error_dialog.setIcon(QMessageBox.Critical)
-            error_dialog.setWindowTitle("Invalid Format")
-            error_dialog.setText(f"Unable to parse this directory!\n\n"
-                                 f"Reason:\n"
-                                 f"{err}\n\n"
-                                 f"Read the manual to learn about the required "
-                                 f"directory structure.")
+            error_dialog.setWindowTitle(self.tr("Invalid Format"))
+            error_dialog.setText(message)
             error_dialog.exec_()
             return
 
@@ -60,7 +63,7 @@ class AddNewIdentitiesWorker(QThread):
     def show_errors(self):
         # If there are errors, show them to the user
         if self.errors:
-            IdentityErrorPopup.show_errors(self.errors)
+            IdentityErrorPopup.show_errors(self.errors, self.parent())
             self.errors = set()
 
     def run(self):

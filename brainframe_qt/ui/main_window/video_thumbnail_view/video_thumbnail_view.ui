@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>widget</class>
- <widget class="QWidget" name="widget">
+ <class>VideoThumbnailView</class>
+ <widget class="QWidget" name="VideoThumbnailView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -127,7 +127,7 @@
   <connection>
    <sender>alertless_streams_layout</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
-   <receiver>widget</receiver>
+   <receiver>VideoThumbnailView</receiver>
    <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -175,7 +175,7 @@
   <connection>
    <sender>alert_streams_layout</sender>
    <signal>thumbnail_stream_clicked_signal(PyQt_PyObject)</signal>
-   <receiver>widget</receiver>
+   <receiver>VideoThumbnailView</receiver>
    <slot>thumbnail_stream_clicked_slot(PyQt_PyObject)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -191,7 +191,7 @@
   <connection>
    <sender>alert_streams_layout</sender>
    <signal>ongoing_alerts_signal(PyQt_PyObject,bool)</signal>
-   <receiver>widget</receiver>
+   <receiver>VideoThumbnailView</receiver>
    <slot>ongoing_alerts_slot(PyQt_PyObject,bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -207,7 +207,7 @@
   <connection>
    <sender>alertless_streams_layout</sender>
    <signal>ongoing_alerts_signal(PyQt_PyObject,bool)</signal>
-   <receiver>widget</receiver>
+   <receiver>VideoThumbnailView</receiver>
    <slot>ongoing_alerts_slot(PyQt_PyObject,bool)</slot>
    <hints>
     <hint type="sourcelabel">

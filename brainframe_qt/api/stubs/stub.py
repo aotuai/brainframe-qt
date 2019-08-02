@@ -277,9 +277,18 @@ def _make_api_error(resp_content):
         description = ("A failure happened but the server did not respond "
                        "with a proper error")
     else:
-        resp_content = ujson.loads(resp_content)
-        kind = resp_content["title"]
-        description = resp_content["description"]
+        try:
+            resp_content = ujson.loads(resp_content)
+            kind = resp_content["title"]
+            description = resp_content["description"]
+        except ValueError:
+            # The content of the error was not in the proper format. This might
+            # happen if some part of our request handling pipeline failed that
+            # doesn't know about our error handling format. Not ideal.
+            kind = error_kinds.UNKNOWN
+            resp_content = resp_content.decode("utf-8")
+            description = ("A failure happened, and the response was not in "
+                           "the proper error format: " + resp_content)
 
     if kind not in api_errors.kind_to_error_type:
         info = f"Unknown error kind {kind}: " + description

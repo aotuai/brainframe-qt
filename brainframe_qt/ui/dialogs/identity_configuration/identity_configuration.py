@@ -63,8 +63,8 @@ class IdentityConfiguration(QDialog):
         self.init_ui()
 
     @classmethod
-    def show_dialog(cls):
-        dialog = cls()
+    def show_dialog(cls, parent):
+        dialog = cls(parent)
         dialog.exec_()
 
     def init_ui(self):

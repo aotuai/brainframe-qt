@@ -42,9 +42,9 @@ class AboutPage(QDialog):
             self.tab_widget.addTab(tab, license_.suffix[1:])
 
     @classmethod
-    def show_dialog(cls):
+    def show_dialog(cls, parent):
 
-        dialog = cls()
+        dialog = cls(parent)
         dialog.exec_()
 
 

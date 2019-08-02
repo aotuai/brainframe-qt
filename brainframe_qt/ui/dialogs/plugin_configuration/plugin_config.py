@@ -50,8 +50,8 @@ class PluginConfigDialog(QDialog):
         self.plugin_options_widget.setDisabled(val)
 
     @classmethod
-    def show_dialog(cls, stream_id=None):
-        dialog = cls(stream_id=stream_id)
+    def show_dialog(cls, parent, stream_id=None):
+        dialog = cls(stream_id=stream_id, parent=parent)
         dialog.exec_()
 
     @pyqtSlot()

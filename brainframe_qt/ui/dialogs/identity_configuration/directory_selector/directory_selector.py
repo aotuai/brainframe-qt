@@ -24,10 +24,10 @@ class DirectorySelector(QDialog):
         self.select_directory_button.clicked.connect(self._file_dialog)
 
     @classmethod
-    def get_path(cls):
+    def get_path(cls, parent):
         # TODO: Verify path is a real path
 
-        dialog = cls()
+        dialog = cls(parent)
         result = dialog.exec_()
 
         if not result:
@@ -38,7 +38,7 @@ class DirectorySelector(QDialog):
     def _file_dialog(self):
         path = QFileDialog().getExistingDirectory(
             self,
-            "Select directory containing identities",
+            self.tr("Select directory containing identities"),
             QStandardPaths.writableLocation(QStandardPaths.HomeLocation),
             QFileDialog.ShowDirsOnly)
 

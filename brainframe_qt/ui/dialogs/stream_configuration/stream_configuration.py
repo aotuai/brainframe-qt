@@ -49,8 +49,8 @@ class StreamConfigurationDialog(QDialog):
         self.toggle_advanced_options()
 
     @classmethod
-    def configure_stream(cls, stream_conf=None):
-        dialog = cls(stream_conf)
+    def configure_stream(cls, parent, stream_conf=None):
+        dialog = cls(parent, stream_conf)
         result = dialog.exec_()
 
         if not result:
@@ -69,7 +69,9 @@ class StreamConfigurationDialog(QDialog):
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
             params = {"filepath": str(dialog.parameter_value.text())}
         else:
-            raise NotImplementedError("Unrecognized connection type")
+            message = QApplication.translate('StreamConfigurationDialog',
+                                             "Unrecognized connection type")
+            raise NotImplementedError(message)
 
         keyframes_only = dialog.advanced_options_checkbox.isChecked() \
                          and dialog.keyframe_only_checkbox.isChecked()
@@ -81,28 +83,28 @@ class StreamConfigurationDialog(QDialog):
                                        "keyframes_only": keyframes_only
                                    })
 
-    @pyqtSlot(str)
-    def connection_type_changed_slot(self, connection_type):
-        """Called when connection_type_combo_box's value is changed"""
-        if connection_type == "":
+    @pyqtSlot(int)
+    def connection_type_changed_slot(self, connection_index: int):
+        """Called when connection_type_combo_box's index is changed"""
+        if connection_index == 0:
             self.connection_type = None
 
             # Hide parameter widgets
             self._set_parameter_widgets_hidden(True)
         else:
 
-            if connection_type == "IP Camera":
+            if connection_index == 1:  # IP Camera
                 self.connection_type = StreamConfiguration.ConnType.IP_CAMERA
-                self.parameter_label.setText("Camera web address")
+                self.parameter_label.setText(self.tr("Camera web address"))
                 self._set_advanced_options_section_hidden(False)
-            elif connection_type == "Webcam":
+            elif connection_index == 2:  # Webcam
                 self.connection_type = StreamConfiguration.ConnType.WEBCAM
-                self.parameter_label.setText("Device ID")
+                self.parameter_label.setText(self.tr("Device ID"))
                 self._set_advanced_options_section_hidden(True)
-            elif connection_type == "File":
+            elif connection_index == 3:  # File
                 # TODO(Bryce Beagle): Use QFileDialog
                 self.connection_type = StreamConfiguration.ConnType.FILE
-                self.parameter_label.setText("Filepath")
+                self.parameter_label.setText(self.tr("Filepath"))
                 self._set_advanced_options_section_hidden(True)
 
             # Show parameter widgets
@@ -163,7 +165,8 @@ class StreamConfigurationDialog(QDialog):
         """
         self.parameters_container.setHidden(hidden)
 
-        # Hide the file selection button if selected connection type is not file
+        # Hide the file selection button if selected connection type is not
+        # file
         self.select_file_button.setHidden(
             self.connection_type != StreamConfiguration.ConnType.FILE)
 
@@ -186,10 +189,10 @@ class StreamConfigurationDialog(QDialog):
 
         # Second return value is ignored. PyQt5 returns what appears to be a
         # filter as a string as well, differing from the C++ implementation
-        file_path, _ = QFileDialog().getOpenFileName(self,
-                                                     "Select video file",
-                                                     QStandardPaths.writableLocation(
-                                                         QStandardPaths.HomeLocation))
+        file_path, _ = QFileDialog().getOpenFileName(
+            self,
+            self.tr("Select video file"),
+            QStandardPaths.writableLocation(QStandardPaths.HomeLocation))
 
         self.parameter_value.setText(file_path)
 

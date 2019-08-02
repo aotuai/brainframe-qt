@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>EncodingEntry</class>
+ <widget class="QWidget" name="EncodingEntry">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">EncodingEntry</string>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -51,7 +51,7 @@
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
-      <string>🗑️</string>
+      <string notr="true">🗑️</string>
      </property>
      <property name="flat">
       <bool>true</bool>

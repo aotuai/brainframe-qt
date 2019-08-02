@@ -36,7 +36,7 @@ class VideoThumbnailView(QWidget):
         self.current_stream_id = None
         """Currently expanded stream. None if no stream selected"""
 
-        self.startTimer(1)
+        self.startTimer(1000)
 
         # Hide the alerts layout
         self.alert_streams_layout.hide()
@@ -122,7 +122,8 @@ class VideoThumbnailView(QWidget):
             self.remove_streams_from_alerts(stream_conf.id)
 
         else:
-            raise RuntimeError("Inconsistent state with alert widgets")
+            message = self.tr("Inconsistent state with alert widgets.")
+            raise RuntimeError(message)
 
     def add_stream_to_alerts(self, stream_id):
 

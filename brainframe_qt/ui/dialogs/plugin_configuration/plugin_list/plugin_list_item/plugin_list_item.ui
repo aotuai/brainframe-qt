@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QLabel" name="Form">
+ <class>PluginListItem</class>
+ <widget class="QLabel" name="PluginListItem">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,10 +29,10 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">PluginListItem</string>
   </property>
   <property name="text">
-   <string>Plugin Name Here</string>
+   <string notr="true">[Plugin Name]</string>
   </property>
   <property name="indent">
    <number>6</number>

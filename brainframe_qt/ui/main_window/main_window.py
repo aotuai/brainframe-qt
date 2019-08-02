@@ -6,15 +6,9 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget, QSizePolicy
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
-from brainframe.client.ui.dialogs import (
-    AboutPage,
-    StandardError,
-    StreamConfigurationDialog,
-    IdentityConfiguration,
-    PluginConfigDialog,
-    RenderConfiguration,
-    ServerConfigurationDialog
-)
+from brainframe.client.ui.dialogs import AboutPage, \
+    IdentityConfiguration, PluginConfigDialog, RenderConfiguration, \
+    ServerConfigurationDialog, StreamConfigurationDialog
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import \
     FloatingActionButton
@@ -38,8 +32,9 @@ class MainWindow(QMainWindow):
             self.video_thumbnail_view,
             self.palette().highlight())
         add_new_stream_button.show()  # No idea why this is necessary
+        # noinspection PyUnresolvedReferences
         add_new_stream_button.clicked.connect(self.add_new_stream_slot)
-        add_new_stream_button.setToolTip("Add new stream")
+        add_new_stream_button.setToolTip(self.tr("Add new stream"))
 
         # Add a spacer to make the license button appear right justified
         spacer = QWidget()
@@ -93,7 +88,7 @@ class MainWindow(QMainWindow):
     def add_new_stream_slot(self):
         """Open dialog to add a new stream and then send it to the server"""
 
-        stream_conf = StreamConfigurationDialog.configure_stream()
+        stream_conf = StreamConfigurationDialog.configure_stream(self)
         if stream_conf is None:
             return
         try:
@@ -103,43 +98,51 @@ class MainWindow(QMainWindow):
             # Currently, we default to setting all new streams as 'active'
             api.start_analyzing(stream_conf.id)
         except api_errors.DuplicateStreamSourceError as err:
-            message = "<b>Stream source already open</b>" \
-                      "<br><br>" \
-                      "You already have the stream source open.<br><br>" \
-                      "Error: <b>" + err.kind + "</b>"
+            message_title = self.tr("Error Opening Stream")
+            message_desc = self.tr("Stream source already open")
+            message_info = self.tr("You already have the stream source open.")
+            error_text = self.tr("Error: ")
+            message = f"<b>{message_desc}</b>" \
+                      f"<br><br>" \
+                      f"{message_info}<br><br>" \
+                      f"{error_text}<b>{err.kind}</b>"
 
-            QMessageBox.information(self, "Error Opening Stream", message)
-            return
+            QMessageBox.information(self, message_title, message)
         except api_errors.StreamNotOpenedError as err:
-            message = "<b>Error encountered while opening stream</b>" \
-                      "<br><br>" \
+            message_title = self.tr("Error Opening Stream")
+            message_desc = self.tr("Error encountered while opening stream")
+            error_text = self.tr("Error: ")
+            message = f"<b>{message_desc}</b>" \
+                      f"<br><br>" \
                       f"{err}<br><br>" \
                       f"{err.description}<br><br>" \
-                      "Error: <b>" + err.kind + "</b>"
-            QMessageBox.information(self, "Error Opening Stream", message)
+                      f"{error_text}<b>{err.kind}</b>"
+            QMessageBox.information(self, message_title, message)
         except api_errors.BaseAPIError as err:
-            message = "<b>Error encountered while opening stream</b>" \
-                      "<br><br>" \
-                      "Is stream already open?<br>" \
-                      "Is this a valid stream source?<br><br>" \
-                      "Error: <b>" + err.kind + "</b>"
-            QMessageBox.information(self, "Error Opening Stream", message)
-            return
+            message_title = self.tr("Error Opening Stream")
+            message_desc = self.tr("Error encountered while opening stream")
+            message_info1 = self.tr("Is stream already open?")
+            message_info2 = self.tr("Is this a valid stream source?")
+            error_text = self.tr("Error: ")
+            message = f"<b>{message_desc}</b>" \
+                      f"<br><br>" \
+                      f"{message_info1}<br>" \
+                      f"{message_info2}<br><br>" \
+                      f"{error_text}<b>{err.kind}</b>"
+            QMessageBox.information(self, message_title, message)
 
     @pyqtSlot()
     def show_video_configuration_dialog(self):
-        RenderConfiguration.show_dialog()
+        RenderConfiguration.show_dialog(self)
 
     @pyqtSlot()
     def show_identities_dialog(self):
-        IdentityConfiguration.show_dialog()
+        IdentityConfiguration.show_dialog(self)
 
     @pyqtSlot()
     def show_about_page_dialog(self):
-        AboutPage.show_dialog()
+        AboutPage.show_dialog(self)
 
     @pyqtSlot()
     def show_global_plugin_config_dialog(self):
-        PluginConfigDialog.show_dialog()
-
-    sys.excepthook = StandardError.show_error
+        PluginConfigDialog.show_dialog(self)

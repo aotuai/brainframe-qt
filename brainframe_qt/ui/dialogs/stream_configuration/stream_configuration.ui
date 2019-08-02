@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>StreamConfigurationDialog</class>
+ <widget class="QDialog" name="StreamConfigurationDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -67,7 +67,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Name:</string>
+        <string>Name</string>
        </property>
       </widget>
      </item>
@@ -220,7 +220,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>[parameter]</string>
+         <string notr="true">[parameter]</string>
         </property>
        </widget>
       </item>
@@ -275,7 +275,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>StreamConfigurationDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -291,7 +291,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>StreamConfigurationDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -306,9 +306,9 @@
   </connection>
   <connection>
    <sender>connection_type_combo_box</sender>
-   <signal>currentTextChanged(QString)</signal>
-   <receiver>Dialog</receiver>
-   <slot>connection_type_changed_slot(QString)</slot>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>StreamConfigurationDialog</receiver>
+   <slot>connection_type_changed_slot(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
@@ -322,6 +322,6 @@
   </connection>
  </connections>
  <slots>
-  <slot>connection_type_changed_slot(QString)</slot>
+  <slot>connection_type_changed_slot(int)</slot>
  </slots>
 </ui>

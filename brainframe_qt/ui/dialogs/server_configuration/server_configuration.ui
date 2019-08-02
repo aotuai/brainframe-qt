@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ServerConfigurationDialog</class>
+ <widget class="QDialog" name="ServerConfigurationDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Server Configuration</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -38,7 +38,7 @@
      <item row="0" column="1">
       <widget class="QLineEdit" name="server_address_line_edit">
        <property name="placeholderText">
-        <string>http://localhost:8000</string>
+        <string notr="true">http://localhost:8000</string>
        </property>
       </widget>
      </item>
@@ -116,7 +116,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>ServerConfigurationDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -132,7 +132,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>ServerConfigurationDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
