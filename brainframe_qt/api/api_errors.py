@@ -71,13 +71,6 @@ class AlertNotFoundError(BaseAPIError):
 
 
 @register_error_type
-class StreamNotFoundError(BaseAPIError):
-    """The corresponding stream for a StreamConfiguration is not available."""
-    def __init__(self, description):
-        super().__init__(error_kinds.STREAM_NOT_FOUND, description)
-
-
-@register_error_type
 class InvalidSyntaxError(BaseAPIError):
     """The syntax of the request could not be parsed."""
     def __init__(self, description):

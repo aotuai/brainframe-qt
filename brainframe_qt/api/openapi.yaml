@@ -65,7 +65,13 @@ paths:
                 schema:
                   $ref: '#/components/schemas/StreamConfiguration'
         '404':
-            description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+            description: 'StreamConfigNotFoundError: A stream with the given ID does not exist'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+        '500':
+            description: 'StreamNotOpenedError: The server was unable to start the video stream'
             content:
               application/json:
                 schema:
@@ -88,8 +94,8 @@ paths:
       responses:
         '200':
           description: The stream was successfully deleted
-        '409':
-          description: 'StreamConfigurationNotFoundError: No stream with the given ID exists'
+        '404':
+          description: 'StreamConfigNotFoundError: No stream with the given ID exists'
           content:
               application/json:
                 schema:
@@ -122,13 +128,7 @@ paths:
                 type: string
                 example: "http://210.54.39.237:8888/video"
         '404':
-            description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-            description: 'StreamNotOpenedError: The stream has disappeared, likely due to a connection issue between the server and the source'
+            description: 'StreamConfigNotFoundError: A stream with the given ID does not exist'
             content:
               application/json:
                 schema:
@@ -170,13 +170,7 @@ paths:
                 type: boolean
                 example: false
         '404':
-          description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: 'StreamNotOpenedError: The stream has disappeared, likely due to a connection issue between the server and the source'
+          description: 'StreamConfigNotFoundError: A stream with the given ID does not exist'
           content:
             application/json:
               schema:
@@ -214,7 +208,7 @@ paths:
                 additionalProperties: {}
                 example: {"keyframes_only": true}
         '404':
-          description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+          description: 'StreamConfigNotFoundError: A stream with the given ID does not exist'
           content:
             application/json:
               schema:
@@ -250,7 +244,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '404':
-          description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+          description: 'StreamConfigNotFoundError: A stream with the given ID does not exist'
           content:
             application/json:
               schema:
@@ -395,7 +389,7 @@ paths:
               find what percent of the total alerts were received after
               pagination."
         '404':
-            description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+            description: 'StreamConfigNotFoundError: A stream with the given ID does not exist'
             content:
               application/json:
                 schema:
@@ -454,7 +448,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Zone'
           '404':
-              description: 'StreamConfigurationNotFoundError: A stream with the given ID does not exist'
+              description: 'StreamConfigNotFoundError: A stream with the given ID does not exist'
               content:
                 application/json:
                   schema:
@@ -1061,7 +1055,7 @@ paths:
                 example: true
                 nullable: true
         '404':
-          description: "StreamConfigurationNotFoundError: No stream with the given ID exists\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
+          description: "StreamConfigNotFoundError: No stream with the given ID exists\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
           content:
             application/json:
               schema:
@@ -1099,7 +1093,7 @@ paths:
         '200':
           description: The activity value was set
         '404':
-          description: "StreamConfigurationNotFoundError: No stream with the given ID exists\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
+          description: "StreamConfigNotFoundError: No stream with the given ID exists\n\nor\n\nPluginNotFoundError: No plugin is loaded with the given name"
           content:
             application/json:
               schema:

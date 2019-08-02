@@ -90,20 +90,12 @@ class StreamStubMixin(Stub):
         """Get the SyncedStreamReader for the given stream_configuration.
 
         :param stream_config: The stream configuration to open.
-        :return: A SyncedStreamReader object OR None, if the server was unable
-            to open a stream.
+        :return: A SyncedStreamReader object
         """
-        try:
-            url = self.get_stream_url(stream_config.id)
-        except api_errors.StreamNotFoundError:
-            logging.warning("API: Requested stream that doesn't exist!")
-            return None
-
+        url = self.get_stream_url(stream_config.id)
         logging.info("API: Opening stream on url " + url)
 
-        return self.get_stream_manager().start_streaming(
-            stream_config,
-            url)
+        return self.get_stream_manager().start_streaming(stream_config, url)
 
     def get_runtime_options(self, stream_id: int) -> Dict[str, object]:
         """Returns the runtime options for the stream with the given ID. This
