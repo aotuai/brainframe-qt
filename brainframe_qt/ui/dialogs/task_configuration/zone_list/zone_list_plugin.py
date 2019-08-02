@@ -1,4 +1,4 @@
-from brainframe.client.ui.resources.qt_plugins.base_plugin import BasePlugin
+from brainframe.client.ui.resources import BasePlugin
 
 
 class ZoneList(BasePlugin):
