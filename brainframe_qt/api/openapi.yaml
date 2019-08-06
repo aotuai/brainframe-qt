@@ -5,7 +5,7 @@ servers:
     url: https://virtserver.swaggerhub.com/BestDriverCN/BrainFrame_v0/1.0.0
 info:
   description: This document describes all available endpoints for the BrainFrame REST API. This API is used by the provided client to monitor and configure streams and alarms. It can also be used by a custom client.
-  version: "0.18.0"
+  version: "0.19.0"
   title: BrainFrame API Documentation
   contact:
     email: zhao.wang@dilililabs.com
