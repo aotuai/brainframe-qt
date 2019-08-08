@@ -2,7 +2,6 @@ import re
 
 from brainframe.shared import error_kinds
 
-
 kind_to_error_type = {}
 """Maps error kinds to their corresponding error type."""
 
@@ -19,6 +18,7 @@ def register_error_type(cls):
 
 class BaseAPIError(Exception):
     """All API errors subclass this error."""
+
     def __init__(self, kind, description):
         self.kind = kind
         self.description = description
@@ -38,13 +38,16 @@ class BaseAPIError(Exception):
 @register_error_type
 class UnknownError(BaseAPIError):
     """Something unexpected happened. The server may be in an invalid state."""
-    def __init__(self, description):
+
+    def __init__(self, description, status_code=None):
         super().__init__(error_kinds.UNKNOWN, description)
+        self.status_code = status_code
 
 
 @register_error_type
 class StreamConfigNotFoundError(BaseAPIError):
     """A StreamConfiguration specified by the client could not be found."""
+
     def __init__(self, description):
         super().__init__(error_kinds.STREAM_CONFIG_NOT_FOUND, description)
 
@@ -52,6 +55,7 @@ class StreamConfigNotFoundError(BaseAPIError):
 @register_error_type
 class ZoneNotFoundError(BaseAPIError):
     """A Zone specified by the client could not be found."""
+
     def __init__(self, description):
         super().__init__(error_kinds.ZONE_NOT_FOUND, description)
 
@@ -59,6 +63,7 @@ class ZoneNotFoundError(BaseAPIError):
 @register_error_type
 class ZoneNotDeletableError(BaseAPIError):
     """A client tried to delete a default Zone"""
+
     def __init__(self, description):
         super().__init__(error_kinds.ZONE_NOT_DELETABLE, description)
 
@@ -66,6 +71,7 @@ class ZoneNotDeletableError(BaseAPIError):
 @register_error_type
 class AlertNotFoundError(BaseAPIError):
     """An Alert specified by the client could not be found."""
+
     def __init__(self, description):
         super().__init__(error_kinds.ALERT_NOT_FOUND, description)
 
@@ -73,6 +79,7 @@ class AlertNotFoundError(BaseAPIError):
 @register_error_type
 class InvalidSyntaxError(BaseAPIError):
     """The syntax of the request could not be parsed."""
+
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_SYNTAX, description)
 
@@ -80,6 +87,7 @@ class InvalidSyntaxError(BaseAPIError):
 @register_error_type
 class InvalidFormatError(BaseAPIError):
     """The request was parsed, but some value within the request is invalid."""
+
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_FORMAT, description)
 
@@ -87,6 +95,7 @@ class InvalidFormatError(BaseAPIError):
 @register_error_type
 class NotImplementedInAPIError(BaseAPIError):
     """The client requested something that is not currently implemented."""
+
     def __init__(self, description):
         super().__init__(error_kinds.NOT_IMPLEMENTED, description)
 
@@ -94,6 +103,7 @@ class NotImplementedInAPIError(BaseAPIError):
 @register_error_type
 class StreamNotOpenedError(BaseAPIError):
     """A stream failed to open when it was required to."""
+
     def __init__(self, description):
         super().__init__(error_kinds.STREAM_NOT_OPENED, description)
 
@@ -103,6 +113,7 @@ class DuplicateStreamSourceError(BaseAPIError):
     """There was an attempted to create a stream configuration with the same
     source as an existing one.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.DUPLICATE_STREAM_SOURCE, description)
 
@@ -112,6 +123,7 @@ class DuplicateZoneNameError(BaseAPIError):
     """There was an attempt to make a zone with the same name as another zone
     within the same stream.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.DUPLICATE_ZONE_NAME, description)
 
@@ -121,6 +133,7 @@ class DuplicateIdentityNameError(BaseAPIError):
     """There was an attempt to create a new identity with the same name as
     another identity.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.DUPLICATE_IDENTITY_NAME, description)
 
@@ -128,6 +141,7 @@ class DuplicateIdentityNameError(BaseAPIError):
 @register_error_type
 class NoDetectorForClassError(BaseAPIError):
     """There was an attempt to use a class name that is not detectable."""
+
     def __init__(self, description):
         super().__init__(error_kinds.NO_DETECTOR_FOR_CLASS, description)
 
@@ -137,6 +151,7 @@ class NoEncoderForClassError(BaseAPIError):
     """There was an attempt to create an identity for a class that is not
     encodable.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.NO_ENCODER_FOR_CLASS, description)
 
@@ -144,6 +159,7 @@ class NoEncoderForClassError(BaseAPIError):
 @register_error_type
 class IdentityNotFoundError(BaseAPIError):
     """An identity specified by the client could not be found."""
+
     def __init__(self, description):
         super().__init__(error_kinds.IDENTITY_NOT_FOUND, description)
 
@@ -153,6 +169,7 @@ class ImageNotFoundForIdentityError(BaseAPIError):
     """An image specified by the client could not be found for the specified
     identity.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.IMAGE_NOT_FOUND_FOR_IDENTITY, description)
 
@@ -160,6 +177,7 @@ class ImageNotFoundForIdentityError(BaseAPIError):
 @register_error_type
 class InvalidImageTypeError(BaseAPIError):
     """An image could not be decoded by OpenCV"""
+
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_IMAGE_TYPE, description)
 
@@ -170,6 +188,7 @@ class AnalysisLimitExceededError(BaseAPIError):
     amount of streams that may have analysis run on them at once has already
     been reached.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.ANALYSIS_LIMIT_EXCEEDED, description)
 
@@ -179,6 +198,7 @@ class NoDetectionsInImageError(BaseAPIError):
     """There was an attempt to encode an image with no objects of the given
     class in the frame.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.NO_DETECTIONS_IN_IMAGE, description)
 
@@ -188,6 +208,7 @@ class TooManyDetectionsInImageError(BaseAPIError):
     """There was an attempt to encode an image with more than one object of the
     given class in the frame, causing ambiguity on which one to encode.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.TOO_MANY_DETECTIONS_IN_IMAGE, description)
 
@@ -197,6 +218,7 @@ class ImageAlreadyEncodedError(BaseAPIError):
     """There was an attempt to encode an image that has already been encoded for
     a given identity and a given class.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.IMAGE_ALREADY_ENCODED, description)
 
@@ -206,6 +228,7 @@ class DuplicateVectorError(BaseAPIError):
     """There was an attempt to add a vector that already exists for the given
     identity and class.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.DUPLICATE_VECTOR, description)
 
@@ -213,6 +236,7 @@ class DuplicateVectorError(BaseAPIError):
 @register_error_type
 class FrameNotFoundForAlertError(BaseAPIError):
     """There was an attempt to get a frame for an alert that has no frame."""
+
     def __init__(self, description):
         super().__init__(error_kinds.FRAME_NOT_FOUND_FOR_ALERT, description)
 
@@ -220,6 +244,7 @@ class FrameNotFoundForAlertError(BaseAPIError):
 @register_error_type
 class PluginNotFoundError(BaseAPIError):
     """There was an attempt to reference a plugin that does not exist."""
+
     def __init__(self, description):
         super().__init__(error_kinds.PLUGIN_NOT_FOUND, description)
 
@@ -230,6 +255,7 @@ class InvalidPluginOptionError(BaseAPIError):
     be because the option does not exist or the value for that option doesn't
     fit the constraints.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_PLUGIN_OPTION, description)
 
@@ -237,6 +263,7 @@ class InvalidPluginOptionError(BaseAPIError):
 @register_error_type
 class StorageNotFoundError(BaseAPIError):
     """There was an attempt to access a storage object that does not exist."""
+
     def __init__(self, description):
         super().__init__(error_kinds.STORAGE_NOT_FOUND, description)
 
@@ -244,6 +271,7 @@ class StorageNotFoundError(BaseAPIError):
 @register_error_type
 class ZoneAlarmNotFoundError(BaseAPIError):
     """There was an attempt to access a zone alarm that does not exist."""
+
     def __init__(self, description):
         super().__init__(error_kinds.ZONE_ALARM_NOT_FOUND, description)
 
@@ -253,6 +281,7 @@ class InvalidRuntimeOptionError(BaseAPIError):
     """There was an attempt to set a runtime option that is not supported or is
     of the wrong type.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_RUNTIME_OPTION, description)
 
@@ -260,6 +289,7 @@ class InvalidRuntimeOptionError(BaseAPIError):
 @register_error_type
 class EncodingNotFoundError(BaseAPIError):
     """There was an attempt to access an encoding that does not exist."""
+
     def __init__(self, description):
         super().__init__(error_kinds.ENCODING_NOT_FOUND, description)
 
@@ -267,6 +297,7 @@ class EncodingNotFoundError(BaseAPIError):
 @register_error_type
 class UnauthorizedError(BaseAPIError):
     """There was an attempt to access the API without proper authorization."""
+
     def __init__(self, description):
         super().__init__(error_kinds.UNAUTHORIZED, description)
 
@@ -277,5 +308,6 @@ class InvalidSessionError(BaseAPIError):
     either because the session expired or no session with that ID has ever
     existed. The client should authenticate again to get a new session.
     """
+
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_SESSION, description)

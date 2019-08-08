@@ -83,7 +83,10 @@ class BrainFrameApplication(QApplication):
                     # Prevent a busy loop while splash screen is open
                     sleep(.1)
                     continue
-
+                except api_errors.UnknownError as e:
+                    if e.status_code == 502:
+                        continue
+                    raise
                 message = self.tr("Successfully connected to server. "
                                   "Starting UI")
                 splash_screen.showMessage(message)
