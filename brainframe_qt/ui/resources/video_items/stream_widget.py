@@ -107,6 +107,7 @@ class StreamWidget(QGraphicsView):
     def change_stream(self, stream_conf: StreamConfiguration):
 
         if self.stream_reader:
+            self.destroyed.disconnect()
             self.stream_reader.remove_listener(self.stream_listener)
             QCoreApplication.removePostedEvents(self)
 
@@ -121,7 +122,6 @@ class StreamWidget(QGraphicsView):
         self.stream_reader.add_listener(self.stream_listener)
 
         # Make sure video is unsubscribed before it is GCed
-        self.destroyed.disconnect()
         self.destroyed.connect(
             lambda: self.stream_reader.remove_listener(self.stream_listener))
 
