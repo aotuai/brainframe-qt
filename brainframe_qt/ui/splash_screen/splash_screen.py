@@ -1,7 +1,8 @@
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QSplashScreen
+from PyQt5.QtWidgets import QSplashScreen, QVBoxLayout, QPushButton
 
+from brainframe.client.ui.dialogs import ServerConfigurationDialog
 from brainframe.client.ui.resources.paths import image_paths
 
 
@@ -10,22 +11,24 @@ class SplashScreen(QSplashScreen):
     def __init__(self):
         pixmap = QPixmap(str(image_paths.splash_screen))
 
-        super().__init__(pixmap=pixmap, flags=Qt.WindowStaysOnTopHint)
+        super().__init__(pixmap=pixmap)
+
+        # Force window to be borderless (like a splashscreen, but also let it
+        # have a taskbar icon and be draggable)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
+
+        self.current_message = super().message()
+        """Message without the ellipses"""
 
         # Make the number of ellipses pulse
+        self.num_periods = 0
         self.ellipses_timer = QTimer()
         # noinspection PyUnresolvedReferences
-        # connect is erroneously detected as unresolved
         self.ellipses_timer.timeout.connect(self.increase_ellipses)
         self.ellipses_timer.start(1000)
 
-        # Keep the splash screen on top in window managers that do not support
-        # always on top flag
-        self.raise_timer = QTimer()
-        # noinspection PyUnresolvedReferences
-        # connect is erroneously detected as unresolved
-        self.raise_timer.timeout.connect(self.raise_)
-        self.raise_timer.start(10)
+        # Display a config button if the server hasn't connected for too long
+        QTimer.singleShot(3000, self.show_configuration_button)
 
     def __enter__(self):
         self.show()
@@ -33,7 +36,22 @@ class SplashScreen(QSplashScreen):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.ellipses_timer.stop()
-        self.raise_timer.stop()
+        # self.raise_timer.stop()
+
+    def message(self):
+        """Message without the ellipses"""
+        return self.current_message
+
+    def showMessage(self, message=None,
+                    alignment=Qt.AlignLeft | Qt.AlignBottom,
+                    color=Qt.white):
+        """Default to show message at bottom left in white"""
+
+        # Change the current message if provided, otherwise just update it
+        self.current_message = message or self.current_message
+
+        message = self.message() + ("." * self.num_periods)
+        super().showMessage(message, alignment, color)
 
     def increase_ellipses(self, max_periods=6):
         """Turn the number of periods at the end of the string into a loading
@@ -41,19 +59,17 @@ class SplashScreen(QSplashScreen):
 
         Increases the number of periods until max_periods is reached
         """
-        current_message = self.message()
-        num_periods = len(current_message) - len(current_message.rstrip('.'))
 
-        num_periods = (num_periods + 1) % (max_periods + 1)
+        self.num_periods = (self.num_periods + 1) % max_periods
+        self.showMessage()
 
-        self.showMessage(current_message.rstrip('.') + '.' * num_periods)
+    def show_configuration_button(self):
+        self.setLayout(QVBoxLayout())
+        button = QPushButton(self.tr("Configure"))
+        button.setFocusPolicy(Qt.NoFocus)
+        # noinspection PyUnresolvedReferences
+        button.clicked.connect(
+            lambda: ServerConfigurationDialog.show_dialog(self))
 
-    def showMessage(self, message,
-                    alignment=Qt.AlignLeft | Qt.AlignBottom,
-                    color=Qt.white):
-        """Default to show message at bottom left in white"""
-        super().showMessage(message, alignment, color)
-
-    def mousePressEvent(self, event):
-        """Don't do anything on click. Default option is to hide"""
-        pass
+        self.layout().addWidget(button)
+        self.layout().setAlignment(button, Qt.AlignBottom | Qt.AlignRight)

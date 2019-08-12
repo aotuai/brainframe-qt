@@ -71,13 +71,6 @@ class AlertNotFoundError(BaseAPIError):
 
 
 @register_error_type
-class StreamNotFoundError(BaseAPIError):
-    """The corresponding stream for a StreamConfiguration is not available."""
-    def __init__(self, description):
-        super().__init__(error_kinds.STREAM_NOT_FOUND, description)
-
-
-@register_error_type
 class InvalidSyntaxError(BaseAPIError):
     """The syntax of the request could not be parsed."""
     def __init__(self, description):
@@ -262,3 +255,27 @@ class InvalidRuntimeOptionError(BaseAPIError):
     """
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_RUNTIME_OPTION, description)
+
+
+@register_error_type
+class EncodingNotFoundError(BaseAPIError):
+    """There was an attempt to access an encoding that does not exist."""
+    def __init__(self, description):
+        super().__init__(error_kinds.ENCODING_NOT_FOUND, description)
+
+
+@register_error_type
+class UnauthorizedError(BaseAPIError):
+    """There was an attempt to access the API without proper authorization."""
+    def __init__(self, description):
+        super().__init__(error_kinds.UNAUTHORIZED, description)
+
+
+@register_error_type
+class InvalidSessionError(BaseAPIError):
+    """There was an attempt to access the API with an invalid session ID,
+    either because the session expired or no session with that ID has ever
+    existed. The client should authenticate again to get a new session.
+    """
+    def __init__(self, description):
+        super().__init__(error_kinds.INVALID_SESSION, description)

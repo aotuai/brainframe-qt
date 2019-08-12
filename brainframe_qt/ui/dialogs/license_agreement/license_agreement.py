@@ -15,8 +15,10 @@ class LicenseAgreement(QDialog):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.license_agreement_ui, self)
-        self.button_box.addButton("Decline", QDialogButtonBox.RejectRole)
-        self.button_box.addButton("Accept", QDialogButtonBox.AcceptRole)
+        self.button_box.addButton(self.tr("Decline"),
+                                  QDialogButtonBox.RejectRole)
+        self.button_box.addButton(self.tr("Accept"),
+                                  QDialogButtonBox.AcceptRole)
 
         # Reverse the order of the buttons to be standard (accept on left)
         self.button_box.layout().setDirection(QBoxLayout.RightToLeft)
@@ -25,9 +27,9 @@ class LicenseAgreement(QDialog):
         self.license_text.setPlainText(self.text)
 
     @classmethod
-    def get_agreement(cls):
+    def get_agreement(cls, parent):
 
-        dialog = cls()
+        dialog = cls(parent)
         license_md5 = hashlib.md5(dialog.text.encode('utf-8')).hexdigest()
 
         # Check if the license was already agreed to

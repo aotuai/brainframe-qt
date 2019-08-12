@@ -105,14 +105,16 @@ class StreamWidget(QGraphicsView):
         self.scene().set_frame(path=image_paths.error)
 
     def change_stream(self, stream_conf: StreamConfiguration):
-        if not stream_conf:
-            # User should never see this
-            self.handle_stream_error()
-            return
 
         if self.stream_reader:
             self.stream_reader.remove_listener(self.stream_listener)
             QCoreApplication.removePostedEvents(self)
+
+        if not stream_conf:
+            self.stream_reader = None
+            # User should never see this
+            self.handle_stream_error()
+            return
 
         self.stream_listener = StreamListener()
         self.stream_reader = api.get_stream_reader(stream_conf)

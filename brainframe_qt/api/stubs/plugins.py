@@ -15,7 +15,7 @@ class PluginStubMixin(Stub):
         :return: Plugin with the given name
         """
         req = f"/api/plugins/{name}"
-        plugin = self._get(req)
+        plugin, _ = self._get_json(req)
         return Plugin.from_dict(plugin)
 
     def get_plugins(self) -> List[Plugin]:
@@ -23,7 +23,7 @@ class PluginStubMixin(Stub):
         :return: All available plugins
         """
         req = "/api/plugins"
-        plugins = self._get(req)
+        plugins, _ = self._get_json(req)
         return [Plugin.from_dict(d) for d in plugins]
 
     def get_plugin_option_vals(self, plugin_name, stream_id=None) \
@@ -42,7 +42,9 @@ class PluginStubMixin(Stub):
             req = f"/api/plugins/{plugin_name}/options"
         else:
             req = f"/api/streams/{stream_id}/plugins/{plugin_name}/options"
-        return self._get(req)
+        plugin_option_vals, _ = self._get_json(req)
+
+        return plugin_option_vals
 
     def set_plugin_option_vals(self, *, plugin_name, stream_id=None,
                                option_vals: Dict[str, object]):
@@ -76,7 +78,7 @@ class PluginStubMixin(Stub):
             req = f"/api/plugins/{plugin_name}/active"
         else:
             req = f"/api/streams/{stream_id}/plugins/{plugin_name}/active"
-        plugins_active = self._get(req)
+        plugins_active, _ = self._get_json(req)
         return plugins_active
 
     def set_plugin_active(self, *, plugin_name, stream_id=None,

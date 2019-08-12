@@ -1,10 +1,13 @@
+from typing import Dict
+
 # noinspection PyUnresolvedReferences
 from PyQt5.QtCore import pyqtProperty
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QTimerEvent
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
+from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
@@ -25,7 +28,7 @@ class VideoThumbnailView(QWidget):
 
         loadUi(qt_ui_paths.video_thumbnail_view_ui, self)
 
-        self.all_stream_ids = set()
+        self.all_stream_confs: Dict[int, StreamConfiguration] = {}
         """Stream IDs currently in the ThumbnailView"""
         self.alert_stream_ids = set()
         """Streams IDs currently in the ThumbnailView with ongoing alerts"""
@@ -33,13 +36,28 @@ class VideoThumbnailView(QWidget):
         self.current_stream_id = None
         """Currently expanded stream. None if no stream selected"""
 
-        # Get all current streams
-        for stream_conf in api.get_stream_configurations():
-            # Create widgets for each
-            self.new_stream(stream_conf)
+        self.startTimer(1000)
 
         # Hide the alerts layout
         self.alert_streams_layout.hide()
+
+    def timerEvent(self, timer_event: QTimerEvent):
+
+        received_stream_ids = set()
+
+        # Get all current streams
+        for stream_conf in api.get_stream_configurations():
+
+            received_stream_ids.add(stream_conf.id)
+
+            if stream_conf.id not in self.all_stream_confs:
+                # Create widgets for each
+                self.new_stream(stream_conf)
+
+        dead_stream_ids = self.all_stream_confs.keys() - received_stream_ids
+
+        for stream_id in dead_stream_ids:
+            self.delete_stream_slot(self.all_stream_confs[stream_id])
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
@@ -80,11 +98,14 @@ class VideoThumbnailView(QWidget):
         if stream_conf.id in self.alert_stream_ids:
             self.remove_streams_from_alerts(stream_conf.id)
 
+        del self.all_stream_confs[stream_conf.id]
+
         video = self.alertless_streams_layout.pop_stream_widget(stream_conf.id)
         video.deleteLater()
 
     @pyqtSlot(object, bool)
-    def ongoing_alerts_slot(self, stream_conf, alerts_ongoing):
+    def ongoing_alerts_slot(self, stream_conf: StreamConfiguration,
+                            alerts_ongoing: bool):
         """Alert associated with stream
 
         Connected to:
@@ -101,7 +122,8 @@ class VideoThumbnailView(QWidget):
             self.remove_streams_from_alerts(stream_conf.id)
 
         else:
-            raise RuntimeError("Inconsistent state with alert widgets")
+            message = self.tr("Inconsistent state with alert widgets.")
+            raise RuntimeError(message)
 
     def add_stream_to_alerts(self, stream_id):
 
@@ -134,4 +156,4 @@ class VideoThumbnailView(QWidget):
         self.alertless_streams_layout.new_stream_widget(stream_conf)
 
         # Store ID for each in set
-        self.all_stream_ids.add(stream_conf.id)
+        self.all_stream_confs[stream_conf.id] = stream_conf

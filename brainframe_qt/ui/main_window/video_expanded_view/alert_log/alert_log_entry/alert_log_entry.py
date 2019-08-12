@@ -31,7 +31,9 @@ class AlertLogEntry(_Form, _Base):
         # Create text for alert
         self.alert_text = ""
         for condition in alarm.count_conditions + alarm.rate_conditions:
-            self.alert_text += f"{repr(condition)} in region [{zone_name}]\n"
+            text = self.tr("{} in region [{}]")
+            text = text.format(repr(condition), zone_name)
+            self.alert_text += text
 
         self.setToolTip(self.alert_text)
 
@@ -55,10 +57,10 @@ class AlertLogEntry(_Form, _Base):
         alert_start = alert_start.strftime('%H:%M')
         if alert.end_time is not None:
             alert_end = datetime.fromtimestamp(alert.end_time)
-            alert_end = " to " + alert_end.strftime('%H:%M')
+            alert_end = alert_end.strftime('%H:%M')
         else:
-            alert_end = "(Ongoing)"
-        alert_time = alert_start + alert_end
+            alert_end = self.tr("(Ongoing)")
+        alert_time = self.tr("{} to {}").format(alert_start, alert_end)
 
         self.time_label.setText(alert_time)
 
@@ -70,4 +72,4 @@ class AlertLogEntry(_Form, _Base):
         - AlertLogEntry -- Dynamic
           self.alert_icon_button.clicked
         """
-        AlertEntryPopup.show_alert(self.alert_text, self.alert.id)
+        AlertEntryPopup.show_alert(self.alert_text, self.alert.id, self)

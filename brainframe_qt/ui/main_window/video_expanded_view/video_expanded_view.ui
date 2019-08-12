@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>VideoExpandedView</class>
+ <widget class="QWidget" name="VideoExpandedView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">VideoExpandedView</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -40,7 +40,7 @@
          </font>
         </property>
         <property name="text">
-         <string>[Stream Name]</string>
+         <string notr="true">[Stream Name]</string>
         </property>
        </widget>
       </item>
@@ -56,9 +56,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QToolButton" name="hide_button"/>
       </item>
      </layout>
     </widget>
@@ -151,38 +148,22 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AlertLog</class>
-   <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.video_expanded_view.alert_log.alert_log</header>
-  </customwidget>
-  <customwidget>
    <class>VideoLarge</class>
    <extends>QGraphicsView</extends>
    <header>brainframe.client.ui.main_window.video_expanded_view.video_large.video_large</header>
+  </customwidget>
+  <customwidget>
+   <class>AlertLog</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_expanded_view.alert_log.alert_log</header>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
   <connection>
-   <sender>hide_button</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>expanded_stream_closed_slot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1052</x>
-     <y>43</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>task_config_button</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>VideoExpandedView</receiver>
    <slot>open_task_config()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -198,7 +179,7 @@
   <connection>
    <sender>delete_stream_button</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>VideoExpandedView</receiver>
    <slot>delete_stream_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -214,7 +195,7 @@
   <connection>
    <sender>plugin_stream_config_button</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>VideoExpandedView</receiver>
    <slot>open_stream_plugin_config()</slot>
    <hints>
     <hint type="sourcelabel">

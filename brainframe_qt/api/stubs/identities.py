@@ -1,9 +1,10 @@
-from typing import List
+from typing import List, Tuple, Optional
 
 import ujson
 
 from brainframe.client.api.stubs.stub import Stub
-from brainframe.client.api.codecs import Identity
+from brainframe.client.api.codecs import Identity, Encoding
+from brainframe.client.api.sorting import SortOptions
 
 
 class IdentityStubMixin(Stub):
@@ -17,20 +18,58 @@ class IdentityStubMixin(Stub):
         :return: Identity
         """
         req = f"/api/identities/{identity_id}"
-        identity = self._get(req)
+        identity, _ = self._get_json(req)
 
         return Identity.from_dict(identity)
 
-    def get_identities(self, unique_name=None) -> List[Identity]:
+    def get_identities(self, unique_name: str = None,
+                       encoded_for_class: str = None,
+                       search: Optional[str] = None,
+                       limit: int = None,
+                       offset: int = None,
+                       sort_by: SortOptions = None) \
+            -> Tuple[List[Identity], int]:
         """Returns all identities from the server.
-        :return: List of identities
+
+        :param unique_name: If provided, identities will be filtered by only
+            those who have the given unique name
+        :param encoded_for_class: If provided, identities will be filtered for
+            only those that have been encoded at least once for the given class
+        :param search: If provided, only identities that in some way contain
+            the given search query are returned. This is intended for UI search
+            features, and as such the specific semantics of how the search is
+            performed are subject to change.
+        :param limit: If provided, the number of returned identities is limited
+            to this value.
+        :param offset: The offset to start limiting results from. This is only
+            useful when providing a limit.
+        :param sort_by: If provided, the results will be sorted by the given
+            configuration
+        :return: A list of identities, and the total number of identities that
+            fit this criteria, ignoring pagination (the limit and offset)
         """
         req = f"/api/identities"
-        params = {"unique_name": unique_name} if unique_name else None
-        identities = self._get(req, params=params)
+
+        params = {}
+        if unique_name is not None:
+            params["unique_name"] = unique_name
+        if encoded_for_class is not None:
+            params["encoded_for_class"] = encoded_for_class
+        if search is not None:
+            params["search"] = search
+        if limit is not None:
+            params["limit"] = limit
+        if offset is not None:
+            params["offset"] = offset
+        if sort_by is not None:
+            params["sort_by"] = sort_by.query_format()
+
+        identities, headers = self._get_json(req, params=params)
         identities = [Identity.from_dict(d) for d in identities]
 
-        return identities
+        total_count = int(headers["Total-Count"])
+
+        return identities, total_count
 
     def set_identity(self, identity: Identity) -> Identity:
         """Updates or creates an identity. If the identity does not already
@@ -64,7 +103,8 @@ class IdentityStubMixin(Stub):
             "class_name": class_name,
             "storage_id": storage_id
         }
-        self._post_json(req, ujson.dumps(req_obj))
+        encoding = self._post_json(req, ujson.dumps(req_obj))
+        return Encoding.from_dict(encoding)
 
     def new_identity_vector(self, identity_id: int, class_name: str,
                             vector: List[float]) -> int:
@@ -83,18 +123,5 @@ class IdentityStubMixin(Stub):
             "class_name": class_name,
             "vector": vector
         }
-        return self._post_json(req, ujson.dumps(encoded_obj))
-
-    def get_image_ids_for_identity(self, identity_id, class_name=None) \
-            -> List[int]:
-        """Returns all image storage IDs that are encoded for this identity.
-
-        :param identity_id: The ID of the identity to look for images under
-        :param class_name: Will filter images by ones that are encoded for this
-            class name, if provided
-        :return: List of storage IDs
-        """
-        req = f"/api/identities/{identity_id}/images"
-        params = {"class_name": class_name} if class_name else None
-        image_ids = self._get(req, params=params)
-        return image_ids
+        encoding = self._post_json(req, ujson.dumps(encoded_obj))
+        return Encoding.from_dict(encoding)

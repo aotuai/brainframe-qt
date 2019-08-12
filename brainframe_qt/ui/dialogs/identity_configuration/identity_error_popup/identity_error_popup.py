@@ -44,6 +44,6 @@ class IdentityErrorPopup(QDialog):
             QHeaderView.ResizeToContents)
 
     @classmethod
-    def show_errors(cls, errors: Set[IdentityError]):
-        error_widget = cls(errors)
+    def show_errors(cls, errors: Set[IdentityError], parent):
+        error_widget = cls(errors, parent)
         error_widget.exec_()

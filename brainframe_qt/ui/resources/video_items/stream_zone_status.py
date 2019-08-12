@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QApplication
 
 from brainframe.client.api import codecs
 from brainframe.client.ui.resources.video_items import StreamPolygon, \
@@ -24,18 +25,27 @@ class ZoneStatusPolygon(StreamPolygon):
         if len(status.zone.coords) == 2:
             # If the zone is a line
             if len(status.total_entered):
-                text = status.zone.name + "\nEntering: "
+                entering_text = QApplication.translate(
+                    "ZoneStatusPolygon",
+                    "Entering: ")
+                text = f"{status.zone.name}\n{entering_text}"
                 text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
                                    for k, v in status.total_entered.items()
                                    if v > 0])
             if len(status.total_exited):
-                text += "\nExiting: "
+                exiting_text = QApplication.translate(
+                    "ZoneStatusPolygon",
+                    "Exiting: ")
+                text += f"\n{exiting_text}"
                 text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
                                    for k, v in status.total_exited.items()
                                    if v > 0])
             counts = status.detection_within_counts
             if len(counts):
-                text += "\nWithin: "
+                within_text = QApplication.translate(
+                    "ZoneStatusPolygon",
+                    "Within: ")
+                text += f"\n{within_text}"
                 items = list(counts.items())
                 items.sort()
                 text += "\n" + "\n".join([f"{v} {k}{'s' * bool(v - 1)}"
@@ -50,7 +60,8 @@ class ZoneStatusPolygon(StreamPolygon):
         text = text.strip()
 
         if len(status.alerts):
-            text += "\nAlert!"
+            alert_text = QApplication.translate("ZoneStatusPolygon", "Alert!")
+            text += f"\n{alert_text}"
 
         # Set opacity based on alert status and detection status
         opacity = 0.3

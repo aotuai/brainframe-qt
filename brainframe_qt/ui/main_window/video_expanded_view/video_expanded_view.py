@@ -1,11 +1,12 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QStyle, QWidget
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent, QTimerEvent
+from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import PluginConfigDialog, TaskConfiguration
 from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
 
 
 class VideoExpandedView(QWidget):
@@ -29,15 +30,43 @@ class VideoExpandedView(QWidget):
 
         loadUi(qt_ui_paths.video_expanded_view_ui, self)
 
+        self.hide_button: FloatingXButton = None
+
         self.stream_conf = None
 
+        self._init_ui()
+
+        self.timer: int = None
+
+    def _init_ui(self):
         # https://stackoverflow.com/a/43835396/8134178
         # 3 : 1 height ratio initially
         self.splitter.setSizes([self.height(), self.height() / 3])
 
-        # Set close button's icon to be a bundled icon
-        close_icon = self.style().standardIcon(QStyle.SP_TitleBarCloseButton)
-        self.hide_button.setIcon(close_icon)
+        self.hide_button = FloatingXButton(self, self.palette().mid(),
+                                           m_top=15, m_right=15)
+        self.hide_button.hide()
+        self.hide_button.setToolTip(self.tr("Close expanded video view"))
+        # noinspection PyUnresolvedReferences
+        self.hide_button.clicked.connect(self.expanded_stream_closed_slot)
+
+    # noinspection PyPep8Naming
+    def enterEvent(self, event: QEvent):
+        self.hide_button.show()
+        super().enterEvent(event)
+
+    # noinspection PyPep8Naming
+    def leaveEvent(self, event: QEvent):
+        self.hide_button.hide()
+        super().leaveEvent(event)
+
+    def timerEvent(self, timer_event: QTimerEvent):
+        """Close the expanded view if the currently open stream no longer
+        exists on the server"""
+        for stream_conf in api.get_stream_configurations():
+            if self.stream_conf.id == stream_conf.id:
+                return
+        self.expanded_stream_closed_slot()
 
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
@@ -51,9 +80,13 @@ class VideoExpandedView(QWidget):
         # Set displayed title of stream
         self.stream_name_label.setText(stream_conf.name)
 
+        self.timer = self.startTimer(1000)
+
     @pyqtSlot()
     def expanded_stream_closed_slot(self):
         """Signaled by close button"""
+
+        self.killTimer(self.timer)
 
         # Stop attempting to display a stream
         self.expanded_video.change_stream(None)
@@ -95,7 +128,7 @@ class VideoExpandedView(QWidget):
         - QPushButton -- QtDesigner
           self.open_stream_plugin_config.clicked
         """
-        PluginConfigDialog.show_dialog(self.stream_conf.id)
+        PluginConfigDialog.show_dialog(self, self.stream_conf.id)
 
     @pyqtSlot()
     def open_task_config(self):
@@ -104,6 +137,6 @@ class VideoExpandedView(QWidget):
         - QPushButton -- QtDesigner
           self.task_config_button.clicked
         """
-        config = TaskConfiguration.open_configuration(self.stream_conf)
+        config = TaskConfiguration.open_configuration(self.stream_conf, self)
         if not config:
             return

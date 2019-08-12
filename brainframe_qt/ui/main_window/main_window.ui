@@ -21,6 +21,21 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QSplitter" name="video_splitter">
       <property name="orientation">
@@ -37,7 +52,7 @@
   </widget>
   <widget class="QToolBar" name="tool_bar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string notr="true">ToolBar</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -51,20 +66,12 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="add_stream_action"/>
+   <addaction name="server_configuration_action"/>
    <addaction name="video_configuration_action"/>
    <addaction name="identity_configuration_action"/>
    <addaction name="plugin_configuration_action"/>
    <addaction name="show_about_page_action"/>
   </widget>
-  <action name="add_stream_action">
-   <property name="text">
-    <string>Add Stream</string>
-   </property>
-   <property name="toolTip">
-    <string>Click here to add a new stream source!</string>
-   </property>
-  </action>
   <action name="identity_configuration_action">
    <property name="text">
     <string>Identity Configuration</string>
@@ -97,17 +104,25 @@
     <string>Configure client UI for videos</string>
    </property>
   </action>
+  <action name="server_configuration_action">
+   <property name="text">
+    <string>Server Configuration</string>
+   </property>
+   <property name="toolTip">
+    <string>Configure the settings for the BrainFrame server</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>VideoExpandedView</class>
-   <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.video_expanded_view.video_expanded_view</header>
-  </customwidget>
   <customwidget>
    <class>VideoThumbnailView</class>
    <extends>QWidget</extends>
    <header>brainframe.client.ui.main_window.video_thumbnail_view.video_thumbnail_view</header>
+  </customwidget>
+  <customwidget>
+   <class>VideoExpandedView</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.video_expanded_view.video_expanded_view</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -193,18 +208,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>add_stream_action</sender>
+   <sender>server_configuration_action</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>new_stream()</slot>
+   <slot>show_server_configuration_dialog_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>522</x>
-     <y>328</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
    </hints>
   </connection>
@@ -277,7 +292,7 @@
   <slot>show_video_expanded_view()</slot>
   <slot>hide_video_expanded_view()</slot>
   <slot>show_identities_dialog()</slot>
-  <slot>new_stream()</slot>
+  <slot>add_new_stream_slot()</slot>
   <slot>show_about_page_dialog()</slot>
   <slot>show_global_plugin_config_dialog()</slot>
   <slot>show_video_configuration_dialog()</slot>
