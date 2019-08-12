@@ -50,8 +50,8 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
 
         # Prompt the user appropriately
         if len(changed_options):
-            desc = self.tr("The following options will be reset to default):")
-            desc += "\n\t, \n\t".join(changed_options)
+            desc = self.tr("The following options will be reset to default:")
+            desc += "\n\t" + "\n\t".join(changed_options)
             result = QMessageBox.question(self, title, desc)
             if result != QMessageBox.Yes:
                 # The user cancelled, so exit early.
