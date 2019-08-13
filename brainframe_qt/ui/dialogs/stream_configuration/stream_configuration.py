@@ -179,6 +179,7 @@ class StreamConfigurationDialog(QDialog):
             # options regardless of the checkbox value
             self.pipeline_label.setHidden(hidden)
             self.pipeline_value.setHidden(hidden)
+            self.keyframe_only_checkbox.setHidden(hidden)
         else:
             # Even if the advanced options section should be shown, the actual
             # options may or may not be visible based on the checkbox value
