@@ -108,11 +108,9 @@ class BrainFrameApplication(QApplication):
 
             # Close the client if the exception was thrown in another thread,
             # or if it was not an BaseAPIError
-            # close_client = other_thread \
-            #                or not isinstance(exc_obj, api_errors.BaseAPIError)
+            close_client = other_thread \
+                           or not isinstance(exc_obj, api_errors.BaseAPIError)
 
-            # Disable for now
-            close_client = False
             StandardError.show_error(exc_type, exc_obj, exc_tb, close_client)
         else:
             # Call this function again, but from the correct (UI) thread
