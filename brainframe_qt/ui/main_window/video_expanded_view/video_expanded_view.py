@@ -72,6 +72,8 @@ class VideoExpandedView(QWidget):
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
         """Signaled by thumbnail view when thumbnail video is clicked
         """
+        if self.timer:
+            self.killTimer(self.timer)
 
         self.expanded_video.change_stream(stream_conf)
         self.alert_log.change_stream(stream_conf.id)
@@ -87,6 +89,7 @@ class VideoExpandedView(QWidget):
         """Signaled by close button"""
 
         self.killTimer(self.timer)
+        self.timer = None
 
         # Stop attempting to display a stream
         self.expanded_video.change_stream(None)
