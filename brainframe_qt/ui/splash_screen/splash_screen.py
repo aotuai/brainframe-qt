@@ -42,6 +42,10 @@ class SplashScreen(QSplashScreen):
         """Message without the ellipses"""
         return self.current_message
 
+    def mousePressEvent(self, event):
+        """Don't do anything on click. Default option is to hide"""
+        pass
+
     def showMessage(self, message=None,
                     alignment=Qt.AlignLeft | Qt.AlignBottom,
                     color=Qt.white):
