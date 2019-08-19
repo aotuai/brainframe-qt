@@ -61,7 +61,7 @@ class DetectionPolygon(StreamPolygon):
 
         # Add "Identity" to the description box
         if detection.with_identity is not None and show_recognition:
-            text += QApplication.translate("StreamPolygon", "Name: ")
+            text += "\n" + QApplication.translate("StreamPolygon", "Name: ")
             if detection.with_identity.nickname is not None:
                 text += detection.with_identity.nickname
             else:
