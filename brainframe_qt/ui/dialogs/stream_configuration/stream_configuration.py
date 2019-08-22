@@ -76,12 +76,14 @@ class StreamConfigurationDialog(QDialog):
         keyframes_only = dialog.advanced_options_checkbox.isChecked() \
                          and dialog.keyframe_only_checkbox.isChecked()
 
-        return StreamConfiguration(name=dialog.stream_name.text(),
-                                   connection_type=dialog.connection_type,
-                                   connection_options=params,
-                                   runtime_options={
-                                       "keyframes_only": keyframes_only
-                                   })
+        return StreamConfiguration(
+            name=dialog.stream_name.text(),
+            connection_type=dialog.connection_type,
+            connection_options=params,
+            premises_id=None,
+            runtime_options={
+                "keyframes_only": keyframes_only
+            })
 
     @pyqtSlot(int)
     def connection_type_changed_slot(self, connection_index: int):
