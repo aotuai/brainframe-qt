@@ -293,7 +293,6 @@ def _make_api_error(resp_content, status_code):
     if kind not in api_errors.kind_to_error_type:
         info = f"Unknown error kind {kind}: " + description
         logging.error(info)
-        print("Making api error", resp_content, status_code)
         return api_errors.UnknownError(info, status_code)
     else:
         if kind == error_kinds.UNKNOWN:
