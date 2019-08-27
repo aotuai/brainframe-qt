@@ -18,7 +18,7 @@ class PremisesStubMixin(Stub):
         zones = [Premises.from_dict(j) for j in data]
         return zones
 
-    def set_zone(self, premises: Premises):
+    def set_premises(self, premises: Premises):
         """Update or create a premises. If the Premises doesn't exist, the
         premises.id must be None. An initialized Premises with an ID will be
         returned.
