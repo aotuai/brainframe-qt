@@ -17,6 +17,9 @@ class StreamManager:
     def __init__(self, status_poller: StatusPoller):
         self._stream_readers = {}
         self._status_poller = status_poller
+        self._async_closing_streams = []
+        """A list of StreamReader objects that are closing or may have finished
+        closing"""
 
     def start_streaming(self,
                         stream_config: StreamConfiguration,
@@ -55,20 +58,21 @@ class StreamManager:
 
         :param stream_id: The ID of the stream to delete
         """
-        stream = self._close_stream_async(stream_id)
+        stream = self.close_stream_async(stream_id)
         stream.wait_until_closed()
 
     def close(self):
         """Close all streams and remove references"""
-        closing_streams = []
         for stream_id in self._stream_readers.copy().keys():
-            closing_streams.append(self._close_stream_async(stream_id))
+            self.close_stream_async(stream_id)
         self._stream_readers = {}
 
-        for stream in closing_streams:
+        for stream in self._async_closing_streams:
             stream.wait_until_closed()
+            self._async_closing_streams.remove(stream)
 
-    def _close_stream_async(self, stream_id) -> SyncedStreamReader:
+    def close_stream_async(self, stream_id) -> SyncedStreamReader:
         stream = self._stream_readers.pop(stream_id)
+        self._async_closing_streams.append(stream)
         stream.close()
         return stream

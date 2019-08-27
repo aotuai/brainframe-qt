@@ -74,7 +74,7 @@ class StreamStubMixin(Stub):
         req = f"/api/streams/{stream_id}"
         self._delete(req)
         if self._stream_manager is not None:
-            self._stream_manager.close_stream(stream_id)
+            self._stream_manager.close_stream_async(stream_id)
 
     def get_stream_url(self, stream_id) -> str:
         """Gets the URL that the stream is available at.
