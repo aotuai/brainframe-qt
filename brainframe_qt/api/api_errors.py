@@ -61,6 +61,14 @@ class ZoneNotFoundError(BaseAPIError):
 
 
 @register_error_type
+class PremisesNotFoundError(BaseAPIError):
+    """A Zone specified by the client could not be found."""
+
+    def __init__(self, description):
+        super().__init__(error_kinds.PREMISES_NOT_FOUND, description)
+
+
+@register_error_type
 class ZoneNotDeletableError(BaseAPIError):
     """A client tried to delete a default Zone"""
 
