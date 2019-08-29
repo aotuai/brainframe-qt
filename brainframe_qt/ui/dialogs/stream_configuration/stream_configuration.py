@@ -98,14 +98,17 @@ class StreamConfigurationDialog(QDialog):
             if connection_index == 1:  # IP Camera
                 self.connection_type = StreamConfiguration.ConnType.IP_CAMERA
                 self.parameter_label.setText(self.tr("Camera web address"))
+                self._set_premises_options_hidden(False)
                 self._set_advanced_options_section_hidden(False)
             elif connection_index == 2:  # Webcam
                 self.connection_type = StreamConfiguration.ConnType.WEBCAM
                 self.parameter_label.setText(self.tr("Device ID"))
+                self._set_premises_options_hidden(True)
                 self._set_advanced_options_section_hidden(True)
             elif connection_index == 3:  # File
                 # TODO(Bryce Beagle): Use QFileDialog
                 self.connection_type = StreamConfiguration.ConnType.FILE
+                self._set_premises_options_hidden(True)
                 self.parameter_label.setText(self.tr("Filepath"))
                 self._set_advanced_options_section_hidden(True)
 
@@ -171,6 +174,10 @@ class StreamConfigurationDialog(QDialog):
         # file
         self.select_file_button.setHidden(
             self.connection_type != StreamConfiguration.ConnType.FILE)
+
+    def _set_premises_options_hidden(self, hidden):
+        self.premises_label.setHidden(hidden)
+        self.premises_combobox.setHidden(hidden)
 
     def _set_advanced_options_section_hidden(self, hidden):
         """Hide or show the advanced options section.
