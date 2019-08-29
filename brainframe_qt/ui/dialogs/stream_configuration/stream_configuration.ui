@@ -240,7 +240,7 @@
       <item row="2" column="0" colspan="2">
        <widget class="QLabel" name="premises_label">
         <property name="text">
-         <string>Premises</string>
+         <string extracomment="Hey Translator man, this refers to a location or premises that can have cameras in it.">Premises</string>
         </property>
        </widget>
       </item>
