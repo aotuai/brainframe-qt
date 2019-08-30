@@ -72,8 +72,6 @@ class StreamManager:
             stream.wait_until_closed()
             self._async_closing_streams.remove(stream)
 
-        gobject_init.close()
-
     def close_stream_async(self, stream_id) -> SyncedStreamReader:
         stream = self._stream_readers.pop(stream_id)
         self._async_closing_streams.append(stream)
