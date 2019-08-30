@@ -279,6 +279,11 @@
   <tabstop>stream_name</tabstop>
   <tabstop>connection_type_combo_box</tabstop>
   <tabstop>select_file_button</tabstop>
+  <tabstop>parameter_value</tabstop>
+  <tabstop>premises_combobox</tabstop>
+  <tabstop>advanced_options_checkbox</tabstop>
+  <tabstop>pipeline_value</tabstop>
+  <tabstop>keyframe_only_checkbox</tabstop>
  </tabstops>
  <resources/>
  <connections>
