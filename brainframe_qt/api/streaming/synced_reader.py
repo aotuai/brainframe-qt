@@ -14,6 +14,7 @@ from brainframe.shared.stream_reader import (
     StreamReader,
     StreamStatus
 )
+from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.utils import or_events
 
 
@@ -73,7 +74,7 @@ class SyncedStreamReader(StreamReader):
 
     def __init__(self,
                  stream_id: int,
-                 stream_reader: StreamReader,
+                 stream_reader: GstStreamReader,
                  status_poller: StatusPoller):
         """Creates a new SyncedStreamReader.
 
