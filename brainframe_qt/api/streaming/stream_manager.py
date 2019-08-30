@@ -3,6 +3,7 @@ from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.shared.stream_reader import StreamReader
 from .synced_reader import SyncedStreamReader
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
+from brainframe.shared.gstreamer import gobject_init
 
 
 class StreamManager:
@@ -39,7 +40,7 @@ class StreamManager:
             latency = StreamReader.DEFAULT_LATENCY
             if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:
                 latency = StreamReader.REHOSTED_LATENCY
-
+            gobject_init.start()
             stream_reader = GstStreamReader(
                 url,
                 latency=latency,
@@ -70,6 +71,8 @@ class StreamManager:
         for stream in self._async_closing_streams:
             stream.wait_until_closed()
             self._async_closing_streams.remove(stream)
+
+        gobject_init.close()
 
     def close_stream_async(self, stream_id) -> SyncedStreamReader:
         stream = self._stream_readers.pop(stream_id)
