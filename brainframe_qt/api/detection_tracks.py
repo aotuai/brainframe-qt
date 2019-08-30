@@ -66,6 +66,12 @@ class DetectionTrack:
                 older = det, tstamp
                 break
 
+        # If interp_to_tstamp is older than all detection nodes in the
+        # DetectionTrack, return the most closest DetectionTrack to the
+        # interp_to_tstamp
+        if older is None:
+            return recent[0]
+
         ratio = 1 - (recent[1] - interp_to_tstamp) / (recent[1] - older[1])
 
         newer_coords = np.array(recent[0].coords)
