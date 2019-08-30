@@ -33,3 +33,8 @@ class PremisesStubMixin(Stub):
         data = self._post_codec(req, premises)
         new_premises = Premises.from_dict(data)
         return new_premises
+
+    def delete_premises(self, premises_id: int):
+        """Delete a premises and the streams and data connected to it"""
+        req = f"/api/premises/{premises_id}"
+        self._delete(req)
