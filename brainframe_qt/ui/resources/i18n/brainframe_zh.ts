@@ -200,17 +200,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="70"/>
+        <location filename="../../brainframe_app.py" line="69"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="88"/>
+        <location filename="../../brainframe_app.py" line="90"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="163"/>
+        <location filename="../../brainframe_app.py" line="166"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -286,7 +286,7 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="53"/>
-        <source>The following options will be reset to default):</source>
+        <source>The following options will be reset to default:</source>
         <translation>以下选项将重置为预设值：</translation>
     </message>
     <message>
@@ -375,7 +375,7 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
         <source>Are you sure you want to delete all encodings with class {0} from identity for {1}?</source>
-        <translation type="unfinished">您确定要从 {1} 的标识中删除所有带有类别为 {0} 的编码吗？</translation>
+        <translation>您确定要从 {1} 的标识中删除所有带有类别为 {0} 的编码吗？</translation>
     </message>
     <message>
         <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="102"/>
@@ -651,7 +651,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../splash_screen/splash_screen.py" line="68"/>
+        <location filename="../../splash_screen/splash_screen.py" line="72"/>
         <source>Configure</source>
         <translation>配置</translation>
     </message>
@@ -702,27 +702,27 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationDialog</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="98"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="121"/>
         <source>Camera web address</source>
         <translation>摄像头地址</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="102"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="128"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="107"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="135"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="192"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="233"/>
         <source>Select video file</source>
         <translation>选择视频文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="72"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="94"/>
         <source>Unrecognized connection type</source>
         <translation>无法识别的连接类型</translation>
     </message>
@@ -757,34 +757,44 @@ Please recheck the entered server address.</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="149"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="205"/>
         <source>Select File</source>
         <translation>选择文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="156"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="212"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="163"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="219"/>
         <source>Keyframe-only streaming</source>
         <translation>仅传输关键帧</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="170"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="226"/>
         <source>None</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="203"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="159"/>
         <source>Advanced Options</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="236"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="192"/>
         <source>Stream Options</source>
         <translation>视频流选项</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="243"/>
+        <source>Premises</source>
+        <translation>场所</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="191"/>
+        <source>Local Network</source>
+        <translation>本地网络</translation>
     </message>
 </context>
 <context>

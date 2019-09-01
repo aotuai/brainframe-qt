@@ -7,7 +7,6 @@ from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.status_poller import StatusPoller
 
-
 # Avoid importing stream code where possible to avoid unnecessary OpenCV
 # dependencies
 if TYPE_CHECKING:
@@ -41,13 +40,15 @@ class StreamStubMixin(Stub):
             self._stream_manager = StreamManager(self.get_status_poller())
         return self._stream_manager
 
-    def get_stream_configurations(self) -> List[StreamConfiguration]:
+    def get_stream_configurations(self, premises_id=None) \
+            -> List[StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
 
         :return: [StreamConfiguration, StreamConfiguration, ...]
         """
         req = "/api/streams"
-        data, _ = self._get_json(req)
+        params = {"premises_id": premises_id} if premises_id else None
+        data, _ = self._get_json(req, params=params)
 
         configs = [StreamConfiguration.from_dict(d) for d in data]
         return configs
@@ -73,7 +74,7 @@ class StreamStubMixin(Stub):
         req = f"/api/streams/{stream_id}"
         self._delete(req)
         if self._stream_manager is not None:
-            self._stream_manager.close_stream(stream_id)
+            self._stream_manager.close_stream_async(stream_id)
 
     def get_stream_url(self, stream_id) -> str:
         """Gets the URL that the stream is available at.

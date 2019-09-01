@@ -218,7 +218,7 @@ class Stub:
         """Sends the given request with no authorization."""
         resp = self._send_request(request)
         if not resp.ok:
-            raise _make_api_error(resp.content)
+            raise _make_api_error(resp.content, resp.status_code)
 
         return resp
 
@@ -229,7 +229,7 @@ class Stub:
 
         resp = self._send_request(request)
         if not resp.ok:
-            raise _make_api_error(resp.content)
+            raise _make_api_error(resp.content, resp.status_code)
 
         if "session_id" in resp.cookies:
             # Update the session ID if we don't already have one
@@ -245,7 +245,7 @@ class Stub:
         try:
             resp = self._send_request(request)
             if not resp.ok:
-                raise _make_api_error(resp.content)
+                raise _make_api_error(resp.content, resp.status_code)
         except api_errors.InvalidSessionError:
             # The session likely expired. Try again with the username and
             # password to fetch a new session
@@ -266,7 +266,7 @@ class Stub:
         return requests.Session().send(prepared)
 
 
-def _make_api_error(resp_content):
+def _make_api_error(resp_content, status_code):
     """Makes the corresponding error for this response.
 
     :param resp_content: The HTTP response to inspect for info
@@ -293,6 +293,8 @@ def _make_api_error(resp_content):
     if kind not in api_errors.kind_to_error_type:
         info = f"Unknown error kind {kind}: " + description
         logging.error(info)
-        return api_errors.UnknownError(info)
+        return api_errors.UnknownError(info, status_code)
     else:
+        if kind == error_kinds.UNKNOWN:
+            return api_errors.kind_to_error_type[kind](description, status_code)
         return api_errors.kind_to_error_type[kind](description)

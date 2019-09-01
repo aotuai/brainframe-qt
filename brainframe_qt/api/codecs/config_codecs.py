@@ -1,3 +1,5 @@
+from typing import Optional
+
 from .base_codecs import Codec
 from brainframe.shared import codec_enums
 
@@ -23,12 +25,14 @@ class StreamConfiguration(Codec):
                  connection_type: ConnType,
                  connection_options: dict,
                  runtime_options: dict,
+                 premises_id: Optional[int],
                  id_=None):
         assert connection_type in StreamConfiguration.ConnType, \
             "You must feed StreamConfiguration.ConnType into connection_type" \
             " You used a " + str(type(connection_type)) + " instead!"
 
         self.name = name
+        self.premises_id = premises_id
         self.id = id_
         self.connection_type = connection_type
         self.connection_options = connection_options
@@ -46,4 +50,5 @@ class StreamConfiguration(Codec):
                                    id_=d["id"],
                                    connection_type=connection_t,
                                    connection_options=d["connection_options"],
-                                   runtime_options=d["runtime_options"])
+                                   runtime_options=d["runtime_options"],
+                                   premises_id=d["premises_id"])

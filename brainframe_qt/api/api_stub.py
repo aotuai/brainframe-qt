@@ -14,7 +14,8 @@ class API(stubs.AlertStubMixin,
           stubs.ZoneAlarmStubMixin,
           stubs.ProcessImageStubMixIn,
           stubs.EncodingStubMixIn,
-          stubs.VersionStubMixIn):
+          stubs.VersionStubMixIn,
+          stubs.PremisesStubMixin):
     """Provides access to BrainFrame API endpoints."""
 
     def __init__(self, server_url=None, credentials: Tuple[str, str] = None):

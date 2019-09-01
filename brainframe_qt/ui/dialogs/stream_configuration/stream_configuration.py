@@ -1,14 +1,32 @@
 from PyQt5.QtCore import Qt, pyqtSlot, QStandardPaths
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QDialog, QFileDialog, QDialogButtonBox
+from PyQt5.QtWidgets import (
+    QDialog,
+    QFileDialog,
+    QDialogButtonBox,
+    QComboBox,
+    QLineEdit,
+    QPushButton,
+    QCheckBox
+)
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
+from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 
 
 class StreamConfigurationDialog(QDialog):
     """Dialog for configuring a Stream"""
+    parameter_value: QLineEdit
+    pipeline_value: QLineEdit
+    pipeline_value: QLineEdit
+    stream_name: QLineEdit
+    advanced_options_checkbox: QCheckBox
+    connection_type_combo_box: QComboBox
+    premises_combobox: QComboBox
+    keyframe_only_checkbox: QCheckBox
+    select_file_button: QPushButton
 
     def __init__(self, parent=None, stream_conf=None):
         super().__init__(parent)
@@ -56,6 +74,7 @@ class StreamConfigurationDialog(QDialog):
         if not result:
             return None
 
+        premises_id = None
         if dialog.connection_type == StreamConfiguration.ConnType.IP_CAMERA:
             url = str(dialog.parameter_value.text()).strip()
             params = {"url": url}
@@ -63,6 +82,9 @@ class StreamConfigurationDialog(QDialog):
             pipeline = str(dialog.pipeline_value.text())
             if dialog.advanced_options_checkbox.isChecked() and pipeline:
                 params["pipeline"] = pipeline
+
+            premises_id = dialog.premises_combobox.itemData(
+                dialog.premises_combobox.currentIndex())
         elif dialog.connection_type == StreamConfiguration.ConnType.WEBCAM:
             device_id = str(dialog.parameter_value.text()).strip()
             params = {"device_id": device_id}
@@ -75,13 +97,14 @@ class StreamConfigurationDialog(QDialog):
 
         keyframes_only = dialog.advanced_options_checkbox.isChecked() \
                          and dialog.keyframe_only_checkbox.isChecked()
-
-        return StreamConfiguration(name=dialog.stream_name.text(),
-                                   connection_type=dialog.connection_type,
-                                   connection_options=params,
-                                   runtime_options={
-                                       "keyframes_only": keyframes_only
-                                   })
+        return StreamConfiguration(
+            name=dialog.stream_name.text(),
+            connection_type=dialog.connection_type,
+            connection_options=params,
+            premises_id=premises_id,
+            runtime_options={
+                "keyframes_only": keyframes_only
+            })
 
     @pyqtSlot(int)
     def connection_type_changed_slot(self, connection_index: int):
@@ -96,14 +119,19 @@ class StreamConfigurationDialog(QDialog):
             if connection_index == 1:  # IP Camera
                 self.connection_type = StreamConfiguration.ConnType.IP_CAMERA
                 self.parameter_label.setText(self.tr("Camera web address"))
+                self._set_premises_options_hidden(False)
                 self._set_advanced_options_section_hidden(False)
+                self._update_premises_combobox()
+
             elif connection_index == 2:  # Webcam
                 self.connection_type = StreamConfiguration.ConnType.WEBCAM
                 self.parameter_label.setText(self.tr("Device ID"))
+                self._set_premises_options_hidden(True)
                 self._set_advanced_options_section_hidden(True)
             elif connection_index == 3:  # File
                 # TODO(Bryce Beagle): Use QFileDialog
                 self.connection_type = StreamConfiguration.ConnType.FILE
+                self._set_premises_options_hidden(True)
                 self.parameter_label.setText(self.tr("Filepath"))
                 self._set_advanced_options_section_hidden(True)
 
@@ -157,6 +185,14 @@ class StreamConfigurationDialog(QDialog):
         self.pipeline_value.setHidden(hidden)
         self.keyframe_only_checkbox.setHidden(hidden)
 
+    def _update_premises_combobox(self):
+        # Set the premises dropdown options
+        self.premises_combobox.clear()
+        premises_options = [(self.tr("Local Network"), None)] + \
+                           [(p.name, p.id) for p in api.get_all_premises()]
+        for premises_name, premises_id in premises_options:
+            self.premises_combobox.addItem(premises_name, premises_id)
+
     def _set_parameter_widgets_hidden(self, hidden):
         """Hide or show the widgets related to the parameters
 
@@ -170,6 +206,10 @@ class StreamConfigurationDialog(QDialog):
         self.select_file_button.setHidden(
             self.connection_type != StreamConfiguration.ConnType.FILE)
 
+    def _set_premises_options_hidden(self, hidden):
+        self.premises_label.setHidden(hidden)
+        self.premises_combobox.setHidden(hidden)
+
     def _set_advanced_options_section_hidden(self, hidden):
         """Hide or show the advanced options section.
         """
@@ -179,6 +219,7 @@ class StreamConfigurationDialog(QDialog):
             # options regardless of the checkbox value
             self.pipeline_label.setHidden(hidden)
             self.pipeline_value.setHidden(hidden)
+            self.keyframe_only_checkbox.setHidden(hidden)
         else:
             # Even if the advanced options section should be shown, the actual
             # options may or may not be visible based on the checkbox value
