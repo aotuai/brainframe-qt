@@ -27,7 +27,7 @@ class StreamStubMixin(Stub):
     def get_status_poller(self) -> StatusPoller:
         """Returns the singleton StatusPoller object"""
         if self._status_poller is None or not self._status_poller.is_running:
-            self._status_poller = StatusPoller(self, 33)
+            self._status_poller = StatusPoller(self)
         return self._status_poller
 
     def get_stream_manager(self) -> "StreamManager":

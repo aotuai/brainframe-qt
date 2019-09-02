@@ -1,4 +1,5 @@
 import logging
+import ujson
 from threading import Thread
 from time import sleep, time
 from typing import Dict
@@ -13,7 +14,7 @@ class StatusPoller(Thread):
     """ This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream. """
 
-    def __init__(self, api, ms_status_updates):
+    def __init__(self, api):
         """
         :param api: An API() object for interacting with the BrainFrame REST
             api
@@ -22,7 +23,6 @@ class StatusPoller(Thread):
         """
         super().__init__(name="StatusPollerThread")
         self._api = api
-        self._seconds_between_updates = ms_status_updates / 1000
         self._session = requests.Session()
 
         # Get something before starting the thread
@@ -35,29 +35,36 @@ class StatusPoller(Thread):
         self._running = True
         call_time = 0
 
-        url = f"{self._api._server_url}/api/streams/status?streamed=1"
-        print("starting request")
-        zstatus_stream = self._session.get(url, stream=True).iter_lines()
+        zstatus_stream = self._get_zonestatus_iterator()
         while self._running:
 
-            # Call the server, timing how long the call takes
             try:
                 start = time()
-                latest = next(zstatus_stream).decode('utf-8')
-                print("Iterating lines", latest)
-                print("Got latest from stream", latest)
-                self._latest = latest
+                next_line = next(zstatus_stream)
+                print("Boutta parse", next_line)
+                if next_line == b'':
+                    logging.warning("ZoneStatus pipe seemingly broke")
+                    zstatus_stream = self._get_zonestatus_iterator()
+                    continue
+
+                self._latest = ujson.loads(next_line)
+                print("LAtest", self._latest)
                 call_time = time() - start
             except RequestsConnectionError:
                 logging.warning("StatusLogger: Could not reach server!")
                 sleep(2)
 
-            # Sleep for the appropriate amount to keep call times consistent
-            time_left = self._seconds_between_updates - call_time
-            if time_left > 0:
-                sleep(time_left)
+            print("Call time", call_time)
 
         self._running = False
+
+    def _get_zonestatus_iterator(self):
+        """This is used to initiate a conection to the servers zone status
+        multipart streamed endpoint"""
+        url = f"{self._api._server_url}/api/streams/status?streamed=1"
+        zstatus_stream = self._session.get(url, stream=True).iter_lines(
+            delimiter=b"\r\n")
+        return zstatus_stream
 
     @property
     def is_running(self):
@@ -73,4 +80,5 @@ class StatusPoller(Thread):
     def close(self):
         """Close the status polling thread"""
         self._running = False
+        self._session.close()
         self.join()
