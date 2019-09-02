@@ -3,6 +3,7 @@ from threading import Thread
 from time import sleep, time
 from typing import Dict
 
+import requests
 from requests.exceptions import ConnectionError as RequestsConnectionError
 
 from brainframe.client.api import codecs
@@ -22,6 +23,7 @@ class StatusPoller(Thread):
         super().__init__(name="StatusPollerThread")
         self._api = api
         self._seconds_between_updates = ms_status_updates / 1000
+        self._session = requests.Session()
 
         # Get something before starting the thread
         self._latest = self._api.get_latest_zone_statuses()
@@ -32,12 +34,18 @@ class StatusPoller(Thread):
         """Polls BrainFrame for ZoneStatuses at a constant rate"""
         self._running = True
         call_time = 0
+
+        url = f"{self._api._server_url}/api/streams/status?streamed=1"
+        print("starting request")
+        zstatus_stream = self._session.get(url, stream=True).iter_lines()
         while self._running:
 
             # Call the server, timing how long the call takes
             try:
                 start = time()
-                latest = self._api.get_latest_zone_statuses()
+                latest = next(zstatus_stream).decode('utf-8')
+                print("Iterating lines", latest)
+                print("Got latest from stream", latest)
                 self._latest = latest
                 call_time = time() - start
             except RequestsConnectionError:
