@@ -34,7 +34,7 @@ class StatusPoller(Thread):
         """Polls BrainFrame for ZoneStatuses at a constant rate"""
         self._running = True
 
-        zstatus_stream = self._get_zonestatus_iterator()
+        zstatus_stream = self._zonestatus_stream()
         while self._running:
 
             try:
@@ -42,7 +42,7 @@ class StatusPoller(Thread):
 
                 if next_line == b'':
                     logging.warning("ZoneStatus pipe seemingly broke")
-                    zstatus_stream = self._get_zonestatus_iterator()
+                    zstatus_stream = self._zonestatus_stream()
                     continue
                 zone_statuses_dict = ujson.loads(next_line)
                 processed = {int(s_id): {key: codecs.ZoneStatus.from_dict(val)
@@ -55,7 +55,7 @@ class StatusPoller(Thread):
 
         self._running = False
 
-    def _get_zonestatus_iterator(self):
+    def _zonestatus_stream(self):
         """This is used to initiate a conection to the servers zone status
         multipart streamed endpoint"""
         url = f"{self._api._server_url}/api/streams/statuses"
