@@ -51,7 +51,9 @@ class StatusPoller(Thread):
                 self._latest = processed
             except (RequestsConnectionError, StopIteration):
                 logging.warning("StatusLogger: Could not reach server!")
-                sleep(2)
+                if not self._running:
+                    break
+                sleep(1)
 
         self._running = False
 
@@ -77,5 +79,5 @@ class StatusPoller(Thread):
     def close(self):
         """Close the status polling thread"""
         self._running = False
-        self.join()
+        self.join(timeout=5)
         self._session.close()
