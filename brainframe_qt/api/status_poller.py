@@ -33,35 +33,32 @@ class StatusPoller(Thread):
     def run(self):
         """Polls BrainFrame for ZoneStatuses at a constant rate"""
         self._running = True
-        call_time = 0
 
         zstatus_stream = self._get_zonestatus_iterator()
         while self._running:
 
             try:
-                start = time()
                 next_line = next(zstatus_stream)
-                print("Boutta parse", next_line)
+
                 if next_line == b'':
                     logging.warning("ZoneStatus pipe seemingly broke")
                     zstatus_stream = self._get_zonestatus_iterator()
                     continue
-
-                self._latest = ujson.loads(next_line)
-                print("LAtest", self._latest)
-                call_time = time() - start
-            except RequestsConnectionError:
+                zone_statuses_dict = ujson.loads(next_line)
+                processed = {int(s_id): {key: codecs.ZoneStatus.from_dict(val)
+                                         for key, val in statuses.items()}
+                             for s_id, statuses in zone_statuses_dict.items()}
+                self._latest = processed
+            except (RequestsConnectionError, StopIteration):
                 logging.warning("StatusLogger: Could not reach server!")
                 sleep(2)
-
-            print("Call time", call_time)
 
         self._running = False
 
     def _get_zonestatus_iterator(self):
         """This is used to initiate a conection to the servers zone status
         multipart streamed endpoint"""
-        url = f"{self._api._server_url}/api/streams/status?streamed=1"
+        url = f"{self._api._server_url}/api/streams/statuses"
         zstatus_stream = self._session.get(url, stream=True).iter_lines(
             delimiter=b"\r\n")
         return zstatus_stream
@@ -80,5 +77,5 @@ class StatusPoller(Thread):
     def close(self):
         """Close the status polling thread"""
         self._running = False
-        self._session.close()
         self.join()
+        self._session.close()
