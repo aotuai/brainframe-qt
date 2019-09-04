@@ -79,5 +79,5 @@ class StatusPoller(Thread):
     def close(self):
         """Close the status polling thread"""
         self._running = False
-        self.join(timeout=5)
         self._session.close()
+        self.join()
