@@ -41,11 +41,17 @@ class StreamManager:
             if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:
                 latency = StreamReader.REHOSTED_LATENCY
             gobject_init.start()
+
+            # Streams created with a premises are always proxied from that
+            # premises
+            proxied = stream_config.premises_id is not None
+
             stream_reader = GstStreamReader(
                 url,
                 latency=latency,
                 runtime_options=stream_config.runtime_options,
-                pipeline=pipeline)
+                pipeline=pipeline,
+                proxied=proxied)
             synced_stream_reader = SyncedStreamReader(
                 stream_config.id,
                 stream_reader,
