@@ -1,4 +1,4 @@
-from typing import Tuple, Any, Optional
+from typing import Tuple, Any, Optional, Union
 import ujson
 import requests
 import logging
@@ -119,7 +119,9 @@ class Stub:
 
         return self._send_authorized(request)
 
-    def _put(self, api_url, data: bytes, content_type: str) \
+    def _put(self, api_url,
+             data: Union[bytes, str],
+             content_type: str) \
             -> Tuple[bytes, dict]:
         """Send a PUT request to the given URL, managing authentication and
         error handling, if necessary.
@@ -142,7 +144,7 @@ class Stub:
         return self._send_authorized(request)
 
     def _post(self, api_url,
-              data: bytes = None,
+              data: Union[bytes, str] = None,
               content_type: str = None,
               files=None) \
             -> Tuple[bytes, dict]:
