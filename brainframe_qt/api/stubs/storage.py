@@ -19,9 +19,9 @@ class StorageStubMixin(Stub):
         :return: The data and MIME type of that data
         """
         req = f"/api/storage/{storage_id}"
-        image_bytes, headers = self._get(req)
+        resp = self._get(req)
 
-        return image_bytes, headers["Content-Type"]
+        return resp.content, resp.headers["Content-Type"]
 
     def get_storage_data_as_image(self, storage_id) -> np.ndarray:
         """Gets the data with the given storage ID and attempts to load it as
@@ -42,7 +42,7 @@ class StorageStubMixin(Stub):
         """
         req = r"/api/storage"
 
-        storage_id_json, _ = self._post(req, data, mime_type)
+        storage_id_json = self._post(req, data, mime_type).content
         return ujson.loads(storage_id_json)
 
     def new_storage_as_image(self, data: bytes) -> int:

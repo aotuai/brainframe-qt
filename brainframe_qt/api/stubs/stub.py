@@ -2,6 +2,7 @@ from typing import Tuple, Any, Optional, Union
 import ujson
 import requests
 import logging
+from requests import Response
 
 from brainframe.client.api import api_errors
 from brainframe.shared import error_kinds
@@ -40,11 +41,11 @@ class Stub:
             of a dict, {"key": "value", ...} key and val must be a string
         :return: The response, parsed with JSON
         """
-        data, headers = self._get(api_url, params=params)
+        resp = self._get(api_url, params=params)
 
-        if data:
-            return ujson.loads(data), headers
-        return None, headers
+        if resp.content:
+            return ujson.loads(resp.content), resp.headers
+        return None, resp.headers
 
     def _put_json(self, api_url, json):
         """Send a PUT request to the given URL.
@@ -53,12 +54,12 @@ class Stub:
         :param json: Pre-formatted JSON to send
         :return: The JSON response as a dict, or None if none was sent
         """
-        data, headers = self._put(api_url,
-                                  data=json,
-                                  content_type="application/json")
+        resp = self._put(api_url,
+                         data=json,
+                         content_type="application/json")
 
-        if data:
-            return ujson.loads(data)
+        if resp.content:
+            return ujson.loads(resp.content)
         return None
 
     def _post_codec(self, api_url, codec: Codec):
@@ -69,12 +70,12 @@ class Stub:
         :return: The JSON response as a dict, or None if none was sent
         """
         codec_data = codec.to_json()
-        data, headers = self._post(api_url,
-                                   data=codec_data.encode("utf-8"),
-                                   content_type="application/json")
+        resp = self._post(api_url,
+                          data=codec_data.encode("utf-8"),
+                          content_type="application/json")
 
-        if data:
-            return ujson.loads(data)
+        if resp.content:
+            return ujson.loads(resp.content)
         return None
 
     def _post_json(self, api_url, json):
@@ -83,12 +84,12 @@ class Stub:
         :param json: Preformatted JSON to send
         :return: The JSON response as a dict, or None if none was sent
         """
-        data, headers = self._post(api_url,
-                                   data=json,
-                                   content_type="application/json")
+        resp = self._post(api_url,
+                          data=json,
+                          content_type="application/json")
 
-        if data:
-            return ujson.loads(data)
+        if resp.content:
+            return ujson.loads(resp.content)
         return None
 
     def _post_multipart(self, api_url, files):
@@ -97,13 +98,13 @@ class Stub:
         :param files: A tuple in Requests format for a multipart body
         :return: The JSON response as a dict, or None if none was sent
         """
-        data, headers = self._post(api_url, files=files)
+        resp = self._post(api_url, files=files)
 
-        if data:
-            return ujson.loads(data)
+        if resp.content:
+            return ujson.loads(resp.content)
         return None
 
-    def _get(self, api_url, params=None) -> Tuple[bytes, dict]:
+    def _get(self, api_url, params=None) -> Response:
         """Send a GET request to the given URL, managing authentication and
         error handling, if necessary.
 
@@ -122,7 +123,7 @@ class Stub:
     def _put(self, api_url,
              data: Union[bytes, str],
              content_type: str) \
-            -> Tuple[bytes, dict]:
+            -> Response:
         """Send a PUT request to the given URL, managing authentication and
         error handling, if necessary.
 
@@ -147,7 +148,7 @@ class Stub:
               data: Union[bytes, str] = None,
               content_type: str = None,
               files=None) \
-            -> Tuple[bytes, dict]:
+            -> Response:
         """Send a POST request to the given URL, managing authentication and
         error handling, if necessary.
 
@@ -169,7 +170,7 @@ class Stub:
 
         return self._send_authorized(request)
 
-    def _delete(self, api_url, params=None) -> Tuple[bytes, dict]:
+    def _delete(self, api_url, params=None) -> Response:
         """Sends a DELETE request to the given URL, managing authentication and
         handling errors, as necessary.
 
@@ -197,7 +198,7 @@ class Stub:
         return url
 
     def _send_authorized(self, request: requests.Request) \
-            -> Tuple[bytes, dict]:
+            -> Response:
         """Sends the given request, using whatever authorization path that is
         necessary and raising any errors.
 
@@ -214,7 +215,7 @@ class Stub:
             # Authenticate with the session ID
             resp = self._send_with_session_id(request)
 
-        return resp.content, resp.headers
+        return resp
 
     def _send_no_auth(self, request: requests.Request) -> requests.Response:
         """Sends the given request with no authorization."""

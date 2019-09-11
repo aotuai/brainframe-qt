@@ -62,7 +62,7 @@ class AlertStubMixin(Stub):
         """
         req = f"/api/alerts/{alert_id}/frame"
         try:
-            img_bytes, _ = self._get(req)
+            img_bytes = self._get(req).content
             return image_utils.decode(img_bytes)
         except api_errors.FrameNotFoundForAlertError:
             return None
