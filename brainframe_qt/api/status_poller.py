@@ -32,10 +32,8 @@ class StatusPoller(Thread):
     def run(self):
         """Polls BrainFrame for ZoneStatuses at a constant rate"""
         self._running = True
-
         zstatus_stream = self._api.get_zone_status_stream()
         while self._running:
-
             try:
                 zone_status = next(zstatus_stream)
                 self._latest = zone_status

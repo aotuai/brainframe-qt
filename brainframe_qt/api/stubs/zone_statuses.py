@@ -38,12 +38,9 @@ class ZoneStatusStubMixin(Stub):
 
         def zone_status_iterator():
             resp = self._get(req)
-            print("Got response!", resp)
             for packet in resp.iter_lines(delimiter=b"\r\n"):
-                print("Iterlining seems to be A OKAY!", packet)
                 if packet == b'':
                     continue
-                print("Hooo wee, we got something", packet)
 
                 # Parse the line
                 zone_statuses_dict = ujson.loads(packet)
@@ -51,7 +48,6 @@ class ZoneStatusStubMixin(Stub):
                 processed = {int(s_id): {key: ZoneStatus.from_dict(val)
                                          for key, val in statuses.items()}
                              for s_id, statuses in zone_statuses_dict.items()}
-                print("Woohoo I am operating!", processed)
                 yield processed
 
         return zone_status_iterator()

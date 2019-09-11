@@ -2,7 +2,7 @@ from typing import Tuple, Any, Optional, Union
 import ujson
 import requests
 import logging
-from requests import Response
+from requests import Response, Session
 
 from brainframe.client.api import api_errors
 from brainframe.shared import error_kinds
@@ -258,7 +258,8 @@ class Stub:
         return resp
 
     @staticmethod
-    def _send_request(request: requests.Request) -> requests.Response:
+    def _send_request(request: requests.Request) \
+            -> requests.Response:
         """Sends a request to the server. This method is mocked out in unit
         tests.
 
@@ -266,7 +267,7 @@ class Stub:
         :return: The response data
         """
         prepared = request.prepare()
-        return requests.Session().send(prepared)
+        return requests.Session().send(prepared, stream=True)
 
 
 def _make_api_error(resp_content, status_code):
