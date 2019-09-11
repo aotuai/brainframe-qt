@@ -38,22 +38,25 @@ class StatusPoller(Thread):
         while self._running:
 
             try:
+                # Get the next valid line
                 next_line = next(zstatus_stream)
-
                 if next_line == b'':
-                    logging.warning("ZoneStatus pipe seemingly broke")
-                    zstatus_stream = self._zonestatus_stream()
                     continue
+
+                # Parse the line
                 zone_statuses_dict = ujson.loads(next_line)
                 processed = {int(s_id): {key: codecs.ZoneStatus.from_dict(val)
                                          for key, val in statuses.items()}
                              for s_id, statuses in zone_statuses_dict.items()}
+
+                # Give other threads access to the new status
                 self._latest = processed
             except (RequestsConnectionError, StopIteration):
                 logging.warning("StatusLogger: Could not reach server!")
                 if not self._running:
                     break
                 sleep(1)
+                zstatus_stream = self._zonestatus_stream()
 
         self._running = False
 
