@@ -171,13 +171,16 @@ class AlarmCreationDialog(QDialog):
             raise ValueError(f"Invalid condition button checked: "
                              f"'{condition_button.currentText()}'")
 
-        alarm = ZoneAlarm(name=alarm_name,
-                          zone_id=zones[zone].id,
-                          count_conditions=count_condition,
-                          rate_conditions=rate_condition,
-                          active_start_time=start_time,
-                          active_end_time=stop_time,
-                          use_active_time=True)  # TODO(Bryce Beagle): False?
+        alarm = ZoneAlarm(
+            name=alarm_name,
+            zone_id=zones[zone].id,
+            count_conditions=count_condition,
+            rate_conditions=rate_condition,
+            active_start_time=start_time,
+            active_end_time=stop_time,
+            use_active_time=True,  # TODO(Bryce Beagle): False?
+            # TODO(Tyler Compton): Make this value configurable
+            intersection_point=ZoneAlarm.IntersectionPointType.BOTTOM)
 
         zones[zone].alarms.append(alarm)
 
