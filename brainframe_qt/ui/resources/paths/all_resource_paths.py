@@ -16,7 +16,7 @@ def route_path(*args: Union[str, Path]) -> Path:
     """This function takes a path, routes it to the correct spot, records it,
     and returns a pathlib Path object"""
     global all_paths
-    if environment.in_production():
+    if hasattr(sys, '_MEIPASS'):
         return Path(sys._MEIPASS, *args)
 
     # Check if this file should be saved for pyinstaller
