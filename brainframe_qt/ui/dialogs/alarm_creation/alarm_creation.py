@@ -14,6 +14,7 @@ from brainframe.client.api.codecs import (
     ZoneAlarmRateCondition
 )
 from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.shared.codec_enums import IntersectionPointType
 
 
 class ConditionType(Enum):
@@ -46,6 +47,9 @@ class AlarmCreationDialog(QDialog):
 
         self._update_combo_box(self.zone_combo_box,
                                [zone.name for zone in zones])
+
+        self._update_combo_box(self.intersection_point_combo_box,
+                               IntersectionPointType.values())
 
         # Condition type
         self.condition_type_button_group.buttonClicked.connect(
@@ -113,6 +117,7 @@ class AlarmCreationDialog(QDialog):
         zone = dialog.zone_combo_box.currentText()
         start_time = dialog.start_time_edit.time().toString("HH:mm:ss")
         stop_time = dialog.stop_time_edit.time().toString("HH:mm:ss")
+        intersection_point = dialog.intersection_point_combo_box.currentText()
 
         count_condition = []
         rate_condition = []
@@ -137,7 +142,8 @@ class AlarmCreationDialog(QDialog):
                 test=test_type,
                 check_value=count,
                 with_class_name=countable,
-                with_attribute=attribute))
+                with_attribute=attribute,
+                intersection_point=IntersectionPointType(intersection_point)))
 
         elif condition_button is dialog.rate_based_button:
             direction = dialog.direction_combo_box.currentText()
@@ -157,7 +163,8 @@ class AlarmCreationDialog(QDialog):
                 direction=direction,
                 duration=duration,
                 with_class_name=countable,
-                with_attribute=None))
+                with_attribute=None,
+                intersection_point=IntersectionPointType(intersection_point)))
 
         else:
             raise ValueError(f"Invalid condition button checked: "
@@ -170,9 +177,7 @@ class AlarmCreationDialog(QDialog):
             rate_conditions=rate_condition,
             active_start_time=start_time,
             active_end_time=stop_time,
-            use_active_time=True,  # TODO(Bryce Beagle): False?
-            # TODO(Tyler Compton): Make this value configurable
-            intersection_point=ZoneAlarm.IntersectionPointType.BOTTOM)
+            use_active_time=True)
 
         zones[zone].alarms.append(alarm)
 
