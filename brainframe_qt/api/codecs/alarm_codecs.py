@@ -6,11 +6,8 @@ from brainframe.shared import codec_enums
 class ZoneAlarm(Codec):
     """This is the configuration for an alarm."""
 
-    IntersectionPointType = codec_enums.IntersectionPointType
-
     def __init__(self, *, name, count_conditions, rate_conditions,
                  use_active_time, active_start_time, active_end_time,
-                 intersection_point,
                  id_=None, zone_id=None):
         self.name = name
         self.id = id_
@@ -20,11 +17,9 @@ class ZoneAlarm(Codec):
         self.use_active_time = use_active_time
         self.active_start_time = active_start_time
         self.active_end_time = active_end_time
-        self.intersection_point = intersection_point
 
     def to_dict(self):
         d = dict(self.__dict__)
-        d["intersection_point"] = self.intersection_point.value
         d["count_conditions"] = [ZoneAlarmCountCondition.to_dict(cond)
                                  for cond in self.count_conditions]
         d["rate_conditions"] = [ZoneAlarmRateCondition.to_dict(cond)
@@ -34,8 +29,6 @@ class ZoneAlarm(Codec):
 
     @staticmethod
     def from_dict(d):
-        intersection_point = ZoneAlarm.IntersectionPointType(
-            d["intersection_point"])
         count_conditions = [ZoneAlarmCountCondition.from_dict(cond)
                             for cond in d["count_conditions"]]
         rate_conditions = [ZoneAlarmRateCondition.from_dict(cond)
@@ -48,8 +41,7 @@ class ZoneAlarm(Codec):
                          use_active_time=d["use_active_time"],
                          active_start_time=d["active_start_time"],
                          active_end_time=d["active_end_time"],
-                         zone_id=d["zone_id"],
-                         intersection_point=intersection_point)
+                         zone_id=d["zone_id"])
 
 
 class Alert(Codec):
