@@ -267,7 +267,7 @@ class Stub:
         :return: The response data
         """
         prepared = request.prepare()
-        return requests.Session().send(prepared, stream=True)
+        return requests.Session().send(prepared, stream=True, timeout=10)
 
 
 def _make_api_error(resp_content, status_code):
