@@ -5,6 +5,7 @@ from PyQt5.uic import loadUi
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import PluginConfigDialog, TaskConfiguration
+from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
 
@@ -63,10 +64,19 @@ class VideoExpandedView(QWidget):
     def timerEvent(self, timer_event: QTimerEvent):
         """Close the expanded view if the currently open stream no longer
         exists on the server"""
-        for stream_conf in api.get_stream_configurations():
-            if self.stream_conf.id == stream_conf.id:
-                return
-        self.expanded_stream_closed_slot()
+        def func():
+
+            stream_configurations = api.get_stream_configurations()
+            return stream_configurations
+
+        def callback(stream_configurations):
+
+            for stream_conf in stream_configurations:
+                if self.stream_conf.id == stream_conf.id:
+                    return
+            self.expanded_stream_closed_slot()
+
+        QTAsyncWorker(self, func, callback).start()
 
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
@@ -115,7 +125,9 @@ class VideoExpandedView(QWidget):
         """
 
         # Delete stream from database
+        print("Deleting")
         api.delete_stream_configuration(self.stream_conf.id)
+        print("Done deleting")
 
         # Remove StreamWidgets associated with stream being deleted
         # noinspection PyUnresolvedReferences

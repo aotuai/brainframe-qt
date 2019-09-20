@@ -8,6 +8,7 @@ from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
+from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
@@ -43,21 +44,31 @@ class VideoThumbnailView(QWidget):
 
     def timerEvent(self, timer_event: QTimerEvent):
 
-        received_stream_ids = set()
+        def func():
 
-        # Get all current streams
-        for stream_conf in api.get_stream_configurations():
+            stream_configurations = api.get_stream_configurations()
+            return stream_configurations
 
-            received_stream_ids.add(stream_conf.id)
+        def callback(stream_configurations):
 
-            if stream_conf.id not in self.all_stream_confs:
-                # Create widgets for each
-                self.new_stream(stream_conf)
+            received_stream_ids = set()
 
-        dead_stream_ids = self.all_stream_confs.keys() - received_stream_ids
+            # Get all current streams
+            for stream_conf in stream_configurations:
 
-        for stream_id in dead_stream_ids:
-            self.delete_stream_slot(self.all_stream_confs[stream_id])
+                received_stream_ids.add(stream_conf.id)
+
+                if stream_conf.id not in self.all_stream_confs:
+                    # Create widgets for each
+                    self.new_stream(stream_conf)
+
+            current_stream_ids = self.all_stream_confs.keys()
+            dead_stream_ids = current_stream_ids - received_stream_ids
+
+            for stream_id in dead_stream_ids:
+                self.delete_stream_slot(self.all_stream_confs[stream_id])
+
+        QTAsyncWorker(self, func, callback).start()
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
