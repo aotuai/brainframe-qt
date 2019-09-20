@@ -81,7 +81,7 @@ class Stub:
     def _post_json(self, api_url, json):
         """Send a POST request to the given URL.
         :param api_url: The /api/blah/blah to append to the base_url
-        :param json: Preformatted JSON to send
+        :param json: Pre-formatted JSON to send
         :return: The JSON response as a dict, or None if none was sent
         """
         resp = self._post(api_url,
@@ -155,6 +155,7 @@ class Stub:
         :param api_url: The /api/blah/blah to append to the base_url
         :param data: The data to send
         :param content_type: The content type of the data
+        :param files: If provided, the POST request will be a multipart request
         :return: The raw bytes of the response and the response headers
         """
         headers = None
@@ -201,9 +202,6 @@ class Stub:
             -> Response:
         """Sends the given request, using whatever authorization path that is
         necessary and raising any errors.
-
-        :param request: The request to send
-        :return: The body of the request, and all response headers
         """
         if self._credentials is None:
             # No credentials provided, send the request without any auth
