@@ -71,7 +71,8 @@ class BrainFrameApplication(QApplication):
             message = self.tr("Attempting to connect to server at {}")
 
             timeout_event = Event()
-            """Set once we've properly communicated with the server"""
+            """Event that is set once communication with server has succeeded
+            """
 
             def wait_for_server():
                 while True:
@@ -82,7 +83,8 @@ class BrainFrameApplication(QApplication):
                         break
                     except (ConnectionError, ConnectionRefusedError,
                             api_errors.UnauthorizedError, ReadTimeout):
-                        # Server not started yet
+                        # Server not started yet or there is a communication
+                        # error
                         pass
                     except api_errors.UnknownError as exc:
                         if exc.status_code not in [502]:
