@@ -115,14 +115,9 @@ Read the manual to learn about the required directory structure.</source>
         <translation>活跃时间</translation>
     </message>
     <message>
-        <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="293"/>
+        <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="290"/>
         <source>to</source>
         <translation>至</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="341"/>
-        <source>Intersection Point</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -205,17 +200,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="71"/>
+        <location filename="../../brainframe_app.py" line="69"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="107"/>
+        <location filename="../../brainframe_app.py" line="90"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="180"/>
+        <location filename="../../brainframe_app.py" line="166"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -987,7 +982,7 @@ Please recheck the entered server address.</source>
         <translation>删除视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="50"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="49"/>
         <source>Close expanded video view</source>
         <translation>关闭扩展视频视图</translation>
     </message>
@@ -1005,7 +1000,7 @@ Please recheck the entered server address.</source>
         <translation>无警报的视频流：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="136"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="125"/>
         <source>Inconsistent state with alert widgets.</source>
         <translation></translation>
     </message>
