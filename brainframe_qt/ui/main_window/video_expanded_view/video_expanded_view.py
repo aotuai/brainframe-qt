@@ -125,9 +125,7 @@ class VideoExpandedView(QWidget):
         """
 
         # Delete stream from database
-        print("Deleting")
         api.delete_stream_configuration(self.stream_conf.id)
-        print("Done deleting")
 
         # Remove StreamWidgets associated with stream being deleted
         # noinspection PyUnresolvedReferences
