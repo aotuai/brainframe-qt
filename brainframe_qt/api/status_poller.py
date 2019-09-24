@@ -6,6 +6,7 @@ from typing import Dict
 
 import requests
 from requests.exceptions import ConnectionError as RequestsConnectionError
+from requests.exceptions import ReadTimeout
 
 from brainframe.client.api import codecs
 
@@ -38,8 +39,8 @@ class StatusPoller(Thread):
                 zone_status = next(zstatus_stream)
                 self._latest = zone_status
 
-            except (RequestsConnectionError, StopIteration):
-                logging.warning("StatusLogger: Could not reach server!")
+            except (RequestsConnectionError, StopIteration, ReadTimeout) as ex:
+                logging.warning(f"StatusLogger: Could not reach server: {ex}")
                 if not self._running:
                     break
                 sleep(1)
