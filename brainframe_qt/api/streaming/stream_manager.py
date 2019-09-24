@@ -54,6 +54,16 @@ class StreamManager:
 
         return self._stream_readers[stream_config.id]
 
+    def is_streaming(self, stream_id):
+        """Checks if the the manager has a stream reader for the given stream
+        id.
+
+        :param stream_id: The stream ID to check
+        :return: True if the stream manager has a stream reader, false
+            otherwise
+        """
+        return stream_id in self._stream_readers
+
     def close_stream(self, stream_id):
         """Close a specific stream and remove the reference.
 
