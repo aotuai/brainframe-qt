@@ -1,3 +1,5 @@
+from typing import Optional, List
+
 from brainframe.client.api.stubs.stub import Stub
 from brainframe.client.api.codecs import ZoneAlarm
 
@@ -15,6 +17,20 @@ class ZoneAlarmStubMixin(Stub):
         data, _ = self._get_json(req)
 
         return ZoneAlarm.from_dict(data)
+
+    def get_zone_alarms(self, stream_id: Optional[int] = None,
+                        zone_id: Optional[int] = None) -> List[ZoneAlarm]:
+        req = f"/api/zone_alarms"
+
+        params = {}
+        if stream_id is not None:
+            params["stream_id"] = stream_id
+        if zone_id is not None:
+            params["zone_id"] = zone_id
+
+        data, _ = self._get_json(req, params=params)
+
+        return [ZoneAlarm.from_dict(a) for a in data]
 
     def set_zone_alarm(self, alarm: ZoneAlarm) -> ZoneAlarm:
         """Creates or updates a zone alarm.
