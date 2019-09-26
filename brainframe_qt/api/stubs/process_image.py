@@ -3,17 +3,18 @@ import ujson
 
 import numpy as np
 
-from brainframe.client.api.stubs.stub import Stub
+from brainframe.client.api.stubs.base_stub import BaseStub, DEFAULT_TIMEOUT
 from brainframe.client.api.codecs import Detection
 from brainframe.client.api import image_utils
 
 
-class ProcessImageStubMixIn(Stub):
+class ProcessImageStubMixIn(BaseStub):
     """Provides stubs to call APIs that run processing on a single frame."""
 
     def process_image(self, img_bgr: np.ndarray,
                       plugin_names: List[str],
-                      option_vals: Dict[str, Dict[str, object]]) \
+                      option_vals: Dict[str, Dict[str, object]],
+                      timeout=DEFAULT_TIMEOUT) \
             -> List[Detection]:
         """Process a single image using the given configuration.
         :param img_bgr: The image to process
@@ -23,6 +24,7 @@ class ProcessImageStubMixIn(Stub):
             name and the value is a dict with key-value pairs for each option
             and its corresponding value. Any specified options will override
             the global option values for that plugin
+        :param timeout: The timeout to use for this request
         :return: All detections in the image
         """
         req = f"/api/process_image"
@@ -44,5 +46,5 @@ class ProcessImageStubMixIn(Stub):
                          metadata.encode("utf-8"),
                          "application/json")}
 
-        resp = self._post_multipart(req, files)
+        resp = self._post_multipart(req, timeout, files)
         return [Detection.from_dict(d) for d in resp]
