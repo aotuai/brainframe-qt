@@ -37,7 +37,7 @@ class VideoExpandedView(QWidget):
 
         self._init_ui()
 
-        self.timer: int = None
+        self.startTimer(1000)
 
     def _init_ui(self):
         # https://stackoverflow.com/a/43835396/8134178
@@ -51,12 +51,10 @@ class VideoExpandedView(QWidget):
         # noinspection PyUnresolvedReferences
         self.hide_button.clicked.connect(self.expanded_stream_closed_slot)
 
-    # noinspection PyPep8Naming
     def enterEvent(self, event: QEvent):
         self.hide_button.show()
         super().enterEvent(event)
 
-    # noinspection PyPep8Naming
     def leaveEvent(self, event: QEvent):
         self.hide_button.hide()
         super().leaveEvent(event)
@@ -64,27 +62,29 @@ class VideoExpandedView(QWidget):
     def timerEvent(self, timer_event: QTimerEvent):
         """Close the expanded view if the currently open stream no longer
         exists on the server"""
-        def func():
+        # Don't do anything if we don't have an active stream_conf
+        if not self.stream_conf:
+            return
+
+        def get_stream_configurations():
 
             stream_configurations = api.get_stream_configurations()
             return stream_configurations
 
-        def callback(stream_configurations):
+        def check_deleted(stream_configurations):
 
-            for stream_conf in stream_configurations:
-                if self.stream_conf.id == stream_conf.id:
-                    return
+            if self.stream_conf:
+                for stream_conf in stream_configurations:
+                    if self.stream_conf.id == stream_conf.id:
+                        return
             self.expanded_stream_closed_slot()
 
-        QTAsyncWorker(self, func, callback).start()
+        QTAsyncWorker(self, get_stream_configurations, check_deleted).start()
 
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):
         """Signaled by thumbnail view when thumbnail video is clicked
         """
-        if self.timer:
-            self.killTimer(self.timer)
-
         self.expanded_video.change_stream(stream_conf)
         self.alert_log.change_stream(stream_conf.id)
         self.stream_conf = stream_conf
@@ -92,14 +92,9 @@ class VideoExpandedView(QWidget):
         # Set displayed title of stream
         self.stream_name_label.setText(stream_conf.name)
 
-        self.timer = self.startTimer(1000)
-
     @pyqtSlot()
     def expanded_stream_closed_slot(self):
         """Signaled by close button"""
-
-        self.killTimer(self.timer)
-        self.timer = None
 
         # Stop attempting to display a stream
         self.expanded_video.change_stream(None)
@@ -132,7 +127,6 @@ class VideoExpandedView(QWidget):
         self.stream_delete_signal.emit(self.stream_conf)
 
         self.expanded_stream_closed_slot()
-        self.stream_conf = None
 
     @pyqtSlot()
     def open_stream_plugin_config(self):
@@ -150,6 +144,4 @@ class VideoExpandedView(QWidget):
         - QPushButton -- QtDesigner
           self.task_config_button.clicked
         """
-        config = TaskConfiguration.open_configuration(self.stream_conf, self)
-        if not config:
-            return
+        TaskConfiguration.open_configuration(self.stream_conf, self)
