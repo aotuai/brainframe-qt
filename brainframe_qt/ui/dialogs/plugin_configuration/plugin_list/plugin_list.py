@@ -1,12 +1,15 @@
-from typing import Dict
+from typing import List
 
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QTimer, QMetaMethod
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QListWidget, QListWidgetItem
 from PyQt5.uic import loadUi
 
-from .plugin_list_item.plugin_list_item import PluginListItem
 from brainframe.client.api import api
+from brainframe.client.api.codecs import Plugin
+from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
+
+from .plugin_list_item.plugin_list_item import PluginListItem
 
 
 class PluginList(QListWidget):
@@ -23,31 +26,39 @@ class PluginList(QListWidget):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.plugin_list_ui, self)
-
-        # Populate plugin_container layout with those plugins
-        self.plugins = api.get_plugins()
         self.current_plugin = None
 
-        for plugin in self.plugins:
-            list_widget_item = QListWidgetItem(parent=self)
-            self.addItem(list_widget_item)
-
-            item_widget = PluginListItem(name=plugin.name, parent=self)
-
-            # Fix sizing
-            list_widget_item.setSizeHint(item_widget.sizeHint())
-            self.setItemWidget(list_widget_item, item_widget)
-
+        # noinspection PyUnresolvedReferences
         self.currentItemChanged.connect(self.plugin_changed)
 
-        # # Always have an item selected
-        if len(self.plugins):
-            # Let other widgets be initialized, then call setCurrentRow
-            QTimer.singleShot(0, lambda: self.setCurrentRow(0))
-            # TODO: Find a clever way of doing this with self.connectNotify
+        self._init_plugins()
+
+    def _init_plugins(self):
+        """Populate plugin_container layout with those plugins"""
+
+        def get_plugins():
+            return api.get_plugins()
+
+        def add_plugins(plugins: List[Plugin]):
+
+            for plugin in plugins:
+                plugin_item = QListWidgetItem(parent=self)
+                self.addItem(plugin_item)
+
+                item_widget = PluginListItem(name=plugin.name, parent=self)
+
+                # Fix sizing
+                plugin_item.setSizeHint(item_widget.sizeHint())
+                self.setItemWidget(plugin_item, item_widget)
+
+            # Always have an item selected
+            if plugins:
+                self.setCurrentRow(0)
+
+        QTAsyncWorker(self, get_plugins, add_plugins).start()
 
     def plugin_changed(self, current: QListWidgetItem,
-                       previous: QListWidgetItem):
+                       _previous: QListWidgetItem):
         """When an item on the QListWidget is selected, emit a signal with
         the plugin name as the argument
 
@@ -57,4 +68,5 @@ class PluginList(QListWidget):
         """
         plugin_list_item = self.itemWidget(current)
         self.current_plugin = plugin_list_item.plugin_name
+        # noinspection PyUnresolvedReferences
         self.plugin_selection_changed.emit(self.current_plugin)
