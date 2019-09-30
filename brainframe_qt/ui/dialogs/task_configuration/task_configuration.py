@@ -5,6 +5,7 @@ from PyQt5.uic import loadUi
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration, Zone
 from brainframe.client.ui.dialogs import AlarmCreationDialog
+from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
@@ -43,17 +44,30 @@ class TaskConfiguration(QDialog):
 
     @pyqtSlot()
     def new_alarm(self):
-        plugins = api.get_plugins()
-        zones = api.get_zones(self.stream_conf.id)
 
-        zone, alarm = AlarmCreationDialog.new_alarm(self,
-                                                    zones=zones,
-                                                    plugins=plugins)
-        if not alarm:
-            return None
+        def get_plugins_and_zones():
+            plugins = api.get_plugins()
+            zones = api.get_zones(self.stream_conf.id)
+            return plugins, zones
 
-        alarm = api.set_zone_alarm(alarm)
-        self.zone_list.add_alarm(zone, alarm)
+        def create_alarm(plugins_and_zones):
+            plugins, zones = plugins_and_zones
+
+            zone, alarm = AlarmCreationDialog.new_alarm(
+                self, zones=zones, plugins=plugins)
+
+            if not alarm:
+                return
+
+            def set_zone_alarm():
+                return api.set_zone_alarm(alarm)
+
+            def add_alarm(new_alarm):
+                self.zone_list.add_alarm(zone, new_alarm)
+
+            QTAsyncWorker(self, set_zone_alarm, add_alarm).start()
+
+        QTAsyncWorker(self, get_plugins_and_zones, create_alarm).start()
 
     @pyqtSlot()
     def new_line(self):
