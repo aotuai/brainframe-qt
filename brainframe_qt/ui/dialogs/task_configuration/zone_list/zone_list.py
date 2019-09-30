@@ -13,9 +13,10 @@ from PyQt5.QtWidgets import (
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
+from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 from brainframe.client.api.codecs import Zone, ZoneAlarm
+from brainframe.shared.constants import DEFAULT_ZONE_NAME
 
 from .zone_list_item import ZoneListItem
 
@@ -49,12 +50,16 @@ class ZoneList(QTreeWidget):
         """Initialize zone list with zones already in database"""
         self.stream_id = stream_id
 
-        # TODO: Async
-        zones = api.get_zones(stream_id)
-        for zone in zones:
-            self.add_zone(zone)
+        def get_zones():
+            return api.get_zones(stream_id)
 
-        self.clearSelection()
+        def add_zones(zones):
+            for zone in zones:
+                self.add_zone(zone)
+
+            self.clearSelection()
+
+        QTAsyncWorker(self, get_zones, add_zones).start()
 
     def add_zone(self, zone: Zone):
         """Creates and returns the new ZoneListItem using the zone"""
