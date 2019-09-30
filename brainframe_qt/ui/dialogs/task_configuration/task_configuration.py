@@ -35,9 +35,6 @@ class TaskConfiguration(QDialog):
     @classmethod
     def open_configuration(cls, stream_conf, parent):
         dialog = cls(parent=parent, stream_conf=stream_conf)
-
-        dialog.video_task_config.change_stream(stream_conf)
-
         result = dialog.exec_()
 
         return result

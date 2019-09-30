@@ -107,13 +107,25 @@ class StreamWidget(QGraphicsView):
 
     def change_stream(self, stream_conf: StreamConfiguration):
 
+        # When we no longer want to use a StreamWidget for an active stream
+        if not stream_conf:
+            self._clear_current_stream_reader()
+
+            # User should never see this
+            self.handle_stream_error()
+            return
+
         def get_stream_reader():
             try:
                 return api.get_stream_reader(stream_conf)
             except StreamConfigNotFoundError:
                 return None
 
-        def callback(stream_reader):
+        def subscribe_to_stream_reader(stream_reader: SyncedStreamReader):
+
+            # Inside of callback to avoid race conditions
+            self._clear_current_stream_reader()
+
             if stream_reader is None:
                 # This will happen if we try to get a StreamReader for a stream
                 # that no longer exists, for example if a user clicks to expand
@@ -132,22 +144,8 @@ class StreamWidget(QGraphicsView):
             # noinspection PyUnresolvedReferences
             self.destroyed.connect(remove_listener)
 
-        # If we currently have a stream reader, unsubscribe its listener
-        # and clear any posted events
-        if self.stream_reader:
-            # noinspection PyUnresolvedReferences
-            self.destroyed.disconnect()
-            self.stream_reader.remove_listener(self.stream_listener)
-            QCoreApplication.removePostedEvents(self)
-
-        # When we no longer want to use a StreamWidget for an active stream
-        if not stream_conf:
-            self.stream_reader = None
-            # User should never see this
-            self.handle_stream_error()
-            return
-
-        QTAsyncWorker(self, get_stream_reader, callback).start()
+        QTAsyncWorker(self, get_stream_reader, subscribe_to_stream_reader) \
+            .start()
 
     def hasHeightForWidth(self):
         """Enable the use of heightForWidth"""
@@ -172,6 +170,17 @@ class StreamWidget(QGraphicsView):
             # The sceneRect grows but never shrinks automatically
             self.scene().setSceneRect(current_frame.boundingRect())
             self.fitInView(current_frame.boundingRect(), Qt.KeepAspectRatio)
+
+    def _clear_current_stream_reader(self):
+        # If we currently have a stream reader, unsubscribe its listener
+        # and clear any posted events
+        if self.stream_reader:
+            # noinspection PyUnresolvedReferences
+            self.destroyed.disconnect()
+            self.stream_reader.remove_listener(self.stream_listener)
+            QCoreApplication.removePostedEvents(self)
+
+            self.stream_reader = None
 
     @property
     def draw_lines(self):
