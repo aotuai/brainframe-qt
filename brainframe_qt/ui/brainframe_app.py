@@ -17,7 +17,6 @@ from brainframe.client.ui.resources import QTAsyncWorker, settings
 from brainframe.client.ui.resources.paths import image_paths, text_paths
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.secret import decrypt
-from brainframe.shared.time_utils import SignalTimeout
 
 
 class BrainFrameApplication(QApplication):

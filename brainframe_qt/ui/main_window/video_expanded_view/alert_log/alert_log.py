@@ -1,9 +1,14 @@
-from PyQt5.QtCore import pyqtSlot, QTimer
-from PyQt5.QtWidgets import QVBoxLayout, QWidget
+from typing import Dict, Iterable, List, Tuple
+
+from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
+from brainframe.client.api.codecs import Alert, Zone, ZoneAlarm
+from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
+
 from .alert_log_entry import AlertLogEntry
 
 
@@ -15,74 +20,115 @@ class AlertLog(QWidget):
         loadUi(qt_ui_paths.alert_log_ui, self)
 
         self.stream_id = None
-        self.alert_widgets = {}  # {alert_id: Alert}
-
-        self.status_poller = api.get_status_poller()
+        self.alert_widgets: Dict[int, AlertLogEntry] = {}  # key = alert_id
 
         # Start a QTimer for periodically updating unverified alerts
         self.timer = QTimer()
-
         # noinspection PyUnresolvedReferences
-        self.timer.timeout.connect(self.update_unverified_alerts)
+        self.timer.timeout.connect(self.sync_alerts_with_server)
         self.timer.start(1000)
 
         self.alert_log.setLayout(QVBoxLayout())
 
-    def update_unverified_alerts(self):
-        if self.stream_id is None:
+    def change_stream(self, stream_id):
+        self.stream_id = stream_id
+        self._delete_alerts_by_id(self.alert_widgets.keys())
+        self.sync_alerts_with_server()
+
+    def sync_alerts_with_server(self):
+
+        # Important. Used in set_alerts_checked
+        stream_id = self.stream_id
+
+        if stream_id is None:
+            self._delete_alerts_by_id(self.alert_widgets.keys())
             return
 
-        existing_alert_ids = set(self.alert_widgets.keys())
+        def get_alerts_from_server():
 
-        try:
-            # Get a page of the 100 most recent alerts
-            unverified_alerts, total_count = api.get_unverified_alerts(
-                self.stream_id, limit=100, offset=0)
-        except api_errors.StreamConfigNotFoundError:
-            self._delete_alerts(existing_alert_ids)
-            return
+            try:
+                # Get a page of the 100 most recent alerts
+                server_side_alerts, total_count = api.get_unverified_alerts(
+                    stream_id, limit=100, offset=0)
+            except api_errors.StreamConfigNotFoundError:
+                # Return an empty list. The callback will delete all the
+                # existing Alerts from the UI
+                return []
 
-        unverified_alerts = unverified_alerts[::-1]
-        unverified_alert_ids = set(alert.id for alert in unverified_alerts)
+            # We want it oldest to newest
+            unverified_alerts = server_side_alerts[::-1]
 
-        # Create new alerts
-        new_alerts_ids = unverified_alert_ids - existing_alert_ids
-        new_alerts = [alert for alert in unverified_alerts
-                      if alert.id in new_alerts_ids]
+            return unverified_alerts
 
-        for alert in new_alerts:
-            # Get the alarm that this alert belongs to
-            alarm = api.get_zone_alarm(alert.alarm_id)
-            zone = api.get_zone(alarm.zone_id)
+        def set_alerts_checked(alerts: List[Alert]):
+            # Make sure that the stream_id was not changed while the API call
+            # was blocked
+            if self.stream_id != stream_id:
+                # Just wait for the next run of the timer
+                return
+
+            # If no change to stream_id, then use the results from the API
+            self._set_alerts(alerts)
+
+        QTAsyncWorker(self, get_alerts_from_server, set_alerts_checked).start()
+
+    def _set_alerts(self, server_side_alerts: List[Alert]):
+
+        def get_alarms_and_zones():
+            alarms: List[ZoneAlarm] = api.get_zone_alarms(self.stream_id)
+            zones: List[Zone] = api.get_zones(self.stream_id)
+
+            alarm_dict = {alarm.id: alarm for alarm in alarms}
+            zone_dict = {zone.id: zone for zone in zones}
+
+            return alarm_dict, zone_dict
+
+        def edit_alerts(alarms_and_zones: Tuple[Dict[int, ZoneAlarm],
+                                                Dict[int, Zone]]):
+            alarms, zones = alarms_and_zones
+
+            existing_alert_ids = set(self.alert_widgets.keys())
+            server_side_alert_ids = {alert.id for alert in server_side_alerts}
+
+            # Create new alerts
+            new_alerts_ids = server_side_alert_ids - existing_alert_ids
+            new_alerts = [alert for alert in server_side_alerts
+                          if alert.id in new_alerts_ids]
+            self._add_alerts(new_alerts, alarms, zones)
+
+            # Update info on existing alerts
+            update_alert_ids = server_side_alert_ids & existing_alert_ids
+            update_alerts = [alert for alert in server_side_alerts
+                             if alert.id in update_alert_ids]
+            self._update_alerts(update_alerts)
+
+            # Remove deleted alerts
+            deleted_alert_ids = existing_alert_ids - server_side_alert_ids
+            self._delete_alerts_by_id(deleted_alert_ids)
+
+        QTAsyncWorker(self, get_alarms_and_zones, edit_alerts).start()
+
+    def _add_alerts(self, alerts: Iterable[Alert],
+                    alarms: Dict[int, ZoneAlarm],
+                    zones: Dict[int, Zone]):
+
+        for alert in alerts:
+            try:
+                alarm: ZoneAlarm = alarms[alert.alarm_id]
+                zone: Zone = zones[alarm.zone_id]
+            except KeyError:
+                # Assume the alarm or zone was deleted elsewhere and
+                # that we can ignore the alert
+                continue
 
             alert_widget = AlertLogEntry(alert, alarm, zone.name)
             self.alert_log.layout().insertWidget(0, alert_widget)
             self.alert_widgets[alert.id] = alert_widget
 
-        # Update info on existing alerts
-        update_alert_ids = unverified_alert_ids & existing_alert_ids
-        update_alerts = [alert for alert in unverified_alerts
-                         if alert.id in update_alert_ids]
-        for alert in update_alerts:
+    def _delete_alerts_by_id(self, alert_ids: Iterable[int]):
+        for alert_id in list(alert_ids):
+            self.alert_widgets.pop(alert_id).deleteLater()
+
+    def _update_alerts(self, alerts: Iterable[Alert]):
+        for alert in alerts:
             self.alert_widgets[alert.id].update(alert)
-            continue
-
-        # Remove deleted alerts
-        deleted_alert_ids = existing_alert_ids - unverified_alert_ids
-        self._delete_alerts(deleted_alert_ids)
-
-    def _delete_alerts(self, alert_ids):
-        for alert_id in alert_ids:
-            self.alert_widgets[alert_id].deleteLater()
-            self.alert_widgets.pop(alert_id)
-
-    @pyqtSlot(int)
-    def change_stream(self, stream_id):
-        """
-        Connected to:
-        - TODO
-        """
-        for alert_widget in self.alert_widgets.values():
-            alert_widget.deleteLater()
-        self.alert_widgets = {}
-        self.stream_id = stream_id
