@@ -71,6 +71,27 @@ class PluginStubMixin(BaseStub):
         option_values_json = ujson.dumps(option_vals)
         self._put_json(req, timeout, option_values_json)
 
+    def patch_plugin_option_vals(self, *, plugin_name, stream_id=None,
+                                 option_vals: Dict[str, object],
+                                 timeout=DEFAULT_TIMEOUT):
+        """Patches option values for a plugin. Only the provided options are
+        changed. To unset an option, provide that option with a value of None.
+
+        :param plugin_name: The name of the plugin whose options to set
+        :param stream_id: The ID of the stream, if these are stream-level
+            options. If this value is None, then the global options are set
+        :param option_vals: A dict where the key is the name of the option to
+            set, and the value is the value to set that option to
+        :param timeout: The timeout to use for this request
+        """
+        if stream_id is None:
+            req = f"/api/plugins/{plugin_name}/options"
+        else:
+            req = f"/api/streams/{stream_id}/plugins/{plugin_name}/options"
+
+        option_values_json = ujson.dumps(option_vals)
+        self._patch_json(req, timeout, option_values_json)
+
     def is_plugin_active(self, plugin_name, stream_id=None,
                          timeout=DEFAULT_TIMEOUT) -> bool:
         """Returns true if the plugin is active. If a plugin is not marked as

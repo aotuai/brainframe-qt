@@ -117,6 +117,23 @@ class BaseStub:
             return ujson.loads(resp.content)
         return None
 
+    def _patch_json(self, api_url, timeout, json):
+        """Sends a PATCH request to the given URL.
+
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param timeout: The timeout to use for this request
+        :param json: Pre-formatted JSON to send
+        :return: The JSON response as a dict, or None if none was sent
+        """
+        resp = self._patch(api_url,
+                           timeout,
+                           data=json,
+                           content_type="application_json")
+
+        if resp.content:
+            return ujson.loads(resp.content)
+        return None
+
     def _get(self, api_url, timeout, params=None) -> Response:
         """Send a GET request to the given URL, managing authentication and
         error handling, if necessary.
@@ -174,7 +191,7 @@ class BaseStub:
         :param data: The data to send
         :param content_type: The content type of the data
         :param files: If provided, the POST request will be a multipart request
-        :return: The raw bytes of the response and the response headers
+        :return: The response object
         """
         headers = None
         if content_type is not None:
@@ -203,6 +220,31 @@ class BaseStub:
             method="DELETE",
             url=self._full_url(api_url),
             params=params)
+
+        return self._send_authorized(request, timeout)
+
+    def _patch(self, api_url,
+               timeout,
+               data: Union[bytes, str] = None,
+               content_type: str = None) -> Response:
+        """Sends a PATCH request to the given URL, managing authentication and
+        handling errors. as necessary.
+
+        :param api_url: The /api/blah/blah to append to the base_url
+        :param timeout: The timeout to use for this request
+        :param data: The data to send
+        :param content_type: The content type of the data
+        :return: The response object
+        """
+        headers = None
+        if content_type is not None:
+            headers = {"content-type": content_type}
+
+        request = requests.Request(
+            method="PATCH",
+            url=self._full_url(api_url),
+            data=data,
+            headers=headers)
 
         return self._send_authorized(request, timeout)
 
