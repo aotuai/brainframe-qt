@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
+<!DOCTYPE TS>
+<TS version="2.1" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -122,7 +123,7 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="341"/>
         <source>Intersection Point</source>
-        <translation type="unfinished"></translation>
+        <translation>相交点</translation>
     </message>
 </context>
 <context>
