@@ -93,10 +93,11 @@ class MainWindow(QMainWindow):
             return
         try:
             stream_conf = api.set_stream_configuration(stream_conf)
-            self.video_thumbnail_view.new_stream(stream_conf)
 
             # Currently, we default to setting all new streams as 'active'
             api.start_analyzing(stream_conf.id)
+
+            self.video_thumbnail_view.new_stream(stream_conf)
         except api_errors.DuplicateStreamSourceError as err:
             message_title = self.tr("Error Opening Stream")
             message_desc = self.tr("Stream source already open")
@@ -117,6 +118,22 @@ class MainWindow(QMainWindow):
                       f"{err}<br><br>" \
                       f"{err.description}<br><br>" \
                       f"{error_text}<b>{err.kind}</b>"
+            QMessageBox.information(self, message_title, message)
+        except api_errors.AnalysisLimitExceededError:
+            # Delete the stream configuration, since you almost never want to
+            # have a stream that can't have analysis running
+            api.delete_stream_configuration(stream_conf.id)
+
+            message_title = self.tr("Error Opening Stream")
+            message_desc = self.tr("Active Stream Limit Exceeded")
+            message_info1 = self.tr(
+                "You have exceeded the number of active streams available to "
+                "you under the terms of your license. Consider deleting "
+                "another stream or contacting Dilili Labs to increase your "
+                "active stream limit.")
+            message = (f"<b>{message_desc}</b>"
+                       f"<br><br>"
+                       f"{message_info1}")
             QMessageBox.information(self, message_title, message)
         except api_errors.BaseAPIError as err:
             message_title = self.tr("Error Opening Stream")

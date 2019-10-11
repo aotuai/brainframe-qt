@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
+from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from .video_small.video_small import VideoSmall
 
@@ -43,7 +44,7 @@ class ThumbnailGridLayout(QWidget):
         # Toggle the expansion of the streams when the button is clicked
         self.dropdown_button.clicked.connect(self.toggle_expansion)
 
-    def new_stream_widget(self, stream_conf):
+    def new_stream_widget(self, stream_conf: StreamConfiguration):
         video = VideoSmall(self, stream_conf)
         self.add_video(video)
 
@@ -51,7 +52,7 @@ class ThumbnailGridLayout(QWidget):
 
     def add_video(self, video):
 
-        self.stream_widgets[video.stream_reader.stream_id] = video
+        self.stream_widgets[video.stream_conf.id] = video
         self._add_widget_to_layout(video)
 
         self._set_layout_equal_stretch()

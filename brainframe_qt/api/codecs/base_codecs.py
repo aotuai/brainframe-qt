@@ -3,6 +3,8 @@ import ujson
 
 
 class Codec(abc.ABC):
+    """A serializable object."""
+
     @abc.abstractmethod
     def to_dict(self) -> dict:
         pass

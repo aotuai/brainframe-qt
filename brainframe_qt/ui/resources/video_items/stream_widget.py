@@ -4,10 +4,11 @@ from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.client.api import api
+from brainframe.client.api.api_errors import StreamConfigNotFoundError
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.streaming import SyncedStreamReader, StreamListener
+from brainframe.client.ui.resources import settings, QTAsyncWorker
 from brainframe.client.ui.resources.paths import image_paths
-from brainframe.client.ui.resources import settings
 
 from .stream_graphics_scene import StreamGraphicsScene
 
@@ -106,24 +107,45 @@ class StreamWidget(QGraphicsView):
 
     def change_stream(self, stream_conf: StreamConfiguration):
 
-        if self.stream_reader:
-            self.destroyed.disconnect()
-            self.stream_reader.remove_listener(self.stream_listener)
-            QCoreApplication.removePostedEvents(self)
-
+        # When we no longer want to use a StreamWidget for an active stream
         if not stream_conf:
-            self.stream_reader = None
+            self._clear_current_stream_reader()
+
             # User should never see this
             self.handle_stream_error()
             return
 
-        self.stream_listener = StreamListener()
-        self.stream_reader = api.get_stream_reader(stream_conf)
-        self.stream_reader.add_listener(self.stream_listener)
+        def get_stream_reader():
+            try:
+                return api.get_stream_reader(stream_conf)
+            except StreamConfigNotFoundError:
+                return None
 
-        # Make sure video is unsubscribed before it is GCed
-        self.destroyed.connect(
-            lambda: self.stream_reader.remove_listener(self.stream_listener))
+        def subscribe_to_stream_reader(stream_reader: SyncedStreamReader):
+
+            # Inside of callback to avoid race conditions
+            self._clear_current_stream_reader()
+
+            if stream_reader is None:
+                # This will happen if we try to get a StreamReader for a stream
+                # that no longer exists, for example if a user clicks to expand
+                # a stream the very instant before it's deleted from the server
+                # We don't want to do anything
+                return
+
+            # Subscribe to the StreamReader
+            self.stream_listener = StreamListener()
+            self.stream_reader = stream_reader
+            self.stream_reader.add_listener(self.stream_listener)
+
+            # Make sure video is unsubscribed before it is GCed
+            remove_listener = lambda: self.stream_reader.remove_listener(
+                self.stream_listener)
+            # noinspection PyUnresolvedReferences
+            self.destroyed.connect(remove_listener)
+
+        QTAsyncWorker(self, get_stream_reader, subscribe_to_stream_reader) \
+            .start()
 
     def hasHeightForWidth(self):
         """Enable the use of heightForWidth"""
@@ -148,6 +170,17 @@ class StreamWidget(QGraphicsView):
             # The sceneRect grows but never shrinks automatically
             self.scene().setSceneRect(current_frame.boundingRect())
             self.fitInView(current_frame.boundingRect(), Qt.KeepAspectRatio)
+
+    def _clear_current_stream_reader(self):
+        # If we currently have a stream reader, unsubscribe its listener
+        # and clear any posted events
+        if self.stream_reader:
+            # noinspection PyUnresolvedReferences
+            self.destroyed.disconnect()
+            self.stream_reader.remove_listener(self.stream_listener)
+            QCoreApplication.removePostedEvents(self)
+
+            self.stream_reader = None
 
     @property
     def draw_lines(self):

@@ -2,23 +2,25 @@ from typing import List, Tuple, Optional
 
 import ujson
 
-from brainframe.client.api.stubs.stub import Stub
+from brainframe.client.api.stubs.base_stub import BaseStub, DEFAULT_TIMEOUT
 from brainframe.client.api.codecs import Identity, Encoding
 from brainframe.client.api.sorting import SortOptions
 
 
-class IdentityStubMixin(Stub):
+class IdentityStubMixin(BaseStub):
     """Provides stubs to call APIs that create and update identities, as well
     as add new examples of the identity in image or vector form.
     """
 
-    def get_identity(self, identity_id: int) -> Identity:
+    def get_identity(self, identity_id: int,
+                     timeout=DEFAULT_TIMEOUT) -> Identity:
         """Gets the identity with the given ID.
         :param identity_id: The ID of the identity to get
+        :param timeout: The timeout to use for this request
         :return: Identity
         """
         req = f"/api/identities/{identity_id}"
-        identity, _ = self._get_json(req)
+        identity, _ = self._get_json(req, timeout)
 
         return Identity.from_dict(identity)
 
@@ -27,7 +29,8 @@ class IdentityStubMixin(Stub):
                        search: Optional[str] = None,
                        limit: int = None,
                        offset: int = None,
-                       sort_by: SortOptions = None) \
+                       sort_by: SortOptions = None,
+                       timeout=DEFAULT_TIMEOUT) \
             -> Tuple[List[Identity], int]:
         """Returns all identities from the server.
 
@@ -45,6 +48,7 @@ class IdentityStubMixin(Stub):
             useful when providing a limit.
         :param sort_by: If provided, the results will be sorted by the given
             configuration
+        :param timeout: The timeout to use for this request
         :return: A list of identities, and the total number of identities that
             fit this criteria, ignoring pagination (the limit and offset)
         """
@@ -64,50 +68,59 @@ class IdentityStubMixin(Stub):
         if sort_by is not None:
             params["sort_by"] = sort_by.query_format()
 
-        identities, headers = self._get_json(req, params=params)
+        identities, headers = self._get_json(req, timeout, params=params)
         identities = [Identity.from_dict(d) for d in identities]
 
         total_count = int(headers["Total-Count"])
 
         return identities, total_count
 
-    def set_identity(self, identity: Identity) -> Identity:
+    def set_identity(self, identity: Identity,
+                     timeout=DEFAULT_TIMEOUT) -> Identity:
         """Updates or creates an identity. If the identity does not already
         exist, identity.id must be None. The returned identity will have an
         assigned ID.
+
         :param identity: The identity to save or create
+        :param timeout: The timeout to use for this request
         :return: the saved identity
         """
         req = f"/api/identities"
-        saved = self._post_codec(req, identity)
+        saved = self._post_codec(req, timeout, identity)
         return Identity.from_dict(saved)
 
-    def delete_identity(self, identity_id: int):
+    def delete_identity(self, identity_id: int,
+                        timeout=DEFAULT_TIMEOUT):
         """Deletes the identity with the given ID.
+
         :param identity_id: The ID of the identity to delete
+        :param timeout: The timeout to use for this request
         """
         req = f"/api/identities/{identity_id}"
-        self._delete(req)
+        self._delete(req, timeout)
 
     def new_identity_image(self, identity_id: int, class_name: str,
-                           storage_id: int):
+                           storage_id: int,
+                           timeout=DEFAULT_TIMEOUT):
         """Saves and encodes an image under the identity with the given ID.
 
         :param identity_id: Identity to associate the image with
         :param class_name: The type of object this image shows and should be
             encoded for
         :param storage_id: The ID of the image in storage to encode
+        :param timeout: The timeout to use for this request
         """
         req = f"/api/identities/{identity_id}/images"
         req_obj = {
             "class_name": class_name,
             "storage_id": storage_id
         }
-        encoding = self._post_json(req, ujson.dumps(req_obj))
+        encoding = self._post_json(req, timeout, ujson.dumps(req_obj))
         return Encoding.from_dict(encoding)
 
     def new_identity_vector(self, identity_id: int, class_name: str,
-                            vector: List[float]) -> int:
+                            vector: List[float],
+                            timeout=DEFAULT_TIMEOUT) -> int:
         """Saves the given vector under the identity with the given ID. In this
         case, a vector is simply a list of one or more numbers that describe
         some object in an image.
@@ -115,6 +128,7 @@ class IdentityStubMixin(Stub):
         :param identity_id: Identity to associate the vector with
         :param class_name: The type of object this vector describes
         :param vector: The vector to save
+        :param timeout: The timeout to use for this request
         :return: The vector ID
         """
         req = f"/api/identities/{identity_id}/vectors"
@@ -123,5 +137,5 @@ class IdentityStubMixin(Stub):
             "class_name": class_name,
             "vector": vector
         }
-        encoding = self._post_json(req, ujson.dumps(encoded_obj))
+        encoding = self._post_json(req, timeout, ujson.dumps(encoded_obj))
         return Encoding.from_dict(encoding)

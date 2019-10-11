@@ -11,3 +11,4 @@ from .process_image import ProcessImageStubMixIn
 from .encodings import EncodingStubMixIn
 from .versions import VersionStubMixIn
 from .premises import PremisesStubMixin
+from .base_stub import BaseStub

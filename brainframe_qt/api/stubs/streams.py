@@ -4,7 +4,7 @@ import ujson
 
 from brainframe.client.api import api_errors
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.api.stubs.stub import Stub
+from brainframe.client.api.stubs.base_stub import BaseStub, DEFAULT_TIMEOUT
 from brainframe.client.api.status_poller import StatusPoller
 
 # Avoid importing stream code where possible to avoid unnecessary OpenCV
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
         SyncedStreamReader, StreamManager)
 
 
-class StreamStubMixin(Stub):
+class StreamStubMixin(BaseStub):
     """Provides stubs for calling stream-related APIs and managing
     stream-related client objects.
     """
@@ -27,7 +27,7 @@ class StreamStubMixin(Stub):
     def get_status_poller(self) -> StatusPoller:
         """Returns the singleton StatusPoller object"""
         if self._status_poller is None or not self._status_poller.is_running:
-            self._status_poller = StatusPoller(self, 33)
+            self._status_poller = StatusPoller(self)
         return self._status_poller
 
     def get_stream_manager(self) -> "StreamManager":
@@ -40,7 +40,8 @@ class StreamStubMixin(Stub):
             self._stream_manager = StreamManager(self.get_status_poller())
         return self._stream_manager
 
-    def get_stream_configurations(self, premises_id=None) \
+    def get_stream_configurations(self, premises_id=None,
+                                  timeout=DEFAULT_TIMEOUT) \
             -> List[StreamConfiguration]:
         """Get all StreamConfigurations that currently exist.
 
@@ -48,78 +49,93 @@ class StreamStubMixin(Stub):
         """
         req = "/api/streams"
         params = {"premises_id": premises_id} if premises_id else None
-        data, _ = self._get_json(req, params=params)
+        data, _ = self._get_json(req, timeout, params=params)
 
         configs = [StreamConfiguration.from_dict(d) for d in data]
         return configs
 
-    def set_stream_configuration(self, stream_configuration) \
+    def set_stream_configuration(self, stream_configuration,
+                                 timeout=DEFAULT_TIMEOUT) \
             -> Optional[StreamConfiguration]:
-        """Update an existing stream configuration or create a new one
-        If creating a new one, the stream_configuration.id will be None
+        """Update an existing stream configuration or create a new one. If
+        creating a new one, the stream_configuration.id will be None.
+
         :param stream_configuration: StreamConfiguration
+        :param timeout: The timeout to use for this request
         :return: StreamConfiguration, initialized with an ID
         """
         req = "/api/streams"
-        data = self._post_codec(req, stream_configuration)
+        data = self._post_codec(req, timeout, stream_configuration)
         config = StreamConfiguration.from_dict(data)
         return config
 
-    def delete_stream_configuration(self, stream_id):
+    # TODO: Remove this long timeout when this endpoint is better optimized
+    def delete_stream_configuration(self, stream_id,
+                                    timeout=120):
         """Deletes a stream configuration with the given ID. Also stops
         analysis if analysis was running and closes the stream.
 
         :param stream_id: The ID of the stream to delete
+        :param timeout: The timeout to use for this request
         """
         req = f"/api/streams/{stream_id}"
-        self._delete(req)
-        if self._stream_manager is not None:
+        self._delete(req, timeout)
+        if self._stream_manager is not None \
+                and self._stream_manager.is_streaming(stream_id):
             self._stream_manager.close_stream_async(stream_id)
 
-    def get_stream_url(self, stream_id) -> str:
+    def get_stream_url(self, stream_id,
+                       timeout=DEFAULT_TIMEOUT) -> str:
         """Gets the URL that the stream is available at.
 
         :param stream_id: The ID of the stream to get a URL for
+        :param timeout: The timeout to use for this request
         :return: The URL
         """
         req = f"/api/streams/{stream_id}/url"
-        url, _ = self._get_json(req)
+        url, _ = self._get_json(req, timeout)
         return url
 
-    def get_stream_reader(self, stream_config: StreamConfiguration) \
+    def get_stream_reader(self, stream_config: StreamConfiguration,
+                          timeout=DEFAULT_TIMEOUT) \
             -> Optional["SyncedStreamReader"]:
         """Get the SyncedStreamReader for the given stream_configuration.
 
         :param stream_config: The stream configuration to open.
+        :param timeout: The timeout to use for this request
         :return: A SyncedStreamReader object
         """
-        url = self.get_stream_url(stream_config.id)
+        url = self.get_stream_url(stream_config.id, timeout=timeout)
         logging.info("API: Opening stream on url " + url)
 
         return self.get_stream_manager().start_streaming(stream_config, url)
 
-    def get_runtime_options(self, stream_id: int) -> Dict[str, object]:
+    def get_runtime_options(self, stream_id: int,
+                            timeout=DEFAULT_TIMEOUT) -> Dict[str, object]:
         """Returns the runtime options for the stream with the given ID. This
         can also be read from a StreamConfiguration object.
 
         :param stream_id: The ID of the stream to get runtime options from
+        :param timeout: The timeout to use for this request
         :return: Runtime options
         """
         req = f"/api/streams/{stream_id}/runtime_options"
-        runtime_options, _ = self._get_json(req)
+        runtime_options, _ = self._get_json(req, timeout)
 
         return runtime_options
 
     def set_runtime_option_vals(self, stream_id: int,
-                                runtime_options: Dict[str, object]):
+                                runtime_options: Dict[str, object],
+                                timeout=DEFAULT_TIMEOUT):
         """Sets a stream's runtime options to the given values.
 
         :param stream_id: The ID of the stream to set runtime options for
         :param runtime_options: The runtime options
+        :param timeout: The timeout to use for this requestz
         """
         req = f"/api/streams/{stream_id}/runtime_options"
         runtime_options_json = ujson.dumps(runtime_options)
-        self._put_json(req, runtime_options_json)
+        self._put_json(req, timeout, runtime_options_json)
 
     def close(self):
         if self._status_poller is not None:

@@ -1,8 +1,9 @@
 import sys
+from threading import Event
 from time import sleep
 from typing import List, Optional
 
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, ReadTimeout
 
 from PyQt5.QtCore import pyqtSlot, Qt, Q_ARG, QLocale, QMetaObject, QThread, \
     QTranslator
@@ -12,7 +13,7 @@ from PyQt5.QtWidgets import QApplication, QMessageBox
 from brainframe.client.api import api, api_errors
 from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
 from brainframe.client.ui.dialogs import StandardError
-from brainframe.client.ui.resources import settings
+from brainframe.client.ui.resources import QTAsyncWorker, settings
 from brainframe.client.ui.resources.paths import image_paths, text_paths
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.secret import decrypt
@@ -68,34 +69,46 @@ class BrainFrameApplication(QApplication):
 
             message = self.tr("Attempting to connect to server at {}")
 
-            while True:
-                try:
-                    f_message = message.format(settings.server_url.val())
-                    splash_screen.showMessage(f_message)
+            timeout_event = Event()
+            """Event that is set once communication with server has succeeded
+            """
 
-                    # Test connection to server
-                    api.version()
-                except (ConnectionError, ConnectionRefusedError,
-                        api_errors.UnauthorizedError):
-                    # Server not started yet
-                    self.processEvents()
+            def wait_for_server():
+                while True:
+                    try:
+                        # Test connection to server
+                        api.version()
+                        timeout_event.set()
+                        break
+                    except (ConnectionError, ConnectionRefusedError,
+                            api_errors.UnauthorizedError, ReadTimeout):
+                        # Server not started yet or there is a communication
+                        # error
+                        pass
+                    except api_errors.UnknownError as exc:
+                        if exc.status_code not in [502]:
+                            raise
 
-                    # Prevent a busy loop while splash screen is open
+                    # Prevent busy loop
                     sleep(.1)
-                    continue
-                except api_errors.UnknownError as e:
-                    if e.status_code == 502:
-                        continue
-                    raise
-                message = self.tr("Successfully connected to server. "
-                                  "Starting UI")
-                splash_screen.showMessage(message)
 
-                main_window = MainWindow()
-                splash_screen.finish(main_window)
-                main_window.show()
+            worker = QTAsyncWorker(self, wait_for_server,
+                                   callback=lambda _: None)
+            worker.start()
 
-                break
+            while not timeout_event.wait(.1):
+
+                f_message = message.format(settings.server_url.val())
+                splash_screen.showMessage(f_message)
+
+                self.processEvents()
+
+            message = self.tr("Successfully connected to server. Starting UI")
+            splash_screen.showMessage(message)
+
+            main_window = MainWindow()
+            splash_screen.finish(main_window)
+            main_window.show()
 
         super().exec()
 
@@ -113,7 +126,7 @@ class BrainFrameApplication(QApplication):
 
             StandardError.show_error(exc_type, exc_obj, exc_tb, close_client)
         else:
-            # Call this function again, but from the correct (UI) thread
+            # Call this function again, but from the correct (UI) thread.
             # If a QWidget (the StandardError dialog) is used from another
             # thread we WILL segfault. This is undesirable
             QMetaObject.invokeMethod(
