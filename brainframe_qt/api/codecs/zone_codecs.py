@@ -17,7 +17,7 @@ class Zone(Codec):
         self.name = name
         self.id = id_
         self.stream_id = stream_id
-        self.alarms = list(alarms)
+        self.alarms: List[ZoneAlarm] = list(alarms)
         self.coords = coords
 
     def get_alarm(self, alarm_id) -> Optional[ZoneAlarm]:
