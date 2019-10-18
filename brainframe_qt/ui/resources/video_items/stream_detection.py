@@ -45,7 +45,7 @@ class DetectionPolygon(StreamPolygon):
         :param parent:
         """
         # Choose a color for this class name (or track id, if tracked)
-        class_color = generate_unique_qcolor(str(detection.track_id))
+        class_color = generate_unique_qcolor(detection.class_name)
 
         # Get the polygon to draw
         coords = detection.coords if use_polygons else detection.bbox
