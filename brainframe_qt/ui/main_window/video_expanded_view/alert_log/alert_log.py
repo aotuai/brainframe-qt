@@ -79,9 +79,7 @@ class AlertLog(QWidget):
                 alarms: List[ZoneAlarm] = api.get_zone_alarms(self.stream_id)
                 zones: List[Zone] = api.get_zones(self.stream_id)
             except api_errors.StreamConfigNotFoundError:
-                # This happens if a stream was deleted right before this was
-                # called.
-                return {}, {}
+                return None
             alarm_dict = {alarm.id: alarm for alarm in alarms}
             zone_dict = {zone.id: zone for zone in zones}
 
@@ -89,6 +87,14 @@ class AlertLog(QWidget):
 
         def edit_alerts(alarms_and_zones: Tuple[Dict[int, ZoneAlarm],
                                                 Dict[int, Zone]]):
+
+            if alarms_and_zones is None:
+                # This occurs when a stream was deleted while the api call
+                # for getting alarms/zones was being called.
+                # We're relying on sync_alerts_with_server to clean up
+                # the Alert Log
+                return None
+
             alarms, zones = alarms_and_zones
 
             existing_alert_ids = set(self.alert_widgets.keys())
