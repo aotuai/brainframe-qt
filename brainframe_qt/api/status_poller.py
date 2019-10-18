@@ -1,11 +1,9 @@
 import logging
-import ujson
 from threading import Thread
-from time import sleep, time
+from time import sleep
 from typing import Dict
 
 import requests
-from requests.exceptions import ReadTimeout
 
 from brainframe.client.api import codecs
 
