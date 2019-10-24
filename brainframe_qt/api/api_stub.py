@@ -1,6 +1,10 @@
 from typing import Tuple
+from time import sleep, time
 
-from brainframe.client.api import stubs
+from requests.exceptions import ConnectionError, ReadTimeout
+
+from brainframe.client.api import stubs, api_errors
+from brainframe.client.api.stubs.base_stub import DEFAULT_TIMEOUT
 
 
 class API(stubs.AlertStubMixin,
@@ -14,7 +18,6 @@ class API(stubs.AlertStubMixin,
           stubs.ZoneAlarmStubMixin,
           stubs.ProcessImageStubMixIn,
           stubs.EncodingStubMixIn,
-          stubs.VersionStubMixIn,
           stubs.PremisesStubMixin):
     """Provides access to BrainFrame API endpoints."""
 
@@ -51,6 +54,46 @@ class API(stubs.AlertStubMixin,
         timeout_api._timeout = timeout
 
         return timeout_api
+
+    def version(self, timeout=DEFAULT_TIMEOUT) -> str:
+        """
+        :return: The current BrainFrame version in the format X.Y.Z
+        """
+        req = f"/api/version"
+
+        resp, _ = self._get_json(req, timeout)
+        return resp
+
+    def wait_for_server_initialization(self, timeout: int = None):
+        """
+        :param timeout: In this case, the 'timeout' is the maximum amount
+        of time to wait. If None, this function will hang forever. If set to
+        an integer, the function will raise a TimeoutError after the server
+        did not connect in the appropriate amount of time.
+
+        This function is typically used in scripts that might be run by devs
+        who are starting the BrainFrame Server often.
+        """
+        start_time = time()
+        while True:
+            if timeout is not None and time() - start_time > timeout:
+                raise TimeoutError("The server did not start in time!")
+
+            try:
+                # Test connection to server
+                self.version()
+                break
+            except (ConnectionError, ConnectionRefusedError,
+                    api_errors.UnauthorizedError, ReadTimeout):
+                # Server not started yet or there is a communication
+                # error
+                pass
+            except api_errors.UnknownError as exc:
+                if exc.status_code not in [502]:
+                    raise
+
+            # Prevent busy loop
+            sleep(.1)
 
     def close(self):
         """Clean up the API. It may no longer be used after this call."""
