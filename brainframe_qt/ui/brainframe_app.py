@@ -29,7 +29,7 @@ class BrainFrameApplication(QApplication):
 
         self._init_translator()
 
-        gobject_init.start()
+        gobject_init.start(start_main_loop=False)
 
         self._init_server_settings()
 

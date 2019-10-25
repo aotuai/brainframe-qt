@@ -115,14 +115,17 @@ class StreamWidget(QGraphicsView):
             self.handle_stream_error()
             return
 
-        def get_stream_reader():
+        def get_stream_url():
             try:
-                return api.get_stream_reader(stream_conf)
+                return api.get_stream_url(stream_conf.id)
             except (api_errors.StreamConfigNotFoundError,
                     api_errors.StreamNotOpenedError):
                 return None
 
-        def subscribe_to_stream_reader(stream_reader: SyncedStreamReader):
+        def subscribe_to_stream_reader(stream_url: str):
+            # Create the stream reader
+            stream_reader = api.get_stream_manager().start_streaming(
+                stream_conf, stream_url)
 
             # Inside of callback to avoid race conditions
             self._clear_current_stream_reader()
@@ -145,7 +148,7 @@ class StreamWidget(QGraphicsView):
             # noinspection PyUnresolvedReferences
             self.destroyed.connect(remove_listener)
 
-        QTAsyncWorker(self, get_stream_reader, subscribe_to_stream_reader) \
+        QTAsyncWorker(self, get_stream_url, subscribe_to_stream_reader) \
             .start()
 
     def hasHeightForWidth(self):
