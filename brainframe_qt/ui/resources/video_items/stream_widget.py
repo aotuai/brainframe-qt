@@ -123,6 +123,11 @@ class StreamWidget(QGraphicsView):
                 return None
 
         def subscribe_to_stream_reader(stream_url: str):
+            if stream_url is None:
+                # Occurs when the get_stream_url() call fails due to
+                # the stream having been deleted
+                return None
+
             # Create the stream reader
             stream_reader = api.get_stream_manager().start_streaming(
                 stream_conf, stream_url)
