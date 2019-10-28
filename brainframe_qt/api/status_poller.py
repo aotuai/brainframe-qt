@@ -5,7 +5,7 @@ from typing import Dict
 
 import requests
 
-from brainframe.client.api import codecs
+from brainframe.client.api import codecs, api_errors
 
 
 class StatusPoller(Thread):
@@ -37,10 +37,13 @@ class StatusPoller(Thread):
                 self._latest = zone_status
 
             except (StopIteration,
-                    requests.exceptions.ConnectionError,
-                    requests.exceptions.ReadTimeout,
-                    requests.exceptions.ChunkedEncodingError) as ex:
+                    requests.exceptions.RequestException,
+                    api_errors.UnknownError) as ex:
+                # Catch any 502 errors that happen during server restart
+                if ex is api_errors.UnknownError and ex.status_code != 502:
+                    raise
                 logging.warning(f"StatusLogger: Could not reach server: {ex}")
+
                 if not self._running:
                     break
                 sleep(1)
