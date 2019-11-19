@@ -1,6 +1,6 @@
 import logging
 
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, InvalidSchema
 
 from PyQt5.QtWidgets import QDialog, QLineEdit, QCheckBox, QDialogButtonBox, \
     QMessageBox
@@ -68,14 +68,7 @@ class ServerConfigurationDialog(QDialog):
         server_password = self.server_password_line_edit.text()
         save_password = self.save_password_checkbox.isChecked()
 
-        api.set_url(server_address)
-
-        if server_auth:
-            api.set_credentials((server_username, server_password))
-        else:
-            api.set_credentials(None)
-
-        def save_settings():
+        def _save_settings():
             settings.server_url.set(server_address)
             settings.server_username.set(server_username)
 
@@ -86,29 +79,42 @@ class ServerConfigurationDialog(QDialog):
                 settings.server_password.delete()
 
         try:
-            api.version()
-            save_settings()
-            super().accept()
-            return
-        except api_errors.UnauthorizedError:
-            title = self.tr("Server Authentication Error")
+            api.set_url(server_address)
+        except ValueError:
+            title = self.tr("Invalid Schema")
             message = self.tr(
-                "Unable to authenticate with the BrainFrame server. \n"
-                "Please recheck the entered credentials.")
-        except ConnectionError:
-            title = self.tr("Connection Error")
-            message = self.tr(
-                "Unable to connect to the BrainFrame server. \n"
-                "Please recheck the entered server address.")
+                "Unable to connect to a BrainFrame server with the provided "
+                "URL schema. Supported schemas are {0} and {1}.") \
+                .format("http://", "https://")
+        else:
+            if server_auth:
+                api.set_credentials((server_username, server_password))
+            else:
+                api.set_credentials(None)
+
+            try:
+                api.version()
+            except api_errors.UnauthorizedError:
+                title = self.tr("Server Authentication Error")
+                message = self.tr(
+                    "Unable to authenticate with the BrainFrame server. \n"
+                    "Please recheck the entered credentials.")
+            except ConnectionError:
+                title = self.tr("Connection Error")
+                message = self.tr(
+                    "Unable to connect to the BrainFrame server. \n"
+                    "Please recheck the entered server address.")
+            else:
+                _save_settings()
+                super().accept()
+                return
 
         buttons = QMessageBox.Ok | QMessageBox.Ignore
 
         result = QMessageBox.warning(self, title, message, buttons)
 
-        if result == QMessageBox.Ok:
-            pass
-        elif result == QMessageBox.Ignore:
-            save_settings()
+        if result == QMessageBox.Ignore:
+            _save_settings()
             super().accept()
 
     @classmethod

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh" sourcelanguage="en">
+<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -206,17 +205,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="71"/>
+        <location filename="../../brainframe_app.py" line="69"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="107"/>
+        <location filename="../../brainframe_app.py" line="85"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="180"/>
+        <location filename="../../brainframe_app.py" line="158"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -640,28 +639,38 @@ Read the manual to learn about the required directory structure.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="94"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="98"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="95"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="103"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="100"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
+        <source>Invalid Schema</source>
+        <translation>无效架构</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
+        <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
+        <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
 </context>
 <context>
@@ -832,47 +841,47 @@ Please recheck the entered server address.</source>
 <context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="60"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="71"/>
         <source>New Line</source>
         <translation>新检测线段</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="60"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="71"/>
         <source>Name for new line:</source>
         <translation>新检测线段名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="69"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="80"/>
         <source>New Region</source>
         <translation>新检测区域</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="69"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="80"/>
         <source>Name for new region:</source>
         <translation>新检测区域名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="96"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="107"/>
         <source>New zone cannot have fewer than 2 points</source>
         <translation>新检测区域不能由于少于两个点组成</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="138"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="149"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="183"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="194"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="184"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="195"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="186"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="197"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>
