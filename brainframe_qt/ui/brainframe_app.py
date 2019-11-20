@@ -3,8 +3,6 @@ from threading import Event
 from time import sleep
 from typing import List, Optional
 
-from requests.exceptions import ConnectionError, ReadTimeout
-
 from PyQt5.QtCore import pyqtSlot, Qt, Q_ARG, QLocale, QMetaObject, QThread, \
     QTranslator
 from PyQt5.QtGui import QIcon
@@ -31,7 +29,7 @@ class BrainFrameApplication(QApplication):
 
         self._init_translator()
 
-        gobject_init.start()
+        gobject_init.start(start_main_loop=False)
 
         self._init_server_settings()
 
@@ -66,38 +64,17 @@ class BrainFrameApplication(QApplication):
 
         # Show splash screen while waiting for server connection
         with SplashScreen() as splash_screen:
-
             message = self.tr("Attempting to connect to server at {}")
 
             timeout_event = Event()
             """Event that is set once communication with server has succeeded
             """
 
-            def wait_for_server():
-                while True:
-                    try:
-                        # Test connection to server
-                        api.version()
-                        timeout_event.set()
-                        break
-                    except (ConnectionError, ConnectionRefusedError,
-                            api_errors.UnauthorizedError, ReadTimeout):
-                        # Server not started yet or there is a communication
-                        # error
-                        pass
-                    except api_errors.UnknownError as exc:
-                        if exc.status_code not in [502]:
-                            raise
-
-                    # Prevent busy loop
-                    sleep(.1)
-
-            worker = QTAsyncWorker(self, wait_for_server,
-                                   callback=lambda _: None)
+            worker = QTAsyncWorker(self, api.wait_for_server_initialization,
+                                   callback=lambda _: timeout_event.set())
             worker.start()
 
             while not timeout_event.wait(.1):
-
                 f_message = message.format(settings.server_url.val())
                 splash_screen.showMessage(f_message)
 

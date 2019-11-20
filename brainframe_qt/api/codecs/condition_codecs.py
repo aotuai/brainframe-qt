@@ -34,7 +34,7 @@ class ZoneAlarmCountCondition(Codec):
         self.id = id_
 
     def __repr__(self):
-        condition_str = condition_test_map[self.test]
+        condition_str = condition_test_map[self.test.value]
         attr = self.with_attribute
         attr = attr.value + ' ' if attr else ''
         return f"{condition_str} {self.check_value} " \
@@ -42,6 +42,7 @@ class ZoneAlarmCountCondition(Codec):
 
     def to_dict(self) -> dict:
         d = dict(self.__dict__)
+        d["test"] = self.test.value
         d["intersection_point"] = self.intersection_point.value
         if self.with_attribute is not None:
             d["with_attribute"] = self.with_attribute.to_dict()
@@ -56,9 +57,10 @@ class ZoneAlarmCountCondition(Codec):
         with_attribute = None
         if d["with_attribute"] is not None:
             with_attribute = Attribute.from_dict(d["with_attribute"])
+        test = ZoneAlarmCountCondition.TestType(d["test"])
 
         return ZoneAlarmCountCondition(
-            test=d["test"],
+            test=test,
             check_value=d["check_value"],
             with_class_name=d["with_class_name"],
             with_attribute=with_attribute,
@@ -92,7 +94,7 @@ class ZoneAlarmRateCondition(Codec):
         self.id = id_
 
     def __repr__(self):
-        condition_str = condition_test_map[self.test]
+        condition_str = condition_test_map[self.test.value]
         direction_str = self.direction_map[self.direction]
         return f"{condition_str} {self.change} {self.with_class_name}(s) " \
                f"{direction_str} within {self.duration} seconds"
@@ -104,6 +106,7 @@ class ZoneAlarmRateCondition(Codec):
             d["with_attribute"] = self.with_attribute.to_dict()
 
         d["direction"] = self.direction.value
+        d["test"] = self.test.value
 
         return d
 
@@ -115,9 +118,10 @@ class ZoneAlarmRateCondition(Codec):
         with_attribute = None
         if d["with_attribute"] is not None:
             with_attribute = Attribute.from_dict(d["with_attribute"])
+        test = ZoneAlarmRateCondition.TestType(d["test"])
 
         return ZoneAlarmRateCondition(
-            test=d["test"],
+            test=test,
             duration=d["duration"],
             change=d["change"],
             direction=ZoneAlarmRateCondition.DirectionType(d["direction"]),

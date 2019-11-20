@@ -1,3 +1,5 @@
+from typing import List
+
 from .base_codecs import Codec
 from .condition_codecs import ZoneAlarmCountCondition, ZoneAlarmRateCondition
 from brainframe.shared import codec_enums
@@ -12,8 +14,8 @@ class ZoneAlarm(Codec):
         self.name = name
         self.id = id_
         self.zone_id = zone_id
-        self.count_conditions = count_conditions
-        self.rate_conditions = rate_conditions
+        self.count_conditions: List[ZoneAlarmCountCondition] = count_conditions
+        self.rate_conditions: List[ZoneAlarmRateCondition] = rate_conditions
         self.use_active_time = use_active_time
         self.active_start_time = active_start_time
         self.active_end_time = active_end_time

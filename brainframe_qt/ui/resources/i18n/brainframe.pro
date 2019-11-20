@@ -130,4 +130,5 @@ FORMS += ../../main_window/video_thumbnail_view/thumbnail_grid_layout/thumbnail_
 FORMS += ../../main_window/video_thumbnail_view/video_thumbnail_view.ui
 FORMS += ../ui_elements/containers/paginator.ui
 
+TRANSLATIONS += brainframe_en.ts
 TRANSLATIONS += brainframe_zh.ts

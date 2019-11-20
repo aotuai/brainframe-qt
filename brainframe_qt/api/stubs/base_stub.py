@@ -1,4 +1,6 @@
 from typing import Tuple, Any, Optional, Union
+from urllib.parse import urlparse
+
 import ujson
 import requests
 import logging
@@ -7,7 +9,6 @@ from requests import Response, Session
 from brainframe.client.api import api_errors
 from brainframe.shared import error_kinds
 from brainframe.client.api.codecs import Codec
-
 
 DEFAULT_TIMEOUT = 10
 """The default timeout for most requests."""
@@ -24,6 +25,11 @@ class BaseStub:
     _session_id = None
 
     def set_url(self, url):
+        scheme = urlparse(url).scheme
+        if scheme not in ["http", "https"]:
+            raise ValueError(f"Invalid URL schema ({scheme}://). Must be "
+                             f"either http:// or https://")
+
         self._server_url = url
 
     def set_credentials(self, credentials: Optional[Tuple[str, str]]):
@@ -360,5 +366,6 @@ def _make_api_error(resp_content, status_code):
         return api_errors.UnknownError(info, status_code)
     else:
         if kind == error_kinds.UNKNOWN:
-            return api_errors.kind_to_error_type[kind](description, status_code)
+            return api_errors.kind_to_error_type[kind](description,
+                                                       status_code)
         return api_errors.kind_to_error_type[kind](description)

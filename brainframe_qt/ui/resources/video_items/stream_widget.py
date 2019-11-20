@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.client.api import api
-from brainframe.client.api.api_errors import StreamConfigNotFoundError
+from brainframe.client.api import api_errors
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.streaming import SyncedStreamReader, StreamListener
 from brainframe.client.ui.resources import settings, QTAsyncWorker
@@ -115,13 +115,22 @@ class StreamWidget(QGraphicsView):
             self.handle_stream_error()
             return
 
-        def get_stream_reader():
+        def get_stream_url():
             try:
-                return api.get_stream_reader(stream_conf)
-            except StreamConfigNotFoundError:
+                return api.get_stream_url(stream_conf.id)
+            except (api_errors.StreamConfigNotFoundError,
+                    api_errors.StreamNotOpenedError):
                 return None
 
-        def subscribe_to_stream_reader(stream_reader: SyncedStreamReader):
+        def subscribe_to_stream_reader(stream_url: str):
+            if stream_url is None:
+                # Occurs when the get_stream_url() call fails due to
+                # the stream having been deleted
+                return None
+
+            # Create the stream reader
+            stream_reader = api.get_stream_manager().start_streaming(
+                stream_conf, stream_url)
 
             # Inside of callback to avoid race conditions
             self._clear_current_stream_reader()
@@ -144,7 +153,7 @@ class StreamWidget(QGraphicsView):
             # noinspection PyUnresolvedReferences
             self.destroyed.connect(remove_listener)
 
-        QTAsyncWorker(self, get_stream_reader, subscribe_to_stream_reader) \
+        QTAsyncWorker(self, get_stream_url, subscribe_to_stream_reader) \
             .start()
 
     def hasHeightForWidth(self):

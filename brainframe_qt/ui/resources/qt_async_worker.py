@@ -1,11 +1,16 @@
 import os
+from typing import Callable
 
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import Qt, QThread, pyqtSlot
+from PyQt5.QtWidgets import QWidget
 
 
 class QTAsyncWorker(QThread):
 
-    def __init__(self, parent, func, callback, *args, **kwargs):
+    def __init__(self,
+                 parent: QWidget,
+                 func: Callable, callback: Callable,
+                 *args, **kwargs):
         super().__init__(parent=parent)
 
         self.func = func
@@ -15,12 +20,16 @@ class QTAsyncWorker(QThread):
         self.kwargs = kwargs
 
         self.result = None
+        self._terminated = False
+
+        # Connect the parent's destructor signal
+        # noinspection PyUnresolvedReferences
+        self.parent().destroyed.connect(
+            self._terminate,
+            type=Qt.DirectConnection)
 
         # noinspection PyUnresolvedReferences
-        self.finished.connect(lambda: callback(self.result))
-
-        # noinspection PyUnresolvedReferences
-        self.finished.connect(self.deleteLater)
+        self.finished.connect(self.finish)
 
     def run(self):
         self.result = self.func(*self.args, **self.kwargs)
@@ -36,3 +45,13 @@ class QTAsyncWorker(QThread):
             self.finished.emit()
         else:
             super().start(*args, **kwargs)
+
+    def finish(self):
+        if not self._terminated:
+            self.callback(self.result)
+        self.deleteLater()
+
+    @pyqtSlot()
+    def _terminate(self):
+        self._terminated = True
+        self.wait()
