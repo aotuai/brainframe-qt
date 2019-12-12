@@ -58,7 +58,8 @@ class DetectionPolygon(StreamPolygon):
 
         if show_detection_labels:
             text += detection.class_name
-
+        if "license_plate_string" in detection.extra_data:
+            text += f"\nLicense Plate: {detection.extra_data['license_plate_string']}"
         # Add "Identity" to the description box
         if detection.with_identity is not None and show_recognition:
             text += "\n" + QApplication.translate("StreamPolygon", "Name: ")
