@@ -319,3 +319,13 @@ class InvalidSessionError(BaseAPIError):
 
     def __init__(self, description):
         super().__init__(error_kinds.INVALID_SESSION, description)
+
+
+@register_error_type
+class VectorTooLongError(BaseAPIError):
+    """The provided encoding vector is longer than the maximum allowed
+    length.
+    """
+
+    def __init__(self, description):
+        super().__init__(error_kinds.VECTOR_TOO_LONG, description)
