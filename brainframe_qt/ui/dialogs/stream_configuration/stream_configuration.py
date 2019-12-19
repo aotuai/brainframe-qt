@@ -104,7 +104,8 @@ class StreamConfigurationDialog(QDialog):
             premises_id=premises_id,
             runtime_options={
                 "keyframes_only": keyframes_only
-            })
+            },
+            metadata={})
 
     @pyqtSlot(int)
     def connection_type_changed_slot(self, connection_index: int):
