@@ -4,7 +4,7 @@ from typing import Optional
 
 from PyQt5.QtGui import QIntValidator, QDoubleValidator
 from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
-    QPushButton, QSizePolicy, QApplication
+    QPushButton, QSizePolicy, QApplication, QMessageBox
 
 from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
 from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
@@ -27,8 +27,8 @@ class PluginOptionItem(ABC):
         self.override_checkbox: QCheckBox = None
         self.tooltip_button: QPushButton = None
 
-        pretty_name = plugin_utils.pretty_snakecase(self.option_name)
-        self.init_ui(pretty_name, description, parent)
+        self.pretty_name = plugin_utils.pretty_snakecase(self.option_name)
+        self.init_ui(self.pretty_name, description, parent)
 
         self.locked = None
         """When 'locked' is True or False, a checkbox will appear for allowing
@@ -55,8 +55,14 @@ class PluginOptionItem(ABC):
             self.tooltip_button = TextIconButton("❓", parent=parent)
             self.tooltip_button.setFlat(True)
             self.tooltip_button.setToolTip(description)
-            self.tooltip_button.setDisabled(True)
+            # self.tooltip_button.setDisabled(True)
             self.tooltip_button.setToolTipDuration(0)
+
+            # Make it so if you click an option, the description appears
+            msg = QMessageBox(parent=self.tooltip_button)
+            msg.setText(description)
+            msg.setWindowTitle(f"About: {self.pretty_name}")
+            self.tooltip_button.clicked.connect(lambda: msg.exec())
         else:
             self.tooltip_button = None
 
