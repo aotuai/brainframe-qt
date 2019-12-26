@@ -72,8 +72,8 @@ class DetectionPolygon(StreamPolygon):
             text += f" ({round(confidence, 2)})"
 
         if detection.attributes and show_attributes:
-            attributes_str_list = [a.category + ": " + a.value
-                                   for a in detection.attributes]
+            attributes_str_list = [
+                key + ": " + val for key, val in detection.attributes.items()]
             attributes_str_list.sort()
             text += "\n" + "\n".join(attributes_str_list)
 

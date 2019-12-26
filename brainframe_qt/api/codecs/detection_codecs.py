@@ -44,7 +44,6 @@ class Detection(Codec):
             d["track_id"] = str(self.track_id)
 
         d["children"] = [Detection.to_dict(det) for det in self.children]
-        d["attributes"] = [Attribute.to_dict(att) for att in self.attributes]
         return d
 
     @staticmethod
@@ -58,11 +57,10 @@ class Detection(Codec):
             track_id = uuid.UUID(d["track_id"])
 
         children = [Detection.from_dict(det) for det in d["children"]]
-        attributes = [Attribute.from_dict(att) for att in d["attributes"]]
         return Detection(class_name=d["class_name"],
                          coords=d["coords"],
                          children=children,
-                         attributes=attributes,
+                         attributes=d["attributes"],
                          with_identity=with_identity,
                          extra_data=d["extra_data"],
                          track_id=track_id)
