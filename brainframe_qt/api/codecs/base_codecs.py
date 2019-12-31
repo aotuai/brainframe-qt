@@ -21,7 +21,14 @@ class Codec(abc.ABC):
         return cls.from_dict(ujson.loads(j))
 
     def __repr__(self):
-        return str(self.to_dict())
+        """Formats a string in the format of
+        ClassName(arg1=val, arg2=val, arg3=val)"""
+        argstring = ""
+        for argname, argval in self.to_dict().items():
+            if len(argstring):
+                argstring += ", "
+            argstring += f"{argname}={argval}"
+        return f"{type(self).__name__}({argstring})"
 
     def __eq__(self, other):
         if type(other) is dict:
