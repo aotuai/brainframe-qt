@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
+<!DOCTYPE TS>
+<TS version="2.1" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -159,17 +160,17 @@ Read the manual to learn about the required directory structure.</source>
         <translation>警报名称</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="35"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="34"/>
         <source>{} in region [{}]</source>
         <translation>{} 在区域 [{}] 内</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="62"/>
         <source>(Ongoing)</source>
         <translation>(仍在持续)</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="64"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
         <source>{} to {}</source>
         <translation>{} 至 {}</translation>
     </message>
@@ -182,22 +183,22 @@ Read the manual to learn about the required directory structure.</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="70"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="69"/>
         <source>Plugin Enabled</source>
         <translation>已启用插件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="114"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="113"/>
         <source>The plugin option of name {} has an invalid type of type {}</source>
         <translation>名称为 {} 的插件选项的类型 {} 类型无效</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="148"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="147"/>
         <source>Not all options are valid!</source>
         <translation>并非所有选项都有效！</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="153"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="152"/>
         <source>You can&apos;t apply changes if the plugin never got set!</source>
         <translation>如果插件永远未被设置，则无法应用更改！</translation>
     </message>
@@ -205,17 +206,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="69"/>
+        <location filename="../../brainframe_app.py" line="67"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="85"/>
+        <location filename="../../brainframe_app.py" line="83"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="158"/>
+        <location filename="../../brainframe_app.py" line="156"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -267,7 +268,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>FloatOptionItem</name>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/option_items.py" line="174"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/option_items.py" line="180"/>
         <source>{} is not a float!</source>
         <translation>{}不是浮点数！</translation>
     </message>
@@ -727,17 +728,17 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationDialog</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="121"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="122"/>
         <source>Camera web address</source>
         <translation>摄像头地址</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="128"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="129"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="135"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="136"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
@@ -833,7 +834,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamPolygon</name>
     <message>
-        <location filename="../video_items/stream_detection.py" line="65"/>
+        <location filename="../video_items/stream_detection.py" line="66"/>
         <source>Name: </source>
         <translation>名称： </translation>
     </message>
@@ -944,39 +945,44 @@ Please recheck the entered server address.</source>
         <translation>显示标签</translation>
     </message>
     <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="74"/>
+        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="84"/>
         <source>Use polygons when available</source>
         <translation>在可用时使用多边形</translation>
     </message>
     <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="87"/>
+        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="97"/>
         <source>Show attributes (e.g. gender/behavior for a person detection)</source>
         <translation>显示属性（例如，人物检测的性别/行为）</translation>
     </message>
     <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="94"/>
+        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="104"/>
         <source>Show tracking</source>
         <translation>显示跟踪信息</translation>
     </message>
     <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="101"/>
+        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="111"/>
         <source>Always use bounding boxes</source>
         <translation>始终使用长方形检测框</translation>
     </message>
     <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="111"/>
+        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="121"/>
         <source>Show recognition</source>
         <translation>显示识别结果</translation>
     </message>
     <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="127"/>
+        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="137"/>
         <source>Show regions</source>
         <translation>显示区域</translation>
     </message>
     <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="144"/>
+        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="154"/>
         <source>Show lines</source>
         <translation>显示线段</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="58"/>
+        <source>Show extra data</source>
+        <translation type="unfinished">显示元数据 (Metadata)</translation>
     </message>
 </context>
 <context>
