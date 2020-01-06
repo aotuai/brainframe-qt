@@ -25,8 +25,8 @@ class StreamConfiguration(Codec):
                  connection_type: ConnType,
                  connection_options: dict,
                  runtime_options: dict,
-                 metadata: dict,
                  premises_id: Optional[int],
+                 metadata: dict = None,
                  id_=None):
         assert connection_type in StreamConfiguration.ConnType, \
             "You must feed StreamConfiguration.ConnType into connection_type" \
@@ -38,7 +38,7 @@ class StreamConfiguration(Codec):
         self.connection_type = connection_type
         self.connection_options = connection_options
         self.runtime_options = runtime_options
-        self.metadata = metadata
+        self.metadata = metadata or {}
 
     def to_dict(self):
         d = dict(self.__dict__)
