@@ -76,7 +76,8 @@ class StreamGraphicsScene(QGraphicsScene):
                         show_recognition=True,
                         show_tracks=True,
                         show_detection_labels=True,
-                        show_attributes=True):
+                        show_attributes=True,
+                        show_extra_data=False):
 
         for track in tracks:
             # Draw the detection on the screen
@@ -88,7 +89,8 @@ class StreamGraphicsScene(QGraphicsScene):
                 show_recognition=show_recognition,
                 show_tracks=show_tracks,
                 show_detection_labels=show_detection_labels,
-                show_attributes=show_attributes)
+                show_attributes=show_attributes,
+                show_extra_data=show_extra_data)
             self.addItem(det_polygon)
 
     def remove_items(self, items, condition=any):

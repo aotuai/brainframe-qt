@@ -26,6 +26,7 @@ class StreamWidget(QGraphicsView):
     _show_recognition_label = None
     _show_detection_tracks = None
     _show_attributes = None
+    _show_extra_data = None
 
     # Type hint that self.scene() is more than just a QGraphicsScene
     scene: Callable[[], StreamGraphicsScene]
@@ -87,7 +88,8 @@ class StreamWidget(QGraphicsView):
                 show_recognition=self.show_recognition_label,
                 show_tracks=self.show_detection_tracks,
                 show_detection_labels=self.show_detection_labels,
-                show_attributes=self.show_attributes)
+                show_attributes=self.show_attributes,
+                show_extra_data=self.show_extra_data)
 
     def handle_stream_initializing(self):
         self.scene().remove_all_items()
@@ -266,6 +268,16 @@ class StreamWidget(QGraphicsView):
         if self._show_attributes is not None:
             return self._show_attributes
         return settings.show_attributes.val()
+
+    @property
+    def show_extra_data(self):
+        if self._show_extra_data is not None:
+            return self._show_extra_data
+        return settings.show_extra_data.val()
+
+    @show_extra_data.setter
+    def show_extra_data(self, show_extra_data):
+        self._show_extra_data = show_extra_data
 
     @show_attributes.setter
     def show_attributes(self, show_attributes):

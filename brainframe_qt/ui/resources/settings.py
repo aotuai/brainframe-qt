@@ -73,3 +73,5 @@ show_detection_labels = Setting(
     True, type_=bool, name="video_show_detection_labels")
 show_attributes = Setting(
     True, type_=bool, name="video_show_attributes")
+show_extra_data = Setting(
+    False, type_=bool, name="video_show_extra_data")

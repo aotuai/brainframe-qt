@@ -39,6 +39,7 @@ class DetectionPolygon(StreamPolygon):
                  show_tracks=True,
                  show_recognition=True,
                  show_attributes=True,
+                 show_extra_data=False,
                  parent=None):
         """
         :param detection: The Detection object to render
@@ -61,7 +62,7 @@ class DetectionPolygon(StreamPolygon):
         if "license_plate_string" in detection.extra_data:
             text += f"\nLicense Plate: {detection.extra_data['license_plate_string']}"
         # Add "Identity" to the description box
-        if detection.with_identity is not None and show_recognition:
+        if show_recognition and detection.with_identity is not None:
             text += "\n" + QApplication.translate("StreamPolygon", "Name: ")
             if detection.with_identity.nickname is not None:
                 text += detection.with_identity.nickname
@@ -71,11 +72,24 @@ class DetectionPolygon(StreamPolygon):
             confidence = detection.extra_data['encoding_distance']
             text += f" ({round(confidence, 2)})"
 
-        if detection.attributes and show_attributes:
-            attributes_str_list = [
-                key + ": " + val for key, val in detection.attributes.items()]
-            attributes_str_list.sort()
-            text += "\n" + "\n".join(attributes_str_list)
+        keyval_data = []
+        if show_attributes and detection.attributes:
+            keyval_data += list(detection.attributes.items())
+
+        if show_extra_data:
+            for key, val in detection.extra_data.items():
+                if isinstance(val, float):
+                    val = round(val, 3)
+                elif type(val) not in [str, float, int]:
+                    # Not a valid datatype for rendering
+                    continue
+                keyval_data.append((key, str(val)))
+
+        # Add any metadata (attributes, extra data) to the text
+        attributes_str_list = [
+            key + ": " + val for key, val in keyval_data]
+        attributes_str_list.sort()
+        text += "\n" + "\n".join(attributes_str_list)
 
         # Remove all dual newlines
         text = text.strip()
@@ -88,7 +102,7 @@ class DetectionPolygon(StreamPolygon):
                 text_size=text_size,
                 parent=self)
 
-        if len(track) > 1 and show_tracks:
+        if show_tracks and len(track) > 1:
             line_color = generate_unique_qcolor(str(detection.track_id))
 
             # Draw a track for the detections history
