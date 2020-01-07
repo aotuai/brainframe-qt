@@ -10,7 +10,7 @@ from brainframe.client.api import api_errors
 from brainframe.shared import error_kinds
 from brainframe.client.api.codecs import Codec
 
-DEFAULT_TIMEOUT = 10
+DEFAULT_TIMEOUT = 30
 """The default timeout for most requests."""
 
 

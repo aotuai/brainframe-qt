@@ -39,6 +39,8 @@ class RenderConfiguration(QDialog):
             settings.show_detection_tracks.val())
         self.recognition_checkbox.setChecked(
             settings.show_recognition_confidence.val())
+        self.extra_data_checkbox.setChecked(
+            settings.show_extra_data.val())
 
     @classmethod
     def show_dialog(cls, parent):
@@ -71,3 +73,5 @@ class RenderConfiguration(QDialog):
             dialog.tracks_checkbox.isChecked())
         settings.show_recognition_confidence.set(
             dialog.recognition_checkbox.isChecked())
+        settings.show_extra_data.set(
+            dialog.extra_data_checkbox.isChecked())

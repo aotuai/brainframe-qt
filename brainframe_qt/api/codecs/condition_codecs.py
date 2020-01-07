@@ -7,7 +7,8 @@ condition_test_map = {'>': "Greater than",
                       '>=': "Greater than or equal to",
                       '<': "Less than",
                       '<=': "Less than or equal to",
-                      "=": "Exactly"}
+                      "=": "Exactly",
+                      "!=": "Not Equal To"}
 
 
 IntersectionPointType = codec_enums.IntersectionPointType

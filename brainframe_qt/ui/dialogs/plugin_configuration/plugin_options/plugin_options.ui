@@ -14,7 +14,7 @@
    <string notr="true"/>
   </property>
   <property name="title">
-   <string notr="true">GroupBox</string>
+   <string notr="true">Plugin Name</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
