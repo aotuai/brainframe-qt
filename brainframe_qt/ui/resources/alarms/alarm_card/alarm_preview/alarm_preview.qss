@@ -1,0 +1,3 @@
+AlarmPreview > QLabel#alert_state {
+    qproperty-alignment: 'AlignVCenter | AlignRight';
+}

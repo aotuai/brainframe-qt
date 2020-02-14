@@ -1,0 +1,43 @@
+AlertLog {
+    border: transparent;
+    background: white;
+
+    /* Arbitrary */
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+
+    /* Prevents the children widgets from clipping beyond above border radius.
+     * I would use user overflow:hidden if I could, but it's not available.
+     */
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+AlertLog #container {
+    background: transparent;
+}
+
+AlertLog QScrollBar {
+    background: transparent;
+
+    /* Twice handle border-radius*/
+    width: 6px;
+}
+
+AlertLog QScrollBar::handle:vertical {
+    /* Half scrollbar width*/
+    border-radius: 3px;
+    background: darkgrey;
+
+    /* Arbitrary */
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+AlertLog QScrollBar::add-line:vertical {
+    height: 0;
+}
+
+AlertLog QScrollBar::sub-line:vertical {
+    height: 0;
+}
