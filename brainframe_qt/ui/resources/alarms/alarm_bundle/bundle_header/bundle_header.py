@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget
 
 from brainframe.client.ui.resources import stylesheet_watcher
+from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
 
@@ -17,6 +18,7 @@ class BundleHeaderUI(QFrame):
 
     def _init_bundle_name_label(self) -> QLabel:
         bundle_name_layout = QLabel("Stream 1", self)
+        bundle_name_layout.setObjectName("bundle_name")
         return bundle_name_layout
 
     def _init_layout(self) -> None:
@@ -33,7 +35,7 @@ class BundleHeaderUI(QFrame):
         stylesheet_watcher.watch(self, qt_qss_paths.bundle_header_qss)
 
 
-class BundleHeader(BundleHeaderUI):
+class BundleHeader(BundleHeaderUI, ClickableMI):
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)

@@ -1,16 +1,14 @@
-from typing import Optional
-
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QMouseEvent
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QSizePolicy, QFrame
 
+from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 from brainframe.client.ui.resources import stylesheet_watcher
 
 
 class AlarmPreviewUI(QFrame):
 
-    def __init__(self, parent: Optional[QWidget]):
+    def __init__(self, parent: QWidget):
         super().__init__(parent)
 
         self.stream_name_label = self._init_stream_name_label()
@@ -49,24 +47,7 @@ class AlarmPreviewUI(QFrame):
         stylesheet_watcher.watch(self, qt_qss_paths.alarm_preview_qss)
 
 
-class AlarmPreview(AlarmPreviewUI):
+class AlarmPreview(AlarmPreviewUI, ClickableMI):
 
-    clicked = pyqtSignal()
-
-    def __init__(self, parent: Optional[QWidget]):
+    def __init__(self, parent: QWidget):
         super().__init__(parent)
-
-    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-        """Emit a signal when the widget is clicked"""
-        if event.button() != Qt.LeftButton:
-            return
-
-        # Mouse release events are triggered on the Widget where the mouse was
-        # initially pressed. If the user presses the mouse down, moves the
-        # cursor off the widget, and then releases the button, we want to
-        # ignore it.
-        if not self.rect().contains(event.pos()):
-            return
-
-        # noinspection PyUnresolvedReferences
-        self.clicked.emit()
