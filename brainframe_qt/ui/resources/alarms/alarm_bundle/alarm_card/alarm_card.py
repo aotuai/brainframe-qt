@@ -1,7 +1,7 @@
 from typing import Optional
 
 from PyQt5.QtCore import Qt, pyqtProperty
-from PyQt5.QtWidgets import QFrame, QSizePolicy, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QFrame, QSizePolicy, QVBoxLayout, QWidget, QLayout
 
 from brainframe.client.ui.resources import stylesheet_watcher
 # TODO: Change to relative imports?
@@ -9,6 +9,8 @@ from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alarm_preview
     import AlarmPreview
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alert_log \
     import AlertLog
+from brainframe.client.ui.resources.mixins.data_structure import IterableMI
+from brainframe.client.ui.resources.mixins.display import ExpandableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
 
@@ -49,7 +51,7 @@ class AlarmCardUI(QFrame):
         return alert_log
 
 
-class AlarmCard(AlarmCardUI):
+class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
 
     def __init__(self, parent: Optional[QWidget]):
         # Properties
@@ -64,11 +66,8 @@ class AlarmCard(AlarmCardUI):
         def flip():
             self.alert_active = not self.alert_active
 
-        def flip2():
-            self.expanded = not self.expanded
-
         self.alert_log.clicked.connect(flip)
-        self.alarm_preview.clicked.connect(flip2)
+        self.alarm_preview.clicked.connect(self.toggle_expansion)
 
     @pyqtProperty(bool)
     def alert_active(self) -> bool:
@@ -79,16 +78,13 @@ class AlarmCard(AlarmCardUI):
         self._alert_active = alert_active
         stylesheet_watcher.update()
 
-    @pyqtProperty(bool)
-    def expanded(self) -> bool:
-        return self._expanded
-
-    @expanded.setter
-    def expanded(self, expanded: bool) -> None:
-        self.alert_log.setVisible(expanded)
-
-        self._expanded = expanded
+    def expansion_changed(self):
+        # noinspection PyPropertyAccess
+        self.alert_log.setVisible(self.expanded)
         stylesheet_watcher.update()
+
+    def iterable_layout(self) -> QLayout:
+        return self.alert_log.layout()
 
 
 if __name__ == '__main__':
