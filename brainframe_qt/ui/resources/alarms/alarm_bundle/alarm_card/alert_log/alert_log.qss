@@ -17,6 +17,9 @@ AlertLog #container {
     background: transparent;
 }
 
+/* ###########################################################################
+ * Scrollbar
+ * ######################################################################## */
 AlertLog QScrollBar {
     background: transparent;
 
