@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QLayout
+from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QLayout, QSizePolicy
 
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card \
@@ -34,6 +34,9 @@ class AlarmBundleUI(QWidget):
     def _init_style(self):
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
+
+        # Use a fixed amount of vertical space
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         stylesheet_watcher.watch(self, qt_qss_paths.alarm_bundle_qss)
 
