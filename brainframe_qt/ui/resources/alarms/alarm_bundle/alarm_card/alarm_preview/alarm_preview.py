@@ -35,7 +35,7 @@ class AlarmPreviewUI(QFrame):
         return alert_state_label
 
     def _init_stream_name_label(self) -> QLabel:
-        stream_name_label = QLabel("Stream 1", self)
+        stream_name_label = QLabel("Alert Name", self)
         stream_name_label.setObjectName("stream_name")
         stream_name_label.setSizePolicy(QSizePolicy.Expanding,
                                         QSizePolicy.Fixed)
@@ -63,8 +63,8 @@ class AlarmPreview(AlarmPreviewUI):
 
         # Mouse release events are triggered on the Widget where the mouse was
         # initially pressed. If the user presses the mouse down, moves the
-        # cursor off the widget, and then releases the button, we want to ignore
-        # it.
+        # cursor off the widget, and then releases the button, we want to
+        # ignore it.
         if not self.rect().contains(event.pos()):
             return
 
