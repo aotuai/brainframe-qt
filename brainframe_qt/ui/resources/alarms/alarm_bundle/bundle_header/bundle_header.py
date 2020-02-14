@@ -21,7 +21,6 @@ class BundleHeaderUI(QFrame):
 
     def _init_layout(self) -> None:
         layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
 
         layout.addWidget(self.bundle_name_label)
 

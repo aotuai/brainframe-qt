@@ -38,7 +38,12 @@ class AlarmBundleUI(QWidget):
     def _init_alarm_container(self) -> QWidget:
         alarm_container = QFrame(self)
         alarm_container.setObjectName("alarm_container")
-        alarm_container.setLayout(QVBoxLayout())
+
+        container_layout = QVBoxLayout()
+        container_layout.setContentsMargins(0, 0, 0, 0)
+
+        alarm_container.setLayout(container_layout)
+
         return alarm_container
 
     def _init_bundle_header(self) -> QWidget:
