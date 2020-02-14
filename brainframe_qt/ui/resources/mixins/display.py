@@ -8,6 +8,14 @@ from brainframe.client.ui.resources.mixins import BaseMixin
 
 class ExpandableMI(BaseMixin):
 
+    def __init_subclass__(cls, **kwargs):
+        """This hack is required because of the magic PyQt does to properties.
+        A pyqtProperty is bound to the class that they are first created on.
+        This creates a new property that is attached to the child class.
+        """
+        cls.expanded = pyqtProperty(bool, cls.expanded.fget, cls.expanded.fset)
+        super().__init_subclass__()
+
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
