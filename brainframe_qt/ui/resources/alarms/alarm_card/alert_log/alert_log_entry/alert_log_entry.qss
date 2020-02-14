@@ -1,0 +1,3 @@
+AlertLogEntry > QLabel {
+    color: dimgrey;
+}
