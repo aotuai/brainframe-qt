@@ -27,11 +27,11 @@ AlarmCard[alert_active=true] > AlarmPreview > QLabel {
 /* ###########################################################################
  * Inactive Alert
  * ######################################################################## */
-AlarmCard[alert_active=true] > AlarmPreview {
-    background: lightcoral;
+AlarmCard[alert_active=false] > AlarmPreview {
+    background: grey;
 }
 
-AlarmCard[alert_active=true] > AlarmPreview > QLabel {
-    color: white;
+AlarmCard[alert_active=false] > AlarmPreview > QLabel {
+    color: lightgrey;
 }
 
