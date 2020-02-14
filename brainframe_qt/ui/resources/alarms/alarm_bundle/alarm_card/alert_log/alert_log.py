@@ -14,8 +14,9 @@ class AlertLogUI(QScrollArea):
     def __init__(self, parent: Optional[QWidget]):
         super().__init__(parent)
 
+        # Initialize widgets
         self.container_widget = self._init_container_widget()
-        self._init_viewport()
+        self._init_viewport_widget()
 
         self._init_layout()
 
@@ -44,7 +45,7 @@ class AlertLogUI(QScrollArea):
         container_widget.setObjectName("container")
         return container_widget
 
-    def _init_viewport(self) -> None:
+    def _init_viewport_widget(self) -> None:
         # Give the viewport a name for the stylesheet
         self.viewport().setObjectName("viewport")
 

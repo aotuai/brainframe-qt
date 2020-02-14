@@ -5,9 +5,10 @@ from PyQt5.QtWidgets import QFrame, QSizePolicy, QVBoxLayout, QWidget
 
 from brainframe.client.ui.resources import stylesheet_watcher
 # TODO: Change to relative imports?
-from brainframe.client.ui.resources.alarms.alarm_card.alarm_preview \
+from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alarm_preview \
     import AlarmPreview
-from brainframe.client.ui.resources.alarms.alarm_card.alert_log import AlertLog
+from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alert_log \
+    import AlertLog
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
 
