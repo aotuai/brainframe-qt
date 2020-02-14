@@ -1,7 +1,7 @@
 from typing import Optional
 
 from PyQt5.QtCore import Qt, pyqtProperty
-from PyQt5.QtWidgets import QFrame, QSizePolicy, QVBoxLayout, QWidget, QLayout
+from PyQt5.QtWidgets import QFrame, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
 from brainframe.client.ui.resources import stylesheet_watcher
 # TODO: Change to relative imports?
@@ -56,7 +56,6 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def __init__(self, parent: Optional[QWidget]):
         # Properties
         self._alert_active = False
-        self._expanded = True
 
         super().__init__(parent)
 
