@@ -25,6 +25,12 @@ AlertLog QScrollBar {
 }
 
 AlertLog QScrollBar::handle:vertical {
+
+    /* Twice handle border-radius
+     * Any smaller and the border radius fails to work
+     */
+    min-height: 6px;
+
     /* Half scrollbar width*/
     border-radius: 3px;
     background: darkgrey;
