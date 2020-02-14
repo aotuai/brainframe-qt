@@ -1,1 +1,3 @@
-
+AlarmBundle > #alarm_container {
+    margin-left: 40px;
+}
