@@ -9,3 +9,4 @@ from .stream_configuration.stream_configuration import StreamConfigurationDialog
 from .task_configuration.task_configuration import TaskConfiguration
 from .plugin_configuration.plugin_config import PluginConfigDialog
 from .video_configuration import RenderConfiguration
+from .version_mismatch import VersionMismatch
