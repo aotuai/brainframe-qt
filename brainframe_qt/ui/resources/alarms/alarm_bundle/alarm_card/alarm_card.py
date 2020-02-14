@@ -103,7 +103,7 @@ if __name__ == '__main__':
     window.setAttribute(Qt.WA_StyledBackground, True)
     # window.setStyleSheet("background-color: lightgrey")
 
-    window.setLayout(QVBoxLayout(window))
+    window.setLayout(QVBoxLayout())
     window.layout().addWidget(AlarmCard(parent=window))
 
     window.show()

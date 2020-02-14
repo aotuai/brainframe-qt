@@ -6,6 +6,7 @@ ui_dir = route_path("brainframe", "client", "ui")
 # AlarmBundle
 alarm_bundle_dir = ui_dir / "resources" / "alarms" / "alarm_bundle"
 alarm_bundle_qss = alarm_bundle_dir / "alarm_bundle.qss"
+bundle_header_qss = alarm_bundle_dir / "bundle_header" / "bundle_header.qss"
 
 # AlarmCard
 alarm_card_dir = alarm_bundle_dir / "alarm_card"
