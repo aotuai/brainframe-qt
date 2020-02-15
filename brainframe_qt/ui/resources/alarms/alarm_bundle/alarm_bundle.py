@@ -79,7 +79,7 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
                 alarm_card.expanded = False
 
         self.alarm_container.setVisible(now_expanded)
-        stylesheet_watcher.update()
+        stylesheet_watcher.update_widget(self)
 
     def iterable_layout(self) -> QLayout:
         return self.alarm_container.layout()
