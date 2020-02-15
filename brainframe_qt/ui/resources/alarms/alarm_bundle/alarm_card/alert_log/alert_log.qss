@@ -18,37 +18,3 @@ AlertLog {
 AlertLog #container {
     background: transparent;
 }
-
-/*!* ###########################################################################*/
-/* * Scrollbar*/
-/* * ######################################################################## *!*/
-/*AlertLog QScrollBar {*/
-/*    background: transparent;*/
-
-/*    !* Twice handle border-radius*!*/
-/*    width: 6px;*/
-/*}*/
-
-/*AlertLog QScrollBar::handle:vertical {*/
-
-/*    !* Twice handle border-radius*/
-/*     * Any smaller and the border radius fails to work*/
-/*     *!*/
-/*    min-height: 6px;*/
-
-/*    !* Half scrollbar width*!*/
-/*    border-radius: 3px;*/
-/*    background: darkgrey;*/
-
-/*    !* Arbitrary *!*/
-/*    margin-top: 5px;*/
-/*    margin-bottom: 5px;*/
-/*}*/
-
-/*AlertLog QScrollBar::add-line:vertical {*/
-/*    height: 0;*/
-/*}*/
-
-/*AlertLog QScrollBar::sub-line:vertical {*/
-/*    height: 0;*/
-/*}*/
