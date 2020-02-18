@@ -5,33 +5,57 @@ AlarmView {
 /* ###########################################################################
  * Scrollbar
  * ######################################################################## */
+
 QScrollBar {
     background: transparent;
-
-    /* Twice handle border-radius*/
-    width: 6px;
+}
+QScrollBar:vertical {
+    /* Twice handle border-radius + margin (left) */
+    width: 11px;
+}
+QScrollBar:horizontal {
+    /* Twice handle border-radius + margin (top) */
+    height: 11px;
 }
 
-QScrollBar::handle:vertical {
-
-    /* Twice handle border-radius
-     * Any smaller and the border radius fails to work
-     */
-    min-height: 6px;
-
+QScrollBar::handle {
     /* Half scrollbar width*/
     border-radius: 3px;
     background: darkgrey;
 
-    /* Arbitrary */
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 5px;
+
+}
+QScrollBar::handle:vertical {
+    /* Twice handle border-radius
+     * Any smaller and the border radius fails to work
+     */
+    min-height: 6px;
+    margin-right: 0;
+}
+QScrollBar::handle:horizontal {
+    /* Twice handle border-radius
+     * Any smaller and the border radius fails to work
+     */
+    min-width: 6px;
+    margin-bottom: 0;
 }
 
 QScrollBar::add-line:vertical {
     height: 0;
 }
+QScrollBar::add-line:horizontal {
+    width: 0;
+}
 
 QScrollBar::sub-line:vertical {
     height: 0;
+}
+QScrollBar::sub-line:horizontal {
+    width: 0;
+}
+
+/* https://stackoverflow.com/a/8226736/8134178 */
+QAbstractScrollArea::corner {
+    border: transparent;
 }
