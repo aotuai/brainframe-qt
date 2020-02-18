@@ -18,10 +18,11 @@ class VersionMismatch(QMessageBox):
         self.setTextFormat(Qt.RichText)
         self.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
-        message = ("The server is using version {server_version} but this "
-                   "client is on version {client_version}. Please download "
-                   "the matching version of the client at {download_url}.")
-        message = self.tr(message).format(
+        message = self.tr(
+            "The server is using version {server_version} but this client is "
+            "on version {client_version}. Please download the matching "
+            "version of the client at {download_url}.")
+        message = message.format(
             server_version=server_version,
             client_version=client_version,
             download_url="https://dilililabs.com/docs/downloads/")
