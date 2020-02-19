@@ -40,6 +40,19 @@ class StreamStubMixin(BaseStub):
             self._stream_manager = StreamManager(self.get_status_poller())
         return self._stream_manager
 
+    def get_stream_configuration(
+            self, stream_id, timeout=DEFAULT_TIMEOUT) -> StreamConfiguration:
+        """Gets the StreamConfiguration with the given ID.
+
+        :param stream_id: The ID of the stream configuration to get
+        :param timeout: The timeout to use for this request
+        :return: The stream configuration
+        """
+        req = f"/api/streams/{stream_id}"
+        data, _ = self._get_json(req, timeout)
+
+        return StreamConfiguration.from_dict(data)
+
     def get_stream_configurations(self, premises_id=None,
                                   timeout=DEFAULT_TIMEOUT) \
             -> List[StreamConfiguration]:
