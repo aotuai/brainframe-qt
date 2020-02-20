@@ -10,10 +10,11 @@ class ZoneAlarm(Codec):
 
     def __init__(self, *, name, count_conditions, rate_conditions,
                  use_active_time, active_start_time, active_end_time,
-                 id_=None, zone_id=None):
+                 id_=None, zone_id=None, stream_id=None):
         self.name = name
         self.id = id_
         self.zone_id = zone_id
+        self.stream_id = stream_id
         self.count_conditions: List[ZoneAlarmCountCondition] = count_conditions
         self.rate_conditions: List[ZoneAlarmRateCondition] = rate_conditions
         self.use_active_time = use_active_time
@@ -43,7 +44,8 @@ class ZoneAlarm(Codec):
                          use_active_time=d["use_active_time"],
                          active_start_time=d["active_start_time"],
                          active_end_time=d["active_end_time"],
-                         zone_id=d["zone_id"])
+                         zone_id=d["zone_id"],
+                         stream_id=d["stream_id"])
 
 
 class Alert(Codec):
