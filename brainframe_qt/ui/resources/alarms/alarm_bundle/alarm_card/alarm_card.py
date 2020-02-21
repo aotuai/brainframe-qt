@@ -1,8 +1,11 @@
 from typing import Optional
 
+import typing
 from PyQt5.QtCore import Qt, pyqtProperty
 from PyQt5.QtWidgets import QFrame, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
+from brainframe.client.api import api
+from brainframe.client.api.codecs import StreamConfiguration, Zone, ZoneAlarm
 from brainframe.client.ui.resources import stylesheet_watcher
 # TODO: Change to relative imports?
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alarm_preview \
@@ -53,11 +56,17 @@ class AlarmCardUI(QFrame):
 
 class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
 
-    def __init__(self, parent: Optional[QWidget]):
+    def __init__(self, alarm: ZoneAlarm, parent: QWidget):
         # Properties
         self._alert_active = False
 
         super().__init__(parent)
+
+        self.stream_id = typing.cast(int, None)
+        self._stream_name = typing.cast(str, None)
+
+        self.zone_id: Optional[int] = None
+        self._zone_name: Optional[str] = None
 
         self._init_signals()
 
@@ -85,6 +94,25 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def iterable_layout(self) -> QLayout:
         return self.alert_log.layout()
 
+    @property
+    def stream_name(self):
+        if not self._stream_name:
+            # TODO: Run in another thread
+            stream: StreamConfiguration \
+                = api.get_stream_configuration(stream_id=self.stream_id)
+            self._stream_name = stream.name
+        return self._stream_name
+
+    @property
+    def zone_name(self):
+        if self.zone_id is None:
+            return None
+        if not self._zone_name:
+            # TODO: Run in another thread
+            zone: Zone = api.get_zone(zone_id=self.zone_id)
+            self._zone_name = zone.name
+        return self._zone_name
+
 
 if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
@@ -99,7 +127,17 @@ if __name__ == '__main__':
     # window.setStyleSheet("background-color: lightgrey")
 
     window.setLayout(QVBoxLayout())
-    window.layout().addWidget(AlarmCard(parent=window))
+
+    zone_alarm = ZoneAlarm(
+        name="Too Many Shuchs",
+        count_conditions=None,
+        rate_conditions=None,
+        use_active_time=False,
+        active_start_time=None,
+        active_end_time=None
+    )
+
+    window.layout().addWidget(AlarmCard(zone_alarm, parent=window))
 
     window.show()
 

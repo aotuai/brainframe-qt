@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QLayout, QSizePolicy
 
+from brainframe.client.api.codecs import ZoneAlarm
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card \
     import AlarmCard
@@ -57,12 +58,38 @@ class AlarmBundleUI(QWidget):
 
 
 class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
-    def __init__(self, parent: QWidget):
+
+    def __init__(self, bundle_value: str,
+                 parent: QWidget):
         super().__init__(parent)
         self._init_signals()
 
-        for _ in range(3):
-            self.add_alarm_card()
+        self.bundle_value = bundle_value
+
+    def __contains__(self, alarm):
+        if isinstance(alarm, AlarmCard):
+            return alarm in self.__iter__()
+
+        elif isinstance(alarm, ZoneAlarm):
+            try:
+                self[alarm]
+            except KeyError:
+                return False
+            return True
+
+        else:
+            return super().__contains__(alarm)
+
+    def __getitem__(self, alarm):
+        if isinstance(alarm, ZoneAlarm):
+            search = (alarm_card for alarm_card in self
+                      if alarm_card.alarm.id == alarm.id)
+            try:
+                return next(search)
+            except StopIteration as exc:
+                raise KeyError from exc
+        else:
+            raise TypeError
 
     def _init_signals(self):
         self.bundle_header.clicked.connect(self.toggle_expansion)
@@ -84,8 +111,13 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
     def iterable_layout(self) -> QLayout:
         return self.alarm_container.layout()
 
-    def add_alarm_card(self):
-        self.alarm_container.layout().addWidget(AlarmCard(self))
+    def add_alarm_card(self, alarm: ZoneAlarm):
+        alarm_card = AlarmCard(alarm, self)
+        self.alarm_container.layout().addWidget(alarm_card)
+
+    def del_alarm_card(self, alarm: ZoneAlarm):
+        alarm_card = self[alarm]
+        self.alarm_container.layout().removeWidget(alarm_card)
 
 
 if __name__ == '__main__':
