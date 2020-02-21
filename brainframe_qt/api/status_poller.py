@@ -5,19 +5,17 @@ from typing import Dict
 
 import requests
 
-from brainframe.client.api import codecs, api_errors
+from brainframe.client.api import api_errors, codecs
 
 
 class StatusPoller(Thread):
-    """ This solves the problem that multiple UI elements will want to know the
-    latest ZoneStatuses for any given stream. """
+    """This solves the problem that multiple UI elements will want to know the
+    latest ZoneStatuses for any given stream."""
 
     def __init__(self, api):
         """
         :param api: An API() object for interacting with the BrainFrame REST
             api
-        :param ms_status_updates: Milliseconds between calling for a zone
-            status update
         """
         super().__init__(name="StatusPollerThread")
         self._api = api
@@ -30,10 +28,11 @@ class StatusPoller(Thread):
     def run(self):
         """Polls BrainFrame for ZoneStatuses at a constant rate"""
         self._running = True
-        zstatus_stream = self._api.get_zone_status_stream()
+        zone_status_stream = self._api.get_zone_status_stream()
+
         while self._running:
             try:
-                zone_status = next(zstatus_stream)
+                zone_status = next(zone_status_stream)
                 self._latest = zone_status
 
             except (StopIteration,
@@ -46,23 +45,22 @@ class StatusPoller(Thread):
 
                 if not self._running:
                     break
+
                 sleep(1)
-                zstatus_stream = self._api.get_zone_status_stream()
+                zone_status_stream = self._api.get_zone_status_stream()
 
         self._running = False
 
     @property
-    def is_running(self):
+    def is_running(self) -> bool:
         return self._running
 
-    def latest_statuses(self, stream_id) -> Dict[str, codecs.ZoneStatus]:
-        """Returns the latest cached list of ZoneStatuses for that stream_id"""
-        latest = self._latest
-        if stream_id not in latest:
-            return {}
-        return latest[stream_id]
+    def latest_statuses(self, stream_id: int) -> Dict[str, codecs.ZoneStatus]:
+        """Returns the latest cached list of ZoneStatuses for that stream_id,
+        or any empty dict if none are cached"""
+        return self._latest.get(stream_id, {})
 
-    def close(self):
+    def close(self) -> None:
         """Close the status polling thread"""
         self._running = False
         self.join()
