@@ -1,18 +1,21 @@
 import logging
 from threading import Thread
 from time import sleep
-from typing import Dict
+from typing import Dict, TYPE_CHECKING
 
 import requests
 
 from brainframe.client.api import api_errors, codecs
+
+if TYPE_CHECKING:
+    from brainframe.client.api import API
 
 
 class StatusPoller(Thread):
     """This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream."""
 
-    def __init__(self, api):
+    def __init__(self, api: 'API'):
         """
         :param api: An API() object for interacting with the BrainFrame REST
             api
