@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QMouseEvent
+from PyQt5.QtGui import QCursor, QMouseEvent
 
 from brainframe.client.ui.resources.mixins import BaseMixin
 
@@ -14,6 +14,10 @@ class ClickableMI(BaseMixin):
         """
         cls.clicked = pyqtSignal()
         super().__init_subclass__(**kwargs)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setCursor(QCursor(Qt.PointingHandCursor))
 
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         """Emit a signal when the widget is clicked"""
