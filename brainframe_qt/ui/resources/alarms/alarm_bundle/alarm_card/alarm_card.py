@@ -62,6 +62,8 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
 
         super().__init__(parent)
 
+        self.alarm = alarm
+
         self.stream_id = typing.cast(int, None)
         self._stream_name = typing.cast(str, None)
 
@@ -69,6 +71,8 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         self._zone_name: Optional[str] = None
 
         self._init_signals()
+
+        self.alarm_preview.set_alarm(self.alarm)
 
     def _init_signals(self):
         def flip():
