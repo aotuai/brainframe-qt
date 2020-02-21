@@ -36,6 +36,8 @@ class APIWrapper(API):
             return self._empty_func([])
         if item == "get_encoding_class_names":
             return self._empty_func([])
+        if item == "get_zone_alarms":
+            return self._empty_func([])
 
         return None
 
