@@ -10,12 +10,12 @@ QScrollBar {
     background: transparent;
 }
 QScrollBar:vertical {
-    /* Twice handle border-radius + margin (left) */
-    width: 11px;
+    /* Twice handle border-radius + 2x handle margin (left/right) */
+    width: 16px;
 }
 QScrollBar:horizontal {
-    /* Twice handle border-radius + margin (top) */
-    height: 11px;
+    /* Twice handle border-radius + 2x handle margin (top/bottom) */
+    height: 16px;
 }
 
 QScrollBar::handle {
@@ -31,14 +31,12 @@ QScrollBar::handle:vertical {
      * Any smaller and the border radius fails to work
      */
     min-height: 6px;
-    margin-right: 0;
 }
 QScrollBar::handle:horizontal {
     /* Twice handle border-radius
      * Any smaller and the border radius fails to work
      */
     min-width: 6px;
-    margin-bottom: 0;
 }
 
 QScrollBar::add-line:vertical {
