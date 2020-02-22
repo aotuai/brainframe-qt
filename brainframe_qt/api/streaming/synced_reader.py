@@ -8,12 +8,9 @@ import numpy as np
 
 from brainframe.client.api.codecs import ZoneStatus
 from brainframe.client.api.detection_tracks import DetectionTrack
-from brainframe.client.api.status_poller import StatusPoller
+from brainframe.client.api.status_receiver import StatusReceiver
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
-from brainframe.shared.stream_reader import (
-    StreamReader,
-    StreamStatus
-)
+from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.utils import or_events
 
@@ -75,16 +72,16 @@ class SyncedStreamReader(StreamReader):
     def __init__(self,
                  stream_id: int,
                  stream_reader: GstStreamReader,
-                 status_poller: StatusPoller):
+                 status_receiver: StatusReceiver):
         """Creates a new SyncedStreamReader.
 
         :param stream_id: The stream ID that this synced stream reader is for
         :param stream_reader: The stream reader to get frames from
-        :param status_poller: The StatusPoller currently in use
+        :param status_receiver: The StatusReceiver currently in use
         """
         self.stream_id = stream_id
         self._stream_reader = stream_reader
-        self.status_poller = status_poller
+        self.status_receiver = status_receiver
 
         self.latest_processed_frame: ProcessedFrame = None
 
@@ -191,9 +188,8 @@ class SyncedStreamReader(StreamReader):
             # Get the new frame + timestamp
             frame_tstamp, frame = self._stream_reader.latest_frame
 
-            # Get the latest zone statuses from thread status poller thread
-            statuses = self.status_poller.latest_statuses(
-                self.stream_id)
+            # Get the latest zone statuses from thread status receiver thread
+            statuses = self.status_receiver.latest_statuses(self.stream_id)
 
             # Run the syncing algorithm
             new_processed_frame = frame_syncer.send(

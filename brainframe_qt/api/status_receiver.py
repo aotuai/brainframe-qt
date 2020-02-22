@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from brainframe.client.api import API
 
 
-class StatusPoller(Thread):
+class StatusReceiver(Thread):
     """This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream."""
 
@@ -20,23 +20,24 @@ class StatusPoller(Thread):
         :param api: An API() object for interacting with the BrainFrame REST
             api
         """
-        super().__init__(name="StatusPollerThread")
+        super().__init__(name="StatusReceiverThread")
         self._api = api
 
         # Get something before starting the thread
-        self._latest = self._api.get_latest_zone_statuses()
+        self._latest_statuses = {}
         self._running = True
         self.start()
 
     def run(self):
-        """Polls BrainFrame for ZoneStatuses at a constant rate"""
+        """Opens a connection with BrainFrame to receive ZoneStatus objects.
+        Then, alerts any event handlers of new objects."""
         self._running = True
         zone_status_stream = self._api.get_zone_status_stream()
 
         while self._running:
             try:
                 zone_status = next(zone_status_stream)
-                self._latest = zone_status
+                self._latest_statuses = zone_status
 
             except (StopIteration,
                     requests.exceptions.RequestException,
@@ -61,9 +62,9 @@ class StatusPoller(Thread):
     def latest_statuses(self, stream_id: int) -> Dict[str, codecs.ZoneStatus]:
         """Returns the latest cached list of ZoneStatuses for that stream_id,
         or any empty dict if none are cached"""
-        return self._latest.get(stream_id, {})
+        return self._latest_statuses.get(stream_id, {})
 
     def close(self) -> None:
-        """Close the status polling thread"""
+        """Close the status receiving thread"""
         self._running = False
         self.join()

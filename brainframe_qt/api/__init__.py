@@ -26,7 +26,7 @@ class APIWrapper(API):
         # used somewhere in QtDesigner plugin, so it needs to be faked
         if item == "get_stream_configurations":
             return self._empty_func([])
-        if item == "get_status_poller":
+        if item == "get_status_receiver":
             return self._empty_func(None)
         if item == "get_plugins":
             return self._empty_func([])

@@ -51,7 +51,7 @@ class API(stubs.AlertStubMixin,
         timeout_api = API(self._server_url, self._credentials)
 
         timeout_api._stream_manager = self._stream_manager
-        timeout_api._status_poller = self._status_poller
+        timeout_api._status_receiver = self._status_receiver
         timeout_api._timeout = timeout
 
         return timeout_api

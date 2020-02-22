@@ -1,4 +1,4 @@
-from brainframe.client.api.status_poller import StatusPoller
+from brainframe.client.api.status_receiver import StatusReceiver
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.shared.stream_reader import StreamReader
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
@@ -16,9 +16,9 @@ class StreamManager:
                             StreamConfiguration.ConnType.FILE]
     """These video types are re-hosted by the server."""
 
-    def __init__(self, status_poller: StatusPoller):
+    def __init__(self, status_receiver: StatusReceiver):
         self._stream_readers = {}
-        self._status_poller = status_poller
+        self._status_receiver = status_receiver
         self._async_closing_streams = []
         """A list of StreamReader objects that are closing or may have finished
         closing"""
@@ -55,7 +55,7 @@ class StreamManager:
             synced_stream_reader = SyncedStreamReader(
                 stream_config.id,
                 stream_reader,
-                self._status_poller)
+                self._status_receiver)
             self._stream_readers[stream_config.id] = synced_stream_reader
 
         return self._stream_readers[stream_config.id]
