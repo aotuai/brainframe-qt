@@ -129,7 +129,7 @@ class MainWindow(QMainWindow):
             message_info1 = self.tr(
                 "You have exceeded the number of active streams available to "
                 "you under the terms of your license. Consider deleting "
-                "another stream or contacting Dilili Labs to increase your "
+                "another stream or contacting Aotu to increase your "
                 "active stream limit.")
             message = (f"<b>{message_desc}</b>"
                        f"<br><br>"
