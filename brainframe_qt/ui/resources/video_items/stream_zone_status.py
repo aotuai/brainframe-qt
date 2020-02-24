@@ -28,18 +28,25 @@ class ZoneStatusPolygon(StreamPolygon):
                 entering_text = QApplication.translate(
                     "ZoneStatusPolygon",
                     "Entering: ")
-                text = f"{status.zone.name}\n{entering_text}"
-                text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
-                                   for k, v in status.total_entered.items()
-                                   if v > 0])
+                entering_counts = ", ".join(
+                    ["{} {}{}".format(class_name, count, "s" * bool(count - 1))
+                     for class_name, count in status.total_entered.items()
+                     if count > 0])
+
+                if len(entering_counts):
+                    text += f"\n{entering_text}{entering_counts}"
+
             if len(status.total_exited):
                 exiting_text = QApplication.translate(
                     "ZoneStatusPolygon",
                     "Exiting: ")
-                text += f"\n{exiting_text}"
-                text += ", ".join(["{} {}{}".format(v, k, "s" * bool(v - 1))
-                                   for k, v in status.total_exited.items()
-                                   if v > 0])
+                exiting_counts = ", ".join(
+                    ["{} {}{}".format(class_name, count, "s" * bool(count - 1))
+                     for class_name, count in status.total_exited.items()
+                     if count > 0])
+                if len(exiting_counts):
+                    text += f"\n{exiting_text}{exiting_counts}"
+
             counts = status.detection_within_counts
             if len(counts):
                 within_text = QApplication.translate(
