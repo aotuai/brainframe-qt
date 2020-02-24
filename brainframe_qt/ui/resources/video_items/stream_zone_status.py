@@ -29,7 +29,7 @@ class ZoneStatusPolygon(StreamPolygon):
                     "ZoneStatusPolygon",
                     "Entering: ")
                 entering_counts = ", ".join(
-                    ["{} {}{}".format(class_name, count, "s" * bool(count - 1))
+                    ["{} {}{}".format(count, class_name, "s" * bool(count - 1))
                      for class_name, count in status.total_entered.items()
                      if count > 0])
 
@@ -41,7 +41,7 @@ class ZoneStatusPolygon(StreamPolygon):
                     "ZoneStatusPolygon",
                     "Exiting: ")
                 exiting_counts = ", ".join(
-                    ["{} {}{}".format(class_name, count, "s" * bool(count - 1))
+                    ["{} {}{}".format(count, class_name, "s" * bool(count - 1))
                      for class_name, count in status.total_exited.items()
                      if count > 0])
                 if len(exiting_counts):
