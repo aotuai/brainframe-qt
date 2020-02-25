@@ -1,4 +1,5 @@
 import logging
+import typing
 from threading import Thread, RLock, Event
 from typing import List, Generator, Tuple, Dict, Set
 from uuid import UUID, uuid4
@@ -90,7 +91,7 @@ class SyncedStreamReader(StreamReader):
         self._stream_reader = stream_reader
         self.status_receiver = status_receiver
 
-        self.latest_processed_frame: ProcessedFrame = None
+        self.latest_processed_frame = typing.cast(ProcessedFrame, None)
 
         self.stream_listeners: Set[StreamListener] = set()
         self._stream_listeners_lock = RLock()
