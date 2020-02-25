@@ -34,6 +34,13 @@ class StreamListener:
         self.stream_error_event = Event()
         """Called upon serious error (this shouldn't happen?)"""
 
+    def clear_all_events(self):
+        self.frame_event.clear()
+        self.stream_initializing_event.clear()
+        self.stream_halted_event.clear()
+        self.stream_closed_event.clear()
+        self.stream_error_event.clear()
+
 
 class ProcessedFrame:
     """A frame that may or may not have undergone processing on the server."""
@@ -131,11 +138,7 @@ class SyncedStreamReader(StreamReader):
     def remove_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
             self.stream_listeners.remove(listener)
-            listener.frame_event.clear()
-            listener.stream_initializing_event.clear()
-            listener.stream_halted_event.clear()
-            listener.stream_closed_event.clear()
-            listener.stream_error_event.clear()
+            listener.clear_all_events()
 
     @property
     def status(self) -> StreamStatus:
