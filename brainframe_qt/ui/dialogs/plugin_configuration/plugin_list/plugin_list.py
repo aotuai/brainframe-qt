@@ -55,7 +55,7 @@ class PluginList(QListWidget):
             if plugins:
                 self.setCurrentRow(0)
 
-        QTAsyncWorker(self, get_plugins, add_plugins).start()
+        QTAsyncWorker(self, get_plugins, on_success=add_plugins).start()
 
     def plugin_changed(self, current: QListWidgetItem,
                        _previous: QListWidgetItem):

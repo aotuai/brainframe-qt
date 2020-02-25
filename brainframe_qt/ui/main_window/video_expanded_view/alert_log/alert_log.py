@@ -70,7 +70,9 @@ class AlertLog(QWidget):
             # If no change to stream_id, then use the results from the API
             self._set_alerts(alerts)
 
-        QTAsyncWorker(self, get_alerts_from_server, set_alerts_checked).start()
+        QTAsyncWorker(self, get_alerts_from_server,
+                      on_success=set_alerts_checked) \
+            .start()
 
     def _set_alerts(self, server_side_alerts: List[Alert]):
 
@@ -116,7 +118,8 @@ class AlertLog(QWidget):
             deleted_alert_ids = existing_alert_ids - server_side_alert_ids
             self._delete_alerts_by_id(deleted_alert_ids)
 
-        QTAsyncWorker(self, get_alarms_and_zones, edit_alerts).start()
+        QTAsyncWorker(self, get_alarms_and_zones, on_success=edit_alerts) \
+            .start()
 
     def _add_alerts(self, alerts: Iterable[Alert],
                     alarms: Dict[int, ZoneAlarm],

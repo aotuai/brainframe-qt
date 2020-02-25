@@ -103,7 +103,7 @@ class IdentityGridPaginator(Paginator):
                 self.range_upper >= self.total_items)
             self.range_upper_label.setText(str(self.range_upper))
 
-        QTAsyncWorker(self, func, callback).start()
+        QTAsyncWorker(self, func, on_success=callback).start()
 
     @pyqtSlot(object)
     def delete_identity_slot(self, identity: Identity):
@@ -120,7 +120,7 @@ class IdentityGridPaginator(Paginator):
         def callback(_):
             self.display_page(self.current_page)
 
-        QTAsyncWorker(self, func, callback).start()
+        QTAsyncWorker(self, func, on_success=callback).start()
 
     @pyqtSlot(object, bool)
     def identity_clicked_slot(self, identity: Identity, selected: bool):

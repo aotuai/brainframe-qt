@@ -58,9 +58,9 @@ class IdentityInfo(QWidget):
                     QtCore.Q_ARG("PyQt_PyObject", identity))
 
             # Refresh the identity
-            QTAsyncWorker(self, func2, callback2).start()
+            QTAsyncWorker(self, func2, on_success=callback2).start()
 
-        QTAsyncWorker(self, func, callback).start()
+        QTAsyncWorker(self, func, on_success=callback).start()
 
     @pyqtSlot(object)
     def display_identity_slot(self, identity: Identity):

@@ -2,6 +2,7 @@ import enum
 from enum import Enum
 from typing import Dict, List, Optional, Set
 
+import requests
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLayout, QScrollArea, QVBoxLayout, QWidget
 
@@ -55,7 +56,6 @@ class AlarmViewUI(QScrollArea):
 
 
 class AlarmView(AlarmViewUI, IterableMI):
-
     class BundleType(Enum):
         BY_STREAM = enum.auto()
         BY_ZONE = enum.auto()
@@ -66,7 +66,10 @@ class AlarmView(AlarmViewUI, IterableMI):
         self.bundle_mode = self.BundleType.BY_STREAM
         self.bundle_map: Dict[str, AlarmBundle] = {}
 
-        QTAsyncWorker(self, self.get_alarm_info, self.update_alarms).start()
+        QTAsyncWorker(self, self.get_alarm_info,
+                      on_success=self.update_alarms,
+                      on_error=self.update_alarms_err) \
+            .start()
 
     def iterable_layout(self) -> QLayout:
         return self.container_widget.layout()
@@ -97,6 +100,12 @@ class AlarmView(AlarmViewUI, IterableMI):
 
         for del_alarm in del_alarms.values():
             self.remove_alarm(del_alarm)
+
+    def update_alarms_err(self, err: Exception):
+        if not isinstance(err, requests.exceptions.ConnectionError):
+            raise err
+
+        print("ConnectionError: Unable to get alarms")
 
     def add_alarm(self, new_alarm: ZoneAlarm):
         """Create an AlarmCard for an alarm and add it to the correct

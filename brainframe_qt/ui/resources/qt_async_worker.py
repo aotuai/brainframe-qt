@@ -1,5 +1,5 @@
 import os
-from typing import Callable
+from typing import Callable, Dict, Optional, Tuple
 from threading import Event
 
 from PyQt5.QtCore import Qt, QThread, pyqtSlot
@@ -10,17 +10,21 @@ class QTAsyncWorker(QThread):
 
     def __init__(self,
                  parent: QWidget,
-                 func: Callable, callback: Callable,
-                 *args, **kwargs):
+                 func: Callable, *,
+                 f_args: Tuple = None, f_kwargs: Dict = None,
+                 on_success: Optional[Callable] = None,
+                 on_error: Optional[Callable] = None):
         super().__init__(parent=parent)
 
         self.func = func
-        self.callback = callback
+        self.on_success = on_success
+        self.on_error = on_error
 
-        self.args = args
-        self.kwargs = kwargs
+        self.f_args = f_args or ()
+        self.f_kwargs = f_kwargs or {}
 
-        self.result = None
+        self.err = None
+        self.data = None
         self._terminated = False
 
         # Connect the parent's destructor signal
@@ -38,7 +42,11 @@ class QTAsyncWorker(QThread):
         """
 
     def run(self):
-        self.result = self.func(*self.args, **self.kwargs)
+        try:
+            self.data = self.func(*self.f_args, **self.f_kwargs)
+        except Exception as exc:
+            self.err = exc
+            self.data = None
 
     def start(self, *args, **kwargs):
         # We don't want to use threads when using QtDesigner. If a plugin's
@@ -55,7 +63,12 @@ class QTAsyncWorker(QThread):
     def finish(self):
         if not self._terminated:
             self.finished_event.set()
-            self.callback(self.result)
+
+            if self.err and self.on_error is not None:
+                self.on_error(self.err)
+            elif self.on_success is not None:
+                self.on_success(self.data)
+
         self.deleteLater()
 
     @pyqtSlot()

@@ -155,7 +155,8 @@ class StreamWidget(QGraphicsView):
             # noinspection PyUnresolvedReferences
             self.destroyed.connect(remove_listener)
 
-        QTAsyncWorker(self, get_stream_url, subscribe_to_stream_reader) \
+        QTAsyncWorker(self, get_stream_url,
+                      on_success=subscribe_to_stream_reader) \
             .start()
 
     def hasHeightForWidth(self):
