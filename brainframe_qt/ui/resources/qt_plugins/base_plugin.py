@@ -25,7 +25,7 @@ class BasePlugin(QPyDesignerCustomWidgetPlugin):
         super().__init__()
 
         self.widget_class = cls
-        self.qt_designer_folder = "Dilili" if not qt_designer_folder \
+        self.qt_designer_folder = "Aotu" if not qt_designer_folder \
             else qt_designer_folder
 
         self.widget_name = cls.__name__ if not name else name
