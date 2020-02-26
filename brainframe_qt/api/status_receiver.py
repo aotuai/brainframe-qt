@@ -42,9 +42,12 @@ class StatusReceiver(Thread):
             except (StopIteration,
                     requests.exceptions.RequestException,
                     api_errors.UnknownError) as ex:
+
                 # Catch any 502 errors that happen during server restart
-                if ex is api_errors.UnknownError and ex.status_code != 502:
+                if isinstance(ex, api_errors.UnknownError) \
+                        and ex.status_code != 502:
                     raise
+
                 logging.warning(f"StatusLogger: Could not reach server: {ex}")
 
                 if not self._running:
