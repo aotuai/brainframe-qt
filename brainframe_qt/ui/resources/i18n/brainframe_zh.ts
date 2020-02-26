@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh" sourcelanguage="en">
+<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -160,17 +159,17 @@ Read the manual to learn about the required directory structure.</source>
         <translation>警报名称</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="34"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="35"/>
         <source>{} in region [{}]</source>
         <translation>{} 在区域 [{}] 内</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="62"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
         <source>(Ongoing)</source>
         <translation>(仍在持续)</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="64"/>
         <source>{} to {}</source>
         <translation>{} 至 {}</translation>
     </message>
@@ -183,22 +182,22 @@ Read the manual to learn about the required directory structure.</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="69"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="70"/>
         <source>Plugin Enabled</source>
         <translation>已启用插件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="113"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="114"/>
         <source>The plugin option of name {} has an invalid type of type {}</source>
         <translation>名称为 {} 的插件选项的类型 {} 类型无效</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="147"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="148"/>
         <source>Not all options are valid!</source>
         <translation>并非所有选项都有效！</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="152"/>
+        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="153"/>
         <source>You can&apos;t apply changes if the plugin never got set!</source>
         <translation>如果插件永远未被设置，则无法应用更改！</translation>
     </message>
@@ -206,17 +205,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="67"/>
+        <location filename="../../brainframe_app.py" line="68"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="83"/>
+        <location filename="../../brainframe_app.py" line="93"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="156"/>
+        <location filename="../../brainframe_app.py" line="166"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -685,42 +684,42 @@ Please recheck the entered server address.</source>
 <context>
     <name>StandardError</name>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="44"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="45"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="46"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="47"/>
         <source>Connection to server lost. Client must be closed</source>
         <translation>与服务器的连接丢失。客户必须关闭</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="74"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="75"/>
         <source>Copy to Clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="82"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="83"/>
         <source>Close Client</source>
         <translation>关闭客户端</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="126"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="127"/>
         <source>Error copied to clipboard</source>
         <translation>错误信息已复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="130"/>
+        <location filename="../../dialogs/dialog_actions.py" line="8"/>
         <source>Quitting</source>
         <translation>正在推出</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="51"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="52"/>
         <source>An exception has occurred.</source>
         <translation>发生了一个例外。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="53"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="54"/>
         <source>The client must be closed.</source>
         <translation>必须关闭客户端。</translation>
     </message>
@@ -743,7 +742,7 @@ Please recheck the entered server address.</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="234"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="235"/>
         <source>Select video file</source>
         <translation>选择视频文件</translation>
     </message>
@@ -818,7 +817,7 @@ Please recheck the entered server address.</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="192"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="193"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
@@ -834,7 +833,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamPolygon</name>
     <message>
-        <location filename="../video_items/stream_detection.py" line="66"/>
+        <location filename="../video_items/stream_detection.py" line="67"/>
         <source>Name: </source>
         <translation>名称： </translation>
     </message>
@@ -928,6 +927,24 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>VersionMismatch</name>
+    <message>
+        <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="16"/>
+        <source>Version Mismatch</source>
+        <translation>版本不匹配</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="31"/>
+        <source>Close Client</source>
+        <translation>关闭客户端</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="21"/>
+        <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
+        <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
+    </message>
+</context>
+<context>
     <name>VideoConfiguration</name>
     <message>
         <location filename="../../dialogs/video_configuration/video_configuration.ui" line="14"/>
@@ -982,7 +999,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/video_configuration/video_configuration.ui" line="58"/>
         <source>Show extra data</source>
-        <translation type="unfinished">显示元数据 (Metadata)</translation>
+        <translation>显示元数据 (Metadata)</translation>
     </message>
 </context>
 <context>

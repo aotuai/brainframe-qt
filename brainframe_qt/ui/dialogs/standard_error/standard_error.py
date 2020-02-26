@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 import traceback
 
 from requests.exceptions import ConnectionError
@@ -8,6 +7,8 @@ from requests.exceptions import ConnectionError
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMessageBox, QSizePolicy, \
     QSpacerItem, QTextEdit
+
+from brainframe.client.ui.dialogs import dialog_actions
 
 
 class StandardError(QMessageBox):
@@ -82,7 +83,7 @@ class StandardError(QMessageBox):
             close_button = self.addButton(self.tr("Close Client"),
                                           QMessageBox.DestructiveRole)
             # noinspection PyUnresolvedReferences
-            close_button.clicked.connect(self.close_client)
+            close_button.clicked.connect(dialog_actions.close_client)
             self.setStandardButtons(QMessageBox.NoButton)
 
         else:
@@ -124,17 +125,6 @@ class StandardError(QMessageBox):
         clipboard.setText(clipboard_text)
 
         logging.info(self.tr("Error copied to clipboard"))
-
-    @staticmethod
-    def close_client():
-        logging.info(QApplication.translate("StandardError", "Quitting"))
-
-        # TODO: Why does QApplication.exit not work
-        QApplication.exit(-1)
-
-        # TODO: Should not be necessary but QApplication.exit doesn't work
-        # noinspection PyProtectedMember
-        os._exit(-1)
 
     @staticmethod
     def _is_qt_designer_init_error(exc_obj):
