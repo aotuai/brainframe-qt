@@ -433,8 +433,8 @@ Read the manual to learn about the required directory structure.</source>
     <name>MainWindow</name>
     <message>
         <location filename="../../main_window/main_window.ui" line="20"/>
-        <source>Dilili BrainFrame</source>
-        <translation>Dilili BrainFrame</translation>
+        <source>BrainFrame</source>
+        <translation>BrainFrame</translation>
     </message>
     <message>
         <location filename="../../main_window/main_window.ui" line="77"/>
