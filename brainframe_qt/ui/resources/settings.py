@@ -4,7 +4,7 @@ from PyQt5.QtCore import QSettings
 
 _settings = QSettings(
     # MacOS uses internet domain instead of organization name
-    'dilililabs.com' if sys.platform == 'darwin' else 'dilili-labs',
+    'aotu.ai' if sys.platform == 'darwin' else 'aotu',
     'brainframe')
 
 

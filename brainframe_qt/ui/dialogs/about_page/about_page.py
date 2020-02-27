@@ -29,7 +29,7 @@ class AboutPage(QDialog):
         for license_ in sorted(text_paths.license_dir.iterdir()):
 
             # Create text field to display license
-            tab = QPlainTextEdit(license_.read_text(), self)
+            tab = QPlainTextEdit(license_.read_text(encoding="utf8"), self)
             tab.setReadOnly(True)
 
             # Make text monospace using a fake font with a style hint
