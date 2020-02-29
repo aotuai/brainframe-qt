@@ -19,8 +19,14 @@ class MainWindow(QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-
-        loadUi(qt_ui_paths.main_window_ui, self).show()
+        import brainframe.client.ui.main_window.video_thumbnail_view.video_thumbnail_view as test
+        print("Ayy lmao", test, test.__file__)
+        import os
+        print("plugins path", os.getenv("QT_PLUGIN_PATH"))
+        print("gunna do UI. ", qt_ui_paths.main_window_ui)
+        ui = loadUi(qt_ui_paths.main_window_ui, self)
+        print("UI got load. ", ui)
+        ui.show()
 
         self._init_ui()
 
