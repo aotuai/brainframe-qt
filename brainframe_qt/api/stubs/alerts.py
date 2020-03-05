@@ -1,12 +1,12 @@
+from enum import Flag, auto
 from typing import List, Optional, Tuple
 
 import numpy as np
 import ujson
 
-from brainframe.client.api.stubs.base_stub import BaseStub, DEFAULT_TIMEOUT
+from brainframe.client.api import api_errors, image_utils
 from brainframe.client.api.codecs import Alert
-from brainframe.client.api import image_utils
-from brainframe.client.api import api_errors
+from brainframe.client.api.stubs.base_stub import BaseStub, DEFAULT_TIMEOUT
 
 
 class AlertStubMixin(BaseStub):
@@ -14,14 +14,40 @@ class AlertStubMixin(BaseStub):
     alerts.
     """
 
-    def get_unverified_alerts(self, stream_id,
-                              limit: Optional[int] = None,
-                              offset: Optional[int] = None,
-                              timeout=DEFAULT_TIMEOUT) \
-            -> Tuple[List[Alert], int]:
-        """Gets all alerts that have not been verified or rejected
+    class AlertVerificationQueryType(Flag):
+        UNVERIFIED = auto()
+        TRUE = auto()
+        FALSE = auto()
+        VERIFIED = TRUE | FALSE
+        NO_FALSE_POSITIVES = UNVERIFIED | TRUE
+        NO_TRUE_POSITIVES = UNVERIFIED | FALSE
+        ALL = UNVERIFIED | TRUE | FALSE
 
-        :param stream_id: The stream ID to get unverified alerts for
+        @property
+        def query_repr(self):
+            values = []
+            if self & self.UNVERIFIED:
+                values.append("unverified")
+            if self & self.TRUE:
+                values.append("true")
+            if self & self.FALSE:
+                values.append("false")
+            return ','.join(values)
+
+    def get_alerts(self,
+                   stream_id: Optional[int] = None,
+                   zone_id: Optional[int] = None,
+                   verification: Optional[AlertVerificationQueryType]
+                   = AlertVerificationQueryType.ALL,
+                   limit: Optional[int] = None,
+                   offset: Optional[int] = None,
+                   timeout=DEFAULT_TIMEOUT) \
+            -> Tuple[List[Alert], int]:
+        """Gets all alerts that match a query
+
+        :param stream_id: The stream ID to get alerts for
+        :param zone_id: The zone ID to get alerts for
+        :param verification: The verification states of the alerts
         :param limit: The maximum number of alerts to return. If None, no limit
             will be applied
         :param offset: The offset from the most recent alerts to return. This
@@ -32,11 +58,17 @@ class AlertStubMixin(BaseStub):
         """
         req = "/api/alerts"
 
-        params = {"stream_id": stream_id}
+        params = {}
+        if stream_id is not None:
+            params["stream_id"] = stream_id
+        if zone_id is not None:
+            params["zone_id"] = zone_id
         if limit is not None:
             params["limit"] = limit
         if offset is not None:
             params["offset"] = offset
+        if verification is not self.AlertVerificationQueryType.ALL:
+            params["verification"] = verification.query_repr
 
         data, headers = self._get_json(req, timeout, params=params)
         alerts = [Alert.from_dict(a) for a in data]

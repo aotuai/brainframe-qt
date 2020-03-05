@@ -48,8 +48,10 @@ class AlertLog(QWidget):
 
             try:
                 # Get a page of the 100 most recent alerts
-                server_side_alerts, total_count = api.get_unverified_alerts(
-                    stream_id, limit=100, offset=0)
+                server_side_alerts, total_count = api.get_alerts(
+                    stream_id=stream_id,
+                    limit=100,
+                    offset=0)
             except api_errors.StreamConfigNotFoundError:
                 # Return an empty list. The callback will delete all the
                 # existing Alerts from the UI
