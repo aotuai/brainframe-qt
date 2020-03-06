@@ -26,7 +26,7 @@ class BrainFrameApplication(QApplication):
         self.aboutToQuit.connect(self._shutdown)
 
         self.setWindowIcon(QIcon(str(image_paths.application_icon)))
-        self.setOrganizationDomain('dilililabs.com')
+        self.setOrganizationDomain('aotu.ai')
 
         self._init_translator()
 
