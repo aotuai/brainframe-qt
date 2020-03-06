@@ -37,6 +37,7 @@ class AlertStubMixin(BaseStub):
     def get_alerts(self,
                    stream_id: Optional[int] = None,
                    zone_id: Optional[int] = None,
+                   alarm_id: Optional[int] = None,
                    verification: Optional[AlertVerificationQueryType]
                    = AlertVerificationQueryType.ALL,
                    limit: Optional[int] = None,
@@ -45,8 +46,9 @@ class AlertStubMixin(BaseStub):
             -> Tuple[List[Alert], int]:
         """Gets all alerts that match a query
 
-        :param stream_id: The stream ID to get alerts for
-        :param zone_id: The zone ID to get alerts for
+        :param stream_id: The ID of the stream to get alerts for
+        :param zone_id: The ID of the zone to get alerts for
+        :param alarm_id: The ID of the alarm to get alerts for
         :param verification: The verification states of the alerts
         :param limit: The maximum number of alerts to return. If None, no limit
             will be applied
@@ -63,6 +65,8 @@ class AlertStubMixin(BaseStub):
             params["stream_id"] = stream_id
         if zone_id is not None:
             params["zone_id"] = zone_id
+        if alarm_id is not None:
+            params["alarm_id"] = alarm_id
         if limit is not None:
             params["limit"] = limit
         if offset is not None:
