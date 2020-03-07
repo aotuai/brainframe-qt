@@ -1,5 +1,5 @@
 import os
-from typing import Callable, Dict, Optional, Tuple
+from typing import Callable, Dict, Optional, Tuple, TypeVar
 from threading import Event
 
 from PyQt5.QtCore import Qt, QThread, pyqtSlot
@@ -8,12 +8,14 @@ from PyQt5.QtWidgets import QWidget
 
 class QTAsyncWorker(QThread):
 
+    CallbackT = TypeVar('CallbackT')
+
     def __init__(self,
                  parent: QWidget,
-                 func: Callable, *,
+                 func: Callable[..., CallbackT], *,
                  f_args: Tuple = None, f_kwargs: Dict = None,
-                 on_success: Optional[Callable] = None,
-                 on_error: Optional[Callable] = None):
+                 on_success: Optional[Callable[[CallbackT], None]] = None,
+                 on_error: Optional[Callable[[CallbackT], None]] = None):
         super().__init__(parent=parent)
 
         self.func = func
