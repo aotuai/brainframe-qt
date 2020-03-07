@@ -1,12 +1,12 @@
-from typing import Optional
-
+from typing import List, Optional, Tuple
 import typing
+
 from PyQt5.QtCore import Qt, pyqtProperty
 from PyQt5.QtWidgets import QFrame, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
 from brainframe.client.api import api
-from brainframe.client.api.codecs import StreamConfiguration, Zone, ZoneAlarm
-from brainframe.client.ui.resources import stylesheet_watcher
+from brainframe.client.api.codecs import Alert, ZoneAlarm
+from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
 # TODO: Change to relative imports?
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alarm_preview \
     import AlarmPreview
@@ -30,6 +30,7 @@ class AlarmCardUI(QFrame):
 
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
@@ -70,9 +71,10 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         self.zone_id: Optional[int] = None
         self._zone_name: Optional[str] = None
 
-        self._init_signals()
-
         self.alarm_preview.set_alarm(self.alarm)
+        self._init_alert_log_history()
+
+        self._init_signals()
 
     def _init_signals(self):
         def flip():
@@ -98,37 +100,49 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def iterable_layout(self) -> QLayout:
         return self.alert_log.layout()
 
-    @property
-    def stream_name(self):
-        if not self._stream_name:
-            # TODO: Run in another thread
-            stream: StreamConfiguration \
-                = api.get_stream_configuration(stream_id=self.stream_id)
-            self._stream_name = stream.name
-        return self._stream_name
+    def _init_alert_log_history(self) -> None:
+        QTAsyncWorker(self, api.get_alerts,
+                      f_kwargs={"alarm_id": self.alarm.id},
+                      on_success=self._populate_alert_log,
+                      on_error=self._handle_get_alerts_error) \
+            .start()
 
-    @property
-    def zone_name(self):
-        if self.zone_id is None:
-            return None
-        if not self._zone_name:
-            # TODO: Run in another thread
-            zone: Zone = api.get_zone(zone_id=self.zone_id)
-            self._zone_name = zone.name
-        return self._zone_name
+    def _populate_alert_log(self, alerts_and_count: Tuple[List[Alert], int]):
+        alerts, total_count = alerts_and_count
+        for alert in alerts:
+            self.alert_log.add_alert(alert)
+
+    def _handle_get_alerts_error(self, err):
+        raise err
+
+    # @property
+    # def stream_name(self):
+    #     if not self._stream_name:
+    #         # TODO: Run in another thread
+    #         stream: StreamConfiguration \
+    #             = api.get_stream_configuration(stream_id=self.stream_id)
+    #         self._stream_name = stream.name
+    #     return self._stream_name
+    #
+    # @property
+    # def zone_name(self):
+    #     if self.zone_id is None:
+    #         return None
+    #     if not self._zone_name:
+    #         # TODO: Run in another thread
+    #         zone: Zone = api.get_zone(zone_id=self.zone_id)
+    #         self._zone_name = zone.name
+    #     return self._zone_name
 
 
 if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
 
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QApplication([])
-    app.setAttribute(Qt.AA_EnableHighDpiScaling)
-
-    # window = AlarmCard(None)
 
     window = QWidget()
     window.setAttribute(Qt.WA_StyledBackground, True)
-    # window.setStyleSheet("background-color: lightgrey")
 
     window.setLayout(QVBoxLayout())
 

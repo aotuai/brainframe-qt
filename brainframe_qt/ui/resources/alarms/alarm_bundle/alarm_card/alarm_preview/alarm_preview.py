@@ -21,6 +21,8 @@ class AlarmPreviewUI(QFrame):
 
     def _init_layout(self) -> None:
         layout = QHBoxLayout()
+        layout.setAlignment(Qt.AlignTop)
+
         layout.addWidget(self.alarm_name_label)
         layout.addWidget(self.alert_state_label)
 
@@ -45,6 +47,9 @@ class AlarmPreviewUI(QFrame):
     def _init_style(self) -> None:
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
+
+        # Use a fixed amount of vertical space
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         stylesheet_watcher.watch(self, qt_qss_paths.alarm_preview_qss)
 

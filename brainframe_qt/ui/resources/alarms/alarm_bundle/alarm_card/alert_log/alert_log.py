@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import List, Optional
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
+from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
@@ -26,6 +27,7 @@ class AlertLogUI(QScrollArea):
 
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
 
         self.container_widget.setLayout(layout)
@@ -52,11 +54,12 @@ class AlertLogUI(QScrollArea):
 class AlertLog(AlertLogUI, ClickableMI):
     clicked = pyqtSignal()
 
-    def __init__(self, parent: Optional[QWidget]):
+    def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        for _ in range(10):
-            self.add_alert()
+        self.alert_log_entries: List[AlertLogEntry] = []
 
-    def add_alert(self):
-        self.container_widget.layout().addWidget(AlertLogEntry(self))
+    def add_alert(self, alert: Alert):
+        alert_log_entry = AlertLogEntry(alert, self)
+        self.container_widget.layout().addWidget(alert_log_entry)
+        self.alert_log_entries.append(alert_log_entry)

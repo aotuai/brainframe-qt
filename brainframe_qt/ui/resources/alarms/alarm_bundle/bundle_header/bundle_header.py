@@ -17,7 +17,7 @@ class BundleHeaderUI(QFrame):
         self._init_style()
 
     def _init_bundle_name_label(self) -> QLabel:
-        bundle_name_layout = QLabel("Stream 1", self)
+        bundle_name_layout = QLabel("[Bundle Name]", self)
         bundle_name_layout.setObjectName("bundle_name")
         return bundle_name_layout
 
@@ -39,3 +39,6 @@ class BundleHeader(BundleHeaderUI, ClickableMI):
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
+
+    def set_bundle_name(self, name: str) -> None:
+        self.bundle_name_label.setText(name)

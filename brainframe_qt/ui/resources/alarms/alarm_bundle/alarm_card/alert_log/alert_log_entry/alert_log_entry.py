@@ -1,8 +1,9 @@
 from typing import Optional
 
-from PyQt5.QtCore import Qt, QT_VERSION_STR
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QSizePolicy, QFrame
 
+from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
@@ -61,10 +62,11 @@ class AlertLogEntryUI(QFrame):
         return alert_description_label
 
     def _text_width(self, string: str) -> int:
-        if int(QT_VERSION_STR.split('.')[1]) > 11:
-            raise DeprecationWarning("QFontMetrics is deprecated since Qt 5.11")
-        return self.fontMetrics().width(string)
+        return self.fontMetrics().boundingRect(string).width()
 
 
 class AlertLogEntry(AlertLogEntryUI):
-    ...
+
+    def __init__(self, alert: Alert, parent: QWidget):
+        super().__init__(parent)
+

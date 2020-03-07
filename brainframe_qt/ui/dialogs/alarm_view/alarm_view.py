@@ -2,12 +2,12 @@ import enum
 from enum import Enum
 from typing import Dict, List, Optional, Set
 
-import requests
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLayout, QScrollArea, QVBoxLayout, QWidget
 
 from brainframe.client.api import api
-from brainframe.client.api.codecs import ZoneAlarm
+from brainframe.client.api.codecs import StreamConfiguration, Zone, ZoneAlarm
+from brainframe.client.api.status_receiver import ZoneStatusQueue
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle import AlarmBundle
 from brainframe.client.ui.resources.mixins.data_structure import IterableMI
@@ -64,48 +64,74 @@ class AlarmView(AlarmViewUI, IterableMI):
         super().__init__(parent)
 
         self.bundle_mode = self.BundleType.BY_STREAM
-        self.bundle_map: Dict[str, AlarmBundle] = {}
+        self.bundle_map: Dict[int, AlarmBundle] = {}
+        """{object.id: AlarmBundle}"""
 
-        QTAsyncWorker(self, self.get_alarm_info,
-                      on_success=self.update_alarms,
-                      on_error=self.update_alarms_err) \
-            .start()
+        self.zone_status_queue = typing.cast(ZoneStatusQueue, None)
+
+        self._init_alarm_bundles()
 
     def iterable_layout(self) -> QLayout:
         return self.container_widget.layout()
 
-    def get_alarm_info(self):
+    def _init_alarm_bundles(self):
+        QTAsyncWorker(self, self.get_current_configuration,
+                      on_success=self.populate_view,
+                      on_error=self.handle_get_config_error) \
+            .start()
+
+    def get_current_configuration(self):
+        streams = api.get_stream_configurations()
+        zones = api.get_zones()
         alarms = api.get_zone_alarms()
-        # zones = {zone.id: zone for zone in api.get_zones()}
-        # streams = {stream.id: stream
-        #            for stream in api.get_stream_configurations()}
 
-        return alarms
+        return streams, zones, alarms
 
-    def update_alarms(self, alarms: List[ZoneAlarm]):
+    def populate_view(self, configuration):
+        streams: List[StreamConfiguration]
+        zones: List[Zone]
+        alarms: List[ZoneAlarm]
+        streams, zones, alarms = configuration
 
-        server_alarms = {alarm.id: alarm for alarm in alarms}
-        local_alarms = {alarm.id: alarm for alarm in self.all_alarms}
+        # Create bundles
+        if self.bundle_mode is self.BundleType.BY_STREAM:
+            bundles_to_make = streams
+        elif self.bundle_mode is self.BundleType.BY_ZONE:
+            bundles_to_make = zones
+        else:
+            raise TypeError(f"Unknown bundle type {self.bundle_mode}")
 
-        new_alarm_ids = set(server_alarms).difference(local_alarms)
-        del_alarm_ids = set(local_alarms).difference(server_alarms)
+        for bundle in bundles_to_make:
+            # Create bundle if it does not already exist
+            self.bundle_map.setdefault(bundle.id,
+                                       self.create_bundle(bundle.name))
 
-        new_alarms = {alarm_id: server_alarms[alarm_id]
-                      for alarm_id in new_alarm_ids}
-        del_alarms = {alarm_id: local_alarms[alarm_id]
-                      for alarm_id in del_alarm_ids}
+        # Create alarm cards
+        for alarm in alarms:
+            self.add_alarm(alarm)
 
-        for new_alarm in new_alarms.values():
-            self.add_alarm(new_alarm)
+    def handle_get_config_error(self, err):
+        raise err
 
-        for del_alarm in del_alarms.values():
-            self.remove_alarm(del_alarm)
-
-    def update_alarms_err(self, err: Exception):
-        if not isinstance(err, requests.exceptions.ConnectionError):
-            raise err
-
-        print("ConnectionError: Unable to get alarms")
+    # # For future use
+    # def update_alarms(self, alarms: List[ZoneAlarm]):
+    #
+    #     server_alarms = {alarm.id: alarm for alarm in alarms}
+    #     local_alarms = {alarm.id: alarm for alarm in self.all_alarms}
+    #
+    #     new_alarm_ids = set(server_alarms).difference(local_alarms)
+    #     del_alarm_ids = set(local_alarms).difference(server_alarms)
+    #
+    #     new_alarms = {alarm_id: server_alarms[alarm_id]
+    #                   for alarm_id in new_alarm_ids}
+    #     del_alarms = {alarm_id: local_alarms[alarm_id]
+    #                   for alarm_id in del_alarm_ids}
+    #
+    #     for new_alarm in new_alarms.values():
+    #         self.add_alarm(new_alarm)
+    #
+    #     for del_alarm in del_alarms.values():
+    #         self.remove_alarm(del_alarm)
 
     def add_alarm(self, new_alarm: ZoneAlarm):
         """Create an AlarmCard for an alarm and add it to the correct
@@ -161,9 +187,11 @@ if __name__ == '__main__':
 
     api.set_url("http://localhost")
 
+    # noinspection PyArgumentList
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QApplication([])
-    app.setAttribute(Qt.AA_EnableHighDpiScaling)
 
+    # noinspection PyArgumentList
     window = QWidget()
     window.setAttribute(Qt.WA_StyledBackground, True)
 

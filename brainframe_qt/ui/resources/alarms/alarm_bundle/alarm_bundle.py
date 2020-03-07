@@ -37,7 +37,7 @@ class AlarmBundleUI(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         # Use a fixed amount of vertical space
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
         stylesheet_watcher.watch(self, qt_qss_paths.alarm_bundle_qss)
 
@@ -59,12 +59,14 @@ class AlarmBundleUI(QWidget):
 
 class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
 
-    def __init__(self, bundle_value: str,
+    def __init__(self, bundle_name: str,
                  parent: QWidget):
         super().__init__(parent)
+
         self._init_signals()
 
-        self.bundle_value = bundle_value
+        self.bundle_name = bundle_name
+        self.bundle_header.set_bundle_name(bundle_name)
 
     def __contains__(self, alarm):
         if isinstance(alarm, AlarmCard):
@@ -124,14 +126,17 @@ if __name__ == '__main__':
     import typing
     from PyQt5.QtWidgets import QApplication
 
+    # noinspection PyArgumentList
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QApplication([])
-    app.setAttribute(Qt.AA_EnableHighDpiScaling)
 
+    # noinspection PyArgumentList
     window = QWidget()
     window.setAttribute(Qt.WA_StyledBackground, True)
 
     window.setLayout(QVBoxLayout())
-    window.layout().addWidget(AlarmBundle(typing.cast(QWidget, None)))
+    window.layout().addWidget(AlarmBundle("Bundle name",
+                                          typing.cast(QWidget, None)))
 
     window.show()
 
