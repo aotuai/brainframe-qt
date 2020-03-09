@@ -34,4 +34,3 @@ AlarmCard[alert_active=false] > AlarmPreview {
 AlarmCard[alert_active=false] > AlarmPreview > QLabel {
     color: lightgrey;
 }
-

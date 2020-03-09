@@ -26,6 +26,8 @@ class AlarmBundleUI(QWidget):
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
+        # Start with 0 spacing between BundleHeader and (empty) alarm_container
+        layout.setSpacing(0)
 
         layout.addWidget(self.bundle_header)
         layout.addWidget(self.alarm_container)
@@ -108,6 +110,11 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
                 alarm_card.expanded = False
 
         self.alarm_container.setVisible(now_expanded)
+        if self.iterable_layout().count() == 0:
+            self.layout().setSpacing(0)
+        else:
+            self.layout().setSpacing(-1)
+
         stylesheet_watcher.update_widget(self)
 
     def iterable_layout(self) -> QLayout:
@@ -117,9 +124,17 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
         alarm_card = AlarmCard(alarm, self)
         self.alarm_container.layout().addWidget(alarm_card)
 
+        # Add spacing back between BundleHeader and alarm_container
+        if self.layout().spacing() == 0:
+            self.layout().setSpacing(-1)
+
     def del_alarm_card(self, alarm: ZoneAlarm):
         alarm_card = self[alarm]
         self.alarm_container.layout().removeWidget(alarm_card)
+
+        # Remove between BundleHeader and (empty) alarm_container
+        if self.iterable_layout().count() == 0:
+            self.layout().setSpacing(0)
 
 
 if __name__ == '__main__':
