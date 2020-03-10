@@ -1,4 +1,5 @@
 import sys
+from pathlib import PosixPath
 
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QIcon
@@ -50,7 +51,7 @@ class MainWindow(QMainWindow):
         # Add the Dilili logo to the bottom right
         self.setStyleSheet(
             f"#centralwidget {{"
-            f"    background-image: url({image_paths.background});"
+            f"    background-image: url({image_paths.background.as_posix()});"
             f"    background-position: right bottom;"
             f"    background-repeat: no-repeat;"
             f"}}")

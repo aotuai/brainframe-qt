@@ -265,7 +265,7 @@ class SyncedStreamReader(StreamReader):
             # Check if this is a fresh zone_status or not
             if len(statuses) and last_status_tstamp != status_tstamp:
                 # Catch up to the previous inference frame
-                while buffer[0].tstamp < last_status_tstamp:
+                while len(buffer) and buffer[0].tstamp < last_status_tstamp:
                     buffer.pop(0)
                 last_status_tstamp = status_tstamp
 
