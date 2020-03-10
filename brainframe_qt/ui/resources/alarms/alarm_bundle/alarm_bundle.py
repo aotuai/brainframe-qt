@@ -28,6 +28,7 @@ class AlarmBundleUI(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         # Start with 0 spacing between BundleHeader and (empty) alarm_container
         layout.setSpacing(0)
+        layout.setAlignment(Qt.AlignTop)
 
         layout.addWidget(self.bundle_header)
         layout.addWidget(self.alarm_container)
@@ -49,6 +50,7 @@ class AlarmBundleUI(QWidget):
 
         container_layout = QVBoxLayout()
         container_layout.setContentsMargins(0, 0, 0, 0)
+        container_layout.setAlignment(Qt.AlignTop)
 
         alarm_container.setLayout(container_layout)
 
