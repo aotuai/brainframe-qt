@@ -84,7 +84,7 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
         else:
             return super().__contains__(alarm)
 
-    def __getitem__(self, alarm):
+    def __getitem__(self, alarm: ZoneAlarm) -> AlarmCard:
         if isinstance(alarm, ZoneAlarm):
             search = (alarm_card for alarm_card in self
                       if alarm_card.alarm.id == alarm.id)
