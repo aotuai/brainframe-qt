@@ -66,8 +66,11 @@ class QTAsyncWorker(QThread):
         if not self._terminated:
             self.finished_event.set()
 
-            if self.err and self.on_error is not None:
-                self.on_error(self.err)
+            if self.err:
+                if self.on_error is not None:
+                    self.on_error(self.err)
+                else:
+                    raise self.err
             elif self.on_success is not None:
                 self.on_success(self.data)
 
