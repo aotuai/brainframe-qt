@@ -193,6 +193,7 @@ if __name__ == '__main__':
 
     # noinspection PyArgumentList
     window = QWidget()
+    window.setWindowFlags(Qt.WindowStaysOnTopHint)
     window.resize(QDesktopWidget().availableGeometry(window).size() * .4)
     window.setAttribute(Qt.WA_StyledBackground, True)
 
