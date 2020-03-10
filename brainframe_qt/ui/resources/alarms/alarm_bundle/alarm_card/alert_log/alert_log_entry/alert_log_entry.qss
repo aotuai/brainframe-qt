@@ -1,3 +1,7 @@
 AlertLogEntry > QLabel {
     color: dimgrey;
 }
+
+AlertLogEntry:hover {
+    background: lightgrey;
+}

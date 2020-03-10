@@ -1,12 +1,12 @@
 import pendulum
 from cached_property import cached_property
-from typing import Optional
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QWidget
 
 from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher
+from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
 
@@ -92,14 +92,23 @@ class AlertLogEntryUI(QFrame):
                    for n in range(10))
 
 
-class AlertLogEntry(AlertLogEntryUI):
+class AlertLogEntry(AlertLogEntryUI, ClickableMI):
 
     def __init__(self, alert: Alert, parent: QWidget):
         super().__init__(parent)
 
         self.alert = alert
 
+        self._init_signals()
+
         self._populate_alert_info()
+
+    def _init_signals(self):
+        self.clicked.connect(self.open_alert_info_dialog)
+
+    def open_alert_info_dialog(self):
+        print(f"Opening dialog for {self.alert}")
+        ...
 
     def _populate_alert_info(self) -> None:
         # Alert start time
