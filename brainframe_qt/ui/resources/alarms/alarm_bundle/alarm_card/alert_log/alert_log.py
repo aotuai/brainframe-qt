@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, overload
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
@@ -58,6 +58,32 @@ class AlertLog(AlertLogUI, ClickableMI):
         super().__init__(parent)
 
         self.alert_log_entries: List[AlertLogEntry] = []
+
+    @overload
+    def __getitem__(self, index: int) -> AlertLogEntry:
+        """Returns the AlertLogEntry that at the supplied index"""
+        ...
+
+    @overload
+    def __getitem__(self, alert: Alert) -> AlertLogEntry:
+        """Returns the AlertLogEntry that corresponds to the supplied alert"""
+        ...
+
+    def __getitem__(self, key) -> AlertLogEntry:
+        """Returns the AlertLogEntry for the given key"""
+        if isinstance(key, Alert):
+            alert = key
+            search = (alert_log_entry for alert_log_entry in self
+                      if alert_log_entry.alert.id == alert.id)
+            try:
+                return next(search)
+            except StopIteration as exc:
+                raise KeyError from exc
+        elif isinstance(key, int):
+            index = key
+            return self.container_widget.layout().itemAt(index)
+        else:
+            raise TypeError
 
     def add_alert(self, alert: Alert):
         alert_log_entry = AlertLogEntry(alert, self)
