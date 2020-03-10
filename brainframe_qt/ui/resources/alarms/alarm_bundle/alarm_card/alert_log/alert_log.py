@@ -51,7 +51,7 @@ class AlertLogUI(QScrollArea):
         self.viewport().setObjectName("viewport")
 
 
-class AlertLog(AlertLogUI, ClickableMI):
+class AlertLog(AlertLogUI):
     clicked = pyqtSignal()
 
     def __init__(self, parent: QWidget):

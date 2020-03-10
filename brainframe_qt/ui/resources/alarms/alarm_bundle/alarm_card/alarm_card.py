@@ -77,18 +77,14 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         self._init_signals()
 
     def _init_signals(self):
-        def flip():
-            self.alert_active = not self.alert_active
-
-        self.alert_log.clicked.connect(flip)
         self.alarm_preview.clicked.connect(self.toggle_expansion)
 
     @pyqtProperty(bool)
     def alert_active(self) -> bool:
         return self._alert_active
 
-    @alert_active.setter
-    def alert_active(self, alert_active: bool) -> None:
+    def _set_alert_active(self, alert_active: bool) -> None:
+        """Private setter for alert_active property"""
         self._alert_active = alert_active
         stylesheet_watcher.update_widget(self)
 
@@ -100,6 +96,16 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def iterable_layout(self) -> QLayout:
         return self.alert_log.layout()
 
+    def add_alert(self, alert: Alert):
+        # Additions should always be the most recent alert
+        self._set_alert_active(alert.end_time is None)
+        self.alert_log.add_alert(alert)
+
+    def update_alert(self, alert: Alert):
+        if self.alert_log[0].alert.id == alert.id:
+            self._set_alert_active((alert.end_time is None))
+        self.alert_log.update_alert(alert)
+
     def _init_alert_log_history(self) -> None:
         QTAsyncWorker(self, api.get_alerts,
                       f_kwargs={"alarm_id": self.alarm.id},
@@ -109,8 +115,10 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
 
     def _populate_alert_log(self, alerts_and_count: Tuple[List[Alert], int]):
         alerts, total_count = alerts_and_count
-        for alert in alerts:
-            self.alert_log.add_alert(alert)
+
+        # Populate log oldest -> newest
+        for alert in reversed(alerts):
+            self.add_alert(alert)
 
     def _handle_get_alerts_error(self, err):
         raise err
