@@ -27,6 +27,7 @@ class AlertLogUI(QScrollArea):
 
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
+        layout.setSpacing(0)
         layout.setAlignment(Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
 
