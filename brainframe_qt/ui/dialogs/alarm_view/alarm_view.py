@@ -183,7 +183,7 @@ class AlarmView(AlarmViewUI, IterableMI):
 
 if __name__ == '__main__':
     import typing
-    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtWidgets import QApplication, QDesktopWidget
 
     api.set_url("http://localhost")
 
@@ -193,6 +193,7 @@ if __name__ == '__main__':
 
     # noinspection PyArgumentList
     window = QWidget()
+    window.resize(QDesktopWidget().availableGeometry(window).size() * .4)
     window.setAttribute(Qt.WA_StyledBackground, True)
 
     window.setLayout(QVBoxLayout())
