@@ -14,6 +14,7 @@ class AlarmPreviewUI(QFrame):
         super().__init__(parent)
 
         self.alarm_name_label = self._init_alarm_name_label()
+        self.alarm_location_label = self._init_alarm_location_label()
         self.alert_state_label = self._init_alert_state_label()
 
         self._init_layout()
@@ -24,6 +25,8 @@ class AlarmPreviewUI(QFrame):
         layout.setAlignment(Qt.AlignTop)
 
         layout.addWidget(self.alarm_name_label)
+        layout.addWidget(self.alarm_location_label)
+        layout.addStretch()
         layout.addWidget(self.alert_state_label)
 
         self.setLayout(layout)
@@ -31,16 +34,16 @@ class AlarmPreviewUI(QFrame):
     def _init_alarm_name_label(self) -> QLabel:
         alarm_name_label = QLabel("Alarm Name", self)
         alarm_name_label.setObjectName("alarm_name")
-        alarm_name_label.setSizePolicy(QSizePolicy.Expanding,
-                                       QSizePolicy.Fixed)
-
         return alarm_name_label
+
+    def _init_alarm_location_label(self) -> QLabel:
+        alarm_location_label = QLabel("in [Alarm Location]", self)
+        alarm_location_label.setObjectName("alarm_location")
+        return alarm_location_label
 
     def _init_alert_state_label(self) -> QLabel:
         alert_state_label = QLabel("Inactive", self)
         alert_state_label.setObjectName("alert_state")
-        alert_state_label.setSizePolicy(QSizePolicy.Expanding,
-                                        QSizePolicy.Fixed)
 
         return alert_state_label
 
@@ -61,6 +64,11 @@ class AlarmPreview(AlarmPreviewUI, ClickableMI):
 
         self.alarm = typing.cast(ZoneAlarm, None)
 
-    def set_alarm(self, alarm: ZoneAlarm):
+    def set_alarm(self, alarm: ZoneAlarm, alarm_location: str = None):
         self.alarm = alarm
         self.alarm_name_label.setText(alarm.name)
+
+        if alarm_location is None:
+            self.alarm_location_label.setHidden(True)
+        else:
+            self.alarm_location_label.setText(alarm_location)
