@@ -19,27 +19,16 @@ class AlarmViewUI(QScrollArea):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.container_widget = self._init_container_widget()
+        container_widget = self._init_container_widget()
         self._init_viewport_widget()
 
-        self._init_layout()
-
-        self.setWidget(self.container_widget)
+        self.setWidget(container_widget)
 
         self._init_style()
-
-    def _init_layout(self) -> None:
-        layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-
-        layout.setAlignment(Qt.AlignTop)
-
-        self.container_widget.setLayout(layout)
 
     def _init_style(self) -> None:
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
-        self.container_widget.setAttribute(Qt.WA_StyledBackground, True)
 
         self.setWidgetResizable(True)
 
@@ -48,7 +37,19 @@ class AlarmViewUI(QScrollArea):
     def _init_container_widget(self) -> QWidget:
         container_widget = QWidget(self)
         container_widget.setObjectName("container")
+        container_widget.setAttribute(Qt.WA_StyledBackground, True)
+
+        container_widget.setLayout(self._init_container_widget_layout())
+
         return container_widget
+
+    # noinspection PyMethodMayBeStatic
+    def _init_container_widget_layout(self) -> QVBoxLayout:
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+
+        layout.setAlignment(Qt.AlignTop)
+        return layout
 
     def _init_viewport_widget(self) -> None:
         # Give the viewport a name for the stylesheet
@@ -72,7 +73,7 @@ class AlarmView(AlarmViewUI, IterableMI):
         self._init_alarm_bundles()
 
     def iterable_layout(self) -> QLayout:
-        return self.container_widget.layout()
+        return self.widget().layout()
 
     def _init_alarm_bundles(self):
         QTAsyncWorker(self, self.get_current_configuration,
@@ -150,7 +151,7 @@ class AlarmView(AlarmViewUI, IterableMI):
     def create_bundle(self, bundle_name):
         """Create a new bundle with bundle_name and add it to the view"""
         bundle = AlarmBundle(bundle_name, self)
-        self.container_widget.layout().addWidget(bundle)
+        self.widget().layout().addWidget(bundle)
         self.bundle_map[bundle_name] = bundle
         return bundle
 
