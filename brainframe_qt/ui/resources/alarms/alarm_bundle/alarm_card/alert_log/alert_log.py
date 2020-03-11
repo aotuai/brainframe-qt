@@ -1,6 +1,6 @@
 from typing import List, Optional, overload
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
 from brainframe.client.api.codecs import Alert
@@ -22,6 +22,16 @@ class AlertLogUI(QScrollArea):
         self.setWidget(container_widget)
 
         self._init_style()
+
+    def sizeHint(self):
+        return self.widget().sizeHint()
+
+    def minimumSizeHint(self):
+        """The default QAbstractScrollArea implementation wants to leave room
+        for scrollbars... we don't care about them vertically"""
+        size_hint: QSize = super().minimumSizeHint()
+        size_hint.setHeight(0)
+        return size_hint
 
     def _init_style(self) -> None:
         # Allow background of widget to be styled
@@ -102,6 +112,3 @@ class AlertLog(AlertLogUI, ClickableMI):
         #     alert_log_entry.setAttribute(Qt.WA_WState_Hidden, False)
         # inside .setVisible is what triggers this, but I still don't know why
         alert_log_entry.setVisible(True)
-
-    def sizeHint(self):
-        return self.widget().sizeHint()
