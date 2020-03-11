@@ -28,14 +28,6 @@ class AlarmPreviewUI(QFrame):
 
         self.setLayout(layout)
 
-    def _init_alert_state_label(self) -> QLabel:
-        alert_state_label = QLabel("Inactive", self)
-        alert_state_label.setObjectName("alert_state")
-        alert_state_label.setSizePolicy(QSizePolicy.Expanding,
-                                        QSizePolicy.Fixed)
-
-        return alert_state_label
-
     def _init_alarm_name_label(self) -> QLabel:
         alarm_name_label = QLabel("Alarm Name", self)
         alarm_name_label.setObjectName("alarm_name")
@@ -43,6 +35,14 @@ class AlarmPreviewUI(QFrame):
                                        QSizePolicy.Fixed)
 
         return alarm_name_label
+
+    def _init_alert_state_label(self) -> QLabel:
+        alert_state_label = QLabel("Inactive", self)
+        alert_state_label.setObjectName("alert_state")
+        alert_state_label.setSizePolicy(QSizePolicy.Expanding,
+                                        QSizePolicy.Fixed)
+
+        return alert_state_label
 
     def _init_style(self) -> None:
         # Allow background of widget to be styled
