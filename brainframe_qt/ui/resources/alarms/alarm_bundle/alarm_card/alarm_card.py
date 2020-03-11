@@ -19,7 +19,7 @@ from brainframe.client.ui.resources.paths import qt_qss_paths
 
 class AlarmCardUI(QFrame):
 
-    def __init__(self, parent: Optional[QWidget]):
+    def __init__(self, parent: QWidget):
         super().__init__(parent)
 
         self.alarm_preview = self._init_alarm_preview()
@@ -43,6 +43,10 @@ class AlarmCardUI(QFrame):
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
 
+        # Fixed height will allow cards to be proper size (i.e. expanded
+        # AlertLog
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
         stylesheet_watcher.watch(self, qt_qss_paths.alarm_card_qss)
 
     def _init_alarm_preview(self) -> AlarmPreview:
@@ -51,7 +55,6 @@ class AlarmCardUI(QFrame):
 
     def _init_alert_log(self) -> AlertLog:
         alert_log = AlertLog(self)
-        alert_log.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         return alert_log
 
 
