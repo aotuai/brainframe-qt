@@ -2,7 +2,7 @@ import enum
 from enum import Enum
 from typing import Dict, List, Optional, Set
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QMargins
 from PyQt5.QtWidgets import QLayout, QScrollArea, QVBoxLayout, QWidget
 
 from brainframe.client.api import api
@@ -11,10 +11,11 @@ from brainframe.client.api.status_receiver import ZoneStatusQueue
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle import AlarmBundle
 from brainframe.client.ui.resources.mixins.data_structure import IterableMI
+from brainframe.client.ui.resources.mixins.style import TransientScrollbarMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
 
-class AlarmViewUI(QScrollArea):
+class AlarmViewUI(QScrollArea, TransientScrollbarMI):
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -38,6 +39,12 @@ class AlarmViewUI(QScrollArea):
         container_widget = QWidget(self)
         container_widget.setObjectName("container")
         container_widget.setAttribute(Qt.WA_StyledBackground, True)
+
+        # Leave some space on the right for the scrollbar
+        contents_margins: QMargins = self.contentsMargins()
+        contents_margins.setLeft(50)
+        contents_margins.setRight(50)
+        container_widget.setContentsMargins(contents_margins)
 
         container_widget.setLayout(self._init_container_widget_layout())
 
