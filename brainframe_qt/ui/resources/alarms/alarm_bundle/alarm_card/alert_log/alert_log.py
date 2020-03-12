@@ -6,11 +6,12 @@ from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
+from brainframe.client.ui.resources.mixins.style import TransientScrollbarMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 from .alert_log_entry import AlertLogEntry
 
 
-class AlertLogUI(QScrollArea):
+class AlertLogUI(QScrollArea, TransientScrollbarMI):
 
     def __init__(self, parent: Optional[QWidget]):
         super().__init__(parent)
