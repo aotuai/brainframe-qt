@@ -1,11 +1,13 @@
+import logging
 from typing import Union
 
 import pendulum
-from PyQt5.QtCore import Qt, pyqtProperty, pyqtSlot
-from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QWidget
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QAbstractButton, QButtonGroup, QFrame, \
+    QHBoxLayout, QLabel, QSizePolicy, QWidget
 from cached_property import cached_property
 
-from brainframe.client.api import api
+from brainframe.client.api import api, api_errors
 from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
@@ -21,6 +23,8 @@ class AlertLogEntryUI(QFrame):
         self.start_time_label = self._init_start_time_label()
         self.time_dash_label = self._init_time_dash_label()
         self.end_time_label = self._init_end_time_label()
+
+        self.verification_button_group = self._init_verification_button_group()
         self.verified_true_button = self._init_verified_true_button()
         self.verified_false_button = self._init_verified_false_button()
 
@@ -66,12 +70,20 @@ class AlertLogEntryUI(QFrame):
         end_time_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         return end_time_label
 
+    def _init_verification_button_group(self) -> QButtonGroup:
+        verification_button_group = QButtonGroup(self)
+        verification_button_group.setExclusive(False)
+
+        return verification_button_group
+
     def _init_verified_true_button(self) -> TextIconButton:
         verified_true_button = TextIconButton("✔️", self)
         verified_true_button.setObjectName("verified_true_button")
 
         verified_true_button.setCheckable(True)
         verified_true_button.setFlat(True)
+
+        self.verification_button_group.addButton(verified_true_button)
 
         return verified_true_button
 
@@ -81,6 +93,8 @@ class AlertLogEntryUI(QFrame):
 
         verified_false_button.setFlat(True)
         verified_false_button.setCheckable(True)
+
+        self.verification_button_group.addButton(verified_false_button)
 
         return verified_false_button
 
@@ -97,6 +111,7 @@ class AlertLogEntryUI(QFrame):
 
 
 class AlertLogEntry(AlertLogEntryUI, ClickableMI):
+    alert_verified = pyqtSignal([int, type(None)], [int, bool])
 
     def __init__(self, alert: Alert, parent: QWidget):
         super().__init__(parent)
@@ -109,18 +124,8 @@ class AlertLogEntry(AlertLogEntryUI, ClickableMI):
 
     def _init_signals(self):
         self.clicked.connect(self.open_alert_info_dialog)
-        self.verified_true_button.clicked[bool].connect(
-            self._handle_verification_button_press)
-        self.verified_false_button.clicked[bool].connect(
-            self._handle_verification_button_press)
-
-    @pyqtProperty(bool)
-    def verified(self) -> bool:
-        return True
-
-    @pyqtProperty(bool)
-    def verified_as(self) -> bool:
-        return True
+        self.verification_button_group.buttonClicked.connect(
+            self._alert_verified)
 
     def open_alert_info_dialog(self):
         print(f"Opening dialog for {self.alert}")
@@ -140,11 +145,38 @@ class AlertLogEntry(AlertLogEntryUI, ClickableMI):
         # Alert verification
         self._set_ui_verification(self.alert.verified_as)
 
-    def set_verification(self, verification: Union[None, bool]):
+    def set_alert_verification(self, verification: Union[None, bool]):
         self._set_ui_verification(verification)
+
+        def handle_set_verification_success(_):
+            print("Alert verified properly", verification)
+            self.alert.verified_as = verification
+
+            if verification is None:
+                verified_signal = self.alert_verified[int, type(None)]
+            else:
+                verified_signal = self.alert_verified[int, bool]
+            verified_signal.emit(self.alert.id, verification)
+
+        def handle_set_verification_error(error: api_errors.BaseAPIError):
+
+            logging.warning("An error occurred while attempting to set alert "
+                            "verification value on the BrainFrame server. "
+                            "The value has been reverted on the client.")
+
+            # Reset to the current stored state
+            self._populate_alert_info()
+            if isinstance(error, api_errors.AlertNotFoundError):
+                # Delete entry? Wait for AlertLog to clean up?
+                raise error
+            else:
+                logging.error(error)
+
         QTAsyncWorker(self, api.set_alert_verification,
                       f_args=(self.alert.id,),
-                      f_kwargs={"verified_as": verification}) \
+                      f_kwargs={"verified_as": verification},
+                      on_success=handle_set_verification_success,
+                      on_error=handle_set_verification_error) \
             .start()
 
     def _set_ui_verification(self, verification: Union[None, bool]):
@@ -174,15 +206,20 @@ class AlertLogEntry(AlertLogEntryUI, ClickableMI):
 
         stylesheet_watcher.update_widget(self)
 
-    @pyqtSlot(bool)
-    def _handle_verification_button_press(self, checked: bool):
-        if self.sender() is self.verified_true_button and checked:
+    @pyqtSlot(QAbstractButton)
+    def _alert_verified(self, button: TextIconButton):
+        if button is self.verified_true_button and button.isChecked():
             new_verification = True
-        elif self.sender() is self.verified_false_button and checked:
+            # Clear the other button
+            self.verified_false_button.setChecked(False)
+        elif button is self.verified_false_button and button.isChecked():
             new_verification = False
+            # Clear the other button
+            self.verified_true_button.setChecked(False)
         else:
             new_verification = None
-        self.set_verification(new_verification)
+
+        self.set_alert_verification(new_verification)
 
     def _unix_time_to_tz_time(self, timestamp: float) -> str:
         timezone = "America/Los_Angeles"

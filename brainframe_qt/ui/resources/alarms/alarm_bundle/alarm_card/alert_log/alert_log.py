@@ -1,4 +1,4 @@
-from typing import List, Optional, overload
+from typing import List, Optional, overload, Union
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
@@ -99,6 +99,13 @@ class AlertLog(AlertLogUI, ClickableMI):
 
     def add_alert(self, alert: Alert):
         alert_log_entry = AlertLogEntry(alert, self)
+
+        # Not sure why I need to connect both... but if I don't specify the
+        # overloading, either the signal never fires or the slot is never
+        # called
+        # TODO: Do something?
+        alert_log_entry.alert_verified[int, bool].connect(lambda: None)
+        alert_log_entry.alert_verified[int, type(None)].connect(lambda: None)
 
         self.widget().layout().addWidget(alert_log_entry)
         self.alert_log_entries.append(alert_log_entry)
