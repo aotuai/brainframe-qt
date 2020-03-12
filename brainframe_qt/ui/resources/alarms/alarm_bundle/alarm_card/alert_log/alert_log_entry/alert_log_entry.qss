@@ -5,3 +5,34 @@ AlertLogEntry > QLabel {
 AlertLogEntry:hover {
     background: lightgrey;
 }
+
+AlertLogEntry > TextIconButton {
+    color: dimgrey;
+    font-size: 25px;
+    border: none;
+}
+AlertLogEntry > TextIconButton:checked:hover {
+    color: dimgrey;
+}
+
+/* ###########################################################################
+ * Verified True Button
+ * ######################################################################## */
+
+AlertLogEntry > TextIconButton#verified_true_button:checked {
+    color: limegreen;
+}
+AlertLogEntry > TextIconButton#verified_true_button:!checked:hover {
+    color: limegreen;
+}
+
+/* ###########################################################################
+ * Verified False Button
+ * ######################################################################## */
+
+AlertLogEntry > TextIconButton#verified_false_button:checked {
+    color: indianred;
+}
+AlertLogEntry > TextIconButton#verified_false_button:!checked:hover {
+    color: indianred;
+}
