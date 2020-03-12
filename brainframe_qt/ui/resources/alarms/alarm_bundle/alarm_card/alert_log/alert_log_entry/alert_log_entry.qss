@@ -14,12 +14,20 @@ AlertLogEntry > TextIconButton {
 AlertLogEntry > TextIconButton:checked:hover {
     color: dimgrey;
 }
+AlertLogEntry > TextIconButton:hover {
+    background: darkgrey;
+    border-radius: 4px;
+}
+AlertLogEntry > TextIconButton:focus:pressed {
+    background: grey;
+    border-radius: 4px;
+}
 
 /* ###########################################################################
  * Verified True Button
  * ######################################################################## */
 
-AlertLogEntry > TextIconButton#verified_true_button:checked {
+AlertLogEntry > TextIconButton#verified_true_button:checked:!hover {
     color: limegreen;
 }
 AlertLogEntry > TextIconButton#verified_true_button:!checked:hover {
@@ -30,7 +38,7 @@ AlertLogEntry > TextIconButton#verified_true_button:!checked:hover {
  * Verified False Button
  * ######################################################################## */
 
-AlertLogEntry > TextIconButton#verified_false_button:checked {
+AlertLogEntry > TextIconButton#verified_false_button:checked:!hover {
     color: indianred;
 }
 AlertLogEntry > TextIconButton#verified_false_button:!checked:hover {
