@@ -30,3 +30,5 @@ alarm_preview_qss = alarm_card_dir / "alarm_preview" / "alarm_preview.qss"
 alert_log_qss = alarm_card_dir / "alert_log" / "alert_log.qss"
 alert_log_entry_qss = alarm_card_dir / "alert_log" / "alert_log_entry" \
                       / "alert_log_entry.qss"
+alert_header_qss = alarm_card_dir / "alert_log" / "alert_log_entry" \
+                   / "alert_header" / "alert_header.qss"

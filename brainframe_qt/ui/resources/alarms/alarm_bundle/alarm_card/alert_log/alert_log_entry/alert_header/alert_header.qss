@@ -1,0 +1,46 @@
+AlertHeader > QLabel {
+    color: dimgrey;
+}
+
+AlertHeader:hover {
+    background: lightgrey;
+}
+
+AlertHeader > TextIconButton {
+    color: dimgrey;
+    font-size: 25px;
+    border: none;
+}
+AlertHeader > TextIconButton:checked:hover {
+    color: dimgrey;
+}
+AlertHeader > TextIconButton:hover {
+    background: darkgrey;
+    border-radius: 4px;
+}
+AlertHeader > TextIconButton:focus:pressed {
+    background: grey;
+    border-radius: 4px;
+}
+
+/* ###########################################################################
+ * Verified True Button
+ * ######################################################################## */
+
+AlertHeader > TextIconButton#verified_true_button:checked:!hover {
+    color: limegreen;
+}
+AlertHeader > TextIconButton#verified_true_button:!checked:hover {
+    color: limegreen;
+}
+
+/* ###########################################################################
+ * Verified False Button
+ * ######################################################################## */
+
+AlertHeader > TextIconButton#verified_false_button:checked:!hover {
+    color: indianred;
+}
+AlertHeader > TextIconButton#verified_false_button:!checked:hover {
+    color: indianred;
+}
