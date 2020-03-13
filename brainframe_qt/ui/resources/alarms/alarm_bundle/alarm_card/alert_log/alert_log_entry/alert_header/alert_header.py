@@ -123,7 +123,6 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         self._populate_alert_info()
 
     def _init_signals(self):
-        self.clicked.connect(self.open_alert_info_dialog)
         self.verification_button_group.buttonClicked.connect(
             self._alert_verified)
 
