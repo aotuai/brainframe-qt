@@ -8,8 +8,8 @@ from brainframe.client.api import api
 from brainframe.client.api.codecs import Alert, ZoneAlarm
 from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
 # TODO: Change to relative imports?
-from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alarm_preview \
-    import AlarmPreview
+from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alarm_header \
+    import AlarmHeader
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alert_log \
     import AlertLog
 from brainframe.client.ui.resources.mixins.data_structure import IterableMI
@@ -22,7 +22,7 @@ class AlarmCardUI(QFrame):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.alarm_preview = self._init_alarm_preview()
+        self.alarm_header = self._init_alarm_header()
         self.alert_log = self._init_alert_log()
 
         self._init_layout()
@@ -34,7 +34,7 @@ class AlarmCardUI(QFrame):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        layout.addWidget(self.alarm_preview)
+        layout.addWidget(self.alarm_header)
         layout.addWidget(self.alert_log)
 
         self.setLayout(layout)
@@ -49,9 +49,9 @@ class AlarmCardUI(QFrame):
 
         stylesheet_watcher.watch(self, qt_qss_paths.alarm_card_qss)
 
-    def _init_alarm_preview(self) -> AlarmPreview:
-        alarm_preview = AlarmPreview(self)
-        return alarm_preview
+    def _init_alarm_header(self) -> AlarmHeader:
+        alarm_header = AlarmHeader(self)
+        return alarm_header
 
     def _init_alert_log(self) -> AlertLog:
         alert_log = AlertLog(self)
@@ -74,13 +74,13 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         self.zone_id: Optional[int] = None
         self._zone_name: Optional[str] = None
 
-        self.alarm_preview.set_alarm(self.alarm)
+        self.alarm_header.set_alarm(self.alarm)
         self._init_alert_log_history()
 
         self._init_signals()
 
     def _init_signals(self):
-        self.alarm_preview.clicked.connect(self.toggle_expansion)
+        self.alarm_header.clicked.connect(self.toggle_expansion)
 
     @pyqtProperty(bool)
     def alert_active(self) -> bool:

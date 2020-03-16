@@ -8,7 +8,7 @@ from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
 
-class AlarmPreviewUI(QFrame):
+class AlarmHeaderUI(QFrame):
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -54,10 +54,10 @@ class AlarmPreviewUI(QFrame):
         # Use a fixed amount of vertical space
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
-        stylesheet_watcher.watch(self, qt_qss_paths.alarm_preview_qss)
+        stylesheet_watcher.watch(self, qt_qss_paths.alarm_header_qss)
 
 
-class AlarmPreview(AlarmPreviewUI, ClickableMI):
+class AlarmHeader(AlarmHeaderUI, ClickableMI):
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)

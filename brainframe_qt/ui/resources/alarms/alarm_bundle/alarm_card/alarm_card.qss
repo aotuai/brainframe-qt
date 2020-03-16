@@ -1,14 +1,14 @@
 /* ###########################################################################
  * Expanded Card
  * ######################################################################## */
-AlarmCard[expanded=false] > AlarmPreview {
+AlarmCard[expanded=false] > AlarmHeader {
     border-radius: 4px;
 }
 
 /* ###########################################################################
  * Collapsed Card
  * ######################################################################## */
-AlarmCard[expanded=true] > AlarmPreview {
+AlarmCard[expanded=true] > AlarmHeader {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
@@ -16,21 +16,21 @@ AlarmCard[expanded=true] > AlarmPreview {
 /* ###########################################################################
  * Active Alert
  * ######################################################################## */
-AlarmCard[alert_active=true] > AlarmPreview {
+AlarmCard[alert_active=true] > AlarmHeader {
     background: lightcoral;
 }
 
-AlarmCard[alert_active=true] > AlarmPreview > QLabel {
+AlarmCard[alert_active=true] > AlarmHeader > QLabel {
     color: white;
 }
 
 /* ###########################################################################
  * Inactive Alert
  * ######################################################################## */
-AlarmCard[alert_active=false] > AlarmPreview {
+AlarmCard[alert_active=false] > AlarmHeader {
     background: grey;
 }
 
-AlarmCard[alert_active=false] > AlarmPreview > QLabel {
+AlarmCard[alert_active=false] > AlarmHeader > QLabel {
     color: lightgrey;
 }

@@ -26,7 +26,7 @@ bundle_header_qss = alarm_bundle_dir / "bundle_header" / "bundle_header.qss"
 # AlarmCard
 alarm_card_dir = alarm_bundle_dir / "alarm_card"
 alarm_card_qss = alarm_card_dir / "alarm_card.qss"
-alarm_preview_qss = alarm_card_dir / "alarm_preview" / "alarm_preview.qss"
+alarm_header_qss = alarm_card_dir / "alarm_header" / "alarm_header.qss"
 alert_log_qss = alarm_card_dir / "alert_log" / "alert_log.qss"
 alert_log_entry_qss = alarm_card_dir / "alert_log" / "alert_log_entry" \
                       / "alert_log_entry.qss"

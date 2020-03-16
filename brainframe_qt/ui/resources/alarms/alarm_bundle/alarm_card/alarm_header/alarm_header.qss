@@ -1,7 +1,7 @@
-AlarmPreview > QLabel#alert_state {
+AlarmHeader > QLabel#alert_state {
     qproperty-alignment: 'AlignVCenter | AlignRight';
 }
 
-AlarmPreview > QLabel#alarm_location {
+AlarmHeader > QLabel#alarm_location {
     color: darkgrey;
 }
