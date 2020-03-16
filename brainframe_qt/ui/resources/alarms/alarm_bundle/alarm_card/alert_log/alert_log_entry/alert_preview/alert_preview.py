@@ -77,6 +77,7 @@ class AlertPreview(AlertPreviewUI):
         super().__init__(alert, parent)
 
         self.load_alert_image()
+        self.alert_detail.set_alert(alert)
 
     def load_alert_image(self):
 
