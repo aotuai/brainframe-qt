@@ -15,7 +15,7 @@ class AlertPreviewView(QGraphicsView):
 
     def heightForWidth(self, width: int):
 
-        if self.scene().width == 0:
+        if self.scene().width() == 0:
             return 0
 
         aspect_ratio = self.scene().height() / self.scene().width()
