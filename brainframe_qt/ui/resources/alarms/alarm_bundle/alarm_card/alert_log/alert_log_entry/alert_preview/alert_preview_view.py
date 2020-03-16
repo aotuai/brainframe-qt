@@ -14,11 +14,11 @@ class AlertPreviewView(QGraphicsView):
         return True
 
     def heightForWidth(self, width: int):
-        if width == 0:
+
+        if self.scene().width == 0:
             return 0
 
-        scene = self.scene()
-        aspect_ratio = scene.height() / scene.width()
+        aspect_ratio = self.scene().height() / self.scene().width()
         height = width * aspect_ratio
 
         return height
