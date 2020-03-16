@@ -5,7 +5,6 @@ import pendulum
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QAbstractButton, QButtonGroup, QFrame, \
     QHBoxLayout, QLabel, QSizePolicy, QWidget
-from cached_property import cached_property
 
 from brainframe.client.api import api, api_errors
 from brainframe.client.api.codecs import Alert
@@ -13,6 +12,7 @@ from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
+from brainframe.client.ui.resources.ui_elements.widgets import TimeLabel
 
 
 class AlertHeaderUI(QFrame):
@@ -33,6 +33,7 @@ class AlertHeaderUI(QFrame):
 
     def _init_layout(self) -> None:
         layout = QHBoxLayout()
+        layout.setSpacing(2)
 
         layout.addWidget(self.start_time_label)
         layout.addWidget(self.time_dash_label)
@@ -49,13 +50,10 @@ class AlertHeaderUI(QFrame):
 
         stylesheet_watcher.watch(self, qt_qss_paths.alert_header_qss)
 
-    def _init_start_time_label(self) -> QLabel:
-        start_time_label = QLabel("00:00", self)
+    def _init_start_time_label(self) -> TimeLabel:
+        start_time_label = TimeLabel(self)
         start_time_label.setObjectName("start_time")
 
-        start_time_label.setFixedWidth(self._max_time_width)
-
-        start_time_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         return start_time_label
 
     def _init_time_dash_label(self) -> QLabel:
@@ -63,11 +61,10 @@ class AlertHeaderUI(QFrame):
         time_dash_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         return time_dash_label
 
-    def _init_end_time_label(self) -> QLabel:
-        end_time_label = QLabel("00:00", self)
+    def _init_end_time_label(self) -> TimeLabel:
+        end_time_label = TimeLabel(self)
         end_time_label.setObjectName("end_time")
 
-        end_time_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         return end_time_label
 
     def _init_verification_button_group(self) -> QButtonGroup:
@@ -98,17 +95,6 @@ class AlertHeaderUI(QFrame):
 
         return verified_false_button
 
-    def _text_width(self, text: str) -> int:
-        # https://stackoverflow.com/a/32078341/8134178
-        initial_rect = self.fontMetrics().boundingRect(text)
-        improved_rect = self.fontMetrics().boundingRect(initial_rect, 0, text)
-        return improved_rect.width()
-
-    @cached_property
-    def _max_time_width(self):
-        return max(self._text_width(f"{0}{0}:{0}{0}".format(n))
-                   for n in range(10))
-
 
 class AlertHeader(AlertHeaderUI, ClickableMI):
     alert_verified = pyqtSignal([int, type(None)], [int, bool])
@@ -117,6 +103,7 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         super().__init__(parent)
 
         self.alert = alert
+        self.timezone = "America/Los_Angeles"
 
         self._init_signals()
 
@@ -132,14 +119,16 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
 
     def _populate_alert_info(self) -> None:
         # Alert start time
-        start_time_str = self._unix_time_to_tz_time(self.alert.start_time)
-        self.start_time_label.setText(start_time_str)
+        start_time = pendulum.from_timestamp(self.alert.start_time)
+        self.start_time_label.time = start_time
 
         # Alert end time
-        end_time_str = self._unix_time_to_tz_time(self.alert.end_time) \
-            if self.alert.end_time \
-            else ""
-        self.end_time_label.setText(end_time_str)
+        if self.alert.end_time is not None:
+            end_time = pendulum.from_timestamp(self.alert.end_time)
+            self.end_time_label.time = end_time
+            self.end_time_label.setVisible(True)
+        else:
+            self.end_time_label.setHidden(True)
 
         # Alert verification
         self._set_ui_verification(self.alert.verified_as)
@@ -219,8 +208,3 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
             new_verification = None
 
         self.set_alert_verification(new_verification)
-
-    def _unix_time_to_tz_time(self, timestamp: float) -> str:
-        timezone = "America/Los_Angeles"
-        time = pendulum.from_timestamp(timestamp, tz=timezone)
-        return time.strftime("%I:%M")  # Maybe use `zz` too?

@@ -1,5 +1,9 @@
-AlertHeader > QLabel {
+AlertHeader > TimeLabel > #time_label {
     color: dimgrey;
+}
+
+AlertHeader #timezone_label {
+    color: darkgrey;
 }
 
 AlertHeader:hover {
