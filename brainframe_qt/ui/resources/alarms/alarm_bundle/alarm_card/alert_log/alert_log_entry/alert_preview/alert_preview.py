@@ -5,7 +5,7 @@ import numpy as np
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtWidgets import QFrame, QWidget, QVBoxLayout, QGraphicsPixmapItem
+from PyQt5.QtWidgets import QFrame, QWidget, QHBoxLayout, QGraphicsPixmapItem
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Alert
@@ -13,6 +13,7 @@ from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
 from .alert_preview_view import AlertPreviewView
+from .alert_detail import AlertDetail
 
 
 class AlertPreviewUI(QFrame):
@@ -23,6 +24,7 @@ class AlertPreviewUI(QFrame):
 
         self.image_item = self._init_image_item()
         self.alert_image_view = self._init_alert_image_view()
+        self.alert_detail = self._init_alert_detail()
 
         self._init_layout()
         self._init_style()
@@ -38,11 +40,19 @@ class AlertPreviewUI(QFrame):
 
         return alert_image_view
 
+    def _init_alert_detail(self) -> AlertDetail:
+        return AlertDetail(self)
+
     def _init_layout(self) -> None:
-        layout = QVBoxLayout()
+        layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         layout.addWidget(self.alert_image_view)
+        layout.addWidget(self.alert_detail)
+
+        layout.setStretch(0, 2)
+        layout.setStretch(1, 3)
 
         self.setLayout(layout)
 
