@@ -1,6 +1,9 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent, QTimerEvent
+import logging
+
+from PyQt5.QtCore import QEvent, QTimerEvent, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
+from requests.exceptions import RequestException
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
@@ -67,11 +70,18 @@ class VideoExpandedView(QWidget):
             return
 
         def get_stream_configurations():
-
-            stream_configurations = api.get_stream_configurations()
-            return stream_configurations
+            try:
+                stream_configurations = api.get_stream_configurations()
+                return stream_configurations
+            except RequestException as ex:
+                logging.error(f"Error while polling for stream "
+                              f"configurations: {ex}")
+                return None
 
         def check_deleted(stream_configurations):
+            if stream_configurations is None:
+                # An error occurred while fetching stream configurations
+                return
 
             if self.stream_conf:
                 for stream_conf in stream_configurations:
