@@ -29,6 +29,13 @@ class AlertPreviewUI(QFrame):
         self._init_layout()
         self._init_style()
 
+    def resizeEvent(self, event=None):
+        """Take up entire width using aspect ratio of scene"""
+
+        bounding_rect = self.image_item.boundingRect()
+        self.alert_image_view.scene().setSceneRect(bounding_rect)
+        self.alert_image_view.fitInView(bounding_rect, Qt.KeepAspectRatio)
+
     def _init_image_item(self) -> QGraphicsPixmapItem:
         image_item = QGraphicsPixmapItem(QPixmap())
 
@@ -62,13 +69,6 @@ class AlertPreviewUI(QFrame):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         stylesheet_watcher.watch(self, qt_qss_paths.alert_preview_qss)
-
-    def resizeEvent(self, event=None):
-        """Take up entire width using aspect ratio of scene"""
-
-        bounding_rect = self.image_item.boundingRect()
-        self.alert_image_view.scene().setSceneRect(bounding_rect)
-        self.alert_image_view.fitInView(bounding_rect, Qt.KeepAspectRatio)
 
 
 class AlertPreview(AlertPreviewUI):
