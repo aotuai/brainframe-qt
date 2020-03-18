@@ -1,7 +1,8 @@
 from typing import List, Optional, overload
 
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
+from PyQt5.QtCore import Qt, QSize, QEvent, QMetaObject, QTimer
+from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QSizePolicy, \
+    QApplication
 
 from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher
@@ -99,17 +100,17 @@ class AlertLog(AlertLogUI, ClickableMI):
 
     def add_alert(self, alert: Alert):
         alert_log_entry = AlertLogEntry(alert, self)
-
         self.widget().layout().addWidget(alert_log_entry)
-        self.alert_log_entries.append(alert_log_entry)
 
-        # This is a hack to get the layout to be properly sized.
-        # Without this, at the end of this current event loop cycle,
-        # The AlarmCard's size and sizeHint will be smaller than the AlertLog's
-        # size hint. Calling .updateGeometry _now_ has no effect. Calling it in
-        # a later event loop works fine.
-        #
-        # Note that
-        #     alert_log_entry.setAttribute(Qt.WA_WState_Hidden, False)
-        # inside .setVisible is what triggers this, but I still don't know why
-        alert_log_entry.setVisible(True)
+        # Ok sooo...
+        # Adding a widget to a layout calls QLayout.addChildWidget. This calls
+        # AlertLogEntry.setVisible but using QMetaObject.invokeMethod.
+        # This means that AlertLogEntry.setVisible is only called in the _next_
+        # Event Loop. QWidget.setVisible is where size recalculation is
+        # performed. We _must_ call updateGeometry after our sizeHint changes.
+        # Therefore, I update the geometry using a singleshot, which adds it to
+        # the Event Loop queue and should be performed after the widget has
+        # been set visible (i.e. size is recalculated)
+        QTimer.singleShot(0, self.updateGeometry)
+
+        self.alert_log_entries.append(alert_log_entry)
