@@ -126,25 +126,6 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def _handle_get_alerts_error(self, err):
         raise err
 
-    # @property
-    # def stream_name(self):
-    #     if not self._stream_name:
-    #         # TODO: Run in another thread
-    #         stream: StreamConfiguration \
-    #             = api.get_stream_configuration(stream_id=self.stream_id)
-    #         self._stream_name = stream.name
-    #     return self._stream_name
-    #
-    # @property
-    # def zone_name(self):
-    #     if self.zone_id is None:
-    #         return None
-    #     if not self._zone_name:
-    #         # TODO: Run in another thread
-    #         zone: Zone = api.get_zone(zone_id=self.zone_id)
-    #         self._zone_name = zone.name
-    #     return self._zone_name
-
 
 if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
