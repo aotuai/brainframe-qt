@@ -4,15 +4,14 @@ from typing import Optional
 import numpy as np
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtWidgets import QFrame, QWidget, QHBoxLayout, QGraphicsPixmapItem
+from PyQt5.QtGui import QPixmap, QImage, QResizeEvent
+from PyQt5.QtWidgets import QFrame, QWidget, QHBoxLayout, QLabel
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
-from .alert_preview_view import AlertPreviewView
 from .alert_detail import AlertDetail
 
 
@@ -21,41 +20,32 @@ class AlertPreviewUI(QFrame):
         super().__init__(parent)
 
         self.alert = alert
+        self._image = QImage()
 
-        self.image_item = self._init_image_item()
-        self.alert_image_view = self._init_alert_image_view()
+        self.image_label = self._init_image_label()
         self.alert_detail = self._init_alert_detail()
 
         self._init_layout()
         self._init_style()
 
-    def resizeEvent(self, event=None):
-        """Take up entire width using aspect ratio of scene"""
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self._set_image()
 
-        bounding_rect = self.image_item.boundingRect()
-        self.alert_image_view.scene().setSceneRect(bounding_rect)
-        self.alert_image_view.fitInView(bounding_rect, Qt.KeepAspectRatio)
+    def _init_image_label(self) -> QLabel:
+        image_label = QLabel(self)
 
-    def _init_image_item(self) -> QGraphicsPixmapItem:
-        image_item = QGraphicsPixmapItem(QPixmap())
-
-        return image_item
-
-    def _init_alert_image_view(self) -> AlertPreviewView:
-        alert_image_view = AlertPreviewView(self)
-        alert_image_view.scene().addItem(self.image_item)
-
-        return alert_image_view
+        return image_label
 
     def _init_alert_detail(self) -> AlertDetail:
-        return AlertDetail(self)
+        alert_detail = AlertDetail(self)
+        return alert_detail
 
     def _init_layout(self) -> None:
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        layout.addWidget(self.alert_image_view)
+        layout.addWidget(self.image_label)
         layout.addWidget(self.alert_detail)
 
         layout.setStretch(0, 2)
@@ -69,6 +59,28 @@ class AlertPreviewUI(QFrame):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         stylesheet_watcher.watch(self, qt_qss_paths.alert_preview_qss)
+
+    @property
+    def image(self):
+        return self._image
+
+    @image.setter
+    def image(self, image: QImage):
+        self._image = image
+
+    def _set_image(self):
+        pixmap = QPixmap(self.image)
+        pixmap = pixmap.scaled(self.image_label.size(), Qt.KeepAspectRatioByExpanding)
+        self.image_label.setPixmap(pixmap)
+
+    def setVisible(self, visible: bool) -> None:
+        super().setVisible(visible)
+
+        # Workaround. No idea how to do this gracefully
+        parent = self.parentWidget()
+        while parent:
+            parent.updateGeometry()
+            parent = parent.parentWidget()
 
 
 class AlertPreview(AlertPreviewUI):
@@ -87,17 +99,11 @@ class AlertPreview(AlertPreviewUI):
                 logging.warning("TODO: No frame for alert found")
                 return
 
-            image = self._ndarray_to_qimage(frame)
-            self.set_image(image)
+            self.image = self._ndarray_to_qimage(frame)
 
         QTAsyncWorker(self, api.get_alert_frame, f_args=(self.alert.id,),
                       on_success=handle_frame) \
             .start()
-
-    def set_image(self, image: QImage):
-        self.image_item.setPixmap(QPixmap(image))
-        self.alert_image_view.fitInView(self.image_item.boundingRect(),
-                                        Qt.KeepAspectRatio)
 
     @staticmethod
     def _ndarray_to_qimage(array: np.ndarray) -> QImage:
