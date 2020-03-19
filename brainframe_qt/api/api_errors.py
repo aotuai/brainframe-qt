@@ -353,3 +353,11 @@ class DuplicateUsernameError(BaseAPIError):
 
     def __init__(self, description):
         super().__init__(error_kinds.DUPLICATE_USERNAME, description)
+
+
+@register_error_type
+class AdminMustExistError(BaseAPIError):
+    """There was an attempt to delete the only remaining admin account."""
+
+    def __init__(self, description):
+        super().__init__(error_kinds.ADMIN_MUST_EXIST, description)
