@@ -3,7 +3,7 @@ AlertLog {
     background: white;
 
     /* TODO: Make dynamic if an AlertLogEntry is opened */
-    max-height: 500px;
+    max-height: 400px;
 
     /* Arbitrary */
     border-bottom-left-radius: 4px;
