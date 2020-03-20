@@ -99,10 +99,17 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def iterable_layout(self) -> QLayout:
         return self.alert_log.layout()
 
-    def add_alert(self, alert: Alert):
+    def add_alerts(self, alerts: typing.Iterable[Alert]):
         # Additions should always be the most recent alert
-        self._set_alert_active(alert.end_time is None)
-        self.alert_log.add_alert(alert)
+
+        alert = None
+        for alert in alerts:
+            self.alert_log.add_alert(alert)
+
+        # If any alerts were added
+        if alert:
+            # Set the card active status to the activeness of the final alert
+            self._set_alert_active(alert.end_time is None)
 
     def update_alert(self, alert: Alert):
         if self.alert_log[0].alert.id == alert.id:
@@ -121,8 +128,7 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         alerts, total_count = alerts_and_count
 
         # Populate log oldest -> newest
-        for alert in alerts:
-            self.add_alert(alert)
+        self.add_alerts(alerts)
 
     def _handle_get_alerts_error(self, err):
         raise err
