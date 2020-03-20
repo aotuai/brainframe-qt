@@ -13,6 +13,9 @@ class AlarmHeaderUI(QFrame):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
+        self.active_text = self.tr("Active")
+        self.inactive_text = self.tr("Inactive")
+
         self.alarm_name_label = self._init_alarm_name_label()
         self.alarm_location_label = self._init_alarm_location_label()
         self.alert_state_label = self._init_alert_state_label()
@@ -42,7 +45,7 @@ class AlarmHeaderUI(QFrame):
         return alarm_location_label
 
     def _init_alert_state_label(self) -> QLabel:
-        alert_state_label = QLabel("Inactive", self)
+        alert_state_label = QLabel(self.inactive_text, self)
         alert_state_label.setObjectName("alert_state")
 
         return alert_state_label
@@ -72,3 +75,7 @@ class AlarmHeader(AlarmHeaderUI, ClickableMI):
             self.alarm_location_label.setHidden(True)
         else:
             self.alarm_location_label.setText(alarm_location)
+
+    def set_active(self, active: bool) -> None:
+        text = self.active_text if active else self.inactive_text
+        self.alert_state_label.setText(text)

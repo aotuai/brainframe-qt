@@ -89,6 +89,7 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def _set_alert_active(self, alert_active: bool) -> None:
         """Private setter for alert_active property"""
         self._alert_active = alert_active
+        self.alarm_header.set_active(alert_active)
         stylesheet_watcher.update_widget(self)
 
     def expansion_changed(self):
