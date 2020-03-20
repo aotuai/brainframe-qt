@@ -28,7 +28,7 @@ class AlertLogEntryUI(QFrame):
         return alert_header
 
     def _init_alert_preview(self) -> AlertPreview:
-        alert_preview = AlertPreview(self.alert, self)
+        alert_preview = AlertPreview(self)
 
         return alert_preview
 
@@ -55,6 +55,8 @@ class AlertLogEntry(AlertLogEntryUI, ExpandableMI):
     def __init__(self, alert: Alert, parent: QWidget):
         super().__init__(alert, parent)
 
+        self.alert_preview.set_alert(alert)
+
         self._init_signals()
 
         self.expanded = False
@@ -74,5 +76,9 @@ class AlertLogEntry(AlertLogEntryUI, ExpandableMI):
     def expansion_changed(self):
         # noinspection PyPropertyAccess
         self.alert_preview.setVisible(self.expanded)
+
+        # noinspection PyPropertyAccess
+        if self.expanded:
+            self.alert_preview.populate_from_server()
 
         stylesheet_watcher.update_widget(self)

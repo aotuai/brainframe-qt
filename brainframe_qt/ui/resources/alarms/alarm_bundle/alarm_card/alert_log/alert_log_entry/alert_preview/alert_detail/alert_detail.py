@@ -1,9 +1,10 @@
-from typing import List, Union
+import typing
+from typing import List, Union, Tuple
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QSizePolicy
 
-from brainframe.client.api import api, api_errors
+from brainframe.client.api import api
 from brainframe.client.api.codecs import Alert, ZoneAlarm, \
     ZoneAlarmCountCondition, ZoneAlarmRateCondition, Zone
 from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
@@ -61,27 +62,31 @@ class AlertDetail(AlertDetailUI):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-    def set_alert(self, alert: Alert):
+        self.alert = typing.cast(Alert, None)
 
-        def get_alert_info():
-            alarm = api.get_zone_alarm(alert.alarm_id)
+    def populate_from_server(self):
+
+        if not self.alert:
+            return
+
+        def get_alert_info() -> Tuple[ZoneAlarm, Zone]:
+            alarm = api.get_zone_alarm(self.alert.alarm_id)
             zone = api.get_zone(alarm.zone_id)
 
-            return alert, alarm, zone
+            return alarm, zone
 
         def handle_api_error(error):
             raise error
 
         QTAsyncWorker(self, get_alert_info,
-                      on_success=self.set_alert_info,
+                      on_success=self.display_alert_info,
                       on_error=handle_api_error) \
             .start()
 
-    def set_alert_info(self, alert_alarm_zone):
-        alert: Alert
+    def display_alert_info(self, alarm_zone):
         alarm: ZoneAlarm
         zone: Zone
-        alert, alarm, zone = alert_alarm_zone
+        alarm, zone = alarm_zone
 
         # Create text for alert
         description = ""
@@ -94,3 +99,6 @@ class AlertDetail(AlertDetailUI):
             description += text
 
         self.description = description
+
+    def set_alert(self, alert: Alert) -> None:
+        self.alert = alert
