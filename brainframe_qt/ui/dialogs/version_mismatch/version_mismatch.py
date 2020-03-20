@@ -25,7 +25,7 @@ class VersionMismatch(QMessageBox):
         message = message.format(
             server_version=server_version,
             client_version=client_version,
-            download_url="https://dilililabs.com/docs/downloads/")
+            download_url="aotu.ai/docs/downloads/")
         self.setText(message)
 
         close_button = self.addButton(self.tr("Close Client"),

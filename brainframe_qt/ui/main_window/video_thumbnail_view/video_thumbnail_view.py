@@ -1,10 +1,11 @@
+import logging
 from typing import Dict
 
 # noinspection PyUnresolvedReferences
-from PyQt5.QtCore import pyqtProperty
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QTimerEvent
+from PyQt5.QtCore import QTimerEvent, pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
+from requests.exceptions import RequestException
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
@@ -45,11 +46,18 @@ class VideoThumbnailView(QWidget):
     def timerEvent(self, timer_event: QTimerEvent):
 
         def func():
-
-            stream_configurations = api.get_stream_configurations()
-            return stream_configurations
+            try:
+                stream_configurations = api.get_stream_configurations()
+                return stream_configurations
+            except RequestException as ex:
+                logging.error(f"Error while polling for stream "
+                              f"configurations: {ex}")
+                return None
 
         def callback(stream_configurations):
+            if stream_configurations is None:
+                # An error occurred while fetching stream configurations
+                return
 
             received_stream_ids = set()
 

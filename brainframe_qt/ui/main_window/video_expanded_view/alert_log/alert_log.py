@@ -1,5 +1,7 @@
 from typing import Dict, Iterable, List, Tuple
+import logging
 
+from requests.exceptions import RequestException
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.uic import loadUi
@@ -56,6 +58,9 @@ class AlertLog(QWidget):
                 # Return an empty list. The callback will delete all the
                 # existing Alerts from the UI
                 return []
+            except RequestException as ex:
+                logging.error(f"While polling for alerts: {ex}")
+                return None
 
             # We want it oldest to newest
             unverified_alerts = server_side_alerts[::-1]
@@ -67,6 +72,10 @@ class AlertLog(QWidget):
             # was blocked
             if self.stream_id != stream_id:
                 # Just wait for the next run of the timer
+                return
+
+            if alerts is None:
+                # An error occurred while fetching alerts
                 return
 
             # If no change to stream_id, then use the results from the API
@@ -84,6 +93,10 @@ class AlertLog(QWidget):
                 zones: List[Zone] = api.get_zones(self.stream_id)
             except api_errors.StreamConfigNotFoundError:
                 return None
+            except RequestException as ex:
+                logging.error(f"Error while getting alarms and zones for "
+                              f"alerts: {ex}")
+                return None
             alarm_dict = {alarm.id: alarm for alarm in alarms}
             zone_dict = {zone.id: zone for zone in zones}
 
@@ -94,7 +107,8 @@ class AlertLog(QWidget):
 
             if alarms_and_zones is None:
                 # This occurs when a stream was deleted while the api call
-                # for getting alarms/zones was being called.
+                # for getting alarms/zones was being called, or if a connection
+                # error occurred.
                 # We're relying on sync_alerts_with_server to clean up
                 # the Alert Log
                 return None

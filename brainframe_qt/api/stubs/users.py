@@ -44,3 +44,12 @@ class UserStubMixin(BaseStub):
         data = self._post_codec(req, timeout, user)
 
         return User.from_dict(data)
+
+    def delete_user(self, user_id, timeout=DEFAULT_TIMEOUT):
+        """Deletes a user. Only admin users may make this request.
+
+        :param user_id: The ID of the user to delete
+        :param timeout: The timeout to use for this request
+        """
+        req = f"/api/users/{user_id}"
+        self._delete(req, timeout)
