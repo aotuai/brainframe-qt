@@ -112,7 +112,8 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
 
     def _init_alert_log_history(self) -> None:
         QTAsyncWorker(self, api.get_alerts,
-                      f_kwargs={"alarm_id": self.alarm.id},
+                      f_kwargs={"alarm_id": self.alarm.id, "limit": 50,
+                                "offset": 0},
                       on_success=self._populate_alert_log,
                       on_error=self._handle_get_alerts_error) \
             .start()
