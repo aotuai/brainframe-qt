@@ -8,10 +8,12 @@ from brainframe.client.ui.resources.paths import image_paths
 
 class _ImageLabelUI(QLabel):
 
+    loading_image = QImage(str(image_paths.error))
+
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self._image = QImage(str(image_paths.error))
+        self._image = self.loading_image
         self._update_pixmap()
 
         # Without this set, the image will grow but not shrink
