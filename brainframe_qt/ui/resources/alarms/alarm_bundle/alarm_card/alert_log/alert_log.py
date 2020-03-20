@@ -1,8 +1,8 @@
 from typing import List, Optional, overload
+import typing
 
-from PyQt5.QtCore import Qt, QSize, QEvent, QMetaObject, QTimer
-from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QSizePolicy, \
-    QApplication
+from PyQt5.QtCore import Qt, QSize, QTimer
+from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
 from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher
@@ -94,7 +94,8 @@ class AlertLog(AlertLogUI, ClickableMI):
                 raise KeyError from exc
         elif isinstance(key, int):
             index = key
-            return self.widget().layout().itemAt(index).widget()
+            widget = self.widget().layout().itemAt(index).widget()
+            return typing.cast(AlertLogEntry, widget)
         else:
             raise TypeError
 
