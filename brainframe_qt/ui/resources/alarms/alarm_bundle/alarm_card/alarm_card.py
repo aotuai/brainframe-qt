@@ -121,7 +121,7 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         alerts, total_count = alerts_and_count
 
         # Populate log oldest -> newest
-        for alert in reversed(alerts):
+        for alert in alerts:
             self.add_alert(alert)
 
     def _handle_get_alerts_error(self, err):
