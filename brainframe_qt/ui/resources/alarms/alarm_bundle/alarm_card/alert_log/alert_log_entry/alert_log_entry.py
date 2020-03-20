@@ -73,12 +73,12 @@ class AlertLogEntry(AlertLogEntryUI, ExpandableMI):
         self.alert_header.alert_verified[int, bool].connect(lambda: None)
         self.alert_header.alert_verified[int, type(None)].connect(lambda: None)
 
-    def expansion_changed(self):
+    def expand(self, expanding: bool):
         # noinspection PyPropertyAccess
-        self.alert_preview.setVisible(self.expanded)
+        self.alert_preview.setVisible(expanding)
 
         # noinspection PyPropertyAccess
-        if self.expanded:
+        if expanding:
             self.alert_preview.populate_from_server()
 
         stylesheet_watcher.update_widget(self)

@@ -100,18 +100,15 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
     def _init_signals(self):
         self.bundle_header.clicked.connect(self.toggle_expansion)
 
-    def expansion_changed(self):
-
-        # noinspection PyPropertyAccess
-        now_expanded = self.expanded
+    def expand(self, expanding: bool):
 
         # Collapse all AlarmCards before collapsing the bundle
-        if not now_expanded:
+        if not expanding:
             for alarm_card in self:
                 alarm_card: AlarmCard
                 alarm_card.expanded = False
 
-        self.alarm_container.setVisible(now_expanded)
+        self.alarm_container.setVisible(expanding)
         if self.iterable_layout().count() == 0:
             self.layout().setSpacing(0)
         else:

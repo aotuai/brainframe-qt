@@ -103,6 +103,11 @@ class AlertLog(AlertLogUI, ClickableMI):
         alert_log_entry = AlertLogEntry(alert, self)
         self.widget().layout().addWidget(alert_log_entry)
 
+        # When an AlertLogEntry is expanded, make sure it and its contents are
+        # visible in the ScrollArea
+        alert_log_entry.expansion_changed.connect(
+            self._ensure_alert_log_entry_visible)
+
         # Ok sooo...
         # Adding a widget to a layout calls QLayout.addChildWidget. This calls
         # AlertLogEntry.setVisible but using QMetaObject.invokeMethod.
@@ -115,3 +120,13 @@ class AlertLog(AlertLogUI, ClickableMI):
         QTimer.singleShot(0, self.updateGeometry)
 
         self.alert_log_entries.append(alert_log_entry)
+
+    def _ensure_alert_log_entry_visible(self, expanded: bool):
+
+        if not expanded:
+            return
+
+        alert_log_entry = typing.cast(AlertLogEntry, self.sender())
+
+        # https://stackoverflow.com/a/52450450/8134178
+        QTimer.singleShot(0, lambda: self.ensureWidgetVisible(alert_log_entry))

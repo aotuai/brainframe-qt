@@ -92,9 +92,8 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         self.alarm_header.set_active(alert_active)
         stylesheet_watcher.update_widget(self)
 
-    def expansion_changed(self):
-        # noinspection PyPropertyAccess
-        self.alert_log.setVisible(self.expanded)
+    def expand(self, expanding: bool):
+        self.alert_log.setVisible(expanding)
         stylesheet_watcher.update_widget(self)
 
     def iterable_layout(self) -> QLayout:
