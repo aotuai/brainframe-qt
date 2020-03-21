@@ -1,24 +1,26 @@
-import logging
 import typing
 from typing import Optional
 
 import numpy as np
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QResizeEvent
-from PyQt5.QtWidgets import QFrame, QWidget, QHBoxLayout, QSizePolicy
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import QFrame, QHBoxLayout, QWidget
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Alert
-from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
-from brainframe.client.ui.resources.paths import qt_qss_paths
-
+from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alert_log \
     .alert_log_entry.alert_preview.alert_detail import AlertDetail
+from brainframe.client.ui.resources.paths import image_paths, qt_qss_paths
 from brainframe.client.ui.resources.ui_elements.widgets import ImageLabel
 
 
 class AlertPreviewUI(QFrame):
+
+    _loading_image = typing.cast(QPixmap, None)
+    _no_image_available_image = typing.cast(QPixmap, None)
+
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
@@ -48,7 +50,6 @@ class AlertPreviewUI(QFrame):
         self.setLayout(layout)
 
     def _init_style(self) -> None:
-
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
 
@@ -62,6 +63,22 @@ class AlertPreviewUI(QFrame):
         while parent:
             parent.updateGeometry()
             parent = parent.parentWidget()
+
+    @classmethod
+    def _get_loading_image(cls):
+        """Cache the loading SVG as a 1920x1080 pixmap"""
+        if cls._loading_image is None:
+            icon = QIcon(str(image_paths.loading_image))
+            cls._loading_image = icon.pixmap(1920, 1080)
+        return cls._loading_image
+
+    @classmethod
+    def _get_no_image_available_image(cls):
+        """Cache the no image available SVG as a 1920x1080 pixmap"""
+        if cls._no_image_available_image is None:
+            icon = QIcon(str(image_paths.no_image_available))
+            cls._no_image_available_image = icon.pixmap(1920, 1080)
+        return cls._no_image_available_image
 
 
 class AlertPreview(AlertPreviewUI):
@@ -83,14 +100,12 @@ class AlertPreview(AlertPreviewUI):
 
         def handle_frame(frame: Optional[np.ndarray]):
 
-            self.got_image_from_server = True
-
             if frame is None:
-                # TODO: Handle a missing frame
-                logging.warning("TODO: No frame for alert found")
-                return
+                self.image_label.pixmap_ = self._get_no_image_available_image()
+            else:
+                self.image_label.set_ndarray(frame)
 
-            self.image_label.set_ndarray(frame)
+        self.image_label.pixmap_ = self._get_loading_image()
 
         QTAsyncWorker(self, api.get_alert_frame, f_args=(self.alert.id,),
                       on_success=handle_frame) \

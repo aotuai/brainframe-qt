@@ -4,6 +4,8 @@ image_dir = route_path("brainframe", "client", "ui", "resources", "images")
 
 
 # Images
+loading_image             = route_path(image_dir, "loading_image.svg"       )
+no_image_available        = route_path(image_dir, "no_image_available.svg"  )
 connecting_to_stream      = route_path(image_dir, "connecting_to_stream.png")
 connection_lost           = route_path(image_dir, "connection_lost.png"     )
 splash_screen             = route_path(image_dir, "splash_screen.png"       )
