@@ -113,8 +113,9 @@ class StreamWidget(QGraphicsView):
         if not stream_conf:
             self._clear_current_stream_reader()
 
-            # User should never see this
-            self.handle_stream_error()
+            # Typically a user shouldn't see this, but sometimes the client is
+            # laggy in closing the widget, so we don't use the error message
+            self.handle_stream_closed()
             return
 
         def get_stream_url():
