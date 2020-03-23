@@ -124,8 +124,8 @@ class SyncedStreamReader(StreamReader):
     def add_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
             self.stream_listeners.add(listener)
-            if not self._stream_reader.status.STREAMING:
-                self.alert_status_listeners(self._stream_reader.status)
+            if self.status is not StreamStatus.STREAMING:
+                self.alert_status_listeners(self.status)
             elif self.latest_processed_frame is not None:
                 self.alert_frame_listeners()
             else:
