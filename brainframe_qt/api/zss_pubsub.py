@@ -1,5 +1,6 @@
+import logging
 from enum import Enum, auto
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List, Set, Union
 
 from brainframe.client.api.codecs import Alert, StreamConfiguration, Zone, \
     ZoneAlarm
@@ -21,15 +22,16 @@ class ZSSTopic(Enum):
     ALERTS = auto()
 
 
-class _Subscription:
+class Subscription:
 
-    def __init__(self, callback: Callable, filters=None):
+    def __init__(self, topic: ZSSTopic, callback: Callable, filters=None):
+        self.topic: ZSSTopic = topic
         self.callback: Callable = callback
         self.filters: Dict[str, int] = filters or {}
 
     def __repr__(self):
         return f"zss_pubsub.Subscription(" \
-               f"{self.callback.__qualname__}, {self.filters}" \
+               f"{self.topic}, {self.callback.__qualname__}, {self.filters}" \
                f")"
 
     def filter_data(self, datum: ZSSDatumType):
@@ -75,11 +77,11 @@ class _ZSSPubSub:
     def __init__(self):
         super().__init__()
 
-        self.subscriptions: Dict[ZSSTopic, List[_Subscription]] = {
-            ZSSTopic.STREAMS: [],
-            ZSSTopic.ZONES: [],
-            ZSSTopic.ALARMS: [],
-            ZSSTopic.ALERTS: []
+        self.subscriptions: Dict[ZSSTopic, Set[Subscription]] = {
+            ZSSTopic.STREAMS: set(),
+            ZSSTopic.ZONES: set(),
+            ZSSTopic.ALARMS: set(),
+            ZSSTopic.ALERTS: set()
         }
 
     def publish(self, message: Dict[ZSSTopic, ZSSDataType]):
@@ -90,38 +92,56 @@ class _ZSSPubSub:
             for subscriber in subscribers:
                 data_to_publish = list(filter(subscriber.filter_data, data))
                 if len(data_to_publish) > 0:
-                    subscriber.callback(data_to_publish)
+                    try:
+                        subscriber.callback(data_to_publish)
+                    except RuntimeError as exc:
+                        if "has been deleted" in str(exc):
+                            self.unsubscribe(subscriber)
 
-    def subscribe(self, topic, callback: Callable, filters=None):
-        self.subscriptions[topic].append(_Subscription(callback, filters))
+                            func_name = subscriber.callback.__qualname__
+                            msg = f"Pubsub callback {func_name} was called " \
+                                  f"but attempted to access a deleted " \
+                                  f"QObject:\n\t{exc}"
+                            logging.error(msg)
 
-    def subscribe_streams(self, callback: Callable):
-        self.subscribe(ZSSTopic.STREAMS, callback)
+    def subscribe(self, topic, callback: Callable, filters=None) \
+            -> Subscription:
 
-    def subscribe_zones(self, callback: Callable, stream_id=any):
+        subscription = Subscription(topic, callback, filters)
+        self.subscriptions[topic].add(subscription)
+        return subscription
+
+    def subscribe_streams(self, callback: Callable) -> Subscription:
+        return self.subscribe(ZSSTopic.STREAMS, callback)
+
+    def subscribe_zones(self, callback: Callable, stream_id=any) \
+            -> Subscription:
 
         filters = {"stream_id": stream_id}
 
-        self.subscribe(ZSSTopic.ZONES, callback,
-                       filters=filters)
+        return self.subscribe(ZSSTopic.ZONES, callback, filters=filters)
 
-    def subscribe_alarms(self, callback: Callable, stream_id=any, zone_id=any):
+    def subscribe_alarms(self, callback: Callable,
+                         stream_id=any, zone_id=any) \
+            -> Subscription:
 
         filters = {"stream_id": stream_id,
                    "zone_id": zone_id}
 
-        self.subscribe(ZSSTopic.ALARMS, callback,
-                       filters=filters)
+        return self.subscribe(ZSSTopic.ALARMS, callback, filters=filters)
 
     def subscribe_alerts(self, callback: Callable,
-                         stream_id=any, zone_id=any, alarm_id=any):
+                         stream_id=any, zone_id=any, alarm_id=any) \
+            -> Subscription:
 
         filters = {"stream_id": stream_id,
                    "zone_id": zone_id,
                    "alarm_id": alarm_id}
 
-        self.subscribe(ZSSTopic.ALERTS, callback,
-                       filters=filters)
+        return self.subscribe(ZSSTopic.ALERTS, callback, filters=filters)
+
+    def unsubscribe(self, subscription: Subscription) -> None:
+        self.subscriptions[subscription.topic].remove(subscription)
 
 
 # noinspection SpellCheckingInspection

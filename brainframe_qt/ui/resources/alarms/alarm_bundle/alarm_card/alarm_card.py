@@ -1,8 +1,7 @@
 import typing
 from typing import List, Optional, Tuple
 
-from PyQt5.QtCore import QMetaObject, Q_ARG, Qt, pyqtProperty, pyqtSignal, \
-    pyqtSlot
+from PyQt5.QtCore import QMetaObject, Q_ARG, Qt, pyqtProperty, pyqtSlot
 from PyQt5.QtWidgets import QFrame, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
 from brainframe.client.api import api
@@ -84,14 +83,10 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def _init_signals(self):
         self.alarm_header.clicked.connect(self.toggle_expansion)
 
-        print("############### Connecting")
-        zss_publisher.subscribe_alerts(self._handle_alert_stream,
-                                       alarm_id=self.alarm.id)
-
-        # TODO: Unsubscribe
-        # self.destroyed.connect(
-        #     zss_publisher.unsubscribe
-        # )
+        subscription = zss_publisher.subscribe_alerts(
+            self._handle_alert_stream,
+            alarm_id=self.alarm.id)
+        self.destroyed.connect(lambda: zss_publisher.unsubscribe(subscription))
 
     @pyqtProperty(bool)
     def alert_active(self) -> bool:
@@ -148,8 +143,6 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def update_alerts(self, alerts: List[Alert]):
         new_alerts: List[Alert] = []
 
-        print("################")
-
         # Update existing alerts
         for alert in alerts:
             if self.alert_log.contains_alert(alert):
@@ -160,12 +153,10 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
                 new_alerts.append(alert)
 
         # Add new ones
-        # print(f"Adding {new_alerts}")
         self.add_alerts(new_alerts)
 
     def _handle_alert_stream(self, alerts: List[Alert]):
         """Move the alert stream information to the UI Thread"""
-        print("Got alert message:", alerts)
         QMetaObject.invokeMethod(self, "update_alerts",
                                  Qt.QueuedConnection,
                                  Q_ARG("PyQt_PyObject", alerts))
