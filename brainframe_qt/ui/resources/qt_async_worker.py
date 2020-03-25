@@ -2,8 +2,7 @@ import os
 from typing import Callable, Dict, Optional, Tuple, TypeVar
 from threading import Event
 
-from PyQt5.QtCore import Qt, QThread, pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import Qt, QThread, pyqtSlot, QObject
 
 
 class QTAsyncWorker(QThread):
@@ -11,7 +10,7 @@ class QTAsyncWorker(QThread):
     CallbackT = TypeVar('CallbackT')
 
     def __init__(self,
-                 parent: QWidget,
+                 parent: QObject,
                  func: Callable[..., CallbackT], *,
                  f_args: Tuple = None, f_kwargs: Dict = None,
                  on_success: Optional[Callable[[CallbackT], None]] = None,
@@ -55,6 +54,7 @@ class QTAsyncWorker(QThread):
         # __init__ contains a QThread that is not complete by the time the
         # __init__ method finishes, it will crash
         # This environment variable is only set when running QtDesigner
+        # noinspection SpellCheckingInspection
         if os.getenv("PYQTDESIGNERPATH") is not None:
             self.run()
             # noinspection PyUnresolvedReferences
