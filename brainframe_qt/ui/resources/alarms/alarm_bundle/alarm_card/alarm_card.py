@@ -109,7 +109,7 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         # Additions should always be the most recent alert
 
         alert = None
-        for alert in alerts:
+        for alert in alerts[::-1]:
             self.alert_log.add_alert(alert)
 
         # If any alerts were added

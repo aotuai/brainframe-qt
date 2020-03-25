@@ -105,7 +105,10 @@ class AlertLog(AlertLogUI, ClickableMI):
 
     def add_alert(self, alert: Alert):
         alert_log_entry = AlertLogEntry(alert, self)
-        self.widget().layout().addWidget(alert_log_entry)
+
+        # Add widget to the top of the layout
+        layout = typing.cast(QVBoxLayout, self.widget().layout())
+        layout.insertWidget(0, alert_log_entry)
 
         # When an AlertLogEntry is expanded, make sure it and its contents are
         # visible in the ScrollArea
