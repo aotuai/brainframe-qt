@@ -94,6 +94,10 @@ class AlertLog(AlertLogUI, ClickableMI):
                 raise KeyError from exc
         elif isinstance(key, int):
             index = key
+
+            if index >= self.widget().layout().count():
+                raise IndexError
+
             widget = self.widget().layout().itemAt(index).widget()
             return typing.cast(AlertLogEntry, widget)
         else:
@@ -130,3 +134,9 @@ class AlertLog(AlertLogUI, ClickableMI):
 
         # https://stackoverflow.com/a/52450450/8134178
         QTimer.singleShot(0, lambda: self.ensureWidgetVisible(alert_log_entry))
+
+    def contains_alert(self, alert: Alert):
+        for alert_log_entry in self.alert_log_entries:
+            if alert_log_entry.alert.id == alert.id:
+                return True
+        return False
