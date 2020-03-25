@@ -55,6 +55,8 @@ class AlertLogEntry(AlertLogEntryUI, ExpandableMI):
     def __init__(self, alert: Alert, parent: QWidget):
         super().__init__(alert, parent)
 
+        self.populated_from_server = False
+
         self.alert_preview.set_alert(alert)
 
         self._init_signals()
@@ -66,19 +68,11 @@ class AlertLogEntry(AlertLogEntryUI, ExpandableMI):
         # Toggle alarm preview display on click
         self.alert_header.clicked.connect(self.toggle_expansion)
 
-        # Not sure why I need to connect both... but if I don't specify the
-        # overloading, either the signal never fires or the slot is never
-        # called
-        # TODO: Do something?
-        self.alert_header.alert_verified[int, bool].connect(lambda: None)
-        self.alert_header.alert_verified[int, type(None)].connect(lambda: None)
-
     def expand(self, expanding: bool):
-        # noinspection PyPropertyAccess
         self.alert_preview.setVisible(expanding)
 
-        # noinspection PyPropertyAccess
-        if expanding:
+        if expanding and not self.populated_from_server:
             self.alert_preview.populate_from_server()
+            self.populated_from_server = True
 
         stylesheet_watcher.update_widget(self)
