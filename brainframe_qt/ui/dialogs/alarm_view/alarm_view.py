@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import QLayout, QScrollArea, QVBoxLayout, QWidget
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration, Zone, ZoneAlarm
-from brainframe.client.api.status_receiver import ZoneStatusQueue
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle import AlarmBundle
 from brainframe.client.ui.resources.mixins.data_structure import IterableMI
@@ -74,8 +73,6 @@ class AlarmView(AlarmViewUI, IterableMI):
         self.bundle_mode = self.BundleType.BY_STREAM
         self.bundle_map: Dict[int, AlarmBundle] = {}
         """{object.id: AlarmBundle}"""
-
-        self.zone_status_queue = typing.cast(ZoneStatusQueue, None)
 
         self._init_alarm_bundles()
 
@@ -194,6 +191,7 @@ if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication, QDesktopWidget
 
     api.set_url("http://localhost")
+    zss = api.get_status_receiver()
 
     # noinspection PyArgumentList
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
