@@ -44,13 +44,15 @@ class Subscription:
         elif isinstance(datum, Alert):
             return self._filter_alert(datum)
 
-    # noinspection PyMethodMayBeStatic
-    def _filter_stream(self, _stream: StreamConfiguration):
-        # Currently there are no filters for streams
+    def _filter_stream(self, stream: StreamConfiguration):
+        if self.filters["stream_id"] not in [any, stream.id]:
+            return False
         return True
 
     def _filter_zone(self, zone: Zone):
         if self.filters["stream_id"] not in [any, zone.stream_id]:
+            return False
+        if self.filters["zone_id"] not in [any, zone.id]:
             return False
         return True
 
@@ -58,6 +60,8 @@ class Subscription:
         if self.filters["stream_id"] not in [any, alarm.stream_id]:
             return False
         if self.filters["zone_id"] not in [any, alarm.zone_id]:
+            return False
+        if self.filters["alarm_id"] not in [any, alarm.id]:
             return False
         return True
 
@@ -68,6 +72,8 @@ class Subscription:
         # if self.filters["zone_id"] not in [any, alert.zone_id]:
         #     return False
         if self.filters["alarm_id"] not in [any, alert.alarm_id]:
+            return False
+        if self.filters["alert_id"] not in [any, alert.id]:
             return False
         return True
 
@@ -111,32 +117,40 @@ class _ZSSPubSub:
         self.subscriptions[topic].add(subscription)
         return subscription
 
-    def subscribe_streams(self, callback: Callable) -> Subscription:
-        return self.subscribe(ZSSTopic.STREAMS, callback)
-
-    def subscribe_zones(self, callback: Callable, stream_id=any) \
+    def subscribe_streams(self, callback: Callable, stream_id=any) \
             -> Subscription:
 
         filters = {"stream_id": stream_id}
 
-        return self.subscribe(ZSSTopic.ZONES, callback, filters=filters)
+        return self.subscribe(ZSSTopic.STREAMS, callback, filters=filters)
 
-    def subscribe_alarms(self, callback: Callable,
-                         stream_id=any, zone_id=any) \
+    def subscribe_zones(self, callback: Callable, stream_id=any, zone_id=any) \
             -> Subscription:
 
         filters = {"stream_id": stream_id,
                    "zone_id": zone_id}
 
-        return self.subscribe(ZSSTopic.ALARMS, callback, filters=filters)
+        return self.subscribe(ZSSTopic.ZONES, callback, filters=filters)
 
-    def subscribe_alerts(self, callback: Callable,
+    def subscribe_alarms(self, callback: Callable,
                          stream_id=any, zone_id=any, alarm_id=any) \
             -> Subscription:
 
         filters = {"stream_id": stream_id,
                    "zone_id": zone_id,
                    "alarm_id": alarm_id}
+
+        return self.subscribe(ZSSTopic.ALARMS, callback, filters=filters)
+
+    def subscribe_alerts(self, callback: Callable,
+                         stream_id=any, zone_id=any, alarm_id=any,
+                         alert_id=any) \
+            -> Subscription:
+
+        filters = {"stream_id": stream_id,
+                   "zone_id": zone_id,
+                   "alarm_id": alarm_id,
+                   "alert_id": alert_id}
 
         return self.subscribe(ZSSTopic.ALERTS, callback, filters=filters)
 
