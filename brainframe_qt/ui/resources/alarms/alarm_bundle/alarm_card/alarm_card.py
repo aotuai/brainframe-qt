@@ -1,12 +1,14 @@
-from typing import List, Optional, Tuple
 import typing
+from typing import List, Optional, Tuple
 
-from PyQt5.QtCore import Qt, pyqtProperty
+from PyQt5.QtCore import QMetaObject, Q_ARG, Qt, pyqtProperty, pyqtSignal, \
+    pyqtSlot
 from PyQt5.QtWidgets import QFrame, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Alert, ZoneAlarm
-from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
+from brainframe.client.api.zss_pubsub import zss_publisher
+from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 # TODO: Change to relative imports?
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alarm_header \
     import AlarmHeader
@@ -82,6 +84,15 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
     def _init_signals(self):
         self.alarm_header.clicked.connect(self.toggle_expansion)
 
+        print("############### Connecting")
+        zss_publisher.subscribe_alerts(self._handle_alert_stream,
+                                       alarm_id=self.alarm.id)
+
+        # TODO: Unsubscribe
+        # self.destroyed.connect(
+        #     zss_publisher.unsubscribe
+        # )
+
     @pyqtProperty(bool)
     def alert_active(self) -> bool:
         return self._alert_active
@@ -132,6 +143,32 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
 
     def _handle_get_alerts_error(self, err):
         raise err
+
+    @pyqtSlot(object)
+    def update_alerts(self, alerts: List[Alert]):
+        new_alerts: List[Alert] = []
+
+        print("################")
+
+        # Update existing alerts
+        for alert in alerts:
+            if self.alert_log.contains_alert(alert):
+                print(f"Updating {alert}")
+                # self.update_alert(alert)
+            else:
+                print(f"Adding {alert}")
+                new_alerts.append(alert)
+
+        # Add new ones
+        # print(f"Adding {new_alerts}")
+        self.add_alerts(new_alerts)
+
+    def _handle_alert_stream(self, alerts: List[Alert]):
+        """Move the alert stream information to the UI Thread"""
+        print("Got alert message:", alerts)
+        QMetaObject.invokeMethod(self, "update_alerts",
+                                 Qt.QueuedConnection,
+                                 Q_ARG("PyQt_PyObject", alerts))
 
 
 if __name__ == '__main__':

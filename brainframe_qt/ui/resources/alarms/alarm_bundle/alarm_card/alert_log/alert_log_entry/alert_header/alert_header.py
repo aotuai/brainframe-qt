@@ -6,9 +6,10 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QAbstractButton, QButtonGroup, QFrame, \
     QHBoxLayout, QLabel, QSizePolicy, QWidget
 
-from brainframe.client.api import api, api_errors
+from brainframe.client.api import api_errors
 from brainframe.client.api.codecs import Alert
-from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
+from brainframe.client.ui.resources import stylesheet_watcher
+from brainframe.client.ui.resources.api_pubsub import async_api_pubsub
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
@@ -113,10 +114,6 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         self.verification_button_group.buttonClicked.connect(
             self._alert_verified)
 
-    def open_alert_info_dialog(self):
-        print(f"Opening dialog for {self.alert}")
-        ...
-
     def _populate_alert_info(self) -> None:
         # Alert start time
         start_time = pendulum.from_timestamp(self.alert.start_time)
@@ -136,36 +133,28 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
     def set_alert_verification(self, verification: Union[None, bool]):
         self._set_ui_verification(verification)
 
-        def handle_set_verification_success(_):
-            print("Alert verified properly", verification)
-            self.alert.verified_as = verification
-
-            if verification is None:
-                verified_signal = self.alert_verified[int, type(None)]
-            else:
-                verified_signal = self.alert_verified[int, bool]
-            verified_signal.emit(self.alert.id, verification)
-
         def handle_set_verification_error(error: api_errors.BaseAPIError):
+
+            self._populate_alert_info()
 
             logging.warning("An error occurred while attempting to set alert "
                             "verification value on the BrainFrame server. "
                             "The value has been reverted on the client.")
 
             # Reset to the current stored state
-            self._populate_alert_info()
             if isinstance(error, api_errors.AlertNotFoundError):
-                # Delete entry? Wait for AlertLog to clean up?
-                raise error
+                # TODO: Delete entry? Wait for AlertLog to clean up?
+                pass
             else:
+                # Log an error
                 logging.error(error)
 
-        QTAsyncWorker(self, api.set_alert_verification,
-                      f_args=(self.alert.id,),
-                      f_kwargs={"verified_as": verification},
-                      on_success=handle_set_verification_success,
-                      on_error=handle_set_verification_error) \
-            .start()
+        async_api_pubsub.set_alert_verification(
+            thread_owner=self,
+            alert=self.alert,
+            verified_as=verification,
+            on_error=handle_set_verification_error
+        )
 
     def _set_ui_verification(self, verification: Union[None, bool]):
         true_button = self.verified_true_button
