@@ -1,7 +1,8 @@
 import typing
 from typing import List, Optional, Tuple
 
-from PyQt5.QtCore import QMetaObject, Q_ARG, Qt, pyqtProperty, pyqtSlot
+from PyQt5.QtCore import QMetaObject, Q_ARG, Qt, pyqtProperty, pyqtSlot, \
+    QThread
 from PyQt5.QtWidgets import QFrame, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
 from brainframe.client.api import api
@@ -84,7 +85,7 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         self.alarm_header.clicked.connect(self.toggle_expansion)
 
         subscription = zss_publisher.subscribe_alerts(
-            self._handle_alert_stream,
+            self.handle_alert_stream,
             alarm_id=self.alarm.id)
         self.destroyed.connect(lambda: zss_publisher.unsubscribe(subscription))
 
@@ -116,11 +117,6 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         if alert:
             # Set the card active status to the activeness of the final alert
             self._set_alert_active(alert.end_time is None)
-
-    def update_alert(self, alert: Alert):
-        if self.alert_log[0].alert.id == alert.id:
-            self._set_alert_active((alert.end_time is None))
-        self.alert_log.update_alert(alert)
 
     def _init_alert_log_history(self) -> None:
         QTAsyncWorker(self, api.get_alerts,
@@ -155,11 +151,26 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         # Add new ones
         self.add_alerts(new_alerts)
 
-    def _handle_alert_stream(self, alerts: List[Alert]):
-        """Move the alert stream information to the UI Thread"""
-        QMetaObject.invokeMethod(self, "update_alerts",
-                                 Qt.QueuedConnection,
-                                 Q_ARG("PyQt_PyObject", alerts))
+    @pyqtSlot(object)
+    def handle_alert_stream(self, alerts: List[Alert]):
+        """Add new alerts when the ZSS gets them"""
+
+        if QThread.currentThread() != self.thread():
+            # Move to the UI Thread
+            QMetaObject.invokeMethod(self, self.handle_alert_stream.__name__,
+                                     Qt.QueuedConnection,
+                                     Q_ARG("PyQt_PyObject", alerts))
+            return
+
+        active = None
+        for alert in alerts:
+            if not self.alert_log.contains_alert(alert):
+                self.alert_log.add_alert(alert)
+                active = active or (alert.end_time is None)
+
+        # Set state to the final alert's activity level
+        if active is not None:
+            self._set_alert_active(active)
 
 
 if __name__ == '__main__':

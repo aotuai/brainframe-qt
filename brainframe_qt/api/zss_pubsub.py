@@ -1,5 +1,6 @@
 import logging
 from enum import Enum, auto
+from threading import RLock
 from typing import Callable, Dict, List, Set, Union
 
 from brainframe.client.api.codecs import Alert, StreamConfiguration, Zone, \
@@ -83,6 +84,7 @@ class _ZSSPubSub:
     def __init__(self):
         super().__init__()
 
+        self.subscriptions_lock = RLock()
         self.subscriptions: Dict[ZSSTopic, Set[Subscription]] = {
             ZSSTopic.STREAMS: set(),
             ZSSTopic.ZONES: set(),
@@ -95,26 +97,28 @@ class _ZSSPubSub:
 
             subscribers = self.subscriptions[topic]
 
-            for subscriber in subscribers:
-                data_to_publish = list(filter(subscriber.filter_data, data))
-                if len(data_to_publish) > 0:
-                    try:
-                        subscriber.callback(data_to_publish)
-                    except RuntimeError as exc:
-                        if "has been deleted" in str(exc):
-                            self.unsubscribe(subscriber)
+            with self.subscriptions_lock:
+                for subscriber in subscribers:
+                    data_to_publish = list(filter(subscriber.filter_data, data))
+                    if len(data_to_publish) > 0:
+                        try:
+                            subscriber.callback(data_to_publish)
+                        except RuntimeError as exc:
+                            if "has been deleted" in str(exc):
+                                self.unsubscribe(subscriber)
 
-                            func_name = subscriber.callback.__qualname__
-                            msg = f"Pubsub callback {func_name} was called " \
-                                  f"but attempted to access a deleted " \
-                                  f"QObject:\n\t{exc}"
-                            logging.error(msg)
+                                func_name = subscriber.callback.__qualname__
+                                msg = f"Pubsub callback {func_name} was called " \
+                                      f"but attempted to access a deleted " \
+                                      f"QObject:\n\t{exc}"
+                                logging.error(msg)
 
     def subscribe(self, topic, callback: Callable, filters=None) \
             -> Subscription:
 
         subscription = Subscription(topic, callback, filters)
-        self.subscriptions[topic].add(subscription)
+        with self.subscriptions_lock:
+            self.subscriptions[topic].add(subscription)
         return subscription
 
     def subscribe_streams(self, callback: Callable, stream_id=any) \
@@ -155,7 +159,8 @@ class _ZSSPubSub:
         return self.subscribe(ZSSTopic.ALERTS, callback, filters=filters)
 
     def unsubscribe(self, subscription: Subscription) -> None:
-        self.subscriptions[subscription.topic].remove(subscription)
+        with self.subscriptions_lock:
+            self.subscriptions[subscription.topic].remove(subscription)
 
 
 # noinspection SpellCheckingInspection

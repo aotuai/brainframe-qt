@@ -1,37 +1,16 @@
 import logging
-from queue import Empty, Full, Queue
-from threading import RLock, Thread
+from threading import Thread
 from time import sleep
-from typing import Dict, Set, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING
 
 import requests
 
 from brainframe.client.api import api_errors, codecs
 from brainframe.client.api.stubs.zone_statuses import ZONE_STATUS_TYPE
+from brainframe.client.api.zss_pubsub import zss_publisher, ZSSTopic
 
 if TYPE_CHECKING:
     from brainframe.client.api import API
-
-
-class ZoneStatusQueue(Queue):
-    """This is used by the StatusReceiver to pass events to the UI"""
-
-    def __init__(self, maxsize=100):
-        super().__init__(maxsize)
-
-    def put(self, zone_status: ZONE_STATUS_TYPE, _block=False, _timeout=None):
-        try:
-            super().put(zone_status, block=False)
-        except Full:
-            pass
-
-    def clear(self):
-        while not self.empty():
-            try:
-                self.get(False)
-            except Empty:
-                continue
-            self.task_done()
 
 
 class StatusReceiver(Thread):
@@ -46,12 +25,11 @@ class StatusReceiver(Thread):
         super().__init__(name="StatusReceiverThread")
         self._api = api
 
-        self.status_queues: Set[ZoneStatusQueue] = set()
-        self._status_queues_lock = RLock()
-
         self._latest_statuses = {}
         self._running = False
 
+        # no cleanup code so we can just die when the main thread dies
+        self.daemon = True
         self.start()
 
     def run(self):
@@ -87,19 +65,18 @@ class StatusReceiver(Thread):
     def is_running(self) -> bool:
         return self._running
 
-    def subscribe(self, listener: ZoneStatusQueue):
-        with self._status_queues_lock:
-            self.status_queues.add(listener)
+    def _ingest_zone_statuses(self, zone_statuses: ZONE_STATUS_TYPE):
+        self._latest_statuses = zone_statuses
 
-    def unsubscribe(self, listener: ZoneStatusQueue):
-        with self._status_queues_lock:
-            self.status_queues.remove(listener)
+        streams = []  # For later use
+        zones = []
+        alarms = []
+        alerts = []
+        for stream_id, zone in zone_statuses.items():
+            for zone_name, zone_status in zone.items():
+                alerts.extend(zone_status.alerts)
 
-    def _ingest_zone_statuses(self, zone_status: ZONE_STATUS_TYPE):
-        with self._status_queues_lock:
-            for queue in self.status_queues:
-                queue.put(zone_status)
-        self._latest_statuses = zone_status
+        zss_publisher.publish({ZSSTopic.ALERTS: alerts})
 
     # TODO: Remove usages of this
     def latest_statuses(self, stream_id: int) -> Dict[str, codecs.ZoneStatus]:

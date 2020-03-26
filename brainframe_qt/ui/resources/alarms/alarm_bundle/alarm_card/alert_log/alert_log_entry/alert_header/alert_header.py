@@ -1,4 +1,5 @@
 import logging
+import typing
 from typing import Union
 
 import pendulum
@@ -81,6 +82,9 @@ class AlertHeaderUI(QFrame):
         verified_true_button.setCheckable(True)
         verified_true_button.setFlat(True)
 
+        # Disable until we have an alert set for the widget
+        verified_true_button.setDisabled(True)
+
         self.verification_button_group.addButton(verified_true_button)
 
         return verified_true_button
@@ -92,6 +96,9 @@ class AlertHeaderUI(QFrame):
         verified_false_button.setFlat(True)
         verified_false_button.setCheckable(True)
 
+        # Disable until we have an alert set for the widget
+        verified_false_button.setDisabled(True)
+
         self.verification_button_group.addButton(verified_false_button)
 
         return verified_false_button
@@ -100,21 +107,39 @@ class AlertHeaderUI(QFrame):
 class AlertHeader(AlertHeaderUI, ClickableMI):
     alert_verified = pyqtSignal([int, type(None)], [int, bool])
 
-    def __init__(self, alert: Alert, parent: QWidget):
+    def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.alert = alert
+        self.alert = typing.cast(Alert, None)
         self.timezone = "America/Los_Angeles"
 
         self._init_signals()
 
-        self._populate_alert_info()
-
     def _init_signals(self):
-        self.verification_button_group.buttonClicked.connect(
-            self._alert_verified)
+        self.verification_button_group.buttonClicked \
+            .connect(self._alert_verified)
 
-    def _populate_alert_info(self) -> None:
+    def set_alert(self, alert: Alert):
+
+        # TODO: Find a more robust way to do this
+        verification_changed = (self.alert is None and alert is not None) \
+                               or (self.alert.verified_as != alert.verified_as)
+
+        timespan_changed = (self.alert is None and alert is not None) \
+                           or (self.alert.start_time != alert.start_time) \
+                           or (self.alert.end_time != alert.end_time)
+
+        self.alert = alert
+
+        self.verified_false_button.setDisabled(self.alert is None)
+        self.verified_true_button.setDisabled(self.alert is None)
+
+        if verification_changed:
+            self._set_ui_verification()
+        if timespan_changed:
+            self._set_ui_timespan()
+
+    def _set_ui_timespan(self):
         # Alert start time
         start_time = pendulum.from_timestamp(self.alert.start_time)
         self.start_time_label.time = start_time
@@ -127,15 +152,17 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         else:
             self.end_time_label.setHidden(True)
 
-        # Alert verification
-        self._set_ui_verification(self.alert.verified_as)
-
     def set_alert_verification(self, verification: Union[None, bool]):
-        self._set_ui_verification(verification)
+
+        # Failsafe
+        if not self.alert:
+            return
+
+        self._set_ui_verification(verification_override=verification)
 
         def handle_set_verification_error(error: api_errors.BaseAPIError):
 
-            self._populate_alert_info()
+            self._set_ui_verification()
 
             logging.warning("An error occurred while attempting to set alert "
                             "verification value on the BrainFrame server. "
@@ -156,7 +183,10 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
             on_error=handle_set_verification_error
         )
 
-    def _set_ui_verification(self, verification: Union[None, bool]):
+    def _set_ui_verification(self,
+                             # -1 is a sentinel
+                             verification_override: Union[None, bool] = -1):
+
         true_button = self.verified_true_button
         false_button = self.verified_false_button
 
@@ -164,6 +194,12 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         verify_false_message = self.tr("Verify alert as False")
         deverify_true_message = self.tr("Deverify alert as True")
         deverify_false_message = self.tr("Deverify alert as True")
+
+        # -1 is a sentinel
+        if verification_override == -1:
+            verification = self.alert.verified_as
+        else:
+            verification = verification_override
 
         if verification is None:
             true_button.setChecked(False)
