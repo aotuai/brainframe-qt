@@ -1,7 +1,13 @@
-from PyQt5.QtCore import Qt
+import enum
+from enum import Enum
+from typing import List, Union
+
+from PyQt5.QtCore import Qt, pyqtSlot, QThread, QMetaObject, Q_ARG
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QLayout, QSizePolicy
 
-from brainframe.client.api.codecs import ZoneAlarm
+from brainframe.client.api import api
+from brainframe.client.api.codecs import StreamConfiguration, ZoneAlarm, Zone
+from brainframe.client.api.zss_pubsub import zss_publisher
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card \
     import AlarmCard
@@ -56,21 +62,30 @@ class AlarmBundleUI(QWidget):
 
         return alarm_container
 
-    def _init_bundle_header(self) -> QWidget:
+    def _init_bundle_header(self) -> BundleHeader:
         bundle_header = BundleHeader(self)
         return bundle_header
 
 
 class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
 
-    def __init__(self, bundle_name: str,
+    class BundleType(Enum):
+        BY_STREAM = enum.auto()
+        BY_ZONE = enum.auto()
+
+    def __init__(self, bundle_type: BundleType,
+                 bundle_codec: Union[StreamConfiguration, Zone],
                  parent: QWidget):
         super().__init__(parent)
 
-        self._init_signals()
+        # noinspection PyTypeHints
+        self.bundle_mode: self.BundleType = bundle_type
+        self.bundle_codec: Union[StreamConfiguration, Zone] = bundle_codec
 
-        self.bundle_name = bundle_name
-        self.bundle_header.set_bundle_name(bundle_name)
+        self.bundle_header.set_bundle_name(self.bundle_codec.name)
+
+        self._init_alarm_cards()
+        self._init_signals()
 
     def __contains__(self, alarm):
         if isinstance(alarm, AlarmCard):
@@ -97,8 +112,27 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
         else:
             raise TypeError
 
+    def _init_alarm_cards(self):
+
+        stream_id = None
+        zone_id = None
+        if self.bundle_mode == AlarmBundle.BundleType.BY_STREAM:
+            stream_id = self.bundle_codec.id
+        elif self.bundle_mode == AlarmBundle.BundleType.BY_ZONE:
+            zone_id = self.bundle_codec.id
+
+        alarms = api.get_zone_alarms(stream_id=stream_id, zone_id=zone_id)
+
+        for alarm in alarms:
+            self.add_alarm_card(alarm)
+
     def _init_signals(self):
         self.bundle_header.clicked.connect(self.toggle_expansion)
+
+        # subscription = zss_publisher.subscribe_alarms(
+        #     self.handle_alarm_stream,
+        #     zone_id=self.zone.id)
+        # self.destroyed.connect(lambda: zss_publisher.unsubscribe(subscription))
 
     def expand(self, expanding: bool):
 
@@ -134,6 +168,28 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
         # Remove between BundleHeader and (empty) alarm_container
         if self.iterable_layout().count() == 0:
             self.layout().setSpacing(0)
+
+    @pyqtSlot(object)
+    def handle_alarm_stream(self, stream_alarms: List[ZoneAlarm]):
+        """Add new alarms when the ZSS gets them"""
+
+        if QThread.currentThread() != self.thread():
+            # Move to the UI Thread
+            QMetaObject.invokeMethod(self, self.handle_alarm_stream.__name__,
+                                     Qt.QueuedConnection,
+                                     Q_ARG("PyQt_PyObject", stream_alarms))
+            return
+
+        stream_alarms = set(stream_alarms)
+        old_alarms = {alarm for alarm in self}
+
+        new_alarms = stream_alarms - old_alarms
+        del_alarms = old_alarms - stream_alarms
+
+        for new_alarm in new_alarms:
+            self.add_alarm_card(new_alarm)
+        for del_alarm in del_alarms:
+            self.del_alarm_card(del_alarm)
 
 
 if __name__ == '__main__':
