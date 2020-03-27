@@ -26,10 +26,11 @@ class StatusReceiver(Thread):
         self._api = api
 
         self._latest_statuses = {}
-        self._running = False
 
         # no cleanup code so we can just die when the main thread dies
         self.daemon = True
+
+        self._running = True
         self.start()
 
     def run(self):
