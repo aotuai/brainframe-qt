@@ -95,23 +95,31 @@ class _ZSSPubSub:
     def publish(self, message: Dict[ZSSTopic, ZSSDataType]):
         for topic, data in message.items():
 
-            subscribers = self.subscriptions[topic]
+            # We have the chance to modify the subscriptions while iterating
+            # (even with the lock), so I just make a copy
+            subscribers = list(self.subscriptions[topic])
 
             with self.subscriptions_lock:
                 for subscriber in subscribers:
-                    data_to_publish = list(filter(subscriber.filter_data, data))
-                    if len(data_to_publish) > 0:
-                        try:
-                            subscriber.callback(data_to_publish)
-                        except RuntimeError as exc:
-                            if "has been deleted" in str(exc):
-                                self.unsubscribe(subscriber)
+                    publish_data = list(filter(subscriber.filter_data, data))
 
-                                func_name = subscriber.callback.__qualname__
-                                msg = f"Pubsub callback {func_name} was called " \
-                                      f"but attempted to access a deleted " \
-                                      f"QObject:\n\t{exc}"
-                                logging.error(msg)
+                    # Don't publish empty data
+                    if len(publish_data) == 0:
+                        continue
+
+                    try:
+                        subscriber.callback(publish_data)
+                    except RuntimeError as exc:
+                        if "has been deleted" in str(exc):
+                            # TODO: Fix this race condition
+                            # Ignore. Should be deleted eventually
+                            pass
+
+                            # func_name = subscriber.callback.__qualname__
+                            # msg = f"Pubsub callback {func_name} was called "\
+                            #       f"but attempted to access a deleted " \
+                            #       f"QObject:\n\t{exc}"
+                            # logging.error(msg)
 
     def subscribe(self, topic, callback: Callable, filters=None) \
             -> Subscription:
