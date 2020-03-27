@@ -1,4 +1,5 @@
 import enum
+import functools
 from enum import Enum
 from typing import List, Union
 
@@ -114,14 +115,12 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
 
     def _init_alarm_cards(self):
 
-        stream_id = None
-        zone_id = None
         if self.bundle_mode == AlarmBundle.BundleType.BY_STREAM:
-            stream_id = self.bundle_codec.id
+            alarms = api.get_zone_alarms(stream_id=self.bundle_codec.id)
         elif self.bundle_mode == AlarmBundle.BundleType.BY_ZONE:
-            zone_id = self.bundle_codec.id
-
-        alarms = api.get_zone_alarms(stream_id=stream_id, zone_id=zone_id)
+            alarms = api.get_zone_alarms(zone_id=self.bundle_codec.id)
+        else:
+            return
 
         for alarm in alarms:
             self.add_alarm_card(alarm)
@@ -129,10 +128,17 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
     def _init_signals(self):
         self.bundle_header.clicked.connect(self.toggle_expansion)
 
-        # subscription = zss_publisher.subscribe_alarms(
-        #     self.handle_alarm_stream,
-        #     zone_id=self.zone.id)
-        # self.destroyed.connect(lambda: zss_publisher.unsubscribe(subscription))
+        subscribe_alarms = functools.partial(zss_publisher.subscribe_alarms,
+                                             self.handle_alarm_stream)
+
+        if self.bundle_mode == AlarmBundle.BundleType.BY_STREAM:
+            subscription = subscribe_alarms(stream_id=self.bundle_codec.id)
+        elif self.bundle_mode == AlarmBundle.BundleType.BY_ZONE:
+            subscription = subscribe_alarms(zone_id=self.bundle_codec.id)
+        else:
+            return
+
+        self.destroyed.connect(lambda: zss_publisher.unsubscribe(subscription))
 
     def expand(self, expanding: bool):
 
@@ -170,25 +176,32 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
             self.layout().setSpacing(0)
 
     @pyqtSlot(object)
-    def handle_alarm_stream(self, stream_alarms: List[ZoneAlarm]):
+    def handle_alarm_stream(self, server_alarms: List[ZoneAlarm]):
         """Add new alarms when the ZSS gets them"""
 
         if QThread.currentThread() != self.thread():
             # Move to the UI Thread
             QMetaObject.invokeMethod(self, self.handle_alarm_stream.__name__,
                                      Qt.QueuedConnection,
-                                     Q_ARG("PyQt_PyObject", stream_alarms))
+                                     Q_ARG("PyQt_PyObject", server_alarms))
             return
 
-        stream_alarms = set(stream_alarms)
-        old_alarms = {alarm for alarm in self}
+        server_alarms = {alarm.id: alarm for alarm in server_alarms}
+        local_alarms = {alarm_card.alarm.id: alarm_card.alarm
+                        for alarm_card in self}
 
-        new_alarms = stream_alarms - old_alarms
-        del_alarms = old_alarms - stream_alarms
+        new_alarm_ids = set(server_alarms).difference(local_alarms)
+        del_alarm_ids = set(local_alarms).difference(server_alarms)
 
-        for new_alarm in new_alarms:
+        new_alarms = {alarm_id: server_alarms[alarm_id]
+                      for alarm_id in new_alarm_ids}
+        del_alarms = {alarm_id: local_alarms[alarm_id]
+                      for alarm_id in del_alarm_ids}
+
+        for new_alarm in new_alarms.values():
             self.add_alarm_card(new_alarm)
-        for del_alarm in del_alarms:
+
+        for del_alarm in del_alarms.values():
             self.del_alarm_card(del_alarm)
 
 
