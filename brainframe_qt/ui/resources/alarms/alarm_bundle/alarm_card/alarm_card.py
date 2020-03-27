@@ -69,6 +69,7 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         super().__init__(parent)
 
         self.alarm = alarm
+        self.MAX_ALERTS = 50
 
         self.stream_id = typing.cast(int, None)
         self._stream_name = typing.cast(str, None)
@@ -119,8 +120,12 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
             self._set_alert_active(alert.end_time is None)
 
     def _init_alert_log_history(self) -> None:
+
+        self.alert_log.max_alerts = self.MAX_ALERTS
+
         QTAsyncWorker(self, api.get_alerts,
-                      f_kwargs={"alarm_id": self.alarm.id, "limit": 50,
+                      f_kwargs={"alarm_id": self.alarm.id,
+                                "limit": self.MAX_ALERTS,
                                 "offset": 0},
                       on_success=self._populate_alert_log,
                       on_error=self._handle_get_alerts_error) \

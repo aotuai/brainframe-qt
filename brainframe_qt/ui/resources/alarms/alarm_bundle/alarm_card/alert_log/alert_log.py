@@ -71,6 +71,7 @@ class AlertLog(AlertLogUI, ClickableMI):
         super().__init__(parent)
 
         self.alert_log_entries: List[AlertLogEntry] = []
+        self.max_alerts = None
 
     @overload
     def __getitem__(self, index: int) -> AlertLogEntry:
@@ -126,7 +127,22 @@ class AlertLog(AlertLogUI, ClickableMI):
         # been set visible (i.e. size is recalculated)
         QTimer.singleShot(0, self.updateGeometry)
 
-        self.alert_log_entries.append(alert_log_entry)
+        self.alert_log_entries.insert(0, alert_log_entry)
+
+        if self.max_alerts is not None \
+                and len(self.alert_log_entries) > self.max_alerts:
+            self.pop_alert()
+
+    def pop_alert(self):
+        alert_log_entry = self.alert_log_entries.pop()
+
+        alert_log_entry.expansion_changed.disconnect()
+
+        # Add widget to the top of the layout
+        self.widget().layout().removeWidget(alert_log_entry)
+        alert_log_entry.deleteLater()
+
+        QTimer.singleShot(0, self.updateGeometry)
 
     def _ensure_alert_log_entry_visible(self, expanded: bool):
 
