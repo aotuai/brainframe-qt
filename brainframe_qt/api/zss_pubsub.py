@@ -103,10 +103,6 @@ class _ZSSPubSub:
                 for subscriber in subscribers:
                     publish_data = list(filter(subscriber.filter_data, data))
 
-                    # Don't publish empty data
-                    if len(publish_data) == 0:
-                        continue
-
                     try:
                         subscriber.callback(publish_data)
                     except RuntimeError as exc:
