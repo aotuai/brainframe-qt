@@ -93,8 +93,6 @@ class StatusReceiver(Thread):
                                ZSSTopic.ALARMS: alarms,
                                ZSSTopic.ALERTS: alerts})
 
-
-
     # TODO: Remove usages of this
     def latest_statuses(self, stream_id: int) -> Dict[str, codecs.ZoneStatus]:
         """Returns the latest cached list of ZoneStatuses for that stream_id,
