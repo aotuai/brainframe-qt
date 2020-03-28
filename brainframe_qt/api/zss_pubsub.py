@@ -36,13 +36,13 @@ class Subscription:
                f")"
 
     def filter_data(self, datum: ZSSDatumType):
-        if isinstance(datum, StreamConfiguration):
+        if self.topic is ZSSTopic.STREAMS:
             return self._filter_stream(datum)
-        elif isinstance(datum, Zone):
+        if self.topic is ZSSTopic.ZONES:
             return self._filter_zone(datum)
-        elif isinstance(datum, ZoneAlarm):
+        if self.topic is ZSSTopic.ALARMS:
             return self._filter_alarm(datum)
-        elif isinstance(datum, Alert):
+        if self.topic is ZSSTopic.ALERTS:
             return self._filter_alert(datum)
 
     def _filter_stream(self, stream: StreamConfiguration):

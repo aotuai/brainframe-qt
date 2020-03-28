@@ -69,11 +69,20 @@ class StatusReceiver(Thread):
     def _ingest_zone_statuses(self, zone_statuses: ZONE_STATUS_TYPE):
         self._latest_statuses = zone_statuses
 
-        streams = []  # Note that this remains empty. For later use
+        streams = []
         zones = []
         alarms = []
         alerts = []
         for stream_id, zone in zone_statuses.items():
+
+            # MAJOR HACK. We want to send StreamConfiguration Codecs, but they
+            # aren't in the ZoneStatusStream, so I hack this
+            class StreamHack(object):
+                pass
+            stream = StreamHack()
+            stream.id = stream_id
+            streams.append(stream)
+
             for zone_name, zone_status in zone.items():
                 zones.append(zone_status.zone)
                 alarms.extend(zone_status.zone.alarms)
@@ -83,6 +92,8 @@ class StatusReceiver(Thread):
                                ZSSTopic.ZONES: zones,
                                ZSSTopic.ALARMS: alarms,
                                ZSSTopic.ALERTS: alerts})
+
+
 
     # TODO: Remove usages of this
     def latest_statuses(self, stream_id: int) -> Dict[str, codecs.ZoneStatus]:
