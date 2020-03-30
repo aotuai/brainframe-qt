@@ -84,6 +84,7 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
 
     def _init_signals(self):
         self.alarm_header.clicked.connect(self.toggle_expansion)
+        self.alert_log.alert_activity_changed.connect(self._set_alert_active)
 
         subscription = zss_publisher.subscribe_alerts(
             self.handle_alert_stream,
@@ -108,16 +109,8 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         return self.alert_log.layout()
 
     def add_alerts(self, alerts: typing.Iterable[Alert]):
-        # Additions should always be the most recent alert
-
-        alert = None
         for alert in alerts[::-1]:
             self.alert_log.add_alert(alert)
-
-        # If any alerts were added
-        if alert:
-            # Set the card active status to the activeness of the final alert
-            self._set_alert_active(alert.end_time is None)
 
     def _init_alert_log_history(self) -> None:
 
@@ -167,15 +160,9 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
                                      Q_ARG("PyQt_PyObject", alerts))
             return
 
-        active = None
         for alert in alerts:
             if not self.alert_log.contains_alert(alert):
                 self.alert_log.add_alert(alert)
-                active = active or (alert.end_time is None)
-
-        # Set state to the final alert's activity level
-        if active is not None:
-            self._set_alert_active(active)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 from typing import List, Optional, overload
 import typing
 
-from PyQt5.QtCore import Qt, QSize, QTimer
+from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
 from brainframe.client.api.codecs import Alert
@@ -67,11 +67,14 @@ class AlertLogUI(QScrollArea, TransientScrollbarMI):
 
 class AlertLog(AlertLogUI, ClickableMI):
 
+    alert_activity_changed = pyqtSignal(bool)
+
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
         self.alert_log_entries: List[AlertLogEntry] = []
         self.max_alerts = None
+        self._alert_active = typing.cast(bool, None)
 
     @overload
     def __getitem__(self, index: int) -> AlertLogEntry:
@@ -115,6 +118,8 @@ class AlertLog(AlertLogUI, ClickableMI):
         # visible in the ScrollArea
         alert_log_entry.expansion_changed.connect(
             self._ensure_alert_log_entry_visible)
+        alert_log_entry.alert_activity_changed.connect(
+            self._interpret_alert_activity_changed)
 
         # Ok sooo...
         # Adding a widget to a layout calls QLayout.addChildWidget. This calls
@@ -133,6 +138,18 @@ class AlertLog(AlertLogUI, ClickableMI):
                 and len(self.alert_log_entries) > self.max_alerts:
             self.pop_alert()
 
+        # This check to ensure edge case where self.max_alerts = 0 doesn't
+        # break anything
+        if self.alert_log_entries:
+            latest_alert = self.alert_log_entries[0]
+            latest_alert_active = (latest_alert.alert.end_time is None)
+        else:
+            latest_alert_active = False
+
+        if self._alert_active != latest_alert_active:
+            self._alert_active = latest_alert_active
+            self.alert_activity_changed.emit(latest_alert_active)
+
     def pop_alert(self):
         alert_log_entry = self.alert_log_entries.pop()
 
@@ -143,6 +160,10 @@ class AlertLog(AlertLogUI, ClickableMI):
         alert_log_entry.deleteLater()
 
         QTimer.singleShot(0, self.updateGeometry)
+
+        if not self.alert_log_entries and self._alert_active:
+            self._alert_active = False
+            self.alert_activity_changed.emit(False)
 
     def _ensure_alert_log_entry_visible(self, expanded: bool):
 
@@ -159,3 +180,13 @@ class AlertLog(AlertLogUI, ClickableMI):
             if alert_log_entry.alert.id == alert.id:
                 return True
         return False
+
+    @pyqtSlot(bool)
+    def _interpret_alert_activity_changed(self, alert_active: bool):
+        if not self.alert_log_entries \
+                or self.sender() != self.alert_log_entries[0]:
+            return
+
+        if self._alert_active != alert_active:
+            self._alert_active = alert_active
+            self.alert_activity_changed.emit(alert_active)

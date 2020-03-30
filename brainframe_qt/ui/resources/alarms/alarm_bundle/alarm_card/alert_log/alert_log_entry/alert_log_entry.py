@@ -1,7 +1,7 @@
 from typing import List
 
 import typing
-from PyQt5.QtCore import Qt, QThread, QMetaObject, Q_ARG, pyqtSlot
+from PyQt5.QtCore import Qt, QThread, QMetaObject, Q_ARG, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QFrame, QWidget, QVBoxLayout
 
 from brainframe.client.api.codecs import Alert
@@ -54,6 +54,8 @@ class AlertLogEntryUI(QFrame):
 
 class AlertLogEntry(AlertLogEntryUI, ExpandableMI):
 
+    alert_activity_changed = pyqtSignal(bool)
+
     def __init__(self, alert: Alert, parent: QWidget):
         super().__init__(alert, parent)
 
@@ -86,9 +88,20 @@ class AlertLogEntry(AlertLogEntryUI, ExpandableMI):
         if self.alert is not None and alert.id != self.alert.id:
             raise ValueError("Changing alert ID is not supported")
 
+        old_alert = self.alert
         self.alert = alert
+
         self.alert_header.set_alert(alert)
         self.alert_preview.set_alert(alert)
+
+        # Compare the new alert to the one that was set before
+        # If the new alert's activeness is different, we need to let other
+        # widgets know what changed
+        if old_alert is not None:
+            active_before = old_alert.end_time is None
+            active_now = alert.end_time is None
+            if active_before != active_now:
+                self.alert_activity_changed.emit(active_now)
 
     def expand(self, expanding: bool):
         self.alert_preview.setVisible(expanding)
