@@ -85,7 +85,6 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
 
         self.bundle_header.set_bundle_name(self.bundle_codec.name)
 
-        self._init_alarm_cards()
         self._init_signals()
 
     def __contains__(self, alarm):
@@ -112,18 +111,6 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
                 raise KeyError from exc
         else:
             raise TypeError
-
-    def _init_alarm_cards(self):
-
-        if self.bundle_mode == AlarmBundle.BundleType.BY_STREAM:
-            alarms = api.get_zone_alarms(stream_id=self.bundle_codec.id)
-        elif self.bundle_mode == AlarmBundle.BundleType.BY_ZONE:
-            alarms = api.get_zone_alarms(zone_id=self.bundle_codec.id)
-        else:
-            return
-
-        for alarm in alarms:
-            self.add_alarm_card(alarm)
 
     def _init_signals(self):
         self.bundle_header.clicked.connect(self.toggle_expansion)
