@@ -82,6 +82,13 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
 
         self._init_signals()
 
+    def expand(self, expanding: bool):
+        self.alert_log.setVisible(expanding)
+        stylesheet_watcher.update_widget(self)
+
+    def iterable_layout(self) -> QLayout:
+        return self.alert_log.layout()
+
     def _init_signals(self):
         self.alarm_header.clicked.connect(self.toggle_expansion)
         self.alert_log.alert_activity_changed.connect(self._set_alert_active)
@@ -91,63 +98,26 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
             alarm_id=self.alarm.id)
         self.destroyed.connect(lambda: zss_publisher.unsubscribe(subscription))
 
-    @pyqtProperty(bool)
-    def alert_active(self) -> bool:
-        return self._alert_active
-
-    def _set_alert_active(self, alert_active: bool) -> None:
-        """Private setter for alert_active property"""
-        self._alert_active = alert_active
-        self.alarm_header.set_active(alert_active)
-        stylesheet_watcher.update_widget(self)
-
-    def expand(self, expanding: bool):
-        self.alert_log.setVisible(expanding)
-        stylesheet_watcher.update_widget(self)
-
-    def iterable_layout(self) -> QLayout:
-        return self.alert_log.layout()
-
-    def add_alerts(self, alerts: typing.Iterable[Alert]):
-        for alert in alerts[::-1]:
-            self.alert_log.add_alert(alert)
-
     def _init_alert_log_history(self) -> None:
 
         self.alert_log.max_alerts = self.MAX_ALERTS
+
+        def handle_success(alerts_and_count):
+            alerts: List[Alert]
+            _count: int
+            alerts, _count = alerts_and_count
+            self.handle_alert_stream(alerts)
+
+        def handle_error(err):
+            raise err
 
         QTAsyncWorker(self, api.get_alerts,
                       f_kwargs={"alarm_id": self.alarm.id,
                                 "limit": self.MAX_ALERTS,
                                 "offset": 0},
-                      on_success=self._populate_alert_log,
-                      on_error=self._handle_get_alerts_error) \
+                      on_success=handle_success,
+                      on_error=handle_error) \
             .start()
-
-    def _populate_alert_log(self, alerts_and_count: Tuple[List[Alert], int]):
-        alerts, total_count = alerts_and_count
-
-        # Populate log oldest -> newest
-        self.add_alerts(alerts)
-
-    def _handle_get_alerts_error(self, err):
-        raise err
-
-    @pyqtSlot(object)
-    def update_alerts(self, alerts: List[Alert]):
-        new_alerts: List[Alert] = []
-
-        # Update existing alerts
-        for alert in alerts:
-            if self.alert_log.contains_alert(alert):
-                print(f"Updating {alert}")
-                # self.update_alert(alert)
-            else:
-                print(f"Adding {alert}")
-                new_alerts.append(alert)
-
-        # Add new ones
-        self.add_alerts(new_alerts)
 
     @pyqtSlot(object)
     def handle_alert_stream(self, alerts: List[Alert]):
@@ -163,6 +133,16 @@ class AlarmCard(AlarmCardUI, ExpandableMI, IterableMI):
         for alert in alerts:
             if not self.alert_log.contains_alert(alert):
                 self.alert_log.add_alert(alert)
+
+    @pyqtProperty(bool)
+    def alert_active(self) -> bool:
+        return self._alert_active
+
+    def _set_alert_active(self, alert_active: bool) -> None:
+        """Private setter for alert_active property"""
+        self._alert_active = alert_active
+        self.alarm_header.set_active(alert_active)
+        stylesheet_watcher.update_widget(self)
 
 
 if __name__ == '__main__':
