@@ -71,17 +71,10 @@ class AlarmView(AlarmViewUI, IterableMI):
         self.bundle_map: Dict[int, AlarmBundle] = {}
         """{object.id: AlarmBundle}"""
 
-        self._init_alarm_bundles()
         self._init_signals()
 
     def iterable_layout(self) -> QLayout:
         return self.widget().layout()
-
-    def _init_alarm_bundles(self):
-        QTAsyncWorker(self, self.get_current_configuration,
-                      on_success=self.populate_view,
-                      on_error=self.handle_get_config_error) \
-            .start()
 
     def _init_signals(self):
 
@@ -94,32 +87,6 @@ class AlarmView(AlarmViewUI, IterableMI):
             return
 
         self.destroyed.connect(lambda: zss_publisher.unsubscribe(sub))
-
-    def get_current_configuration(self):
-        streams = api.get_stream_configurations()
-        zones = api.get_zones()
-
-        return streams, zones
-
-    def populate_view(self, configuration):
-        streams: List[StreamConfiguration]
-        zones: List[Zone]
-        streams, zones = configuration
-
-        # Create bundles
-        if self.bundle_mode is AlarmBundle.BundleType.BY_STREAM:
-            bundles_to_make = streams
-        elif self.bundle_mode is AlarmBundle.BundleType.BY_ZONE:
-            bundles_to_make = zones
-        else:
-            raise TypeError(f"Unknown bundle type {self.bundle_mode}")
-
-        for bundle in bundles_to_make:
-            # Create bundle if it does not already exist
-            self.bundle_map.setdefault(bundle.id, self.create_bundle(bundle))
-
-    def handle_get_config_error(self, err):
-        raise err
 
     def create_bundle(self, bundle: Union[StreamConfiguration, Zone]) \
             -> AlarmBundle:
