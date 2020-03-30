@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Any, Dict
 
 from PyQt5.QtCore import QObject
@@ -20,10 +21,11 @@ class _QTAsyncAPIPubsub(QObject):
             api.set_alert_verification(alert.id, verified_as)
 
         def on_success_cb(api_result):
-            # Change the client-stored alert's data
+            nonlocal alert
+            alert = deepcopy(alert)
             alert.verified_as = verified_as
 
-            # Call the callback and publish the data on the pubsub
+        # Call the callback and publish the data on the pubsub
             _QTAsyncAPIPubsub._publish_on_success(
                 on_success, api_result,
                 {ZSSTopic.ALERTS: [alert]})
