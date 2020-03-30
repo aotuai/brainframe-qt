@@ -2,7 +2,7 @@ import functools
 from typing import Dict, List, Union
 
 from PyQt5.QtCore import QMargins, Qt, pyqtSlot, QThread, QMetaObject, Q_ARG
-from PyQt5.QtWidgets import QLayout, QScrollArea, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QLayout, QScrollArea, QVBoxLayout, QWidget, QDialog
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration, Zone, ZoneAlarm
@@ -72,6 +72,13 @@ class AlarmView(AlarmViewUI, IterableMI):
         """{object.id: AlarmBundle}"""
 
         self._init_signals()
+
+    @classmethod
+    def show_dialog(cls, parent):
+        dialog = QDialog(parent)
+        dialog.setLayout(QVBoxLayout())
+        dialog.layout().addWidget(cls(dialog))
+        dialog.exec_()
 
     def iterable_layout(self) -> QLayout:
         return self.widget().layout()
