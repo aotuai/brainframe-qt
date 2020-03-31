@@ -6,3 +6,8 @@ BundleHeader {
 BundleHeader #bundle_name {
     color: white;
 }
+
+BundleHeader #bundle_location {
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    color: lightblue;
+}

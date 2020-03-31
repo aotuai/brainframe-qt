@@ -74,16 +74,16 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
         BY_STREAM = enum.auto()
         BY_ZONE = enum.auto()
 
-    def __init__(self, bundle_type: BundleType,
+    def __init__(self, bundle_mode: BundleType,
                  bundle_codec: Union[StreamConfiguration, Zone],
                  parent: QWidget):
         super().__init__(parent)
 
         # noinspection PyTypeHints
-        self.bundle_mode: self.BundleType = bundle_type
+        self.bundle_mode: self.BundleType = bundle_mode
         self.bundle_codec: Union[StreamConfiguration, Zone] = bundle_codec
 
-        self.bundle_header.set_bundle_name(self.bundle_codec.name)
+        self._populate_bundle_header()
 
         self._init_signals()
 
@@ -118,14 +118,28 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
         subscribe_alarms = functools.partial(zss_publisher.subscribe_alarms,
                                              self.handle_alarm_stream)
 
-        if self.bundle_mode == AlarmBundle.BundleType.BY_STREAM:
+        if self.bundle_mode is AlarmBundle.BundleType.BY_STREAM:
             subscription = subscribe_alarms(stream_id=self.bundle_codec.id)
-        elif self.bundle_mode == AlarmBundle.BundleType.BY_ZONE:
+        elif self.bundle_mode is AlarmBundle.BundleType.BY_ZONE:
             subscription = subscribe_alarms(zone_id=self.bundle_codec.id)
         else:
             return
 
         self.destroyed.connect(lambda: zss_publisher.unsubscribe(subscription))
+
+    def _populate_bundle_header(self) -> None:
+        self.bundle_header.bundle_name = self.bundle_codec.name
+
+        if self.bundle_mode is AlarmBundle.BundleType.BY_STREAM:
+            bundle_location = self.tr("(Stream)")
+        elif self.bundle_mode is AlarmBundle.BundleType.BY_ZONE:
+            bundle_location = self.tr("in Zone '{}'")
+        else:
+            return
+
+        bundle_location = bundle_location.format(self.bundle_codec.name)
+
+        self.bundle_header.bundle_location = bundle_location
 
     def expand(self, expanding: bool):
 
