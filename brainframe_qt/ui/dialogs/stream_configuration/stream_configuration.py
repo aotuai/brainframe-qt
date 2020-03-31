@@ -102,8 +102,8 @@ class StreamConfigurationDialog(QDialog):
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
             params["filepath"] = str(dialog.parameter_value.text())
             params["transcode"] = \
-                dialog.advanced_options_checkbox.isChecked() \
-                and not dialog.avoid_transcoding_checkbox.isChecked()
+                not (dialog.advanced_options_checkbox.isChecked()
+                     and dialog.avoid_transcoding_checkbox.isChecked())
         else:
             message = QApplication.translate('StreamConfigurationDialog',
                                              "Unrecognized connection type")
