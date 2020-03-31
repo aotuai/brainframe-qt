@@ -190,10 +190,10 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         true_button = self.verified_true_button
         false_button = self.verified_false_button
 
-        verify_true_message = self.tr("Verify alert as True")
-        verify_false_message = self.tr("Verify alert as False")
-        deverify_true_message = self.tr("Deverify alert as True")
-        deverify_false_message = self.tr("Deverify alert as True")
+        verify_true_message = self.tr("Verify alert")
+        verify_false_message = self.tr("Mark alert as false positive")
+        deverify_true_message = self.tr("Unverify alert")
+        deverify_false_message = self.tr("Unmark alert as false positive")
 
         # -1 is a sentinel
         if verification_override == -1:

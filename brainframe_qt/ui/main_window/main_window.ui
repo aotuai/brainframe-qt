@@ -118,7 +118,7 @@
     <string>Alert Status</string>
    </property>
    <property name="toolTip">
-    <string>View ongoing and past alerts for streams and alarms</string>
+    <string>View ongoing and past alerts for alarms</string>
    </property>
   </action>
  </widget>

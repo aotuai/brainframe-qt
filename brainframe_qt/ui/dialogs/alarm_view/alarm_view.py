@@ -76,10 +76,15 @@ class AlarmView(AlarmViewUI, IterableMI):
     @classmethod
     def show_dialog(cls, parent):
         dialog = QDialog(parent)
+        alarm_view = cls(dialog)
+
+        dialog.setWindowTitle(alarm_view.tr("Alert Status"))
         dialog.setWindowFlags(Qt.Window)
         dialog.setLayout(QVBoxLayout())
-        dialog.layout().addWidget(cls(dialog))
         dialog.resize(600, 800)
+
+        dialog.layout().addWidget(alarm_view)
+
         dialog.show()
 
     def iterable_layout(self) -> QLayout:
