@@ -80,7 +80,7 @@ class StreamConfigurationDialog(QDialog):
         params = {}
 
         # Add the pipeline value if it was configured
-        pipeline = str(dialog.pipeline_value.text())
+        pipeline = dialog.pipeline_value.text()
         if dialog.advanced_options_checkbox.isChecked() and pipeline:
             params["pipeline"] = pipeline
 
@@ -88,7 +88,7 @@ class StreamConfigurationDialog(QDialog):
 
         premises_id = None
         if dialog.connection_type == StreamConfiguration.ConnType.IP_CAMERA:
-            url = str(dialog.parameter_value.text()).strip()
+            url = dialog.parameter_value.text().strip()
             params["url"] = url
 
             premises_id = dialog.premises_combobox.itemData(
@@ -97,10 +97,10 @@ class StreamConfigurationDialog(QDialog):
                 dialog.advanced_options_checkbox.isChecked() \
                 and dialog.keyframe_only_checkbox.isChecked()
         elif dialog.connection_type == StreamConfiguration.ConnType.WEBCAM:
-            device_id = str(dialog.parameter_value.text()).strip()
+            device_id = dialog.parameter_value.text().strip()
             params["device_id"] = device_id
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
-            params["filepath"] = str(dialog.parameter_value.text())
+            params["filepath"] = dialog.parameter_value.text()
             params["transcode"] = \
                 not (dialog.advanced_options_checkbox.isChecked()
                      and dialog.avoid_transcoding_checkbox.isChecked())
