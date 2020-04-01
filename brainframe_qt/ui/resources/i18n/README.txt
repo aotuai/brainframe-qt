@@ -11,7 +11,7 @@ the packages outlined in the main README for UI development installed.
 # Usage
 
 After adding a new file or changing an existing file that needs translations or to add a new language,
-edit and run the gen_i18n.py script the scripts/ directory.
+edit and run the gen_i18n.py script that is in the scripts/ directory.
 
 ```commandline
 python scripts/gen_i18n.py
