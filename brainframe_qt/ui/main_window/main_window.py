@@ -58,16 +58,10 @@ class MainWindow(QMainWindow):
         video_config_icon = QIcon(str(image_paths.video_settings_icon))
         identity_config_icon = QIcon(str(image_paths.settings_gear_icon))
         plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
+        alert_status_icon = QIcon(str(image_paths.alarm_view_action_icon))
         about_page_icon = QIcon(str(image_paths.information_icon))
         server_configuration_icon = \
             QIcon(str(image_paths.server_configuration_icon))
-
-        # Temporary rotation cause I don't have a good icon
-        about_pixmap = QPixmap(str(image_paths.information_icon))
-        transform = QTransform().rotate(180)
-        about_pixmap = about_pixmap.transformed(transform,
-                                                Qt.SmoothTransformation)
-        alert_status_icon = QIcon(about_pixmap)
 
         self.server_configuration_action.setIcon(server_configuration_icon)
         self.video_configuration_action.setIcon(video_config_icon)

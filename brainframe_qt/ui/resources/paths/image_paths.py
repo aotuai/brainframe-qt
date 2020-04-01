@@ -15,6 +15,7 @@ error                     = route_path(image_dir, "error_message.png"       )
 # Icons
 icon_dir                  = route_path(image_dir, "icons"                   )
 alarm_icon                = route_path( icon_dir, "alarm.svg"               )
+alarm_view_action_icon    = route_path( icon_dir, "alarm_view_action.svg"   )
 alert_icon                = route_path( icon_dir, "alert.svg"               )
 application_icon          = route_path( icon_dir, "app_icon.png"            )
 folder_icon               = route_path( icon_dir, "folder.svg"              )
