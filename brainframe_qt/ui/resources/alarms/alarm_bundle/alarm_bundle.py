@@ -4,9 +4,9 @@ from enum import Enum
 from typing import List, Union
 
 from PyQt5.QtCore import Qt, pyqtSlot, QThread, QMetaObject, Q_ARG
-from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QLayout, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QFrame, QVBoxLayout, QWidget, \
+    QLayout, QSizePolicy
 
-from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration, ZoneAlarm, Zone
 from brainframe.client.api.zss_pubsub import zss_publisher
 from brainframe.client.ui.resources import stylesheet_watcher
@@ -131,13 +131,12 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
         self.bundle_header.bundle_name = self.bundle_codec.name
 
         if self.bundle_mode is AlarmBundle.BundleType.BY_STREAM:
-            bundle_location = self.tr("(Stream)")
+            bundle_location = QApplication.translate("AlarmBundle", "(Stream)")
         elif self.bundle_mode is AlarmBundle.BundleType.BY_ZONE:
-            bundle_location = self.tr("in Zone '{}'")
+            # TODO: Translate
+            bundle_location = "in Zone '{}'".format(self.bundle_codec.name)
         else:
             return
-
-        bundle_location = bundle_location.format(self.bundle_codec.name)
 
         self.bundle_header.bundle_location = bundle_location
 

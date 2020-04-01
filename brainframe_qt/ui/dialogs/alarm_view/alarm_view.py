@@ -1,13 +1,13 @@
-import functools
 from typing import Dict, List, Union
 
 from PyQt5.QtCore import QMargins, Qt, pyqtSlot, QThread, QMetaObject, Q_ARG
-from PyQt5.QtWidgets import QLayout, QScrollArea, QVBoxLayout, QWidget, QDialog
+from PyQt5.QtWidgets import QApplication, QLayout, QScrollArea, QVBoxLayout, \
+    QWidget, QDialog
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration, Zone, ZoneAlarm
 from brainframe.client.api.zss_pubsub import zss_publisher
-from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
+from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle import AlarmBundle
 from brainframe.client.ui.resources.mixins.data_structure import IterableMI
 from brainframe.client.ui.resources.mixins.style import TransientScrollbarMI
@@ -78,7 +78,8 @@ class AlarmView(AlarmViewUI, IterableMI):
         dialog = QDialog(parent)
         alarm_view = cls(dialog)
 
-        dialog.setWindowTitle(alarm_view.tr("Alert Status"))
+        window_title = QApplication.translate("AlarmView", "Alarm Status")
+        dialog.setWindowTitle(window_title)
         dialog.setWindowFlags(Qt.Window)
         dialog.setLayout(QVBoxLayout())
         dialog.resize(600, 800)

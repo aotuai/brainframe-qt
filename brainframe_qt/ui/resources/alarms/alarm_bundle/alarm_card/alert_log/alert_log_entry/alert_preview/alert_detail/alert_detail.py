@@ -94,7 +94,7 @@ class AlertDetail(AlertDetailUI):
                                ZoneAlarmRateCondition]] \
             = alarm.count_conditions + alarm.rate_conditions
         for condition in conditions:
-            text = self.tr("{} in region [{}]")
+            text = self.tr('"{0}" in region "{1}"')
             text = text.format(repr(condition).strip(), zone.name)
             description += text
 

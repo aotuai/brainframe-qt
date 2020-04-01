@@ -1,6 +1,7 @@
 import typing
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QWidget
+from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QWidget, \
+    QApplication
 
 from brainframe.client.api.codecs import ZoneAlarm
 from brainframe.client.ui.resources import stylesheet_watcher
@@ -13,8 +14,9 @@ class AlarmHeaderUI(QFrame):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.active_text = self.tr("Active")
-        self.inactive_text = self.tr("Inactive")
+        self.active_text = QApplication.translate("AlarmHeaderUI", "Active")
+        self.inactive_text = QApplication.translate(
+            "AlarmHeaderUI", "Inactive")
 
         self.alarm_name_label = self._init_alarm_name_label()
         self.alarm_location_label = self._init_alarm_location_label()
