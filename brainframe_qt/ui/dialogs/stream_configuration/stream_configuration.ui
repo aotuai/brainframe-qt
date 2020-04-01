@@ -137,35 +137,18 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item row="5" column="0">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>30</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="0" colspan="5">
-       <widget class="QCheckBox" name="advanced_options_checkbox">
-        <property name="text">
-         <string>Advanced Options</string>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="parameter_value">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="5">
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
+      <item row="2" column="2">
+       <widget class="QComboBox" name="premises_combobox"/>
       </item>
       <item row="1" column="0" colspan="2">
        <widget class="QLabel" name="parameter_label">
@@ -206,34 +189,47 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QLabel" name="pipeline_label">
+      <item row="8" column="1">
+       <widget class="QCheckBox" name="avoid_transcoding_checkbox">
         <property name="text">
-         <string>Pipeline</string>
+         <string>Avoid transcoding</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="1" colspan="4">
-       <widget class="QCheckBox" name="keyframe_only_checkbox">
-        <property name="text">
-         <string>Keyframe-only streaming</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2" colspan="2">
+      <item row="6" column="2" colspan="2">
        <widget class="QLineEdit" name="pipeline_value">
         <property name="placeholderText">
          <string>None</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLineEdit" name="parameter_value">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="6" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>30</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="pipeline_label">
+        <property name="text">
+         <string>Pipeline</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="5">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
@@ -244,8 +240,19 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QComboBox" name="premises_combobox"/>
+      <item row="4" column="0" colspan="5">
+       <widget class="QCheckBox" name="advanced_options_checkbox">
+        <property name="text">
+         <string>Advanced Options</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QCheckBox" name="keyframe_only_checkbox">
+        <property name="text">
+         <string>Keyframe-only streaming</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -283,7 +290,6 @@
   <tabstop>premises_combobox</tabstop>
   <tabstop>advanced_options_checkbox</tabstop>
   <tabstop>pipeline_value</tabstop>
-  <tabstop>keyframe_only_checkbox</tabstop>
  </tabstops>
  <resources/>
  <connections>
