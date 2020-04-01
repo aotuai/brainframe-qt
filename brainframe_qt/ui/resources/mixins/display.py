@@ -3,10 +3,10 @@ from abc import abstractmethod
 from PyQt5.QtCore import pyqtProperty, pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from brainframe.client.ui.resources.mixins import BaseMixin
+from brainframe.client.ui.resources.mixins import BaseWidgetMixin
 
 
-class ExpandableMI(BaseMixin):
+class ExpandableMI(BaseWidgetMixin):
 
     def __init_subclass__(cls, **kwargs):
         # This hack is required because of the magic PyQt does to properties.

@@ -2,10 +2,10 @@ from abc import abstractmethod
 
 from PyQt5.QtWidgets import QLayout
 
-from brainframe.client.ui.resources.mixins import BaseMixin
+from brainframe.client.ui.resources.mixins import BaseWidgetMixin
 
 
-class IterableMI(BaseMixin):
+class IterableMI(BaseWidgetMixin):
 
     def __iter__(self):
         layout = self.iterable_layout()

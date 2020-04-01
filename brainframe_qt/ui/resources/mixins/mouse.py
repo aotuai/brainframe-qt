@@ -1,10 +1,10 @@
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QCursor, QMouseEvent
 
-from brainframe.client.ui.resources.mixins import BaseMixin
+from brainframe.client.ui.resources.mixins import BaseWidgetMixin
 
 
-class ClickableMI(BaseMixin):
+class ClickableMI(BaseWidgetMixin):
 
     def __init_subclass__(cls, **kwargs):
         """This is required because of the magic PyQt does to signals.

@@ -1,1 +1,1 @@
-from .base_mixin import BaseMixin
+from .base_mixin import BaseLayoutMixin, BaseWidgetMixin
