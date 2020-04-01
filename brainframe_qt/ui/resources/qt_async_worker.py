@@ -1,5 +1,6 @@
 import os
 from typing import Callable
+from threading import Event
 
 from PyQt5.QtCore import Qt, QThread, pyqtSlot
 from PyQt5.QtWidgets import QWidget
@@ -31,6 +32,11 @@ class QTAsyncWorker(QThread):
         # noinspection PyUnresolvedReferences
         self.finished.connect(self.finish)
 
+        self.finished_event = Event()
+        """An event that is set when the worker has finished, but before the 
+        callback is run.
+        """
+
     def run(self):
         self.result = self.func(*self.args, **self.kwargs)
 
@@ -48,6 +54,7 @@ class QTAsyncWorker(QThread):
 
     def finish(self):
         if not self._terminated:
+            self.finished_event.set()
             self.callback(self.result)
         self.deleteLater()
 

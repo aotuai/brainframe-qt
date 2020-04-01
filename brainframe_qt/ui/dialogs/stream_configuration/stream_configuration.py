@@ -26,6 +26,7 @@ class StreamConfigurationDialog(QDialog):
     connection_type_combo_box: QComboBox
     premises_combobox: QComboBox
     keyframe_only_checkbox: QCheckBox
+    avoid_transcoding_checkbox: QCheckBox
     select_file_button: QPushButton
 
     def __init__(self, parent=None, stream_conf=None):
@@ -58,13 +59,15 @@ class StreamConfigurationDialog(QDialog):
             self.verify_inputs_valid)
         self.advanced_options_checkbox.stateChanged.connect(
             self.verify_inputs_valid)
+        self.avoid_transcoding_checkbox.stateChanged.connect(
+            self.verify_inputs_valid)
         self.verify_inputs_valid()
 
         self.advanced_options_checkbox.stateChanged.connect(
-            self.toggle_advanced_options)
+            self.update_advanced_option_items)
 
         # Start with advanced options hidden
-        self.toggle_advanced_options()
+        self.update_advanced_option_items()
 
     @classmethod
     def configure_stream(cls, parent, stream_conf=None):
@@ -74,29 +77,38 @@ class StreamConfigurationDialog(QDialog):
         if not result:
             return None
 
+        params = {}
+
+        # Add the pipeline value if it was configured
+        pipeline = dialog.pipeline_value.text()
+        if dialog.advanced_options_checkbox.isChecked() and pipeline:
+            params["pipeline"] = pipeline
+
+        keyframes_only = False
+
         premises_id = None
         if dialog.connection_type == StreamConfiguration.ConnType.IP_CAMERA:
-            url = str(dialog.parameter_value.text()).strip()
-            params = {"url": url}
-            # Add the pipeline value if it was configured
-            pipeline = str(dialog.pipeline_value.text())
-            if dialog.advanced_options_checkbox.isChecked() and pipeline:
-                params["pipeline"] = pipeline
+            url = dialog.parameter_value.text().strip()
+            params["url"] = url
 
             premises_id = dialog.premises_combobox.itemData(
                 dialog.premises_combobox.currentIndex())
+            keyframes_only = \
+                dialog.advanced_options_checkbox.isChecked() \
+                and dialog.keyframe_only_checkbox.isChecked()
         elif dialog.connection_type == StreamConfiguration.ConnType.WEBCAM:
-            device_id = str(dialog.parameter_value.text()).strip()
-            params = {"device_id": device_id}
+            device_id = dialog.parameter_value.text().strip()
+            params["device_id"] = device_id
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
-            params = {"filepath": str(dialog.parameter_value.text())}
+            params["filepath"] = dialog.parameter_value.text()
+            params["transcode"] = \
+                not (dialog.advanced_options_checkbox.isChecked()
+                     and dialog.avoid_transcoding_checkbox.isChecked())
         else:
             message = QApplication.translate('StreamConfigurationDialog',
                                              "Unrecognized connection type")
             raise NotImplementedError(message)
 
-        keyframes_only = dialog.advanced_options_checkbox.isChecked() \
-                         and dialog.keyframe_only_checkbox.isChecked()
         return StreamConfiguration(
             name=dialog.stream_name.text(),
             connection_type=dialog.connection_type,
@@ -121,23 +133,22 @@ class StreamConfigurationDialog(QDialog):
                 self.connection_type = StreamConfiguration.ConnType.IP_CAMERA
                 self.parameter_label.setText(self.tr("Camera web address"))
                 self._set_premises_options_hidden(False)
-                self._set_advanced_options_section_hidden(False)
                 self._update_premises_combobox()
 
             elif connection_index == 2:  # Webcam
                 self.connection_type = StreamConfiguration.ConnType.WEBCAM
                 self.parameter_label.setText(self.tr("Device ID"))
                 self._set_premises_options_hidden(True)
-                self._set_advanced_options_section_hidden(True)
             elif connection_index == 3:  # File
                 # TODO(Bryce Beagle): Use QFileDialog
                 self.connection_type = StreamConfiguration.ConnType.FILE
                 self._set_premises_options_hidden(True)
                 self.parameter_label.setText(self.tr("Filepath"))
-                self._set_advanced_options_section_hidden(True)
 
             # Show parameter widgets
             self._set_parameter_widgets_hidden(False)
+            # Show advanced options
+            self._set_advanced_options_section_hidden(False)
 
     @pyqtSlot()
     def verify_inputs_valid(self):
@@ -151,6 +162,8 @@ class StreamConfigurationDialog(QDialog):
           self.connection_type_combo_box.currentTextChanged
         - QCheckBox -- Dynamic
           self.advanced_options_checkbox.stateChanged
+        - QCheckBox -- Dynamic
+          self.avoid_transcoding_checkbox.stateChanged
         - QTextEdit -- Dynamic
           self.parameter_value.textChanged
         """
@@ -173,18 +186,38 @@ class StreamConfigurationDialog(QDialog):
         self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(is_valid)
 
     @pyqtSlot()
-    def toggle_advanced_options(self):
+    def update_advanced_option_items(self):
         """Changes whether or not the advanced options are hidden based on the
-        value of the "Advanced Options" checkbox.
+        value of the "Advanced Options" checkbox and the currently selected
+        stream type.
 
         Connected to:
         - QCheckBox -- Dynamic
           self.advanced_options_checkbox.stateChanged
         """
-        hidden = not self.advanced_options_checkbox.isChecked()
-        self.pipeline_label.setHidden(hidden)
-        self.pipeline_value.setHidden(hidden)
-        self.keyframe_only_checkbox.setHidden(hidden)
+        # If the whole advanced options section is hidden, hide the actual
+        # options regardless of the checkbox value
+        section_hidden = self.advanced_options_checkbox.isHidden()
+        # Even if the advanced options section should be shown, the actual
+        # options will not be shown if the advanced options checkbox is
+        # unchecked
+        unchecked = not self.advanced_options_checkbox.isChecked()
+
+        # Advanced options for all stream types
+        self.pipeline_label.setHidden(section_hidden or unchecked)
+        self.pipeline_value.setHidden(section_hidden or unchecked)
+
+        # Advanced options for the IP camera stream type
+        self.keyframe_only_checkbox.setHidden(
+            section_hidden
+            or unchecked
+            or self.connection_type is not StreamConfiguration.ConnType.IP_CAMERA)
+
+        # Advanced options for the file stream type
+        self.avoid_transcoding_checkbox.setHidden(
+            section_hidden
+            or unchecked
+            or self.connection_type is not StreamConfiguration.ConnType.FILE)
 
     def _update_premises_combobox(self):
         # Set the premises dropdown options
@@ -215,16 +248,7 @@ class StreamConfigurationDialog(QDialog):
         """Hide or show the advanced options section.
         """
         self.advanced_options_checkbox.setHidden(hidden)
-        if hidden:
-            # If the whole advanced options section is hidden, hide the actual
-            # options regardless of the checkbox value
-            self.pipeline_label.setHidden(hidden)
-            self.pipeline_value.setHidden(hidden)
-            self.keyframe_only_checkbox.setHidden(hidden)
-        else:
-            # Even if the advanced options section should be shown, the actual
-            # options may or may not be visible based on the checkbox value
-            self.toggle_advanced_options()
+        self.update_advanced_option_items()
 
     def _file_dialog(self):
         """Get the path to (presumably) a video file"""

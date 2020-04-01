@@ -1,16 +1,17 @@
 import sys
 from threading import Event
-from time import sleep
 from typing import List, Optional
+from queue import Queue
 
 from PyQt5.QtCore import pyqtSlot, Qt, Q_ARG, QLocale, QMetaObject, QThread, \
     QTranslator
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
+import brainframe
 from brainframe.client.api import api, api_errors
 from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
-from brainframe.client.ui.dialogs import StandardError
+from brainframe.client.ui.dialogs import StandardError, VersionMismatch
 from brainframe.client.ui.resources import QTAsyncWorker, settings
 from brainframe.client.ui.resources.paths import image_paths, text_paths
 from brainframe.shared.gstreamer import gobject_init
@@ -65,20 +66,29 @@ class BrainFrameApplication(QApplication):
         # Show splash screen while waiting for server connection
         with SplashScreen() as splash_screen:
             message = self.tr("Attempting to connect to server at {}")
+            f_message = message.format(settings.server_url.val())
+            splash_screen.showMessage(f_message)
 
-            timeout_event = Event()
-            """Event that is set once communication with server has succeeded
-            """
-
-            worker = QTAsyncWorker(self, api.wait_for_server_initialization,
-                                   callback=lambda _: timeout_event.set())
+            worker = QTAsyncWorker(
+                self, api.wait_for_server_initialization,
+                callback=lambda _: None)
             worker.start()
+            self._wait_for_event(worker.finished_event)
 
-            while not timeout_event.wait(.1):
-                f_message = message.format(settings.server_url.val())
-                splash_screen.showMessage(f_message)
+            version_queue = Queue(maxsize=1)
 
-                self.processEvents()
+            worker = QTAsyncWorker(
+                self, api.version,
+                callback=lambda result: version_queue.put(result))
+            worker.start()
+            self._wait_for_event(worker.finished_event)
+
+            version = version_queue.get()
+            if version != brainframe.__version__:
+                dialog = VersionMismatch(
+                    server_version=version,
+                    client_version=brainframe.__version__)
+                dialog.exec_()
 
             message = self.tr("Successfully connected to server. Starting UI")
             splash_screen.showMessage(message)
@@ -154,6 +164,11 @@ class BrainFrameApplication(QApplication):
         # Otherwise close program
         if not LicenseAgreement.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
+
+    def _wait_for_event(self, event):
+        """Runs the Qt event loop while waiting on an event to be triggered."""
+        while not event.wait(.1):
+            self.processEvents()
 
     # Handle all exceptions using a graphical handler
     # https://stackoverflow.com/a/41921291/8134178

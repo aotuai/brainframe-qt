@@ -329,3 +329,35 @@ class VectorTooLongError(BaseAPIError):
 
     def __init__(self, description):
         super().__init__(error_kinds.VECTOR_TOO_LONG, description)
+
+
+@register_error_type
+class UserNotFoundError(BaseAPIError):
+    """There was an attempt to access a user by ID that does not exist."""
+
+    def __init__(self, description):
+        super().__init__(error_kinds.USER_NOT_FOUND, description)
+
+
+@register_error_type
+class InsufficientRoleError(BaseAPIError):
+    """A user attempted an operation that they don't have permission to do."""
+
+    def __init__(self, description):
+        super().__init__(error_kinds.INSUFFICIENT_ROLE, description)
+
+
+@register_error_type
+class DuplicateUsernameError(BaseAPIError):
+    """The requested username already exists."""
+
+    def __init__(self, description):
+        super().__init__(error_kinds.DUPLICATE_USERNAME, description)
+
+
+@register_error_type
+class AdminMustExistError(BaseAPIError):
+    """There was an attempt to delete the only remaining admin account."""
+
+    def __init__(self, description):
+        super().__init__(error_kinds.ADMIN_MUST_EXIST, description)

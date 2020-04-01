@@ -99,7 +99,7 @@ class SyncedStreamReader(StreamReader):
 
     def alert_frame_listeners(self):
         with self._stream_listeners_lock:
-            if self._stream_reader.status is StreamStatus.STREAMING:
+            if self.status is StreamStatus.STREAMING:
                 for listener in self.stream_listeners:
                     listener.frame_event.set()
 
@@ -124,8 +124,8 @@ class SyncedStreamReader(StreamReader):
     def add_listener(self, listener: StreamListener):
         with self._stream_listeners_lock:
             self.stream_listeners.add(listener)
-            if not self._stream_reader.status.STREAMING:
-                self.alert_status_listeners(self._stream_reader.status)
+            if self.status is not StreamStatus.STREAMING:
+                self.alert_status_listeners(self.status)
             elif self.latest_processed_frame is not None:
                 self.alert_frame_listeners()
             else:
@@ -160,7 +160,7 @@ class SyncedStreamReader(StreamReader):
         self._stream_reader.set_runtime_option_vals(runtime_options)
 
     def _sync_detections_with_stream(self):
-        while self._stream_reader.status != StreamStatus.INITIALIZING:
+        while self.status != StreamStatus.INITIALIZING:
             sleep(0.01)
 
         # Create the frame syncing generator and initialize it
@@ -175,10 +175,10 @@ class SyncedStreamReader(StreamReader):
 
             if self._stream_reader.new_status_event.is_set():
                 self._stream_reader.new_status_event.clear()
-                if self._stream_reader.status is StreamStatus.CLOSED:
+                if self.status is StreamStatus.CLOSED:
                     break
-                if self._stream_reader.status is not StreamStatus.STREAMING:
-                    self.alert_status_listeners(self._stream_reader.status)
+                if self.status is not StreamStatus.STREAMING:
+                    self.alert_status_listeners(self.status)
                     continue
 
             # If streaming is the new event we need to process the frame
@@ -265,7 +265,7 @@ class SyncedStreamReader(StreamReader):
             # Check if this is a fresh zone_status or not
             if len(statuses) and last_status_tstamp != status_tstamp:
                 # Catch up to the previous inference frame
-                while buffer[0].tstamp < last_status_tstamp:
+                while len(buffer) and buffer[0].tstamp < last_status_tstamp:
                     buffer.pop(0)
                 last_status_tstamp = status_tstamp
 
