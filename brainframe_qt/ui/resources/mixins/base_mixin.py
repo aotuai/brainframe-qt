@@ -10,7 +10,7 @@ class ABCObject(type(QObject), ABCMeta):
     pass
 
 
-class BaseLayoutMixin(QLayout, metaclass=ABCObject):
+class BaseQMixin(metaclass=ABCObject):
     pass
 
 
