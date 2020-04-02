@@ -36,7 +36,6 @@ class SortedLayoutMI(BaseQMixin, QVBoxLayout):
         self.insertItem(index, item)
 
     def addWidget(self, widget: W, *args, **kwargs) -> None:
-        print("%^%%% added widget")
         index = self._widgets.add(widget)
         self.insertWidget(index, widget, *args, **kwargs)
 
