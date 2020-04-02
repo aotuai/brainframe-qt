@@ -1,8 +1,8 @@
-from typing import List, Optional, overload
+from typing import Optional
 import typing
 
 from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QScrollArea, QWidget
 
 from brainframe.client.api.codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher
@@ -10,6 +10,7 @@ from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.mixins.style import TransientScrollbarMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 from .alert_log_entry import AlertLogEntry
+from .alert_log_layout import AlertLogLayout
 
 
 class AlertLogUI(QScrollArea, TransientScrollbarMI):
@@ -18,10 +19,11 @@ class AlertLogUI(QScrollArea, TransientScrollbarMI):
         super().__init__(parent)
 
         # Initialize widgets
+        self.container_layout = self._init_container_layout()
         container_widget = self._init_container_widget()
-        self._init_viewport_widget()
-
         self.setWidget(container_widget)
+
+        self._init_viewport_widget()
 
         self._init_style()
 
@@ -47,17 +49,13 @@ class AlertLogUI(QScrollArea, TransientScrollbarMI):
         container_widget.setObjectName("container")
         container_widget.setAttribute(Qt.WA_StyledBackground, True)
 
-        container_widget.setLayout(self._init_container_widget_layout())
+        container_widget.setLayout(self.container_layout)
 
         return container_widget
 
     # noinspection PyMethodMayBeStatic
-    def _init_container_widget_layout(self) -> QVBoxLayout:
-        layout = QVBoxLayout()
-        layout.setSpacing(0)
-        layout.setAlignment(Qt.AlignTop)
-        layout.setContentsMargins(0, 0, 0, 0)
-
+    def _init_container_layout(self) -> AlertLogLayout:
+        layout = AlertLogLayout()
         return layout
 
     def _init_viewport_widget(self) -> None:
@@ -72,47 +70,15 @@ class AlertLog(AlertLogUI, ClickableMI):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.alert_log_entries: List[AlertLogEntry] = []
         self.max_alerts = None
         self._alert_active = typing.cast(bool, None)
-
-    @overload
-    def __getitem__(self, index: int) -> AlertLogEntry:
-        """Returns the AlertLogEntry that at the supplied index"""
-        ...
-
-    @overload
-    def __getitem__(self, alert: Alert) -> AlertLogEntry:
-        """Returns the AlertLogEntry that corresponds to the supplied alert"""
-        ...
-
-    def __getitem__(self, key) -> AlertLogEntry:
-        """Returns the AlertLogEntry for the given key"""
-        if isinstance(key, Alert):
-            alert = key
-            search = (alert_log_entry for alert_log_entry in self
-                      if alert_log_entry.alert.id == alert.id)
-            try:
-                return next(search)
-            except StopIteration as exc:
-                raise KeyError from exc
-        elif isinstance(key, int):
-            index = key
-
-            if index >= self.widget().layout().count():
-                raise IndexError
-
-            widget = self.widget().layout().itemAt(index).widget()
-            return typing.cast(AlertLogEntry, widget)
-        else:
-            raise TypeError
 
     def add_alert(self, alert: Alert):
         alert_log_entry = AlertLogEntry(alert, self)
 
         # Add widget to the top of the layout
-        layout = typing.cast(QVBoxLayout, self.widget().layout())
-        layout.insertWidget(0, alert_log_entry)
+        layout = typing.cast(AlertLogLayout, self.widget().layout())
+        layout.addWidget(alert_log_entry)
 
         # When an AlertLogEntry is expanded, make sure it and its contents are
         # visible in the ScrollArea
@@ -132,36 +98,34 @@ class AlertLog(AlertLogUI, ClickableMI):
         # been set visible (i.e. size is recalculated)
         QTimer.singleShot(0, self.updateGeometry)
 
-        self.alert_log_entries.insert(0, alert_log_entry)
-
         if self.max_alerts is not None \
-                and len(self.alert_log_entries) > self.max_alerts:
+                and self.container_layout.count() > self.max_alerts:
             self.pop_alert()
 
         # This check to ensure edge case where self.max_alerts = 0 doesn't
         # break anything
-        if self.alert_log_entries:
-            latest_alert = self.alert_log_entries[0]
-            latest_alert_active = (latest_alert.alert.end_time is None)
-        else:
+        if self.container_layout.count() == 0:
             latest_alert_active = False
+        else:
+            latest_alert = self.container_layout.widget_at(0)
+            latest_alert_active = (latest_alert.alert.end_time is None)
 
         if self._alert_active != latest_alert_active:
             self._alert_active = latest_alert_active
             self.alert_activity_changed.emit(latest_alert_active)
 
     def pop_alert(self):
-        alert_log_entry = self.alert_log_entries.pop()
+        last_index = self.container_layout.count()
+        alert_log_entry = self.container_layout.take_widget_at(last_index)
 
         alert_log_entry.expansion_changed.disconnect()
 
         # Add widget to the top of the layout
-        self.widget().layout().removeWidget(alert_log_entry)
         alert_log_entry.deleteLater()
 
         QTimer.singleShot(0, self.updateGeometry)
 
-        if not self.alert_log_entries and self._alert_active:
+        if self.container_layout.count() == 0 and self._alert_active:
             self._alert_active = False
             self.alert_activity_changed.emit(False)
 
@@ -176,15 +140,16 @@ class AlertLog(AlertLogUI, ClickableMI):
         QTimer.singleShot(0, lambda: self.ensureWidgetVisible(alert_log_entry))
 
     def contains_alert(self, alert: Alert):
-        for alert_log_entry in self.alert_log_entries:
+        for index in range(self.container_layout.count()):
+            alert_log_entry = self.container_layout.widget_at(index)
             if alert_log_entry.alert.id == alert.id:
                 return True
         return False
 
     @pyqtSlot(bool)
     def _interpret_alert_activity_changed(self, alert_active: bool):
-        if not self.alert_log_entries \
-                or self.sender() != self.alert_log_entries[0]:
+        if self.container_layout.count() == 0 \
+                or self.sender() != self.container_layout.widget_at(0):
             return
 
         if self._alert_active != alert_active:
