@@ -115,7 +115,7 @@ class AlertLog(AlertLogUI, ClickableMI):
             self.alert_activity_changed.emit(latest_alert_active)
 
     def pop_alert(self):
-        last_index = self.container_layout.count()
+        last_index = self.container_layout.count() - 1
         alert_log_entry = self.container_layout.take_widget_at(last_index)
 
         alert_log_entry.expansion_changed.disconnect()
