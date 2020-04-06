@@ -4,7 +4,7 @@ from typing import Generic, TypeVar
 from PyQt5.QtWidgets import QWidget, QLayoutItem, QVBoxLayout
 
 from brainframe.client.ui.resources.mixins import BaseQMixin
-from brainframe.shared.data_structures import SortedList
+from brainframe.client.ui.resources.data_structures import SortedList
 
 W = TypeVar("W", bound=QWidget)
 
