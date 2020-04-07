@@ -107,10 +107,16 @@ class _ZSSPubSub:
                         subscriber.callback(publish_data)
                     except RuntimeError as exc:
                         if "has been deleted" in str(exc):
-                            # TODO: Fix this race condition
-                            # Ignore. Should be deleted eventually
+                            # TODO: A race condition occurs when a subscriber
+                            #  deletes itself while we're iterating over the
+                            #  subscription list. For now, we just ignore it
+                            #  because that occurrence will just resolve itself
+                            #  and the subscriber's unsubscribe call will come
+                            #  through eventually
                             pass
 
+                            # TODO: If the above race condition is fixed, this
+                            #  should be used instead of `pass`
                             # func_name = subscriber.callback.__qualname__
                             # msg = f"Pubsub callback {func_name} was called "\
                             #       f"but attempted to access a deleted " \
