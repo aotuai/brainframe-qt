@@ -62,9 +62,11 @@ class TaskConfiguration(QDialog):
             def add_alarm(new_alarm):
                 self.zone_list.add_alarm(zone, new_alarm)
 
-            QTAsyncWorker(self, set_zone_alarm, add_alarm).start()
+            QTAsyncWorker(self, set_zone_alarm, on_success=add_alarm).start()
 
-        QTAsyncWorker(self, get_plugins_and_zones, create_alarm).start()
+        QTAsyncWorker(self, get_plugins_and_zones,
+                      on_success=create_alarm) \
+            .start()
 
     @pyqtSlot()
     def new_line(self):

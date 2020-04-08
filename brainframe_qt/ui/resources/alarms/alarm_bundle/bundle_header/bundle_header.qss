@@ -1,0 +1,13 @@
+BundleHeader {
+    background: teal;
+    border-radius: 4px;
+}
+
+BundleHeader #bundle_name {
+    color: white;
+}
+
+BundleHeader #bundle_location {
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    color: lightblue;
+}

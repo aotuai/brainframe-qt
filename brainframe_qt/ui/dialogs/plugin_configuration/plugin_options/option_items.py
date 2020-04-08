@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 import logging
 from typing import Optional
 
-from PyQt5.QtGui import QIntValidator, QDoubleValidator
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
 from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
     QPushButton, QSizePolicy, QApplication, QMessageBox
 
@@ -57,6 +58,7 @@ class PluginOptionItem(ABC):
             self.tooltip_button.setToolTip(description)
             # self.tooltip_button.setDisabled(True)
             self.tooltip_button.setToolTipDuration(0)
+            self.tooltip_button.setCursor(QCursor(Qt.WhatsThisCursor))
 
             # Make it so if you click an option, the description appears
             msg = QMessageBox(parent=self.tooltip_button)

@@ -4,6 +4,8 @@ image_dir = route_path("brainframe", "client", "ui", "resources", "images")
 
 
 # Images
+loading_image             = route_path(image_dir, "loading_image.svg"       )
+no_image_available        = route_path(image_dir, "no_image_available.svg"  )
 connecting_to_stream      = route_path(image_dir, "connecting_to_stream.png")
 connection_lost           = route_path(image_dir, "connection_lost.png"     )
 splash_screen             = route_path(image_dir, "splash_screen.png"       )
@@ -13,6 +15,7 @@ error                     = route_path(image_dir, "error_message.png"       )
 # Icons
 icon_dir                  = route_path(image_dir, "icons"                   )
 alarm_icon                = route_path( icon_dir, "alarm.svg"               )
+alarm_view_action_icon    = route_path( icon_dir, "alarm_view_action.svg"   )
 alert_icon                = route_path( icon_dir, "alert.svg"               )
 application_icon          = route_path( icon_dir, "app_icon.png"            )
 folder_icon               = route_path( icon_dir, "folder.svg"              )

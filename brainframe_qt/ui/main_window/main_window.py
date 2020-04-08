@@ -1,13 +1,10 @@
-import sys
-from pathlib import PosixPath
-
 from PyQt5.QtCore import pyqtSlot, Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap, QTransform
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget, QSizePolicy
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
-from brainframe.client.ui.dialogs import AboutPage, \
+from brainframe.client.ui.dialogs import AboutPage, AlarmView, \
     IdentityConfiguration, PluginConfigDialog, RenderConfiguration, \
     ServerConfigurationDialog, StreamConfigurationDialog
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
@@ -61,6 +58,7 @@ class MainWindow(QMainWindow):
         video_config_icon = QIcon(str(image_paths.video_settings_icon))
         identity_config_icon = QIcon(str(image_paths.settings_gear_icon))
         plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
+        alert_status_icon = QIcon(str(image_paths.alarm_view_action_icon))
         about_page_icon = QIcon(str(image_paths.information_icon))
         server_configuration_icon = \
             QIcon(str(image_paths.server_configuration_icon))
@@ -69,6 +67,7 @@ class MainWindow(QMainWindow):
         self.video_configuration_action.setIcon(video_config_icon)
         self.identity_configuration_action.setIcon(identity_config_icon)
         self.plugin_configuration_action.setIcon(plugin_config_icon)
+        self.show_alert_view_action.setIcon(alert_status_icon)
         self.show_about_page_action.setIcon(about_page_icon)
 
     @pyqtSlot()
@@ -164,3 +163,7 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def show_global_plugin_config_dialog(self):
         PluginConfigDialog.show_dialog(self)
+
+    @pyqtSlot()
+    def show_alert_view_dialog(self):
+        AlarmView.show_dialog(self)

@@ -59,7 +59,7 @@ class ZoneList(QTreeWidget):
 
             self.clearSelection()
 
-        QTAsyncWorker(self, get_zones, add_zones).start()
+        QTAsyncWorker(self, get_zones, on_success=add_zones).start()
 
     def add_zone(self, zone: Zone):
         """Creates and returns the new ZoneListItem using the zone"""

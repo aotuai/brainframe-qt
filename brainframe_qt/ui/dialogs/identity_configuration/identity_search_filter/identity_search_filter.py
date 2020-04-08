@@ -65,7 +65,7 @@ class IdentitySearchFilter(QWidget):
         def callback(encoding_class_names):
             self.encoding_list.init_encodings(encoding_class_names)
 
-        QTAsyncWorker(self, func, callback).start()
+        QTAsyncWorker(self, func, on_success=callback).start()
 
     @pyqtSlot(str)
     def delete_encoding_class_slot(self, encoding_class: str):
@@ -95,7 +95,7 @@ class IdentitySearchFilter(QWidget):
             # noinspection PyUnresolvedReferences
             self.filter_by_encoding_class_signal.emit("")
 
-        QTAsyncWorker(self, func, callback).start()
+        QTAsyncWorker(self, func, on_success=callback).start()
 
     # noinspection DuplicatedCode
     def _prompt_encoding_class_deletion(self, encoding_class: str) -> bool:

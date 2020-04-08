@@ -2,7 +2,6 @@ from typing import List
 
 from .base_codecs import Codec
 from .condition_codecs import ZoneAlarmCountCondition, ZoneAlarmRateCondition
-from brainframe.shared import codec_enums
 
 
 class ZoneAlarm(Codec):

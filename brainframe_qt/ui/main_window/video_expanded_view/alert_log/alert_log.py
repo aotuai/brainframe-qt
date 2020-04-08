@@ -50,8 +50,10 @@ class AlertLog(QWidget):
 
             try:
                 # Get a page of the 100 most recent alerts
-                server_side_alerts, total_count = api.get_unverified_alerts(
-                    stream_id, limit=100, offset=0)
+                server_side_alerts, total_count = api.get_alerts(
+                    stream_id=stream_id,
+                    limit=100,
+                    offset=0)
             except api_errors.StreamConfigNotFoundError:
                 # Return an empty list. The callback will delete all the
                 # existing Alerts from the UI
@@ -79,7 +81,9 @@ class AlertLog(QWidget):
             # If no change to stream_id, then use the results from the API
             self._set_alerts(alerts)
 
-        QTAsyncWorker(self, get_alerts_from_server, set_alerts_checked).start()
+        QTAsyncWorker(self, get_alerts_from_server,
+                      on_success=set_alerts_checked) \
+            .start()
 
     def _set_alerts(self, server_side_alerts: List[Alert]):
 
@@ -130,7 +134,8 @@ class AlertLog(QWidget):
             deleted_alert_ids = existing_alert_ids - server_side_alert_ids
             self._delete_alerts_by_id(deleted_alert_ids)
 
-        QTAsyncWorker(self, get_alarms_and_zones, edit_alerts).start()
+        QTAsyncWorker(self, get_alarms_and_zones, on_success=edit_alerts) \
+            .start()
 
     def _add_alerts(self, alerts: Iterable[Alert],
                     alarms: Dict[int, ZoneAlarm],

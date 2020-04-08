@@ -69,9 +69,7 @@ class BrainFrameApplication(QApplication):
             f_message = message.format(settings.server_url.val())
             splash_screen.showMessage(f_message)
 
-            worker = QTAsyncWorker(
-                self, api.wait_for_server_initialization,
-                callback=lambda _: None)
+            worker = QTAsyncWorker(self, api.wait_for_server_initialization)
             worker.start()
             self._wait_for_event(worker.finished_event)
 
@@ -79,7 +77,7 @@ class BrainFrameApplication(QApplication):
 
             worker = QTAsyncWorker(
                 self, api.version,
-                callback=lambda result: version_queue.put(result))
+                on_success=lambda result: version_queue.put(result))
             worker.start()
             self._wait_for_event(worker.finished_event)
 

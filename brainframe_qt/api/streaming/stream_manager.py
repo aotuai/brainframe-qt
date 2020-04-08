@@ -1,9 +1,10 @@
-from brainframe.client.api.status_poller import StatusPoller
+from brainframe.client.api.status_receiver import StatusReceiver
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.shared.stream_reader import StreamReader
-from .synced_reader import SyncedStreamReader
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.gstreamer import gobject_init
+
+from .synced_reader import SyncedStreamReader
 
 
 class StreamManager:
@@ -15,9 +16,9 @@ class StreamManager:
                             StreamConfiguration.ConnType.FILE]
     """These video types are re-hosted by the server."""
 
-    def __init__(self, status_poller: StatusPoller):
+    def __init__(self, status_receiver: StatusReceiver):
         self._stream_readers = {}
-        self._status_poller = status_poller
+        self._status_receiver = status_receiver
         self._async_closing_streams = []
         """A list of StreamReader objects that are closing or may have finished
         closing"""
@@ -32,10 +33,9 @@ class StreamManager:
         :param url: The URL to stream on
         :return: A Stream object
         """
-        if stream_config.id not in self._stream_readers:
-            pipeline = None
-            if "pipeline" in stream_config.connection_options:
-                pipeline = stream_config.connection_options["pipeline"]
+        if not self.is_streaming(stream_config.id):
+            # pipeline will be None if not in the options
+            pipeline: str = stream_config.connection_options.get("pipeline")
 
             latency = StreamReader.DEFAULT_LATENCY
             if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:
@@ -55,12 +55,12 @@ class StreamManager:
             synced_stream_reader = SyncedStreamReader(
                 stream_config.id,
                 stream_reader,
-                self._status_poller)
+                self._status_receiver)
             self._stream_readers[stream_config.id] = synced_stream_reader
 
         return self._stream_readers[stream_config.id]
 
-    def is_streaming(self, stream_id):
+    def is_streaming(self, stream_id: int) -> bool:
         """Checks if the the manager has a stream reader for the given stream
         id.
 
@@ -70,7 +70,7 @@ class StreamManager:
         """
         return stream_id in self._stream_readers
 
-    def close_stream(self, stream_id):
+    def close_stream(self, stream_id: int) -> None:
         """Close a specific stream and remove the reference.
 
         :param stream_id: The ID of the stream to delete
@@ -78,7 +78,7 @@ class StreamManager:
         stream = self.close_stream_async(stream_id)
         stream.wait_until_closed()
 
-    def close(self):
+    def close(self) -> None:
         """Close all streams and remove references"""
         for stream_id in self._stream_readers.copy().keys():
             self.close_stream_async(stream_id)
@@ -88,7 +88,7 @@ class StreamManager:
             stream.wait_until_closed()
             self._async_closing_streams.remove(stream)
 
-    def close_stream_async(self, stream_id) -> SyncedStreamReader:
+    def close_stream_async(self, stream_id: int) -> SyncedStreamReader:
         stream = self._stream_readers.pop(stream_id)
         self._async_closing_streams.append(stream)
         stream.close()

@@ -5,7 +5,7 @@ import ujson
 from brainframe.client.api import api_errors
 from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.api.stubs.base_stub import BaseStub, DEFAULT_TIMEOUT
-from brainframe.client.api.status_poller import StatusPoller
+from brainframe.client.api.status_receiver import StatusReceiver
 
 # Avoid importing stream code where possible to avoid unnecessary OpenCV
 # dependencies
@@ -22,26 +22,27 @@ class StreamStubMixin(BaseStub):
     def __init__(self):
         # These are evaluated lazily
         self._stream_manager = None
-        self._status_poller = None
+        self._status_receiver = None
 
-    def get_status_poller(self) -> StatusPoller:
-        """Returns the singleton StatusPoller object"""
-        if self._status_poller is None or not self._status_poller.is_running:
-            self._status_poller = StatusPoller(self)
-        return self._status_poller
+    def get_status_receiver(self) -> StatusReceiver:
+        """Returns a singleton StatusReceiver object"""
+        if self._status_receiver is None \
+                or not self._status_receiver.is_running:
+            self._status_receiver = StatusReceiver(self)
+        return self._status_receiver
 
     def get_stream_manager(self) -> "StreamManager":
-        """Returns the singleton StreamManager object"""
+        """Returns a singleton StreamManager object"""
         # Lazily import streaming code to avoid OpenCV dependencies unless
         # necessary
         from brainframe.client.api.streaming import StreamManager
 
         if self._stream_manager is None:
-            self._stream_manager = StreamManager(self.get_status_poller())
+            self._stream_manager = StreamManager(self.get_status_receiver())
         return self._stream_manager
 
-    def get_stream_configuration(
-            self, stream_id, timeout=DEFAULT_TIMEOUT) -> StreamConfiguration:
+    def get_stream_configuration(self, stream_id, timeout=DEFAULT_TIMEOUT) \
+            -> StreamConfiguration:
         """Gets the StreamConfiguration with the given ID.
 
         :param stream_id: The ID of the stream configuration to get
@@ -151,9 +152,9 @@ class StreamStubMixin(BaseStub):
         self._put_json(req, timeout, runtime_options_json)
 
     def close(self):
-        if self._status_poller is not None:
-            self._status_poller.close()
-            self._status_poller = None
+        if self._status_receiver is not None:
+            self._status_receiver.close()
+            self._status_receiver = None
         if self._stream_manager is not None:
             self._stream_manager.close()
             self._stream_manager = None

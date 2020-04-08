@@ -1,5 +1,6 @@
 from .about_page.about_page import AboutPage
 from .alarm_creation.alarm_creation import AlarmCreationDialog
+from .alarm_view.alarm_view import AlarmView
 from .alert_entry_popup.alert_entry_popup import AlertEntryPopup
 from .identity_configuration.identity_configuration import IdentityConfiguration
 from .license_agreement.license_agreement import LicenseAgreement

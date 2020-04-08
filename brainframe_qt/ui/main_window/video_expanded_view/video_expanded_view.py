@@ -89,7 +89,9 @@ class VideoExpandedView(QWidget):
                         return
             self.expanded_stream_closed_slot()
 
-        QTAsyncWorker(self, get_stream_configurations, check_deleted).start()
+        QTAsyncWorker(self, get_stream_configurations,
+                      on_success=check_deleted) \
+            .start()
 
     @pyqtSlot(object)
     def open_expanded_view_slot(self, stream_conf: StreamConfiguration):

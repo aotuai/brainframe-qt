@@ -1,26 +1,31 @@
 import os
-from typing import Callable
+from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
 from threading import Event
 
-from PyQt5.QtCore import Qt, QThread, pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import Qt, QThread, pyqtSlot, QObject
 
 
 class QTAsyncWorker(QThread):
 
+    CallbackT = TypeVar('CallbackT')
+
     def __init__(self,
-                 parent: QWidget,
-                 func: Callable, callback: Callable,
-                 *args, **kwargs):
+                 parent: QObject,
+                 func: Callable[..., CallbackT], *,
+                 f_args: Tuple = None, f_kwargs: Dict = None,
+                 on_success: Optional[Callable[[CallbackT], Any]] = None,
+                 on_error: Optional[Callable[[CallbackT], Any]] = None):
         super().__init__(parent=parent)
 
         self.func = func
-        self.callback = callback
+        self.on_success = on_success
+        self.on_error = on_error
 
-        self.args = args
-        self.kwargs = kwargs
+        self.f_args = f_args or ()
+        self.f_kwargs = f_kwargs or {}
 
-        self.result = None
+        self.err = None
+        self.data = None
         self._terminated = False
 
         # Connect the parent's destructor signal
@@ -38,13 +43,18 @@ class QTAsyncWorker(QThread):
         """
 
     def run(self):
-        self.result = self.func(*self.args, **self.kwargs)
+        try:
+            self.data = self.func(*self.f_args, **self.f_kwargs)
+        except Exception as exc:
+            self.err = exc
+            self.data = None
 
     def start(self, *args, **kwargs):
         # We don't want to use threads when using QtDesigner. If a plugin's
         # __init__ contains a QThread that is not complete by the time the
         # __init__ method finishes, it will crash
         # This environment variable is only set when running QtDesigner
+        # noinspection SpellCheckingInspection
         if os.getenv("PYQTDESIGNERPATH") is not None:
             self.run()
             # noinspection PyUnresolvedReferences
@@ -55,7 +65,15 @@ class QTAsyncWorker(QThread):
     def finish(self):
         if not self._terminated:
             self.finished_event.set()
-            self.callback(self.result)
+
+            if self.err:
+                if self.on_error is not None:
+                    self.on_error(self.err)
+                else:
+                    raise self.err
+            elif self.on_success is not None:
+                self.on_success(self.data)
+
         self.deleteLater()
 
     @pyqtSlot()

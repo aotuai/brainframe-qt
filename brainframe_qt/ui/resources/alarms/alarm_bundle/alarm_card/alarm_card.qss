@@ -1,0 +1,36 @@
+/* ###########################################################################
+ * Expanded Card
+ * ######################################################################## */
+AlarmCard[expanded=false] > AlarmHeader {
+    border-radius: 4px;
+}
+
+/* ###########################################################################
+ * Collapsed Card
+ * ######################################################################## */
+AlarmCard[expanded=true] > AlarmHeader {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+/* ###########################################################################
+ * Active Alert
+ * ######################################################################## */
+AlarmCard[alert_active=true] > AlarmHeader {
+    background: lightcoral;
+}
+
+AlarmCard[alert_active=true] > AlarmHeader > QLabel {
+    color: white;
+}
+
+/* ###########################################################################
+ * Inactive Alert
+ * ######################################################################## */
+AlarmCard[alert_active=false] > AlarmHeader {
+    background: grey;
+}
+
+AlarmCard[alert_active=false] > AlarmHeader > QLabel {
+    color: lightgrey;
+}

@@ -76,7 +76,7 @@ class VideoThumbnailView(QWidget):
             for stream_id in dead_stream_ids:
                 self.delete_stream_slot(self.all_stream_confs[stream_id])
 
-        QTAsyncWorker(self, func, callback).start()
+        QTAsyncWorker(self, func, on_success=callback).start()
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
