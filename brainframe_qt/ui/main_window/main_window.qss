@@ -1,0 +1,6 @@
+/* TODO: path */
+/*#centralwidget {"*/
+/*    background-image: url({image_paths.background.as_posix()});"*/
+/*    background-position: right bottom;"*/
+/*    background-repeat: no-repeat;"*/
+/*}*/
