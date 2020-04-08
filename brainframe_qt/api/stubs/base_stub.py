@@ -1,4 +1,4 @@
-from typing import Tuple, Any, Optional, Union
+from typing import Tuple, Any, Optional, Union, BinaryIO
 from urllib.parse import urlparse
 
 import ujson
@@ -185,7 +185,7 @@ class BaseStub:
 
     def _post(self, api_url,
               timeout,
-              data: Union[bytes, str] = None,
+              data: Union[bytes, str, BinaryIO] = None,
               content_type: str = None,
               files=None) \
             -> Response:
