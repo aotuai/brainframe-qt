@@ -1146,8 +1146,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="289"/>
         <source>Uploading {filepath}...</source>
-        <translatorcomment>Done using Google Translate</translatorcomment>
-        <translation>上载中 {filepath}...</translation>
+        <translation>上传中 {filepath}...</translation>
     </message>
 </context>
 </TS>
