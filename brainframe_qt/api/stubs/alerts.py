@@ -34,6 +34,18 @@ class AlertStubMixin(BaseStub):
                 values.append("false")
             return ','.join(values)
 
+    def get_alert(self, alert_id, timeout=DEFAULT_TIMEOUT) -> Alert:
+        """Gets the alert with the given ID.
+
+        :param alert_id: The ID of the alert to get
+        :param timeout: The timeout to use for this request
+        :return: The alert
+        """
+        req = f"/api/alerts/{alert_id}"
+        data, _ = self._get_json(req, timeout)
+
+        return Alert.from_dict(data)
+
     def get_alerts(self,
                    stream_id: Optional[int] = None,
                    zone_id: Optional[int] = None,
