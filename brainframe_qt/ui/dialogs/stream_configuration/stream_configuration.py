@@ -1,3 +1,6 @@
+from pathlib import Path
+from typing import Optional
+
 from PyQt5.QtCore import Qt, pyqtSlot, QStandardPaths
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (
@@ -7,11 +10,13 @@ from PyQt5.QtWidgets import (
     QComboBox,
     QLineEdit,
     QPushButton,
-    QCheckBox
+    QCheckBox,
+    QProgressDialog,
 )
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
+from brainframe.client.ui.resources import ProgressFileReader, CancelledError
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 
@@ -70,11 +75,21 @@ class StreamConfigurationDialog(QDialog):
         self.update_advanced_option_items()
 
     @classmethod
-    def configure_stream(cls, parent, stream_conf=None):
+    def configure_stream(cls, parent, stream_conf=None) \
+            -> Optional[StreamConfiguration]:
+        """Creates a new stream configuration dialog and converts the results
+        to a stream configuration.
+
+        :param parent: A parent UI object to make the dialog a child to
+        :param stream_conf: If provided, fields in the dialog will be
+            pre-filled with the values in this object. (Not currently
+            implemented)
+        :return: The created stream configuration, or None if the user aborted
+        """
         dialog = cls(parent, stream_conf)
         result = dialog.exec_()
-
         if not result:
+            # The user cancelled out of the dialog, do nothing
             return None
 
         params = {}
@@ -100,7 +115,13 @@ class StreamConfigurationDialog(QDialog):
             device_id = dialog.parameter_value.text().strip()
             params["device_id"] = device_id
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
-            params["filepath"] = dialog.parameter_value.text()
+            filepath = Path(dialog.parameter_value.text())
+            try:
+                params["storage_id"] = cls._upload_file(filepath, parent)
+            except CancelledError:
+                # The upload was cancelled by the user
+                return None
+
             params["transcode"] = \
                 not (dialog.advanced_options_checkbox.isChecked()
                      and dialog.avoid_transcoding_checkbox.isChecked())
@@ -261,6 +282,18 @@ class StreamConfigurationDialog(QDialog):
             QStandardPaths.writableLocation(QStandardPaths.HomeLocation))
 
         self.parameter_value.setText(file_path)
+
+    @staticmethod
+    def _upload_file(filepath, parent):
+        progress_dialog = QProgressDialog(parent)
+        label_text = parent.tr("Uploading {filepath}...".format(
+            filepath=filepath
+        ))
+        progress_dialog.setLabelText(label_text)
+        progress_dialog.setWindowModality(Qt.WindowModal)
+
+        with ProgressFileReader(filepath, progress_dialog) as f:
+            return api.new_storage(f, "application/octet-stream")
 
 
 if __name__ == '__main__':
