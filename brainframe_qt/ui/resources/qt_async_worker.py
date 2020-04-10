@@ -14,7 +14,7 @@ class QTAsyncWorker(QThread):
                  func: Callable[..., CallbackT], *,
                  f_args: Tuple = None, f_kwargs: Dict = None,
                  on_success: Optional[Callable[[CallbackT], Any]] = None,
-                 on_error: Optional[Callable[[Exception], Any]] = None):
+                 on_error: Optional[Callable[[CallbackT], Any]] = None):
         super().__init__(parent=parent)
 
         self.func = func
