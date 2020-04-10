@@ -80,7 +80,7 @@ class ProgressFileReader(QObject):
             # being read. This limiter prevents the emit queue from being
             # filled up at small block sizes.
             emit_due = time() - last_time_emitted >= (1/60)
-            finished = total_read_kb == self.file_size_kb
+            finished = total_read_kb >= self.file_size_kb
             if emit_due or finished:
                 self.progress_signal.emit(total_read_kb)
                 last_time_emitted = time()
