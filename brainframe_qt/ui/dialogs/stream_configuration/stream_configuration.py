@@ -348,6 +348,8 @@ class StreamConfigurationDialog(QDialog):
                 return None
 
         def on_success_check_none(storage_id: Optional[int]):
+            # Make sure the progress dialog closes
+            progress_dialog.cancel()
             if storage_id is not None:
                 on_success(storage_id)
 
