@@ -66,12 +66,12 @@ class ProgressFileReader(QObject):
         last_time_emitted = 0
 
         while True:
+            if self._canceled:
+                raise CanceledError()
+
             data = self._file.read(_BLOCK_SIZE)
             if not data:
                 break
-
-            if self._canceled:
-                raise CanceledError()
             total_read_kb += len(data) / 1000
 
             yield data
