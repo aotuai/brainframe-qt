@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget, QSizePolicy
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
+from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import AboutPage, AlarmView, \
     IdentityConfiguration, PluginConfigDialog, RenderConfiguration, \
     ServerConfigurationDialog, StreamConfigurationDialog
@@ -87,8 +88,41 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def add_new_stream_slot(self):
         """Open dialog to add a new stream and then send it to the server"""
+        def on_error(err):
+            message_title = self.tr("Error Opening Stream")
+            message_desc = self.tr(
+                "Error encountered while uploading video file")
+            message = (f"<b>{message_desc}</b>"
+                       f"<br><br>"
+                       f"{err}")
+            QMessageBox.information(self, message_title, message)
 
-        stream_conf = StreamConfigurationDialog.configure_stream(self)
+        StreamConfigurationDialog.configure_stream(
+            on_success=lambda conf: self._create_stream(conf),
+            on_error=on_error,
+            parent=self)
+
+    @pyqtSlot()
+    def show_video_configuration_dialog(self):
+        RenderConfiguration.show_dialog(self)
+
+    @pyqtSlot()
+    def show_identities_dialog(self):
+        IdentityConfiguration.show_dialog(self)
+
+    @pyqtSlot()
+    def show_about_page_dialog(self):
+        AboutPage.show_dialog(self)
+
+    @pyqtSlot()
+    def show_global_plugin_config_dialog(self):
+        PluginConfigDialog.show_dialog(self)
+
+    @pyqtSlot()
+    def show_alert_view_dialog(self):
+        AlarmView.show_dialog(self)
+
+    def _create_stream(self, stream_conf: StreamConfiguration) -> None:
         if stream_conf is None:
             return
         try:
@@ -148,22 +182,3 @@ class MainWindow(QMainWindow):
                       f"{error_text}<b>{err.kind}</b>"
             QMessageBox.information(self, message_title, message)
 
-    @pyqtSlot()
-    def show_video_configuration_dialog(self):
-        RenderConfiguration.show_dialog(self)
-
-    @pyqtSlot()
-    def show_identities_dialog(self):
-        IdentityConfiguration.show_dialog(self)
-
-    @pyqtSlot()
-    def show_about_page_dialog(self):
-        AboutPage.show_dialog(self)
-
-    @pyqtSlot()
-    def show_global_plugin_config_dialog(self):
-        PluginConfigDialog.show_dialog(self)
-
-    @pyqtSlot()
-    def show_alert_view_dialog(self):
-        AlarmView.show_dialog(self)

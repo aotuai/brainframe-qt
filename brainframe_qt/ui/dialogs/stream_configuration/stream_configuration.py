@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Callable
 
-from PyQt5.QtCore import Qt, pyqtSlot, QStandardPaths
+from PyQt5.QtCore import Qt, pyqtSlot, QStandardPaths, QObject
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (
     QDialog,
@@ -16,7 +16,11 @@ from PyQt5.QtWidgets import (
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
-from brainframe.client.ui.resources import ProgressFileReader, CancelledError
+from brainframe.client.ui.resources import (
+    ProgressFileReader,
+    CanceledError,
+    QTAsyncWorker,
+)
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
 
@@ -75,16 +79,20 @@ class StreamConfigurationDialog(QDialog):
         self.update_advanced_option_items()
 
     @classmethod
-    def configure_stream(cls, parent, stream_conf=None) \
-            -> Optional[StreamConfiguration]:
-        """Creates a new stream configuration dialog and converts the results
-        to a stream configuration.
+    def configure_stream(cls,
+                         on_success: Callable[[StreamConfiguration], None],
+                         on_error: Callable[[Exception], None],
+                         parent: QObject,
+                         stream_conf=None) -> None:
+        """Asynchronously creates a new stream configuration dialog and
+        converts the results to a stream configuration.
 
+        :param on_success: Called when the stream configuration is created
+        :param on_error: Called if there was an error while creating the config
         :param parent: A parent UI object to make the dialog a child to
         :param stream_conf: If provided, fields in the dialog will be
             pre-filled with the values in this object. (Not currently
             implemented)
-        :return: The created stream configuration, or None if the user aborted
         """
         dialog = cls(parent, stream_conf)
         result = dialog.exec_()
@@ -115,22 +123,16 @@ class StreamConfigurationDialog(QDialog):
             device_id = dialog.parameter_value.text().strip()
             params["device_id"] = device_id
         elif dialog.connection_type == StreamConfiguration.ConnType.FILE:
-            filepath = Path(dialog.parameter_value.text())
-            try:
-                params["storage_id"] = cls._upload_file(filepath, parent)
-            except CancelledError:
-                # The upload was cancelled by the user
-                return None
-
             params["transcode"] = \
                 not (dialog.advanced_options_checkbox.isChecked()
                      and dialog.avoid_transcoding_checkbox.isChecked())
+            # The storage_id field will be filled in later
         else:
             message = QApplication.translate('StreamConfigurationDialog',
                                              "Unrecognized connection type")
             raise NotImplementedError(message)
 
-        return StreamConfiguration(
+        stream_conf = StreamConfiguration(
             name=dialog.stream_name.text(),
             connection_type=dialog.connection_type,
             connection_options=params,
@@ -139,6 +141,27 @@ class StreamConfigurationDialog(QDialog):
                 "keyframes_only": keyframes_only
             },
             metadata={})
+
+        if dialog.connection_type == StreamConfiguration.ConnType.FILE:
+            # Kick off file uploading asynchronously
+            filepath = Path(dialog.parameter_value.text())
+
+            def on_file_uploaded(storage_id):
+                stream_conf.connection_options["storage_id"] = storage_id
+                on_success(stream_conf)
+
+            try:
+                cls._upload_file(
+                    filepath,
+                    on_file_uploaded,
+                    on_error,
+                    parent)
+            except CanceledError:
+                # The upload was cancelled by the user
+                return None
+        else:
+            # Nothing blocking to do, just synchronously report success
+            on_success(stream_conf)
 
     @pyqtSlot(int)
     def connection_type_changed_slot(self, connection_index: int):
@@ -284,16 +307,54 @@ class StreamConfigurationDialog(QDialog):
         self.parameter_value.setText(file_path)
 
     @staticmethod
-    def _upload_file(filepath, parent):
-        progress_dialog = QProgressDialog(parent)
+    def _upload_file(filepath: Path,
+                     on_success: Callable[[Optional[int]], None],
+                     on_error: Callable[[Exception], None],
+                     parent: QObject) -> None:
+        """Uploads a file to storage asynchronously, notifying the user of the
+        upload progress using a QProgressDialog. If the user cancels the
+        process, no callback will be called.
+
+        :param filepath: The path to the file to upload
+        :param on_success: Called when the file is done uploading, providing
+            the storage ID
+        :param on_error: Called if there was an error while uploading
+        :param parent: The parent element
+        """
+        reader = ProgressFileReader(filepath, parent)
+
+        # Make the progress dialog
         label_text = parent.tr("Uploading {filepath}...".format(
             filepath=filepath
         ))
+        progress_dialog = QProgressDialog(parent)
         progress_dialog.setLabelText(label_text)
-        progress_dialog.setWindowModality(Qt.WindowModal)
+        # progress_dialog.setWindowModality(Qt.WindowModal)
+        progress_dialog.setMinimum(0)
+        progress_dialog.setMaximum(reader.file_size)
+        progress_dialog.setValue(0)
+        progress_dialog.setMinimumDuration(0)
 
-        with ProgressFileReader(filepath, progress_dialog) as f:
-            return api.new_storage(f, "application/octet-stream")
+        # Connect signals
+        reader.progress_signal.connect(progress_dialog.setValue)
+        progress_dialog.canceled.connect(reader.cancel)
+
+        def upload_video() -> Optional[int]:
+            try:
+                with reader:
+                    return api.new_storage(reader, "application/octet-stream")
+            except CanceledError:
+                # The user canceled the upload
+                return None
+
+        def on_success_check_none(storage_id: Optional[int]):
+            if storage_id is not None:
+                on_success(storage_id)
+
+        QTAsyncWorker(parent,
+                      upload_video,
+                      on_success=on_success_check_none,
+                      on_error=on_error).start()
 
 
 if __name__ == '__main__':
