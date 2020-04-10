@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import cast, Iterator
 from io import BytesIO
+from time import time
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
@@ -11,8 +12,7 @@ class CanceledError(Exception):
     """
 
 
-# _BLOCK_SIZE = 8192
-_BLOCK_SIZE = 8
+_BLOCK_SIZE = 8192
 """A somewhat arbitrarily chosen upload block size."""
 
 
@@ -41,17 +41,13 @@ class ProgressFileReader(QObject):
         """
         super().__init__(parent)
         self.filepath: Path = filepath
+        self.file_size_kb = self.filepath.stat().st_size / 1000
+        """The total size of the file in bytes"""
         self._file = cast(BytesIO, None)
 
         self._canceled = False
-        self._total_read = 0
-
-    @property
-    def file_size(self) -> int:
-        """
-        :return: The total size of the file in bytes
-        """
-        return self.filepath.stat().st_size
+        self._total_read_kb = 0
+        self._last_time_emitted = 0
 
     def cancel(self) -> None:
         """Stops reading prematurely by raising a CanceledError the next time
@@ -75,9 +71,18 @@ class ProgressFileReader(QObject):
 
             if self._canceled:
                 raise CanceledError()
-            self._total_read += len(data)
-            self.progress_signal.emit(self._total_read)
+            self._total_read_kb += len(data) / 1000
+
             yield data
+
+            # Emit progress 60 times per second and when the file is finished
+            # being read. This limiter prevents the emit queue from being
+            # filled up at small block sizes.
+            emit_due = time() - self._last_time_emitted >= (1/60)
+            finished = self._total_read_kb == self.file_size_kb
+            if emit_due or finished:
+                self.progress_signal.emit(self._total_read_kb)
+                self._last_time_emitted = time()
 
     def __len__(self) -> int:
         return self.filepath.stat().st_size

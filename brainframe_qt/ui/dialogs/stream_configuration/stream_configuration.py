@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QCheckBox,
     QProgressDialog,
+    QProgressBar,
 )
 from PyQt5.uic import loadUi
 
@@ -329,11 +330,15 @@ class StreamConfigurationDialog(QDialog):
         ))
         progress_dialog = QProgressDialog(parent)
         progress_dialog.setLabelText(label_text)
-        # progress_dialog.setWindowModality(Qt.WindowModal)
-        progress_dialog.setMinimum(0)
-        progress_dialog.setMaximum(reader.file_size)
-        progress_dialog.setValue(0)
-        progress_dialog.setMinimumDuration(0)
+        progress_dialog.setWindowModality(Qt.WindowModal)
+
+        # Create the progress bar for the dialog
+        progress_bar = QProgressBar(parent)
+        # Show percent and number of kB sent over the total
+        progress_bar.setFormat("%v kB/%m kB (%p%)")
+        progress_bar.setMinimum(0)
+        progress_bar.setMaximum(reader.file_size_kb)
+        progress_dialog.setBar(progress_bar)
 
         # Connect signals
         reader.progress_signal.connect(progress_dialog.setValue)
