@@ -30,8 +30,8 @@ class ProgressFileReader(QObject):
     """
 
     progress_signal = pyqtSignal(int)
-    """Emitted when a chunk of data is read. Provides the total number of bytes
-    read.
+    """Emitted when a chunk of data is read. Provides the total number of
+    kilobytes read.
     """
 
     def __init__(self, filepath: Path, parent: QObject):
@@ -42,7 +42,7 @@ class ProgressFileReader(QObject):
         super().__init__(parent)
         self.filepath: Path = filepath
         self.file_size_kb = self.filepath.stat().st_size / 1000
-        """The total size of the file in bytes"""
+        """The total size of the file in kilobytes"""
         self._file = cast(BytesIO, None)
 
         self._canceled = False
