@@ -46,6 +46,7 @@ class TimeLabelUI(QWidget):
         improved_rect = self.fontMetrics().boundingRect(initial_rect, 0, text)
         return improved_rect.width()
 
+    @property
     def _max_time_width(self):
         return max(self._text_width(f"{0}{0}:{0}{0}".format(n))
                    for n in range(10))
