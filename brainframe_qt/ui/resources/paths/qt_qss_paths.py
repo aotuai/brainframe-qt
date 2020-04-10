@@ -10,6 +10,9 @@ ui_dir = route_path("brainframe", "client", "ui")
 main_window_dir = ui_dir / "main_window"
 main_window_qss = main_window_dir / "main_window.qss"
 
+# MainTabWidget
+main_tab_widget_dir = main_window_dir / "main_tab_widget"
+main_tab_widget_qss = main_tab_widget_dir / "main_tab_widget.qss"
 
 ###############################################################################
 # Dialog
@@ -26,6 +29,18 @@ alarm_view_qss = alarm_view_dir / "alarm_view.qss"
 ###############################################################################
 
 resource_dir = ui_dir / "resources"
+
+# Widgets
+widget_resource_dir = resource_dir / "ui_elements" / "widgets"
+labeled_icon_qss = widget_resource_dir / "labeled_icon.qss"
+
+# Containers
+container_resource_dir = resource_dir / "ui_elements" / "containers"
+stacked_tab_widget_qss = container_resource_dir / "stacked_tab_widget.qss"
+
+###############################################################################
+# BrainFrame Resources
+###############################################################################
 
 # AlarmBundle
 alarm_bundle_dir = resource_dir / "alarms" / "alarm_bundle"

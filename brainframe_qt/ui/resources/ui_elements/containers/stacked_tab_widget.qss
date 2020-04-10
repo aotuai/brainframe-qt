@@ -1,0 +1,7 @@
+_VerticalTabbingWidget {
+    max-width: 100px;
+}
+
+LabeledIcon {
+    max-height: 75px;
+}

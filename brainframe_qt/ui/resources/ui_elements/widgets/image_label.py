@@ -9,6 +9,9 @@ class _ImageLabelUI(QLabel):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
+        self.has_height_for_width = True
+        """Must be set before pixmap set"""
+
         self._pixmap = QPixmap()
         self._update_pixmap()
 
@@ -16,7 +19,7 @@ class _ImageLabelUI(QLabel):
         self.setMinimumSize(1, 1)
 
     def hasHeightForWidth(self) -> bool:
-        return True
+        return self.has_height_for_width
 
     def heightForWidth(self, width: int) -> int:
         if self.pixmap() is None:

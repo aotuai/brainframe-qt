@@ -1,0 +1,7 @@
+QLabel {
+    qproperty-alignment: 'AlignCenter'
+}
+
+LabeledIcon {
+    /*background: red*/
+}
