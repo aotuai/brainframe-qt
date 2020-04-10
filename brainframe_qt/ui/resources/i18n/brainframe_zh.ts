@@ -609,7 +609,7 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../main_window/main_window.py" line="93"/>
         <source>Error encountered while uploading video file</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
