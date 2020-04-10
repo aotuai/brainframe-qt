@@ -46,8 +46,6 @@ class ProgressFileReader(QObject):
         self._file = cast(BytesIO, None)
 
         self._canceled = False
-        self._total_read_kb = 0
-        self._last_time_emitted = 0
 
     def cancel(self) -> None:
         """Stops reading prematurely by raising a CanceledError the next time
@@ -64,6 +62,9 @@ class ProgressFileReader(QObject):
             self._file.close()
 
     def __iter__(self) -> Iterator[bytes]:
+        total_read_kb = 0
+        last_time_emitted = 0
+
         while True:
             data = self._file.read(_BLOCK_SIZE)
             if not data:
@@ -71,18 +72,18 @@ class ProgressFileReader(QObject):
 
             if self._canceled:
                 raise CanceledError()
-            self._total_read_kb += len(data) / 1000
+            total_read_kb += len(data) / 1000
 
             yield data
 
             # Emit progress 60 times per second and when the file is finished
             # being read. This limiter prevents the emit queue from being
             # filled up at small block sizes.
-            emit_due = time() - self._last_time_emitted >= (1/60)
-            finished = self._total_read_kb == self.file_size_kb
+            emit_due = time() - last_time_emitted >= (1/60)
+            finished = total_read_kb == self.file_size_kb
             if emit_due or finished:
-                self.progress_signal.emit(self._total_read_kb)
-                self._last_time_emitted = time()
+                self.progress_signal.emit(total_read_kb)
+                last_time_emitted = time()
 
     def __len__(self) -> int:
         return self.filepath.stat().st_size
