@@ -1,8 +1,10 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QHBoxLayout, QStackedWidget, QWidget
+from PyQt5.QtWidgets import QHBoxLayout, QStackedWidget, QVBoxLayout, QWidget
 
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.ui_elements.widgets import LabeledIcon
+from brainframe.client.ui.resources.paths import qt_qss_paths
 
 
 class _VerticalTabbingWidgetUI(QWidget):
@@ -98,12 +100,10 @@ class StackedTabWidget(_StackedTabWidgetUI):
 if __name__ == '__main__':
     import typing
 
-    from PyQt5.QtCore import Qt
     from PyQt5.QtGui import QIcon
-    from PyQt5.QtWidgets import QApplication, QDesktopWidget, QVBoxLayout, \
-        QPushButton
+    from PyQt5.QtWidgets import QApplication, QDesktopWidget, QPushButton
 
-    from brainframe.client.ui.resources.paths import image_paths, qt_qss_paths
+    from brainframe.client.ui.resources.paths import image_paths
 
     # noinspection PyArgumentList
     app = QApplication([])

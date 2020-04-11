@@ -14,6 +14,10 @@ main_window_qss = main_window_dir / "main_window.qss"
 main_tab_widget_dir = main_window_dir / "main_tab_widget"
 main_tab_widget_qss = main_tab_widget_dir / "main_tab_widget.qss"
 
+# Activities
+activity_dir = main_window_dir / "activities"
+stream_activity_qss = activity_dir / "stream_activity" / "stream_activity.qss"
+
 ###############################################################################
 # Dialog
 ###############################################################################
