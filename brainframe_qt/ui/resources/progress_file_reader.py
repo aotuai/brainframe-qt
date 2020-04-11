@@ -12,8 +12,10 @@ class CanceledError(Exception):
     """
 
 
-_BLOCK_SIZE = 8192
-"""A somewhat arbitrarily chosen upload block size."""
+_BLOCK_SIZE = 1024000
+"""The block size to read files at. Chosen from this answer:
+https://stackoverflow.com/a/3673731
+"""
 
 
 class ProgressFileReader(QObject):
