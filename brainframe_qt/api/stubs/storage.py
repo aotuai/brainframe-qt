@@ -1,4 +1,4 @@
-from typing import Tuple, BinaryIO, Union
+from typing import Tuple, BinaryIO, Union, Iterable
 from io import BytesIO
 
 import numpy as np
@@ -37,7 +37,8 @@ class StorageStubMixin(BaseStub):
         data, _ = self.get_storage_data(storage_id, timeout=timeout)
         return image_utils.decode(data)
 
-    def new_storage(self, data: Union[bytes, BinaryIO], mime_type: str,
+    def new_storage(self, data: Union[bytes, BinaryIO, Iterable],
+                    mime_type: str,
                     timeout=DEFAULT_TIMEOUT) -> int:
         """Stores the given data.
 
