@@ -1151,7 +1151,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="328"/>
         <source>Uploading {filepath}...</source>
-        <translation type="unfinished">上传中 {filepath}……</translation>
+        <translation>上传中 {filepath}⋯⋯</translation>
     </message>
 </context>
 </TS>
