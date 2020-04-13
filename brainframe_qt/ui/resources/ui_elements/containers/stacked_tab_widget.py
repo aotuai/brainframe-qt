@@ -1,9 +1,9 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QHBoxLayout, QStackedWidget, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QHBoxLayout, QStackedWidget, QToolButton, \
+    QVBoxLayout, QWidget
 
 from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.ui_elements.widgets import LabeledIcon
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
 
@@ -32,8 +32,15 @@ class _VerticalTabbingWidget(_VerticalTabbingWidgetUI):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-    def add_tab(self, tab_name: str, icon: QIcon) -> LabeledIcon:
-        tab_widget = LabeledIcon(tab_name, icon, self)
+    def add_tab(self, tab_name: str, icon: QIcon) -> QToolButton:
+        tab_widget = QToolButton(self)
+        tab_widget.setObjectName("stacked_tab_button")
+
+        tab_widget.setIcon(icon)
+        tab_widget.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        tab_widget.setIconSize(QSize(50, 50))
+        tab_widget.setText(tab_name)
+
         self.layout().addWidget(tab_widget)
 
         return tab_widget
@@ -62,7 +69,6 @@ class _StackedTabWidgetUI(QWidget):
         layout = QHBoxLayout()
 
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(Qt.AlignTop)
         layout.setSpacing(0)
 
         layout.addWidget(self.tabbing_widget)

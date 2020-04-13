@@ -1,0 +1,19 @@
+#stacked_tab_button:hover {
+}
+
+_VerticalTabbingWidget {
+    /*background: purple;*/
+    max-width: 90px;
+    min-width: 90px;
+}
+
+_VerticalTabbingWidget {
+}
+
+ImageLabel {
+    /*background: red;*/
+}
+
+#icon_label {
+    /*background: orange*/
+}

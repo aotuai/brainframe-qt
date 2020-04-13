@@ -1,7 +1,7 @@
 import numpy as np
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QImage, QPixmap, QResizeEvent
-from PyQt5.QtWidgets import QLabel, QWidget
+from PyQt5.QtWidgets import QLabel, QSizePolicy, QWidget
 
 
 class _ImageLabelUI(QLabel):
@@ -9,34 +9,61 @@ class _ImageLabelUI(QLabel):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.has_height_for_width = True
-        """Must be set before pixmap set"""
+        self._has_height_for_width = True
+        self._keep_square = False
 
         self._pixmap = QPixmap()
         self._update_pixmap()
 
-        # Without this set, the image will grow but not shrink
-        self.setMinimumSize(1, 1)
+        self._init_style()
 
     def hasHeightForWidth(self) -> bool:
+        """Prefer using the has_height_for_width property"""
         return self.has_height_for_width
 
     def heightForWidth(self, width: int) -> int:
+
         if self.pixmap() is None:
             return 0
+
+        if self.keep_square:
+            return width
 
         return self.pixmap().height()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
 
         self._update_pixmap()
-        super().resizeEvent(event)
 
         # Workaround. No idea how to do this gracefully
         parent = self.parentWidget()
         while parent:
             parent.updateGeometry()
             parent = parent.parentWidget()
+
+    def _init_style(self):
+        # Without this set, the image will grow but not shrink
+        self.setMinimumSize(1, 1)
+
+        self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+
+    @property
+    def has_height_for_width(self):
+        return self._has_height_for_width
+
+    @has_height_for_width.setter
+    def has_height_for_width(self, has_height_for_width):
+        self._has_height_for_width = has_height_for_width
+        self._update_pixmap()
+
+    @property
+    def keep_square(self) -> bool:
+        return self._keep_square
+
+    @keep_square.setter
+    def keep_square(self, keep_square: bool):
+        self._keep_square = keep_square
+        self._update_pixmap()
 
     @property
     def pixmap_(self) -> QPixmap:
@@ -58,7 +85,9 @@ class _ImageLabelUI(QLabel):
 
         if self.hasHeightForWidth():
             # Use width to decide initial height
-            pixmap_size = self._pixmap.size().scaled(self.width(), 999999999,
+            width = self.width()
+            height = (2 ** 31) - 1  # Max Qt int
+            pixmap_size = self._pixmap.size().scaled(width, height,
                                                      Qt.KeepAspectRatio)
         else:
             pixmap_size = self._pixmap.size().scaled(self.size(),

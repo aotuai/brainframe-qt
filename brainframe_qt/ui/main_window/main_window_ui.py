@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget
 from brainframe.client.ui.main_window.activities.stream_activity import \
     StreamActivity
 from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe.client.ui.resources.paths import image_paths, qt_qss_paths
 from brainframe.client.ui.resources.ui_elements.containers import \
     StackedTabWidget
 
@@ -33,7 +33,10 @@ class MainWindowUI(QMainWindow):
 
     def _init_layout(self):
         self.setCentralWidget(self.tab_widget)
-        self.tab_widget.add_widget(self.stream_activity, "Streams", QIcon())
+
+        stream_activity_icon = QIcon(str(image_paths.new_stream_icon))
+        self.tab_widget.add_widget(self.stream_activity, "Streams",
+                                   stream_activity_icon)
 
     def _init_style(self):
         # Allow background of widget to be styled
