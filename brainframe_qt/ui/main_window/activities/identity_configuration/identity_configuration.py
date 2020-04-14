@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QDialog, QLineEdit, QProgressBar
+from PyQt5.QtWidgets import QDialog, QLineEdit, QProgressBar, QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -13,7 +13,7 @@ from .identity_search_filter import IdentitySearchFilter
 from .identity_adder_worker import AddNewIdentitiesWorker
 
 
-class IdentityConfiguration(QDialog):
+class IdentityConfiguration(QWidget):
     display_new_identity_signal = pyqtSignal(object)
     """Emitted when we want to add/display a new Identity on the IdentityGrid
     
@@ -24,7 +24,7 @@ class IdentityConfiguration(QDialog):
     self.identity_grid_paginator.add_new_identities_slot
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidget):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.identity_configuration_ui, self)
@@ -61,11 +61,6 @@ class IdentityConfiguration(QDialog):
             lambda: self.hide_progress_bar(self.identity_load_progress_bar))
 
         self.init_ui()
-
-    @classmethod
-    def show_dialog(cls, parent):
-        dialog = cls(parent)
-        dialog.exec_()
 
     def init_ui(self):
         self.setWindowFlags(Qt.Window)

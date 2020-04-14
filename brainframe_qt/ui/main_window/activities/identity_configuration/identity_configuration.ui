@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>IdentityConfiguration</class>
- <widget class="QDialog" name="IdentityConfiguration">
+ <widget class="QWidget" name="IdentityConfiguration">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,9 +12,6 @@
   </property>
   <property name="windowTitle">
    <string>Identities</string>
-  </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
    <property name="spacing">
@@ -71,18 +68,18 @@
   <customwidget>
    <class>IdentityGridPaginator</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.dialogs.identity_configuration.identity_grid_paginator.identity_grid_paginator</header>
+   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_grid_paginator.identity_grid_paginator</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>IdentitySearchFilter</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.dialogs.identity_configuration.identity_search_filter.identity_search_filter</header>
+   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_search_filter.identity_search_filter</header>
   </customwidget>
   <customwidget>
    <class>IdentityInfo</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.dialogs.identity_configuration.identity_info.identity_info</header>
+   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_info.identity_info</header>
   </customwidget>
  </customwidgets>
  <connections>

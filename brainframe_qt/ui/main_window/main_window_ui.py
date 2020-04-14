@@ -4,6 +4,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget
 
+from brainframe.client.ui.main_window.activities.identity_configuration \
+    import IdentityConfiguration
 from brainframe.client.ui.main_window.activities.stream_activity import \
     StreamActivity
 from brainframe.client.ui.resources import stylesheet_watcher
@@ -19,6 +21,7 @@ class MainWindowUI(QMainWindow):
 
         self.tab_widget = self._init_tab_widget()
         self.stream_activity = self._init_stream_activity()
+        self.identity_activity = self._init_identity_activity()
 
         self._init_layout()
         self._init_style()
@@ -31,12 +34,19 @@ class MainWindowUI(QMainWindow):
         stream_activity = StreamActivity(self)
         return stream_activity
 
+    def _init_identity_activity(self) -> IdentityConfiguration:
+        identity_activity = IdentityConfiguration(self)
+        return identity_activity
+
     def _init_layout(self):
         self.setCentralWidget(self.tab_widget)
 
         stream_activity_icon = QIcon(str(image_paths.new_stream_icon))
+        identity_activity_icon = QIcon(str(image_paths.person_icon))
         self.tab_widget.add_widget(self.stream_activity, "Streams",
                                    stream_activity_icon)
+        self.tab_widget.add_widget(self.identity_activity, "Identities",
+                                   identity_activity_icon)
 
     def _init_style(self):
         # Allow background of widget to be styled

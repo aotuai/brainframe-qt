@@ -39,7 +39,7 @@ alarm_creation_ui          = route_path(alarm_creation_dir        , "alarm_creat
 alert_entry_popup_dir      = route_path(dialogs_dir               , "alert_entry_popup"        )
 alert_entry_popup_ui       = route_path(alert_entry_popup_dir     , "alert_entry_popup.ui"     )
 
-identity_configuration_dir = route_path(dialogs_dir               , "identity_configuration"   )
+identity_configuration_dir = route_path(main_window_dir, "activities", "identity_configuration")
 identity_configuration_ui  = route_path(identity_configuration_dir, "identity_configuration.ui")
 identity_error_popup_dir   = route_path(identity_configuration_dir, "identity_error_popup"     )
 identity_error_popup_ui    = route_path(identity_error_popup_dir  , "identity_error_popup.ui"  )
