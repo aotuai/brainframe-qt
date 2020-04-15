@@ -1,15 +1,13 @@
 from typing import Callable
 
-from PyQt5.QtCore import Qt, QCoreApplication
+from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QGraphicsView
 
-from brainframe.client.api import api
-from brainframe.client.api import api_errors
+from brainframe.client.api import api, api_errors
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.api.streaming import SyncedStreamReader, StreamListener
-from brainframe.client.ui.resources import settings, QTAsyncWorker
-from brainframe.client.ui.resources.paths import image_paths
-
+from brainframe.client.api.streaming import StreamListener, SyncedStreamReader
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, settings
 from .stream_graphics_scene import StreamGraphicsScene
 
 
@@ -93,19 +91,19 @@ class StreamWidget(QGraphicsView):
 
     def handle_stream_initializing(self):
         self.scene().remove_all_items()
-        self.scene().set_frame(path=image_paths.connecting_to_stream)
+        self.scene().set_frame(path=":/images/connecting_to_stream_png")
         ...
 
     def handle_stream_halted(self):
         self.scene().remove_all_items()
-        self.scene().set_frame(path=image_paths.connection_lost)
+        self.scene().set_frame(path=":/images/connection_lost_png")
 
     def handle_stream_closed(self):
         self.handle_stream_halted()
 
     def handle_stream_error(self):
         self.scene().remove_all_items()
-        self.scene().set_frame(path=image_paths.error)
+        self.scene().set_frame(path=":/images/error_message_png")
 
     def change_stream(self, stream_conf: StreamConfiguration):
 

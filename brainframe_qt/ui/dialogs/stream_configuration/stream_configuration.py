@@ -1,29 +1,19 @@
 from pathlib import Path
-from typing import Optional, Callable
+from typing import Callable, Optional
 
-from PyQt5.QtCore import Qt, pyqtSlot, QStandardPaths, QObject
+from PyQt5.QtCore import QObject, QStandardPaths, Qt, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import (
-    QDialog,
-    QFileDialog,
-    QDialogButtonBox,
-    QComboBox,
-    QLineEdit,
-    QPushButton,
-    QCheckBox,
-    QProgressDialog,
-    QProgressBar,
-)
+from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDialog, QDialogButtonBox,
+                             QFileDialog, QLineEdit, QProgressBar,
+                             QProgressDialog, QPushButton)
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
-from brainframe.client.ui.resources import (
-    ProgressFileReader,
-    CanceledError,
-    QTAsyncWorker,
-)
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
+    QTAsyncWorker, qt_resources
+from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class StreamConfigurationDialog(QDialog):
@@ -54,7 +44,7 @@ class StreamConfigurationDialog(QDialog):
 
         # Set the alert icon on the left of the log entry
         self.select_file_button.setText("")
-        pixmap = QPixmap(str(image_paths.folder_icon))
+        pixmap = QPixmap(":/icons/folder")
         pixmap = pixmap.scaled(32, 32, transformMode=Qt.SmoothTransformation)
         self.select_file_button.setIcon(QIcon(pixmap))
 

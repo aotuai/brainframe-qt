@@ -3,13 +3,14 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QSplashScreen, QVBoxLayout, QPushButton
 
 from brainframe.client.ui.dialogs import ServerConfigurationDialog
-from brainframe.client.ui.resources.paths import image_paths
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import qt_resources
 
 
 class SplashScreen(QSplashScreen):
 
     def __init__(self):
-        pixmap = QPixmap(str(image_paths.splash_screen))
+        pixmap = QPixmap(":/images/splash_screen_png")
 
         super().__init__(pixmap=pixmap)
 
