@@ -1,23 +1,18 @@
 from enum import Enum
 from typing import Dict
 
-from PyQt5.QtCore import pyqtSlot, QModelIndex
+from PyQt5.QtCore import QModelIndex, pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
-    QHeaderView,
-    QPushButton,
-    QStyledItemDelegate,
-    QStyleOptionViewItem,
-    QTreeWidget
-)
+from PyQt5.QtWidgets import (QHeaderView, QPushButton, QStyleOptionViewItem,
+                             QStyledItemDelegate, QTreeWidget)
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
-from brainframe.client.ui.resources import QTAsyncWorker
-from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
 from brainframe.client.api.codecs import Zone, ZoneAlarm
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import QTAsyncWorker, qt_resources
+from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
-
 from .zone_list_item import ZoneListItem
 
 
@@ -147,19 +142,19 @@ class ZoneList(QTreeWidget):
     def _get_item_icon(self, entry_type: EntryType):
 
         if entry_type == self.EntryType.REGION:
-            entry_type_icon = QIcon(str(image_paths.region_icon))
+            entry_type_icon = QIcon(":/icons/region")
         elif entry_type == self.EntryType.LINE:
-            entry_type_icon = QIcon(str(image_paths.line_icon))
+            entry_type_icon = QIcon(":/icons/line")
         elif entry_type == self.EntryType.ALARM:
-            entry_type_icon = QIcon(str(image_paths.alarm_icon))
+            entry_type_icon = QIcon(":/icons/alarm")
         else:  # includes self.EntryType.UNKNOWN
-            entry_type_icon = QIcon(str(image_paths.question_mark_icon))
+            entry_type_icon = QIcon(":/icons/question_mark")
 
         return entry_type_icon
 
     def _add_trash_button(self, row_item: ZoneListItem):
         trash_button = QPushButton()
-        trash_button.setIcon(QIcon(str(image_paths.trash_icon)))
+        trash_button.setIcon(QIcon(":/icons/trash"))
         self.setItemWidget(row_item, 2, trash_button)
 
         row_item.trash_button = trash_button

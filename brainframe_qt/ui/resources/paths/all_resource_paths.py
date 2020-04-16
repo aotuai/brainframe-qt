@@ -5,8 +5,6 @@ import sys
 from typing import Union
 from pathlib import Path
 
-from brainframe.shared import environment
-
 all_paths = []
 """A list of all paths in the program. This is used for building the project
 to make sure that all used resources get packaged into the executable"""

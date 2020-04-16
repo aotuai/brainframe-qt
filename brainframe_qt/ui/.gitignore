@@ -1,0 +1,7 @@
+# Generated QRC file for PyQt
+/resources/qt_resources.py
+
+# Translation files
+i18n/*.pro
+*.qm
+.qmake.stash

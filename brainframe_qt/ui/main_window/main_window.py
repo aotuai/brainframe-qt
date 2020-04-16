@@ -1,6 +1,7 @@
-from PyQt5.QtCore import pyqtSlot, Qt
-from PyQt5.QtGui import QIcon, QPixmap, QTransform
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QWidget, QSizePolicy
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QSizePolicy, \
+    QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api, api_errors
@@ -8,7 +9,9 @@ from brainframe.client.api.codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import AboutPage, AlarmView, \
     IdentityConfiguration, PluginConfigDialog, RenderConfiguration, \
     ServerConfigurationDialog, StreamConfigurationDialog
-from brainframe.client.ui.resources.paths import image_paths, qt_ui_paths
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import qt_resources
+from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import \
     FloatingActionButton
 
@@ -49,20 +52,19 @@ class MainWindow(QMainWindow):
         # Add the Dilili logo to the bottom right
         self.setStyleSheet(
             f"#centralwidget {{"
-            f"    background-image: url({image_paths.background.as_posix()});"
+            f"    background-image: url(:/images/background_logo_svg);"
             f"    background-position: right bottom;"
             f"    background-repeat: no-repeat;"
             f"}}")
 
     def _setup_toolbar(self):
         # Add icons to buttons in toolbar
-        video_config_icon = QIcon(str(image_paths.video_settings_icon))
-        identity_config_icon = QIcon(str(image_paths.settings_gear_icon))
-        plugin_config_icon = QIcon(str(image_paths.global_plugin_conf_icon))
-        alert_status_icon = QIcon(str(image_paths.alarm_view_action_icon))
-        about_page_icon = QIcon(str(image_paths.information_icon))
-        server_configuration_icon = \
-            QIcon(str(image_paths.server_configuration_icon))
+        video_config_icon = QIcon(":/icons/video_settings")
+        identity_config_icon = QIcon(":/icons/settings_gear")
+        plugin_config_icon = QIcon(":/icons/global_plugin_config")
+        alert_status_icon = QIcon(":/icons/alert_view")
+        about_page_icon = QIcon(":/icons/info")
+        server_configuration_icon = QIcon(":/icons/server_config")
 
         self.server_configuration_action.setIcon(server_configuration_icon)
         self.video_configuration_action.setIcon(video_config_icon)
@@ -88,6 +90,7 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def add_new_stream_slot(self):
         """Open dialog to add a new stream and then send it to the server"""
+
         def on_error(err):
             message_title = self.tr("Error Opening Stream")
             message_desc = self.tr(
@@ -181,4 +184,3 @@ class MainWindow(QMainWindow):
                       f"{message_info2}<br><br>" \
                       f"{error_text}<b>{err.kind}</b>"
             QMessageBox.information(self, message_title, message)
-

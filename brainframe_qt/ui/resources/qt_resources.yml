@@ -1,0 +1,4 @@
+ioPaths:
+  -
+    - "resources/qt_resources.qrc"
+    - "resources/qt_resources.py"
