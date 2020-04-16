@@ -1,4 +1,4 @@
 # Generated QRC file for PyQt
-/ui/resources/qt_resources.py
+/resources/qt_resources.py
 *.qm
 .qmake.stash
