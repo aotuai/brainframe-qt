@@ -26,14 +26,14 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def main():
+def main() -> None:
     args: argparse.Namespace = parse_args()
 
     compile_qrc()
     compile_tr(args.tr_dev)
 
 
-def compile_qrc():
+def compile_qrc() -> None:
     # noinspection SpellCheckingInspection
     pyqt5ac_config_file = RESOURCE_DIR / "qt_resources.yml"
     pyqt5ac.main(config=str(pyqt5ac_config_file))
