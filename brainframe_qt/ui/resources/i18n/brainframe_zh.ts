@@ -148,7 +148,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlarmView</name>
     <message>
-        <location filename="../../dialogs/alarm_view/alarm_view.py" line="81"/>
+        <location filename="../../dialogs/alarm_view/alarm_view.py" line="31"/>
         <source>Alarm Status</source>
         <translation>警报状态</translation>
     </message>
