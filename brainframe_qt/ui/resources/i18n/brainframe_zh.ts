@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh" sourcelanguage="en">
+<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -219,17 +218,17 @@ Read the manual to learn about the required directory structure.</source>
         <translation>警报名称</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="34"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="35"/>
         <source>{} in region [{}]</source>
         <translation>{} 在区域 [{}] 内</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="62"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
         <source>(Ongoing)</source>
         <translation>(仍在持续)</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="64"/>
         <source>{} to {}</source>
         <translation>{} 至 {}</translation>
     </message>
@@ -265,17 +264,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="68"/>
+        <location filename="../../brainframe_app.py" line="69"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="91"/>
+        <location filename="../../brainframe_app.py" line="92"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="164"/>
+        <location filename="../../brainframe_app.py" line="165"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -298,7 +297,7 @@ Read the manual to learn about the required directory structure.</source>
         <translation>从以下位置选择要加载标识的目录：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.py" line="39"/>
+        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.py" line="41"/>
         <source>Select directory containing identities</source>
         <translation>选择包含标识的目录</translation>
     </message>
@@ -547,47 +546,47 @@ Read the manual to learn about the required directory structure.</source>
         <translation>配置BrainFrame服务器</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="36"/>
+        <location filename="../../main_window/main_window.py" line="39"/>
         <source>Add new stream</source>
         <translation>添加新视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="173"/>
+        <location filename="../../main_window/main_window.py" line="176"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="137"/>
+        <location filename="../../main_window/main_window.py" line="140"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="138"/>
+        <location filename="../../main_window/main_window.py" line="141"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="177"/>
+        <location filename="../../main_window/main_window.py" line="180"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="174"/>
+        <location filename="../../main_window/main_window.py" line="177"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="175"/>
+        <location filename="../../main_window/main_window.py" line="178"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="176"/>
+        <location filename="../../main_window/main_window.py" line="179"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="162"/>
+        <location filename="../../main_window/main_window.py" line="165"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
@@ -602,12 +601,12 @@ Read the manual to learn about the required directory structure.</source>
         <translation>查看正在进行中的和过去的警报</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="163"/>
+        <location filename="../../main_window/main_window.py" line="166"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="93"/>
+        <location filename="../../main_window/main_window.py" line="96"/>
         <source>Error encountered while uploading video file</source>
         <translation>上传视频文件时发生错误</translation>
     </message>
@@ -751,7 +750,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../splash_screen/splash_screen.py" line="72"/>
+        <location filename="../../splash_screen/splash_screen.py" line="73"/>
         <source>Configure</source>
         <translation>配置</translation>
     </message>
@@ -802,27 +801,27 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationDialog</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="179"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="169"/>
         <source>Camera web address</source>
         <translation>摄像头地址</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="185"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="175"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="191"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="181"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="303"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="293"/>
         <source>Select video file</source>
         <translation>选择视频文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="132"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="122"/>
         <source>Unrecognized connection type</source>
         <translation>无法识别的连接类型</translation>
     </message>
@@ -892,7 +891,7 @@ Please recheck the entered server address.</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="270"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="260"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
@@ -1149,7 +1148,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>parent</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="328"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="318"/>
         <source>Uploading {filepath}...</source>
         <translation>上传中 {filepath}⋯⋯</translation>
     </message>
