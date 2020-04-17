@@ -39,7 +39,7 @@ class AlarmView(AlarmViewUI, IterableMI):
         dialog.show()
 
     def iterable_layout(self) -> QLayout:
-        return self.widget().layout()
+        return self.container_widget.layout()
 
     def _init_signals(self):
 
@@ -57,14 +57,24 @@ class AlarmView(AlarmViewUI, IterableMI):
             -> AlarmBundle:
         """Create a new bundle with bundle_name and add it to the view"""
         alarm_bundle = AlarmBundle(self.bundle_mode, bundle, self)
-        self.widget().layout().addWidget(alarm_bundle)
+        self.container_widget.layout().addWidget(alarm_bundle)
         self.bundle_map[bundle.id] = alarm_bundle
+
+        # Ensure scroll area widget visible
+        self.scroll_area.setVisible(True)
+        self.background_widget.setHidden(True)
+
         return alarm_bundle
 
     def delete_bundle_by_id(self, bundle_id: int) -> None:
         alarm_bundle = self.bundle_map.pop(bundle_id)
-        self.widget().layout().removeWidget(alarm_bundle)
+        self.container_widget.layout().removeWidget(alarm_bundle)
         alarm_bundle.deleteLater()
+
+        # Show the background image if there are no bundles
+        no_bundles = (len(self.bundle_map) == 0)
+        self.scroll_area.setHidden(no_bundles)
+        self.background_widget.setVisible(no_bundles)
 
     def get_bundle_id_for_alarm(self, alarm: ZoneAlarm) -> int:
         if self.bundle_mode == AlarmBundle.BundleType.BY_STREAM:

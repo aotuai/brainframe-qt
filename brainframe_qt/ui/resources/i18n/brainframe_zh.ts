@@ -154,6 +154,14 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>AlarmViewUI</name>
+    <message>
+        <location filename="../../dialogs/alarm_view/alarm_view_ui.py" line="24"/>
+        <source>No streams are being analyzed right now, so there is nothing to show here</source>
+        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
+    </message>
+</context>
+<context>
     <name>AlertDetail</name>
     <message>
         <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_preview/alert_detail/alert_detail.py" line="97"/>
