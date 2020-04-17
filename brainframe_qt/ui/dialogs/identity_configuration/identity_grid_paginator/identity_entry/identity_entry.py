@@ -1,11 +1,13 @@
-from PyQt5.QtCore import pyqtSignal, Qt, QEvent
-from PyQt5.QtGui import QMouseEvent, QPixmap, QPalette, QFontMetrics, \
-    QPaintEvent
+from PyQt5.QtCore import QEvent, Qt, pyqtSignal
+from PyQt5.QtGui import QFontMetrics, QMouseEvent, QPaintEvent, QPalette, \
+    QPixmap
 from PyQt5.QtWidgets import QLabel, QStyle, QStyleOption
 from PyQt5.uic import loadUiType
 
 from brainframe.client.api.codecs import Identity
-from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import qt_resources
+from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
 
 # Preload & parse the UI file into memory, for performance reasons
@@ -31,7 +33,7 @@ class IdentityEntry(_Form, _Base):
     """
 
     def __new__(cls, *args, **kwargs):
-        cls.icon = QPixmap(str(image_paths.person_icon))
+        cls.icon = QPixmap(":/icons/person")
         return super().__new__(cls, *args, **kwargs)
 
     def __init__(self, identity: Identity, parent=None):

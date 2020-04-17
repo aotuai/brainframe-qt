@@ -1,7 +1,8 @@
 from PyQt5.QtCore import pyqtSignal, QRectF, Qt
 from PyQt5.QtGui import QPainter, QColor, QImage, QFontMetricsF
 
-from brainframe.client.ui.resources.paths import image_paths
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import qt_resources
 from brainframe.client.ui.resources.video_items import StreamWidget
 
 
@@ -89,7 +90,7 @@ class VideoSmall(StreamWidget):
             # Draw icon
             image_percent = 0.8
 
-            image = QImage(str(image_paths.alert_icon))
+            image = QImage(":/icons/alert")
             image = image.scaled(int(self.sceneRect().width()),
                                  int(bar_height * image_percent),
                                  Qt.KeepAspectRatio)
