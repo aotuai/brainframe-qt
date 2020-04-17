@@ -361,3 +361,30 @@ class AdminMustExistError(BaseAPIError):
 
     def __init__(self, description):
         super().__init__(error_kinds.ADMIN_MUST_EXIST, description)
+
+
+@register_error_type
+class LicenseRequiredError(BaseAPIError):
+    """There was an attempt to access a resource that requires an active
+    license while no valid license is loaded.
+    """
+
+    def __init__(self, description):
+        super().__init__(error_kinds.LICENSE_REQUIRED, description)
+
+
+@register_error_type
+class LicenseExpiredError(BaseAPIError):
+    """There was an attempt to upload a license that is expired."""
+
+    def __init__(self, description):
+        super().__init__(error_kinds.LICENSE_EXPIRED, description)
+
+
+@register_error_type
+class LicenseInvalidError(BaseAPIError):
+    """There was an attempt to upload a license that is in an invalid format.
+    """
+
+    def __init__(self, description):
+        super().__init__(error_kinds.LICENSE_INVALID, description)
