@@ -11,11 +11,11 @@ the packages outlined in the main README for UI development installed.
 # Usage
 
 After adding a new file or changing an existing file that needs translations or to add a new language,
-edit and run the gen_i18n.py script that is in the scripts/ directory.
+edit and run the "Compile QT Resources" run configuration. If you're not using PyCharm, run
+`compile_qt_resources.py` from within the client dir.
 
-```commandline
-python scripts/gen_i18n.py
-```
+This script will fail on the "compiling" step until all translations are marked as "finished".
+For development, add the "--tr-dev" flag.
 
 After running the script, this directory is populated with new .ts files (if
 new languages were added) and the existing .ts files are updated to contain
@@ -23,6 +23,3 @@ any new strings that need translation.
 
 Using `linguist`, open the .ts files and add translations for the new languages
 and strings (including English, but just click the confirm checkbox).
-
-When done adding translations, run `lrelease brainframe.pro` and the .qm files
-will be generated.
