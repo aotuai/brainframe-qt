@@ -18,6 +18,7 @@
         <file alias="info">images/icons/information.svg</file>
         <file alias="line">images/icons/line.svg</file>
         <file alias="new_stream">images/icons/new_stream.svg</file>
+        <file alias="no_streams_for_alerts">images/icons/no_streams_for_alerts.svg</file>
         <file alias="person">images/icons/person.svg</file>
         <file alias="stream_config">images/icons/project_file_stream_settings.svg</file>
         <file alias="question_mark">images/icons/question_mark.svg</file>
