@@ -21,13 +21,14 @@ class LicenseTerms(Codec):
     def to_dict(self) -> dict:
         d = dict(self.__dict__)
         if self.expiration_date is not None:
-            d["expiration_date"] = self.expiration_date.strftime(DATE_FORMAT)
+            d["expiration_date"] = self.expiration_date.isoformat()
         return d
 
     @staticmethod
     def from_dict(d: dict) -> "LicenseTerms":
         expiration_date = None
         if d["expiration_date"] is not None:
+            # TODO: Switch to date.fromisoformat when we're on Python >= 3.7
             expiration_date = datetime.strptime(
                 d["expiration_date"], DATE_FORMAT).date()
 
