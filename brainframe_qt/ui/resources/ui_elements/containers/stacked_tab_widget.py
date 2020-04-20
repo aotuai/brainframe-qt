@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QHBoxLayout, QStackedWidget, QToolButton, \
+from PyQt5.QtWidgets import QHBoxLayout, QSizePolicy, QStackedWidget, \
+    QToolButton, \
     QVBoxLayout, QWidget
 
 from brainframe.client.ui.resources import stylesheet_watcher
@@ -40,6 +41,9 @@ class _VerticalTabbingWidget(_VerticalTabbingWidgetUI):
         tab_widget.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tab_widget.setIconSize(QSize(50, 50))
         tab_widget.setText(tab_name)
+
+        tab_widget.setSizePolicy(QSizePolicy.MinimumExpanding,
+                                 QSizePolicy.Preferred)
 
         self.layout().addWidget(tab_widget)
 
