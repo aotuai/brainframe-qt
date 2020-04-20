@@ -5,15 +5,17 @@ _VerticalTabbingWidget {
     /*background: purple;*/
     max-width: 90px;
     min-width: 90px;
+    background: #82c7a5;
 }
 
 _VerticalTabbingWidget {
 }
 
-ImageLabel {
-    /*background: red;*/
+QToolButton {
+    border: none;
+    border-radius: 4px;
 }
 
-#icon_label {
-    /*background: orange*/
+QToolButton:hover {
+    background: #5fb78c;
 }
