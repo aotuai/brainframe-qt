@@ -5,10 +5,11 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.uic import loadUiType
 
 from brainframe.client.ui.dialogs import AlertEntryPopup
-from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
+from brainframe.client.ui.resources import qt_resources
+from brainframe.client.ui.resources.paths import qt_ui_paths
 
 # Preload the necessary icons for the AlertLogEntry
-pixmap = QPixmap(str(image_paths.alert_icon))
+pixmap = QPixmap(":/icons/alert")
 pixmap = pixmap.scaled(32, 32, transformMode=Qt.SmoothTransformation)
 alert_icon = QIcon(pixmap)
 

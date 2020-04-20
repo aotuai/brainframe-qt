@@ -1,19 +1,20 @@
 import sys
-from threading import Event
-from typing import List, Optional
 from queue import Queue
+from typing import List, Optional
 
-from PyQt5.QtCore import pyqtSlot, Qt, Q_ARG, QLocale, QMetaObject, QThread, \
-    QTranslator
+from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
+    pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
 import brainframe
 from brainframe.client.api import api, api_errors
-from brainframe.client.ui import MainWindow, SplashScreen, LicenseAgreement
+from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
 from brainframe.client.ui.dialogs import StandardError, VersionMismatch
-from brainframe.client.ui.resources import QTAsyncWorker, settings
-from brainframe.client.ui.resources.paths import image_paths, text_paths
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
+    settings
+from brainframe.client.ui.resources.paths import text_paths
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.secret import decrypt
 
@@ -25,7 +26,7 @@ class BrainFrameApplication(QApplication):
         # noinspection PyUnresolvedReferences
         self.aboutToQuit.connect(self._shutdown)
 
-        self.setWindowIcon(QIcon(str(image_paths.application_icon)))
+        self.setWindowIcon(QIcon(":/app_icon_png"))
         self.setOrganizationDomain('aotu.ai')
 
         self._init_translator()

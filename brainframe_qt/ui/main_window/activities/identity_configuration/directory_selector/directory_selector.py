@@ -1,11 +1,13 @@
 from pathlib import Path
 
-from PyQt5.QtCore import Qt, QStandardPaths
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtCore import QStandardPaths, Qt
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import qt_ui_paths, image_paths
+# noinspection PyUnresolvedReferences
+from brainframe.client.ui.resources import qt_resources
+from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class DirectorySelector(QDialog):
@@ -17,7 +19,7 @@ class DirectorySelector(QDialog):
 
         # Set the alert icon on the left of the log entry
         self.select_directory_button.setText("")
-        pixmap = QPixmap(str(image_paths.folder_icon))
+        pixmap = QPixmap(":/icons/folder")
         pixmap = pixmap.scaled(32, 32, transformMode=Qt.SmoothTransformation)
         self.select_directory_button.setIcon(QIcon(pixmap))
 
