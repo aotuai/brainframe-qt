@@ -11,4 +11,5 @@ from .process_image import ProcessImageStubMixIn
 from .encodings import EncodingStubMixIn
 from .premises import PremisesStubMixin
 from .users import UserStubMixin
+from .licenses import LicenseStubMixIn
 from .base_stub import BaseStub

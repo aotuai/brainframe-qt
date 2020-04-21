@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Callable, Optional
 
-from PyQt5.QtCore import QObject, QStandardPaths, Qt, pyqtSlot
+from PyQt5.QtCore import (QObject, QStandardPaths, Qt, QCoreApplication,
+                          pyqtSlot)
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDialog, QDialogButtonBox,
                              QFileDialog, QLineEdit, QProgressBar,
@@ -315,9 +316,10 @@ class StreamConfigurationDialog(QDialog):
         reader = ProgressFileReader(filepath, parent)
 
         # Make the progress dialog
-        label_text = parent.tr("Uploading {filepath}...".format(
-            filepath=filepath
-        ))
+        label_text = QCoreApplication.translate(
+            "StreamConfigurationDialog",
+            "Uploading {filepath}...")
+        label_text = label_text.format(filepath=filepath)
         progress_dialog = QProgressDialog(parent)
         progress_dialog.setLabelText(label_text)
         progress_dialog.setWindowModality(Qt.WindowModal)
