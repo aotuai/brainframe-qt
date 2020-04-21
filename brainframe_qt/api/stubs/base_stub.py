@@ -148,7 +148,7 @@ class BaseStub:
         :param timeout: The timeout to use for this request
         :param params: The "query_string" to add to the url. In the format
             of a dict, {"key": "value", ...} key and val must be a string
-        :return: The raw bytes of the response and the response headers
+        :return: The response object
         """
         request = requests.Request(
             method="GET",
@@ -169,7 +169,7 @@ class BaseStub:
         :param timeout: The timeout to use for this request
         :param data: The data to send
         :param content_type: The content type of the data
-        :return: The raw bytes of the response and the response headers
+        :return: The response object
         """
         headers = None
         if content_type is not None:
@@ -220,7 +220,7 @@ class BaseStub:
         :param timeout: The timeout to use for this request
         :param params: The "query_string" to add to the URL. Must be a
           str-to-str dict
-        :return: The response bytes and headers
+        :return: The response object
         """
         request = requests.Request(
             method="DELETE",

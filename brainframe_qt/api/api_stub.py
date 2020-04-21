@@ -19,7 +19,8 @@ class API(stubs.AlertStubMixin,
           stubs.ProcessImageStubMixIn,
           stubs.EncodingStubMixIn,
           stubs.PremisesStubMixin,
-          stubs.UserStubMixin):
+          stubs.UserStubMixin,
+          stubs.LicenseStubMixIn):
     """Provides access to BrainFrame API endpoints."""
 
     def __init__(self, server_url=None, credentials: Tuple[str, str] = None,
@@ -83,7 +84,11 @@ class API(stubs.AlertStubMixin,
             try:
                 # Test connection to server
                 self.version()
-                break
+                # TODO: Remove this check and let the user know about the
+                #       license not being valid
+                license_info = self.get_license_info()
+                if license_info.state is license_info.State.VALID:
+                    break
             except (ConnectionError, ConnectionRefusedError,
                     api_errors.UnauthorizedError, ReadTimeout):
                 # Server not started yet or there is a communication

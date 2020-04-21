@@ -129,7 +129,15 @@ class MainWindow(QMainWindow):
         if stream_conf is None:
             return
         try:
-            stream_conf = api.set_stream_configuration(stream_conf)
+            try:
+                stream_conf = api.set_stream_configuration(stream_conf)
+            except api_errors.BaseAPIError:
+                if stream_conf.connection_type == StreamConfiguration.ConnType.FILE \
+                        and "storage_id" in stream_conf.connection_options:
+                    # Clean up the video file if creating the stream failed
+                    api.delete_storage(
+                        stream_conf.connection_options["storage_id"])
+                raise
 
             # Currently, we default to setting all new streams as 'active'
             api.start_analyzing(stream_conf.id)
