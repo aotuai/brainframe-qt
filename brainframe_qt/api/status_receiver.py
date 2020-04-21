@@ -79,6 +79,7 @@ class StatusReceiver(Thread):
             # aren't in the ZoneStatusStream, so I hack this
             class StreamHack(object):
                 pass
+
             stream = StreamHack()
             stream.id = stream_id
             streams.append(stream)
