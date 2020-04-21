@@ -1,7 +1,9 @@
 # Generated QRC file for PyQt
 /resources/qt_resources.py
 
+# (Generated) Qt project file
+/resources/i18n/brainframe.pro
+
 # Translation files
-i18n/*.pro
 *.qm
 .qmake.stash
