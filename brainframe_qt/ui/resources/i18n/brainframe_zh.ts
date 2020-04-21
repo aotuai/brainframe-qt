@@ -16,7 +16,7 @@
 <context>
     <name>AddNewIdentitiesWorker</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="46"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="46"/>
         <source>Unable to parse this directory!
 
 Reason:
@@ -31,7 +31,7 @@ Read the manual to learn about the required directory structure.</source>
 请阅读手册以了解目录结构格式。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="54"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="54"/>
         <source>Invalid Format</source>
         <translation>无效格式</translation>
     </message>
@@ -282,22 +282,22 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>DirectorySelector</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.ui" line="14"/>
+        <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.ui" line="14"/>
         <source>Select Identity Directory</source>
         <translation>选择身份目录</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.ui" line="26"/>
+        <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.ui" line="26"/>
         <source>Select Directory</source>
         <translation>选择目录</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.ui" line="39"/>
+        <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.ui" line="39"/>
         <source>Select a directory to load identities from:</source>
         <translation>从以下位置选择要加载标识的目录：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.py" line="41"/>
+        <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.py" line="41"/>
         <source>Select directory containing identities</source>
         <translation>选择包含标识的目录</translation>
     </message>
@@ -305,7 +305,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>EncodingEntry</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/encoding_list/encoding_entry/encoding_entry.ui" line="38"/>
+        <location filename="../../main_window/activities/identity_configuration/encoding_list/encoding_entry/encoding_entry.ui" line="38"/>
         <source>Encoding</source>
         <translation>编码</translation>
     </message>
@@ -313,12 +313,12 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>EncodingList</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/encoding_list/encoding_list.ui" line="49"/>
+        <location filename="../../main_window/activities/identity_configuration/encoding_list/encoding_list.ui" line="49"/>
         <source>Encoding Classes:</source>
         <translation>编码类：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/encoding_list/encoding_list.ui" line="68"/>
+        <location filename="../../main_window/activities/identity_configuration/encoding_list/encoding_list.ui" line="68"/>
         <source>None</source>
         <translation>空</translation>
     </message>
@@ -372,17 +372,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>IdentityConfiguration</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_configuration.ui" line="14"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_configuration.ui" line="14"/>
         <source>Identities</source>
         <translation>身份</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_configuration.ui" line="54"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_configuration.ui" line="51"/>
         <source>Uploading Identities: %p%</source>
         <translation>上传身份：％p％</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_configuration.ui" line="64"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_configuration.ui" line="61"/>
         <source>Loading Identities: %p%</source>
         <translation>加载身份：％p％</translation>
     </message>
@@ -390,22 +390,22 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>IdentityErrorPopup</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="14"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_error_popup/identity_error_popup.ui" line="14"/>
         <source>Identity Upload Summary</source>
         <translation>身份上传摘要</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="39"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_error_popup/identity_error_popup.ui" line="39"/>
         <source>Element</source>
         <translation>项目</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="44"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_error_popup/identity_error_popup.ui" line="44"/>
         <source>Error</source>
         <translation>错误信息</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="52"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_error_popup/identity_error_popup.ui" line="52"/>
         <source>Errors encountered during identity creation:</source>
         <translation>身份创建过程中遇到的错误：</translation>
     </message>
@@ -413,36 +413,36 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>IdentityInfo</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.ui" line="20"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.ui" line="20"/>
         <source>Unique Name:</source>
         <comment>Before setting</comment>
         <translation>唯一名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.ui" line="27"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.ui" line="27"/>
         <source>Nickname:</source>
         <comment>Before setting</comment>
         <translation>昵称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="81"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="81"/>
         <source>Unique Name: {}</source>
         <comment>After setting</comment>
         <translation>唯一名称：{}</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="83"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="83"/>
         <source>Nickname: {}</source>
         <comment>After setting</comment>
         <translation>昵称：{}</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="99"/>
         <source>Are you sure you want to delete all encodings with class {0} from identity for {1}?</source>
         <translation>您确定要从 {1} 的标识中删除所有带有类别为 {0} 的编码吗？</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="102"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="102"/>
         <source>This operation cannot be undone.</source>
         <translation>此操作无法撤消。</translation>
     </message>
@@ -450,17 +450,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>IdentitySearchFilter</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.ui" line="46"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.ui" line="46"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
         <source>Are you sure you want to delete all encodings with class {} from the database?</source>
         <translation>您确定要从数据库中删除所有类别为{}的编码吗？</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="104"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="104"/>
         <source>This operation cannot be undone.</source>
         <translation>此操作无法撤消。</translation>
     </message>
@@ -546,51 +546,6 @@ Read the manual to learn about the required directory structure.</source>
         <translation>配置BrainFrame服务器</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="39"/>
-        <source>Add new stream</source>
-        <translation>添加新视频流</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="176"/>
-        <source>Error Opening Stream</source>
-        <translation>打开视频流时出错</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="140"/>
-        <source>Stream source already open</source>
-        <translation>视频流源已经打开</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="141"/>
-        <source>You already have the stream source open.</source>
-        <translation>您已经打开了视频流源。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="180"/>
-        <source>Error: </source>
-        <translation>错误： </translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="177"/>
-        <source>Error encountered while opening stream</source>
-        <translation>打开视频流时出错</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="178"/>
-        <source>Is stream already open?</source>
-        <translation>视频流是否已打开？</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="179"/>
-        <source>Is this a valid stream source?</source>
-        <translation>这是一个有效的视频流源吗？</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="165"/>
-        <source>Active Stream Limit Exceeded</source>
-        <translation>视频流数量超过上限</translation>
-    </message>
-    <message>
         <location filename="../../main_window/main_window.ui" line="118"/>
         <source>Alarm Status</source>
         <translation>警报状态</translation>
@@ -599,16 +554,6 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../../main_window/main_window.ui" line="121"/>
         <source>View ongoing and past alerts for alarms</source>
         <translation>查看正在进行中的和过去的警报</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="166"/>
-        <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
-        <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="96"/>
-        <source>Error encountered while uploading video file</source>
-        <translation>上传视频文件时发生错误</translation>
     </message>
 </context>
 <context>
@@ -796,6 +741,54 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/standard_error/standard_error.py" line="54"/>
         <source>The client must be closed.</source>
         <translation>必须关闭客户端。</translation>
+    </message>
+</context>
+<context>
+    <name>StreamActivity</name>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="93"/>
+        <source>Error Opening Stream</source>
+        <translation type="unfinished">打开视频流时出错</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="57"/>
+        <source>Stream source already open</source>
+        <translation type="unfinished">视频流源已经打开</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="58"/>
+        <source>You already have the stream source open.</source>
+        <translation type="unfinished">您已经打开了视频流源。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="97"/>
+        <source>Error: </source>
+        <translation type="unfinished">错误： </translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="94"/>
+        <source>Error encountered while opening stream</source>
+        <translation type="unfinished">打开视频流时出错</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="82"/>
+        <source>Active Stream Limit Exceeded</source>
+        <translation type="unfinished">视频流数量超过上限</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="83"/>
+        <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
+        <translation type="unfinished">您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="95"/>
+        <source>Is stream already open?</source>
+        <translation type="unfinished">视频流是否已打开？</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="96"/>
+        <source>Is this a valid stream source?</source>
+        <translation type="unfinished">这是一个有效的视频流源吗？</translation>
     </message>
 </context>
 <context>
@@ -1143,6 +1136,14 @@ Please recheck the entered server address.</source>
         <location filename="../video_items/stream_zone_status.py" line="70"/>
         <source>Alert!</source>
         <translation>警报！</translation>
+    </message>
+</context>
+<context>
+    <name>_StreamActivityUI</name>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity_ui.py" line="35"/>
+        <source>Add new stream</source>
+        <translation type="unfinished">添加新视频流</translation>
     </message>
 </context>
 <context>

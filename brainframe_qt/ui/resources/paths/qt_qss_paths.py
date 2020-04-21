@@ -10,6 +10,10 @@ ui_dir = route_path("brainframe", "client", "ui")
 main_window_dir = ui_dir / "main_window"
 main_window_qss = main_window_dir / "main_window.qss"
 
+# ToolBar
+toolbar_dir = main_window_dir / "toolbar"
+main_toolbar_qss = toolbar_dir / "main_toolbar.qss"
+
 # MainTabWidget
 main_tab_widget_dir = main_window_dir / "main_tab_widget"
 main_tab_widget_qss = main_tab_widget_dir / "main_tab_widget.qss"

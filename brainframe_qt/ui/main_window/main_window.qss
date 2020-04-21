@@ -1,21 +1,14 @@
-#stacked_tab_button:hover {
-}
-
-_VerticalTabbingWidget {
-    /*background: purple;*/
-    max-width: 90px;
-    min-width: 90px;
-    background: #82c7a5;
-}
-
-_VerticalTabbingWidget {
-}
-
 QToolButton {
     border: none;
     border-radius: 4px;
 }
 
-QToolButton:hover {
+QToolBar {
+    qproperty-iconSize: 35px;
+    border: none;
+    background: #82c7a5;
+}
+
+QToolBar > QToolButton:hover {
     background: #5fb78c;
 }
