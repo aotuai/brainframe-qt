@@ -35,12 +35,13 @@ class ZoneStatusStubMixin(BaseStub):
                for s_id, statuses in data.items()}
         return out
 
-    def get_zone_status_stream(self) -> Generator[ZONE_STATUS_TYPE, None, None]:
+    def get_zone_status_stream(self, timeout=None) -> \
+            Generator[ZONE_STATUS_TYPE, None, None]:
         req = "/api/streams/statuses"
 
         def zone_status_iterator():
             # Don't use a timeout for this request, since it's ongoing
-            resp = self._get(req, timeout=None)
+            resp = self._get(req, timeout=timeout)
             for packet in resp.iter_lines(delimiter=b"\r\n"):
                 if packet == b'':
                     continue
