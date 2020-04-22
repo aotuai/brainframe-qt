@@ -1,12 +1,13 @@
 import logging
 from threading import Thread
 from time import sleep
-from typing import Dict, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING, Optional
 
 import requests
 
 from brainframe.client.api import api_errors, codecs
-from brainframe.client.api.stubs.zone_statuses import ZONE_STATUS_TYPE
+from brainframe.client.api.stubs.zone_statuses import \
+    ZONE_STATUS_TYPE, ZONE_STATUS_STREAM_TYPE
 from brainframe.client.api.zss_pubsub import zss_publisher, ZSSTopic
 
 if TYPE_CHECKING:
@@ -44,7 +45,7 @@ class StatusReceiver(Thread):
         """Opens a connection with BrainFrame to receive ZoneStatus objects.
         Then, alerts any event handlers of new objects."""
         self._running = True
-        zone_status_stream = None
+        zone_status_stream: Optional[ZONE_STATUS_STREAM_TYPE] = None
 
         while self._running:
             if zone_status_stream is None:

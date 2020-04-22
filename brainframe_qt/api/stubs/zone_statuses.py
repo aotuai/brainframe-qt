@@ -6,6 +6,7 @@ from brainframe.client.api.stubs.base_stub import BaseStub, DEFAULT_TIMEOUT
 from brainframe.client.api.codecs import ZoneStatus
 
 ZONE_STATUS_TYPE = Dict[int, Dict[str, ZoneStatus]]
+ZONE_STATUS_STREAM_TYPE = Generator[ZONE_STATUS_TYPE, None, None]
 
 
 class ZoneStatusStubMixin(BaseStub):
@@ -35,8 +36,7 @@ class ZoneStatusStubMixin(BaseStub):
                for s_id, statuses in data.items()}
         return out
 
-    def get_zone_status_stream(self, timeout=None) -> \
-            Generator[ZONE_STATUS_TYPE, None, None]:
+    def get_zone_status_stream(self, timeout=None) -> ZONE_STATUS_STREAM_TYPE:
         req = "/api/streams/statuses"
 
         def zone_status_iterator():
