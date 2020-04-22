@@ -559,42 +559,42 @@ Read the manual to learn about the required directory structure.</source>
         <translation>添加新视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="176"/>
+        <location filename="../../main_window/main_window.py" line="184"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="140"/>
+        <location filename="../../main_window/main_window.py" line="148"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="141"/>
+        <location filename="../../main_window/main_window.py" line="149"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="180"/>
+        <location filename="../../main_window/main_window.py" line="188"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="177"/>
+        <location filename="../../main_window/main_window.py" line="185"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="178"/>
+        <location filename="../../main_window/main_window.py" line="186"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="179"/>
+        <location filename="../../main_window/main_window.py" line="187"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="165"/>
+        <location filename="../../main_window/main_window.py" line="173"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
@@ -609,7 +609,7 @@ Read the manual to learn about the required directory structure.</source>
         <translation>查看正在进行中的和过去的警报</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="166"/>
+        <location filename="../../main_window/main_window.py" line="174"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
@@ -809,27 +809,27 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationDialog</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="169"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="170"/>
         <source>Camera web address</source>
         <translation>摄像头地址</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="175"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="176"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="181"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="182"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="293"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="294"/>
         <source>Select video file</source>
         <translation>选择视频文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="122"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="123"/>
         <source>Unrecognized connection type</source>
         <translation>无法识别的连接类型</translation>
     </message>
@@ -899,7 +899,7 @@ Please recheck the entered server address.</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="260"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="261"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
@@ -907,6 +907,11 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="195"/>
         <source>Avoid transcoding</source>
         <translation>避免转码</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="319"/>
+        <source>Uploading {filepath}...</source>
+        <translation>上传中{filepath}⋯⋯</translation>
     </message>
 </context>
 <context>
@@ -1151,14 +1156,6 @@ Please recheck the entered server address.</source>
         <location filename="../video_items/stream_zone_status.py" line="70"/>
         <source>Alert!</source>
         <translation>警报！</translation>
-    </message>
-</context>
-<context>
-    <name>parent</name>
-    <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="318"/>
-        <source>Uploading {filepath}...</source>
-        <translation>上传中 {filepath}⋯⋯</translation>
     </message>
 </context>
 </TS>

@@ -1,12 +1,13 @@
 import logging
 from threading import Thread
 from time import sleep
-from typing import Dict, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING, Optional
 
 import requests
 
 from brainframe.client.api import api_errors, codecs
-from brainframe.client.api.stubs.zone_statuses import ZONE_STATUS_TYPE
+from brainframe.client.api.stubs.zone_statuses import \
+    ZONE_STATUS_TYPE, ZONE_STATUS_STREAM_TYPE
 from brainframe.client.api.zss_pubsub import zss_publisher, ZSSTopic
 
 if TYPE_CHECKING:
@@ -16,6 +17,13 @@ if TYPE_CHECKING:
 class StatusReceiver(Thread):
     """This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream."""
+
+    ZONE_STATUS_STREAM_TIMEOUT = 10
+    """The timeout in seconds before reinitializing a connection to the server. 
+    If none, the zonestatus stream will wait forever even if there are no 
+    results, making the thread potentially never check if it should be 
+    closing.
+    """
 
     def __init__(self, api: 'API'):
         """
@@ -37,9 +45,12 @@ class StatusReceiver(Thread):
         """Opens a connection with BrainFrame to receive ZoneStatus objects.
         Then, alerts any event handlers of new objects."""
         self._running = True
-        zone_status_stream = self._api.get_zone_status_stream()
+        zone_status_stream: Optional[ZONE_STATUS_STREAM_TYPE] = None
 
         while self._running:
+            if zone_status_stream is None:
+                zone_status_stream = self._api.get_zone_status_stream(
+                    timeout=self.ZONE_STATUS_STREAM_TIMEOUT)
             try:
                 zone_statuses = next(zone_status_stream)
             except (StopIteration,
@@ -54,9 +65,10 @@ class StatusReceiver(Thread):
                 if not self._running:
                     break
 
+                zone_status_stream = None
+
                 logging.warning(f"StatusLogger: Could not reach server: {ex}")
                 sleep(1)
-                zone_status_stream = self._api.get_zone_status_stream()
             else:
                 self._ingest_zone_statuses(zone_statuses)
 
@@ -79,6 +91,7 @@ class StatusReceiver(Thread):
             # aren't in the ZoneStatusStream, so I hack this
             class StreamHack(object):
                 pass
+
             stream = StreamHack()
             stream.id = stream_id
             streams.append(stream)
