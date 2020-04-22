@@ -1,14 +1,13 @@
 from typing import Optional
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QSizePolicy, QStackedWidget, \
-    QToolBar, QWidget
+from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget
 
 from brainframe.client.ui.main_window.activities.identity_configuration \
     import IdentityConfiguration
 from brainframe.client.ui.main_window.activities.stream_activity import \
     StreamActivity
+from brainframe.client.ui.main_window.toolbar import MainToolbar
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
@@ -39,8 +38,8 @@ class MainWindowUI(QMainWindow):
         identity_activity = IdentityConfiguration(self)
         return identity_activity
 
-    def _init_toolbar(self) -> QToolBar:
-        toolbar = QToolBar(self)
+    def _init_toolbar(self) -> MainToolbar:
+        toolbar = MainToolbar(self)
         toolbar.setMovable(False)
         toolbar.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
@@ -49,36 +48,6 @@ class MainWindowUI(QMainWindow):
     def _init_layout(self):
         self.setCentralWidget(self.stacked_widget)
         self.addToolBar(Qt.LeftToolBarArea, self.toolbar)
-
-        stream_activity_icon = QIcon(":/icons/new_stream")
-        identity_activity_icon = QIcon(":/icons/person")
-        alert_view_activity_icon = QIcon(":/icons/alert_view")
-        about_page_icon = QIcon(":/icons/info")
-        task_config_icon = QIcon(":/icons/settings_gear")
-        plugin_config_icon = QIcon(":/icons/global_plugin_config")
-        video_config_icon = QIcon(":/icons/video_settings")
-        server_config_icon = QIcon(":/icons/server_config")
-
-        def spacer_widget():
-            widget = QWidget(self.toolbar)
-            widget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-            return widget
-
-        # TODO: Switch to QActions?
-        self.toolbar.addAction(stream_activity_icon, "Streams")
-        self.toolbar.addAction(identity_activity_icon, "Identities")
-        self.toolbar.addAction(alert_view_activity_icon, "Alerts")
-
-        self.toolbar.addWidget(spacer_widget())
-
-        self.toolbar.addAction(task_config_icon, "Tasks")
-        self.toolbar.addAction(plugin_config_icon, "Plugins")
-        self.toolbar.addAction(video_config_icon, "Render")
-        self.toolbar.addAction(server_config_icon, "Server")
-
-        self.toolbar.addSeparator()
-
-        self.toolbar.addAction(about_page_icon, "About")
 
         self.stacked_widget.addWidget(self.stream_activity)
         self.stacked_widget.addWidget(self.identity_activity)

@@ -489,6 +489,49 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>MainToolbar</name>
+    <message>
+        <location filename="../../main_window/main_window_ui.py" line="70"/>
+        <source>Streams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window_ui.py" line="71"/>
+        <source>Identities</source>
+        <translation type="unfinished">身份</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window_ui.py" line="72"/>
+        <source>Alerts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window_ui.py" line="73"/>
+        <source>Tasks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window_ui.py" line="74"/>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window_ui.py" line="75"/>
+        <source>Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window_ui.py" line="76"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/main_window_ui.py" line="77"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../../main_window/main_window.ui" line="20"/>
