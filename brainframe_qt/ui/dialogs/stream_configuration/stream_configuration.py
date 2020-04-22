@@ -3,9 +3,9 @@ from typing import Callable, Optional
 
 from PyQt5.QtCore import QObject, QStandardPaths, Qt, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDialog, QDialogButtonBox,
+from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDialogButtonBox,
                              QFileDialog, QLineEdit, QProgressBar,
-                             QProgressDialog, QPushButton)
+                             QProgressDialog, QPushButton, QWidget)
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
@@ -16,7 +16,7 @@ from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-class StreamConfigurationDialog(QDialog):
+class StreamConfigurationDialog(QWidget):
     """Dialog for configuring a Stream"""
     parameter_value: QLineEdit
     pipeline_value: QLineEdit
