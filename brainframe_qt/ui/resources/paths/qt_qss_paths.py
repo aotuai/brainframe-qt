@@ -2,6 +2,7 @@ from .all_resource_paths import route_path
 
 ui_dir = route_path("brainframe", "client", "ui")
 
+
 ###############################################################################
 # Dialog
 ###############################################################################
@@ -12,7 +13,7 @@ alarm_view_dir = route_path(dialog_dir / "alarm_view")
 alarm_view_qss = route_path(alarm_view_dir / "alarm_view.qss")
 
 ###############################################################################
-# Resources
+# BrainFrame Resources
 ###############################################################################
 
 resource_dir = route_path(ui_dir / "resources")

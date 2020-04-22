@@ -148,9 +148,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlarmView</name>
     <message>
-        <location filename="../../dialogs/alarm_view/alarm_view.py" line="81"/>
+        <location filename="../../dialogs/alarm_view/alarm_view.py" line="31"/>
         <source>Alarm Status</source>
         <translation>警报状态</translation>
+    </message>
+</context>
+<context>
+    <name>AlarmViewUI</name>
+    <message>
+        <location filename="../../dialogs/alarm_view/alarm_view_ui.py" line="24"/>
+        <source>No streams are being analyzed right now, so there is nothing to show here</source>
+        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
     </message>
 </context>
 <context>
@@ -551,42 +559,42 @@ Read the manual to learn about the required directory structure.</source>
         <translation>添加新视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="184"/>
+        <location filename="../../main_window/main_window.py" line="185"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="148"/>
+        <location filename="../../main_window/main_window.py" line="149"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="149"/>
+        <location filename="../../main_window/main_window.py" line="150"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="188"/>
+        <location filename="../../main_window/main_window.py" line="189"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="185"/>
+        <location filename="../../main_window/main_window.py" line="186"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="186"/>
+        <location filename="../../main_window/main_window.py" line="187"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="187"/>
+        <location filename="../../main_window/main_window.py" line="188"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="173"/>
+        <location filename="../../main_window/main_window.py" line="174"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
@@ -601,7 +609,7 @@ Read the manual to learn about the required directory structure.</source>
         <translation>查看正在进行中的和过去的警报</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="174"/>
+        <location filename="../../main_window/main_window.py" line="175"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>

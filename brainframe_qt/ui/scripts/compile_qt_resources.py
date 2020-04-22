@@ -94,7 +94,7 @@ def update_qm_files(qt_project_file: Path, tr_dev: bool = False) -> None:
     print(output.strip())
 
     if not tr_dev:
-        if re.search(r"[1-9]\d* unfinished", output):
+        if re.search(r"[1-9]\d* unfinished|Ignored \d+ untranslated", output):
             raise RuntimeError("Error: Not all translations are finished, but "
                                "translation development is not enabled.")
 
