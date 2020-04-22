@@ -75,8 +75,12 @@ def update_ts_files(i18n_dir: Path, qt_project_file: Path) -> None:
         for language in TR_LANGUAGES:
             pro_fi.write(f"TRANSLATIONS += brainframe_{language}.ts\n")
 
-    # noinspection SpellCheckingInspection
-    command = ["pylupdate5", "-verbose", "-noobsolete", str(qt_project_file)]
+    if sys.platform == "win32":
+        command = ["python3.exe", "-m", "PyQt5.pylupdate_main"]
+    else:
+        command = ["pylupdate5"]
+    command += ["-verbose", "-noobsolete", str(qt_project_file)]
+
     output = subprocess.check_output(command, stderr=subprocess.STDOUT) \
         .decode()
     print(output.strip())
@@ -90,7 +94,7 @@ def update_qm_files(qt_project_file: Path, tr_dev: bool = False) -> None:
     print(output.strip())
 
     if not tr_dev:
-        if re.search(r"[1-9]\d* unfinished", output):
+        if re.search(r"[1-9]\d* unfinished|Ignored \d+ untranslated", output):
             raise RuntimeError("Error: Not all translations are finished, but "
                                "translation development is not enabled.")
 

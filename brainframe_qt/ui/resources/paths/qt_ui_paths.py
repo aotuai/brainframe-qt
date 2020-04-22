@@ -27,28 +27,17 @@ thumbnail_grid_layout_ui   = route_path(thumbnail_grid_layout_dir , "thumbnail_g
 new_stream_button_dir      = route_path(video_thumbnail_view_dir  , "new_stream_button"        )
 new_stream_button_ui       = route_path(new_stream_button_dir     , "new_stream_button.ui"     )
 
+# Activities
+
 activity_dir               = route_path(main_window_dir           , "activities"               )
+
 stream_configuration_dir   = route_path(activity_dir              , "stream_configuration"     )
 stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )
 
-# Dialogs
-dialogs_dir                = route_path(ui_dir                    , "dialogs"                  )
-
-about_page_dir             = route_path(dialogs_dir               , "about_page"               )
-about_page_ui              = route_path(about_page_dir            , "about_page.ui"            )
-
-alarm_creation_dir         = route_path(dialogs_dir               , "alarm_creation"           )
-alarm_creation_ui          = route_path(alarm_creation_dir        , "alarm_creation.ui"        )
-
-alert_entry_popup_dir      = route_path(dialogs_dir               , "alert_entry_popup"        )
-alert_entry_popup_ui       = route_path(alert_entry_popup_dir     , "alert_entry_popup.ui"     )
-
-identity_configuration_dir = route_path(main_window_dir, "activities", "identity_configuration")
+identity_configuration_dir = route_path(activity_dir              , "identity_configuration"   )
 identity_configuration_ui  = route_path(identity_configuration_dir, "identity_configuration.ui")
 identity_error_popup_dir   = route_path(identity_configuration_dir, "identity_error_popup"     )
 identity_error_popup_ui    = route_path(identity_error_popup_dir  , "identity_error_popup.ui"  )
-tree_widget_dir            = route_path(identity_error_popup_dir  , "tree_widget"              )
-tree_widget_ui             = route_path(tree_widget_dir           , "tree_widget.ui"           )
 directory_selector_dir     = route_path(identity_configuration_dir, "directory_selector"       )
 directory_selector_ui      = route_path(directory_selector_dir    , "directory_selector.ui"    )
 identity_paginator_dir     = route_path(identity_configuration_dir, "identity_grid_paginator"  )
@@ -62,6 +51,18 @@ encoding_entry_dir         = route_path(encoding_list_dir         , "encoding_en
 encoding_entry_ui          = route_path(encoding_entry_dir        , "encoding_entry.ui"        )
 identity_info_dir          = route_path(identity_configuration_dir, "identity_info"            )
 identity_info_ui           = route_path(identity_info_dir         , "identity_info.ui"         )
+
+# Dialogs
+dialogs_dir                = route_path(ui_dir                    , "dialogs"                  )
+
+about_page_dir             = route_path(dialogs_dir               , "about_page"               )
+about_page_ui              = route_path(about_page_dir            , "about_page.ui"            )
+
+alarm_creation_dir         = route_path(dialogs_dir               , "alarm_creation"           )
+alarm_creation_ui          = route_path(alarm_creation_dir        , "alarm_creation.ui"        )
+
+alert_entry_popup_dir      = route_path(dialogs_dir               , "alert_entry_popup"        )
+alert_entry_popup_ui       = route_path(alert_entry_popup_dir     , "alert_entry_popup.ui"     )
 
 license_agreement_dir      = route_path(dialogs_dir               , "license_agreement"        )
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
