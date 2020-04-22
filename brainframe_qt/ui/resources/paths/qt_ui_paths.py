@@ -6,9 +6,6 @@ ui_dir = route_path("brainframe", "client", "ui")
 main_window_dir            = route_path(ui_dir                    , "main_window"              )
 main_window_ui             = route_path(main_window_dir           , "main_window.ui"           )
 
-toolbar_dir                = route_path(main_window_dir           , "toolbar"                  )
-toolbar_ui                 = route_path(toolbar_dir               , "toolbar.ui"               )
-
 video_expanded_view_dir    = route_path(main_window_dir           , "video_expanded_view"      )
 video_expanded_view_ui     = route_path(video_expanded_view_dir   , "video_expanded_view.ui"   )
 
@@ -23,9 +20,6 @@ video_thumbnail_view_ui    = route_path(video_thumbnail_view_dir  , "video_thumb
 
 thumbnail_grid_layout_dir  = route_path(video_thumbnail_view_dir  , "thumbnail_grid_layout"    )
 thumbnail_grid_layout_ui   = route_path(thumbnail_grid_layout_dir , "thumbnail_grid_layout.ui" )
-
-new_stream_button_dir      = route_path(video_thumbnail_view_dir  , "new_stream_button"        )
-new_stream_button_ui       = route_path(new_stream_button_dir     , "new_stream_button.ui"     )
 
 # Activities
 
