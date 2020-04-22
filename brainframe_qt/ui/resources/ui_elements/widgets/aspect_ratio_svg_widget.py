@@ -6,6 +6,14 @@ from PyQt5.QtSvg import QSvgWidget
 
 
 class AspectRatioSVGWidget(QSvgWidget):
+    """This widget is like a regular QSvgWidget, but maintains the aspect ratio
+    of the underlying SVG. The regular QSvgWidget simply expands the SVG to
+    fill the space entirely.
+
+    Maintaining the aspect ratio means that the widget will have unused space.
+    You can control where the unused space goes by controlling the Alignment of
+    the SVG within the widget.
+    """
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -18,6 +26,7 @@ class AspectRatioSVGWidget(QSvgWidget):
         svg_size = QSizeF(self.renderer().defaultSize())
         widget_size = QSizeF(self.size())
 
+        # Scale the SVG to fit within the bounds of the widget, but no larger
         new_size = svg_size.scaled(widget_size, Qt.KeepAspectRatio)
         offset = self._get_offset(new_size, widget_size)
 
