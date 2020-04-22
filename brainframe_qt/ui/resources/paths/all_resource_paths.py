@@ -21,4 +21,7 @@ def route_path(*args: Union[str, Path]) -> Path:
     path = Path(*args)
     if path.is_file():
         all_paths.append(str(path))
+
+    if not path.exists():
+        raise FileNotFoundError(f"Could not find file or directory {path}")
     return path

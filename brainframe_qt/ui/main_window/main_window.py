@@ -131,16 +131,17 @@ class MainWindow(QMainWindow):
         try:
             try:
                 stream_conf = api.set_stream_configuration(stream_conf)
+
+                # Currently, we default to setting all new streams as 'active'
+                api.start_analyzing(stream_conf.id)
             except api_errors.BaseAPIError:
                 if stream_conf.connection_type == StreamConfiguration.ConnType.FILE \
                         and "storage_id" in stream_conf.connection_options:
-                    # Clean up the video file if creating the stream failed
+                    # Clean up the video file if creating the stream or turning
+                    # on analysis failed
                     api.delete_storage(
                         stream_conf.connection_options["storage_id"])
                 raise
-
-            # Currently, we default to setting all new streams as 'active'
-            api.start_analyzing(stream_conf.id)
 
             self.video_thumbnail_view.new_stream(stream_conf)
         except api_errors.DuplicateStreamSourceError as err:
