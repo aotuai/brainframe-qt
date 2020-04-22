@@ -2,8 +2,8 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
 from brainframe.client.api import api, api_errors
-from brainframe.client.ui.dialogs.stream_configuration.stream_configuration import \
-    StreamConfigurationDialog
+from brainframe.client.ui.main_window.activities \
+    import StreamConfigurationDialog
 from brainframe.client.ui.main_window.activities.stream_activity.stream_activity_ui import \
     _StreamActivityUI
 from brainframe.client.ui.resources.mixins.display import ExpandableMI

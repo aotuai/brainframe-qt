@@ -27,6 +27,10 @@ thumbnail_grid_layout_ui   = route_path(thumbnail_grid_layout_dir , "thumbnail_g
 new_stream_button_dir      = route_path(video_thumbnail_view_dir  , "new_stream_button"        )
 new_stream_button_ui       = route_path(new_stream_button_dir     , "new_stream_button.ui"     )
 
+activity_dir               = route_path(main_window_dir           , "activities"               )
+stream_configuration_dir   = route_path(activity_dir              , "stream_configuration"     )
+stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )
+
 # Dialogs
 dialogs_dir                = route_path(ui_dir                    , "dialogs"                  )
 
@@ -73,9 +77,6 @@ plugin_options_ui          = route_path(plugin_options_dir        , "plugin_opti
 
 server_configuration_dir   = route_path(dialogs_dir               , "server_configuration"     )
 server_configuration_ui    = route_path(server_configuration_dir  , "server_configuration.ui"  )
-
-stream_configuration_dir   = route_path(dialogs_dir               , "stream_configuration"     )
-stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )
 
 task_configuration_dir     = route_path(dialogs_dir               , "task_configuration"       )
 task_configuration_ui      = route_path(task_configuration_dir    , "task_configuration.ui"    )

@@ -5,8 +5,8 @@ import typing
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QWidget
 
-from brainframe.client.ui.dialogs.stream_configuration.stream_configuration import \
-    StreamConfigurationDialog
+from brainframe.client.ui.main_window.activities \
+    import StreamConfigurationDialog
 from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
 
 

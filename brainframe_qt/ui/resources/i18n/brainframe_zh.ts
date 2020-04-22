@@ -837,102 +837,102 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationDialog</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="169"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="169"/>
         <source>Camera web address</source>
         <translation>摄像头地址</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="175"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="175"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="181"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="181"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="293"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="293"/>
         <source>Select video file</source>
         <translation>选择视频文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="122"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="122"/>
         <source>Unrecognized connection type</source>
         <translation>无法识别的连接类型</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="23"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="23"/>
         <source>New Stream</source>
         <translation>新视频流</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="54"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="54"/>
         <source>Connection Type</source>
         <translation>连接类型</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="67"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="67"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="95"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="95"/>
         <source>IP Camera</source>
         <translation>网络摄像头</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="100"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="100"/>
         <source>Webcam</source>
         <translation>摄像头</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="105"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="105"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="185"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="185"/>
         <source>Select File</source>
         <translation>选择文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="222"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="222"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="250"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="250"/>
         <source>Keyframe-only streaming</source>
         <translation>仅传输关键帧</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="199"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="199"/>
         <source>None</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="243"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="243"/>
         <source>Advanced Options</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="172"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="172"/>
         <source>Stream Options</source>
         <translation>视频流选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="236"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="236"/>
         <source>Premises</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="260"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="260"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="192"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.ui" line="192"/>
         <source>Avoid transcoding</source>
         <translation>避免转码</translation>
     </message>
@@ -1192,7 +1192,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>parent</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="318"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="318"/>
         <source>Uploading {filepath}...</source>
         <translation>上传中 {filepath}⋯⋯</translation>
     </message>
