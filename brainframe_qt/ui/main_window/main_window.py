@@ -1,12 +1,10 @@
 from typing import Optional
 
-import typing
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QWidget
 
-from brainframe.client.ui.main_window.activities \
-    import StreamConfigurationDialog
+from brainframe.client.ui.main_window.activities import StreamConfiguration
+# from brainframe.client.ui.main_window.activities import StreamConfigurationOld as StreamConfiguration
 from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
 
 
@@ -23,7 +21,7 @@ class MainWindow(MainWindowUI):
 
     def display_stream_configuration(self):
         dock_widget = QDockWidget(self)
-        stream_configuration = StreamConfigurationDialog(self)
+        stream_configuration = StreamConfiguration(self)
 
         dock_widget.setWidget(stream_configuration)
         self.addDockWidget(Qt.RightDockWidgetArea, dock_widget)

@@ -1,1 +1,1 @@
-from .stream_configuration import StreamConfigurationDialog
+from .stream_configuration import StreamConfiguration

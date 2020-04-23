@@ -2,7 +2,6 @@ from .all_resource_paths import route_path
 
 ui_dir = route_path("brainframe", "client", "ui")
 
-
 ###############################################################################
 # Main Window
 ###############################################################################
@@ -22,6 +21,8 @@ main_tab_widget_qss = main_tab_widget_dir / "main_tab_widget.qss"
 # Activities
 activity_dir = main_window_dir / "activities"
 stream_activity_qss = activity_dir / "stream_activity" / "stream_activity.qss"
+stream_configuration_qss = activity_dir / "stream_configuration" \
+                           / "stream_configuration.qss"
 
 ###############################################################################
 # Dialog
