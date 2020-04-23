@@ -9,6 +9,7 @@ from brainframe.client.api import api
 from brainframe.client.api.codecs import Premises
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe.client.ui.resources.ui_elements.widgets import FileSelector
 from brainframe.shared.codec_enums import ConnType
 
 
@@ -80,6 +81,8 @@ class StreamConfigurationUI(QWidget):
         layout.addWidget(self.connection_type_combobox, 1, 1)
         layout.addWidget(self.stream_options, 2, 0, 1, 2)
 
+        self.stream_options.setHidden(True)
+
         layout.setAlignment(Qt.AlignTop)
 
         self.setLayout(layout)
@@ -96,6 +99,12 @@ class _StreamOptions(QGroupBox):
     def __init__(self, title: str, parent: QWidget):
         super().__init__(title, parent)
 
+        self.network_address_label = self._init_network_address_label()
+        self.network_address_line_edit = self._init_network_address_line_edit()
+
+        self.webcam_device_label = self._init_webcam_device_label()
+        self.webcam_device_line_edit = self._init_webcam_device_line_edit()
+
         self.filepath_label = self._init_filepath_label()
         self.file_selector = self._init_file_selector()
 
@@ -106,16 +115,35 @@ class _StreamOptions(QGroupBox):
 
         self._init_layout()
 
+    def _init_network_address_label(self) -> QLabel:
+        text = self.tr("Network address")
+        network_address_label = QLabel(text, self)
+
+        return network_address_label
+
+    def _init_network_address_line_edit(self) -> QLineEdit:
+        network_address_line_edit = QLineEdit(self)
+        return network_address_line_edit
+
+    def _init_webcam_device_label(self) -> QLabel:
+        text = self.tr("Device ID")
+        webcam_device_label = QLabel(text, self)
+
+        return webcam_device_label
+
+    def _init_webcam_device_line_edit(self) -> QLineEdit:
+        webcam_device_line_edit = QLineEdit(self)
+        return webcam_device_line_edit
+
     def _init_filepath_label(self) -> QLabel:
         text = self.tr("Filepath")
         file_path_label = QLabel(text, self)
 
         return file_path_label
 
-    def _init_file_selector(self) -> QWidget:
-        # TODO: Create a resource
-        ...
-        return QWidget(self)
+    def _init_file_selector(self) -> FileSelector:
+        file_selector = FileSelector(self)
+        return file_selector
 
     def _init_premises_label(self) -> QLabel:
         text = self.tr("Premises")
@@ -154,15 +182,33 @@ class _StreamOptions(QGroupBox):
     def _init_layout(self):
         layout = QGridLayout()
 
-        layout.addWidget(self.filepath_label, 0, 0)
-        layout.addWidget(self.file_selector, 0, 1)
+        layout.addWidget(self.network_address_label, 0, 0)
+        layout.addWidget(self.network_address_line_edit, 0, 1)
 
-        layout.addWidget(self.premises_label, 1, 0)
-        layout.addWidget(self.premises_combobox, 1, 1)
+        layout.addWidget(self.webcam_device_label, 1, 0)
+        layout.addWidget(self.webcam_device_line_edit, 1, 1)
 
-        layout.addWidget(self.advanced_options, 2, 0, 1, 2)
+        layout.addWidget(self.filepath_label, 2, 0)
+        layout.addWidget(self.file_selector, 2, 1)
+
+        layout.addWidget(self.premises_label, 3, 0)
+        layout.addWidget(self.premises_combobox, 3, 1)
+
+        layout.addWidget(self.advanced_options, 4, 0, 1, 2)
 
         self.setLayout(layout)
+
+    def hide_all(self, hidden: bool) -> None:
+        self.network_address_label.setHidden(hidden)
+        self.network_address_line_edit.setHidden(hidden)
+        self.webcam_device_label.setHidden(hidden)
+        self.webcam_device_line_edit.setHidden(hidden)
+        self.filepath_label.setHidden(hidden)
+        self.file_selector.setHidden(hidden)
+        self.premises_label.setHidden(hidden)
+        self.premises_combobox.setHidden(hidden)
+
+        self.advanced_options.hide_all(hidden)
 
 
 class _AdvancedOptionsGroupBox(QGroupBox):
@@ -213,3 +259,9 @@ class _AdvancedOptionsGroupBox(QGroupBox):
         layout.addWidget(self.keyframe_only_streaming_checkbox, 2, 0, 1, 2)
 
         self.setLayout(layout)
+
+    def hide_all(self, hidden: bool) -> None:
+        self.pipeline_label.setHidden(hidden)
+        self.pipeline_line_edit.setHidden(hidden)
+        self.avoid_transcoding_checkbox.setHidden(hidden)
+        self.keyframe_only_streaming_checkbox.setHidden(hidden)

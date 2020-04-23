@@ -20,18 +20,36 @@ class StreamConfiguration(StreamConfigurationUI):
             self.connection_type_changed)
 
     def connection_type_changed(self, index):
-        connection_type: Optional[self.ConnType] \
+        connection_type: Optional[ConnType] \
             = self.connection_type_combobox.itemData(index)
 
+        self.stream_options.setHidden(connection_type is None)
         if connection_type is None:
-            self.stream_options.setHidden(True)
             return
+
+        self.stream_options.hide_all(True)
+
         if connection_type is ConnType.IP_CAMERA:
-            print("IP Camera")
-        if connection_type is ConnType.WEBCAM:
-            print("Webcam")
-        if connection_type is ConnType.FILE:
-            print("File")
+            self.stream_options.network_address_label.setVisible(True)
+            self.stream_options.network_address_line_edit.setVisible(True)
+            self.stream_options.advanced_options \
+                .keyframe_only_streaming_checkbox.setVisible(True)
+        elif connection_type is ConnType.WEBCAM:
+            self.stream_options.webcam_device_label.setVisible(True)
+            self.stream_options.webcam_device_line_edit.setVisible(True)
+        elif connection_type is ConnType.FILE:
+            self.stream_options.filepath_label.setVisible(True)
+            self.stream_options.file_selector.setVisible(True)
+            self.stream_options.advanced_options.avoid_transcoding_checkbox \
+                .setVisible(True)
+
+        self.stream_options.advanced_options.pipeline_label.setVisible(True)
+        self.stream_options.advanced_options.pipeline_line_edit \
+            .setVisible(True)
+
+    @property
+    def advanced_options_enabled(self) -> bool:
+        return self.stream_options.advanced_options.isChecked()
 
     @property
     def avoid_transcoding(self) -> bool:
@@ -45,7 +63,39 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def filepath(self) -> Path:
-        return self.filepath_selector.filepath
+        return self.stream_options.filepath_selector.filepath
+
+    @property
+    def inputs_valid(self) -> bool:
+        if not self.stream_name:
+            return False
+        if self.connection_type is None:
+            return False
+
+        @property
+        def pipeline_valid() -> bool:
+            return not self.pipeline or "{url}" in self.pipeline
+
+        if self.connection_type is ConnType.IP_CAMERA:
+            if self.advanced_options_enabled:
+                if not pipeline_valid:
+                    return False
+
+        elif self.connection_type is ConnType.FILE:
+            if not self.filepath:
+                return False
+            if self.advanced_options_enabled:
+                if not pipeline_valid:
+                    return False
+
+        elif self.connection_type is ConnType.WEBCAM:
+            if not self.webcam_device:
+                return False
+
+        else:
+            return False
+
+        return True
 
     @property
     def keyframe_only_streaming(self) -> bool:
@@ -66,3 +116,7 @@ class StreamConfiguration(StreamConfigurationUI):
     @property
     def stream_name(self) -> str:
         return self.stream_name_label.text()
+
+    @property
+    def webcam_device(self) -> str:
+        return self.stream_options.webcam_device_line_edit.text()
