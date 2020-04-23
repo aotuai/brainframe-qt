@@ -2,14 +2,14 @@ from typing import List
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
-    QLabel, \
-    QLineEdit, QSizePolicy, QWidget
+    QLabel, QLineEdit, QSizePolicy, QWidget
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Premises
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.paths import qt_qss_paths
-from brainframe.client.ui.resources.ui_elements.widgets import FileSelector
+from brainframe.client.ui.resources.ui_elements.widgets import FileSelector, \
+    Line
 from brainframe.shared.codec_enums import ConnType
 
 
@@ -79,7 +79,8 @@ class StreamConfigurationUI(QWidget):
         layout.addWidget(self.stream_name_line_edit, 0, 1)
         layout.addWidget(self.connection_type_label, 1, 0)
         layout.addWidget(self.connection_type_combobox, 1, 1)
-        layout.addWidget(self.stream_options, 2, 0, 1, 2)
+        layout.addWidget(Line.h_line(self), 2, 0, 1, 2)
+        layout.addWidget(self.stream_options, 3, 0, 1, 2)
 
         self.stream_options.setHidden(True)
 
@@ -194,7 +195,9 @@ class _StreamOptions(QGroupBox):
         layout.addWidget(self.premises_label, 3, 0)
         layout.addWidget(self.premises_combobox, 3, 1)
 
-        layout.addWidget(self.advanced_options, 4, 0, 1, 2)
+        layout.addWidget(Line.h_line(self), 4, 0, 1, 2)
+
+        layout.addWidget(self.advanced_options, 5, 0, 1, 2)
 
         self.setLayout(layout)
 
