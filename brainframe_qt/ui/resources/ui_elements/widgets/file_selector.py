@@ -1,4 +1,6 @@
-from PyQt5.QtCore import QStandardPaths, Qt
+from pathlib import Path
+
+from PyQt5.QtCore import QStandardPaths, Qt, pyqtSignal
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit, QPushButton, \
     QSizePolicy, \
@@ -48,6 +50,8 @@ class _FileSelectorUI(QWidget):
 
 class FileSelector(_FileSelectorUI):
 
+    path_changed = pyqtSignal(Path)
+
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
@@ -56,6 +60,9 @@ class FileSelector(_FileSelectorUI):
     def _init_signals(self) -> None:
         self.select_file_button.clicked.connect(self._get_filepath_dialog)
 
+        self.filepath_line_edit.textChanged.connect(
+            lambda filepath: self.path_changed.emit(Path(filepath)))
+
     @property
     def filepath(self) -> str:
         return self.filepath_line_edit.text()
@@ -63,6 +70,7 @@ class FileSelector(_FileSelectorUI):
     @filepath.setter
     def filepath(self, filepath: str) -> None:
         self.filepath_line_edit.setText(filepath)
+        self.path_changed.emit(Path(filepath))
 
     def _get_filepath_dialog(self) -> None:
         # Second return value is ignored. PyQt5 returns what appears to be a
