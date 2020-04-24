@@ -334,7 +334,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>FileSelector</name>
     <message>
-        <location filename="../ui_elements/widgets/file_selector.py" line="70"/>
+        <location filename="../ui_elements/widgets/file_selector.py" line="78"/>
         <source>Select video file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -964,32 +964,32 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationUI</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="67"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="68"/>
         <source>Stream Options</source>
         <translation type="unfinished">视频流选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="42"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="43"/>
         <source>Stream Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="47"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="48"/>
         <source>Connection Type</source>
         <translation type="unfinished">连接类型</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="55"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="56"/>
         <source>IP Camera</source>
         <translation type="unfinished">网络摄像头</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="56"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="57"/>
         <source>Webcam</source>
         <translation type="unfinished">摄像头</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="57"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="58"/>
         <source>Video File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1241,22 +1241,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>_AdvancedOptionsGroupBox</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="235"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="249"/>
         <source>Pipeline</source>
         <translation type="unfinished">Pipeline</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="247"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="261"/>
         <source>Avoid transcoding</source>
         <translation type="unfinished">避免转码</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="242"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="256"/>
         <source>None</source>
         <translation type="unfinished">空</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="253"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="267"/>
         <source>Keyframe-only streaming</source>
         <translation type="unfinished">仅传输关键帧</translation>
     </message>
@@ -1272,32 +1272,32 @@ Please recheck the entered server address.</source>
 <context>
     <name>_StreamOptions</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="175"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="189"/>
         <source>Advanced Options</source>
         <translation type="unfinished">高级选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="142"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="156"/>
         <source>Filepath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="152"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="166"/>
         <source>Premises</source>
         <translation type="unfinished">场所</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="158"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="172"/>
         <source>Local Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="122"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="136"/>
         <source>Network address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="132"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="146"/>
         <source>Device ID</source>
         <translation type="unfinished"></translation>
     </message>

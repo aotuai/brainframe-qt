@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QDialogButtonBox, QWidget
 
 from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
@@ -18,6 +18,18 @@ class StreamConfiguration(StreamConfigurationUI):
     def _init_signals(self) -> None:
         self.connection_type_combobox.currentIndexChanged[int].connect(
             self.connection_type_changed)
+
+        # Validation on change
+        for signal in [
+            self.stream_name_line_edit.textChanged,
+            self.connection_type_combobox.currentIndexChanged,
+            self.stream_options.file_selector.path_changed,
+            self.stream_options.webcam_device_line_edit.textChanged,
+            self.stream_options.network_address_line_edit.textChanged,
+            self.stream_options.advanced_options.toggled,
+            self.stream_options.advanced_options.pipeline_line_edit.textChanged,
+        ]:
+            signal.connect(self.validate_input)
 
     def connection_type_changed(self, index):
         connection_type: Optional[ConnType] \
@@ -65,7 +77,11 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def filepath(self) -> Path:
-        return self.stream_options.filepath_selector.filepath
+        return self.stream_options.file_selector.filepath
+
+    def validate_input(self) -> None:
+        apply_button = self.button_box.button(QDialogButtonBox.Apply)
+        apply_button.setEnabled(self.inputs_valid)
 
     @property
     def inputs_valid(self) -> bool:

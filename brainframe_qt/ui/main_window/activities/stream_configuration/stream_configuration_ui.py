@@ -1,7 +1,8 @@
 from typing import List
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
+from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialogButtonBox, \
+    QGridLayout, QGroupBox, \
     QLabel, QLineEdit, QSizePolicy, QWidget
 
 from brainframe.client.api import api
@@ -25,6 +26,8 @@ class StreamConfigurationUI(QWidget):
         self.connection_type_combobox = self._init_connection_type_combobox()
 
         self.stream_options = self._init_stream_options_gb()
+
+        self.button_box = self._init_button_box()
 
         self._init_layout()
         self._init_style()
@@ -72,6 +75,14 @@ class StreamConfigurationUI(QWidget):
 
         return stream_options
 
+    def _init_button_box(self) -> QDialogButtonBox:
+        button_box = QDialogButtonBox(self)
+
+        button_box.setStandardButtons(QDialogButtonBox.Reset |
+                                      QDialogButtonBox.Apply)
+
+        return button_box
+
     def _init_layout(self) -> None:
         layout = QGridLayout()
 
@@ -81,6 +92,11 @@ class StreamConfigurationUI(QWidget):
         layout.addWidget(self.connection_type_combobox, 1, 1)
         layout.addWidget(Line.h_line(self), 2, 0, 1, 2)
         layout.addWidget(self.stream_options, 3, 0, 1, 2)
+
+        # # Empty stretch row
+        # layout.setRowStretch(4, 1)
+
+        layout.addWidget(self.button_box, 4, 0, 1, 2)
 
         self.stream_options.setHidden(True)
 
