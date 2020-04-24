@@ -340,6 +340,14 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>FileUploadProgressDialog</name>
+    <message>
+        <location filename="../ui_elements/widgets/file_upload_progress_dialog.py" line="44"/>
+        <source>Uploading {filepath}...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FloatOptionItem</name>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/option_items.py" line="182"/>
@@ -876,6 +884,59 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="95"/>
         <source>Is this a valid stream source?</source>
         <translation type="unfinished">这是一个有效的视频流源吗？</translation>
+    </message>
+</context>
+<context>
+    <name>StreamConfiguration</name>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="331"/>
+        <source>Error Opening Stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="177"/>
+        <source>Error encountered while uploading video file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="287"/>
+        <source>Stream source already open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="288"/>
+        <source>You already have the stream source open.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="308"/>
+        <source>Error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="305"/>
+        <source>Error encountered while opening stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="306"/>
+        <source>Is stream already open?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="307"/>
+        <source>Is this a valid stream source?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="332"/>
+        <source>Active Stream Limit Exceeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="333"/>
+        <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
