@@ -119,7 +119,8 @@ class StreamConfiguration(StreamConfigurationUI):
             connection_type=self.connection_type,
             connection_options={
                 "pipeline": self.pipeline,
-                "url": self.network_address
+                "url": self.network_address,
+                "device_id": self.webcam_device
             },
             premises_id=self.premises and self.premises.id,
             runtime_options={
