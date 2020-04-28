@@ -273,7 +273,7 @@ class StreamConfiguration(StreamConfigurationUI):
     def premises(self) -> Optional[codecs.Premises]:
         if self.connection_type is not ConnType.IP_CAMERA:
             return None
-        return self.stream_options.premises_combobox
+        return self.stream_options.premises_combobox.currentData()
 
     @property
     def runtime_options(self) -> dict:
