@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import QDockWidget, QWidget
 
 from brainframe.client.api import codecs
 from brainframe.client.ui.main_window.activities import StreamConfiguration
-# from brainframe.client.ui.main_window.activities import StreamConfigurationOld as StreamConfiguration
 from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
 
 
@@ -20,7 +19,13 @@ class MainWindow(MainWindowUI):
 
     def _init_signals(self):
         self.toolbar.stream_activity_action.triggered.connect(
-            lambda _: self.display_stream_configuration())
+            lambda: self.stacked_widget.setCurrentWidget(self.stream_activity))
+        self.toolbar.identity_activity_action.triggered.connect(
+            lambda: self.stacked_widget.setCurrentWidget(
+                self.identity_activity))
+        # self.toolbar.alert_view_activity_action.triggered.connect(
+        #     lambda: self.stacked_widget.setCurrentWidget(
+        #         self.alert_view_activity))
 
         thumbnail_view = self.stream_activity.video_thumbnail_view
         thumbnail_view.thumbnail_stream_clicked_signal.connect(
