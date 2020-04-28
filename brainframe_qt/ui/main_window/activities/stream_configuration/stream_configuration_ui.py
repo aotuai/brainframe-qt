@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialogButtonBox, \
 from brainframe.client.api import api
 from brainframe.client.api.codecs import Premises
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
+from brainframe.client.ui.resources.mixins.display import ExpandableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 from brainframe.client.ui.resources.ui_elements.widgets import FileSelector, \
     Line
@@ -186,8 +187,8 @@ class _StreamOptions(QGroupBox):
         return premises_combobox
 
     def _init_advanced_options_gb(self) -> "_AdvancedOptionsGroupBox":
-        title = self.tr("Advanced Options")
-        advanced_options = _AdvancedOptionsGroupBox(title, self)
+        advanced_options = _AdvancedOptionsGroupBox(self)
+        advanced_options.setTitle(self.tr("Advanced Options"))
         advanced_options.setObjectName("advanced_options")
 
         advanced_options.setCheckable(True)
@@ -230,10 +231,10 @@ class _StreamOptions(QGroupBox):
         self.advanced_options.hide_all(hidden)
 
 
-class _AdvancedOptionsGroupBox(QGroupBox):
+class _AdvancedOptionsGroupBox(QGroupBox, ExpandableMI):
 
-    def __init__(self, title: str, parent: QWidget):
-        super().__init__(title, parent)
+    def __init__(self, parent: QWidget):
+        super().__init__(parent)
 
         self.pipeline_label = self._init_pipeline_label()
         self.pipeline_line_edit = self._init_pipeline_line_edit()
@@ -244,6 +245,7 @@ class _AdvancedOptionsGroupBox(QGroupBox):
             = self._init_keyframe_only_checkbox()
 
         self._init_layout()
+        self._init_signals()
 
     def _init_pipeline_label(self) -> QLabel:
         text = self.tr("Pipeline")
@@ -279,8 +281,14 @@ class _AdvancedOptionsGroupBox(QGroupBox):
 
         self.setLayout(layout)
 
+    def expand(self, expanding: bool) -> None:
+        self.hide_all(not expanding)
+
     def hide_all(self, hidden: bool) -> None:
         self.pipeline_label.setHidden(hidden)
         self.pipeline_line_edit.setHidden(hidden)
         self.avoid_transcoding_checkbox.setHidden(hidden)
         self.keyframe_only_checkbox.setHidden(hidden)
+
+    def _init_signals(self) -> None:
+        self.toggled.connect(self.set_expanded)
