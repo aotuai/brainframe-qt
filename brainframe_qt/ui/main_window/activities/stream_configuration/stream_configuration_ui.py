@@ -240,7 +240,7 @@ class _AdvancedOptionsGroupBox(QGroupBox):
 
         self.avoid_transcoding_checkbox \
             = self._init_avoid_transcoding_checkbox()
-        self.keyframe_only_streaming_checkbox \
+        self.keyframe_only_checkbox \
             = self._init_keyframe_only_checkbox()
 
         self._init_layout()
@@ -275,7 +275,7 @@ class _AdvancedOptionsGroupBox(QGroupBox):
         layout.addWidget(self.pipeline_label, 0, 0)
         layout.addWidget(self.pipeline_line_edit, 0, 1)
         layout.addWidget(self.avoid_transcoding_checkbox, 1, 0, 1, 2)
-        layout.addWidget(self.keyframe_only_streaming_checkbox, 2, 0, 1, 2)
+        layout.addWidget(self.keyframe_only_checkbox, 2, 0, 1, 2)
 
         self.setLayout(layout)
 
@@ -283,4 +283,4 @@ class _AdvancedOptionsGroupBox(QGroupBox):
         self.pipeline_label.setHidden(hidden)
         self.pipeline_line_edit.setHidden(hidden)
         self.avoid_transcoding_checkbox.setHidden(hidden)
-        self.keyframe_only_streaming_checkbox.setHidden(hidden)
+        self.keyframe_only_checkbox.setHidden(hidden)

@@ -56,7 +56,7 @@ class StreamConfiguration(StreamConfigurationUI):
             self.stream_options.network_address_label.setVisible(True)
             self.stream_options.network_address_line_edit.setVisible(True)
             self.stream_options.advanced_options \
-                .keyframe_only_streaming_checkbox.setVisible(True)
+                .keyframe_only_checkbox.setVisible(True)
             self.stream_options.premises_label.setVisible(True)
             self.stream_options.premises_combobox.setVisible(True)
         elif connection_type is ConnType.WEBCAM:
