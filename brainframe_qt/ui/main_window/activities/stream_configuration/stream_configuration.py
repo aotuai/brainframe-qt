@@ -42,19 +42,35 @@ class StreamConfiguration(StreamConfigurationUI):
             self._gather_and_send_stream_configuration
         )
 
-    def load_from_conf(self, stream_conf: codecs.StreamConfiguration):
+    def load_from_conf(
+            self, stream_conf: Optional[codecs.StreamConfiguration]) -> None:
+
+        if stream_conf is None:
+            self._load_empty_conf()
+            return
 
         self.stream_name = stream_conf.name
         self.connection_type = stream_conf.connection_type
         self.premises = stream_conf.premises_id
-        # TODO: I invalidate the filepath because the server doesn't store it
-        #       and it's meaningless for an already existing
-        #       StreamConfiguration. Is there a better thing to do?
-        self.stream_options.file_selector.setDisabled(True)
         self.connection_options = stream_conf.connection_options
         self.runtime_options = stream_conf.runtime_options
 
         self.advanced_options_enabled = True
+
+        # TODO: Allow editing a stream configuration
+        self.setDisabled(True)
+
+    def _load_empty_conf(self):
+
+        self.stream_name = ""
+        self.connection_type = None
+        self.premises = None
+        self.connection_options = {}
+        self.runtime_options = {}
+
+        self.advanced_options_enabled = True
+
+        self.setEnabled(True)
 
     def connection_type_changed(self, index):
         connection_type: Optional[ConnType] \
