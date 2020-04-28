@@ -117,15 +117,9 @@ class StreamConfiguration(StreamConfigurationUI):
         stream_conf = codecs.StreamConfiguration(
             name=self.stream_name,
             connection_type=self.connection_type,
-            connection_options={
-                "pipeline": self.pipeline,
-                "url": self.network_address,
-                "device_id": self.webcam_device
-            },
+            connection_options=self.connection_options,
             premises_id=self.premises and self.premises.id,
-            runtime_options={
-                "keyframes_only": self.keyframe_only_streaming
-            },
+            runtime_options=self.runtime_options,
             metadata={}
         )
 
@@ -228,6 +222,17 @@ class StreamConfiguration(StreamConfigurationUI):
         return avoid_transcoding.isChecked()
 
     @property
+    def connection_options(self) -> dict:
+        connection_options = {}
+        if self.pipeline is not None:
+            connection_options["pipeline"] = self.pipeline
+        if self.network_address is not None:
+            connection_options["url"] = self.network_address
+        if self.webcam_device is not None:
+            connection_options["device_id"] = self.webcam_device
+        return connection_options
+
+    @property
     def connection_type(self) -> ConnType:
         return self.connection_type_combobox.currentData()
 
@@ -269,6 +274,13 @@ class StreamConfiguration(StreamConfigurationUI):
         if self.connection_type is not ConnType.IP_CAMERA:
             return None
         return self.stream_options.premises_combobox
+
+    @property
+    def runtime_options(self) -> dict:
+        runtime_options = {}
+        if self.keyframe_only_streaming is not None:
+            runtime_options["keyframes_only"] = self.keyframe_only_streaming
+        return runtime_options
 
     @property
     def stream_name(self) -> str:
