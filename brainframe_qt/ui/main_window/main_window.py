@@ -31,6 +31,9 @@ class MainWindow(MainWindowUI):
         thumbnail_view.thumbnail_stream_clicked_signal.connect(
             self.display_stream_configuration)
 
+        self.stream_activity.new_stream_button.clicked.connect(
+            lambda _: self.display_stream_configuration())
+
     def display_stream_configuration(
             self, stream_conf: Optional[codecs.StreamConfiguration] = None) \
             -> None:
