@@ -54,6 +54,8 @@ class StreamConfiguration(StreamConfigurationUI):
         self.connection_options = stream_conf.connection_options
         self.runtime_options = stream_conf.runtime_options
 
+        self.advanced_options_enabled = True
+
     def connection_type_changed(self, index):
         connection_type: Optional[ConnType] \
             = self.connection_type_combobox.itemData(index)
@@ -222,6 +224,11 @@ class StreamConfiguration(StreamConfigurationUI):
     def advanced_options_enabled(self) -> bool:
         return self.stream_options.advanced_options.isChecked()
 
+    @advanced_options_enabled.setter
+    def advanced_options_enabled(self, advanced_options_enabled: bool):
+        advanced_options = self.stream_options.advanced_options
+        advanced_options.setChecked(advanced_options_enabled)
+
     @property
     def avoid_transcoding(self) -> Optional[bool]:
         if self.connection_type is not ConnType.FILE:
@@ -246,9 +253,9 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @connection_options.setter
     def connection_options(self, connection_options: dict) -> None:
-        self.pipeline = connection_options["pipeline"]
-        self.network_address = connection_options["url"]
-        self.webcam_device = connection_options["device_id"]
+        self.pipeline = connection_options.get("pipeline")
+        self.network_address = connection_options.get("url")
+        self.webcam_device = connection_options.get("device_id")
 
     @property
     def connection_type(self) -> ConnType:
@@ -322,8 +329,8 @@ class StreamConfiguration(StreamConfigurationUI):
             -> None:
 
         if premises is None or isinstance(premises, codecs.Premises):
-            index = self.connection_type_combobox.findData(premises)
-            self.connection_type_combobox.setCurrentIndex(index)
+            index = self.stream_options.premises_combobox.findData(premises)
+            self.stream_options.premises_combobox.setCurrentIndex(index)
 
         elif isinstance(premises, int):
             self._set_premises_by_id(premises)
@@ -351,15 +358,16 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @runtime_options.setter
     def runtime_options(self, runtime_options: dict) -> None:
-        self.keyframe_only_streaming = runtime_options["keyframes_only"]
+        self.keyframe_only_streaming = runtime_options.get("keyframes_only",
+                                                           False)
 
     @property
     def stream_name(self) -> str:
-        return self.stream_name_label.text()
+        return self.stream_name_line_edit.text()
 
     @stream_name.setter
     def stream_name(self, stream_name: str) -> None:
-        self.stream_name_label.setText(stream_name)
+        self.stream_name_line_edit.setText(stream_name)
 
     @property
     def webcam_device(self) -> Optional[str]:
