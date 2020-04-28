@@ -889,52 +889,52 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="345"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="395"/>
         <source>Error Opening Stream</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="172"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="180"/>
         <source>Error encountered while uploading video file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="301"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="351"/>
         <source>Stream source already open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="302"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="352"/>
         <source>You already have the stream source open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="322"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="372"/>
         <source>Error: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="319"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="369"/>
         <source>Error encountered while opening stream</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="320"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="370"/>
         <source>Is stream already open?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="321"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="371"/>
         <source>Is this a valid stream source?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="346"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="396"/>
         <source>Active Stream Limit Exceeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="347"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="397"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation type="unfinished"></translation>
     </message>

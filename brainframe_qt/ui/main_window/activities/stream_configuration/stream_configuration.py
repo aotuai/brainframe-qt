@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
 
 from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
@@ -41,6 +41,18 @@ class StreamConfiguration(StreamConfigurationUI):
         self.button_box.button(QDialogButtonBox.Apply).clicked.connect(
             self._gather_and_send_stream_configuration
         )
+
+    def load_from_conf(self, stream_conf: codecs.StreamConfiguration):
+
+        self.stream_name = stream_conf.name
+        self.connection_type = stream_conf.connection_type
+        self.premises = stream_conf.premises_id
+        # TODO: I invalidate the filepath because the server doesn't store it
+        #       and it's meaningless for an already existing
+        #       StreamConfiguration. Is there a better thing to do?
+        self.stream_options.file_selector.setDisabled(True)
+        self.connection_options = stream_conf.connection_options
+        self.runtime_options = stream_conf.runtime_options
 
     def connection_type_changed(self, index):
         connection_type: Optional[ConnType] \
@@ -232,9 +244,20 @@ class StreamConfiguration(StreamConfigurationUI):
             connection_options["device_id"] = self.webcam_device
         return connection_options
 
+    @connection_options.setter
+    def connection_options(self, connection_options: dict) -> None:
+        self.pipeline = connection_options["pipeline"]
+        self.network_address = connection_options["url"]
+        self.webcam_device = connection_options["device_id"]
+
     @property
     def connection_type(self) -> ConnType:
         return self.connection_type_combobox.currentData()
+
+    @connection_type.setter
+    def connection_type(self, connection_type: ConnType) -> None:
+        index = self.connection_type_combobox.findData(connection_type)
+        self.connection_type_combobox.setCurrentIndex(index)
 
     @property
     def filepath(self) -> Optional[Path]:
@@ -253,12 +276,23 @@ class StreamConfiguration(StreamConfigurationUI):
         keyframe_only_checkbox = advanced_options.keyframe_only_checkbox
         return keyframe_only_checkbox.isChecked()
 
+    @keyframe_only_streaming.setter
+    def keyframe_only_streaming(self, keyframe_only_streaming: bool) -> None:
+        advanced_options = self.stream_options.advanced_options
+        keyframe_only_checkbox = advanced_options.keyframe_only_checkbox
+        keyframe_only_checkbox.setChecked(keyframe_only_streaming)
+
     @property
     def network_address(self) -> Optional[str]:
         if self.connection_type is not ConnType.IP_CAMERA:
             return None
 
         return self.stream_options.network_address_line_edit.text()
+
+    @network_address.setter
+    def network_address(self, network_address: Optional[str]) -> None:
+        network_address = "" if network_address is None else network_address
+        self.stream_options.network_address_line_edit.setText(network_address)
 
     @property
     def pipeline(self) -> Optional[str]:
@@ -269,11 +303,44 @@ class StreamConfiguration(StreamConfigurationUI):
         pipeline = advanced_options.pipeline_line_edit
         return pipeline.text() or None
 
+    @pipeline.setter
+    def pipeline(self, pipeline: Optional[str]) -> None:
+        advanced_options = self.stream_options.advanced_options
+        pipeline_line_edit = advanced_options.pipeline_line_edit
+
+        pipeline = "" if pipeline is None else pipeline
+        pipeline_line_edit.setText(pipeline)
+
     @property
     def premises(self) -> Optional[codecs.Premises]:
         if self.connection_type is not ConnType.IP_CAMERA:
             return None
         return self.stream_options.premises_combobox.currentData()
+
+    @premises.setter
+    def premises(self, premises: Optional[Union[int, codecs.Premises]]) \
+            -> None:
+
+        if premises is None or isinstance(premises, codecs.Premises):
+            index = self.connection_type_combobox.findData(premises)
+            self.connection_type_combobox.setCurrentIndex(index)
+
+        elif isinstance(premises, int):
+            self._set_premises_by_id(premises)
+
+    def _set_premises_by_id(self, premises_id: int) -> None:
+
+        def on_success(premises: codecs.Premises) -> None:
+            self.premises = premises
+
+        def on_error(exc: BaseException) -> None:
+            # TODO: Handle a premises that doesn't exist
+            raise exc
+
+        QTAsyncWorker(self, api.get_premises, f_args=(premises_id, ),
+                      on_success=on_success,
+                      on_error=on_error) \
+            .start()
 
     @property
     def runtime_options(self) -> dict:
@@ -282,15 +349,28 @@ class StreamConfiguration(StreamConfigurationUI):
             runtime_options["keyframes_only"] = self.keyframe_only_streaming
         return runtime_options
 
+    @runtime_options.setter
+    def runtime_options(self, runtime_options: dict) -> None:
+        self.keyframe_only_streaming = runtime_options["keyframes_only"]
+
     @property
     def stream_name(self) -> str:
         return self.stream_name_label.text()
+
+    @stream_name.setter
+    def stream_name(self, stream_name: str) -> None:
+        self.stream_name_label.setText(stream_name)
 
     @property
     def webcam_device(self) -> Optional[str]:
         if self.connection_type is not ConnType.WEBCAM:
             return None
         return self.stream_options.webcam_device_line_edit.text()
+
+    @webcam_device.setter
+    def webcam_device(self, webcam_device: Optional[int]) -> None:
+        webcam_device = "" if webcam_device is None else str(webcam_device)
+        self.stream_options.webcam_device_line_edit.setText(webcam_device)
 
     def _handle_send_stream_conf_error(self, exc: BaseException) -> None:
 
