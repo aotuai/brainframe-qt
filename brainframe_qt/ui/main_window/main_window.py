@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+import typing
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QWidget
 
@@ -60,19 +61,18 @@ class MainWindow(MainWindowUI):
             self, stream_conf: Optional[codecs.StreamConfiguration] = None) \
             -> None:
 
-        stream_configuration_widget = None
         for dock_widget in self.dock_widgets:
-            widget = dock_widget.widget()
-            if isinstance(widget, StreamConfiguration):
-                stream_configuration_widget = widget
-
-        if stream_configuration_widget is None:
+            if isinstance(dock_widget.widget(), StreamConfiguration):
+                break
+        else:
             dock_widget = QDockWidget(self)
             stream_configuration_widget = StreamConfiguration(self)
             dock_widget.setWidget(stream_configuration_widget)
-
-            self.addDockWidget(Qt.RightDockWidgetArea, dock_widget)
-
             self.dock_widgets.append(dock_widget)
 
+        self.addDockWidget(Qt.RightDockWidgetArea, dock_widget)
+
+        dock_widget.show()
+
+        stream_configuration_widget = dock_widget.widget()
         stream_configuration_widget.load_from_conf(stream_conf)
