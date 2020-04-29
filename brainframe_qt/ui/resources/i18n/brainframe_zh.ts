@@ -515,43 +515,43 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>MainToolbar</name>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="11"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="12"/>
         <source>Streams</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="12"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
         <source>Identities</source>
         <translation type="unfinished">身份</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
         <source>Alerts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
         <source>Tasks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
-        <source>Videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
         <source>Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
         <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
+        <source>Client</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
