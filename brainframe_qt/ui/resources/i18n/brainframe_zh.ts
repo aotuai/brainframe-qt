@@ -185,22 +185,22 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertHeader</name>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="196"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="192"/>
         <source>Verify alert</source>
         <translation>标记“检测结果正确”</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="197"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="193"/>
         <source>Mark alert as false positive</source>
         <translation>标记“检测结果错误”</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="198"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="194"/>
         <source>Unverify alert</source>
         <translation>取消“检测结果正确”标记</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="199"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="195"/>
         <source>Unmark alert as false positive</source>
         <translation>取消“检测结果错误”标记</translation>
     </message>
@@ -216,7 +216,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertLogEntry</name>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="111"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="112"/>
         <source>{} in region [{}]</source>
         <translation>{} 在区域 [{}] 内</translation>
     </message>

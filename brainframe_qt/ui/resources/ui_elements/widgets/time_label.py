@@ -1,7 +1,8 @@
 import pendulum
-from pendulum.tz.timezone import Timezone
 
 from PyQt5.QtWidgets import QLabel, QWidget, QSizePolicy, QHBoxLayout
+
+from brainframe.client.ui.resources import settings
 
 
 class TimeLabelUI(QWidget):
@@ -58,7 +59,6 @@ class TimeLabel(TimeLabelUI):
         super().__init__(parent)
 
         self._time = pendulum.DateTime.EPOCH
-        self._user_timezone = pendulum.now().timezone
         self._display_timezone = True
 
     @property
@@ -84,22 +84,6 @@ class TimeLabel(TimeLabelUI):
         self._update()
 
     @property
-    def user_timezone(self) -> Timezone:
-        """
-        :return: The timezone the user will be shown time in. By default, this
-            value is the user's local time.
-        """
-        return self._user_timezone
-
-    @user_timezone.setter
-    def user_timezone(self, timezone: Timezone):
-        """
-        :param timezone: The timezone to show time to the user in
-        """
-        self._user_timezone = timezone
-        self._update()
-
-    @property
     def display_timezone(self) -> bool:
         """
         :return: If true, the timezone will be shown to the user in addition
@@ -117,7 +101,7 @@ class TimeLabel(TimeLabelUI):
         self._update()
 
     def _update(self):
-        display_time = self._time.in_tz(self._user_timezone)
+        display_time = self._time.in_tz(settings.get_user_timezone())
         self.time_label.setText(display_time.format("HH:mm"))
         if self._display_timezone:
             self.timezone_label.setText(display_time.tzname())
