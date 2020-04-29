@@ -4,6 +4,7 @@ from typing import List, Dict
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
+import pendulum
 
 from brainframe.client.api.codecs import (
     Attribute,
@@ -67,6 +68,16 @@ class AlarmCreationDialog(QDialog):
             self.verify_inputs_valid)
         self.verify_inputs_valid()
 
+        # The timezone that the user enters times in
+        self.user_timezone = pendulum.now().timezone
+
+        # Show the user's current timezone in the three-letter abbreviation
+        # formation (PST, CST, UTC, etc)
+        timezone_abbreviation = (pendulum.now()
+                                 .in_tz(self.user_timezone)
+                                 .format("zz"))
+        self.timezone_label.setText(f"({timezone_abbreviation})")
+
     def condition_type_button_changed(self):
         checked_button = self.condition_type_button_group.checkedButton()
         if checked_button is self.count_based_button:
@@ -119,8 +130,8 @@ class AlarmCreationDialog(QDialog):
         count = dialog.count_spin_box.value()
         countable = dialog.countable_combo_box.currentText()
         zone = dialog.zone_combo_box.currentText()
-        start_time = dialog.start_time_edit.time().toString("HH:mm:ss")
-        stop_time = dialog.stop_time_edit.time().toString("HH:mm:ss")
+        start_time = dialog.start_time_utc
+        stop_time = dialog.stop_time_utc
         intersection_point = dialog.intersection_point_combo_box.currentText()
 
         count_condition = []
@@ -279,3 +290,23 @@ class AlarmCreationDialog(QDialog):
                     values.add(value)
 
         return list(values)
+
+    @property
+    def start_time_utc(self) -> str:
+        """The configured alarm's active start time in UTC as a string."""
+        start_time_str = self.start_time_edit.time().toString("HH:mm:ss")
+        return self._time_str_to_utc(start_time_str)
+
+    @property
+    def stop_time_utc(self) -> str:
+        """The configured alarm's active stop time in UTC as a string."""
+        stop_time_str = self.stop_time_edit.time().toString("HH:mm:ss")
+        return self._time_str_to_utc(stop_time_str)
+
+    def _time_str_to_utc(self, original_time: str) -> str:
+        """Converts the given time string to UTC, interpreting its time zone
+        as the user's configured time zone.
+        """
+        return (pendulum.parse(original_time, tz=self.user_timezone)
+                .in_tz(pendulum.UTC)
+                .format("HH:mm:ss"))
