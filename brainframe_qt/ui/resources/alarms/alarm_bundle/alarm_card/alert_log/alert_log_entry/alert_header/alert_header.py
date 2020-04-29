@@ -111,7 +111,8 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         super().__init__(parent)
 
         self.alert = typing.cast(Alert, None)
-        self.timezone = "America/Los_Angeles"
+        # The timezone that time will be displayed to the user in
+        self.user_timezone = pendulum.now().timezone
 
         self._init_signals()
 
@@ -143,11 +144,13 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         # Alert start time
         start_time = pendulum.from_timestamp(self.alert.start_time)
         self.start_time_label.time = start_time
+        self.start_time_label.user_timezone = self.user_timezone
 
         # Alert end time
         if self.alert.end_time is not None:
             end_time = pendulum.from_timestamp(self.alert.end_time)
             self.end_time_label.time = end_time
+            self.end_time_label.user_timezone = self.user_timezone
             self.end_time_label.setVisible(True)
         else:
             self.end_time_label.setHidden(True)
