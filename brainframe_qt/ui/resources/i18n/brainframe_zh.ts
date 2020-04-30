@@ -1190,24 +1190,29 @@ Please recheck the entered server address.</source>
 <context>
     <name>VideoExpandedView</name>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="117"/>
         <source>Task Config</source>
         <translation>任务选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="111"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
         <source>Stream Plugin Config</source>
         <translation>视频流插件配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="137"/>
         <source>Delete Stream</source>
         <translation>删除视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="53"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="57"/>
         <source>Close expanded video view</source>
         <translation>关闭扩展视频视图</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
+        <source>Stream Config</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

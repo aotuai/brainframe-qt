@@ -30,8 +30,8 @@ class MainWindow(MainWindowUI):
         self._init_activity_signals()
         self._init_dialog_signals()
 
-        thumbnail_view = self.stream_activity.video_thumbnail_view
-        thumbnail_view.thumbnail_stream_clicked_signal.connect(
+        expanded_view = self.stream_activity.video_expanded_view
+        expanded_view.open_stream_config_signal.connect(
             self.display_stream_configuration)
 
         self.stream_activity.new_stream_button.clicked.connect(
