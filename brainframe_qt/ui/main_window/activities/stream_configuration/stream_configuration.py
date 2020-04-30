@@ -55,10 +55,7 @@ class StreamConfiguration(StreamConfigurationUI):
         self.connection_options = stream_conf.connection_options
         self.runtime_options = stream_conf.runtime_options
 
-        self.advanced_options_enabled = True
-
-        # TODO: Allow editing a stream configuration
-        self.setDisabled(True)
+        self.disable_input_fields(True)
 
     def _load_empty_conf(self):
 
@@ -70,7 +67,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         self.advanced_options_enabled = True
 
-        self.setEnabled(True)
+        self.disable_input_fields(False)
 
     def connection_type_changed(self, index):
         connection_type: Optional[ConnType] \
@@ -101,6 +98,23 @@ class StreamConfiguration(StreamConfigurationUI):
         self.stream_options.advanced_options.pipeline_label.setVisible(True)
         self.stream_options.advanced_options.pipeline_line_edit \
             .setVisible(True)
+
+    def disable_input_fields(self, disable: bool) -> None:
+        self.advanced_options_enabled = disable
+
+        self.stream_name_line_edit.setDisabled(disable)
+        self.connection_type_combobox.setDisabled(disable)
+
+        stream_options = self.stream_options
+        stream_options.premises_combobox.setDisabled(disable)
+        stream_options.network_address_line_edit.setDisabled(disable)
+        stream_options.file_selector.setDisabled(disable)
+        stream_options.webcam_device_line_edit.setDisabled(disable)
+
+        advanced_options = stream_options.advanced_options
+        advanced_options.keyframe_only_checkbox.setDisabled(disable)
+        advanced_options.pipeline_line_edit.setDisabled(disable)
+        advanced_options.avoid_transcoding_checkbox.setDisabled(disable)
 
     def validate_input(self) -> None:
         apply_button = self.button_box.button(QDialogButtonBox.Apply)

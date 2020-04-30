@@ -841,52 +841,52 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="448"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="462"/>
         <source>Error Opening Stream</source>
         <translation type="unfinished">打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="202"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="216"/>
         <source>Error encountered while uploading video file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="404"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="418"/>
         <source>Stream source already open</source>
         <translation type="unfinished">视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="405"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="419"/>
         <source>You already have the stream source open.</source>
         <translation type="unfinished">您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="425"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="439"/>
         <source>Error: </source>
         <translation type="unfinished">错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="422"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="436"/>
         <source>Error encountered while opening stream</source>
         <translation type="unfinished">打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="423"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="437"/>
         <source>Is stream already open?</source>
         <translation type="unfinished">视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="424"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="438"/>
         <source>Is this a valid stream source?</source>
         <translation type="unfinished">这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="449"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="463"/>
         <source>Active Stream Limit Exceeded</source>
         <translation type="unfinished">视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="450"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="464"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation type="unfinished">您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
