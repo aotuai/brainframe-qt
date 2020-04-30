@@ -20,7 +20,6 @@
         <file alias="new_stream">images/icons/new_stream.svg</file>
         <file alias="no_streams_for_alerts">images/icons/no_streams_for_alerts.svg</file>
         <file alias="person">images/icons/person.svg</file>
-        <file alias="stream_config">images/icons/project_file_stream_settings.svg</file>
         <file alias="question_mark">images/icons/question_mark.svg</file>
         <file alias="region">images/icons/region.svg</file>
         <file alias="server_config">images/icons/server_configuration.svg</file>
