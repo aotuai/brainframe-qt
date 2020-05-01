@@ -232,7 +232,7 @@ class StreamConfiguration(StreamConfigurationUI):
         # for exceptions in the latter needs the result of the former.
 
         def on_success(_enabled_stream_conf: codecs.StreamConfiguration):
-            self.setDisabled(True)
+            self.disable_input_fields(True)
 
         def start_analysis(sent_stream_conf: codecs.StreamConfiguration):
 
