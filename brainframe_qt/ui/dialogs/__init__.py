@@ -7,5 +7,5 @@ from .server_configuration.server_configuration import ServerConfigurationDialog
 from .standard_error.standard_error import StandardError
 from .task_configuration.task_configuration import TaskConfiguration
 from .plugin_configuration.plugin_config import PluginConfigDialog
-from .video_configuration import RenderConfiguration
+from .client_configuration import RenderConfiguration
 from .version_mismatch import VersionMismatch

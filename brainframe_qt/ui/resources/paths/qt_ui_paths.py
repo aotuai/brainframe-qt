@@ -76,8 +76,8 @@ server_configuration_ui    = route_path(server_configuration_dir  , "server_conf
 task_configuration_dir     = route_path(dialogs_dir               , "task_configuration"       )
 task_configuration_ui      = route_path(task_configuration_dir    , "task_configuration.ui"    )
 
-video_configuration_dir    = route_path(dialogs_dir               , "video_configuration"      )
-video_configuration_ui     = route_path(video_configuration_dir   , "video_configuration.ui"   )
+client_configuration_dir   = route_path(dialogs_dir               , "client_configuration"     )
+video_configuration_ui     = route_path(client_configuration_dir  , "client_configuration.ui"  )
 
 zone_list_dir              = route_path(task_configuration_dir    , "zone_list"                )
 zone_list_ui               = route_path(zone_list_dir             , "zone_list.ui"             )

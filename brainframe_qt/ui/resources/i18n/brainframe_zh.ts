@@ -288,6 +288,64 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>ClientConfiguration</name>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="14"/>
+        <source>Video Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="20"/>
+        <source>Show detections</source>
+        <translation>显示检测信息</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="48"/>
+        <source>Show labels</source>
+        <translation>显示标签</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="84"/>
+        <source>Use polygons when available</source>
+        <translation>在可用时使用多边形</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="97"/>
+        <source>Show attributes (e.g. gender/behavior for a person detection)</source>
+        <translation>显示属性（例如，人物检测的性别/行为）</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="104"/>
+        <source>Show tracking</source>
+        <translation>显示跟踪信息</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="111"/>
+        <source>Always use bounding boxes</source>
+        <translation>始终使用长方形检测框</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="121"/>
+        <source>Show recognition</source>
+        <translation>显示识别结果</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="137"/>
+        <source>Show regions</source>
+        <translation>显示区域</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="154"/>
+        <source>Show lines</source>
+        <translation>显示线段</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="58"/>
+        <source>Show extra data</source>
+        <translation>显示元数据 (Metadata)</translation>
+    </message>
+</context>
+<context>
     <name>DirectorySelector</name>
     <message>
         <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.ui" line="14"/>
@@ -1127,64 +1185,6 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="21"/>
         <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
         <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
-    </message>
-</context>
-<context>
-    <name>ClientConfiguration</name>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="14"/>
-        <source>Client Configuration</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="20"/>
-        <source>Show detections</source>
-        <translation>显示检测信息</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="48"/>
-        <source>Show labels</source>
-        <translation>显示标签</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="84"/>
-        <source>Use polygons when available</source>
-        <translation>在可用时使用多边形</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="97"/>
-        <source>Show attributes (e.g. gender/behavior for a person detection)</source>
-        <translation>显示属性（例如，人物检测的性别/行为）</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="104"/>
-        <source>Show tracking</source>
-        <translation>显示跟踪信息</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="111"/>
-        <source>Always use bounding boxes</source>
-        <translation>始终使用长方形检测框</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="121"/>
-        <source>Show recognition</source>
-        <translation>显示识别结果</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="137"/>
-        <source>Show regions</source>
-        <translation>显示区域</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="154"/>
-        <source>Show lines</source>
-        <translation>显示线段</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="58"/>
-        <source>Show extra data</source>
-        <translation>显示元数据 (Metadata)</translation>
     </message>
 </context>
 <context>

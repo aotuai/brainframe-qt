@@ -54,7 +54,7 @@
         <file alias="stream_configuration">../dialogs/stream_configuration/stream_configuration.ui</file>
         <file alias="task_configuration">../dialogs/task_configuration/task_configuration.ui</file>
         <file alias="thumbnail_grid_layout">../main_window/video_thumbnail_view/thumbnail_grid_layout/thumbnail_grid_layout.ui</file>
-        <file alias="video_configuration">../dialogs/video_configuration/video_configuration.ui</file>
+        <file alias="client_configuration">../dialogs/client_configuration/client_configuration.ui</file>
         <file alias="video_expanded_view">../main_window/video_expanded_view/video_expanded_view.ui</file>
         <file alias="video_thumbnail_view">../main_window/video_thumbnail_view/video_thumbnail_view.ui</file>
         <file alias="zone_list">../dialogs/task_configuration/zone_list/zone_list.ui</file>

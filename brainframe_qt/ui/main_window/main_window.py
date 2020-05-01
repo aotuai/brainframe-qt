@@ -1,6 +1,5 @@
 from typing import List, Optional
 
-import typing
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QWidget
 
@@ -10,8 +9,8 @@ from brainframe.client.ui.dialogs.plugin_configuration.plugin_config import \
     PluginConfigDialog
 from brainframe.client.ui.dialogs.server_configuration.server_configuration import \
     ServerConfigurationDialog
-from brainframe.client.ui.dialogs.video_configuration.video_configuration import \
-    RenderConfiguration
+from brainframe.client.ui.dialogs.client_configuration \
+    import RenderConfiguration
 from brainframe.client.ui.main_window.activities import StreamConfiguration
 from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
 
