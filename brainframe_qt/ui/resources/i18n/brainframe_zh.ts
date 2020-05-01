@@ -190,22 +190,22 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertHeader</name>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="193"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="192"/>
         <source>Verify alert</source>
         <translation>标记“检测结果正确”</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="194"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="193"/>
         <source>Mark alert as false positive</source>
         <translation>标记“检测结果错误”</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="195"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="194"/>
         <source>Unverify alert</source>
         <translation>取消“检测结果正确”标记</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="196"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="195"/>
         <source>Unmark alert as false positive</source>
         <translation>取消“检测结果错误”标记</translation>
     </message>
@@ -221,29 +221,9 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertLogEntry</name>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.ui" line="39"/>
-        <source>Time</source>
-        <translation>时间</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.ui" line="46"/>
-        <source>Alarm Name</source>
-        <translation>警报名称</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="35"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="132"/>
         <source>{} in region [{}]</source>
         <translation>{} 在区域 [{}] 内</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="63"/>
-        <source>(Ongoing)</source>
-        <translation>(仍在持续)</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="64"/>
-        <source>{} to {}</source>
-        <translation>{} 至 {}</translation>
     </message>
 </context>
 <context>
@@ -1161,6 +1141,14 @@ Please recheck the entered server address.</source>
         <location filename="../video_items/stream_zone_status.py" line="70"/>
         <source>Alert!</source>
         <translation>警报！</translation>
+    </message>
+</context>
+<context>
+    <name>_TimeSpanUI</name>
+    <message>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="42"/>
+        <source>(Ongoing)</source>
+        <translation>(仍在持续)</translation>
     </message>
 </context>
 </TS>
