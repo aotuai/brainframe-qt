@@ -1,5 +1,6 @@
-import pendulum
+from typing import Optional
 
+import pendulum
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QWidget, QPushButton, QLabel, QHBoxLayout,
@@ -20,7 +21,8 @@ class _TimeSpanUI(QWidget):
 
         self.start_label = self._init_time_label("start")
         self.dash_label = self._init_dash_label()
-        self.end_label = self._init_time_label("end")
+        self.ongoing_label = self._init_ongoing_label()
+        self.stop_label = self._init_time_label("stop")
 
         self._init_layout()
 
@@ -36,12 +38,19 @@ class _TimeSpanUI(QWidget):
         dash_label.setObjectName("dash_label")
         return dash_label
 
+    def _init_ongoing_label(self):
+        ongoing_label = QLabel(self.tr("(Ongoing)"))
+        ongoing_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        ongoing_label.setObjectName("ongoing_label")
+        return ongoing_label
+
     def _init_layout(self) -> None:
         layout = QHBoxLayout()
 
         layout.addWidget(self.start_label)
         layout.addWidget(self.dash_label)
-        layout.addWidget(self.end_label)
+        layout.addWidget(self.ongoing_label)
+        layout.addWidget(self.stop_label)
         layout.addStretch()
 
         self.setLayout(layout)
@@ -49,7 +58,22 @@ class _TimeSpanUI(QWidget):
 
 class _TimeSpan(_TimeSpanUI):
     """Displays a span of time in the format 16:20 PM PST - 16:21 PM PST."""
-    pass
+    def set_times(self, start_time: float, stop_time: Optional[float]) -> None:
+        self.start_label.time = pendulum.from_timestamp(start_time)
+
+        if stop_time is None:
+            # The timespan hasn't ended yet. Display the format:
+            # 16:20 PM PST (Ongoing)
+            self.stop_label.setVisible(False)
+            self.dash_label.setVisible(False)
+            self.ongoing_label.setVisible(True)
+        else:
+            # Show both the start and end times
+            self.stop_label.time = pendulum.from_timestamp(stop_time)
+
+            self.stop_label.setVisible(True)
+            self.dash_label.setVisible(True)
+            self.ongoing_label.setVisible(False)
 
 
 class AlertLogEntryUI(QWidget):
@@ -125,14 +149,7 @@ class AlertLogEntry(AlertLogEntryUI):
     def update(self, alert):
         self.alert = alert
 
-        self.time_span.start_label.time = \
-            pendulum.from_timestamp(alert.start_time)
-        if alert.end_time is not None:
-            self.time_span.end_label.time = \
-                pendulum.from_timestamp(alert.end_time)
-            self.time_span.end_label.setVisible(True)
-        else:
-            self.time_span.end_label.setVisible(False)
+        self.time_span.set_times(alert.start_time, alert.end_time)
 
     @pyqtSlot()
     def display_alert_info(self):

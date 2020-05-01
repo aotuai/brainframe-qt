@@ -216,7 +216,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertLogEntry</name>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="108"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="132"/>
         <source>{} in region [{}]</source>
         <translation>{} 在区域 [{}] 内</translation>
     </message>
@@ -1136,6 +1136,14 @@ Please recheck the entered server address.</source>
         <location filename="../video_items/stream_zone_status.py" line="70"/>
         <source>Alert!</source>
         <translation>警报！</translation>
+    </message>
+</context>
+<context>
+    <name>_TimeSpanUI</name>
+    <message>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="42"/>
+        <source>(Ongoing)</source>
+        <translation>(仍在持续)</translation>
     </message>
 </context>
 </TS>
