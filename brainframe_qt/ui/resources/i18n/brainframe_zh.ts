@@ -841,7 +841,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="462"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="463"/>
         <source>Error Opening Stream</source>
         <translation type="unfinished">打开视频流时出错</translation>
     </message>
@@ -851,42 +851,42 @@ Please recheck the entered server address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="418"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="419"/>
         <source>Stream source already open</source>
         <translation type="unfinished">视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="419"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="420"/>
         <source>You already have the stream source open.</source>
         <translation type="unfinished">您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="439"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="440"/>
         <source>Error: </source>
         <translation type="unfinished">错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="436"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="437"/>
         <source>Error encountered while opening stream</source>
         <translation type="unfinished">打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="437"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="438"/>
         <source>Is stream already open?</source>
         <translation type="unfinished">视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="438"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="439"/>
         <source>Is this a valid stream source?</source>
         <translation type="unfinished">这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="463"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="464"/>
         <source>Active Stream Limit Exceeded</source>
         <translation type="unfinished">视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="464"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="465"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation type="unfinished">您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>

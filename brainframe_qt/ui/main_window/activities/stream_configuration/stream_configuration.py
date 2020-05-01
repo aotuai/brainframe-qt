@@ -242,7 +242,8 @@ class StreamConfiguration(StreamConfigurationUI):
             QTAsyncWorker(self, api.start_analyzing,
                           f_args=(sent_stream_conf.id, ),
                           on_success=on_success,
-                          on_error=on_error)
+                          on_error=on_error) \
+                .start()
 
         QTAsyncWorker(self, api.set_stream_configuration,
                       f_args=(stream_conf, ),
