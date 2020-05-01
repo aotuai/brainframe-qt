@@ -3,6 +3,7 @@ from typing import Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget
 
+from brainframe.client.ui.dialogs.alarm_view.alarm_view import AlarmView
 from brainframe.client.ui.main_window.activities.identity_configuration \
     import IdentityConfiguration
 from brainframe.client.ui.main_window.activities.stream_activity import \
@@ -22,6 +23,7 @@ class MainWindowUI(QMainWindow):
 
         self.stream_activity = self._init_stream_activity()
         self.identity_activity = self._init_identity_activity()
+        self.alert_activity = self._init_alert_activity()
 
         self._init_layout()
         self._init_style()
@@ -38,6 +40,11 @@ class MainWindowUI(QMainWindow):
         identity_activity = IdentityConfiguration(self)
         return identity_activity
 
+    def _init_alert_activity(self) -> AlarmView:
+        alert_activity = AlarmView(self)
+
+        return alert_activity
+
     def _init_toolbar(self) -> MainToolbar:
         toolbar = MainToolbar(self)
         toolbar.setMovable(False)
@@ -51,6 +58,7 @@ class MainWindowUI(QMainWindow):
 
         self.stacked_widget.addWidget(self.stream_activity)
         self.stacked_widget.addWidget(self.identity_activity)
+        self.stacked_widget.addWidget(self.alert_activity)
 
     def _init_style(self):
         # Allow background of widget to be styled

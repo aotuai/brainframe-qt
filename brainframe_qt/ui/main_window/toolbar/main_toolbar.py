@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction, QSizePolicy, QToolBar, QToolButton, \
+from PyQt5.QtWidgets import QAction, QLabel, QSizePolicy, QToolBar, \
+    QToolButton, \
     QWidget
 
 
@@ -13,7 +14,7 @@ class MainToolbar(QToolBar):
         alert_text = self.tr("Alerts")
         task_config_text = self.tr("Tasks")
         plugin_config_text = self.tr("Plugins")
-        video_config_text = self.tr("Videos")
+        client_config_text = self.tr("Client")
         server_config_text = self.tr("Server")
         about_page_text = self.tr("About")
 
@@ -28,8 +29,8 @@ class MainToolbar(QToolBar):
         self.plugin_config_action \
             = self._init_action(":/icons/global_plugin_config",
                                 plugin_config_text)
-        self.video_config_action \
-            = self._init_action(":/icons/video_settings", video_config_text)
+        self.client_config_action \
+            = self._init_action(":/icons/video_settings", client_config_text)
         self.server_config_action \
             = self._init_action(":/icons/server_config", server_config_text)
         self.about_page_action \
@@ -49,9 +50,11 @@ class MainToolbar(QToolBar):
 
         self.addWidget(self._create_spacer_widget())
 
-        self.addAction(self.task_config_action)
+        self.addSeparator()
+
+        # self.addAction(self.task_config_action)
         self.addAction(self.plugin_config_action)
-        self.addAction(self.video_config_action)
+        self.addAction(self.client_config_action)
         self.addAction(self.server_config_action)
 
         self.addSeparator()
