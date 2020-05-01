@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>VideoConfiguration</class>
- <widget class="QDialog" name="VideoConfiguration">
+ <class>ClientConfiguration</class>
+ <widget class="QDialog" name="ClientConfiguration">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -191,7 +191,7 @@
   <connection>
    <sender>dialog_button_box</sender>
    <signal>accepted()</signal>
-   <receiver>VideoConfiguration</receiver>
+   <receiver>ClientConfiguration</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -207,7 +207,7 @@
   <connection>
    <sender>dialog_button_box</sender>
    <signal>rejected()</signal>
-   <receiver>VideoConfiguration</receiver>
+   <receiver>ClientConfiguration</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

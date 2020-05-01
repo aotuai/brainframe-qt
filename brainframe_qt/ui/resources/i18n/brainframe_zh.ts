@@ -1130,11 +1130,11 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
-    <name>VideoConfiguration</name>
+    <name>ClientConfiguration</name>
     <message>
         <location filename="../../dialogs/video_configuration/video_configuration.ui" line="14"/>
-        <source>Video Configuration</source>
-        <translation>视频配置</translation>
+        <source>Client Configuration</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../dialogs/video_configuration/video_configuration.ui" line="20"/>
