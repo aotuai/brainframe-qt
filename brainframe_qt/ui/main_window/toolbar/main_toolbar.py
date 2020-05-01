@@ -30,7 +30,7 @@ class MainToolbar(QToolBar):
             = self._init_action(":/icons/global_plugin_config",
                                 plugin_config_text)
         self.client_config_action \
-            = self._init_action(":/icons/video_settings", client_config_text)
+            = self._init_action(":/icons/client_config", client_config_text)
         self.server_config_action \
             = self._init_action(":/icons/server_config", server_config_text)
         self.about_page_action \

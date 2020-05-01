@@ -23,6 +23,7 @@
         <file alias="question_mark">images/icons/question_mark.svg</file>
         <file alias="region">images/icons/region.svg</file>
         <file alias="server_config">images/icons/server_configuration.svg</file>
+        <file alias="client_config">images/icons/client_settings.svg</file>
         <file alias="settings_gear">images/icons/settings_gear.svg</file>
         <file alias="stream_plugin_config">images/icons/stream_plugin_config.svg</file>
         <file alias="trash">images/icons/trash.svg</file>
