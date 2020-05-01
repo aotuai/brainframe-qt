@@ -18,6 +18,8 @@ class StreamConfiguration(StreamConfigurationUI):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
+        self._reset_stream_conf: Optional[codecs.StreamConfiguration] = None
+
         self.validate_input()
 
         self._init_signals()
@@ -38,12 +40,16 @@ class StreamConfiguration(StreamConfigurationUI):
         ]:
             signal.connect(self.validate_input)
 
+        # Buttons
         self.button_box.button(QDialogButtonBox.Apply).clicked.connect(
-            self._gather_and_send_stream_configuration
-        )
+            self._gather_and_send_stream_configuration)
+        self.button_box.button(QDialogButtonBox.Reset).clicked.connect(
+            lambda _: self.reset_conf)
 
     def load_from_conf(
             self, stream_conf: Optional[codecs.StreamConfiguration]) -> None:
+
+        self._reset_stream_conf = stream_conf
 
         if stream_conf is None:
             self._load_empty_conf()
@@ -98,6 +104,9 @@ class StreamConfiguration(StreamConfigurationUI):
         self.stream_options.advanced_options.pipeline_label.setVisible(True)
         self.stream_options.advanced_options.pipeline_line_edit \
             .setVisible(True)
+
+    def reset_conf(self):
+        self.load_from_conf(self._reset_stream_conf)
 
     def disable_input_fields(self, disable: bool) -> None:
         self.advanced_options_enabled = disable
@@ -233,6 +242,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         def on_success(_enabled_stream_conf: codecs.StreamConfiguration):
             self.disable_input_fields(True)
+            self._reset_stream_conf = _enabled_stream_conf
 
         def start_analysis(sent_stream_conf: codecs.StreamConfiguration):
 
