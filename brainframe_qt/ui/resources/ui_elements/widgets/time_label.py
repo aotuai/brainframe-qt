@@ -1,7 +1,8 @@
 import pendulum
-from pendulum.tz.timezone import Timezone
 
 from PyQt5.QtWidgets import QLabel, QWidget, QSizePolicy, QHBoxLayout
+
+from brainframe.client.ui.resources import settings
 
 
 class TimeLabelUI(QWidget):
@@ -58,33 +59,51 @@ class TimeLabel(TimeLabelUI):
         super().__init__(parent)
 
         self._time = pendulum.DateTime.EPOCH
-
-        # TODO: Make configurable
-        self.display_timezone = True
+        self._display_timezone = True
 
     @property
     def time(self) -> pendulum.DateTime:
+        """
+        :return: The time this label is displaying, in UTC
+        """
         return self._time
 
     @time.setter
     def time(self, time: pendulum.DateTime):
-        self._time = time.in_tz(self.timezone)
+        """
+        :param time: The time to display, in UTC
+        """
+        if time.timezone != pendulum.UTC:
+            # We should be working exclusively with UTC times except when
+            # displaying to the user or taking in user input. A non-UTC value
+            # indicates a bug.
+            raise ValueError("The provided time must be in UTC")
+
+        self._time = time
 
         self._update()
 
     @property
-    def timezone(self) -> Timezone:
-        return self._time.tz
+    def display_timezone(self) -> bool:
+        """
+        :return: If true, the timezone will be shown to the user in addition
+            to the time. By default, this value is True.
+        """
+        return self._display_timezone
 
-    @timezone.setter
-    def timezone(self, timezone: Timezone):
-        self._time.set(tz=timezone)
-
+    @display_timezone.setter
+    def display_timezone(self, display_timezone: bool):
+        """
+        :param display_timezone: Whether or not the timezone will be shown to
+            the user in addition to the time
+        """
+        self._display_timezone = display_timezone
         self._update()
 
     def _update(self):
-        self.time_label.setText(self.time.format("HH:mm"))
-        self.timezone_label.setText(self.time.tzname())
-
-    def change_timezone(self, timezone: pendulum.tz):
-        self.time = self.time.in_timezone(timezone)
+        display_time = self._time.in_tz(settings.get_user_timezone())
+        self.time_label.setText(display_time.format("HH:mm"))
+        if self._display_timezone:
+            self.timezone_label.setText(display_time.tzname())
+        else:
+            self.timezone_label.setText("")
