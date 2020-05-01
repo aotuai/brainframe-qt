@@ -84,12 +84,9 @@ class AlertLogEntryUI(QWidget):
         layout.setSpacing(6)
         layout.setContentsMargins(9, 0, 9, 0)
 
-        layout.addWidget(self.alert_icon_button)
-        layout.setStretch(0, 0)
-        layout.addWidget(self.time_span)
-        layout.setStretch(1, 1)
-        layout.addWidget(self.alarm_name_label)
-        layout.setStretch(2, 1)
+        layout.addWidget(self.alert_icon_button, stretch=0)
+        layout.addWidget(self.time_span, stretch=1)
+        layout.addWidget(self.alarm_name_label, stretch=1)
 
         self.setLayout(layout)
 

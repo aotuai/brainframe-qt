@@ -216,7 +216,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertLogEntry</name>
     <message>
-        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="112"/>
+        <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="108"/>
         <source>{} in region [{}]</source>
         <translation>{} 在区域 [{}] 内</translation>
     </message>
