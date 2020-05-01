@@ -19,7 +19,7 @@ class RenderConfiguration(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        loadUi(qt_ui_paths.video_configuration_ui, self)
+        loadUi(qt_ui_paths.client_configuration_ui, self)
 
         self.detections_checkbox.setChecked(
             settings.draw_detections.val())
