@@ -38,7 +38,6 @@ class _TimeSpanUI(QWidget):
 
     def _init_layout(self) -> None:
         layout = QHBoxLayout()
-        layout.setSpacing(1)
 
         layout.addWidget(self.start_label)
         layout.addWidget(self.dash_label)
