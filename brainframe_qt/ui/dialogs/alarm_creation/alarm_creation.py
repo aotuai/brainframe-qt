@@ -1,10 +1,10 @@
 from enum import Enum, auto
-from typing import List, Dict
+from typing import Dict, List
 
+import pendulum
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
-import pendulum
 
 from brainframe.client.api.codecs import (
     Attribute,
@@ -14,9 +14,9 @@ from brainframe.client.api.codecs import (
     ZoneAlarmCountCondition,
     ZoneAlarmRateCondition
 )
+from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.shared.codec_enums import IntersectionPointType
-from brainframe.client.ui.resources import settings
 
 
 class ConditionType(Enum):
@@ -25,7 +25,6 @@ class ConditionType(Enum):
 
 
 class AlarmCreationDialog(QDialog):
-
     WINDOW_DURATION = 5.0
     """The default window duration for count events."""
     WINDOW_THRESHOLD = 0.5
