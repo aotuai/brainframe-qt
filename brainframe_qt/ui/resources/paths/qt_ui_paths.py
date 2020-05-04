@@ -4,7 +4,6 @@ ui_dir = route_path("brainframe", "client", "ui")
 
 # Main Window
 main_window_dir            = route_path(ui_dir                    , "main_window"              )
-main_window_ui             = route_path(main_window_dir           , "main_window.ui"           )
 
 video_expanded_view_dir    = route_path(main_window_dir           , "video_expanded_view"      )
 video_expanded_view_ui     = route_path(video_expanded_view_dir   , "video_expanded_view.ui"   )
