@@ -278,8 +278,14 @@ class StreamConfiguration(StreamConfigurationUI):
             return None
 
         advanced_options = self.stream_options.advanced_options
-        avoid_transcoding = advanced_options.avoid_transcoding_checkbox
-        return avoid_transcoding.isChecked()
+        avoid_transcoding_cb = advanced_options.avoid_transcoding_checkbox
+        return avoid_transcoding_cb.isChecked()
+
+    @avoid_transcoding.setter
+    def avoid_transcoding(self, avoid_transcoding: bool) -> None:
+        advanced_options = self.stream_options.advanced_options
+        avoid_transcoding_cb = advanced_options.avoid_transcoding_checkbox
+        avoid_transcoding_cb.setChecked(avoid_transcoding)
 
     @property
     def connection_options(self) -> dict:
@@ -290,6 +296,8 @@ class StreamConfiguration(StreamConfigurationUI):
             connection_options["url"] = self.network_address
         if self.webcam_device is not None:
             connection_options["device_id"] = self.webcam_device
+        if self.avoid_transcoding is not None:
+            connection_options["transcode"] = self.avoid_transcoding
         return connection_options
 
     @connection_options.setter
@@ -297,6 +305,7 @@ class StreamConfiguration(StreamConfigurationUI):
         self.pipeline = connection_options.get("pipeline")
         self.network_address = connection_options.get("url")
         self.webcam_device = connection_options.get("device_id")
+        self.avoid_transcoding = connection_options.get("transcode")
 
     @property
     def connection_type(self) -> ConnType:
