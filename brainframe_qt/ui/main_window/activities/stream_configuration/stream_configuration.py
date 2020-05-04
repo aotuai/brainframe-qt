@@ -47,6 +47,10 @@ class StreamConfiguration(StreamConfigurationUI):
         self.button_box.button(QDialogButtonBox.Reset).clicked.connect(
             self.reset_conf)
 
+        # GroupBox
+        self.stream_options.advanced_options.expansion_changed.connect(
+            self._show_relevant_options)
+
     def load_from_conf(
             self, stream_conf: Optional[codecs.StreamConfiguration]) -> None:
 
@@ -76,35 +80,13 @@ class StreamConfiguration(StreamConfigurationUI):
 
         self.disable_input_fields(False)
 
-    def connection_type_changed(self, index):
-        connection_type: Optional[ConnType] \
-            = self.connection_type_combobox.itemData(index)
+    def connection_type_changed(self, _index):
 
-        self.stream_options.setHidden(connection_type is None)
-        if connection_type is None:
+        self.stream_options.setHidden(self.connection_type is None)
+        if self.connection_type is None:
             return
 
-        self.stream_options.hide_all(True)
-
-        if connection_type is ConnType.IP_CAMERA:
-            self.stream_options.network_address_label.setVisible(True)
-            self.stream_options.network_address_line_edit.setVisible(True)
-            self.stream_options.advanced_options \
-                .keyframe_only_checkbox.setVisible(True)
-            self.stream_options.premises_label.setVisible(True)
-            self.stream_options.premises_combobox.setVisible(True)
-        elif connection_type is ConnType.WEBCAM:
-            self.stream_options.webcam_device_label.setVisible(True)
-            self.stream_options.webcam_device_line_edit.setVisible(True)
-        elif connection_type is ConnType.FILE:
-            self.stream_options.filepath_label.setVisible(True)
-            self.stream_options.file_selector.setVisible(True)
-            self.stream_options.advanced_options.avoid_transcoding_checkbox \
-                .setVisible(True)
-
-        self.stream_options.advanced_options.pipeline_label.setVisible(True)
-        self.stream_options.advanced_options.pipeline_line_edit \
-            .setVisible(True)
+        self._show_relevant_options()
 
     def reset_conf(self):
         self.load_from_conf(self._reset_stream_conf)
@@ -127,6 +109,32 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options.avoid_transcoding_checkbox.setDisabled(disable)
 
         advanced_options.setDisabled(True)
+
+    def _show_relevant_options(self):
+        self.stream_options.hide_all(True)
+
+        advanced_options = self.stream_options.advanced_options
+        advanced_options_visible = advanced_options.expanded
+
+        if self.connection_type is ConnType.IP_CAMERA:
+            self.stream_options.network_address_label.setVisible(True)
+            self.stream_options.network_address_line_edit.setVisible(True)
+            self.stream_options.premises_label.setVisible(True)
+            self.stream_options.premises_combobox.setVisible(True)
+            if advanced_options_visible:
+                advanced_options.keyframe_only_checkbox.setVisible(True)
+        elif self.connection_type is ConnType.WEBCAM:
+            self.stream_options.webcam_device_label.setVisible(True)
+            self.stream_options.webcam_device_line_edit.setVisible(True)
+        elif self.connection_type is ConnType.FILE:
+            self.stream_options.filepath_label.setVisible(True)
+            self.stream_options.file_selector.setVisible(True)
+            if advanced_options_visible:
+                advanced_options.avoid_transcoding_checkbox.setVisible(True)
+
+        if advanced_options_visible:
+            advanced_options.pipeline_label.setVisible(True)
+            advanced_options.pipeline_line_edit.setVisible(True)
 
     def validate_input(self) -> None:
         apply_button = self.button_box.button(QDialogButtonBox.Apply)
@@ -251,7 +259,6 @@ class StreamConfiguration(StreamConfigurationUI):
             self._reset_stream_conf = _enabled_stream_conf
 
         def start_analysis(sent_stream_conf: codecs.StreamConfiguration):
-
             def on_error(exc: BaseException):
                 self._handle_start_analysis_error(sent_stream_conf, exc)
 
