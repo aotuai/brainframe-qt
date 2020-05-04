@@ -108,7 +108,7 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options.pipeline_line_edit.setDisabled(disable)
         advanced_options.avoid_transcoding_checkbox.setDisabled(disable)
 
-        advanced_options.setDisabled(True)
+        advanced_options.setDisabled(disable)
 
     def _show_relevant_options(self):
         self.stream_options.hide_all(True)
