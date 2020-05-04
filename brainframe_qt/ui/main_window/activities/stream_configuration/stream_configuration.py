@@ -37,6 +37,7 @@ class StreamConfiguration(StreamConfigurationUI):
             self.stream_options.network_address_line_edit.textChanged,
             self.stream_options.advanced_options.toggled,
             self.stream_options.advanced_options.pipeline_line_edit.textChanged,
+            self.stream_options.advanced_options.keyframe_only_checkbox.toggled,
         ]:
             signal.connect(self.validate_input)
 
@@ -44,7 +45,7 @@ class StreamConfiguration(StreamConfigurationUI):
         self.button_box.button(QDialogButtonBox.Apply).clicked.connect(
             self._gather_and_send_stream_configuration)
         self.button_box.button(QDialogButtonBox.Reset).clicked.connect(
-            lambda _: self.reset_conf)
+            self.reset_conf)
 
     def load_from_conf(
             self, stream_conf: Optional[codecs.StreamConfiguration]) -> None:
@@ -125,9 +126,14 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options.pipeline_line_edit.setDisabled(disable)
         advanced_options.avoid_transcoding_checkbox.setDisabled(disable)
 
+        advanced_options.setDisabled(True)
+
     def validate_input(self) -> None:
         apply_button = self.button_box.button(QDialogButtonBox.Apply)
-        apply_button.setEnabled(self.inputs_valid)
+        reset_button = self.button_box.button(QDialogButtonBox.Reset)
+
+        apply_button.setEnabled(self.inputs_valid and self.fields_changed)
+        reset_button.setEnabled(self.fields_changed)
 
     @property
     def inputs_valid(self) -> bool:
@@ -250,13 +256,13 @@ class StreamConfiguration(StreamConfigurationUI):
                 self._handle_start_analysis_error(sent_stream_conf, exc)
 
             QTAsyncWorker(self, api.start_analyzing,
-                          f_args=(sent_stream_conf.id, ),
+                          f_args=(sent_stream_conf.id,),
                           on_success=on_success,
                           on_error=on_error) \
                 .start()
 
         QTAsyncWorker(self, api.set_stream_configuration,
-                      f_args=(stream_conf, ),
+                      f_args=(stream_conf,),
                       on_success=start_analysis,
                       on_error=self._handle_send_stream_conf_error) \
             .start()
@@ -275,7 +281,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if self.connection_type is not ConnType.FILE:
             return None
         if not self.advanced_options_enabled:
-            return None
+            return DefaultOptions.AVOID_TRANSCODING
 
         advanced_options = self.stream_options.advanced_options
         avoid_transcoding_cb = advanced_options.avoid_transcoding_checkbox
@@ -305,7 +311,8 @@ class StreamConfiguration(StreamConfigurationUI):
         self.pipeline = connection_options.get("pipeline")
         self.network_address = connection_options.get("url")
         self.webcam_device = connection_options.get("device_id")
-        self.avoid_transcoding = connection_options.get("transcode")
+        self.avoid_transcoding = connection_options.get(
+            "transcode", DefaultOptions.KEYFRAME_ONLY_STREAMING)
 
     @property
     def connection_type(self) -> ConnType:
@@ -315,6 +322,41 @@ class StreamConfiguration(StreamConfigurationUI):
     def connection_type(self, connection_type: ConnType) -> None:
         index = self.connection_type_combobox.findData(connection_type)
         self.connection_type_combobox.setCurrentIndex(index)
+
+    @property
+    def fields_changed(self) -> bool:
+        if self._reset_stream_conf is None:
+            return True
+
+        if self.stream_name != self._reset_stream_conf.name:
+            return True
+        if self.connection_type is not self._reset_stream_conf.connection_type:
+            return True
+
+        premises_id = self.premises.id if self.premises is not None else None
+        if premises_id != self._reset_stream_conf.premises_id:
+            return True
+
+        # Connection Options
+        connection_options = self._reset_stream_conf.connection_options
+        if self.pipeline != connection_options.get("pipeline"):
+            return True
+        if self.network_address != connection_options.get("url"):
+            return True
+        if self.webcam_device != connection_options.get("device_id"):
+            return True
+
+        # Runtime Options
+        runtime_options = self._reset_stream_conf.runtime_options
+        keyframes_only = runtime_options.get("keyframes_only")
+        if self.keyframe_only_streaming != keyframes_only:
+            return True
+
+        avoid_transcoding = runtime_options.get("transcode")
+        if self.avoid_transcoding != avoid_transcoding:
+            return True
+
+        return False
 
     @property
     def filepath(self) -> Optional[Path]:
@@ -327,7 +369,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if self.connection_type is not ConnType.IP_CAMERA:
             return None
         if not self.advanced_options_enabled:
-            return None
+            return DefaultOptions.KEYFRAME_ONLY_STREAMING
 
         advanced_options = self.stream_options.advanced_options
         keyframe_only_checkbox = advanced_options.keyframe_only_checkbox
@@ -394,7 +436,7 @@ class StreamConfiguration(StreamConfigurationUI):
             # TODO: Handle a premises that doesn't exist
             raise exc
 
-        QTAsyncWorker(self, api.get_premises, f_args=(premises_id, ),
+        QTAsyncWorker(self, api.get_premises, f_args=(premises_id,),
                       on_success=on_success,
                       on_error=on_error) \
             .start()
@@ -408,8 +450,9 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @runtime_options.setter
     def runtime_options(self, runtime_options: dict) -> None:
-        self.keyframe_only_streaming = runtime_options.get("keyframes_only",
-                                                           False)
+        self.keyframe_only_streaming = \
+            runtime_options.get("keyframes_only",
+                                DefaultOptions.KEYFRAME_ONLY_STREAMING)
 
     @property
     def stream_name(self) -> str:
@@ -476,7 +519,7 @@ class StreamConfiguration(StreamConfigurationUI):
             # Delete the stream configuration, since you almost never want to
             # have a stream that can't have analysis running
             QTAsyncWorker(self, api.delete_stream_configuration,
-                          f_args=(stream_conf.id, )) \
+                          f_args=(stream_conf.id,)) \
                 .start()
 
             message_title = self.tr("Error Opening Stream")
@@ -494,3 +537,8 @@ class StreamConfiguration(StreamConfigurationUI):
 
         else:
             raise exc
+
+
+class DefaultOptions:
+    AVOID_TRANSCODING: bool = False
+    KEYFRAME_ONLY_STREAMING: bool = False

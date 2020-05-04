@@ -614,74 +614,6 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="20"/>
-        <source>BrainFrame</source>
-        <translation>BrainFrame</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="78"/>
-        <source>Identity Configuration</source>
-        <translation>身份配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="81"/>
-        <source>Configure identities</source>
-        <translation>配置身份</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="86"/>
-        <source>Licenses</source>
-        <translation>授权</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="89"/>
-        <source>Open source licenses</source>
-        <translation>开源授权</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="94"/>
-        <source>Global Plugin Configuration</source>
-        <translation>全局插件配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="97"/>
-        <source>Edit the options for plugins and apply it to all streams that don&apos;t have specific options set already.</source>
-        <translation>编辑插件选项并将其应用于尚未设置特定选项的所有流。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="102"/>
-        <source>Render Configuration</source>
-        <translation>渲染配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="105"/>
-        <source>Configure client UI for videos</source>
-        <translation>配置视频的客户端界面</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="110"/>
-        <source>Server Configuration</source>
-        <translation>服务器配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="113"/>
-        <source>Configure the settings for the BrainFrame server</source>
-        <translation>配置BrainFrame服务器</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="118"/>
-        <source>Alarm Status</source>
-        <translation>警报状态</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="121"/>
-        <source>View ongoing and past alerts for alarms</source>
-        <translation>查看正在进行中的和过去的警报</translation>
-    </message>
-</context>
-<context>
     <name>OldStreamConfigurationDialog</name>
     <message>
         <location filename="../../main_window/activities/stream_configuration/old_stream_configuration.py" line="170"/>
@@ -899,52 +831,52 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="473"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="524"/>
         <source>Error Opening Stream</source>
         <translation type="unfinished">打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="225"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="231"/>
         <source>Error encountered while uploading video file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="429"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="480"/>
         <source>Stream source already open</source>
         <translation type="unfinished">视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="430"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="481"/>
         <source>You already have the stream source open.</source>
         <translation type="unfinished">您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="450"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="501"/>
         <source>Error: </source>
         <translation type="unfinished">错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="447"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="498"/>
         <source>Error encountered while opening stream</source>
         <translation type="unfinished">打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="448"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="499"/>
         <source>Is stream already open?</source>
         <translation type="unfinished">视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="449"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="500"/>
         <source>Is this a valid stream source?</source>
         <translation type="unfinished">这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="474"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="525"/>
         <source>Active Stream Limit Exceeded</source>
         <translation type="unfinished">视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="475"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="526"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation type="unfinished">您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
