@@ -16,6 +16,7 @@ from brainframe.client.api.codecs import (
 )
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.shared.codec_enums import IntersectionPointType
+from brainframe.client.ui.resources import settings
 
 
 class ConditionType(Enum):
@@ -68,13 +69,10 @@ class AlarmCreationDialog(QDialog):
             self.verify_inputs_valid)
         self.verify_inputs_valid()
 
-        # The timezone that the user enters times in
-        self.user_timezone = pendulum.now().timezone
-
         # Show the user's current timezone in the three-letter abbreviation
         # formation (PST, CST, UTC, etc)
         timezone_abbreviation = (pendulum.now()
-                                 .in_tz(self.user_timezone)
+                                 .in_tz(settings.get_user_timezone())
                                  .format("zz"))
         self.timezone_label.setText(f"({timezone_abbreviation})")
 
@@ -307,6 +305,7 @@ class AlarmCreationDialog(QDialog):
         """Converts the given time string to UTC, interpreting its time zone
         as the user's configured time zone.
         """
-        return (pendulum.parse(original_time, tz=self.user_timezone)
+        user_timezone = settings.get_user_timezone()
+        return (pendulum.parse(original_time, tz=user_timezone)
                 .in_tz(pendulum.UTC)
                 .format("HH:mm:ss"))
