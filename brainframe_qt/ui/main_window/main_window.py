@@ -69,9 +69,24 @@ class MainWindow(MainWindowUI):
             dock_widget.setWidget(stream_configuration_widget)
             self.dock_widgets.append(dock_widget)
 
+            stream_configuration_widget.stream_conf_deleted.connect(
+                self.close_stream_configuration)
+
         self.addDockWidget(Qt.RightDockWidgetArea, dock_widget)
 
         dock_widget.show()
 
         stream_configuration_widget = dock_widget.widget()
         stream_configuration_widget.load_from_conf(stream_conf)
+
+    def close_stream_configuration(self) -> None:
+
+        for dock_widget in self.dock_widgets:
+            if isinstance(dock_widget.widget(), StreamConfiguration):
+                break
+        else:
+            # Nothing to do
+            return
+
+        self.dock_widgets.remove(dock_widget)
+        dock_widget.close()

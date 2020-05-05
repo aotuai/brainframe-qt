@@ -1,9 +1,12 @@
+import string
 from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import Callable, List, Optional, Union
 
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
 from brainframe.client.api import api, api_errors, codecs
+from brainframe.client.api.zss_pubsub import zss_publisher
 from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
 from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
@@ -14,6 +17,8 @@ from brainframe.shared.codec_enums import ConnType
 
 
 class StreamConfiguration(StreamConfigurationUI):
+
+    stream_conf_deleted = pyqtSignal()
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -50,6 +55,11 @@ class StreamConfiguration(StreamConfigurationUI):
         # GroupBox
         self.stream_options.advanced_options.expansion_changed.connect(
             self._show_relevant_options)
+
+        # PubSub
+        stream_sub = zss_publisher.subscribe_streams(
+            self._handle_stream_stream)
+        self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
 
     def load_from_conf(
             self, stream_conf: Optional[codecs.StreamConfiguration]) -> None:
@@ -109,6 +119,23 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options.avoid_transcoding_checkbox.setDisabled(disable)
 
         advanced_options.setDisabled(disable)
+
+    def _handle_stream_stream(
+            self, stream_confs: List[codecs.StreamConfiguration]) \
+            -> None:
+
+        if self._reset_stream_conf is None:
+            return
+
+        stream_ids = [stream_conf.id for stream_conf in stream_confs]
+
+        print(self._reset_stream_conf.id, stream_ids)
+
+        if self._reset_stream_conf.id not in stream_ids:
+            self._reset_stream_conf = None
+            self._load_empty_conf()
+            self.setDisabled(True)
+            self.stream_conf_deleted.emit()
 
     def _show_relevant_options(self):
         self.stream_options.hide_all(True)
@@ -269,7 +296,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
             QTAsyncWorker(self, api.start_analyzing,
                           f_args=(sent_stream_conf.id,),
-                          on_success=on_success,
+                          on_success=lambda _: on_success(sent_stream_conf),
                           on_error=on_error) \
                 .start()
 
@@ -398,7 +425,8 @@ class StreamConfiguration(StreamConfigurationUI):
         if self.connection_type is not ConnType.IP_CAMERA:
             return None
 
-        return self.stream_options.network_address_line_edit.text()
+        network_address = self.stream_options.network_address_line_edit.text()
+        return network_address.strip(string.whitespace)
 
     @network_address.setter
     def network_address(self, network_address: Optional[str]) -> None:
@@ -412,7 +440,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         advanced_options = self.stream_options.advanced_options
         pipeline = advanced_options.pipeline_line_edit
-        return pipeline.text() or None
+        return pipeline.text().strip(string.whitespace) or None
 
     @pipeline.setter
     def pipeline(self, pipeline: Optional[str]) -> None:
@@ -468,7 +496,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def stream_name(self) -> str:
-        return self.stream_name_line_edit.text()
+        return self.stream_name_line_edit.text().strip(string.whitespace)
 
     @stream_name.setter
     def stream_name(self, stream_name: str) -> None:
@@ -478,7 +506,9 @@ class StreamConfiguration(StreamConfigurationUI):
     def webcam_device(self) -> Optional[str]:
         if self.connection_type is not ConnType.WEBCAM:
             return None
-        return self.stream_options.webcam_device_line_edit.text()
+
+        webcam_device = self.stream_options.webcam_device_line_edit.text()
+        return webcam_device.strip(string.whitespace)
 
     @webcam_device.setter
     def webcam_device(self, webcam_device: Optional[int]) -> None:
