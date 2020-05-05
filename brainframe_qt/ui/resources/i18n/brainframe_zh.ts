@@ -127,7 +127,7 @@ Read the manual to learn about the required directory structure.</source>
         <translation>至</translation>
     </message>
     <message>
-        <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="341"/>
+        <location filename="../../dialogs/alarm_creation/alarm_creation.ui" line="348"/>
         <source>Intersection Point</source>
         <translation>相交点</translation>
     </message>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>537</width>
-    <height>427</height>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -311,6 +311,13 @@
            <month>1</month>
            <day>1</day>
           </datetime>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="timezone_label">
+         <property name="text">
+          <string notr="true">[timezone]</string>
          </property>
         </widget>
        </item>
