@@ -1,11 +1,11 @@
 from pathlib import Path
 from typing import Callable, Optional
 
-from PyQt5.QtCore import (QObject, QStandardPaths, Qt, QCoreApplication,
+from PyQt5.QtCore import (QCoreApplication, QObject, QStandardPaths, Qt,
                           pyqtSlot)
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDialog, QDialogButtonBox,
-                             QFileDialog, QLineEdit, QProgressBar,
+                             QFileDialog, QLineEdit, QMessageBox, QProgressBar,
                              QProgressDialog, QPushButton)
 from PyQt5.uic import loadUi
 
@@ -137,6 +137,10 @@ class StreamConfigurationDialog(QDialog):
         if dialog.connection_type == StreamConfiguration.ConnType.FILE:
             # Kick off file uploading asynchronously
             filepath = Path(dialog.parameter_value.text())
+
+            if not filepath.is_file():
+                dialog._handle_missing_file_error(filepath)
+                return
 
             def on_file_uploaded(storage_id):
                 stream_conf.connection_options["storage_id"] = storage_id
@@ -354,6 +358,13 @@ class StreamConfigurationDialog(QDialog):
                       upload_video,
                       on_success=on_success_check_none,
                       on_error=on_error).start()
+
+    def _handle_missing_file_error(self, filepath: Path):
+        message_title = self.tr("Invalid file")
+        message_desc = self.tr(f"File does not exist or is a directory:<br>"
+                               f"{filepath}").format(filepath=filepath)
+
+        QMessageBox.information(self, message_title, message_desc)
 
 
 if __name__ == '__main__':

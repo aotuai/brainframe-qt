@@ -600,6 +600,34 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>OldStreamConfigurationDialog</name>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/old_stream_configuration.py" line="170"/>
+        <source>Camera web address</source>
+        <translation type="unfinished">摄像头地址</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/old_stream_configuration.py" line="176"/>
+        <source>Device ID</source>
+        <translation type="unfinished">设备编号</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/old_stream_configuration.py" line="182"/>
+        <source>Filepath</source>
+        <translation type="unfinished">文件路径</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/old_stream_configuration.py" line="261"/>
+        <source>Local Network</source>
+        <translation type="unfinished">本地网络</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/old_stream_configuration.py" line="294"/>
+        <source>Select video file</source>
+        <translation type="unfinished">选择视频文件</translation>
+    </message>
+</context>
+<context>
     <name>Paginator</name>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="62"/>
@@ -789,27 +817,27 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationDialog</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="170"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="174"/>
         <source>Camera web address</source>
         <translation>摄像头地址</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="176"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="180"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="182"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="186"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="294"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="298"/>
         <source>Select video file</source>
         <translation>选择视频文件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="123"/>
+        <location filename="../../main_window/activities/stream_configuration/old_stream_configuration.py" line="123"/>
         <source>Unrecognized connection type</source>
         <translation>无法识别的连接类型</translation>
     </message>
@@ -879,7 +907,7 @@ Please recheck the entered server address.</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="261"/>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="265"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
@@ -889,9 +917,19 @@ Please recheck the entered server address.</source>
         <translation>避免转码</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="319"/>
+        <location filename="../../main_window/activities/stream_configuration/old_stream_configuration.py" line="319"/>
         <source>Uploading {filepath}...</source>
         <translation>上传中{filepath}⋯⋯</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="364"/>
+        <source>File does not exist or is a directory:&lt;br&gt;{filepath}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="363"/>
+        <source>Invalid file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
