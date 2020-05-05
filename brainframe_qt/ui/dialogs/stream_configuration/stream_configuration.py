@@ -361,10 +361,11 @@ class StreamConfigurationDialog(QDialog):
 
     def _handle_missing_file_error(self, filepath: Path):
         message_title = self.tr("Invalid file")
-        message_desc = self.tr(f"File does not exist or is a directory:<br>"
-                               f"{filepath}").format(filepath=filepath)
+        message_desc = self.tr(f"File does not exist or is a directory:")
+        message = f"{message_desc}<br>" \
+                  f"{filepath}"
 
-        QMessageBox.information(self, message_title, message_desc)
+        QMessageBox.information(self, message_title, message)
 
 
 if __name__ == '__main__':
