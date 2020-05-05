@@ -1,6 +1,9 @@
 import sys
 
 from PyQt5.QtCore import QSettings
+import pendulum
+from pendulum.tz.timezone import Timezone
+
 
 _settings = QSettings(
     # MacOS uses internet domain instead of organization name
@@ -49,6 +52,11 @@ server_username = Setting(
 server_password = Setting(
     None, type_=bytes, name="server_password"
 )
+# Defines what timezone the user wants times to be displayed in. If this value
+# is an empty string, the current system timezone will be selected.
+user_timezone = Setting(
+    "", type_=str, name="user_timezone"
+)
 
 # License settings
 client_license_accepted = Setting(
@@ -75,3 +83,16 @@ show_attributes = Setting(
     True, type_=bool, name="video_show_attributes")
 show_extra_data = Setting(
     False, type_=bool, name="video_show_extra_data")
+
+
+def get_user_timezone() -> Timezone:
+    """Gets the timezone the user should be displayed times in as a Pendulum
+    timezone. By default, this is the system timezone.
+
+    :return: The currently configured timezone
+    """
+    if user_timezone.val() == "":
+        # Default to the current timezone
+        return pendulum.now().timezone
+    else:
+        return pendulum.timezone(user_timezone.val())

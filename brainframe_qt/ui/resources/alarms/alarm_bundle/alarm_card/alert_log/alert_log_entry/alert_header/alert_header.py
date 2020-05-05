@@ -111,7 +111,6 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         super().__init__(parent)
 
         self.alert = typing.cast(Alert, None)
-        self.timezone = "America/Los_Angeles"
 
         self._init_signals()
 
