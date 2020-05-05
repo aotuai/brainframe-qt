@@ -16,7 +16,7 @@
 <context>
     <name>AddNewIdentitiesWorker</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="46"/>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="52"/>
         <source>Unable to parse this directory!
 
 Reason:
@@ -31,9 +31,19 @@ Read the manual to learn about the required directory structure.</source>
 请阅读手册以了解目录结构格式。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="54"/>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="60"/>
         <source>Invalid Format</source>
         <translation>无效格式</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="171"/>
+        <source>Invalid directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="172"/>
+        <source>Directory does not exist or is a file:&lt;br&gt;{filepath}</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

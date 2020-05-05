@@ -1,7 +1,9 @@
+from pathlib import Path
 from typing import List, Set
 
+import typing
 from PyQt5.QtCore import QThread, QObject, pyqtSignal
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QWidget
 
 from brainframe.client.api import api, api_errors
 from brainframe.client.api.codecs import Identity
@@ -35,6 +37,10 @@ class AddNewIdentitiesWorker(QThread):
 
         # User canceled
         if path is None:
+            return
+
+        if not path.is_file():
+            self._handle_missing_dir_error(path)
             return
 
         # TODO: Error is excessively vague. Should be within the function
@@ -160,3 +166,10 @@ class AddNewIdentitiesWorker(QThread):
 
             # noinspection PyUnresolvedReferences
             self.identity_uploaded_signal.emit(identity)
+
+    def _handle_missing_dir_error(self, filepath: Path):
+        message_title = self.tr("Invalid directory")
+        message_desc = self.tr(f"Directory does not exist or is a file:<br>"
+                               f"{filepath}").format(filepath=filepath)
+        parent = typing.cast(QWidget, self.parent())
+        QMessageBox.information(parent, message_title, message_desc)
