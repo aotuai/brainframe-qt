@@ -191,6 +191,11 @@ class StreamConfiguration(StreamConfigurationUI):
         )
 
         if self.connection_type is ConnType.FILE:
+
+            if not Path(self.filepath).is_file():
+                self._handle_missing_file_error(self.filepath)
+                return
+
             def update_and_send(storage_id: Optional[int]):
                 # storage_id is None if the user canceled the upload
                 if storage_id is None:
@@ -544,6 +549,17 @@ class StreamConfiguration(StreamConfigurationUI):
 
         else:
             raise exc
+
+    def _handle_missing_file_error(self, filepath: Path):
+        message_title = self.tr("Error uploading file")
+        message_desc = self.tr("File does not exist")
+        message_info = self.tr("No such file: {filepath}") \
+            .format(filepath=filepath)
+        message = (f"<b>{message_desc}</b>"
+                   f"<br><br>"
+                   f"{message_info}")
+
+        QMessageBox.information(self, message_title, message)
 
 
 class DefaultOptions:
