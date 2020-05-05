@@ -21,9 +21,6 @@ thumbnail_grid_layout_ui   = route_path(thumbnail_grid_layout_dir , "thumbnail_g
 
 activity_dir               = route_path(main_window_dir           , "activities"               )
 
-stream_configuration_dir   = route_path(activity_dir              , "stream_configuration"     )
-stream_configuration_ui    = route_path(stream_configuration_dir  , "stream_configuration.ui"  )
-
 identity_configuration_dir = route_path(activity_dir              , "identity_configuration"   )
 identity_configuration_ui  = route_path(identity_configuration_dir, "identity_configuration.ui")
 identity_error_popup_dir   = route_path(identity_configuration_dir, "identity_error_popup"     )

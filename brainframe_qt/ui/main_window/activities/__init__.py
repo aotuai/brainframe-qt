@@ -1,2 +1,1 @@
 from .stream_configuration import StreamConfiguration
-from .stream_configuration.old_stream_configuration import OldStreamConfigurationDialog as StreamConfigurationOld
