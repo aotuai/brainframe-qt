@@ -129,8 +129,6 @@ class StreamConfiguration(StreamConfigurationUI):
 
         stream_ids = [stream_conf.id for stream_conf in stream_confs]
 
-        print(self._reset_stream_conf.id, stream_ids)
-
         if self._reset_stream_conf.id not in stream_ids:
             self._reset_stream_conf = None
             self._load_empty_conf()
