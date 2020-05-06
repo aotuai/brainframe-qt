@@ -75,21 +75,16 @@ class VideoThumbnailView(QWidget):
         self.alertless_streams_layout.expand_grid()
         self.alert_streams_layout.expand_grid()
 
-    @pyqtSlot(object)
-    def delete_stream_slot(self, stream_conf):
-        """Stream is being deleted
+    def delete_stream(self, stream_id: int):
+        """Delete a stream from the view"""
 
-        Connected to:
-        - VideoExpandedView -- QtDesigner
-          [peer].stream_delete_signal
-        """
         # Delete stream from alert widget if it is there
-        if stream_conf.id in self.alert_stream_ids:
-            self.remove_streams_from_alerts(stream_conf.id)
+        if stream_id in self.alert_stream_ids:
+            self.remove_streams_from_alerts(stream_id)
 
-        del self.all_stream_confs[stream_conf.id]
+        del self.all_stream_confs[stream_id]
 
-        video = self.alertless_streams_layout.pop_stream_widget(stream_conf.id)
+        video = self.alertless_streams_layout.pop_stream_widget(stream_id)
         video.deleteLater()
 
     @pyqtSlot(object, bool)
@@ -189,4 +184,4 @@ class VideoThumbnailView(QWidget):
             self.new_stream(stream_id)
 
         for stream_id in dead_stream_ids:
-            self.delete_stream_slot(self.all_stream_confs[stream_id])
+            self.delete_stream(stream_id)

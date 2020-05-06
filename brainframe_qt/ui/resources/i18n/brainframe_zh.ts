@@ -1054,7 +1054,7 @@ Please recheck the entered server address.</source>
         <translation>无警报的视频流：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="115"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="109"/>
         <source>Inconsistent state with alert widgets.</source>
         <translation></translation>
     </message>
