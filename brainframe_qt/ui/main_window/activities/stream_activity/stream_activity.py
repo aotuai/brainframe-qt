@@ -22,8 +22,6 @@ class StreamActivity(_StreamActivityUI, ExpandableMI):
 
         self.video_expanded_view.stream_delete_signal.connect(
             lambda: self.set_expanded(False))
-        self.video_expanded_view.stream_delete_signal.connect(
-            self.video_thumbnail_view.delete_stream_slot)
 
     def expand(self, expanding: bool):
         self.video_expanded_view.setVisible(expanding)

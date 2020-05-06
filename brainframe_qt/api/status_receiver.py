@@ -1,14 +1,13 @@
 import logging
-from threading import Thread
+from threading import RLock, Thread
 from time import sleep
-from typing import Dict, TYPE_CHECKING, Optional
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
 import requests
 
 from brainframe.client.api import api_errors, codecs
 from brainframe.client.api.stubs.zone_statuses import \
-    ZONE_STATUS_TYPE, ZONE_STATUS_STREAM_TYPE
-from brainframe.client.api.zss_pubsub import zss_publisher, ZSSTopic
+    ZONE_STATUS_STREAM_TYPE, ZONE_STATUS_TYPE
 
 if TYPE_CHECKING:
     from brainframe.client.api import API
@@ -32,6 +31,9 @@ class StatusReceiver(Thread):
         """
         super().__init__(name="StatusReceiverThread")
         self._api = api
+
+        self._listeners: List[Callable[[ZONE_STATUS_TYPE], Any]] = []
+        self._listener_lock = RLock()
 
         self._latest_statuses = {}
 
@@ -74,6 +76,10 @@ class StatusReceiver(Thread):
 
         self._running = False
 
+    def add_listener(self, listener: Callable[[ZONE_STATUS_TYPE], Any]):
+        with self._listener_lock:
+            self._listeners.append(listener)
+
     @property
     def is_running(self) -> bool:
         return self._running
@@ -81,30 +87,9 @@ class StatusReceiver(Thread):
     def _ingest_zone_statuses(self, zone_statuses: ZONE_STATUS_TYPE):
         self._latest_statuses = zone_statuses
 
-        streams = []
-        zones = []
-        alarms = []
-        alerts = []
-        for stream_id, zone in zone_statuses.items():
-
-            # MAJOR HACK. We want to send StreamConfiguration Codecs, but they
-            # aren't in the ZoneStatusStream, so I hack this
-            class StreamHack(object):
-                pass
-
-            stream = StreamHack()
-            stream.id = stream_id
-            streams.append(stream)
-
-            for zone_name, zone_status in zone.items():
-                zones.append(zone_status.zone)
-                alarms.extend(zone_status.zone.alarms)
-                alerts.extend(zone_status.alerts)
-
-        zss_publisher.publish({ZSSTopic.STREAMS: streams,
-                               ZSSTopic.ZONES: zones,
-                               ZSSTopic.ALARMS: alarms,
-                               ZSSTopic.ALERTS: alerts})
+        with self._listener_lock:
+            for listener in self._listeners:
+                listener(zone_statuses)
 
     # TODO: Remove usages of this
     def latest_statuses(self, stream_id: int) -> Dict[str, codecs.ZoneStatus]:

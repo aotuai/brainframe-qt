@@ -1,10 +1,13 @@
-import logging
+import typing
 from enum import Enum, auto
 from threading import RLock
 from typing import Callable, Dict, List, Set, Union
 
+from brainframe.client.api import api
 from brainframe.client.api.codecs import Alert, StreamConfiguration, Zone, \
     ZoneAlarm
+from brainframe.client.api.status_receiver import StatusReceiver
+from brainframe.client.api.stubs.zone_statuses import ZONE_STATUS_TYPE
 
 ZSSDatumType = Union[
     StreamConfiguration,
@@ -84,6 +87,8 @@ class _ZSSPubSub:
     def __init__(self):
         super().__init__()
 
+        self.status_receiver = typing.cast(StatusReceiver, None)
+
         self.subscriptions_lock = RLock()
         self.subscriptions: Dict[ZSSTopic, Set[Subscription]] = {
             ZSSTopic.STREAMS: set(),
@@ -123,8 +128,39 @@ class _ZSSPubSub:
                             #       f"QObject:\n\t{exc}"
                             # logging.error(msg)
 
-    def subscribe(self, topic, callback: Callable, filters=None) \
+    def _publish(self, zone_statuses: ZONE_STATUS_TYPE):
+        streams = []
+        zones = []
+        alarms = []
+        alerts = []
+
+        for stream_id, zone in zone_statuses.items():
+
+            # MAJOR HACK. We want to send StreamConfiguration Codecs, but they
+            # aren't in the ZoneStatusStream, so I hack this
+            class StreamHack(object):
+                pass
+
+            stream = StreamHack()
+            stream.id = stream_id
+            streams.append(stream)
+
+            for zone_name, zone_status in zone.items():
+                zones.append(zone_status.zone)
+                alarms.extend(zone_status.zone.alarms)
+                alerts.extend(zone_status.alerts)
+
+        self.publish({ZSSTopic.STREAMS: streams,
+                      ZSSTopic.ZONES: zones,
+                      ZSSTopic.ALARMS: alarms,
+                      ZSSTopic.ALERTS: alerts})
+
+    def subscribe(self, topic: ZSSTopic, callback: Callable, filters=None) \
             -> Subscription:
+
+        if self.status_receiver is None:
+            self.status_receiver = api.get_status_receiver()
+            self.status_receiver.add_listener(self._publish)
 
         subscription = Subscription(topic, callback, filters)
         with self.subscriptions_lock:
