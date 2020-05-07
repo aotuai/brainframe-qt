@@ -6,7 +6,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
 
-from brainframe.client.api.codecs import (
+from brainframe.api.codecs import (
     Attribute,
     Plugin,
     Zone,

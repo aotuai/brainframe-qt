@@ -4,8 +4,9 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QSizePolicy, \
     QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.client.api import api, api_errors
-from brainframe.client.api.codecs import StreamConfiguration
+from brainframe.client.api import api
+from brainframe.api import api_errors
+from brainframe.api.codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import AboutPage, AlarmView, \
     IdentityConfiguration, PluginConfigDialog, RenderConfiguration, \
     ServerConfigurationDialog, StreamConfigurationDialog

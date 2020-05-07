@@ -1,9 +1,8 @@
-import logging
 from enum import Enum, auto
 from threading import RLock
 from typing import Callable, Dict, List, Set, Union
 
-from brainframe.client.api.codecs import Alert, StreamConfiguration, Zone, \
+from brainframe.api.codecs import Alert, StreamConfiguration, Zone, \
     ZoneAlarm
 
 ZSSDatumType = Union[

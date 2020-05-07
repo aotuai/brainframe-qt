@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (QHeaderView, QPushButton, QStyleOptionViewItem,
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
-from brainframe.client.api.codecs import Zone, ZoneAlarm
+from brainframe.api.codecs import Zone, ZoneAlarm
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources
 from brainframe.client.ui.resources.paths import qt_ui_paths

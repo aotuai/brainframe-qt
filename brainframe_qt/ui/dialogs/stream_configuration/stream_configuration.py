@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDialog, QDialogButtonBox,
 from PyQt5.uic import loadUi
 
 from brainframe.client.api import api
-from brainframe.client.api.codecs import StreamConfiguration
+from brainframe.api.codecs import StreamConfiguration
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
     QTAsyncWorker, qt_resources

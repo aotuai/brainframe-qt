@@ -1,5 +1,7 @@
+from threading import RLock
+
 from brainframe.client.api.status_receiver import StatusReceiver
-from brainframe.client.api.codecs import StreamConfiguration
+from brainframe.api.codecs import StreamConfiguration
 from brainframe.shared.stream_reader import StreamReader
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.gstreamer import gobject_init
@@ -12,6 +14,10 @@ class StreamManager:
     necessary.
     """
 
+    _instance = None
+    """Holds the singleton instance of this class."""
+    _instance_lock = RLock()
+
     REHOSTED_VIDEO_TYPES = [StreamConfiguration.ConnType.WEBCAM,
                             StreamConfiguration.ConnType.FILE]
     """These video types are re-hosted by the server."""
@@ -22,6 +28,12 @@ class StreamManager:
         self._async_closing_streams = []
         """A list of StreamReader objects that are closing or may have finished
         closing"""
+
+    @classmethod
+    def get_instance(cls):
+        with cls._instance_lock:
+            if cls._instance is None:
+                self._instance = StreamManager()
 
     def start_streaming(self,
                         stream_config: StreamConfiguration,

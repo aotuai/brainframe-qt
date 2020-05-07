@@ -5,8 +5,9 @@ import typing
 from PyQt5.QtCore import QThread, QObject, pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from brainframe.client.api import api, api_errors
-from brainframe.client.api.codecs import Identity
+from brainframe.client.api import api
+from brainframe.api import api_errors
+from brainframe.api.codecs import Identity
 from brainframe.client.api.identities import FileTreeIdentityFinder
 from brainframe.client.api.identities import IdentityPrototype
 

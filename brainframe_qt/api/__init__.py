@@ -1,4 +1,4 @@
-from .api_stub import API
+from brainframe.api.api_stub import API
 
 
 class APIWrapper(API):

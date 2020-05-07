@@ -1,12 +1,13 @@
 import logging
-from threading import Thread
+from threading import Thread, RLock
 from time import sleep
 from typing import Dict, TYPE_CHECKING, Optional
 
 import requests
 
-from brainframe.client.api import api_errors, codecs
-from brainframe.client.api.stubs.zone_statuses import \
+from brainframe.api import api_errors
+from brainframe.api import codecs
+from brainframe.api.stubs.zone_statuses import \
     ZONE_STATUS_TYPE, ZONE_STATUS_STREAM_TYPE
 from brainframe.client.api.zss_pubsub import zss_publisher, ZSSTopic
 
@@ -18,12 +19,25 @@ class StatusReceiver(Thread):
     """This solves the problem that multiple UI elements will want to know the
     latest ZoneStatuses for any given stream."""
 
+    _instance = None
+    """The singleton instance of this class."""
+    _instance_lock = RLock()
+    """Used to prevent race conditions when initializing the singleton."""
+
     ZONE_STATUS_STREAM_TIMEOUT = 10
     """The timeout in seconds before reinitializing a connection to the server. 
     If none, the zonestatus stream will wait forever even if there are no 
     results, making the thread potentially never check if it should be 
     closing.
     """
+
+    @classmethod
+    def get_instance(cls, api: 'API') -> 'StatusReceiver':
+        with cls._instance_lock:
+            if cls._instance is None or not cls._instance.is_running():
+                cls._instance = StatusReceiver(api)
+
+            return cls._instance
 
     def __init__(self, api: 'API'):
         """

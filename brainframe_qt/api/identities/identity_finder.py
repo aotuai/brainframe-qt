@@ -3,8 +3,8 @@ from typing import Dict, List, Tuple
 from collections import defaultdict
 from abc import ABC, abstractmethod
 
-from brainframe.client.api.codecs import Identity
-from brainframe.client.api.api_stub import API
+from brainframe.api.codecs import Identity
+from brainframe.api.api_stub import API
 
 VECTOR = List[float]
 

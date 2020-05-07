@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QSizePolicy
 
 from brainframe.client.api import api
-from brainframe.client.api.codecs import Alert, ZoneAlarm, \
+from brainframe.api.codecs import Alert, ZoneAlarm, \
     ZoneAlarmCountCondition, ZoneAlarmRateCondition, Zone
 from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_qss_paths

@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QInputDialog,
                              QMessageBox)
 from PyQt5.uic import loadUi
 from brainframe.client.api import api
-from brainframe.client.api.codecs import StreamConfiguration, Zone
+from brainframe.api.codecs import StreamConfiguration, Zone
 from brainframe.client.ui.dialogs import AlarmCreationDialog
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths

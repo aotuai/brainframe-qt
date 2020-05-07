@@ -8,7 +8,8 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
 import brainframe
-from brainframe.client.api import api, api_errors
+from brainframe.client.api import api
+from brainframe.api import api_errors
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
 from brainframe.client.ui.dialogs import StandardError, VersionMismatch
 # noinspection PyUnresolvedReferences

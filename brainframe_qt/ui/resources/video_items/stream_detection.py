@@ -4,7 +4,7 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 
 from brainframe.client.api.detection_tracks import DetectionTrack
-from brainframe.client.api.codecs import Detection
+from brainframe.api.codecs import Detection
 from brainframe.client.ui.resources.video_items import (
     StreamLabelBox,
     StreamPolygon

@@ -7,7 +7,7 @@ from time import sleep
 
 import numpy as np
 
-from brainframe.client.api.codecs import ZoneStatus
+from brainframe.api.codecs import ZoneStatus
 from brainframe.client.api.detection_tracks import DetectionTrack
 from brainframe.client.api.status_receiver import StatusReceiver
 from brainframe.shared.constants import DEFAULT_ZONE_NAME

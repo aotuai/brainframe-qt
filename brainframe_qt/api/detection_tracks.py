@@ -4,7 +4,7 @@ from collections import deque
 
 import numpy as np
 
-from brainframe.client.api.codecs import Detection
+from brainframe.api.codecs import Detection
 
 DET_TSTAMP_TUPLE = Tuple[Detection, float]
 

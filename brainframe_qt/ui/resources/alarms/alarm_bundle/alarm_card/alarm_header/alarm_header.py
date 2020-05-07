@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QWidget, \
     QApplication
 
-from brainframe.client.api.codecs import ZoneAlarm
+from brainframe.api.codecs import ZoneAlarm
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths

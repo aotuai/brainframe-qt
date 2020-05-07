@@ -1,12 +1,12 @@
 import typing
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from PyQt5.QtCore import QMetaObject, Q_ARG, Qt, pyqtProperty, pyqtSlot, \
     QThread
 from PyQt5.QtWidgets import QFrame, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
 from brainframe.client.api import api
-from brainframe.client.api.codecs import Alert, ZoneAlarm
+from brainframe.api.codecs import Alert, ZoneAlarm
 from brainframe.client.api.zss_pubsub import zss_publisher
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 # TODO: Change to relative imports?

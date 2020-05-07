@@ -16,7 +16,7 @@
 <context>
     <name>AddNewIdentitiesWorker</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="52"/>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="53"/>
         <source>Unable to parse this directory!
 
 Reason:
@@ -31,17 +31,17 @@ Read the manual to learn about the required directory structure.</source>
 请阅读手册以了解目录结构格式。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="60"/>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="61"/>
         <source>Invalid Format</source>
         <translation>无效格式</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="171"/>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="172"/>
         <source>Invalid directory</source>
         <translation>无效目录</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="172"/>
+        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="173"/>
         <source>Directory does not exist or is a file:</source>
         <translation>目录不存在或为文件：</translation>
     </message>
@@ -262,17 +262,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="69"/>
+        <location filename="../../brainframe_app.py" line="70"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="92"/>
+        <location filename="../../brainframe_app.py" line="93"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="165"/>
+        <location filename="../../brainframe_app.py" line="166"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -544,47 +544,47 @@ Read the manual to learn about the required directory structure.</source>
         <translation>配置BrainFrame服务器</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="39"/>
+        <location filename="../../main_window/main_window.py" line="40"/>
         <source>Add new stream</source>
         <translation>添加新视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="185"/>
+        <location filename="../../main_window/main_window.py" line="186"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="149"/>
+        <location filename="../../main_window/main_window.py" line="150"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="150"/>
+        <location filename="../../main_window/main_window.py" line="151"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="189"/>
+        <location filename="../../main_window/main_window.py" line="190"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="186"/>
+        <location filename="../../main_window/main_window.py" line="187"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="187"/>
+        <location filename="../../main_window/main_window.py" line="188"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="188"/>
+        <location filename="../../main_window/main_window.py" line="189"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="174"/>
+        <location filename="../../main_window/main_window.py" line="175"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
@@ -599,12 +599,12 @@ Read the manual to learn about the required directory structure.</source>
         <translation>查看正在进行中的和过去的警报</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="175"/>
+        <location filename="../../main_window/main_window.py" line="176"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="96"/>
+        <location filename="../../main_window/main_window.py" line="97"/>
         <source>Error encountered while uploading video file</source>
         <translation>上传视频文件时发生错误</translation>
     </message>
@@ -706,41 +706,41 @@ Read the manual to learn about the required directory structure.</source>
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="42"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="43"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="98"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="100"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="103"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="105"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="86"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>

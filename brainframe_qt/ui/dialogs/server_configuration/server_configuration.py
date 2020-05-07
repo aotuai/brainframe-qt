@@ -1,12 +1,13 @@
 import logging
 
-from requests.exceptions import ConnectionError, InvalidSchema
+from requests.exceptions import ConnectionError
 
 from PyQt5.QtWidgets import QDialog, QLineEdit, QCheckBox, QDialogButtonBox, \
     QMessageBox
 from PyQt5.uic import loadUi
 
-from brainframe.client.api import api, api_errors
+from brainframe.client.api import api
+from brainframe.api import api_errors
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.shared.secret import decrypt, encrypt

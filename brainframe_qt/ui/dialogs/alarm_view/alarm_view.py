@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication, QDialog, QLayout, QVBoxLayout, \
     QWidget
 
 from brainframe.client.api import api
-from brainframe.client.api.codecs import StreamConfiguration, Zone, ZoneAlarm
+from brainframe.api.codecs import StreamConfiguration, Zone, ZoneAlarm
 from brainframe.client.api.zss_pubsub import zss_publisher
 from brainframe.client.ui.dialogs.alarm_view.alarm_view_ui import AlarmViewUI
 from brainframe.client.ui.resources.alarms.alarm_bundle import AlarmBundle
