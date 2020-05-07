@@ -169,7 +169,9 @@ class AddNewIdentitiesWorker(QThread):
 
     def _handle_missing_dir_error(self, filepath: Path):
         message_title = self.tr("Invalid directory")
-        message_desc = self.tr(f"Directory does not exist or is a file:<br>"
-                               f"{filepath}").format(filepath=filepath)
+        message_desc = self.tr(f"Directory does not exist or is a file:")
+        message = f"{message_desc}<br>" \
+                  f"{filepath}"
+
         parent = typing.cast(QWidget, self.parent())
-        QMessageBox.information(parent, message_title, message_desc)
+        QMessageBox.information(parent, message_title, message)
