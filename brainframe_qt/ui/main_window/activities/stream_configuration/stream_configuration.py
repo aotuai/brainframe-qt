@@ -24,6 +24,8 @@ class StreamConfiguration(StreamConfigurationUI):
         super().__init__(parent)
 
         self._reset_stream_conf: Optional[codecs.StreamConfiguration] = None
+        """Holds the loaded stream configuration to revert to when Reset button
+        is pressed"""
 
         self.validate_input()
 
@@ -78,7 +80,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         self.disable_input_fields(True)
 
-    def _load_empty_conf(self):
+    def _load_empty_conf(self) -> None:
 
         self.stream_name = ""
         self.connection_type = None
@@ -90,7 +92,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         self.disable_input_fields(False)
 
-    def connection_type_changed(self, _index):
+    def connection_type_changed(self, _index) -> None:
 
         self.stream_options.setHidden(self.connection_type is None)
         if self.connection_type is None:
@@ -98,7 +100,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         self._show_relevant_options()
 
-    def reset_conf(self):
+    def reset_conf(self) -> None:
         self.load_from_conf(self._reset_stream_conf)
 
     def disable_input_fields(self, disable: bool) -> None:
@@ -123,6 +125,8 @@ class StreamConfiguration(StreamConfigurationUI):
     def _handle_stream_stream(
             self, stream_confs: List[codecs.StreamConfiguration]) \
             -> None:
+        """Handles the stream of StreamConfiguration information from the
+        pubsub system"""
 
         if self._reset_stream_conf is None:
             return
@@ -135,7 +139,7 @@ class StreamConfiguration(StreamConfigurationUI):
             self.setDisabled(True)
             self.stream_conf_deleted.emit()
 
-    def _show_relevant_options(self):
+    def _show_relevant_options(self) -> None:
         self.stream_options.hide_all(True)
 
         advanced_options = self.stream_options.advanced_options
@@ -202,7 +206,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         return True
 
-    def _gather_and_send_stream_configuration(self):
+    def _gather_and_send_stream_configuration(self) -> None:
         if not self.inputs_valid:
             raise ValueError("Invalid stream configuration")
 
@@ -221,7 +225,7 @@ class StreamConfiguration(StreamConfigurationUI):
                 self._handle_missing_file_error(self.filepath)
                 return
 
-            def update_and_send(storage_id: Optional[int]):
+            def update_and_send(storage_id: Optional[int]) -> None:
                 # storage_id is None if the user canceled the upload
                 if storage_id is None:
                     return
@@ -235,7 +239,7 @@ class StreamConfiguration(StreamConfigurationUI):
             # No need to upload anything. Immediately send stream_conf
             self._send_stream_configuration(stream_conf)
 
-    def _upload_video(self, *, callback: Callable):
+    def _upload_video(self, *, callback: Callable) -> None:
         """Uploads a file to storage asynchronously, notifying the user of the
         upload progress using a QProgressDialog.
 
@@ -249,7 +253,7 @@ class StreamConfiguration(StreamConfigurationUI):
         reader.progress_signal.connect(progress_dialog.setValue)
         progress_dialog.canceled.connect(reader.cancel)
 
-        def upload():
+        def upload() -> Optional[int]:
             try:
                 with reader:
                     return api.new_storage(reader, "application/octet-stream")
@@ -309,7 +313,7 @@ class StreamConfiguration(StreamConfigurationUI):
         return self.stream_options.advanced_options.isChecked()
 
     @advanced_options_enabled.setter
-    def advanced_options_enabled(self, advanced_options_enabled: bool):
+    def advanced_options_enabled(self, advanced_options_enabled: bool) -> None:
         advanced_options = self.stream_options.advanced_options
         advanced_options.setChecked(advanced_options_enabled)
 
@@ -578,7 +582,7 @@ class StreamConfiguration(StreamConfigurationUI):
         else:
             raise exc
 
-    def _handle_missing_file_error(self, filepath: Path):
+    def _handle_missing_file_error(self, filepath: Path) -> None:
         message_title = self.tr("Error uploading file")
         message_desc = self.tr("File does not exist")
         message_info = self.tr("No such file: {filepath}") \

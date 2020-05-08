@@ -40,7 +40,7 @@ class FileUploadProgressDialog(QProgressDialog):
         self._update_label_text()
         self.setMaximum(filepath.stat().st_size)
 
-    def _update_label_text(self):
+    def _update_label_text(self) -> None:
         label_text = self.tr("Uploading {filepath}...") \
             .format(filepath=self.filepath)
         self.setLabelText(label_text)

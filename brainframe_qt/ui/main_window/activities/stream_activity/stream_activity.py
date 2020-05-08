@@ -6,6 +6,8 @@ from brainframe.client.ui.resources.mixins.display import ExpandableMI
 
 
 class StreamActivity(_StreamActivityUI, ExpandableMI):
+    """This widget holds the thumbnail and expanded video views"""
+
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 

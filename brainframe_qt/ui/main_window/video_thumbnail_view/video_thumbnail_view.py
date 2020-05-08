@@ -75,7 +75,7 @@ class VideoThumbnailView(QWidget):
         self.alertless_streams_layout.expand_grid()
         self.alert_streams_layout.expand_grid()
 
-    def delete_stream(self, stream_id: int):
+    def delete_stream(self, stream_id: int) -> None:
         """Delete a stream from the view"""
 
         # Delete stream from alert widget if it is there
@@ -165,6 +165,8 @@ class VideoThumbnailView(QWidget):
     def _handle_stream_stream(
             self, stream_confs: List[StreamConfiguration]) \
             -> None:
+        """Handles the stream of StreamConfiguration information from the
+        pubsub system"""
 
         if QThread.currentThread() != self.thread():
             # Move to the UI Thread

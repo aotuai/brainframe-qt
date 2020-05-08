@@ -94,9 +94,6 @@ class StreamConfigurationUI(QWidget):
         layout.addWidget(Line.h_line(self), 2, 0, 1, 2)
         layout.addWidget(self.stream_options, 3, 0, 1, 2)
 
-        # # Empty stretch row
-        # layout.setRowStretch(4, 1)
-
         layout.addWidget(self.button_box, 4, 0, 1, 2)
 
         self.stream_options.setHidden(True)

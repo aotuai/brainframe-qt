@@ -52,7 +52,7 @@ class MainWindowUI(QMainWindow):
 
         return toolbar
 
-    def _init_layout(self):
+    def _init_layout(self) -> None:
         self.setCentralWidget(self.stacked_widget)
         self.addToolBar(Qt.LeftToolBarArea, self.toolbar)
 
@@ -60,7 +60,7 @@ class MainWindowUI(QMainWindow):
         self.stacked_widget.addWidget(self.identity_activity)
         self.stacked_widget.addWidget(self.alert_activity)
 
-    def _init_style(self):
+    def _init_style(self) -> None:
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
 
