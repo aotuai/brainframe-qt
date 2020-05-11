@@ -286,7 +286,7 @@ class StreamConfiguration(StreamConfigurationUI):
             -> None:
 
         # Two stage QtAsyncWorker because we need to catch exceptions on both
-        # api_helpers.set_stream_configuration and api_helpers.start_analyzing, but the handler
+        # api.set_stream_configuration and api.start_analyzing, but the handler
         # for exceptions in the latter needs the result of the former.
 
         def on_success(_enabled_stream_conf: bfapi.StreamConfiguration):

@@ -107,7 +107,7 @@ class AlertLog(QWidget):
                                                 Dict[int, Zone]]):
 
             if alarms_and_zones is None:
-                # This occurs when a stream was deleted while the api_helpers call
+                # This occurs when a stream was deleted while the api call
                 # for getting alarms/zones was being called, or if a connection
                 # error occurred.
                 # We're relying on sync_alerts_with_server to clean up

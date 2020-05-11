@@ -35,7 +35,7 @@ class _QTAsyncAPIPubsub(QObject):
                                on_error=on_error)
         worker.start()
 
-    # @async_pubsub(api_helpers.set_alert_verification, zss_publisher.Topic.ALERTS)
+    # @async_pubsub(api.set_alert_verification, zss_publisher.Topic.ALERTS)
     # def set_alert_verification2(self, alert: Alert, verified_as: bool):
     #     alert.verified_as = verified_as
 

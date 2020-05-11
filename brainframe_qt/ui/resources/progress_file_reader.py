@@ -28,7 +28,7 @@ class ProgressFileReader(QObject):
     >>> reader = ProgressFileReader("/path/to/file")
     >>> # Connect process_signal to slots on a UI element
     >>> with reader:
-    >>>     api_helpers.new_storage(reader, "application/octet-stream")
+    >>>     api.new_storage(reader, "application/octet-stream")
     """
 
     progress_signal = pyqtSignal(int)
