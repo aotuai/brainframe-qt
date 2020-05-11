@@ -15,10 +15,6 @@ class StreamManager:
     necessary.
     """
 
-    _instance = None
-    """Holds the singleton instance of this class."""
-    _instance_lock = RLock()
-
     REHOSTED_VIDEO_TYPES = [StreamConfiguration.ConnType.WEBCAM,
                             StreamConfiguration.ConnType.FILE]
     """These video types are re-hosted by the server."""
