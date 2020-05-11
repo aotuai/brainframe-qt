@@ -20,10 +20,10 @@
         <file alias="new_stream">images/icons/new_stream.svg</file>
         <file alias="no_streams_for_alerts">images/icons/no_streams_for_alerts.svg</file>
         <file alias="person">images/icons/person.svg</file>
-        <file alias="stream_config">images/icons/project_file_stream_settings.svg</file>
         <file alias="question_mark">images/icons/question_mark.svg</file>
         <file alias="region">images/icons/region.svg</file>
         <file alias="server_config">images/icons/server_configuration.svg</file>
+        <file alias="client_config">images/icons/client_settings.svg</file>
         <file alias="settings_gear">images/icons/settings_gear.svg</file>
         <file alias="stream_plugin_config">images/icons/stream_plugin_config.svg</file>
         <file alias="trash">images/icons/trash.svg</file>
@@ -51,10 +51,9 @@
         <file alias="plugin_list_item">../dialogs/plugin_configuration/plugin_list/plugin_list_item/plugin_list_item.ui</file>
         <file alias="plugin_options">../dialogs/plugin_configuration/plugin_options/plugin_options.ui</file>
         <file alias="server_configuration">../dialogs/server_configuration/server_configuration.ui</file>
-        <file alias="stream_configuration">../dialogs/stream_configuration/stream_configuration.ui</file>
         <file alias="task_configuration">../dialogs/task_configuration/task_configuration.ui</file>
         <file alias="thumbnail_grid_layout">../main_window/video_thumbnail_view/thumbnail_grid_layout/thumbnail_grid_layout.ui</file>
-        <file alias="video_configuration">../dialogs/video_configuration/video_configuration.ui</file>
+        <file alias="client_configuration">../dialogs/client_configuration/client_configuration.ui</file>
         <file alias="video_expanded_view">../main_window/video_expanded_view/video_expanded_view.ui</file>
         <file alias="video_thumbnail_view">../main_window/video_thumbnail_view/video_thumbnail_view.ui</file>
         <file alias="zone_list">../dialogs/task_configuration/zone_list/zone_list.ui</file>

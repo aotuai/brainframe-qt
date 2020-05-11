@@ -1,0 +1,14 @@
+QToolBar {
+    qproperty-iconSize: 35px;
+    border: none;
+    background: #82c7a5;
+}
+
+QToolBar > QToolButton {
+    border: none;
+    border-radius: 4px;
+}
+
+QToolBar > QToolButton:hover {
+    background: #5fb78c;
+}

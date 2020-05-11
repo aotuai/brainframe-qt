@@ -4,9 +4,9 @@ from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QDialog, QLayout, QVBoxLayout, \
     QWidget
 
-from brainframe.client.api import api
+from brainframe.client.api_helpers import api
 from brainframe.api.codecs import StreamConfiguration, Zone, ZoneAlarm
-from brainframe.client.api.zss_pubsub import zss_publisher
+from brainframe.client.api_helpers.zss_pubsub import zss_publisher
 from brainframe.client.ui.dialogs.alarm_view.alarm_view_ui import AlarmViewUI
 from brainframe.client.ui.resources.alarms.alarm_bundle import AlarmBundle
 from brainframe.client.ui.resources.mixins.data_structure import IterableMI

@@ -61,7 +61,6 @@ class AlarmViewUI(QWidget):
 
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
 
         layout.addWidget(self.background_widget)
         layout.addWidget(self.scroll_area)

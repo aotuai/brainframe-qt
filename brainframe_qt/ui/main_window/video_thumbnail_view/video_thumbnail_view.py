@@ -1,14 +1,12 @@
-import logging
-from typing import Dict
+from typing import Dict, List
 
-# noinspection PyUnresolvedReferences
-from PyQt5.QtCore import QTimerEvent, pyqtProperty, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
-from requests.exceptions import RequestException
 
-from brainframe.client.api import api
-from brainframe.api.codecs import StreamConfiguration
+from brainframe.client.api_helpers import api
+from brainframe.api import StreamConfiguration
+from brainframe.client.api_helpers.zss_pubsub import zss_publisher
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
@@ -35,48 +33,20 @@ class VideoThumbnailView(QWidget):
         self.alert_stream_ids = set()
         """Streams IDs currently in the ThumbnailView with ongoing alerts"""
 
+        self._streams_being_added = set()
+        """Streams that are currently being added on another thread"""
+
         self.current_stream_id = None
         """Currently expanded stream. None if no stream selected"""
-
-        self.startTimer(1000)
 
         # Hide the alerts layout
         self.alert_streams_layout.hide()
 
-    def timerEvent(self, timer_event: QTimerEvent):
+        self._init_pubsub()
 
-        def func():
-            try:
-                stream_configurations = api.get_stream_configurations()
-                return stream_configurations
-            except RequestException as ex:
-                logging.error(f"Error while polling for stream "
-                              f"configurations: {ex}")
-                return None
-
-        def callback(stream_configurations):
-            if stream_configurations is None:
-                # An error occurred while fetching stream configurations
-                return
-
-            received_stream_ids = set()
-
-            # Get all current streams
-            for stream_conf in stream_configurations:
-
-                received_stream_ids.add(stream_conf.id)
-
-                if stream_conf.id not in self.all_stream_confs:
-                    # Create widgets for each
-                    self.new_stream(stream_conf)
-
-            current_stream_ids = self.all_stream_confs.keys()
-            dead_stream_ids = current_stream_ids - received_stream_ids
-
-            for stream_id in dead_stream_ids:
-                self.delete_stream_slot(self.all_stream_confs[stream_id])
-
-        QTAsyncWorker(self, func, on_success=callback).start()
+    def _init_pubsub(self) -> None:
+        sub = zss_publisher.subscribe_streams(self._handle_stream_stream)
+        self.destroyed.connect(lambda: zss_publisher.unsubscribe(sub))
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
@@ -105,21 +75,16 @@ class VideoThumbnailView(QWidget):
         self.alertless_streams_layout.expand_grid()
         self.alert_streams_layout.expand_grid()
 
-    @pyqtSlot(object)
-    def delete_stream_slot(self, stream_conf):
-        """Stream is being deleted
+    def delete_stream(self, stream_id: int) -> None:
+        """Delete a stream from the view"""
 
-        Connected to:
-        - VideoExpandedView -- QtDesigner
-          [peer].stream_delete_signal
-        """
         # Delete stream from alert widget if it is there
-        if stream_conf.id in self.alert_stream_ids:
-            self.remove_streams_from_alerts(stream_conf.id)
+        if stream_id in self.alert_stream_ids:
+            self.remove_streams_from_alerts(stream_id)
 
-        del self.all_stream_confs[stream_conf.id]
+        del self.all_stream_confs[stream_id]
 
-        video = self.alertless_streams_layout.pop_stream_widget(stream_conf.id)
+        video = self.alertless_streams_layout.pop_stream_widget(stream_id)
         video.deleteLater()
 
     @pyqtSlot(object, bool)
@@ -170,9 +135,55 @@ class VideoThumbnailView(QWidget):
         widget = self.alert_streams_layout.pop_stream_widget(stream_id)
         self.alertless_streams_layout.add_video(widget)
 
-    def new_stream(self, stream_conf):
+    def new_stream(self, stream_id: int) -> None:
         """Create a new stream widget and remember its ID"""
-        self.alertless_streams_layout.new_stream_widget(stream_conf)
 
-        # Store ID for each in set
-        self.all_stream_confs[stream_conf.id] = stream_conf
+        # Don't do anything if we're already in the process of adding this
+        # stream
+        if stream_id in self._streams_being_added:
+            return
+        else:
+            self._streams_being_added.add(stream_id)
+
+        def on_success(stream_conf):
+            self.alertless_streams_layout.new_stream_widget(stream_conf)
+
+            # Store ID for each in set
+            self.all_stream_confs[stream_conf.id] = stream_conf
+
+            self._streams_being_added.remove(stream_id)
+
+        def on_error(exc: BaseException):
+            self._streams_being_added.remove(stream_id)
+            raise exc
+
+        QTAsyncWorker(self, api.get_stream_configuration, f_args=(stream_id,),
+                      on_success=on_success, on_error=on_error) \
+            .start()
+
+    @pyqtSlot(object)
+    def _handle_stream_stream(
+            self, stream_confs: List[StreamConfiguration]) \
+            -> None:
+        """Handles the stream of StreamConfiguration information from the
+        pubsub system"""
+
+        if QThread.currentThread() != self.thread():
+            # Move to the UI Thread
+            QMetaObject.invokeMethod(self,
+                                     self._handle_stream_stream.__name__,
+                                     Qt.QueuedConnection,
+                                     Q_ARG("PyQt_PyObject", stream_confs))
+            return
+
+        received_stream_ids = {stream_conf.id for stream_conf in stream_confs}
+        current_stream_ids = self.all_stream_confs.keys()
+
+        new_stream_ids = received_stream_ids - current_stream_ids
+        dead_stream_ids = current_stream_ids - received_stream_ids
+
+        for stream_id in new_stream_ids:
+            self.new_stream(stream_id)
+
+        for stream_id in dead_stream_ids:
+            self.delete_stream(stream_id)

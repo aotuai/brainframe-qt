@@ -6,7 +6,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.uic import loadUi
 
-from brainframe.client.api import api
+from brainframe.client.api_helpers import api
 from brainframe.api import api_errors
 from brainframe.api.codecs import Alert, Zone, ZoneAlarm
 from brainframe.client.ui.resources import QTAsyncWorker
@@ -107,7 +107,7 @@ class AlertLog(QWidget):
                                                 Dict[int, Zone]]):
 
             if alarms_and_zones is None:
-                # This occurs when a stream was deleted while the api call
+                # This occurs when a stream was deleted while the api_helpers call
                 # for getting alarms/zones was being called, or if a connection
                 # error occurred.
                 # We're relying on sync_alerts_with_server to clean up

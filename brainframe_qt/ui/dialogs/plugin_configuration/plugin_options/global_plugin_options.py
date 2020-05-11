@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QGridLayout, QMessageBox
 
-from brainframe.client.api import api
+from brainframe.client.api_helpers import api
 
 from .base_plugin_options import BasePluginOptionsWidget
 

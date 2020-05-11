@@ -3,10 +3,10 @@ from typing import Callable
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QGraphicsView
 
-from brainframe.client.api import api
+from brainframe.client.api_helpers import api
 from brainframe.api import api_errors
 from brainframe.api.codecs import StreamConfiguration
-from brainframe.client.api.streaming import StreamListener, SyncedStreamReader
+from brainframe.client.api_helpers.streaming import StreamListener, SyncedStreamReader
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, settings
 from .stream_graphics_scene import StreamGraphicsScene

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>IdentityConfiguration</class>
+ <widget class="QWidget" name="IdentityConfiguration">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1487</width>
+    <height>975</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Identities</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="main_layout" stretch="1,3,1">
+     <item>
+      <widget class="IdentitySearchFilter" name="identity_search_filter"/>
+     </item>
+     <item>
+      <widget class="IdentityGridPaginator" name="identity_grid_paginator"/>
+     </item>
+     <item>
+      <widget class="IdentityInfo" name="identity_info"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="identity_upload_progress_bar">
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="format">
+      <string>Uploading Identities: %p%</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="identity_load_progress_bar">
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="format">
+      <string>Loading Identities: %p%</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>IdentityGridPaginator</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_grid_paginator.identity_grid_paginator</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>IdentitySearchFilter</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_search_filter.identity_search_filter</header>
+  </customwidget>
+  <customwidget>
+   <class>IdentityInfo</class>
+   <extends>QWidget</extends>
+   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_info.identity_info</header>
+  </customwidget>
+ </customwidgets>
+ <connections>
+  <connection>
+   <sender>identity_search_filter</sender>
+   <signal>filter_by_encoding_class_signal(QString)</signal>
+   <receiver>identity_grid_paginator</receiver>
+   <slot>set_encoding_class(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>121</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>identity_search_filter</sender>
+   <signal>filter_by_search_string_signal(QString)</signal>
+   <receiver>identity_grid_paginator</receiver>
+   <slot>set_search_string(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>297</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>identity_grid_paginator</sender>
+   <signal>identity_clicked_signal(PyQt_PyObject)</signal>
+   <receiver>identity_info</receiver>
+   <slot>display_identity_slot(PyQt_PyObject)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>850</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1235</x>
+     <y>128</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>display_new_identity(PyQt_PyObject)</signal>
+  <slot>show_identity_info_slot(PyQt_PyObject)</slot>
+ </slots>
+</ui>

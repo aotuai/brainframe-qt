@@ -12,7 +12,7 @@ from .option_items import (
     BoolOptionItem
 )
 from brainframe.shared.codec_enums import OptionType
-from brainframe.client.api import api
+from brainframe.client.api_helpers import api
 from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
 from brainframe.client.ui.resources.paths import qt_ui_paths
 

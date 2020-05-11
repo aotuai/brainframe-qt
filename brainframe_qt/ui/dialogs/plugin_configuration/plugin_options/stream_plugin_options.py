@@ -1,6 +1,6 @@
 from .base_plugin_options import BasePluginOptionsWidget
 
-from brainframe.client.api import api
+from brainframe.client.api_helpers import api
 
 
 class StreamPluginOptionsWidget(BasePluginOptionsWidget):

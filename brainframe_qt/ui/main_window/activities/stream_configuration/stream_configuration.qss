@@ -1,0 +1,8 @@
+StreamConfiguration {
+    min-width: 400px;
+}
+
+#stream_options {
+    /* Bold title */
+    font-weight: bold;
+}

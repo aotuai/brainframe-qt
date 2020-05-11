@@ -36,6 +36,11 @@ class ExpandableMI(BaseWidgetMixin):
         self.expand(expanded)
         self.expansion_changed.emit(expanded)
 
+    def set_expanded(self, expanded: bool) -> None:
+        """Equivalent to @expanded.setter, but as a convenience method for
+        lambdas"""
+        self.expanded = expanded
+
     def toggle_expansion(self):
         # noinspection PyPropertyAccess
         self.expanded = not self.expanded

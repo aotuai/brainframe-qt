@@ -2,6 +2,27 @@ from .all_resource_paths import route_path
 
 ui_dir = route_path("brainframe", "client", "ui")
 
+###############################################################################
+# Main Window
+###############################################################################
+
+# MainWindow
+main_window_dir = ui_dir / "main_window"
+main_window_qss = main_window_dir / "main_window.qss"
+
+# ToolBar
+toolbar_dir = main_window_dir / "toolbar"
+main_toolbar_qss = toolbar_dir / "main_toolbar.qss"
+
+# MainTabWidget
+main_tab_widget_dir = main_window_dir / "main_tab_widget"
+main_tab_widget_qss = main_tab_widget_dir / "main_tab_widget.qss"
+
+# Activities
+activity_dir = main_window_dir / "activities"
+stream_activity_qss = activity_dir / "stream_activity" / "stream_activity.qss"
+stream_configuration_qss = activity_dir / "stream_configuration" \
+                           / "stream_configuration.qss"
 
 ###############################################################################
 # Dialog
@@ -17,6 +38,18 @@ alarm_view_qss = route_path(alarm_view_dir / "alarm_view.qss")
 ###############################################################################
 
 resource_dir = route_path(ui_dir / "resources")
+
+# Widgets
+widget_resource_dir = resource_dir / "ui_elements" / "widgets"
+labeled_icon_qss = widget_resource_dir / "labeled_icon.qss"
+
+# Containers
+container_resource_dir = resource_dir / "ui_elements" / "containers"
+stacked_tab_widget_qss = container_resource_dir / "stacked_tab_widget.qss"
+
+###############################################################################
+# BrainFrame Resources
+###############################################################################
 
 # AlarmBundle
 alarm_bundle_dir = route_path(resource_dir / "alarms" / "alarm_bundle")

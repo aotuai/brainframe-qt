@@ -16,7 +16,7 @@
 <context>
     <name>AddNewIdentitiesWorker</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="53"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="52"/>
         <source>Unable to parse this directory!
 
 Reason:
@@ -31,17 +31,17 @@ Read the manual to learn about the required directory structure.</source>
 请阅读手册以了解目录结构格式。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="61"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="60"/>
         <source>Invalid Format</source>
         <translation>无效格式</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="172"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="171"/>
         <source>Invalid directory</source>
         <translation>无效目录</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_adder_worker.py" line="173"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="172"/>
         <source>Directory does not exist or is a file:</source>
         <translation>目录不存在或为文件：</translation>
     </message>
@@ -262,40 +262,98 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="70"/>
+        <location filename="../../brainframe_app.py" line="69"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="93"/>
+        <location filename="../../brainframe_app.py" line="92"/>
         <source>Successfully connected to server. Starting UI</source>
-        <translation>连接服务器成功，正在启动UI。</translation>
+        <translation>连接服务器成功，正在启动UI</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="166"/>
+        <location filename="../../brainframe_app.py" line="165"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
 </context>
 <context>
+    <name>ClientConfiguration</name>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="14"/>
+        <source>Client Configuration</source>
+        <translation>客户端配置</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="20"/>
+        <source>Show detections</source>
+        <translation>显示检测信息</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="48"/>
+        <source>Show labels</source>
+        <translation>显示标签</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="84"/>
+        <source>Use polygons when available</source>
+        <translation>在可用时使用多边形</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="97"/>
+        <source>Show attributes (e.g. gender/behavior for a person detection)</source>
+        <translation>显示属性（例如，人物检测的性别/行为）</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="104"/>
+        <source>Show tracking</source>
+        <translation>显示跟踪信息</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="111"/>
+        <source>Always use bounding boxes</source>
+        <translation>始终使用长方形检测框</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="121"/>
+        <source>Show recognition</source>
+        <translation>显示识别结果</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="137"/>
+        <source>Show regions</source>
+        <translation>显示区域</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="154"/>
+        <source>Show lines</source>
+        <translation>显示线段</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="58"/>
+        <source>Show extra data</source>
+        <translation>显示元数据 (Metadata)</translation>
+    </message>
+</context>
+<context>
     <name>DirectorySelector</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.ui" line="14"/>
+        <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.ui" line="14"/>
         <source>Select Identity Directory</source>
         <translation>选择身份目录</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.ui" line="26"/>
+        <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.ui" line="26"/>
         <source>Select Directory</source>
         <translation>选择目录</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.ui" line="39"/>
+        <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.ui" line="39"/>
         <source>Select a directory to load identities from:</source>
         <translation>从以下位置选择要加载标识的目录：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/directory_selector/directory_selector.py" line="41"/>
+        <location filename="../../main_window/activities/identity_configuration/directory_selector/directory_selector.py" line="41"/>
         <source>Select directory containing identities</source>
         <translation>选择包含标识的目录</translation>
     </message>
@@ -303,7 +361,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>EncodingEntry</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/encoding_list/encoding_entry/encoding_entry.ui" line="38"/>
+        <location filename="../../main_window/activities/identity_configuration/encoding_list/encoding_entry/encoding_entry.ui" line="38"/>
         <source>Encoding</source>
         <translation>编码</translation>
     </message>
@@ -311,14 +369,30 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>EncodingList</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/encoding_list/encoding_list.ui" line="49"/>
+        <location filename="../../main_window/activities/identity_configuration/encoding_list/encoding_list.ui" line="49"/>
         <source>Encoding Classes:</source>
         <translation>编码类：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/encoding_list/encoding_list.ui" line="68"/>
+        <location filename="../../main_window/activities/identity_configuration/encoding_list/encoding_list.ui" line="68"/>
         <source>None</source>
         <translation>空</translation>
+    </message>
+</context>
+<context>
+    <name>FileSelector</name>
+    <message>
+        <location filename="../ui_elements/widgets/file_selector.py" line="78"/>
+        <source>Select video file</source>
+        <translation>选择视频文件</translation>
+    </message>
+</context>
+<context>
+    <name>FileUploadProgressDialog</name>
+    <message>
+        <location filename="../ui_elements/widgets/file_upload_progress_dialog.py" line="44"/>
+        <source>Uploading {filepath}...</source>
+        <translation>上传中 {filepath}⋯⋯</translation>
     </message>
 </context>
 <context>
@@ -370,17 +444,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>IdentityConfiguration</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_configuration.ui" line="14"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_configuration.ui" line="14"/>
         <source>Identities</source>
         <translation>身份</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_configuration.ui" line="54"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_configuration.ui" line="51"/>
         <source>Uploading Identities: %p%</source>
         <translation>上传身份：％p％</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_configuration.ui" line="64"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_configuration.ui" line="61"/>
         <source>Loading Identities: %p%</source>
         <translation>加载身份：％p％</translation>
     </message>
@@ -388,22 +462,22 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>IdentityErrorPopup</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="14"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_error_popup/identity_error_popup.ui" line="14"/>
         <source>Identity Upload Summary</source>
         <translation>身份上传摘要</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="39"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_error_popup/identity_error_popup.ui" line="39"/>
         <source>Element</source>
         <translation>项目</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="44"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_error_popup/identity_error_popup.ui" line="44"/>
         <source>Error</source>
         <translation>错误信息</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_error_popup/identity_error_popup.ui" line="52"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_error_popup/identity_error_popup.ui" line="52"/>
         <source>Errors encountered during identity creation:</source>
         <translation>身份创建过程中遇到的错误：</translation>
     </message>
@@ -411,36 +485,36 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>IdentityInfo</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.ui" line="20"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.ui" line="20"/>
         <source>Unique Name:</source>
         <comment>Before setting</comment>
         <translation>唯一名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.ui" line="27"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.ui" line="27"/>
         <source>Nickname:</source>
         <comment>Before setting</comment>
         <translation>昵称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="81"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="81"/>
         <source>Unique Name: {}</source>
         <comment>After setting</comment>
         <translation>唯一名称：{}</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="83"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="83"/>
         <source>Nickname: {}</source>
         <comment>After setting</comment>
         <translation>昵称：{}</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="99"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="99"/>
         <source>Are you sure you want to delete all encodings with class {0} from identity for {1}?</source>
         <translation>您确定要从 {1} 的标识中删除所有带有类别为 {0} 的编码吗？</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_info/identity_info.py" line="102"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="102"/>
         <source>This operation cannot be undone.</source>
         <translation>此操作无法撤消。</translation>
     </message>
@@ -448,17 +522,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>IdentitySearchFilter</name>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.ui" line="46"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.ui" line="46"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
         <source>Are you sure you want to delete all encodings with class {} from the database?</source>
         <translation>您确定要从数据库中删除所有类别为{}的编码吗？</translation>
     </message>
     <message>
-        <location filename="../../dialogs/identity_configuration/identity_search_filter/identity_search_filter.py" line="104"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="104"/>
         <source>This operation cannot be undone.</source>
         <translation>此操作无法撤消。</translation>
     </message>
@@ -487,126 +561,46 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
+    <name>MainToolbar</name>
     <message>
-        <location filename="../../main_window/main_window.ui" line="20"/>
-        <source>BrainFrame</source>
-        <translation>BrainFrame</translation>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="12"/>
+        <source>Streams</source>
+        <translation>视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.ui" line="78"/>
-        <source>Identity Configuration</source>
-        <translation>身份配置</translation>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
+        <source>Identities</source>
+        <translation>身份</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.ui" line="81"/>
-        <source>Configure identities</source>
-        <translation>配置身份</translation>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
+        <source>Alerts</source>
+        <translation>警报</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.ui" line="86"/>
-        <source>Licenses</source>
-        <translation>授权</translation>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
+        <source>Tasks</source>
+        <translation>任务</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.ui" line="89"/>
-        <source>Open source licenses</source>
-        <translation>开源授权</translation>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
+        <source>Plugins</source>
+        <translation>插件配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.ui" line="94"/>
-        <source>Global Plugin Configuration</source>
-        <translation>全局插件配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="97"/>
-        <source>Edit the options for plugins and apply it to all streams that don&apos;t have specific options set already.</source>
-        <translation>编辑插件选项并将其应用于尚未设置特定选项的所有流。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="102"/>
-        <source>Render Configuration</source>
-        <translation>渲染配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="105"/>
-        <source>Configure client UI for videos</source>
-        <translation>配置视频的客户端界面</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="110"/>
-        <source>Server Configuration</source>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
+        <source>Server</source>
         <translation>服务器配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.ui" line="113"/>
-        <source>Configure the settings for the BrainFrame server</source>
-        <translation>配置BrainFrame服务器</translation>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
+        <source>About</source>
+        <translation>相关</translation>
     </message>
     <message>
-        <location filename="../../main_window/main_window.py" line="40"/>
-        <source>Add new stream</source>
-        <translation>添加新视频流</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="186"/>
-        <source>Error Opening Stream</source>
-        <translation>打开视频流时出错</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="150"/>
-        <source>Stream source already open</source>
-        <translation>视频流源已经打开</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="151"/>
-        <source>You already have the stream source open.</source>
-        <translation>您已经打开了视频流源。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="190"/>
-        <source>Error: </source>
-        <translation>错误： </translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="187"/>
-        <source>Error encountered while opening stream</source>
-        <translation>打开视频流时出错</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="188"/>
-        <source>Is stream already open?</source>
-        <translation>视频流是否已打开？</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="189"/>
-        <source>Is this a valid stream source?</source>
-        <translation>这是一个有效的视频流源吗？</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="175"/>
-        <source>Active Stream Limit Exceeded</source>
-        <translation>视频流数量超过上限</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="118"/>
-        <source>Alarm Status</source>
-        <translation>警报状态</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.ui" line="121"/>
-        <source>View ongoing and past alerts for alarms</source>
-        <translation>查看正在进行中的和过去的警报</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="176"/>
-        <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
-        <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/main_window.py" line="97"/>
-        <source>Error encountered while uploading video file</source>
-        <translation>上传视频文件时发生错误</translation>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
+        <source>Client</source>
+        <translation>客户端配置</translation>
     </message>
 </context>
 <context>
@@ -706,41 +700,41 @@ Read the manual to learn about the required directory structure.</source>
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="43"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="42"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="98"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="100"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="103"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="105"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="86"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
@@ -797,121 +791,104 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
-    <name>StreamConfigurationDialog</name>
+    <name>StreamConfiguration</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="174"/>
-        <source>Camera web address</source>
-        <translation>摄像头地址</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="569"/>
+        <source>Error Opening Stream</source>
+        <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="180"/>
-        <source>Device ID</source>
-        <translation>设备编号</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="273"/>
+        <source>Error encountered while uploading video file</source>
+        <translation>上传视频文件过程中发生了一个错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="186"/>
-        <source>Filepath</source>
-        <translation>文件路径</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="525"/>
+        <source>Stream source already open</source>
+        <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="298"/>
-        <source>Select video file</source>
-        <translation>选择视频文件</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="526"/>
+        <source>You already have the stream source open.</source>
+        <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="123"/>
-        <source>Unrecognized connection type</source>
-        <translation>无法识别的连接类型</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="546"/>
+        <source>Error: </source>
+        <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="26"/>
-        <source>New Stream</source>
-        <translation>新视频流</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="543"/>
+        <source>Error encountered while opening stream</source>
+        <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="57"/>
-        <source>Connection Type</source>
-        <translation>连接类型</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="544"/>
+        <source>Is stream already open?</source>
+        <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="70"/>
-        <source>Name</source>
-        <translation>名称</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="545"/>
+        <source>Is this a valid stream source?</source>
+        <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="98"/>
-        <source>IP Camera</source>
-        <translation>网络摄像头</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="570"/>
+        <source>Active Stream Limit Exceeded</source>
+        <translation>视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="103"/>
-        <source>Webcam</source>
-        <translation>摄像头</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="571"/>
+        <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
+        <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="108"/>
-        <source>File</source>
-        <translation>文件</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="586"/>
+        <source>Error uploading file</source>
+        <translation>上传文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="188"/>
-        <source>Select File</source>
-        <translation>选择文件</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="587"/>
+        <source>File does not exist</source>
+        <translation>文件不存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="225"/>
-        <source>Pipeline</source>
-        <translation>Pipeline</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="588"/>
+        <source>No such file: {filepath}</source>
+        <translation>没有这样的文件：{filepath}</translation>
     </message>
+</context>
+<context>
+    <name>StreamConfigurationUI</name>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="253"/>
-        <source>Keyframe-only streaming</source>
-        <translation>仅传输关键帧</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="202"/>
-        <source>None</source>
-        <translation>空</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="246"/>
-        <source>Advanced Options</source>
-        <translation>高级选项</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="175"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="69"/>
         <source>Stream Options</source>
         <translation>视频流选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="239"/>
-        <source>Premises</source>
-        <translation>场所</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="44"/>
+        <source>Stream Name</source>
+        <translation>视频流名称</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="265"/>
-        <source>Local Network</source>
-        <translation>本地网络</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="49"/>
+        <source>Connection Type</source>
+        <translation>连接类型</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.ui" line="195"/>
-        <source>Avoid transcoding</source>
-        <translation>避免转码</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="57"/>
+        <source>IP Camera</source>
+        <translation>网络摄像头</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="323"/>
-        <source>Uploading {filepath}...</source>
-        <translation>上传中{filepath}⋯⋯</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="58"/>
+        <source>Webcam</source>
+        <translation>摄像头</translation>
     </message>
     <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="364"/>
-        <source>File does not exist or is a directory:</source>
-        <translation>文件不存在或为目录：</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/stream_configuration/stream_configuration.py" line="363"/>
-        <source>Invalid file</source>
-        <translation>无效文件</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="59"/>
+        <source>Video File</source>
+        <translation>视频文件</translation>
     </message>
 </context>
 <context>
@@ -1037,84 +1014,31 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
-    <name>VideoConfiguration</name>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="14"/>
-        <source>Video Configuration</source>
-        <translation>视频配置</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="20"/>
-        <source>Show detections</source>
-        <translation>显示检测信息</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="48"/>
-        <source>Show labels</source>
-        <translation>显示标签</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="84"/>
-        <source>Use polygons when available</source>
-        <translation>在可用时使用多边形</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="97"/>
-        <source>Show attributes (e.g. gender/behavior for a person detection)</source>
-        <translation>显示属性（例如，人物检测的性别/行为）</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="104"/>
-        <source>Show tracking</source>
-        <translation>显示跟踪信息</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="111"/>
-        <source>Always use bounding boxes</source>
-        <translation>始终使用长方形检测框</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="121"/>
-        <source>Show recognition</source>
-        <translation>显示识别结果</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="137"/>
-        <source>Show regions</source>
-        <translation>显示区域</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="154"/>
-        <source>Show lines</source>
-        <translation>显示线段</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/video_configuration/video_configuration.ui" line="58"/>
-        <source>Show extra data</source>
-        <translation>显示元数据 (Metadata)</translation>
-    </message>
-</context>
-<context>
     <name>VideoExpandedView</name>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="117"/>
         <source>Task Config</source>
         <translation>任务选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="111"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
         <source>Stream Plugin Config</source>
         <translation>视频流插件配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="137"/>
         <source>Delete Stream</source>
         <translation>删除视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="53"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="57"/>
         <source>Close expanded video view</source>
         <translation>关闭扩展视频视图</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
+        <source>Stream Config</source>
+        <translation>视频流配置</translation>
     </message>
 </context>
 <context>
@@ -1130,7 +1054,7 @@ Please recheck the entered server address.</source>
         <translation>无警报的视频流：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="144"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="109"/>
         <source>Inconsistent state with alert widgets.</source>
         <translation></translation>
     </message>
@@ -1156,6 +1080,70 @@ Please recheck the entered server address.</source>
         <location filename="../video_items/stream_zone_status.py" line="70"/>
         <source>Alert!</source>
         <translation>警报！</translation>
+    </message>
+</context>
+<context>
+    <name>_AdvancedOptionsGroupBox</name>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="248"/>
+        <source>Pipeline</source>
+        <translation>Pipeline</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="260"/>
+        <source>Avoid transcoding</source>
+        <translation>避免转码</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="255"/>
+        <source>None</source>
+        <translation>空</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="266"/>
+        <source>Keyframe-only streaming</source>
+        <translation>仅传输关键帧</translation>
+    </message>
+</context>
+<context>
+    <name>_StreamActivityUI</name>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity_ui.py" line="35"/>
+        <source>Add new stream</source>
+        <translation>添加新视频流</translation>
+    </message>
+</context>
+<context>
+    <name>_StreamOptions</name>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="188"/>
+        <source>Advanced Options</source>
+        <translation>高级选项</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="154"/>
+        <source>Filepath</source>
+        <translation>文件路径</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="164"/>
+        <source>Premises</source>
+        <translation>场所</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="170"/>
+        <source>Local Network</source>
+        <translation>本地网络</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="134"/>
+        <source>Network address</source>
+        <translation>网络地址</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="144"/>
+        <source>Device ID</source>
+        <translation>设备编号</translation>
     </message>
 </context>
 <context>

@@ -3,8 +3,8 @@ from typing import Any, Dict
 
 from PyQt5.QtCore import QObject
 
-from brainframe.client.api import api
-from brainframe.client.api.zss_pubsub import zss_publisher, ZSSDataType, \
+from brainframe.client.api_helpers import api
+from brainframe.client.api_helpers.zss_pubsub import zss_publisher, ZSSDataType, \
     ZSSTopic
 from brainframe.api.codecs import Alert
 from brainframe.client.ui.resources import QTAsyncWorker
@@ -35,7 +35,7 @@ class _QTAsyncAPIPubsub(QObject):
                                on_error=on_error)
         worker.start()
 
-    # @async_pubsub(api.set_alert_verification, zss_publisher.Topic.ALERTS)
+    # @async_pubsub(api_helpers.set_alert_verification, zss_publisher.Topic.ALERTS)
     # def set_alert_verification2(self, alert: Alert, verified_as: bool):
     #     alert.verified_as = verified_as
 

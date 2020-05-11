@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 from requests.exceptions import RequestException
 
-from brainframe.client.api import api
+from brainframe.client.api_helpers import api
 from brainframe.api.codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import PluginConfigDialog, TaskConfiguration
 from brainframe.client.ui.resources import QTAsyncWorker
@@ -29,6 +29,9 @@ class VideoExpandedView(QWidget):
     stream_delete_signal = pyqtSignal(object)
     """Called when the user wants to delete a stream"""
 
+    open_stream_config_signal = pyqtSignal(object)
+    """Called when the user clicks the Stream Config button"""
+
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -39,6 +42,7 @@ class VideoExpandedView(QWidget):
         self.stream_conf = None
 
         self._init_ui()
+        self._init_signals()
 
         self.startTimer(1000)
 
@@ -53,6 +57,11 @@ class VideoExpandedView(QWidget):
         self.hide_button.setToolTip(self.tr("Close expanded video view"))
         # noinspection PyUnresolvedReferences
         self.hide_button.clicked.connect(self.expanded_stream_closed_slot)
+
+    def _init_signals(self):
+        self.stream_config_button.clicked.connect(
+            lambda: self.open_stream_config_signal.emit(self.stream_conf)
+        )
 
     def enterEvent(self, event: QEvent):
         self.hide_button.show()

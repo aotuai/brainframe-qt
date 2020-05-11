@@ -1,196 +1,92 @@
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QSizePolicy, \
-    QWidget
-from PyQt5.uic import loadUi
+from typing import List, Optional
 
-from brainframe.client.api import api
-from brainframe.api import api_errors
-from brainframe.api.codecs import StreamConfiguration
-from brainframe.client.ui.dialogs import AboutPage, AlarmView, \
-    IdentityConfiguration, PluginConfigDialog, RenderConfiguration, \
-    ServerConfigurationDialog, StreamConfigurationDialog
-# noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import qt_resources
-from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.ui.resources.ui_elements.buttons import \
-    FloatingActionButton
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QDockWidget, QWidget
+
+import brainframe.api as bfapi
+from brainframe.client.ui.dialogs.about_page.about_page import AboutPage
+from brainframe.client.ui.dialogs.plugin_configuration.plugin_config import \
+    PluginConfigDialog
+from brainframe.client.ui.dialogs.server_configuration.server_configuration import \
+    ServerConfigurationDialog
+from brainframe.client.ui.dialogs.client_configuration \
+    import RenderConfiguration
+from brainframe.client.ui.main_window.activities import StreamConfiguration
+from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
 
 
-class MainWindow(QMainWindow):
-    """Main window for entire UI"""
+class MainWindow(MainWindowUI):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
 
-        loadUi(qt_ui_paths.main_window_ui, self).show()
+        self.dock_widgets: List[QDockWidget] = []
 
-        self._init_ui()
+        self._init_signals()
 
-    def _init_ui(self):
+    def _init_signals(self):
 
-        self._setup_toolbar()
+        self._init_activity_signals()
+        self._init_dialog_signals()
 
-        add_new_stream_button = FloatingActionButton(
-            self.video_thumbnail_view,
-            self.palette().highlight())
-        add_new_stream_button.show()  # No idea why this is necessary
-        # noinspection PyUnresolvedReferences
-        add_new_stream_button.clicked.connect(self.add_new_stream_slot)
-        add_new_stream_button.setToolTip(self.tr("Add new stream"))
+        expanded_view = self.stream_activity.video_expanded_view
+        expanded_view.open_stream_config_signal.connect(
+            self.display_stream_configuration)
 
-        # Add a spacer to make the license button appear right justified
-        spacer = QWidget()
-        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.tool_bar.insertWidget(self.show_about_page_action, spacer)
+        self.stream_activity.new_stream_button.clicked.connect(
+            lambda _: self.display_stream_configuration())
 
-        # https://stackoverflow.com/a/43835396/8134178
-        # 1 : 3 width ratio when expanded
-        self.video_splitter.setSizes([self.width() / 3, self.width()])
+    def _init_activity_signals(self):
+        self.toolbar.stream_activity_action.triggered.connect(
+            lambda: self.stacked_widget.setCurrentWidget(self.stream_activity))
+        self.toolbar.identity_activity_action.triggered.connect(
+            lambda: self.stacked_widget.setCurrentWidget(
+                self.identity_activity))
+        self.toolbar.alert_view_activity_action.triggered.connect(
+            lambda: self.stacked_widget.setCurrentWidget(
+                self.alert_activity))
 
-        self.hide_video_expanded_view()
+    def _init_dialog_signals(self):
+        self.toolbar.client_config_action.triggered.connect(
+            lambda: RenderConfiguration.show_dialog(self))
+        self.toolbar.plugin_config_action.triggered.connect(
+            lambda: PluginConfigDialog.show_dialog(self))
+        self.toolbar.server_config_action.triggered.connect(
+            lambda: ServerConfigurationDialog.show_dialog(self))
+        self.toolbar.about_page_action.triggered.connect(
+            lambda: AboutPage.show_dialog(self))
 
-        # Add the Dilili logo to the bottom right
-        self.setStyleSheet(
-            f"#centralwidget {{"
-            f"    background-image: url(:/images/background_logo_svg);"
-            f"    background-position: right bottom;"
-            f"    background-repeat: no-repeat;"
-            f"}}")
+    def display_stream_configuration(
+            self, stream_conf: Optional[bfapi.StreamConfiguration] = None) \
+            -> None:
 
-    def _setup_toolbar(self):
-        # Add icons to buttons in toolbar
-        video_config_icon = QIcon(":/icons/video_settings")
-        identity_config_icon = QIcon(":/icons/settings_gear")
-        plugin_config_icon = QIcon(":/icons/global_plugin_config")
-        alert_status_icon = QIcon(":/icons/alert_view")
-        about_page_icon = QIcon(":/icons/info")
-        server_configuration_icon = QIcon(":/icons/server_config")
+        for dock_widget in self.dock_widgets:
+            if isinstance(dock_widget.widget(), StreamConfiguration):
+                break
+        else:
+            dock_widget = QDockWidget(self)
+            stream_configuration_widget = StreamConfiguration(self)
+            dock_widget.setWidget(stream_configuration_widget)
+            self.dock_widgets.append(dock_widget)
 
-        self.server_configuration_action.setIcon(server_configuration_icon)
-        self.video_configuration_action.setIcon(video_config_icon)
-        self.identity_configuration_action.setIcon(identity_config_icon)
-        self.plugin_configuration_action.setIcon(plugin_config_icon)
-        self.show_alert_view_action.setIcon(alert_status_icon)
-        self.show_about_page_action.setIcon(about_page_icon)
+            stream_configuration_widget.stream_conf_deleted.connect(
+                self.close_stream_configuration)
 
-    @pyqtSlot()
-    def show_video_expanded_view(self):
-        """Called by thumbnail_view when a thumbnail is clicked"""
-        self.video_expanded_view.setHidden(False)
+        self.addDockWidget(Qt.RightDockWidgetArea, dock_widget)
 
-    @pyqtSlot()
-    def hide_video_expanded_view(self):
-        """Called by expanded_view when expanded video is closed"""
-        self.video_expanded_view.setHidden(True)
+        dock_widget.show()
 
-    @pyqtSlot()
-    def show_server_configuration_dialog_slot(self):
-        ServerConfigurationDialog.show_dialog(self)
+        stream_configuration_widget = dock_widget.widget()
+        stream_configuration_widget.load_from_conf(stream_conf)
 
-    @pyqtSlot()
-    def add_new_stream_slot(self):
-        """Open dialog to add a new stream and then send it to the server"""
+    def close_stream_configuration(self) -> None:
 
-        def on_error(err):
-            message_title = self.tr("Error Opening Stream")
-            message_desc = self.tr(
-                "Error encountered while uploading video file")
-            message = (f"<b>{message_desc}</b>"
-                       f"<br><br>"
-                       f"{err}")
-            QMessageBox.information(self, message_title, message)
-
-        StreamConfigurationDialog.configure_stream(
-            on_success=lambda conf: self._create_stream(conf),
-            on_error=on_error,
-            parent=self)
-
-    @pyqtSlot()
-    def show_video_configuration_dialog(self):
-        RenderConfiguration.show_dialog(self)
-
-    @pyqtSlot()
-    def show_identities_dialog(self):
-        IdentityConfiguration.show_dialog(self)
-
-    @pyqtSlot()
-    def show_about_page_dialog(self):
-        AboutPage.show_dialog(self)
-
-    @pyqtSlot()
-    def show_global_plugin_config_dialog(self):
-        PluginConfigDialog.show_dialog(self)
-
-    @pyqtSlot()
-    def show_alert_view_dialog(self):
-        AlarmView.show_dialog(self)
-
-    def _create_stream(self, stream_conf: StreamConfiguration) -> None:
-        if stream_conf is None:
+        for dock_widget in self.dock_widgets:
+            if isinstance(dock_widget.widget(), StreamConfiguration):
+                break
+        else:
+            # Nothing to do
             return
-        try:
-            try:
-                stream_conf = api.set_stream_configuration(stream_conf)
 
-                # Currently, we default to setting all new streams as 'active'
-                api.start_analyzing(stream_conf.id)
-            except api_errors.BaseAPIError:
-                if stream_conf.connection_type == StreamConfiguration.ConnType.FILE \
-                        and "storage_id" in stream_conf.connection_options:
-                    # Clean up the video file if creating the stream or turning
-                    # on analysis failed
-                    api.delete_storage(
-                        stream_conf.connection_options["storage_id"])
-                raise
-
-            self.video_thumbnail_view.new_stream(stream_conf)
-        except api_errors.DuplicateStreamSourceError as err:
-            message_title = self.tr("Error Opening Stream")
-            message_desc = self.tr("Stream source already open")
-            message_info = self.tr("You already have the stream source open.")
-            error_text = self.tr("Error: ")
-            message = f"<b>{message_desc}</b>" \
-                      f"<br><br>" \
-                      f"{message_info}<br><br>" \
-                      f"{error_text}<b>{err.kind}</b>"
-
-            QMessageBox.information(self, message_title, message)
-        except api_errors.StreamNotOpenedError as err:
-            message_title = self.tr("Error Opening Stream")
-            message_desc = self.tr("Error encountered while opening stream")
-            error_text = self.tr("Error: ")
-            message = f"<b>{message_desc}</b>" \
-                      f"<br><br>" \
-                      f"{err}<br><br>" \
-                      f"{err.description}<br><br>" \
-                      f"{error_text}<b>{err.kind}</b>"
-            QMessageBox.information(self, message_title, message)
-        except api_errors.AnalysisLimitExceededError:
-            # Delete the stream configuration, since you almost never want to
-            # have a stream that can't have analysis running
-            api.delete_stream_configuration(stream_conf.id)
-
-            message_title = self.tr("Error Opening Stream")
-            message_desc = self.tr("Active Stream Limit Exceeded")
-            message_info1 = self.tr(
-                "You have exceeded the number of active streams available to "
-                "you under the terms of your license. Consider deleting "
-                "another stream or contacting Aotu to increase your "
-                "active stream limit.")
-            message = (f"<b>{message_desc}</b>"
-                       f"<br><br>"
-                       f"{message_info1}")
-            QMessageBox.information(self, message_title, message)
-        except api_errors.BaseAPIError as err:
-            message_title = self.tr("Error Opening Stream")
-            message_desc = self.tr("Error encountered while opening stream")
-            message_info1 = self.tr("Is stream already open?")
-            message_info2 = self.tr("Is this a valid stream source?")
-            error_text = self.tr("Error: ")
-            message = f"<b>{message_desc}</b>" \
-                      f"<br><br>" \
-                      f"{message_info1}<br>" \
-                      f"{message_info2}<br><br>" \
-                      f"{error_text}<b>{err.kind}</b>"
-            QMessageBox.information(self, message_title, message)
+        self.dock_widgets.remove(dock_widget)
+        dock_widget.close()
