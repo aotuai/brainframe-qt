@@ -108,3 +108,35 @@ class StreamManager:
         self._async_closing_streams.append(stream)
         stream.close()
         return stream
+
+
+class StreamManagerAPI(API):
+    """Augments the API class to manage and provide a StreamManager."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._stream_manager = None
+
+    def delete_stream_configuration(self, stream_id,
+                                    timeout=120):
+        super().delete_stream_configuration(stream_id, timeout)
+        if self._stream_manager is not None \
+                and self._stream_manager.is_streaming(stream_id):
+            self._stream_manager.close_stream_async(stream_id)
+
+    def get_stream_manager(self):
+        """Returns a singleton StreamManager object"""
+        # Lazily import streaming code to avoid OpenCV dependencies unless
+        # necessary
+        from brainframe.client.api_helpers.streaming import StreamManager
+
+        if self._stream_manager is None:
+            self._stream_manager = StreamManager(
+                self, self.get_status_receiver())
+        return self._stream_manager
+
+    def close(self):
+        super().close()
+        if self._stream_manager is not None:
+            self._stream_manager.close()
+            self._stream_manager = None

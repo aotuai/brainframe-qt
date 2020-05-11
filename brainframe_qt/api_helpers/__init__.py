@@ -1,17 +1,13 @@
 from brainframe.api.api_stub import API
-from .streaming import StreamManager
+from .streaming import StreamManager, StreamManagerAPI
 
 
-class APIWrapper(API):
+class APIWrapper(StreamManagerAPI):
     """Wrapped API object so that QtDesigner can initialize without API
     instance
 
     If _server_url is not set, it assumes that it is being used from QtDesigner
     """
-    def __init__(self):
-        super().__init__()
-        self._stream_manager = None
-
     def __getattribute__(self, item):
         """If __getattribute__ fails, this is called"""
 
@@ -56,16 +52,6 @@ class APIWrapper(API):
                 return rets[0]
 
         return mock_func
-
-    def get_stream_manager(self):
-        """Returns a singleton StreamManager object"""
-        # Lazily import streaming code to avoid OpenCV dependencies unless
-        # necessary
-        from brainframe.client.api_helpers.streaming import StreamManager
-
-        if self._stream_manager is None:
-            self._stream_manager = StreamManager(self.get_status_receiver())
-        return self._stream_manager
 
 
 # API instance that is later monkeypatched to be a singleton
