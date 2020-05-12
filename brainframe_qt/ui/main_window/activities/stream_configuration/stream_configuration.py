@@ -5,8 +5,8 @@ from typing import Callable, List, Optional, Union
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
-from brainframe.client.api_helpers import api
 import brainframe.api as bfapi
+from brainframe.client.api_helpers import api
 from brainframe.client.api_helpers.zss_pubsub import zss_publisher
 from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
@@ -18,7 +18,6 @@ from brainframe.shared.codec_enums import ConnType
 
 
 class StreamConfiguration(StreamConfigurationUI):
-
     stream_conf_deleted = pyqtSignal()
 
     def __init__(self, parent: QWidget):
@@ -211,7 +210,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if not self.inputs_valid:
             raise ValueError("Invalid stream configuration")
 
-        stream_conf = codecs.StreamConfiguration(
+        stream_conf = bfapi.StreamConfiguration(
             name=self.stream_name,
             connection_type=self.connection_type,
             connection_options=self.connection_options,
