@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QLineEdit, QMessageBox
 from PyQt5.uic import loadUi
 
-from brainframe.client.api_helpers import api
+from brainframe.client.api_utils import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources import QTAsyncWorker
 

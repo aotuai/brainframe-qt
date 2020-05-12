@@ -6,7 +6,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.uic import loadUi
 
-from brainframe.client.api_helpers import api
+from brainframe.client.api_utils import api
 from brainframe.api import api_errors
 from brainframe.api.codecs import Alert, Zone, ZoneAlarm
 from brainframe.client.ui.resources import QTAsyncWorker

@@ -6,8 +6,8 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
 import brainframe.api as bfapi
-from brainframe.client.api_helpers import api
-from brainframe.client.api_helpers.zss_pubsub import zss_publisher
+from brainframe.client.api_utils import api
+from brainframe.client.api_utils.zss_pubsub import zss_publisher
 from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
 from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \

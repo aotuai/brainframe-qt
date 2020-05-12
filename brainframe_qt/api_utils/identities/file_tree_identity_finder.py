@@ -4,7 +4,7 @@ from typing import List
 import ujson
 import logging
 
-from brainframe.client.api_helpers.identities.identity_finder import (
+from brainframe.client.api_utils.identities.identity_finder import (
     IdentityPrototype,
     IdentityFinder
 )

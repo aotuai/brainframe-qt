@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialogButtonBox, \
     QGridLayout, QGroupBox, \
     QLabel, QLineEdit, QSizePolicy, QWidget
 
-from brainframe.client.api_helpers import api
+from brainframe.client.api_utils import api
 from brainframe.api import Premises
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.mixins.display import ExpandableMI

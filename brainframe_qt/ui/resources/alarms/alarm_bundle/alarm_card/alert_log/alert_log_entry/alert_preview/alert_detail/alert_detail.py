@@ -4,7 +4,7 @@ from typing import List, Union, Tuple
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QSizePolicy
 
-from brainframe.client.api_helpers import api
+from brainframe.client.api_utils import api
 from brainframe.api.codecs import Alert, ZoneAlarm, \
     ZoneAlarmCountCondition, ZoneAlarmRateCondition, Zone
 from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker

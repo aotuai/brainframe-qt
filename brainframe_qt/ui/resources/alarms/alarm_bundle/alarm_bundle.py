@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, \
     QLayout, QSizePolicy, QApplication
 
 from brainframe.api.codecs import StreamConfiguration, ZoneAlarm, Zone
-from brainframe.client.api_helpers.zss_pubsub import zss_publisher
+from brainframe.client.api_utils.zss_pubsub import zss_publisher
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card \
     import AlarmCard

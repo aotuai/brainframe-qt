@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog, QLineEdit, QCheckBox, QDialogButtonBox, \
     QMessageBox
 from PyQt5.uic import loadUi
 
-from brainframe.client.api_helpers import api
+from brainframe.client.api_utils import api
 from brainframe.api import api_errors
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths

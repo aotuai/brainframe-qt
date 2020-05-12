@@ -4,9 +4,9 @@ from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.client.api_helpers import api
+from brainframe.client.api_utils import api
 from brainframe.api import StreamConfiguration
-from brainframe.client.api_helpers.zss_pubsub import zss_publisher
+from brainframe.client.api_utils.zss_pubsub import zss_publisher
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 

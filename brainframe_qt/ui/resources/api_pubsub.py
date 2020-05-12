@@ -3,8 +3,8 @@ from typing import Any, Dict
 
 from PyQt5.QtCore import QObject
 
-from brainframe.client.api_helpers import api
-from brainframe.client.api_helpers.zss_pubsub import zss_publisher, ZSSDataType, \
+from brainframe.client.api_utils import api
+from brainframe.client.api_utils.zss_pubsub import zss_publisher, ZSSDataType, \
     ZSSTopic
 from brainframe.api.codecs import Alert
 from brainframe.client.ui.resources import QTAsyncWorker

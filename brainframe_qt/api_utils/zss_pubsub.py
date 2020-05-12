@@ -3,7 +3,7 @@ from enum import Enum, auto
 from threading import RLock
 from typing import Callable, Dict, List, Set, Union
 
-from brainframe.client.api_helpers import api
+from brainframe.client.api_utils import api
 from brainframe.api import Alert, StreamConfiguration, Zone, ZoneAlarm, \
     ZONE_STATUS_TYPE
 from brainframe.api import StatusReceiver
