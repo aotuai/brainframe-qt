@@ -5,7 +5,7 @@ from typing import List, Union
 
 from PyQt5.QtCore import Qt, pyqtSlot, QThread, QMetaObject, Q_ARG
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, \
-    QLayout, QSizePolicy
+    QLayout, QSizePolicy, QApplication
 
 from brainframe.api.codecs import StreamConfiguration, ZoneAlarm, Zone
 from brainframe.client.api_helpers.zss_pubsub import zss_publisher
@@ -207,7 +207,6 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
 
 if __name__ == '__main__':
     import typing
-    from PyQt5.QtWidgets import QApplication
 
     # noinspection PyArgumentList
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
