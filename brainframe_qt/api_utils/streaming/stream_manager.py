@@ -19,24 +19,12 @@ class StreamManager:
                             StreamConfiguration.ConnType.FILE]
     """These video types are re-hosted by the server."""
 
-    def __init__(self, api: API, status_receiver: StatusReceiver):
-        self._api = api
+    def __init__(self, status_receiver: StatusReceiver):
         self._stream_readers = {}
         self._status_receiver = status_receiver
         self._async_closing_streams = []
         """A list of StreamReader objects that are closing or may have finished
         closing"""
-
-    def get_stream_reader(self, stream_config: StreamConfiguration):
-        """Get the SyncedStreamReader for the given stream_configuration.
-
-        :param stream_config: The stream configuration to open.
-        :return: A SyncedStreamReader object
-        """
-        url = self._api.get_stream_url(stream_config.id)
-        logging.info("API: Opening stream on url " + url)
-
-        return self.start_streaming(stream_config, url)
 
     def start_streaming(self,
                         stream_config: StreamConfiguration,
@@ -131,9 +119,19 @@ class StreamManagerAPI(API):
         from brainframe.client.api_utils.streaming import StreamManager
 
         if self._stream_manager is None:
-            self._stream_manager = StreamManager(
-                self, self.get_status_receiver())
+            self._stream_manager = StreamManager(self.get_status_receiver())
         return self._stream_manager
+
+    def get_stream_reader(self, stream_config: StreamConfiguration):
+        """Get the SyncedStreamReader for the given stream_configuration.
+
+        :param stream_config: The stream configuration to open.
+        :return: A SyncedStreamReader object
+        """
+        url = self.get_stream_url(stream_config.id)
+        logging.info("API: Opening stream on url " + url)
+
+        return self.get_stream_manager().start_streaming(stream_config, url)
 
     def close(self):
         super().close()
