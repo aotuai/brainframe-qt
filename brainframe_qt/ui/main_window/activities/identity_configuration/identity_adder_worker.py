@@ -39,7 +39,7 @@ class AddNewIdentitiesWorker(QThread):
         if path is None:
             return
 
-        if not path.is_file():
+        if not path.is_dir():
             self._handle_missing_dir_error(path)
             return
 
