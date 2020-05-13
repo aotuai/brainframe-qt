@@ -7,8 +7,7 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QAbstractButton, QButtonGroup, QFrame, \
     QHBoxLayout, QLabel, QSizePolicy, QWidget
 
-from brainframe.api import api_errors
-from brainframe.api.codecs import Alert
+from brainframe.api import BaseAPIError, Alert, AlertNotFoundError
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.api_pubsub import async_api_pubsub
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
@@ -159,7 +158,7 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
 
         self._set_ui_verification(verification_override=verification)
 
-        def handle_set_verification_error(error: api_errors.BaseAPIError):
+        def handle_set_verification_error(error: BaseAPIError):
 
             self._set_ui_verification()
 
@@ -168,7 +167,7 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
                             "The value has been reverted on the client.")
 
             # Reset to the current stored state
-            if isinstance(error, api_errors.AlertNotFoundError):
+            if isinstance(error, AlertNotFoundError):
                 # TODO: Delete entry? Wait for AlertLog to clean up?
                 pass
             else:

@@ -1,4 +1,4 @@
-from brainframe.api.api_stub import API
+from brainframe.api import API
 from .streaming import StreamManager, StreamManagerAPI
 
 

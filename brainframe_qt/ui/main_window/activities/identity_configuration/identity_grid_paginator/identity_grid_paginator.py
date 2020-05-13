@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
 from brainframe.client.api_utils import api
-from brainframe.api.codecs import Identity
+from brainframe.api import Identity
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.ui_elements.containers import Paginator
 

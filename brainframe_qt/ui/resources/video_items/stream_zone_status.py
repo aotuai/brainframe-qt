@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 
-from brainframe.api import codecs
+from brainframe.api import ZoneStatus
 from brainframe.client.ui.resources.video_items import StreamPolygon, \
     StreamLabelBox
 
@@ -13,7 +13,7 @@ class ZoneStatusPolygon(StreamPolygon):
     NORMAL_COLOR = QColor(0, 255, 125)
     ALERTING_COLOR = QColor(255, 125, 0)
 
-    def __init__(self, status: codecs.ZoneStatus, text_size, *,
+    def __init__(self, status: ZoneStatus, text_size, *,
                  border_thickness=1, parent=None):
 
         # Find the top-left point of the zone

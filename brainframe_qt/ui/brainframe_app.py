@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QApplication, QMessageBox
 
 import brainframe
 from brainframe.client.api_utils import api
-from brainframe.api import api_errors
+from brainframe.api import BaseAPIError
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
 from brainframe.client.ui.dialogs import StandardError, VersionMismatch
 # noinspection PyUnresolvedReferences
@@ -109,7 +109,7 @@ class BrainFrameApplication(QApplication):
             # Close the client if the exception was thrown in another thread,
             # or if it was not an BaseAPIError
             close_client = other_thread \
-                           or not isinstance(exc_obj, api_errors.BaseAPIError)
+                           or not isinstance(exc_obj, BaseAPIError)
 
             StandardError.show_error(exc_type, exc_obj, exc_tb, close_client)
         else:

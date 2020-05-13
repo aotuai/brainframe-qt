@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QMessageBox
 from PyQt5.uic import loadUi
 
 from brainframe.client.api_utils import api
-from brainframe.api.codecs import Identity, Encoding
+from brainframe.api import Identity, Encoding
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 

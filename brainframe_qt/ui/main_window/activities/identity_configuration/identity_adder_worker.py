@@ -6,7 +6,7 @@ from PyQt5.QtCore import QThread, QObject, pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
 from brainframe.client.api_utils import api
-from brainframe.api import api_errors, Identity
+import brainframe.api as bfapi
 from brainframe.client.api_utils.identities import FileTreeIdentityFinder
 from brainframe.client.api_utils.identities import IdentityPrototype
 
@@ -78,7 +78,7 @@ class AddNewIdentitiesWorker(QThread):
         while self.identity_prototypes:
             prototype = self.identity_prototypes.pop()
 
-            identity = Identity(
+            identity = bfapi.Identity(
                 unique_name=prototype.unique_name,
                 nickname=prototype.nickname,
                 metadata={})
@@ -87,7 +87,7 @@ class AddNewIdentitiesWorker(QThread):
 
             try:
                 identity = api.set_identity(identity)
-            except api_errors.DuplicateIdentityNameError:
+            except bfapi.DuplicateIdentityNameError:
                 # Identity already exists
                 identities, _ = api.get_identities(
                     unique_name=prototype.unique_name
@@ -96,7 +96,7 @@ class AddNewIdentitiesWorker(QThread):
 
                 # This error is a warning. Don't show it to user
                 pass
-            except api_errors.BaseAPIError as err:
+            except bfapi.BaseAPIError as err:
                 identity_error.error = err.kind
 
             # Associate images with the identity
@@ -113,12 +113,12 @@ class AddNewIdentitiesWorker(QThread):
                             class_name,
                             image_id)
 
-                    except (api_errors.NoEncoderForClassError,
-                            api_errors.NoDetectorForClassError) as err:
+                    except (bfapi.NoEncoderForClassError,
+                            bfapi.NoDetectorForClassError) as err:
                         class_name_error.error = err.kind
-                    except api_errors.ImageAlreadyEncodedError:
+                    except bfapi.ImageAlreadyEncodedError:
                         pass
-                    except api_errors.BaseAPIError as err:
+                    except bfapi.BaseAPIError as err:
                         image_error = IdentityError(image_name.name,
                                                     err.pretty_name)
                         class_name_error.children.add(image_error)
@@ -145,11 +145,11 @@ class AddNewIdentitiesWorker(QThread):
                                                 class_name,
                                                 vector)
 
-                    except api_errors.NoEncoderForClassError as err:
+                    except bfapi.NoEncoderForClassError as err:
                         class_name_error.error = err.kind
-                    except api_errors.DuplicateVectorError:
+                    except bfapi.DuplicateVectorError:
                         pass
-                    except api_errors.BaseAPIError as err:
+                    except bfapi.BaseAPIError as err:
                         image_error = IdentityError(file_name.name,
                                                     err.pretty_name)
                         class_name_error.children.add(image_error)

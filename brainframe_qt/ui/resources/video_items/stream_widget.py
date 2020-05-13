@@ -4,11 +4,13 @@ from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.client.api_utils import api
-from brainframe.api import api_errors
-from brainframe.api.codecs import StreamConfiguration
-from brainframe.client.api_utils.streaming import StreamListener, SyncedStreamReader
+from brainframe.api import StreamConfiguration, StreamConfigNotFoundError, \
+    StreamNotOpenedError
+from brainframe.client.api_utils.streaming import StreamListener, \
+    SyncedStreamReader
 # noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, settings
+from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
+    settings
 from .stream_graphics_scene import StreamGraphicsScene
 
 
@@ -120,8 +122,7 @@ class StreamWidget(QGraphicsView):
         def get_stream_url():
             try:
                 return api.get_stream_url(stream_conf.id)
-            except (api_errors.StreamConfigNotFoundError,
-                    api_errors.StreamNotOpenedError):
+            except (StreamConfigNotFoundError, StreamNotOpenedError):
                 return None
 
         def subscribe_to_stream_reader(stream_url: str):
