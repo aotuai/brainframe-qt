@@ -1,4 +1,6 @@
-from PyQt5.QtCore import Qt
+import functools
+
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QHBoxLayout, QSplitter, QWidget
 
 from brainframe.client.ui.main_window.video_expanded_view.video_expanded_view import \
@@ -43,7 +45,7 @@ class _StreamActivityUI(QWidget):
 
     def _init_video_expanded_view(self) -> VideoExpandedView:
         video_expanded_view = VideoExpandedView(self)
-        video_expanded_view.setHidden(True)
+        video_expanded_view.hide()
         return video_expanded_view
 
     def _init_layout(self) -> None:
@@ -52,6 +54,15 @@ class _StreamActivityUI(QWidget):
         layout.addWidget(self.splitter)
         self.splitter.addWidget(self.video_thumbnail_view)
         self.splitter.addWidget(self.video_expanded_view)
+
+        # https://stackoverflow.com/a/43835396/8134178
+        # 1 : 3 width ratio when expanded
+        # I do this in a single-shot so that .width() can calculate after sizes
+        # have been initialized
+        set_splitter_sizes = functools.partial(
+            self.splitter.setSizes,
+            [.25 * self.width(), .75 * self.width()])
+        QTimer.singleShot(0, set_splitter_sizes)
 
         self.setLayout(layout)
 

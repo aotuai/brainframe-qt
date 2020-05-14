@@ -19,6 +19,9 @@ from brainframe.shared.codec_enums import ConnType
 class StreamConfiguration(StreamConfigurationUI):
 
     stream_conf_deleted = pyqtSignal()
+    stream_conf_modified = pyqtSignal(codecs.StreamConfiguration)
+    """Sent when a new or modified stream_conf has been sent to, and accepted
+    by, the server"""
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -288,9 +291,11 @@ class StreamConfiguration(StreamConfigurationUI):
         # api.set_stream_configuration and api.start_analyzing, but the handler
         # for exceptions in the latter needs the result of the former.
 
-        def on_success(_enabled_stream_conf: codecs.StreamConfiguration):
+        def on_success(enabled_stream_conf: codecs.StreamConfiguration):
             self.disable_input_fields(True)
-            self._reset_stream_conf = _enabled_stream_conf
+            self._reset_stream_conf = enabled_stream_conf
+
+            self.stream_conf_modified.emit(enabled_stream_conf)
 
         def start_analysis(sent_stream_conf: codecs.StreamConfiguration):
             def on_error(exc: BaseException):

@@ -1,189 +1,124 @@
+import logging
 from typing import Dict, List
 
-from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget
-from PyQt5.uic import loadUi
+from PyQt5.QtCore import QTimer, pyqtSignal
+from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
 
-from brainframe.client.api import api
-from brainframe.client.api.codecs import StreamConfiguration
+from brainframe.client.api import api, codecs
 from brainframe.client.api.zss_pubsub import zss_publisher
+from brainframe.client.ui.main_window.video_thumbnail_view \
+    .thumbnail_grid_layout.video_small.video_small import VideoSmall
+from brainframe.client.ui.main_window.video_thumbnail_view \
+    .video_thumbnail_view_ui import _VideoThumbnailViewUI
 from brainframe.client.ui.resources import QTAsyncWorker
-from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-class VideoThumbnailView(QWidget):
-    thumbnail_stream_clicked_signal = pyqtSignal(object)
-    """Used to alert outer widget of change
-    
-    Connected to:
-    - MainWindow -- QtDesigner
-      [parent].show_video_expanded_view()
-    - VideoExpandedView -- QtDesigner
-      [peer].open_expanded_view_slot()
-    """
+class VideoThumbnailView(_VideoThumbnailViewUI):
+    stream_clicked = pyqtSignal(codecs.StreamConfiguration)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidget):
+        super().__init__(parent)
 
-        super().__init__(parent=parent)
+        self.update_streams()
 
-        loadUi(qt_ui_paths.video_thumbnail_view_ui, self)
+        self._init_signals()
 
-        self.all_stream_confs: Dict[int, StreamConfiguration] = {}
-        """Stream IDs currently in the ThumbnailView"""
-        self.alert_stream_ids = set()
-        """Streams IDs currently in the ThumbnailView with ongoing alerts"""
+    def _init_signals(self):
 
-        self._streams_being_added = set()
-        """Streams that are currently being added on another thread"""
+        self.alert_stream_layout.thumbnail_stream_clicked_signal.connect(
+            self.stream_clicked)
+        self.alertless_stream_layout.thumbnail_stream_clicked_signal.connect(
+            self.stream_clicked)
 
-        self.current_stream_id = None
-        """Currently expanded stream. None if no stream selected"""
+        # PubSub
+        stream_sub = zss_publisher.subscribe_alerts(self._handle_alerts)
+        self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
 
-        # Hide the alerts layout
-        self.alert_streams_layout.hide()
+    def update_streams(self):
 
-        self._init_pubsub()
+        def on_success(stream_confs: List[codecs.StreamConfiguration]):
+            for stream_conf in stream_confs:
+                self.add_stream_conf(stream_conf)
 
-    def _init_pubsub(self) -> None:
-        sub = zss_publisher.subscribe_streams(self._handle_stream_stream)
-        self.destroyed.connect(lambda: zss_publisher.unsubscribe(sub))
-
-    @pyqtSlot(object)
-    def thumbnail_stream_clicked_slot(self, stream_conf):
-        """Stream has been clicked
-
-        Connected to:
-        - ThumbnailGridLayout -- QtDesigner
-          self.alertless_streams_layout.thumbnail_stream_clicked_signal
-        - ThumbnailGridLayout -- QtDesigner
-          self.alert_streams_layout.thumbnail_stream_clicked_signal
-        """
-
-        # Alert outer widget
-        # noinspection PyUnresolvedReferences
-        self.thumbnail_stream_clicked_signal.emit(stream_conf)
-
-    @pyqtSlot()
-    def expand_thumbnail_layouts_slot(self):
-        """Expand the grid layouts to fill the entire main_window.
-
-        Connected to:
-        - VideoExpandedView -- QtDesigner
-          [peer].expanded_stream_closed_signal
-        """
-        # Resize GridLayout
-        self.alertless_streams_layout.expand_grid()
-        self.alert_streams_layout.expand_grid()
-
-    def delete_stream(self, stream_id: int) -> None:
-        """Delete a stream from the view"""
-
-        # Delete stream from alert widget if it is there
-        if stream_id in self.alert_stream_ids:
-            self.remove_streams_from_alerts(stream_id)
-
-        del self.all_stream_confs[stream_id]
-
-        video = self.alertless_streams_layout.pop_stream_widget(stream_id)
-        video.deleteLater()
-
-    @pyqtSlot(object, bool)
-    def ongoing_alerts_slot(self, stream_conf: StreamConfiguration,
-                            alerts_ongoing: bool):
-        """Alert associated with stream
-
-        Connected to:
-        - ThumbnailGridLayout -- QtDesigner
-          self.alertless_streams_layout.ongoing_alerts_signal
-        - ThumbnailGridLayout -- QtDesigner
-          self.alert_streams_layout.ongoing_alerts_signal
-        """
-
-        if alerts_ongoing and stream_conf.id not in self.alert_stream_ids:
-            self.add_stream_to_alerts(stream_conf.id)
-
-        elif stream_conf.id in self.alert_stream_ids and not alerts_ongoing:
-            self.remove_streams_from_alerts(stream_conf.id)
-
-        else:
-            message = self.tr("Inconsistent state with alert widgets.")
-            raise RuntimeError(message)
-
-    def add_stream_to_alerts(self, stream_id):
-
-        # Expand alert layout if necessary
-        if not self.alert_stream_ids:
-            self.alert_streams_layout.show()
-
-        # Add stream ID of alert to set
-        self.alert_stream_ids.add(stream_id)
-
-        # Move widget from alertless_streams_layout to alert_streams_layout
-        widget = self.alertless_streams_layout.pop_stream_widget(stream_id)
-        self.alert_streams_layout.add_video(widget)
-
-    def remove_streams_from_alerts(self, stream_id):
-
-        # Remove stream ID of alert from set
-        self.alert_stream_ids.remove(stream_id)
-
-        # Hide alert layout if necessary
-        if not self.alert_stream_ids:
-            self.alert_streams_layout.hide()
-
-        # Move widget from alert_streams_layout to alertless_streams_layout
-        widget = self.alert_streams_layout.pop_stream_widget(stream_id)
-        self.alertless_streams_layout.add_video(widget)
-
-    def new_stream(self, stream_id: int) -> None:
-        """Create a new stream widget and remember its ID"""
-
-        # Don't do anything if we're already in the process of adding this
-        # stream
-        if stream_id in self._streams_being_added:
-            return
-        else:
-            self._streams_being_added.add(stream_id)
-
-        def on_success(stream_conf):
-            self.alertless_streams_layout.new_stream_widget(stream_conf)
-
-            # Store ID for each in set
-            self.all_stream_confs[stream_conf.id] = stream_conf
-
-            self._streams_being_added.remove(stream_id)
-
-        def on_error(exc: BaseException):
-            self._streams_being_added.remove(stream_id)
-            raise exc
-
-        QTAsyncWorker(self, api.get_stream_configuration, f_args=(stream_id,),
-                      on_success=on_success, on_error=on_error) \
+        QTAsyncWorker(self, api.get_stream_configurations,
+                      on_success=on_success,
+                      on_error=self._handle_get_stream_conf_error) \
             .start()
 
-    @pyqtSlot(object)
-    def _handle_stream_stream(
-            self, stream_confs: List[StreamConfiguration]) \
-            -> None:
-        """Handles the stream of StreamConfiguration information from the
-        pubsub system"""
+    @property
+    def streams(self) -> Dict[int, VideoSmall]:
+        alert_streams = self.alert_stream_layout.stream_widgets
+        alertless_streams = self.alertless_stream_layout.stream_widgets
 
-        if QThread.currentThread() != self.thread():
-            # Move to the UI Thread
-            QMetaObject.invokeMethod(self,
-                                     self._handle_stream_stream.__name__,
-                                     Qt.QueuedConnection,
-                                     Q_ARG("PyQt_PyObject", stream_confs))
-            return
+        all_streams = {**alert_streams, **alertless_streams}
 
-        received_stream_ids = {stream_conf.id for stream_conf in stream_confs}
-        current_stream_ids = self.all_stream_confs.keys()
+        return all_streams
 
-        new_stream_ids = received_stream_ids - current_stream_ids
-        dead_stream_ids = current_stream_ids - received_stream_ids
+    def show_background_image(self, show_background: bool):
+        self.scroll_area.setHidden(show_background)
+        self.background_widget.setVisible(show_background)
 
-        for stream_id in new_stream_ids:
-            self.new_stream(stream_id)
+    def add_stream_conf(self, stream_conf: codecs.StreamConfiguration):
+        self.alertless_stream_layout.new_stream_widget(stream_conf)
 
-        for stream_id in dead_stream_ids:
-            self.delete_stream(stream_id)
+        self.show_background_image(False)
+
+    def delete_stream_id(self, stream_id: int):
+        stream_widget = self.streams[stream_id]
+        stream_widget.deleteLater()
+
+        if len(self.streams) == 0:
+            self.show_background_image(True)
+
+    def expand_video_grids(self):
+        self.alertless_stream_layout.expand_grid()
+        self.alert_stream_layout.expand_grid()
+
+    def _handle_alerts(self, alerts: List[codecs.Alert]):
+
+        alert_streams = self.alert_stream_layout.stream_widgets
+        alertless_streams = self.alertless_stream_layout.stream_widgets
+
+        for alert in alerts:
+            stream_id = alert.stream_id
+            if stream_id not in self.streams:
+                # Currently unsupported
+                pass
+
+            if alert.end_time is not None and stream_id in alertless_streams:
+
+                video_widget = alertless_streams[stream_id]
+                self.alert_stream_layout.add_video(video_widget)
+
+            elif alert.end_time is None and stream_id in alert_streams:
+
+                video_widget = alert_streams[stream_id]
+                self.alertless_stream_layout.add_video(video_widget)
+
+        streams_with_alerts = len(self.alert_stream_layout.stream_widgets) > 0
+        self.alert_stream_layout.setVisible(streams_with_alerts)
+
+    def _handle_get_stream_conf_error(self, exc: BaseException):
+
+        message_title = self.tr("Error retrieving stream configurations")
+        message = self.tr("Exception:")
+        question = self.tr("Retry or Close Client?")
+        message = (f"<{message}<br>"
+                   f"<br>"
+                   f"{exc}<br>"
+                   f"<br>"
+                   f"{question}")
+
+        logging.error(message)
+
+        buttons = QMessageBox.Retry | QMessageBox.Close
+        ret_button = QMessageBox.question(self, message_title, message,
+                                          buttons=buttons,
+                                          defaultButton=QMessageBox.Retry)
+
+        if ret_button is QMessageBox.Close:
+            QApplication.instance().quit()
+        else:
+            # Retry again in 1 second. (Don't want to go to fast if holding
+            # the escape key down or something)
+            QTimer.singleShot(1000, self.update_streams)

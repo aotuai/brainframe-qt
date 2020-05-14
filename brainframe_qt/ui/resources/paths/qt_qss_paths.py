@@ -18,10 +18,24 @@ main_toolbar_qss = toolbar_dir / "main_toolbar.qss"
 main_tab_widget_dir = main_window_dir / "main_tab_widget"
 main_tab_widget_qss = main_tab_widget_dir / "main_tab_widget.qss"
 
+###############################################################################
 # Activities
+###############################################################################
+
 activity_dir = main_window_dir / "activities"
-stream_activity_qss = activity_dir / "stream_activity" / "stream_activity.qss"
-stream_configuration_qss = activity_dir / "stream_configuration" \
+
+# Stream Activity
+stream_activity_dir = activity_dir / "stream_activity"
+stream_activity_qss = stream_activity_dir / "stream_activity.qss"
+
+# Video Thumbnail View
+video_thumbnail_view_dir = main_window_dir / "video_thumbnail_view"
+video_thumbnail_view_qss = video_thumbnail_view_dir \
+                           / "video_thumbnail_view.qss"
+
+# Stream Configuration
+stream_configuration_dir = activity_dir / "stream_configuration"
+stream_configuration_qss = stream_configuration_dir \
                            / "stream_configuration.qss"
 
 ###############################################################################

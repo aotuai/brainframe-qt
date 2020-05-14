@@ -14,9 +14,9 @@ class StreamActivity(_StreamActivityUI, ExpandableMI):
         self._init_signals()
 
     def _init_signals(self):
-        self.video_thumbnail_view.thumbnail_stream_clicked_signal.connect(
+        self.video_thumbnail_view.stream_clicked.connect(
             lambda: self.set_expanded(True))
-        self.video_thumbnail_view.thumbnail_stream_clicked_signal.connect(
+        self.video_thumbnail_view.stream_clicked.connect(
             self.video_expanded_view.open_expanded_view_slot)
 
         self.video_expanded_view.expanded_stream_closed_signal.connect(
@@ -29,4 +29,4 @@ class StreamActivity(_StreamActivityUI, ExpandableMI):
         self.video_expanded_view.setVisible(expanding)
 
         if not expanding:
-            self.video_thumbnail_view.expand_thumbnail_layouts_slot()
+            self.video_thumbnail_view.expand_video_grids()

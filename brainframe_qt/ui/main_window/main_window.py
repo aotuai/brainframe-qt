@@ -69,6 +69,8 @@ class MainWindow(MainWindowUI):
             dock_widget.setWidget(stream_configuration_widget)
             self.dock_widgets.append(dock_widget)
 
+            stream_configuration_widget.stream_conf_modified.connect(
+                self.stream_activity.video_thumbnail_view.add_stream_conf)
             stream_configuration_widget.stream_conf_deleted.connect(
                 self.close_stream_configuration)
 
