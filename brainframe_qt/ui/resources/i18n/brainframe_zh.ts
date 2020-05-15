@@ -1162,12 +1162,12 @@ Please recheck the entered server address.</source>
         <translation type="unfinished">目前没有视频流正在被分析，因此此处无内容显示</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="70"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="71"/>
         <source>Streams with ongoing alerts:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="80"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="81"/>
         <source>Streams without alerts:</source>
         <translation type="unfinished"></translation>
     </message>

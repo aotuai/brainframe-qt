@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
 from brainframe.client.ui.main_window.video_thumbnail_view.thumbnail_grid_layout.thumbnail_grid_layout import \
@@ -45,8 +45,10 @@ class _VideoThumbnailViewUI(QWidget):
 
     # noinspection PyMethodMayBeStatic
     def _init_container_widget_layout(self) -> QVBoxLayout:
-        layout = QVBoxLayout()
+        layout = _ContainerLayout()
+        layout.setAlignment(Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         layout.addWidget(self.alert_stream_layout)
         layout.addWidget(self.alertless_stream_layout)
@@ -119,3 +121,15 @@ class _AlarmViewScrollArea(QScrollArea, TransientScrollbarMI):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         self.setWidgetResizable(True)
+
+
+class _ContainerLayout(QVBoxLayout):
+
+    def sizeHint(self) -> QSize:
+        """This is a hack. Not doing this makes the ThumbnailGridLayouts get
+        squished vertically, when used in conjunction with their container
+        layout's alignment set to Qt.AlignTop. I don't know why this fixes it
+        """
+        sh = super().sizeHint()
+        sh.setHeight(9999999)
+        return sh

@@ -56,12 +56,12 @@ class _StreamActivityUI(QWidget):
         self.splitter.addWidget(self.video_expanded_view)
 
         # https://stackoverflow.com/a/43835396/8134178
-        # 1 : 3 width ratio when expanded
+        # 1 : 4 width ratio when expanded
         # I do this in a single-shot so that .width() can calculate after sizes
         # have been initialized
         set_splitter_sizes = functools.partial(
             self.splitter.setSizes,
-            [.25 * self.width(), .75 * self.width()])
+            [.20 * self.width(), .80 * self.width()])
         QTimer.singleShot(0, set_splitter_sizes)
 
         self.setLayout(layout)
