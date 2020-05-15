@@ -1,0 +1,3 @@
+VideoThumbnailView > _ThumbnailScrollArea {
+    border: none;
+}

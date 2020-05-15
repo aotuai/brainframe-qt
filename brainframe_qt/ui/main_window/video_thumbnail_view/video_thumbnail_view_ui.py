@@ -58,8 +58,8 @@ class _VideoThumbnailViewUI(QWidget):
 
         return layout
 
-    def _init_scroll_area(self) -> "_AlarmViewScrollArea":
-        scroll_area = _AlarmViewScrollArea(self)
+    def _init_scroll_area(self) -> "_ThumbnailScrollArea":
+        scroll_area = _ThumbnailScrollArea(self)
 
         scroll_area.setWidget(self.container_widget)
 
@@ -103,7 +103,7 @@ class _VideoThumbnailViewUI(QWidget):
         stylesheet_watcher.watch(self, qt_qss_paths.video_thumbnail_view_qss)
 
 
-class _AlarmViewScrollArea(QScrollArea, TransientScrollbarMI):
+class _ThumbnailScrollArea(QScrollArea, TransientScrollbarMI):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
