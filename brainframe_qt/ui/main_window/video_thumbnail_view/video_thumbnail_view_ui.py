@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
 from brainframe.client.ui.main_window.video_thumbnail_view.thumbnail_grid_layout.thumbnail_grid_layout import \
@@ -40,6 +41,8 @@ class _VideoThumbnailViewUI(QWidget):
         container_widget.setAttribute(Qt.WA_StyledBackground, True)
 
         container_widget.setLayout(self._init_container_widget_layout())
+
+        container_widget.setAttribute(Qt.WA_StyledBackground, True)
 
         return container_widget
 
@@ -112,9 +115,16 @@ class _ThumbnailScrollArea(QScrollArea, TransientScrollbarMI):
 
         self._init_style()
 
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        """Prevent the scroll area from scrolling horizontally by setting
+        minimumWidth to be the sizeHint of its contents"""
+        super().resizeEvent(event)
+        self.setMinimumWidth(self.widget().minimumSizeHint().width())
+
     def _init_viewport_widget(self) -> None:
         # Give the viewport a name for the stylesheet
         self.viewport().setObjectName("viewport")
+        self.viewport().setAttribute(Qt.WA_StyledBackground, True)
 
     def _init_style(self) -> None:
         # Allow background of widget to be styled

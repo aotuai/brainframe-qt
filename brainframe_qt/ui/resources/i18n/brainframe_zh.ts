@@ -1157,17 +1157,17 @@ Please recheck the entered server address.</source>
 <context>
     <name>_VideoThumbnailViewUI</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="29"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
         <source>No streams are being analyzed right now, so there is nothing to show here</source>
         <translation type="unfinished">目前没有视频流正在被分析，因此此处无内容显示</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="71"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="74"/>
         <source>Streams with ongoing alerts:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="81"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="84"/>
         <source>Streams without alerts:</source>
         <translation type="unfinished"></translation>
     </message>
