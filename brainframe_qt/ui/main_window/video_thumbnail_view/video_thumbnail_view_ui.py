@@ -51,9 +51,9 @@ class _VideoThumbnailViewUI(QWidget):
         layout.addWidget(self.alert_stream_layout)
         layout.addWidget(self.alertless_stream_layout)
 
-        layout.addStretch()
+        layout.setAlignment(self.alert_stream_layout, Qt.AlignTop)
+        layout.setAlignment(self.alertless_stream_layout, Qt.AlignTop)
 
-        layout.setAlignment(Qt.AlignTop)
         return layout
 
     def _init_scroll_area(self) -> "_AlarmViewScrollArea":
@@ -69,7 +69,7 @@ class _VideoThumbnailViewUI(QWidget):
         layout_name = self.tr("Streams with ongoing alerts:")
         alert_stream_layout.layout_name = layout_name
 
-        alert_stream_layout.expand_grid()
+        alert_stream_layout.expand_grid(True)
 
         return alert_stream_layout
 
@@ -79,12 +79,13 @@ class _VideoThumbnailViewUI(QWidget):
         layout_name = self.tr("Streams without alerts:")
         alertless_stream_layout.layout_name = layout_name
 
-        alertless_stream_layout.expand_grid()
+        alertless_stream_layout.expand_grid(True)
 
         return alertless_stream_layout
 
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignTop)
 
         layout.addWidget(self.background_widget)
         layout.addWidget(self.scroll_area)

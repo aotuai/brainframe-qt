@@ -70,9 +70,9 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         if len(self.streams) == 0:
             self.show_background_image(True)
 
-    def expand_video_grids(self):
-        self.alertless_stream_layout.expand_grid()
-        self.alert_stream_layout.expand_grid()
+    def expand_video_grids(self, expand):
+        self.alertless_stream_layout.expand_grid(expand)
+        self.alert_stream_layout.expand_grid(expand)
 
     def _handle_alerts(self, alerts: List[codecs.Alert]):
 
@@ -83,17 +83,18 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
             stream_id = alert.stream_id
             if stream_id not in self.streams:
                 # Currently unsupported
-                pass
+                continue
 
-            if alert.end_time is not None and stream_id in alertless_streams:
+            if alert.end_time is not None \
+                    and stream_id not in alertless_streams:
 
-                video_widget = alertless_streams[stream_id]
-                self.alert_stream_layout.add_video(video_widget)
-
-            elif alert.end_time is None and stream_id in alert_streams:
-
-                video_widget = alert_streams[stream_id]
+                video_widget = self.streams[stream_id]
                 self.alertless_stream_layout.add_video(video_widget)
+
+            elif alert.end_time is None and stream_id not in alert_streams:
+
+                video_widget = self.streams[stream_id]
+                self.alert_stream_layout.add_video(video_widget)
 
         streams_with_alerts = len(self.alert_stream_layout.stream_widgets) > 0
         self.alert_stream_layout.setVisible(streams_with_alerts)

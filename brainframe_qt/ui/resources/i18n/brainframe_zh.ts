@@ -1044,17 +1044,17 @@ Please recheck the entered server address.</source>
 <context>
     <name>VideoThumbnailView</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="103"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="104"/>
         <source>Error retrieving stream configurations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="104"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="105"/>
         <source>Exception:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="105"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="106"/>
         <source>Retry or Close Client?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1162,12 +1162,12 @@ Please recheck the entered server address.</source>
         <translation type="unfinished">目前没有视频流正在被分析，因此此处无内容显示</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="69"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="70"/>
         <source>Streams with ongoing alerts:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="79"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="80"/>
         <source>Streams without alerts:</source>
         <translation type="unfinished"></translation>
     </message>
