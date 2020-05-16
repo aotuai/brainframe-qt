@@ -526,7 +526,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         message_title = self.tr("Error Opening Stream")
 
-        if exc is api_errors.DuplicateStreamSourceError:
+        if isinstance(exc, api_errors.DuplicateStreamSourceError):
             message_desc = self.tr("Stream source already open")
             message_info = self.tr("You already have the stream source open.")
             error_text = self.tr("Error: ")
@@ -535,7 +535,7 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{message_info}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif exc is api_errors.StreamNotOpenedError:
+        elif isinstance(exc, api_errors.StreamNotOpenedError):
             message_desc = self.tr("Error encountered while opening stream")
             error_text = self.tr("Error: ")
             message = f"<b>{message_desc}</b>" \
@@ -544,7 +544,7 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{exc.description}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif exc is api_errors.BaseAPIError:
+        elif isinstance(exc, api_errors.BaseAPIError):
             message_desc = self.tr("Error encountered while opening stream")
             message_info1 = self.tr("Is stream already open?")
             message_info2 = self.tr("Is this a valid stream source?")
@@ -564,7 +564,7 @@ class StreamConfiguration(StreamConfigurationUI):
             self, stream_conf: codecs.StreamConfiguration,
             exc: BaseException) \
             -> None:
-        if exc is api_errors.AnalysisLimitExceededError:
+        if isinstance(exc, api_errors.AnalysisLimitExceededError):
             # Delete the stream configuration, since you almost never want to
             # have a stream that can't have analysis running
             QTAsyncWorker(self, api.delete_stream_configuration,
