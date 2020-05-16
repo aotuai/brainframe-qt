@@ -30,7 +30,8 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         self.alertless_stream_layout.thumbnail_stream_clicked_signal.connect(
             self.stream_clicked)
 
-        # PubSub
+    def _init_alert_pubsub(self):
+        """Called after streams are initially populated"""
         stream_sub = zss_publisher.subscribe_alerts(self._handle_alerts)
         self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
 
@@ -39,6 +40,8 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         def on_success(stream_confs: List[codecs.StreamConfiguration]):
             for stream_conf in stream_confs:
                 self.add_stream_conf(stream_conf)
+
+            self._init_alert_pubsub()
 
         QTAsyncWorker(self, api.get_stream_configurations,
                       on_success=on_success,
@@ -63,8 +66,8 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
 
         self.show_background_image(False)
 
-    def delete_stream_id(self, stream_id: int):
-        stream_widget = self.streams[stream_id]
+    def delete_stream_conf(self, stream_conf: codecs.StreamConfiguration):
+        stream_widget = self.streams[stream_conf.id]
         stream_widget.deleteLater()
 
         if len(self.streams) == 0:

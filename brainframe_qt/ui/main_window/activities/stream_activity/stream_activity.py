@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QWidget
 
 from brainframe.client.ui.main_window.activities.stream_activity.stream_activity_ui import \
     _StreamActivityUI
-from brainframe.client.ui.resources.mixins.display import ExpandableMI
 
 
 class StreamActivity(_StreamActivityUI):
@@ -22,6 +21,8 @@ class StreamActivity(_StreamActivityUI):
         self.video_expanded_view.expanded_stream_closed_signal.connect(
             lambda: self.display_expanded_video(False))
 
+        self.video_expanded_view.stream_delete_signal.connect(
+            self.video_thumbnail_view.delete_stream_conf)
         self.video_expanded_view.stream_delete_signal.connect(
             lambda: self.display_expanded_video(False))
 
