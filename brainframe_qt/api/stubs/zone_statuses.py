@@ -42,9 +42,7 @@ class ZoneStatusStubMixin(BaseStub):
         def zone_status_iterator():
             # Don't use a timeout for this request, since it's ongoing
             resp = self._get(req, timeout=timeout)
-            # Why chunk_size=None:
-            # https://github.com/psf/requests/blob/9ed5db8ed28e816b597dafd328b342ec95466afa/requests/models.py#L737
-            for packet in resp.iter_lines(chunk_size=None, delimiter=b"\r\n"):
+            for packet in resp.iter_lines(delimiter=b"\r\n"):
                 if packet == b'':
                     continue
 
