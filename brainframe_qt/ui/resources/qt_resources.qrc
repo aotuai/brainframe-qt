@@ -13,6 +13,7 @@
         <file alias="alert">images/icons/alert.svg</file>
         <file alias="alert_view">images/icons/alarm_view_action.svg</file>
         <file alias="app_icon_png">images/icons/app_icon.png</file>
+        <file alias="capsule_toolbar">images/icons/capsule_toolbar.svg</file>
         <file alias="folder">images/icons/folder.svg</file>
         <file alias="global_plugin_config">images/icons/global_plugin_config.svg</file>
         <file alias="identity_toolbar">images/icons/identity_toolbar.svg</file>

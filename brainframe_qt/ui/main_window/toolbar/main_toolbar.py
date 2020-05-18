@@ -13,7 +13,7 @@ class MainToolbar(QToolBar):
         identity_text = self.tr("Identities")
         alert_text = self.tr("Alerts")
         task_config_text = self.tr("Tasks")
-        plugin_config_text = self.tr("Plugins")
+        plugin_config_text = self.tr("Capsules")
         client_config_text = self.tr("Client")
         server_config_text = self.tr("Server")
         about_page_text = self.tr("About")
@@ -26,8 +26,8 @@ class MainToolbar(QToolBar):
             = self._init_action(":/icons/alert_view", alert_text)
         self.task_config_action \
             = self._init_action(":/icons/settings_gear", task_config_text)
-        self.plugin_config_action \
-            = self._init_action(":/icons/global_plugin_config",
+        self.capsule_config_action \
+            = self._init_action(":/icons/capsule_toolbar",
                                 plugin_config_text)
         self.client_config_action \
             = self._init_action(":/icons/client_config", client_config_text)
@@ -53,7 +53,7 @@ class MainToolbar(QToolBar):
         self.addSeparator()
 
         # self.addAction(self.task_config_action)
-        self.addAction(self.plugin_config_action)
+        self.addAction(self.capsule_config_action)
         self.addAction(self.client_config_action)
         self.addAction(self.server_config_action)
 

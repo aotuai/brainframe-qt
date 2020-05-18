@@ -52,7 +52,7 @@ class MainWindow(MainWindowUI):
     def _init_dialog_signals(self):
         self.toolbar.client_config_action.triggered.connect(
             lambda: RenderConfiguration.show_dialog(self))
-        self.toolbar.plugin_config_action.triggered.connect(
+        self.toolbar.capsule_config_action.triggered.connect(
             lambda: PluginConfigDialog.show_dialog(self))
         self.toolbar.server_config_action.triggered.connect(
             lambda: ServerConfigurationDialog.show_dialog(self))

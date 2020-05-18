@@ -583,11 +583,6 @@ Read the manual to learn about the required directory structure.</source>
         <translation>任务</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
-        <source>Plugins</source>
-        <translation>插件配置</translation>
-    </message>
-    <message>
         <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
         <source>Server</source>
         <translation>服务器配置</translation>
@@ -601,6 +596,11 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
         <source>Client</source>
         <translation>客户端配置</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
+        <source>Capsules</source>
+        <translation type="unfinished">胶囊</translation>
     </message>
 </context>
 <context>
