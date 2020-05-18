@@ -1,3 +1,4 @@
+import typing
 from typing import List, Optional
 
 from PyQt5.QtCore import Qt
@@ -32,6 +33,8 @@ class MainWindow(MainWindowUI):
         expanded_view = self.stream_activity.video_expanded_view
         expanded_view.open_stream_config_signal.connect(
             self.display_stream_configuration)
+        expanded_view.stream_delete_signal.connect(
+            self.close_stream_configuration)
 
         self.stream_activity.new_stream_button.clicked.connect(
             lambda _: self.display_stream_configuration())
@@ -81,13 +84,25 @@ class MainWindow(MainWindowUI):
         stream_configuration_widget = dock_widget.widget()
         stream_configuration_widget.load_from_conf(stream_conf)
 
-    def close_stream_configuration(self) -> None:
+    def close_stream_configuration(
+            self, stream_conf: Optional[codecs.StreamConfiguration] = None) \
+            -> None:
 
         for dock_widget in self.dock_widgets:
-            if isinstance(dock_widget.widget(), StreamConfiguration):
+            stream_conf_widget = dock_widget.widget()
+            if isinstance(stream_conf_widget, StreamConfiguration):
                 break
+            # noinspection PyUnusedLocal
+            stream_conf_widget = typing.cast(StreamConfiguration,
+                                             stream_conf_widget)
         else:
             # Nothing to do
+            return
+
+        # If stream_conf is passed, make sure the StreamConfiguration widget's
+        # stream_conf matches
+        if stream_conf is not None \
+                and stream_conf_widget.stream_id != stream_conf.id:
             return
 
         self.dock_widgets.remove(dock_widget)

@@ -26,10 +26,10 @@ class VideoExpandedView(QWidget):
       [peer].expand_thumbnail_layouts_slot()
     """
 
-    stream_delete_signal = pyqtSignal(object)
+    stream_delete_signal = pyqtSignal(StreamConfiguration)
     """Called when the user wants to delete a stream"""
 
-    open_stream_config_signal = pyqtSignal(object)
+    open_stream_config_signal = pyqtSignal(StreamConfiguration)
     """Called when the user clicks the Stream Config button"""
 
     def __init__(self, parent):

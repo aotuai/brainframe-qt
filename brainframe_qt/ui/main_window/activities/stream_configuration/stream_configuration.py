@@ -61,10 +61,11 @@ class StreamConfiguration(StreamConfigurationUI):
         self.stream_options.advanced_options.expansion_changed.connect(
             self._show_relevant_options)
 
-        # PubSub
-        stream_sub = zss_publisher.subscribe_streams(
-            self._handle_stream_stream)
-        self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
+        # TODO: Readd with a better pubsub system
+        # # PubSub
+        # stream_sub = zss_publisher.subscribe_streams(
+        #     self._handle_stream_stream)
+        # self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
 
     def load_from_conf(
             self, stream_conf: Optional[codecs.StreamConfiguration]) -> None:
@@ -500,6 +501,13 @@ class StreamConfiguration(StreamConfigurationUI):
         self.keyframe_only_streaming = \
             runtime_options.get("keyframes_only",
                                 DefaultOptions.KEYFRAME_ONLY_STREAMING)
+
+    @property
+    def stream_id(self) -> Optional[int]:
+        if self._reset_stream_conf is None:
+            return None
+
+        return self._reset_stream_conf.id
 
     @property
     def stream_name(self) -> str:
