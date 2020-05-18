@@ -29,7 +29,7 @@ class _VideoThumbnailViewUI(QWidget):
     def _init_background_widget(self) -> BackgroundImageText:
         text = self.tr("No streams are being analyzed right now, so there is "
                        "nothing to show here")
-        svg_path = ":/icons/no_streams_for_alerts"
+        svg_path = ":/icons/no_streams"
 
         background_widget = BackgroundImageText(text, svg_path, self)
 

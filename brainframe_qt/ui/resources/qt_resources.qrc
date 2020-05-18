@@ -15,10 +15,12 @@
         <file alias="app_icon_png">images/icons/app_icon.png</file>
         <file alias="folder">images/icons/folder.svg</file>
         <file alias="global_plugin_config">images/icons/global_plugin_config.svg</file>
+        <file alias="identity_toolbar">images/icons/identity_toolbar.svg</file>
         <file alias="info">images/icons/information.svg</file>
         <file alias="line">images/icons/line.svg</file>
         <file alias="new_stream">images/icons/new_stream.svg</file>
         <file alias="no_streams_for_alerts">images/icons/no_streams_for_alerts.svg</file>
+        <file alias="no_streams">images/icons/no_streams.svg</file>
         <file alias="person">images/icons/person.svg</file>
         <file alias="question_mark">images/icons/question_mark.svg</file>
         <file alias="region">images/icons/region.svg</file>
