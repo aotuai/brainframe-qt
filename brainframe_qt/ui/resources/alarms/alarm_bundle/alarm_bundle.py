@@ -4,8 +4,8 @@ from enum import Enum
 from typing import List, Union
 
 from PyQt5.QtCore import Qt, pyqtSlot, QThread, QMetaObject, Q_ARG
-from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, \
-    QLayout, QSizePolicy, QApplication
+from PyQt5.QtWidgets import QApplication, QFrame, QVBoxLayout, QWidget, \
+    QLayout, QSizePolicy
 
 from brainframe.api import StreamConfiguration, ZoneAlarm, Zone
 from brainframe.client.api_utils.zss_pubsub import zss_publisher
@@ -207,6 +207,7 @@ class AlarmBundle(AlarmBundleUI, ExpandableMI, IterableMI):
 
 if __name__ == '__main__':
     import typing
+    from PyQt5.QtWidgets import QApplication
 
     # noinspection PyArgumentList
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
