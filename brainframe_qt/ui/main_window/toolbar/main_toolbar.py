@@ -19,9 +19,9 @@ class MainToolbar(QToolBar):
         about_page_text = self.tr("About")
 
         self.stream_activity_action \
-            = self._init_action(":/icons/new_stream", stream_text)
+            = self._init_action(":/icons/stream_toolbar", stream_text)
         self.identity_activity_action \
-            = self._init_action(":/icons/person", identity_text)
+            = self._init_action(":/icons/identity_toolbar", identity_text)
         self.alert_view_activity_action \
             = self._init_action(":/icons/alert_view", alert_text)
         self.task_config_action \
