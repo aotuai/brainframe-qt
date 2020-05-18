@@ -6,13 +6,12 @@ from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialogButtonBox, \
     QLabel, QLineEdit, QSizePolicy, QWidget
 
 from brainframe.client.api_utils import api
-from brainframe.api import Premises
+from brainframe.api import Premises, ConnType
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.mixins.display import ExpandableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
 from brainframe.client.ui.resources.ui_elements.widgets import FileSelector, \
     Line
-from brainframe.shared.codec_enums import ConnType
 
 
 class StreamConfigurationUI(QWidget):

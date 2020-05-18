@@ -12,11 +12,11 @@ from brainframe.api import (
     Zone,
     ZoneAlarm,
     ZoneAlarmCountCondition,
-    ZoneAlarmRateCondition
+    ZoneAlarmRateCondition,
+    IntersectionPointType,
 )
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.shared.codec_enums import IntersectionPointType
 
 
 class ConditionType(Enum):
