@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QListWidget, QListWidgetItem
 from PyQt5.uic import loadUi
 
 from brainframe.client.api_utils import api
-from brainframe.api import Plugin
+from brainframe.api.bf_codecs import Plugin
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 

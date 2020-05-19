@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 
-from brainframe.api import ZoneStatus
+from brainframe.api.bf_codecs import ZoneStatus
 from brainframe.client.ui.resources.video_items import StreamPolygon, \
     StreamLabelBox
 

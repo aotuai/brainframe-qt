@@ -4,7 +4,8 @@ from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QGraphicsView
 
 from brainframe.client.api_utils import api
-from brainframe.api import StreamConfiguration, StreamConfigNotFoundError, \
+from brainframe.api.bf_codecs import StreamConfiguration
+from brainframe.api.bf_errors import StreamConfigNotFoundError, \
     StreamNotOpenedError
 from brainframe.client.api_utils.streaming import StreamListener, \
     SyncedStreamReader

@@ -2,7 +2,7 @@ from typing import List
 
 from PyQt5.QtWidgets import QPushButton, QTreeWidgetItem
 
-from brainframe.api import Zone, ZoneAlarm
+from brainframe.api.bf_codecs import Zone, ZoneAlarm
 
 
 class ZoneListItem(QTreeWidgetItem):

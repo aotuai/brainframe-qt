@@ -7,7 +7,8 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QAbstractButton, QButtonGroup, QFrame, \
     QHBoxLayout, QLabel, QSizePolicy, QWidget
 
-from brainframe.api import BaseAPIError, Alert, AlertNotFoundError
+from brainframe.api.bf_codecs import Alert
+from brainframe.api.bf_errors import BaseAPIError, AlertNotFoundError
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.api_pubsub import async_api_pubsub
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI

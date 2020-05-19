@@ -1,9 +1,10 @@
+from abc import ABC, abstractmethod
+from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Tuple
-from collections import defaultdict
-from abc import ABC, abstractmethod
 
-from brainframe.api import Identity, API
+from brainframe.api import BrainFrameAPI
+from brainframe.api.bf_codecs import Identity
 
 VECTOR = List[float]
 
@@ -37,8 +38,8 @@ class IdentityPrototype:
 
     def __repr__(self):
         return f"IdentityPrototype(unique_name={self.unique_name}, " \
-            f"nickname={self.nickname}, " \
-            f"images_by_class_name={list(self.images_by_class_name.keys())}))"
+               f"nickname={self.nickname}, " \
+               f"images_by_class_name={list(self.images_by_class_name.keys())}))"
 
 
 class IdentityFinder(ABC):
@@ -56,7 +57,7 @@ class IdentityFinder(ABC):
         raise NotImplementedError
 
 
-def create_identity_from_prototype(api: API, prototype: IdentityPrototype) \
+def create_identity_from_prototype(api: BrainFrameAPI, prototype: IdentityPrototype) \
         -> Identity:
     """Creates the identity and all of its encodings based on the given
     prototype.

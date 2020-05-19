@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QDialog, QLineEdit, QCheckBox, QDialogButtonBox, \
 from PyQt5.uic import loadUi
 
 from brainframe.client.api_utils import api
-from brainframe.api import UnauthorizedError
+from brainframe.api.bf_errors import UnauthorizedError
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.shared.secret import decrypt, encrypt

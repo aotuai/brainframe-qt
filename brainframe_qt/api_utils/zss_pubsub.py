@@ -4,9 +4,9 @@ from threading import RLock
 from typing import Callable, Dict, List, Set, Union
 
 from brainframe.client.api_utils import api
-from brainframe.api import Alert, StreamConfiguration, Zone, ZoneAlarm, \
-    ZONE_STATUS_TYPE
-from brainframe.api import StatusReceiver
+from brainframe.api.bf_codecs import Alert, StreamConfiguration, Zone, \
+    ZoneAlarm
+from brainframe.api import StatusReceiver, ZONE_STATUS_TYPE
 
 ZSSDatumType = Union[
     StreamConfiguration,

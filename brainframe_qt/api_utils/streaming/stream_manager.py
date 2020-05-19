@@ -1,12 +1,10 @@
-from threading import RLock
 import logging
 
-from brainframe.api import StatusReceiver, API
-from brainframe.api import StreamConfiguration
-from brainframe.shared.stream_reader import StreamReader
-from brainframe.shared.gstreamer.stream_reader import GstStreamReader
+from brainframe.api import BrainFrameAPI, StatusReceiver
+from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.shared.gstreamer import gobject_init
-
+from brainframe.shared.gstreamer.stream_reader import GstStreamReader
+from brainframe.shared.stream_reader import StreamReader
 from .synced_reader import SyncedStreamReader
 
 
@@ -98,7 +96,7 @@ class StreamManager:
         return stream
 
 
-class StreamManagerAPI(API):
+class StreamManagerAPI(BrainFrameAPI):
     """Augments the API class to manage and provide a StreamManager."""
 
     def __init__(self, *args, **kwargs):

@@ -6,7 +6,7 @@ from PyQt5.QtCore import QObject
 from brainframe.client.api_utils import api
 from brainframe.client.api_utils.zss_pubsub import zss_publisher, ZSSDataType, \
     ZSSTopic
-from brainframe.api import Alert
+from brainframe.api.bf_codecs import Alert
 from brainframe.client.ui.resources import QTAsyncWorker
 
 

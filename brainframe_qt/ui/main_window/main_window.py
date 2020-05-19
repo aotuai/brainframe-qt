@@ -3,7 +3,7 @@ from typing import List, Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QWidget
 
-import brainframe.api as bfapi
+from brainframe.api import bf_codecs
 from brainframe.client.ui.dialogs.about_page.about_page import AboutPage
 from brainframe.client.ui.dialogs.plugin_configuration.plugin_config import \
     PluginConfigDialog
@@ -57,7 +57,7 @@ class MainWindow(MainWindowUI):
             lambda: AboutPage.show_dialog(self))
 
     def display_stream_configuration(
-            self, stream_conf: Optional[bfapi.StreamConfiguration] = None) \
+            self, stream_conf: Optional[bf_codecs.StreamConfiguration] = None) \
             -> None:
 
         for dock_widget in self.dock_widgets:

@@ -4,7 +4,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.api import StreamConfiguration
+from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from .video_small.video_small import VideoSmall
 

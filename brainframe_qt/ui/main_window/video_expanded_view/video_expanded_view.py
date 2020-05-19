@@ -6,7 +6,7 @@ from PyQt5.uic import loadUi
 from requests.exceptions import RequestException
 
 from brainframe.client.api_utils import api
-from brainframe.api import StreamConfiguration
+from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import PluginConfigDialog, TaskConfiguration
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths

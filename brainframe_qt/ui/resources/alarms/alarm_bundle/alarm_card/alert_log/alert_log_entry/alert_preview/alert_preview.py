@@ -7,7 +7,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QWidget
 
 from brainframe.client.api_utils import api
-from brainframe.api import Alert
+from brainframe.api.bf_codecs import Alert
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
     stylesheet_watcher

@@ -1,4 +1,4 @@
-from brainframe.api import API
+from brainframe.api import BrainFrameAPI
 from .streaming import StreamManager, StreamManagerAPI
 
 
@@ -55,4 +55,4 @@ class APIWrapper(StreamManagerAPI):
 
 
 # API instance that is later monkeypatched to be a singleton
-api: API = APIWrapper()
+api: BrainFrameAPI = APIWrapper()

@@ -1,18 +1,18 @@
 import logging
 import typing
-from threading import Thread, RLock, Event
-from typing import List, Generator, Tuple, Dict, Set
-from uuid import UUID, uuid4
+from threading import Event, RLock, Thread
 from time import sleep
+from typing import Dict, Generator, List, Set, Tuple
+from uuid import UUID, uuid4
 
 import numpy as np
 
-from brainframe.api import ZoneStatus
-from brainframe.client.api_utils.detection_tracks import DetectionTrack
 from brainframe.api import StatusReceiver
+from brainframe.api.bf_codecs import ZoneStatus
+from brainframe.client.api_utils.detection_tracks import DetectionTrack
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
-from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
+from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.utils import or_events
 
 

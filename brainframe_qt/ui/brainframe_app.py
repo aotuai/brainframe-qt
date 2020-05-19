@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QApplication, QMessageBox
 
 import brainframe
 from brainframe.client.api_utils import api
-from brainframe.api import BaseAPIError
+from brainframe.api.bf_errors import BaseAPIError
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
 from brainframe.client.ui.dialogs import StandardError, VersionMismatch
 # noinspection PyUnresolvedReferences

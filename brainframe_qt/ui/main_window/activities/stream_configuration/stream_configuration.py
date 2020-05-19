@@ -5,7 +5,7 @@ from typing import Callable, List, Optional, Union
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
-import brainframe.api as bfapi
+from brainframe.api import bf_codecs, bf_errors
 from brainframe.client.api_utils import api
 from brainframe.client.api_utils.zss_pubsub import zss_publisher
 from brainframe.client.ui.main_window.activities.stream_configuration \
@@ -22,7 +22,7 @@ class StreamConfiguration(StreamConfigurationUI):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self._reset_stream_conf: Optional[bfapi.StreamConfiguration] = None
+        self._reset_stream_conf: Optional[bf_codecs.StreamConfiguration] = None
         """Holds the loaded stream configuration to revert to when Reset button
         is pressed"""
 
@@ -63,7 +63,7 @@ class StreamConfiguration(StreamConfigurationUI):
         self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
 
     def load_from_conf(
-            self, stream_conf: Optional[bfapi.StreamConfiguration]) -> None:
+            self, stream_conf: Optional[bf_codecs.StreamConfiguration]) -> None:
 
         self._reset_stream_conf = stream_conf
 
@@ -122,7 +122,7 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options.setDisabled(disable)
 
     def _handle_stream_stream(
-            self, stream_confs: List[bfapi.StreamConfiguration]) \
+            self, stream_confs: List[bf_codecs.StreamConfiguration]) \
             -> None:
         """Handles the stream of StreamConfiguration information from the
         pubsub system"""
@@ -144,17 +144,17 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options = self.stream_options.advanced_options
         advanced_options_visible = advanced_options.expanded
 
-        if self.connection_type is bfapi.ConnType.IP_CAMERA:
+        if self.connection_type is bf_codecs.ConnType.IP_CAMERA:
             self.stream_options.network_address_label.setVisible(True)
             self.stream_options.network_address_line_edit.setVisible(True)
             self.stream_options.premises_label.setVisible(True)
             self.stream_options.premises_combobox.setVisible(True)
             if advanced_options_visible:
                 advanced_options.keyframe_only_checkbox.setVisible(True)
-        elif self.connection_type is bfapi.ConnType.WEBCAM:
+        elif self.connection_type is bf_codecs.ConnType.WEBCAM:
             self.stream_options.webcam_device_label.setVisible(True)
             self.stream_options.webcam_device_line_edit.setVisible(True)
-        elif self.connection_type is bfapi.ConnType.FILE:
+        elif self.connection_type is bf_codecs.ConnType.FILE:
             self.stream_options.filepath_label.setVisible(True)
             self.stream_options.file_selector.setVisible(True)
             if advanced_options_visible:
@@ -182,21 +182,21 @@ class StreamConfiguration(StreamConfigurationUI):
         def pipeline_valid() -> bool:
             return not self.pipeline or "{url}" in self.pipeline
 
-        if self.connection_type is bfapi.ConnType.IP_CAMERA:
+        if self.connection_type is bf_codecs.ConnType.IP_CAMERA:
             if not self.network_address:
                 return False
             if self.advanced_options_enabled:
                 if not pipeline_valid:
                     return False
 
-        elif self.connection_type is bfapi.ConnType.FILE:
+        elif self.connection_type is bf_codecs.ConnType.FILE:
             if not self.filepath:
                 return False
             if self.advanced_options_enabled:
                 if not pipeline_valid:
                     return False
 
-        elif self.connection_type is bfapi.ConnType.WEBCAM:
+        elif self.connection_type is bf_codecs.ConnType.WEBCAM:
             if not self.webcam_device:
                 return False
 
@@ -209,7 +209,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if not self.inputs_valid:
             raise ValueError("Invalid stream configuration")
 
-        stream_conf = bfapi.StreamConfiguration(
+        stream_conf = bf_codecs.StreamConfiguration(
             name=self.stream_name,
             connection_type=self.connection_type,
             connection_options=self.connection_options,
@@ -218,7 +218,7 @@ class StreamConfiguration(StreamConfigurationUI):
             metadata={}
         )
 
-        if self.connection_type is bfapi.ConnType.FILE:
+        if self.connection_type is bf_codecs.ConnType.FILE:
 
             if not Path(self.filepath).is_file():
                 self._handle_missing_file_error(self.filepath)
@@ -280,18 +280,18 @@ class StreamConfiguration(StreamConfigurationUI):
             .start()
 
     def _send_stream_configuration(
-            self, stream_conf: bfapi.StreamConfiguration) \
+            self, stream_conf: bf_codecs.StreamConfiguration) \
             -> None:
 
         # Two stage QtAsyncWorker because we need to catch exceptions on both
         # api.set_stream_configuration and api.start_analyzing, but the handler
         # for exceptions in the latter needs the result of the former.
 
-        def on_success(_enabled_stream_conf: bfapi.StreamConfiguration):
+        def on_success(_enabled_stream_conf: bf_codecs.StreamConfiguration):
             self.disable_input_fields(True)
             self._reset_stream_conf = _enabled_stream_conf
 
-        def start_analysis(sent_stream_conf: bfapi.StreamConfiguration):
+        def start_analysis(sent_stream_conf: bf_codecs.StreamConfiguration):
             def on_error(exc: BaseException):
                 self._handle_start_analysis_error(sent_stream_conf, exc)
 
@@ -318,7 +318,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def avoid_transcoding(self) -> Optional[bool]:
-        if self.connection_type is not bfapi.ConnType.FILE:
+        if self.connection_type is not bf_codecs.ConnType.FILE:
             return None
         if not self.advanced_options_enabled:
             return DefaultOptions.AVOID_TRANSCODING
@@ -355,11 +355,11 @@ class StreamConfiguration(StreamConfigurationUI):
             "transcode", DefaultOptions.KEYFRAME_ONLY_STREAMING)
 
     @property
-    def connection_type(self) -> bfapi.ConnType:
+    def connection_type(self) -> bf_codecs.ConnType:
         return self.connection_type_combobox.currentData()
 
     @connection_type.setter
-    def connection_type(self, connection_type: bfapi.ConnType) -> None:
+    def connection_type(self, connection_type: bf_codecs.ConnType) -> None:
         index = self.connection_type_combobox.findData(connection_type)
         self.connection_type_combobox.setCurrentIndex(index)
 
@@ -400,13 +400,13 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def filepath(self) -> Optional[Path]:
-        if self.connection_type is not bfapi.ConnType.FILE:
+        if self.connection_type is not bf_codecs.ConnType.FILE:
             return None
         return self.stream_options.file_selector.filepath
 
     @property
     def keyframe_only_streaming(self) -> Optional[bool]:
-        if self.connection_type is not bfapi.ConnType.IP_CAMERA:
+        if self.connection_type is not bf_codecs.ConnType.IP_CAMERA:
             return None
         if not self.advanced_options_enabled:
             return DefaultOptions.KEYFRAME_ONLY_STREAMING
@@ -423,7 +423,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def network_address(self) -> Optional[str]:
-        if self.connection_type is not bfapi.ConnType.IP_CAMERA:
+        if self.connection_type is not bf_codecs.ConnType.IP_CAMERA:
             return None
 
         network_address = self.stream_options.network_address_line_edit.text()
@@ -452,16 +452,16 @@ class StreamConfiguration(StreamConfigurationUI):
         pipeline_line_edit.setText(pipeline)
 
     @property
-    def premises(self) -> Optional[bfapi.Premises]:
-        if self.connection_type is not bfapi.ConnType.IP_CAMERA:
+    def premises(self) -> Optional[bf_codecs.Premises]:
+        if self.connection_type is not bf_codecs.ConnType.IP_CAMERA:
             return None
         return self.stream_options.premises_combobox.currentData()
 
     @premises.setter
-    def premises(self, premises: Optional[Union[int, bfapi.Premises]]) \
+    def premises(self, premises: Optional[Union[int, bf_codecs.Premises]]) \
             -> None:
 
-        if premises is None or isinstance(premises, bfapi.Premises):
+        if premises is None or isinstance(premises, bf_codecs.Premises):
             index = self.stream_options.premises_combobox.findData(premises)
             self.stream_options.premises_combobox.setCurrentIndex(index)
 
@@ -470,7 +470,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     def _set_premises_by_id(self, premises_id: int) -> None:
 
-        def on_success(premises: bfapi.Premises) -> None:
+        def on_success(premises: bf_codecs.Premises) -> None:
             self.premises = premises
 
         def on_error(exc: BaseException) -> None:
@@ -505,7 +505,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def webcam_device(self) -> Optional[str]:
-        if self.connection_type is not bfapi.ConnType.WEBCAM:
+        if self.connection_type is not bf_codecs.ConnType.WEBCAM:
             return None
 
         webcam_device = self.stream_options.webcam_device_line_edit.text()
@@ -520,7 +520,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         message_title = self.tr("Error Opening Stream")
 
-        if exc is bfapi.DuplicateStreamSourceError:
+        if exc is bf_errors.DuplicateStreamSourceError:
             message_desc = self.tr("Stream source already open")
             message_info = self.tr("You already have the stream source open.")
             error_text = self.tr("Error: ")
@@ -529,7 +529,7 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{message_info}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif exc is bfapi.StreamNotOpenedError:
+        elif exc is bf_errors.StreamNotOpenedError:
             message_desc = self.tr("Error encountered while opening stream")
             error_text = self.tr("Error: ")
             message = f"<b>{message_desc}</b>" \
@@ -538,7 +538,7 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{exc.description}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif exc is bfapi.BaseAPIError:
+        elif exc is bf_errors.BaseAPIError:
             message_desc = self.tr("Error encountered while opening stream")
             message_info1 = self.tr("Is stream already open?")
             message_info2 = self.tr("Is this a valid stream source?")
@@ -555,10 +555,10 @@ class StreamConfiguration(StreamConfigurationUI):
         QMessageBox.information(self, message_title, message)
 
     def _handle_start_analysis_error(
-            self, stream_conf: bfapi.StreamConfiguration,
+            self, stream_conf: bf_codecs.StreamConfiguration,
             exc: BaseException) \
             -> None:
-        if exc is bfapi.AnalysisLimitExceededError:
+        if exc is bf_errors.AnalysisLimitExceededError:
             # Delete the stream configuration, since you almost never want to
             # have a stream that can't have analysis running
             QTAsyncWorker(self, api.delete_stream_configuration,
