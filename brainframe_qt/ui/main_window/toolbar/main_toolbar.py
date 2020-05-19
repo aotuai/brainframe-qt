@@ -39,11 +39,11 @@ class MainToolbar(QToolBar):
         self._init_layout()
         self._init_style()
 
-    def _init_action(self, icon_path: str, text: str):
+    def _init_action(self, icon_path: str, text: str) -> QAction:
         icon = QIcon(icon_path)
         return QAction(icon, text, self)
 
-    def _init_layout(self):
+    def _init_layout(self) -> None:
         self.addAction(self.stream_activity_action)
         self.addAction(self.identity_activity_action)
         self.addAction(self.alert_view_activity_action)
@@ -61,7 +61,7 @@ class MainToolbar(QToolBar):
 
         self.addAction(self.about_page_action)
 
-    def _init_style(self):
+    def _init_style(self) -> None:
         for action in self.actions():
             widget = self.widgetForAction(action)
             if not isinstance(widget, QToolButton):
