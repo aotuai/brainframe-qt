@@ -1046,17 +1046,17 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="109"/>
         <source>Error retrieving stream configurations</source>
-        <translation type="unfinished"></translation>
+        <translation>检索流配置时发生错误</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="110"/>
         <source>Exception:</source>
-        <translation type="unfinished"></translation>
+        <translation>异常：</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="111"/>
         <source>Retry or Close Client?</source>
-        <translation type="unfinished"></translation>
+        <translation>重试或关闭客户端？</translation>
     </message>
 </context>
 <context>
@@ -1159,17 +1159,17 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
         <source>No streams are being analyzed right now, so there is nothing to show here</source>
-        <translation type="unfinished">目前没有视频流正在被分析，因此此处无内容显示</translation>
+        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="74"/>
         <source>Streams with ongoing alerts:</source>
-        <translation type="unfinished"></translation>
+        <translation>正在警报的视频流：</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="84"/>
         <source>Streams without alerts:</source>
-        <translation type="unfinished"></translation>
+        <translation>无警报的视频流：</translation>
     </message>
 </context>
 </TS>
