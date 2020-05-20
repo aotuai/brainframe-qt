@@ -1,7 +1,8 @@
+from typing import List
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction, QLabel, QSizePolicy, QToolBar, \
-    QToolButton, \
+from PyQt5.QtWidgets import QAction, QToolBar, QSizePolicy, QToolButton, \
     QWidget
 
 
@@ -62,17 +63,28 @@ class MainToolbar(QToolBar):
         self.addAction(self.about_page_action)
 
     def _init_style(self) -> None:
-        for action in self.actions():
-            widget = self.widgetForAction(action)
-            if not isinstance(widget, QToolButton):
-                continue
+        for action in self.button_actions:
+            button = self.widgetForAction(action)
+
+            button.setObjectName("unselected")
 
             # TODO: This is supposed to make all the buttons the same width,
-            #  not sure why it doesn't work
-            widget.setSizePolicy(QSizePolicy.Expanding,
+            #  not sure why it doesn't work. I set the button min-width to an
+            #  arbitrary value in the qss instead
+            button.setSizePolicy(QSizePolicy.Expanding,
                                  QSizePolicy.Preferred)
 
-            widget.setCursor(Qt.PointingHandCursor)
+            button.setCursor(Qt.PointingHandCursor)
+
+    @property
+    def button_actions(self) -> List[QAction]:
+        actions = []
+        for action in self.actions():
+            button = self.widgetForAction(action)
+            if isinstance(button, QToolButton):
+                actions.append(action)
+
+        return actions
 
     def _create_spacer_widget(self) -> QWidget:
         widget = QWidget(self)
