@@ -750,27 +750,27 @@ Please recheck the entered server address.</source>
 <context>
     <name>StandardError</name>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="45"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="41"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="47"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="43"/>
         <source>Connection to server lost. Client must be closed</source>
         <translation>与服务器的连接丢失。客户必须关闭</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="75"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="71"/>
         <source>Copy to Clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="83"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="79"/>
         <source>Close Client</source>
         <translation>关闭客户端</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="127"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="123"/>
         <source>Error copied to clipboard</source>
         <translation>错误信息已复制到剪贴板</translation>
     </message>
@@ -780,12 +780,12 @@ Please recheck the entered server address.</source>
         <translation>正在推出</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="52"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="48"/>
         <source>An exception has occurred.</source>
         <translation>发生了一个例外。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="54"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="50"/>
         <source>The client must be closed.</source>
         <translation>必须关闭客户端。</translation>
     </message>
