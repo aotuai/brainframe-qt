@@ -6,6 +6,6 @@ from .license_agreement.license_agreement import LicenseAgreement
 from .server_configuration.server_configuration import ServerConfigurationDialog
 from .standard_error.standard_error import StandardError
 from .task_configuration.task_configuration import TaskConfiguration
-from .plugin_configuration.plugin_config import CapsuleConfigDialog
+from .capsule_configuration.plugin_config import CapsuleConfigDialog
 from .client_configuration import RenderConfiguration
 from .version_mismatch import VersionMismatch

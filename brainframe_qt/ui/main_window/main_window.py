@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QAction, QDockWidget, QWidget
 
 from brainframe.client.api import codecs
 from brainframe.client.ui.dialogs.about_page.about_page import AboutPage
-from brainframe.client.ui.dialogs.plugin_configuration.plugin_config import \
+from brainframe.client.ui.dialogs.capsule_configuration.plugin_config import \
     CapsuleConfigDialog
 from brainframe.client.ui.dialogs.server_configuration.server_configuration import \
     ServerConfigurationDialog

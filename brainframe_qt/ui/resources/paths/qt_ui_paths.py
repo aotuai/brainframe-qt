@@ -53,7 +53,7 @@ alert_entry_popup_ui       = route_path(alert_entry_popup_dir     , "alert_entry
 license_agreement_dir      = route_path(dialogs_dir               , "license_agreement"        )
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
 
-plugin_config_dir          = route_path(dialogs_dir               , "plugin_configuration"     )
+plugin_config_dir          = route_path(dialogs_dir               , "capsule_configuration"    )
 plugin_config_dialog_ui    = route_path(plugin_config_dir         , "plugin_config.ui"         )
 plugin_list_dir            = route_path(plugin_config_dir         , "plugin_list"              )
 plugin_list_ui             = route_path(plugin_list_dir           , "plugin_list.ui"           )

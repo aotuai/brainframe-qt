@@ -13,7 +13,7 @@ from .option_items import (
 )
 from brainframe.shared.codec_enums import OptionType
 from brainframe.client.api import api
-from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
+from brainframe.client.ui.dialogs.capsule_configuration import plugin_utils
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
