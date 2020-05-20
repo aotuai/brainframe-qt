@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QPushButton
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from .plugin_options import StreamCapsuleOptionsWidget, GlobalCapsuleOptionsWidget
+from .capsule_options import StreamCapsuleOptionsWidget, GlobalCapsuleOptionsWidget
 
 
 class CapsuleConfigDialog(QDialog):
