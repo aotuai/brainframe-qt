@@ -80,7 +80,8 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
         # Check if any streams override this
         changed_stream_ids = []
         for stream_id in all_stream_ids:
-            # Check if plugin options or plugin activity is changed server-side
+            # Check if capsule options or capsule activity is changed
+            # server-side
             opts = api.get_plugin_option_vals(
                 plugin_name=self.current_capsule,
                 stream_id=stream_id)
