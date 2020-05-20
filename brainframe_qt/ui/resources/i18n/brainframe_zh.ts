@@ -234,27 +234,27 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BaseCapsuleOptionsWidget</name>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/base_plugin_options.py" line="60"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/base_capsule_options.py" line="60"/>
         <source>Options</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/base_plugin_options.py" line="69"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/base_capsule_options.py" line="69"/>
         <source>Plugin Enabled</source>
         <translation>已启用插件</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/base_plugin_options.py" line="113"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/base_capsule_options.py" line="113"/>
         <source>The plugin option of name {} has an invalid type of type {}</source>
         <translation>名称为 {} 的插件选项的类型 {} 类型无效</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/base_plugin_options.py" line="147"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/base_capsule_options.py" line="147"/>
         <source>Not all options are valid!</source>
         <translation>并非所有选项都有效！</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/base_plugin_options.py" line="152"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/base_capsule_options.py" line="152"/>
         <source>You can&apos;t apply changes if the plugin never got set!</source>
         <translation>如果插件永远未被设置，则无法应用更改！</translation>
     </message>

@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QPushButton, QGridLayout, QMessageBox
 
 from brainframe.client.api import api
 
-from .base_plugin_options import BaseCapsuleOptionsWidget
+from .base_capsule_options import BaseCapsuleOptionsWidget
 
 
 class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):

@@ -1,4 +1,4 @@
-from .base_plugin_options import BaseCapsuleOptionsWidget
+from .base_capsule_options import BaseCapsuleOptionsWidget
 
 from brainframe.client.api import api
 
