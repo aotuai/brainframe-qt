@@ -563,44 +563,44 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>MainToolbar</name>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="12"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
         <source>Streams</source>
         <translation>视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
         <source>Identities</source>
         <translation>身份</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
         <source>Alerts</source>
         <translation>警报</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
         <source>Tasks</source>
         <translation>任务</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
         <source>Server</source>
         <translation>服务器配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="20"/>
         <source>About</source>
         <translation>相关</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
         <source>Client</source>
         <translation>客户端配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
         <source>Capsules</source>
-        <translation type="unfinished">胶囊</translation>
+        <translation>胶囊</translation>
     </message>
 </context>
 <context>
@@ -711,7 +711,7 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
-        <source>Unable to authenticate with the BrainFrame server. 
+        <source>Unable to authenticate with the BrainFrame server.
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
@@ -723,7 +723,7 @@ Please recheck the entered credentials.</source>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
-        <source>Unable to connect to the BrainFrame server. 
+        <source>Unable to connect to the BrainFrame server.
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
@@ -1046,17 +1046,17 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="109"/>
         <source>Error retrieving stream configurations</source>
-        <translation type="unfinished"></translation>
+        <translation>检索流配置时发生错误</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="110"/>
         <source>Exception:</source>
-        <translation type="unfinished"></translation>
+        <translation>异常：</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="111"/>
         <source>Retry or Close Client?</source>
-        <translation type="unfinished"></translation>
+        <translation>重试或关闭客户端？</translation>
     </message>
 </context>
 <context>
@@ -1159,17 +1159,17 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
         <source>No streams are being analyzed right now, so there is nothing to show here</source>
-        <translation type="unfinished">目前没有视频流正在被分析，因此此处无内容显示</translation>
+        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="74"/>
         <source>Streams with ongoing alerts:</source>
-        <translation type="unfinished"></translation>
+        <translation>正在警报的视频流：</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="84"/>
         <source>Streams without alerts:</source>
-        <translation type="unfinished"></translation>
+        <translation>无警报的视频流：</translation>
     </message>
 </context>
 </TS>
