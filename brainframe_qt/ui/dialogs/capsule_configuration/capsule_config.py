@@ -79,7 +79,7 @@ class CapsuleConfigDialog(QDialog):
         by the plugin list.
 
         Connected to:
-        - PluginList -- QtDesigner
+        - CapsuleList -- QtDesigner
           [peer].plugin_selection_changed
         """
         self.plugin_options_widget.change_plugin(plugin_name)

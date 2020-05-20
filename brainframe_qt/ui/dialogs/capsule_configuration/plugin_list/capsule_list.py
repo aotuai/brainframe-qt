@@ -12,7 +12,7 @@ from brainframe.client.ui.resources.paths import qt_ui_paths
 from .capsule_list_item.capsule_list_item import CapsuleListItem
 
 
-class PluginList(QListWidget):
+class CapsuleList(QListWidget):
     plugin_selection_changed = pyqtSignal(str)
     """This is activated when the user changes the selected plugin in the
     list.
@@ -63,7 +63,7 @@ class PluginList(QListWidget):
         the plugin name as the argument
 
         Connected to:
-        - PluginList -- Dynamic
+        - CapsuleList -- Dynamic
           self.currentItemChanged
         """
         capsule_list_item = self.itemWidget(current)

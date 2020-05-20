@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,0" columnstretch="3,5">
    <item row="1" column="0">
-    <widget class="PluginList" name="PluginList">
+    <widget class="CapsuleList" name="CapsuleList">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -66,7 +66,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PluginList</class>
+   <class>CapsuleList</class>
    <extends>QListWidget</extends>
    <header>brainframe.client.ui.dialogs.capsule_configuration.plugin_list.capsule_list</header>
   </customwidget>
@@ -106,7 +106,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>PluginList</sender>
+   <sender>CapsuleList</sender>
    <signal>plugin_selection_changed(QString)</signal>
    <receiver>CapsuleConfigDialog</receiver>
    <slot>on_plugin_change(QString)</slot>
