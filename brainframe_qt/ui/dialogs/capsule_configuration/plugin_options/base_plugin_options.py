@@ -17,7 +17,7 @@ from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-class BasePluginOptionsWidget(QGroupBox):
+class BaseCapsuleOptionsWidget(QGroupBox):
     plugin_options_changed = pyqtSignal()
     """Alerts the dialog holding the options widget that the current options
     have been modified by the user, such options may or may not be valid
@@ -111,7 +111,7 @@ class BasePluginOptionsWidget(QGroupBox):
             item = IntOptionItem(*args)
         else:
             message = QApplication.translate(
-                "BasePluginOptionsWidget",
+                "BaseCapsuleOptionsWidget",
                 "The plugin option of name {} has an invalid type of type {}")
             message = message.format(name, type_)
             raise TypeError(message)
@@ -145,12 +145,12 @@ class BasePluginOptionsWidget(QGroupBox):
         # Make sure that the options are valid
         if not self.options_valid():
             message = QApplication.translate(
-                "BasePluginOptionsWidget",
+                "BaseCapsuleOptionsWidget",
                 "Not all options are valid!")
             raise ValueError(message)
         if not len(self.all_items):
             message = QApplication.translate(
-                "BasePluginOptionsWidget",
+                "BaseCapsuleOptionsWidget",
                 "You can't apply changes if the plugin never got set!")
             raise RuntimeError(message)
 

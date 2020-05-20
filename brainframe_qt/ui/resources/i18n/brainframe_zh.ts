@@ -232,7 +232,7 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>BasePluginOptionsWidget</name>
+    <name>BaseCapsuleOptionsWidget</name>
     <message>
         <location filename="../../dialogs/capsule_configuration/plugin_options/base_plugin_options.py" line="60"/>
         <source>Options</source>

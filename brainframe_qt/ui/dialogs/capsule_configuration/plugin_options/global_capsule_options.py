@@ -2,10 +2,10 @@ from PyQt5.QtWidgets import QPushButton, QGridLayout, QMessageBox
 
 from brainframe.client.api import api
 
-from .base_plugin_options import BasePluginOptionsWidget
+from .base_plugin_options import BaseCapsuleOptionsWidget
 
 
-class GlobalCapsuleOptionsWidget(BasePluginOptionsWidget):
+class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 

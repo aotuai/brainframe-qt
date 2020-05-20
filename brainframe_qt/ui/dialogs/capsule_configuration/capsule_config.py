@@ -60,7 +60,7 @@ class CapsuleConfigDialog(QDialog):
         have not been changed.
 
         Connected to:
-        - BasePluginOptionsWidget -- Dynamic
+        - BaseCapsuleOptionsWidget -- Dynamic
           [child].plugin_options_changed
         """
 

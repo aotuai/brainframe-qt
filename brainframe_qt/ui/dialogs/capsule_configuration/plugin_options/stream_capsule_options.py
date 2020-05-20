@@ -1,9 +1,9 @@
-from .base_plugin_options import BasePluginOptionsWidget
+from .base_plugin_options import BaseCapsuleOptionsWidget
 
 from brainframe.client.api import api
 
 
-class StreamCapsuleOptionsWidget(BasePluginOptionsWidget):
+class StreamCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
     def __init__(self, stream_id, parent=None):
         super().__init__(parent=parent)
         assert stream_id is not None
