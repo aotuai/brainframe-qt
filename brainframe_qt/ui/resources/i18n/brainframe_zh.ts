@@ -563,42 +563,43 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>MainToolbar</name>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="12"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
         <source>Streams</source>
         <translation>视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
         <source>Identities</source>
         <translation>身份</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
+        <location fil
+ename="../../main_window/toolbar/main_toolbar.py" line="16"/>
         <source>Alerts</source>
         <translation>警报</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
         <source>Tasks</source>
         <translation>任务</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
         <source>Plugins</source>
         <translation>插件配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="20"/>
         <source>Server</source>
         <translation>服务器配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="21"/>
         <source>About</source>
         <translation>相关</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
         <source>Client</source>
         <translation>客户端配置</translation>
     </message>
