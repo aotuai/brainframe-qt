@@ -1,5 +1,6 @@
 from typing import List
 
+import typing
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QListWidget, QListWidgetItem
 from PyQt5.uic import loadUi
@@ -13,8 +14,8 @@ from .capsule_list_item.capsule_list_item import CapsuleListItem
 
 
 class CapsuleList(QListWidget):
-    plugin_selection_changed = pyqtSignal(str)
-    """This is activated when the user changes the selected plugin in the
+    capsule_selection_changed = pyqtSignal(str)
+    """This is activated when the user changes the selected capsule in the
     list.
 
     Connected to:
@@ -26,47 +27,48 @@ class CapsuleList(QListWidget):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.capsule_list_ui, self)
-        self.current_plugin = None
+        self.current_capsule = None
 
         # noinspection PyUnresolvedReferences
-        self.currentItemChanged.connect(self.plugin_changed)
+        self.currentItemChanged.connect(self.capsule_changed)
 
-        self._init_plugins()
+        self._init_capsules()
 
-    def _init_plugins(self):
-        """Populate plugin_container layout with those plugins"""
+    def _init_capsules(self):
+        """Populate capsule container layout with those capsules"""
 
-        def get_plugins():
+        def get_capsules():
             return api.get_plugins()
 
-        def add_plugins(plugins: List[Plugin]):
+        def add_capsules(capsules: List[Plugin]):
 
-            for plugin in plugins:
-                plugin_item = QListWidgetItem(parent=self)
-                self.addItem(plugin_item)
+            for capsule in capsules:
+                capsule_item = QListWidgetItem(parent=self)
+                self.addItem(capsule_item)
 
-                item_widget = CapsuleListItem(name=plugin.name, parent=self)
+                item_widget = CapsuleListItem(name=capsule.name, parent=self)
 
                 # Fix sizing
-                plugin_item.setSizeHint(item_widget.sizeHint())
-                self.setItemWidget(plugin_item, item_widget)
+                capsule_item.setSizeHint(item_widget.sizeHint())
+                self.setItemWidget(capsule_item, item_widget)
 
             # Always have an item selected
-            if plugins:
+            if capsules:
                 self.setCurrentRow(0)
 
-        QTAsyncWorker(self, get_plugins, on_success=add_plugins).start()
+        QTAsyncWorker(self, get_capsules, on_success=add_capsules).start()
 
-    def plugin_changed(self, current: QListWidgetItem,
-                       _previous: QListWidgetItem):
+    def capsule_changed(self, current: QListWidgetItem,
+                        _previous: QListWidgetItem):
         """When an item on the QListWidget is selected, emit a signal with
-        the plugin name as the argument
+        the capsule name as the argument
 
         Connected to:
         - CapsuleList -- Dynamic
           self.currentItemChanged
         """
-        capsule_list_item = self.itemWidget(current)
-        self.current_plugin = capsule_list_item.plugin_name
+        capsule_list_item = typing.cast(CapsuleListItem,
+                                        self.itemWidget(current))
+        self.current_capsule = capsule_list_item.capsule_name
         # noinspection PyUnresolvedReferences
-        self.plugin_selection_changed.emit(self.current_plugin)
+        self.capsule_selection_changed.emit(self.current_capsule)

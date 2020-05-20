@@ -107,7 +107,7 @@
   </connection>
   <connection>
    <sender>CapsuleList</sender>
-   <signal>plugin_selection_changed(QString)</signal>
+   <signal>capsule_selection_changed(QString)</signal>
    <receiver>CapsuleConfigDialog</receiver>
    <slot>on_plugin_change(QString)</slot>
    <hints>

@@ -14,5 +14,5 @@ class CapsuleListItem(QLabel):
 
         loadUi(qt_ui_paths.capsule_list_item_ui, self)
 
-        self.plugin_name = name
+        self.capsule_name = name
         self.setText(capsule_utils.pretty_snakecase(name))
