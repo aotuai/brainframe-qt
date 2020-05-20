@@ -9,7 +9,7 @@ from brainframe.client.api.codecs import Plugin
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
-from .plugin_list_item.capsule_list_item import CapsuleListItem
+from .capsule_list_item.capsule_list_item import CapsuleListItem
 
 
 class PluginList(QListWidget):
