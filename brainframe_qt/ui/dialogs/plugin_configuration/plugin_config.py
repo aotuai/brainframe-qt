@@ -6,7 +6,7 @@ from brainframe.client.ui.resources.paths import qt_ui_paths
 from .plugin_options import StreamPluginOptionsWidget, GlobalPluginOptionsWidget
 
 
-class PluginConfigDialog(QDialog):
+class CapsuleConfigDialog(QDialog):
 
     def __init__(self, stream_id=None, parent=None):
         """

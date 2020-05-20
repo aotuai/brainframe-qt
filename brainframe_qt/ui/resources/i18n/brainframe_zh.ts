@@ -278,6 +278,19 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>CapsuleConfigDialog</name>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="14"/>
+        <source>Plugin Options</source>
+        <translation>插件选项</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="45"/>
+        <source>Loaded Plugins</source>
+        <translation>已加载插件</translation>
+    </message>
+</context>
+<context>
     <name>ClientConfiguration</name>
     <message>
         <location filename="../../dialogs/client_configuration/client_configuration.ui" line="14"/>
@@ -632,19 +645,6 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>PluginConfigDialog</name>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="14"/>
-        <source>Plugin Options</source>
-        <translation>插件选项</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="45"/>
-        <source>Loaded Plugins</source>
-        <translation>已加载插件</translation>
-    </message>
-</context>
-<context>
     <name>PluginOptions</name>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="51"/>
@@ -711,9 +711,9 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
-        <source>Unable to authenticate with the BrainFrame server.
+        <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
-        <translation>无法使用BrainFrame服务器进行身份验证。
+        <translation type="unfinished">无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
@@ -723,9 +723,9 @@ Please recheck the entered credentials.</source>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
-        <source>Unable to connect to the BrainFrame server.
+        <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
-        <translation>无法连接到BrainFrame服务器。
+        <translation type="unfinished">无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>

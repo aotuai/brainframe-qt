@@ -23,7 +23,7 @@ class BasePluginOptionsWidget(QGroupBox):
     have been modified by the user, such options may or may not be valid
     
     Connected to:
-    - PluginConfigDialog -- Dynamic
+    - CapsuleConfigDialog -- Dynamic
       [parent].is_inputs_valid
     """
 

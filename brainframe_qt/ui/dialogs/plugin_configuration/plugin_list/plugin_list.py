@@ -18,7 +18,7 @@ class PluginList(QListWidget):
     list.
 
     Connected to:
-    - PluginConfigDialog -- QtDesigner
+    - CapsuleConfigDialog -- QtDesigner
       [peer].on_plugin_change
     """
 
