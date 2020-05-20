@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QGridLayout, QGroupBox, QApplication
 from PyQt5.uic import loadUi
 
 from .option_items import (
-    PluginOptionItem,
+    CapsuleOptionItem,
     EnumOptionItem,
     FloatOptionItem,
     IntOptionItem,
@@ -32,11 +32,11 @@ class BaseCapsuleOptionsWidget(QGroupBox):
 
         loadUi(qt_ui_paths.capsule_options_ui, self)
 
-        self.option_items: List[PluginOptionItem] = []
+        self.option_items: List[CapsuleOptionItem] = []
         """Only plugin-specific option items. This does not include items that 
         exist for all plugins, such as 'plugin_enabled'."""
 
-        self.all_items: List[PluginOptionItem] = []
+        self.all_items: List[CapsuleOptionItem] = []
         """All option items, including special cases such as 
         self.enabled_option"""
 
@@ -181,7 +181,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         depending on the specific subclass of the PluginOption Item.
 
         Connected to:
-        - PluginOptionItem -- Dynamic
+        - CapsuleOptionItem -- Dynamic
          [child].change_signal
         """
         self.capsule_options_changed.emit()

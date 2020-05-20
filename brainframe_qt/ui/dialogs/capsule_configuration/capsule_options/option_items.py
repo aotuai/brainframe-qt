@@ -11,7 +11,7 @@ from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
 from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
 
 
-class PluginOptionItem(ABC):
+class CapsuleOptionItem(ABC):
     # To be filled in by subclass
     option_widget: QWidget = None
     change_signal = None
@@ -110,7 +110,7 @@ class PluginOptionItem(ABC):
             self.tooltip_button.deleteLater()
 
 
-class EnumOptionItem(PluginOptionItem):
+class EnumOptionItem(CapsuleOptionItem):
     """A plugin option that holds a choice from a discrete set of string values.
     """
 
@@ -141,7 +141,7 @@ class EnumOptionItem(PluginOptionItem):
         return self.val in self._choices
 
 
-class FloatOptionItem(PluginOptionItem):
+class FloatOptionItem(CapsuleOptionItem):
     """A plugin option that holds a floating point value with defined
     boundaries.
 
@@ -208,7 +208,7 @@ class IntOptionItem(FloatOptionItem):
         return int(super().val)
 
 
-class BoolOptionItem(PluginOptionItem):
+class BoolOptionItem(CapsuleOptionItem):
     """A plugin option that holds an boolean value."""
 
     def __init__(self, name: str, value: bool, _,
