@@ -7,36 +7,31 @@ ui_dir = route_path("brainframe", "client", "ui")
 ###############################################################################
 
 # MainWindow
-main_window_dir = ui_dir / "main_window"
-main_window_qss = main_window_dir / "main_window.qss"
+main_window_dir = route_path(ui_dir / "main_window")
+main_window_qss = route_path(main_window_dir / "main_window.qss")
 
 # ToolBar
-toolbar_dir = main_window_dir / "toolbar"
-main_toolbar_qss = toolbar_dir / "main_toolbar.qss"
-
-# MainTabWidget
-main_tab_widget_dir = main_window_dir / "main_tab_widget"
-main_tab_widget_qss = main_tab_widget_dir / "main_tab_widget.qss"
+toolbar_dir = route_path(main_window_dir / "toolbar")
 
 ###############################################################################
 # Activities
 ###############################################################################
 
-activity_dir = main_window_dir / "activities"
+activity_dir = route_path(main_window_dir / "activities")
 
 # Stream Activity
-stream_activity_dir = activity_dir / "stream_activity"
-stream_activity_qss = stream_activity_dir / "stream_activity.qss"
+stream_activity_dir = route_path(activity_dir / "stream_activity")
+stream_activity_qss = route_path(stream_activity_dir / "stream_activity.qss")
 
 # Video Thumbnail View
-video_thumbnail_view_dir = main_window_dir / "video_thumbnail_view"
-video_thumbnail_view_qss = video_thumbnail_view_dir \
-                           / "video_thumbnail_view.qss"
+video_thumbnail_view_dir = route_path(main_window_dir / "video_thumbnail_view")
+video_thumbnail_view_qss = route_path(video_thumbnail_view_dir
+                                      / "video_thumbnail_view.qss")
 
 # Stream Configuration
-stream_configuration_dir = activity_dir / "stream_configuration"
-stream_configuration_qss = stream_configuration_dir \
-                           / "stream_configuration.qss"
+stream_configuration_dir = route_path(activity_dir / "stream_configuration")
+stream_configuration_qss = route_path(stream_configuration_dir
+                                      / "stream_configuration.qss")
 
 ###############################################################################
 # Dialog
@@ -54,12 +49,7 @@ alarm_view_qss = route_path(alarm_view_dir / "alarm_view.qss")
 resource_dir = route_path(ui_dir / "resources")
 
 # Widgets
-widget_resource_dir = resource_dir / "ui_elements" / "widgets"
-labeled_icon_qss = widget_resource_dir / "labeled_icon.qss"
-
-# Containers
-container_resource_dir = resource_dir / "ui_elements" / "containers"
-stacked_tab_widget_qss = container_resource_dir / "stacked_tab_widget.qss"
+widget_resource_dir = route_path(resource_dir / "ui_elements" / "widgets")
 
 ###############################################################################
 # BrainFrame Resources

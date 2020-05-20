@@ -30,6 +30,7 @@ class BackgroundImageTextUI(QWidget):
         text_label.setObjectName("text_label")
 
         text_label.setAlignment(Qt.AlignCenter)
+        text_label.setWordWrap(True)
 
         return text_label
 
