@@ -417,7 +417,7 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>GlobalPluginOptionsWidget</name>
+    <name>GlobalCapsuleOptionsWidget</name>
     <message>
         <location filename="../../dialogs/capsule_configuration/plugin_options/global_plugin_options.py" line="12"/>
         <source>Global Plugin Options</source>

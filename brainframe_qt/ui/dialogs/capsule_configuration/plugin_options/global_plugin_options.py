@@ -5,7 +5,7 @@ from brainframe.client.api import api
 from .base_plugin_options import BasePluginOptionsWidget
 
 
-class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
+class GlobalCapsuleOptionsWidget(BasePluginOptionsWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 

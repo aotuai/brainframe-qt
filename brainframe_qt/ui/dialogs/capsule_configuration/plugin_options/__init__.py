@@ -1,2 +1,2 @@
-from .global_plugin_options import GlobalPluginOptionsWidget
+from .global_plugin_options import GlobalCapsuleOptionsWidget
 from .stream_capsule_options import StreamCapsuleOptionsWidget
