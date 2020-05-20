@@ -280,12 +280,12 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>CapsuleConfigDialog</name>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_config.ui" line="14"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.ui" line="14"/>
         <source>Plugin Options</source>
         <translation>插件选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_config.ui" line="45"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.ui" line="45"/>
         <source>Loaded Plugins</source>
         <translation>已加载插件</translation>
     </message>

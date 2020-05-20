@@ -18,7 +18,7 @@ class CapsuleConfigDialog(QDialog):
         :param parent:
         """
         super().__init__(parent=parent)
-        loadUi(qt_ui_paths.plugin_config_dialog_ui, self)
+        loadUi(qt_ui_paths.capsule_config_dialog_ui, self)
 
         # Add the appropriate options widget
         if stream_id:
