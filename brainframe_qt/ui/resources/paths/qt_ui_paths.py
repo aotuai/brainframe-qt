@@ -53,13 +53,13 @@ alert_entry_popup_ui       = route_path(alert_entry_popup_dir     , "alert_entry
 license_agreement_dir      = route_path(dialogs_dir               , "license_agreement"        )
 license_agreement_ui       = route_path(license_agreement_dir     , "license_agreement.ui"     )
 
-plugin_config_dir          = route_path(dialogs_dir               , "capsule_configuration"    )
-capsule_config_dialog_ui   = route_path(plugin_config_dir         , "capsule_config.ui"         )
-capsule_list_dir           = route_path(plugin_config_dir         , "capsule_list"             )
+capsule_config_dir         = route_path(dialogs_dir               , "capsule_configuration"    )
+capsule_config_dialog_ui   = route_path(capsule_config_dir        , "capsule_config.ui"        )
+capsule_list_dir           = route_path(capsule_config_dir        , "capsule_list"             )
 capsule_list_ui            = route_path(capsule_list_dir          , "capsule_list.ui"          )
 capsule_list_item_dir      = route_path(capsule_list_dir          , "capsule_list_item"        )
 capsule_list_item_ui       = route_path(capsule_list_item_dir     , "capsule_list_item.ui"     )
-capsule_options_dir        = route_path(plugin_config_dir         , "capsule_options"          )
+capsule_options_dir        = route_path(capsule_config_dir        , "capsule_options"          )
 capsule_options_ui         = route_path(capsule_options_dir       , "capsule_options.ui"       )
 
 server_configuration_dir   = route_path(dialogs_dir               , "server_configuration"     )
