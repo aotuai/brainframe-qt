@@ -64,13 +64,13 @@ class FileSelector(_FileSelectorUI):
             lambda filepath: self.path_changed.emit(Path(filepath)))
 
     @property
-    def filepath(self) -> str:
-        return self.filepath_line_edit.text()
+    def filepath(self) -> Path:
+        return Path(self.filepath_line_edit.text())
 
     @filepath.setter
-    def filepath(self, filepath: str) -> None:
-        self.filepath_line_edit.setText(filepath)
-        self.path_changed.emit(Path(filepath))
+    def filepath(self, filepath: Path) -> None:
+        self.filepath_line_edit.setText(str(filepath))
+        self.path_changed.emit(filepath)
 
     def _get_filepath_dialog(self) -> None:
         # Second return value is ignored. PyQt5 returns what appears to be a
@@ -80,4 +80,4 @@ class FileSelector(_FileSelectorUI):
             self.tr("Select video file"),
             QStandardPaths.writableLocation(QStandardPaths.HomeLocation))
 
-        self.filepath = file_path
+        self.filepath = Path(file_path)
