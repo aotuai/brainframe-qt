@@ -150,11 +150,11 @@ class VideoExpandedView(QWidget):
         self.expanded_stream_closed_slot()
 
     @pyqtSlot()
-    def open_stream_plugin_config(self):
+    def open_stream_capsule_config(self):
         """
         Connected to:
         - QPushButton -- QtDesigner
-          self.open_stream_plugin_config.clicked
+          self.open_stream_capsule_config.clicked
         """
         CapsuleConfigDialog.show_dialog(self, self.stream_conf.id)
 

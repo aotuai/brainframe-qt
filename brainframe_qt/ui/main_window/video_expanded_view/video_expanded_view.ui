@@ -119,7 +119,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="plugin_stream_config_button">
+          <widget class="QPushButton" name="capsule_stream_config_button">
            <property name="text">
             <string>Stream Plugin Config</string>
            </property>
@@ -206,10 +206,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>plugin_stream_config_button</sender>
+   <sender>capsule_stream_config_button</sender>
    <signal>clicked()</signal>
    <receiver>VideoExpandedView</receiver>
-   <slot>open_stream_plugin_config()</slot>
+   <slot>open_stream_capsule_config()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>954</x>
@@ -227,6 +227,6 @@
   <slot>open_task_config()</slot>
   <slot>open_source_config()</slot>
   <slot>delete_stream_button_clicked()</slot>
-  <slot>open_stream_plugin_config()</slot>
+  <slot>open_stream_capsule_config()</slot>
  </slots>
 </ui>
