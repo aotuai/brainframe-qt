@@ -68,7 +68,7 @@
   <customwidget>
    <class>CapsuleList</class>
    <extends>QListWidget</extends>
-   <header>brainframe.client.ui.dialogs.capsule_configuration.plugin_list.capsule_list</header>
+   <header>brainframe.client.ui.dialogs.capsule_configuration.capsule_list.capsule_list</header>
   </customwidget>
  </customwidgets>
  <resources/>
