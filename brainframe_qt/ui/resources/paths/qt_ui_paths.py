@@ -58,7 +58,7 @@ capsule_config_dialog_ui   = route_path(plugin_config_dir         , "capsule_con
 plugin_list_dir            = route_path(plugin_config_dir         , "plugin_list"              )
 plugin_list_ui             = route_path(plugin_list_dir           , "plugin_list.ui"           )
 plugin_list_item_dir       = route_path(plugin_list_dir           , "plugin_list_item"         )
-plugin_list_item_ui        = route_path(plugin_list_item_dir      , "plugin_list_item.ui"      )
+capsule_list_item_ui       = route_path(plugin_list_item_dir      , "capsule_list_item.ui"     )
 plugin_options_dir         = route_path(plugin_config_dir         , "plugin_options"           )
 plugin_options_ui          = route_path(plugin_options_dir        , "plugin_options.ui"        )
 
