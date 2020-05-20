@@ -291,6 +291,29 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>CapsuleOptions</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="51"/>
+        <source>Plugin Description</source>
+        <translation>差价描述</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="104"/>
+        <source>Value</source>
+        <translation>值</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="139"/>
+        <source>Option</source>
+        <translation>选项</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="155"/>
+        <source>Override Global</source>
+        <translation>覆盖全局选项</translation>
+    </message>
+</context>
+<context>
     <name>ClientConfiguration</name>
     <message>
         <location filename="../../dialogs/client_configuration/client_configuration.ui" line="14"/>
@@ -424,7 +447,7 @@ Read the manual to learn about the required directory structure.</source>
         <translation>全局插件选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="94"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="95"/>
         <source>Reset All Overriding Streams</source>
         <translation>重置所有覆盖全局选项的流</translation>
     </message>
@@ -444,12 +467,12 @@ Read the manual to learn about the required directory structure.</source>
         <translation>无需重置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="96"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="97"/>
         <source>The following streams have overrides that will be cleared:</source>
         <translation>以下覆盖全局选项的流将被清除：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="120"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="121"/>
         <source>There are no streams that override the global options for this plugin.</source>
         <translation>没有流覆盖了此插件的全局选项。</translation>
     </message>
@@ -642,29 +665,6 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../ui_elements/containers/paginator.ui" line="119"/>
         <source>of</source>
         <translation>中的</translation>
-    </message>
-</context>
-<context>
-    <name>PluginOptions</name>
-    <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="51"/>
-        <source>Plugin Description</source>
-        <translation>差价描述</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="104"/>
-        <source>Value</source>
-        <translation>值</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="139"/>
-        <source>Option</source>
-        <translation>选项</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="155"/>
-        <source>Override Global</source>
-        <translation>覆盖全局选项</translation>
     </message>
 </context>
 <context>
