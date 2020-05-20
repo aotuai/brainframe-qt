@@ -791,6 +791,14 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>StreamCapsuleOptionsWidget</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/stream_capsule_options.py" line="10"/>
+        <source>Stream Plugin Options</source>
+        <translation>视频流插件选项</translation>
+    </message>
+</context>
+<context>
     <name>StreamConfiguration</name>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="582"/>
@@ -889,14 +897,6 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="59"/>
         <source>Video File</source>
         <translation>视频文件</translation>
-    </message>
-</context>
-<context>
-    <name>StreamPluginOptionsWidget</name>
-    <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/stream_capsule_options.py" line="10"/>
-        <source>Stream Plugin Options</source>
-        <translation>视频流插件选项</translation>
     </message>
 </context>
 <context>

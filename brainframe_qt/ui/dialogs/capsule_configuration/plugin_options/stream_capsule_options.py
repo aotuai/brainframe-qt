@@ -3,7 +3,7 @@ from .base_plugin_options import BasePluginOptionsWidget
 from brainframe.client.api import api
 
 
-class StreamPluginOptionsWidget(BasePluginOptionsWidget):
+class StreamCapsuleOptionsWidget(BasePluginOptionsWidget):
     def __init__(self, stream_id, parent=None):
         super().__init__(parent=parent)
         assert stream_id is not None
