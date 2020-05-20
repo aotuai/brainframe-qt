@@ -9,7 +9,7 @@ from brainframe.client.api.codecs import Plugin
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
-from .plugin_list_item.plugin_list_item import CapsuleListItem
+from .plugin_list_item.capsule_list_item import CapsuleListItem
 
 
 class PluginList(QListWidget):
@@ -66,7 +66,7 @@ class PluginList(QListWidget):
         - PluginList -- Dynamic
           self.currentItemChanged
         """
-        plugin_list_item = self.itemWidget(current)
-        self.current_plugin = plugin_list_item.plugin_name
+        capsule_list_item = self.itemWidget(current)
+        self.current_plugin = capsule_list_item.plugin_name
         # noinspection PyUnresolvedReferences
         self.plugin_selection_changed.emit(self.current_plugin)
