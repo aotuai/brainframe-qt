@@ -7,7 +7,7 @@ from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
 from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
     QPushButton, QSizePolicy, QApplication, QMessageBox
 
-from brainframe.client.ui.dialogs.capsule_configuration import plugin_utils
+from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
 from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
 
 
@@ -28,7 +28,7 @@ class PluginOptionItem(ABC):
         self.override_checkbox: QCheckBox = None
         self.tooltip_button: QPushButton = None
 
-        self.pretty_name = plugin_utils.pretty_snakecase(self.option_name)
+        self.pretty_name = capsule_utils.pretty_snakecase(self.option_name)
         self.init_ui(self.pretty_name, description, parent)
 
         self.locked = None
@@ -124,7 +124,7 @@ class EnumOptionItem(PluginOptionItem):
         self._choices = constraints["choices"]
 
         for choice_text in self._choices:
-            pretty_choice = plugin_utils.pretty_snakecase(choice_text)
+            pretty_choice = capsule_utils.pretty_snakecase(choice_text)
             self.option_widget.addItem(pretty_choice)
 
         super().__init__(name, value, description, parent=parent)

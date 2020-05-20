@@ -13,7 +13,7 @@ from .option_items import (
 )
 from brainframe.shared.codec_enums import OptionType
 from brainframe.client.api import api
-from brainframe.client.ui.dialogs.capsule_configuration import plugin_utils
+from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
@@ -56,7 +56,7 @@ class BasePluginOptionsWidget(QGroupBox):
         plugin = api.get_plugin(plugin_name)
 
         # Change name of plugin
-        title = f"[{plugin_utils.pretty_snakecase(plugin_name)}] "
+        title = f"[{capsule_utils.pretty_snakecase(plugin_name)}] "
         title += self.tr("Options")
         self.setTitle(title)
 
