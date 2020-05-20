@@ -20,7 +20,7 @@ class CapsuleList(QListWidget):
 
     Connected to:
     - CapsuleConfigDialog -- QtDesigner
-      [peer].on_plugin_change
+      [peer].on_capsule_change
     """
 
     def __init__(self, parent=None):

@@ -109,7 +109,7 @@
    <sender>CapsuleList</sender>
    <signal>capsule_selection_changed(QString)</signal>
    <receiver>CapsuleConfigDialog</receiver>
-   <slot>on_plugin_change(QString)</slot>
+   <slot>on_capsule_change(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>265</x>
@@ -123,6 +123,6 @@
   </connection>
  </connections>
  <slots>
-  <slot>on_plugin_change(QString)</slot>
+  <slot>on_capsule_change(QString)</slot>
  </slots>
 </ui>
