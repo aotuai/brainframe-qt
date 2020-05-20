@@ -31,13 +31,13 @@ class AlarmCreationDialog(QDialog):
     """The default window threshold for count events."""
 
     def __init__(self, zones: List[Zone],
-                 plugins: List[Plugin],
+                 capsules: List[Plugin],
                  parent=None):
         super().__init__(parent)
 
         loadUi(qt_ui_paths.alarm_creation_ui, self)
 
-        self.plugins = plugins
+        self.capsules = capsules
         self.zones = zones
 
         self._update_combo_box(self.countable_combo_box,
@@ -112,8 +112,8 @@ class AlarmCreationDialog(QDialog):
         self.seconds_label.setHidden(hidden)
 
     @classmethod
-    def new_alarm(cls, parent, *, zones, plugins: List[Plugin]):
-        dialog = cls(zones, plugins, parent=parent)
+    def new_alarm(cls, parent, *, zones, capsules: List[Plugin]):
+        dialog = cls(zones, capsules, parent=parent)
         result = dialog.exec_()
 
         zones: Dict[str, Zone] = {zone.name: zone for zone in zones}
@@ -139,8 +139,8 @@ class AlarmCreationDialog(QDialog):
 
             # Find the category that the attribute value is a part of
             attribute_category = None
-            for plugin in plugins:
-                for category, values in plugin.capability.attributes.items():
+            for capsule in capsules:
+                for category, values in capsule.capability.attributes.items():
                     if behavior in values:
                         attribute_category = category
                         break
@@ -242,13 +242,13 @@ class AlarmCreationDialog(QDialog):
                                    attribute_values)
 
     def _detection_classes(self) -> List[str]:
-        """Inspects plugins to find all detectable classes.
+        """Inspects capsules to find all detectable classes.
 
         :return: All currently detectable class names
         """
         detection_classes = set()
-        for plugin in self.plugins:
-            for det_class in plugin.capability.detections:
+        for capsule in self.capsules:
+            for det_class in capsule.capability.detections:
                 detection_classes.add(det_class)
 
         return list(detection_classes)
@@ -267,9 +267,9 @@ class AlarmCreationDialog(QDialog):
             are the corresponding list of possible attribute values
         """
         attributes = {}
-        for plugin in self.plugins:
-            if class_name in plugin.output_type.detections:
-                for category, values in plugin.capability.attributes.items():
+        for capsule in self.capsules:
+            if class_name in capsule.output_type.detections:
+                for category, values in capsule.capability.attributes.items():
                     attributes[category] = values
 
         return attributes
@@ -281,9 +281,9 @@ class AlarmCreationDialog(QDialog):
         :return: All possible values
         """
         values = set()
-        for plugin in self.plugins:
-            if category in plugin.capability.attributes:
-                for value in plugin.capability.attributes[category]:
+        for capsule in self.capsules:
+            if category in capsule.capability.attributes:
+                for value in capsule.capability.attributes[category]:
                     values.add(value)
 
         return list(values)

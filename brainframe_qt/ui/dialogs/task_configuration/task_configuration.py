@@ -51,7 +51,7 @@ class TaskConfiguration(QDialog):
             plugins, zones = plugins_and_zones
 
             zone, alarm = AlarmCreationDialog.new_alarm(
-                self, zones=zones, plugins=plugins)
+                self, zones=zones, capsules=plugins)
 
             if not alarm:
                 return
