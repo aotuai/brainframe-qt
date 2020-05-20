@@ -62,8 +62,8 @@ class BaseCapsuleOptionsWidget(QGroupBox):
 
         # Set capsule description
         capsule_description = capsule.description or ""
-        self.plugin_description_area.setVisible(bool(capsule_description))
-        self.plugin_description_label.setText(capsule_description)
+        self.capsule_description_area.setVisible(bool(capsule_description))
+        self.capsule_description_label.setText(capsule_description)
 
         # Add configuration that every capsule _always_ has
         self.enabled_option = self._add_option(
