@@ -29,7 +29,7 @@ class CapsuleConfigDialog(QDialog):
         self.layout().addWidget(self.plugin_options_widget, 1, 1)
 
         # Connect signals
-        self.plugin_options_widget.plugin_options_changed.connect(
+        self.plugin_options_widget.capsule_options_changed.connect(
             self.is_inputs_valid)
 
         self.stream_id = stream_id
@@ -61,7 +61,7 @@ class CapsuleConfigDialog(QDialog):
 
         Connected to:
         - BaseCapsuleOptionsWidget -- Dynamic
-          [child].plugin_options_changed
+          [child].capsule_options_changed
         """
 
         is_valid = True

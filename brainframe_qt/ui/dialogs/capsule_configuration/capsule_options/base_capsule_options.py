@@ -18,7 +18,7 @@ from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class BaseCapsuleOptionsWidget(QGroupBox):
-    plugin_options_changed = pyqtSignal()
+    capsule_options_changed = pyqtSignal()
     """Alerts the dialog holding the options widget that the current options
     have been modified by the user, such options may or may not be valid
     
@@ -184,7 +184,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         - PluginOptionItem -- Dynamic
          [child].change_signal
         """
-        self.plugin_options_changed.emit()
+        self.capsule_options_changed.emit()
 
     def _reset(self):
         """Clear any state specific to any one plugin"""
