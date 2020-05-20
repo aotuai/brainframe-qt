@@ -25,7 +25,7 @@ class PluginList(QListWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        loadUi(qt_ui_paths.plugin_list_ui, self)
+        loadUi(qt_ui_paths.capsule_list_ui, self)
         self.current_plugin = None
 
         # noinspection PyUnresolvedReferences

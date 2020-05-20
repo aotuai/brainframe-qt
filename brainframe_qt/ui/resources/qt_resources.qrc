@@ -51,7 +51,7 @@
         <file alias="main_window">../main_window/main_window.ui</file>
         <file alias="paginator">../resources/ui_elements/containers/paginator.ui</file>
         <file alias="plugin_config">../dialogs/capsule_configuration/plugin_config.ui</file>
-        <file alias="plugin_list">../dialogs/capsule_configuration/plugin_list/plugin_list.ui</file>
+        <file alias="capsule_list">../dialogs/capsule_configuration/plugin_list/capsule_list.ui</file>
         <file alias="capsule_list_item">../dialogs/capsule_configuration/plugin_list/capsule_list_item/capsule_list_item.ui</file>
         <file alias="plugin_options">../dialogs/capsule_configuration/plugin_options/plugin_options.ui</file>
         <file alias="server_configuration">../dialogs/server_configuration/server_configuration.ui</file>
