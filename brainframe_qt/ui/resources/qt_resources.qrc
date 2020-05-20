@@ -53,7 +53,7 @@
         <file alias="plugin_config">../dialogs/capsule_configuration/plugin_config.ui</file>
         <file alias="capsule_list">../dialogs/capsule_configuration/capsule_list/capsule_list.ui</file>
         <file alias="capsule_list_item">../dialogs/capsule_configuration/capsule_list/capsule_list_item/capsule_list_item.ui</file>
-        <file alias="plugin_options">../dialogs/capsule_configuration/plugin_options/plugin_options.ui</file>
+        <file alias="plugin_options">../dialogs/capsule_configuration/plugin_options/capsule_options.ui</file>
         <file alias="server_configuration">../dialogs/server_configuration/server_configuration.ui</file>
         <file alias="task_configuration">../dialogs/task_configuration/task_configuration.ui</file>
         <file alias="thumbnail_grid_layout">../main_window/video_thumbnail_view/thumbnail_grid_layout/thumbnail_grid_layout.ui</file>

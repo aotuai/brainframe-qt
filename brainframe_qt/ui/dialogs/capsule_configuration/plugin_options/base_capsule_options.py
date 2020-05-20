@@ -30,7 +30,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        loadUi(qt_ui_paths.plugin_options_ui, self)
+        loadUi(qt_ui_paths.capsule_options_ui, self)
 
         self.option_items: List[PluginOptionItem] = []
         """Only plugin-specific option items. This does not include items that 

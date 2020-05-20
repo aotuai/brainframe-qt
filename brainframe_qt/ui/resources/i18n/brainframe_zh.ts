@@ -647,22 +647,22 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>PluginOptions</name>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/plugin_options.ui" line="51"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/capsule_options.ui" line="51"/>
         <source>Plugin Description</source>
         <translation>差价描述</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/plugin_options.ui" line="104"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/capsule_options.ui" line="104"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/plugin_options.ui" line="139"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/capsule_options.ui" line="139"/>
         <source>Option</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/plugin_options.ui" line="155"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/capsule_options.ui" line="155"/>
         <source>Override Global</source>
         <translation>覆盖全局选项</translation>
     </message>
