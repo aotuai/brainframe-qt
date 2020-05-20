@@ -85,7 +85,7 @@ class CapsuleOptionItem(ABC):
     @abstractmethod
     def is_valid(self):
         """Should return True or False if the current value of the option is
-        valid, or if it does not fit the rules set by the plugin."""
+        valid, or if it does not fit the rules set by the capsule."""
         raise NotImplementedError
 
     def show_lock(self, status: bool):
@@ -111,7 +111,8 @@ class CapsuleOptionItem(ABC):
 
 
 class EnumOptionItem(CapsuleOptionItem):
-    """A plugin option that holds a choice from a discrete set of string values.
+    """A capsule option that holds a choice from a discrete set of string
+    values.
     """
 
     def __init__(self, name: str, value: str, constraints,
@@ -142,7 +143,7 @@ class EnumOptionItem(CapsuleOptionItem):
 
 
 class FloatOptionItem(CapsuleOptionItem):
-    """A plugin option that holds a floating point value with defined
+    """A capsule option that holds a floating point value with defined
     boundaries.
 
     Can have min_val or max_val be None"""
@@ -192,7 +193,7 @@ class FloatOptionItem(CapsuleOptionItem):
 
 
 class IntOptionItem(FloatOptionItem):
-    """A plugin option that holds an integer value.
+    """A capsule option that holds an integer value.
 
     Can have min_val and max_val be None
     """
@@ -209,7 +210,7 @@ class IntOptionItem(FloatOptionItem):
 
 
 class BoolOptionItem(CapsuleOptionItem):
-    """A plugin option that holds an boolean value."""
+    """A capsule option that holds an boolean value."""
 
     def __init__(self, name: str, value: bool, _,
                  description: Optional[str] = None,

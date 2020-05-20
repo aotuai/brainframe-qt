@@ -411,7 +411,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>FloatOptionItem</name>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/option_items.py" line="182"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/option_items.py" line="183"/>
         <source>{} is not a float!</source>
         <translation>{}不是浮点数！</translation>
     </message>
