@@ -14,7 +14,7 @@
    <string notr="true"/>
   </property>
   <property name="title">
-   <string notr="true">Plugin Name</string>
+   <string notr="true">Capsule Name</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -64,7 +64,7 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QScrollArea" name="plugin_options_area">
+     <widget class="QScrollArea" name="capsule_options_area">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
