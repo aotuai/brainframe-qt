@@ -1,7 +1,7 @@
 from brainframe.client.ui.resources.qt_plugins.base_plugin import BasePlugin
 
 
-class PluginList(BasePlugin):
+class CapsuleList(BasePlugin):
     # noinspection PyUnresolvedReferences
     from brainframe.client.ui.dialogs.capsule_configuration.plugin_list.plugin_list import \
         PluginList as Widget
