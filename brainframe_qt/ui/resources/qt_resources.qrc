@@ -15,7 +15,6 @@
         <file alias="app_icon_png">images/icons/app_icon.png</file>
         <file alias="capsule_toolbar">images/icons/capsule_toolbar.svg</file>
         <file alias="folder">images/icons/folder.svg</file>
-        <file alias="global_plugin_config">images/icons/global_plugin_config.svg</file>
         <file alias="identity_toolbar">images/icons/identity_toolbar.svg</file>
         <file alias="info">images/icons/information.svg</file>
         <file alias="line">images/icons/line.svg</file>
@@ -28,7 +27,6 @@
         <file alias="server_config">images/icons/server_configuration.svg</file>
         <file alias="client_config">images/icons/client_settings.svg</file>
         <file alias="settings_gear">images/icons/settings_gear.svg</file>
-        <file alias="stream_plugin_config">images/icons/stream_plugin_config.svg</file>
         <file alias="stream_toolbar">images/icons/stream_toolbar.svg</file>
         <file alias="trash">images/icons/trash.svg</file>
         <file alias="video_settings">images/icons/video_settings.svg</file>
