@@ -419,37 +419,37 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>GlobalCapsuleOptionsWidget</name>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/global_plugin_options.py" line="12"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/global_capsule_options.py" line="12"/>
         <source>Global Plugin Options</source>
         <translation>全局插件选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/global_plugin_options.py" line="94"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/global_capsule_options.py" line="94"/>
         <source>Reset All Overriding Streams</source>
         <translation>重置所有覆盖全局选项的流</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/global_plugin_options.py" line="39"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/global_capsule_options.py" line="39"/>
         <source>Reset to Defaults</source>
         <translation>重置为预设值</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/global_plugin_options.py" line="53"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/global_capsule_options.py" line="53"/>
         <source>The following options will be reset to default:</source>
         <translation>以下选项将重置为预设值：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/global_plugin_options.py" line="67"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/global_capsule_options.py" line="67"/>
         <source>There are no changes to reset</source>
         <translation>无需重置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/global_plugin_options.py" line="96"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/global_capsule_options.py" line="96"/>
         <source>The following streams have overrides that will be cleared:</source>
         <translation>以下覆盖全局选项的流将被清除：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/global_plugin_options.py" line="120"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/global_capsule_options.py" line="120"/>
         <source>There are no streams that override the global options for this plugin.</source>
         <translation>没有流覆盖了此插件的全局选项。</translation>
     </message>
