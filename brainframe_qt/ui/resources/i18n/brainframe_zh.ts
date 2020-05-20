@@ -563,45 +563,44 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>MainToolbar</name>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
         <source>Streams</source>
         <translation>视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
         <source>Identities</source>
         <translation>身份</translation>
     </message>
     <message>
-        <location fil
-ename="../../main_window/toolbar/main_toolbar.py" line="16"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
         <source>Alerts</source>
-        <translation>警报</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
+        <source>Tasks</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
-        <source>Tasks</source>
-        <translation>任务</translation>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
-        <source>Plugins</source>
-        <translation>插件配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="20"/>
-        <source>Server</source>
-        <translation>服务器配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="21"/>
-        <source>About</source>
-        <translation>相关</translation>
+        <source>Client</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
-        <source>Client</source>
-        <translation>客户端配置</translation>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="20"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -609,27 +608,27 @@ ename="../../main_window/toolbar/main_toolbar.py" line="16"/>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="62"/>
         <source>Previous page</source>
-        <translation>上一页</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="78"/>
         <source>Next page</source>
-        <translation>下一页</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="91"/>
         <source>Displaying</source>
-        <translation>正在显示</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="129"/>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="119"/>
         <source>of</source>
-        <translation>中的</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -637,12 +636,12 @@ ename="../../main_window/toolbar/main_toolbar.py" line="16"/>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="14"/>
         <source>Plugin Options</source>
-        <translation>插件选项</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="45"/>
         <source>Loaded Plugins</source>
-        <translation>已加载插件</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -650,94 +649,92 @@ ename="../../main_window/toolbar/main_toolbar.py" line="16"/>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="51"/>
         <source>Plugin Description</source>
-        <translation>差价描述</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="104"/>
         <source>Value</source>
-        <translation>值</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="139"/>
         <source>Option</source>
-        <translation>选项</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="155"/>
         <source>Override Global</source>
-        <translation>覆盖全局选项</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ServerConfigurationDialog</name>
     <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="14"/>
+        <source>Server Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="34"/>
         <source>Server address</source>
-        <translation>服务器地址</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="55"/>
         <source>Server uses authentication</source>
-        <translation>服务器使用身份验证</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="69"/>
         <source>Username</source>
-        <translation>用户名</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="86"/>
         <source>Password</source>
-        <translation>密码</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="93"/>
         <source>Save password between sessions</source>
-        <translation>保存密码</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="14"/>
-        <source>Server Configuration</source>
-        <translation>服务器选项</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="42"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
-        <translation>QSettings中保存的密码无效，正在清除。</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
+        <source>Invalid Schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
+        <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="98"/>
         <source>Server Authentication Error</source>
-        <translation>服务器认证错误</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
-        <translation>无法使用BrainFrame服务器进行身份验证。
-请重新检查输入的凭据。</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="103"/>
         <source>Connection Error</source>
-        <translation>连接错误</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
-        <translation>无法连接到BrainFrame服务器。
-请重新检查输入的服务器地址。</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
-        <source>Invalid Schema</source>
-        <translation>无效架构</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
-        <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
-        <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -745,50 +742,50 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../splash_screen/splash_screen.py" line="73"/>
         <source>Configure</source>
-        <translation>配置</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>StandardError</name>
     <message>
+        <location filename="../../dialogs/dialog_actions.py" line="8"/>
+        <source>Quitting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../dialogs/standard_error/standard_error.py" line="45"/>
         <source>An exception has occurred</source>
-        <translation>发生了一个例外</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/standard_error/standard_error.py" line="47"/>
         <source>Connection to server lost. Client must be closed</source>
-        <translation>与服务器的连接丢失。客户必须关闭</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="75"/>
-        <source>Copy to Clipboard</source>
-        <translation>复制到剪贴板</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="83"/>
-        <source>Close Client</source>
-        <translation>关闭客户端</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="127"/>
-        <source>Error copied to clipboard</source>
-        <translation>错误信息已复制到剪贴板</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/dialog_actions.py" line="8"/>
-        <source>Quitting</source>
-        <translation>正在推出</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/standard_error/standard_error.py" line="52"/>
         <source>An exception has occurred.</source>
-        <translation>发生了一个例外。</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/standard_error/standard_error.py" line="54"/>
         <source>The client must be closed.</source>
-        <translation>必须关闭客户端。</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="75"/>
+        <source>Copy to Clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="83"/>
+        <source>Close Client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="127"/>
+        <source>Error copied to clipboard</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -796,100 +793,100 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="582"/>
         <source>Error Opening Stream</source>
-        <translation>打开视频流时出错</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="277"/>
         <source>Error encountered while uploading video file</source>
-        <translation>上传视频文件过程中发生了一个错误</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="538"/>
         <source>Stream source already open</source>
-        <translation>视频流源已经打开</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="539"/>
         <source>You already have the stream source open.</source>
-        <translation>您已经打开了视频流源。</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="559"/>
         <source>Error: </source>
-        <translation>错误： </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="556"/>
         <source>Error encountered while opening stream</source>
-        <translation>打开视频流时出错</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="557"/>
         <source>Is stream already open?</source>
-        <translation>视频流是否已打开？</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="558"/>
         <source>Is this a valid stream source?</source>
-        <translation>这是一个有效的视频流源吗？</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="583"/>
         <source>Active Stream Limit Exceeded</source>
-        <translation>视频流数量超过上限</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="584"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
-        <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
         <source>Error uploading file</source>
-        <translation>上传文件时发生错误</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="600"/>
         <source>File does not exist</source>
-        <translation>文件不存在</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="601"/>
         <source>No such file: {filepath}</source>
-        <translation>没有这样的文件：{filepath}</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>StreamConfigurationUI</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="69"/>
-        <source>Stream Options</source>
-        <translation>视频流选项</translation>
-    </message>
-    <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="44"/>
         <source>Stream Name</source>
-        <translation>视频流名称</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="49"/>
         <source>Connection Type</source>
-        <translation>连接类型</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="57"/>
         <source>IP Camera</source>
-        <translation>网络摄像头</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="58"/>
         <source>Webcam</source>
-        <translation>摄像头</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="59"/>
         <source>Video File</source>
-        <translation>视频文件</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="69"/>
+        <source>Stream Options</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -897,7 +894,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/plugin_configuration/plugin_options/stream_plugin_options.py" line="10"/>
         <source>Stream Plugin Options</source>
-        <translation>视频流插件选项</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -905,95 +902,95 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../video_items/stream_detection.py" line="66"/>
         <source>Name: </source>
-        <translation>名称： </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="73"/>
-        <source>New Line</source>
-        <translation>新检测线段</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="73"/>
-        <source>Name for new line:</source>
-        <translation>新检测线段名称：</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="82"/>
-        <source>New Region</source>
-        <translation>新检测区域</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="82"/>
-        <source>Name for new region:</source>
-        <translation>新检测区域名称：</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="109"/>
-        <source>New zone cannot have fewer than 2 points</source>
-        <translation>新检测区域不能由于少于两个点组成</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="151"/>
-        <source>Add points until done, then press &quot;Confirm&quot; button</source>
-        <translation>添加点直到完成，然后按“确认”按钮</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="196"/>
-        <source>Item Name Already Exists</source>
-        <translation>名称已存在</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="197"/>
-        <source>Item {} already exists in Stream</source>
-        <translation>项目{}已存在于视频流中</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="199"/>
-        <source>Please use another name.</source>
-        <translation>请使用另一个名称。</translation>
-    </message>
-    <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="14"/>
         <source>Task Configuration</source>
-        <translation>任务配置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="41"/>
         <source>Add New</source>
-        <translation>添加</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="53"/>
         <source>Alarm</source>
-        <translation>警报</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="60"/>
         <source>Region</source>
-        <translation>区域</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="67"/>
         <source>Line</source>
-        <translation>线段</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="88"/>
         <source>Current Tasks</source>
-        <translation>已有任务</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="203"/>
         <source>Confirm</source>
-        <translation>确认</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="210"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="73"/>
+        <source>New Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="73"/>
+        <source>Name for new line:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="82"/>
+        <source>New Region</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="82"/>
+        <source>Name for new region:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="109"/>
+        <source>New zone cannot have fewer than 2 points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="151"/>
+        <source>Add points until done, then press &quot;Confirm&quot; button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="196"/>
+        <source>Item Name Already Exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="197"/>
+        <source>Item {} already exists in Stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="199"/>
+        <source>Please use another name.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1001,45 +998,45 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="16"/>
         <source>Version Mismatch</source>
-        <translation>版本不匹配</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="31"/>
-        <source>Close Client</source>
-        <translation>关闭客户端</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="21"/>
         <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
-        <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="31"/>
+        <source>Close Client</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VideoExpandedView</name>
     <message>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
+        <source>Stream Config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="117"/>
         <source>Task Config</source>
-        <translation>任务选项</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
         <source>Stream Plugin Config</source>
-        <translation>视频流插件配置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="137"/>
         <source>Delete Stream</source>
-        <translation>删除视频流</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="57"/>
         <source>Close expanded video view</source>
-        <translation>关闭扩展视频视图</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
-        <source>Stream Config</source>
-        <translation>视频流配置</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1047,17 +1044,17 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="109"/>
         <source>Error retrieving stream configurations</source>
-        <translation>检索流配置时发生错误</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="110"/>
         <source>Exception:</source>
-        <translation>异常：</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="111"/>
         <source>Retry or Close Client?</source>
-        <translation>重试或关闭客户端？</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1065,22 +1062,22 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../video_items/stream_zone_status.py" line="28"/>
         <source>Entering: </source>
-        <translation>进入： </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../video_items/stream_zone_status.py" line="40"/>
         <source>Exiting: </source>
-        <translation>离开： </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../video_items/stream_zone_status.py" line="52"/>
         <source>Within: </source>
-        <translation>在内： </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../video_items/stream_zone_status.py" line="70"/>
         <source>Alert!</source>
-        <translation>警报！</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1088,22 +1085,22 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="248"/>
         <source>Pipeline</source>
-        <translation>Pipeline</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="260"/>
-        <source>Avoid transcoding</source>
-        <translation>避免转码</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="255"/>
         <source>None</source>
-        <translation>空</translation>
+        <translation type="unfinished">空</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="260"/>
+        <source>Avoid transcoding</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="266"/>
         <source>Keyframe-only streaming</source>
-        <translation>仅传输关键帧</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1111,40 +1108,40 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_activity/stream_activity_ui.py" line="37"/>
         <source>Add new stream</source>
-        <translation>添加新视频流</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>_StreamOptions</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="188"/>
-        <source>Advanced Options</source>
-        <translation>高级选项</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="154"/>
-        <source>Filepath</source>
-        <translation>文件路径</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="164"/>
-        <source>Premises</source>
-        <translation>场所</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="170"/>
-        <source>Local Network</source>
-        <translation>本地网络</translation>
-    </message>
-    <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="134"/>
         <source>Network address</source>
-        <translation>网络地址</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="144"/>
         <source>Device ID</source>
-        <translation>设备编号</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="154"/>
+        <source>Filepath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="164"/>
+        <source>Premises</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="170"/>
+        <source>Local Network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="188"/>
+        <source>Advanced Options</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1152,7 +1149,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="42"/>
         <source>(Ongoing)</source>
-        <translation>(仍在持续)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1160,17 +1157,17 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
         <source>No streams are being analyzed right now, so there is nothing to show here</source>
-        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
+        <translation type="unfinished">目前没有视频流正在被分析，因此此处无内容显示</translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="74"/>
         <source>Streams with ongoing alerts:</source>
-        <translation>正在警报的视频流：</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="84"/>
         <source>Streams without alerts:</source>
-        <translation>无警报的视频流：</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -12,11 +12,6 @@ main_window_qss = route_path(main_window_dir / "main_window.qss")
 
 # ToolBar
 toolbar_dir = route_path(main_window_dir / "toolbar")
-main_toolbar_qss = route_path(toolbar_dir / "main_toolbar.qss")
-
-# MainTabWidget
-main_tab_widget_dir = route_path(main_window_dir / "main_tab_widget")
-main_tab_widget_qss = route_path(main_tab_widget_dir / "main_tab_widget.qss")
 
 ###############################################################################
 # Activities
@@ -55,13 +50,6 @@ resource_dir = route_path(ui_dir / "resources")
 
 # Widgets
 widget_resource_dir = route_path(resource_dir / "ui_elements" / "widgets")
-labeled_icon_qss = route_path(widget_resource_dir / "labeled_icon.qss")
-
-# Containers
-container_resource_dir = route_path(resource_dir / "ui_elements"
-                                    / "containers")
-stacked_tab_widget_qss = route_path(container_resource_dir
-                                    / "stacked_tab_widget.qss")
 
 ###############################################################################
 # BrainFrame Resources
