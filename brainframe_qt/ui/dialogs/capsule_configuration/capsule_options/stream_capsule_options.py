@@ -10,14 +10,14 @@ class StreamCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
         self.window().setWindowTitle(self.tr("Stream Plugin Options"))
         self.stream_id = stream_id
 
-    def change_plugin(self, plugin_name):
+    def change_capsule(self, capsule_name):
         # Add all of the global options
-        super().change_plugin(plugin_name)
+        super().change_capsule(capsule_name)
 
         # Get stream-specific option items
-        stream_options = api.get_plugin_option_vals(plugin_name,
+        stream_options = api.get_plugin_option_vals(capsule_name,
                                                     self.stream_id)
-        enabled_option = api.is_plugin_active(plugin_name, self.stream_id)
+        enabled_option = api.is_plugin_active(capsule_name, self.stream_id)
 
         # Lock all options that are not overwritten by stream specific options
         for option_item in self.option_items:

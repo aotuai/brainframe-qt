@@ -82,7 +82,7 @@ class CapsuleConfigDialog(QDialog):
         - CapsuleList -- QtDesigner
           [peer].plugin_selection_changed
         """
-        self.plugin_options_widget.change_plugin(plugin_name)
+        self.plugin_options_widget.change_capsule(plugin_name)
 
         # Now that a plugin is loaded, allow the user to interact with buttons
         self.set_buttons_disabled(False)

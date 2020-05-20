@@ -40,7 +40,7 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
 
         default_values = {key: option.default
                           for key, option in
-                          api.get_plugin(self.current_plugin).options.items()}
+                          api.get_plugin(self.current_capsule).options.items()}
 
         # Check if there are any changed options
         changed_options = []
@@ -82,10 +82,10 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
         for stream_id in all_stream_ids:
             # Check if plugin options or plugin activity is changed server-side
             opts = api.get_plugin_option_vals(
-                plugin_name=self.current_plugin,
+                plugin_name=self.current_capsule,
                 stream_id=stream_id)
             is_active = api.is_plugin_active(
-                plugin_name=self.current_plugin,
+                plugin_name=self.current_capsule,
                 stream_id=stream_id)
 
             if len(opts) or is_active is not None:
@@ -109,11 +109,11 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
             # Change the options to default
             for stream_id in changed_stream_ids:
                 api.set_plugin_option_vals(
-                    plugin_name=self.current_plugin,
+                    plugin_name=self.current_capsule,
                     stream_id=stream_id,
                     option_vals={})
                 api.set_plugin_active(
-                    plugin_name=self.current_plugin,
+                    plugin_name=self.current_capsule,
                     stream_id=stream_id,
                     active=None)
         else:
