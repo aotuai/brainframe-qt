@@ -894,7 +894,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamPluginOptionsWidget</name>
     <message>
-        <location filename="../../dialogs/capsule_configuration/plugin_options/stream_plugin_options.py" line="10"/>
+        <location filename="../../dialogs/capsule_configuration/plugin_options/stream_capsule_options.py" line="10"/>
         <source>Stream Plugin Options</source>
         <translation>视频流插件选项</translation>
     </message>
