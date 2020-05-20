@@ -7,7 +7,7 @@ from brainframe.client.api import api
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
-class PluginListItem(QLabel):
+class CapsuleListItem(QLabel):
 
     def __init__(self, name, parent=None):
         super().__init__(parent=parent)

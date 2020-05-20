@@ -9,7 +9,7 @@ from brainframe.client.api.codecs import Plugin
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
-from .plugin_list_item.plugin_list_item import PluginListItem
+from .plugin_list_item.plugin_list_item import CapsuleListItem
 
 
 class PluginList(QListWidget):
@@ -45,7 +45,7 @@ class PluginList(QListWidget):
                 plugin_item = QListWidgetItem(parent=self)
                 self.addItem(plugin_item)
 
-                item_widget = PluginListItem(name=plugin.name, parent=self)
+                item_widget = CapsuleListItem(name=plugin.name, parent=self)
 
                 # Fix sizing
                 plugin_item.setSizeHint(item_widget.sizeHint())
