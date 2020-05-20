@@ -48,7 +48,7 @@
         <file alias="license_agreement">../dialogs/license_agreement/license_agreement.ui</file>
         <file alias="main_window">../main_window/main_window.ui</file>
         <file alias="paginator">../resources/ui_elements/containers/paginator.ui</file>
-        <file alias="plugin_config">../dialogs/capsule_configuration/plugin_config.ui</file>
+        <file alias="capsule_config">../dialogs/capsule_configuration/capsule_config.ui</file>
         <file alias="capsule_list">../dialogs/capsule_configuration/capsule_list/capsule_list.ui</file>
         <file alias="capsule_list_item">../dialogs/capsule_configuration/capsule_list/capsule_list_item/capsule_list_item.ui</file>
         <file alias="capsule_options">../dialogs/capsule_configuration/capsule_options/capsule_options.ui</file>
