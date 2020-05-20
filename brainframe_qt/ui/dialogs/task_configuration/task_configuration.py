@@ -42,16 +42,16 @@ class TaskConfiguration(QDialog):
     @pyqtSlot()
     def new_alarm(self):
 
-        def get_plugins_and_zones():
-            plugins = api.get_plugins()
+        def get_capsules_and_zones():
+            capsules = api.get_plugins()
             zones = api.get_zones(self.stream_conf.id)
-            return plugins, zones
+            return capsules, zones
 
-        def create_alarm(plugins_and_zones):
-            plugins, zones = plugins_and_zones
+        def create_alarm(capsules_and_zones):
+            capsules, zones = capsules_and_zones
 
             zone, alarm = AlarmCreationDialog.new_alarm(
-                self, zones=zones, capsules=plugins)
+                self, zones=zones, capsules=capsules)
 
             if not alarm:
                 return
@@ -64,7 +64,7 @@ class TaskConfiguration(QDialog):
 
             QTAsyncWorker(self, set_zone_alarm, on_success=add_alarm).start()
 
-        QTAsyncWorker(self, get_plugins_and_zones,
+        QTAsyncWorker(self, get_capsules_and_zones,
                       on_success=create_alarm) \
             .start()
 
