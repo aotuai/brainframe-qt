@@ -195,22 +195,22 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertHeader</name>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="191"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="192"/>
         <source>Verify alert</source>
         <translation>标记“检测结果正确”</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="192"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="193"/>
         <source>Mark alert as false positive</source>
         <translation>标记“检测结果错误”</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="193"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="194"/>
         <source>Unverify alert</source>
         <translation>取消“检测结果正确”标记</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="194"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="195"/>
         <source>Unmark alert as false positive</source>
         <translation>取消“检测结果错误”标记</translation>
     </message>
@@ -262,17 +262,17 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="70"/>
+        <location filename="../../brainframe_app.py" line="69"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="93"/>
+        <location filename="../../brainframe_app.py" line="92"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="166"/>
+        <location filename="../../brainframe_app.py" line="165"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -563,44 +563,44 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>MainToolbar</name>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="12"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
         <source>Streams</source>
         <translation>视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
         <source>Identities</source>
         <translation>身份</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
         <source>Alerts</source>
         <translation>警报</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
         <source>Tasks</source>
         <translation>任务</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
-        <source>Plugins</source>
-        <translation>插件配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
         <source>Server</source>
         <translation>服务器配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="20"/>
         <source>About</source>
         <translation>相关</translation>
     </message>
     <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
         <source>Client</source>
         <translation>客户端配置</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
+        <source>Capsules</source>
+        <translation>胶囊</translation>
     </message>
 </context>
 <context>
@@ -700,41 +700,41 @@ Read the manual to learn about the required directory structure.</source>
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="43"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="42"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="98"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="100"/>
-        <source>Unable to authenticate with the BrainFrame server. 
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <source>Unable to authenticate with the BrainFrame server.
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="103"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="105"/>
-        <source>Unable to connect to the BrainFrame server. 
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
+        <source>Unable to connect to the BrainFrame server.
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="86"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
@@ -793,67 +793,67 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="568"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="582"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="272"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="277"/>
         <source>Error encountered while uploading video file</source>
         <translation>上传视频文件过程中发生了一个错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="524"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="538"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="525"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="539"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="545"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="559"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="542"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="556"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="543"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="557"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="544"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="558"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="569"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="583"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="570"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="584"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="585"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
         <source>Error uploading file</source>
         <translation>上传文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="586"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="600"/>
         <source>File does not exist</source>
         <translation>文件不存在</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="587"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="601"/>
         <source>No such file: {filepath}</source>
         <translation>没有这样的文件：{filepath}</translation>
     </message>
@@ -861,32 +861,32 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationUI</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="68"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="69"/>
         <source>Stream Options</source>
         <translation>视频流选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="43"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="44"/>
         <source>Stream Name</source>
         <translation>视频流名称</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="48"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="49"/>
         <source>Connection Type</source>
         <translation>连接类型</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="56"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="57"/>
         <source>IP Camera</source>
         <translation>网络摄像头</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="57"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="58"/>
         <source>Webcam</source>
         <translation>摄像头</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="58"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="59"/>
         <source>Video File</source>
         <translation>视频文件</translation>
     </message>
@@ -1044,19 +1044,19 @@ Please recheck the entered server address.</source>
 <context>
     <name>VideoThumbnailView</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.ui" line="80"/>
-        <source>Streams with ongoing alerts:</source>
-        <translation>正在警报的视频流：</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.ui" line="90"/>
-        <source>Streams without alerts:</source>
-        <translation>无警报的视频流：</translation>
-    </message>
-    <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="109"/>
-        <source>Inconsistent state with alert widgets.</source>
-        <translation></translation>
+        <source>Error retrieving stream configurations</source>
+        <translation>检索流配置时发生错误</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="110"/>
+        <source>Exception:</source>
+        <translation>异常：</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="111"/>
+        <source>Retry or Close Client?</source>
+        <translation>重试或关闭客户端？</translation>
     </message>
 </context>
 <context>
@@ -1085,22 +1085,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>_AdvancedOptionsGroupBox</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="247"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="248"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="259"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="260"/>
         <source>Avoid transcoding</source>
         <translation>避免转码</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="254"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="255"/>
         <source>None</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="265"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="266"/>
         <source>Keyframe-only streaming</source>
         <translation>仅传输关键帧</translation>
     </message>
@@ -1108,7 +1108,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>_StreamActivityUI</name>
     <message>
-        <location filename="../../main_window/activities/stream_activity/stream_activity_ui.py" line="35"/>
+        <location filename="../../main_window/activities/stream_activity/stream_activity_ui.py" line="37"/>
         <source>Add new stream</source>
         <translation>添加新视频流</translation>
     </message>
@@ -1116,32 +1116,32 @@ Please recheck the entered server address.</source>
 <context>
     <name>_StreamOptions</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="187"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="188"/>
         <source>Advanced Options</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="153"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="154"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="163"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="164"/>
         <source>Premises</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="169"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="170"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="133"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="134"/>
         <source>Network address</source>
         <translation>网络地址</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="143"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="144"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
@@ -1152,6 +1152,24 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/video_expanded_view/alert_log/alert_log_entry/alert_log_entry.py" line="42"/>
         <source>(Ongoing)</source>
         <translation>(仍在持续)</translation>
+    </message>
+</context>
+<context>
+    <name>_VideoThumbnailViewUI</name>
+    <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
+        <source>No streams are being analyzed right now, so there is nothing to show here</source>
+        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="74"/>
+        <source>Streams with ongoing alerts:</source>
+        <translation>正在警报的视频流：</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="84"/>
+        <source>Streams without alerts:</source>
+        <translation>无警报的视频流：</translation>
     </message>
 </context>
 </TS>

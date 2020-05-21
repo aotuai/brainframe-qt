@@ -12,7 +12,6 @@ alert_log_dir              = route_path(video_expanded_view_dir   , "alert_log" 
 alert_log_ui               = route_path(alert_log_dir             , "alert_log.ui"             )
 
 video_thumbnail_view_dir   = route_path(main_window_dir           , "video_thumbnail_view"     )
-video_thumbnail_view_ui    = route_path(video_thumbnail_view_dir  , "video_thumbnail_view.ui"  )
 
 thumbnail_grid_layout_dir  = route_path(video_thumbnail_view_dir  , "thumbnail_grid_layout"    )
 thumbnail_grid_layout_ui   = route_path(thumbnail_grid_layout_dir , "thumbnail_grid_layout.ui" )

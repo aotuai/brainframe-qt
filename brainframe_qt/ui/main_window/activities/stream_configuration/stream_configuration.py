@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
 from brainframe.api import bf_codecs, bf_errors
 from brainframe.client.api_utils import api
-from brainframe.client.api_utils.zss_pubsub import zss_publisher
 from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
 from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
@@ -18,6 +17,9 @@ from brainframe.client.ui.resources.ui_elements.widgets import \
 
 class StreamConfiguration(StreamConfigurationUI):
     stream_conf_deleted = pyqtSignal()
+    stream_conf_modified = pyqtSignal(bf_codecs.StreamConfiguration)
+    """Sent when a new or modified stream_conf has been sent to, and accepted
+    by, the server"""
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -57,13 +59,15 @@ class StreamConfiguration(StreamConfigurationUI):
         self.stream_options.advanced_options.expansion_changed.connect(
             self._show_relevant_options)
 
-        # PubSub
-        stream_sub = zss_publisher.subscribe_streams(
-            self._handle_stream_stream)
-        self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
+        # TODO: Readd with a better pubsub system
+        # # PubSub
+        # stream_sub = zss_publisher.subscribe_streams(
+        #     self._handle_stream_stream)
+        # self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
 
     def load_from_conf(
-            self, stream_conf: Optional[bf_codecs.StreamConfiguration]) -> None:
+            self,
+            stream_conf: Optional[bf_codecs.StreamConfiguration]) -> None:
 
         self._reset_stream_conf = stream_conf
 
@@ -287,9 +291,11 @@ class StreamConfiguration(StreamConfigurationUI):
         # api.set_stream_configuration and api.start_analyzing, but the handler
         # for exceptions in the latter needs the result of the former.
 
-        def on_success(_enabled_stream_conf: bf_codecs.StreamConfiguration):
+        def on_success(enabled_stream_conf: bf_codecs.StreamConfiguration):
             self.disable_input_fields(True)
-            self._reset_stream_conf = _enabled_stream_conf
+            self._reset_stream_conf = enabled_stream_conf
+
+            self.stream_conf_modified.emit(enabled_stream_conf)
 
         def start_analysis(sent_stream_conf: bf_codecs.StreamConfiguration):
             def on_error(exc: BaseException):
@@ -496,6 +502,13 @@ class StreamConfiguration(StreamConfigurationUI):
                                 DefaultOptions.KEYFRAME_ONLY_STREAMING)
 
     @property
+    def stream_id(self) -> Optional[int]:
+        if self._reset_stream_conf is None:
+            return None
+
+        return self._reset_stream_conf.id
+
+    @property
     def stream_name(self) -> str:
         return self.stream_name_line_edit.text().strip(string.whitespace)
 
@@ -520,7 +533,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
         message_title = self.tr("Error Opening Stream")
 
-        if exc is bf_errors.DuplicateStreamSourceError:
+        if isinstance(exc, bf_errors.DuplicateStreamSourceError):
             message_desc = self.tr("Stream source already open")
             message_info = self.tr("You already have the stream source open.")
             error_text = self.tr("Error: ")
@@ -529,7 +542,7 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{message_info}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif exc is bf_errors.StreamNotOpenedError:
+        elif isinstance(exc, bf_errors.StreamNotOpenedError):
             message_desc = self.tr("Error encountered while opening stream")
             error_text = self.tr("Error: ")
             message = f"<b>{message_desc}</b>" \
@@ -538,7 +551,7 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{exc.description}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif exc is bf_errors.BaseAPIError:
+        elif isinstance(exc, bf_errors.BaseAPIError):
             message_desc = self.tr("Error encountered while opening stream")
             message_info1 = self.tr("Is stream already open?")
             message_info2 = self.tr("Is this a valid stream source?")
@@ -558,7 +571,7 @@ class StreamConfiguration(StreamConfigurationUI):
             self, stream_conf: bf_codecs.StreamConfiguration,
             exc: BaseException) \
             -> None:
-        if exc is bf_errors.AnalysisLimitExceededError:
+        if isinstance(exc, bf_errors.AnalysisLimitExceededError):
             # Delete the stream configuration, since you almost never want to
             # have a stream that can't have analysis running
             QTAsyncWorker(self, api.delete_stream_configuration,

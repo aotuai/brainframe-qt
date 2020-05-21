@@ -44,6 +44,8 @@ class ThumbnailGridLayout(QWidget):
         # Toggle the expansion of the streams when the button is clicked
         self.dropdown_button.clicked.connect(self.toggle_expansion)
 
+        self._init_style()
+
     def new_stream_widget(self, stream_conf: StreamConfiguration):
         video = VideoSmall(self, stream_conf)
         self.add_video(video)
@@ -136,14 +138,15 @@ class ThumbnailGridLayout(QWidget):
 
         return stream_widget
 
-    def expand_grid(self):
-        """Called by outer widget when expanded video is explicitly closed
+    def expand_grid(self, expand: bool):
+        """Called by outer widget when expanded video is explicitly closed"""
 
-        TODO: Unimplemented
-        Removes selection border from currently selected video
-        """
-        # Resize GridLayout
-        self.grid_num_columns = self._grid_num_columns_expanded
+        if expand:
+            num_columns = self._grid_num_columns_expanded
+        else:
+            num_columns = 1
+
+        self.grid_num_columns = num_columns
 
     @pyqtSlot(bool)
     def toggle_expansion(self, expand):
@@ -184,3 +187,7 @@ class ThumbnailGridLayout(QWidget):
     def layout_name(self, layout_name):
         self.dropdown_button.setText(layout_name)
         self._layout_name = layout_name
+
+    def _init_style(self) -> None:
+        # Allow background of widget to be styled
+        self.setAttribute(Qt.WA_StyledBackground, True)
