@@ -115,7 +115,7 @@ class MainWindow(MainWindowUI):
         stream_configuration_widget.load_from_conf(stream_conf)
 
     def close_stream_configuration(
-            self, stream_conf: Optional[codecs.StreamConfiguration] = None) \
+            self, stream_conf: Optional[bf_codecs.StreamConfiguration] = None) \
             -> None:
 
         for dock_widget in self.dock_widgets:
