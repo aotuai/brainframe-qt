@@ -232,31 +232,31 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>BasePluginOptionsWidget</name>
+    <name>BaseCapsuleOptionsWidget</name>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="60"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="60"/>
         <source>Options</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="69"/>
-        <source>Plugin Enabled</source>
-        <translation>已启用插件</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="69"/>
+        <source>Capsule Enabled</source>
+        <translation>已启用算法胶囊</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="113"/>
-        <source>The plugin option of name {} has an invalid type of type {}</source>
-        <translation>名称为 {} 的插件选项的类型 {} 类型无效</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="113"/>
+        <source>The capsule option of name {} has an invalid type of type {}</source>
+        <translation>名称为 {} 的算法胶囊选项的类型 {} 类型无效 </translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="147"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="147"/>
         <source>Not all options are valid!</source>
         <translation>并非所有选项都有效！</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="152"/>
-        <source>You can&apos;t apply changes if the plugin never got set!</source>
-        <translation>如果插件永远未被设置，则无法应用更改！</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="152"/>
+        <source>You can&apos;t apply changes if the capsule never got set!</source>
+        <translation>如果算法胶囊尚未被设置，则无法应用更改！</translation>
     </message>
 </context>
 <context>
@@ -275,6 +275,42 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../../brainframe_app.py" line="165"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
+    </message>
+</context>
+<context>
+    <name>CapsuleConfigDialog</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.ui" line="14"/>
+        <source>Capsule Options</source>
+        <translation>算法胶囊选项</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.ui" line="45"/>
+        <source>Loaded Capsules</source>
+        <translation>已加载算法胶囊</translation>
+    </message>
+</context>
+<context>
+    <name>CapsuleOptions</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="51"/>
+        <source>Capsule Description</source>
+        <translation>算法胶囊描述</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="104"/>
+        <source>Value</source>
+        <translation>值</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="139"/>
+        <source>Option</source>
+        <translation>选项</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="155"/>
+        <source>Override Global</source>
+        <translation>覆盖全局选项</translation>
     </message>
 </context>
 <context>
@@ -398,47 +434,47 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>FloatOptionItem</name>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/option_items.py" line="182"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/option_items.py" line="183"/>
         <source>{} is not a float!</source>
         <translation>{}不是浮点数！</translation>
     </message>
 </context>
 <context>
-    <name>GlobalPluginOptionsWidget</name>
+    <name>GlobalCapsuleOptionsWidget</name>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="12"/>
-        <source>Global Plugin Options</source>
-        <translation>全局插件选项</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="12"/>
+        <source>Global Capsule Options</source>
+        <translation>全局算法胶囊选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="94"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="95"/>
         <source>Reset All Overriding Streams</source>
         <translation>重置所有覆盖全局选项的流</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="39"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="39"/>
         <source>Reset to Defaults</source>
         <translation>重置为预设值</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="53"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="53"/>
         <source>The following options will be reset to default:</source>
         <translation>以下选项将重置为预设值：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="67"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="67"/>
         <source>There are no changes to reset</source>
         <translation>无需重置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="96"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="97"/>
         <source>The following streams have overrides that will be cleared:</source>
         <translation>以下覆盖全局选项的流将被清除：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="120"/>
-        <source>There are no streams that override the global options for this plugin.</source>
-        <translation>没有流覆盖了此插件的全局选项。</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="121"/>
+        <source>There are no streams that override the global options for this capsule.</source>
+        <translation>没有流覆盖了此算法胶囊的全局选项。</translation>
     </message>
 </context>
 <context>
@@ -632,42 +668,6 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>PluginConfigDialog</name>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="14"/>
-        <source>Plugin Options</source>
-        <translation>插件选项</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="45"/>
-        <source>Loaded Plugins</source>
-        <translation>已加载插件</translation>
-    </message>
-</context>
-<context>
-    <name>PluginOptions</name>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="51"/>
-        <source>Plugin Description</source>
-        <translation>差价描述</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="104"/>
-        <source>Value</source>
-        <translation>值</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="139"/>
-        <source>Option</source>
-        <translation>选项</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="155"/>
-        <source>Override Global</source>
-        <translation>覆盖全局选项</translation>
-    </message>
-</context>
-<context>
     <name>ServerConfigurationDialog</name>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="34"/>
@@ -750,27 +750,27 @@ Please recheck the entered server address.</source>
 <context>
     <name>StandardError</name>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="45"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="41"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="47"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="43"/>
         <source>Connection to server lost. Client must be closed</source>
         <translation>与服务器的连接丢失。客户必须关闭</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="75"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="71"/>
         <source>Copy to Clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="83"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="79"/>
         <source>Close Client</source>
         <translation>关闭客户端</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="127"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="123"/>
         <source>Error copied to clipboard</source>
         <translation>错误信息已复制到剪贴板</translation>
     </message>
@@ -780,14 +780,22 @@ Please recheck the entered server address.</source>
         <translation>正在推出</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="52"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="48"/>
         <source>An exception has occurred.</source>
         <translation>发生了一个例外。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="54"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="50"/>
         <source>The client must be closed.</source>
         <translation>必须关闭客户端。</translation>
+    </message>
+</context>
+<context>
+    <name>StreamCapsuleOptionsWidget</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/stream_capsule_options.py" line="10"/>
+        <source>Stream Capsule Options</source>
+        <translation>视频流算法胶囊选项</translation>
     </message>
 </context>
 <context>
@@ -889,14 +897,6 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="59"/>
         <source>Video File</source>
         <translation>视频文件</translation>
-    </message>
-</context>
-<context>
-    <name>StreamPluginOptionsWidget</name>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/stream_plugin_options.py" line="10"/>
-        <source>Stream Plugin Options</source>
-        <translation>视频流插件选项</translation>
     </message>
 </context>
 <context>
@@ -1022,8 +1022,8 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
-        <source>Stream Plugin Config</source>
-        <translation>视频流插件配置</translation>
+        <source>Stream Capsule Config</source>
+        <translation>视频流算法胶囊配置</translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="137"/>

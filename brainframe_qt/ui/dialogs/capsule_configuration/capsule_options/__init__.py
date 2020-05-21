@@ -1,0 +1,2 @@
+from .global_capsule_options import GlobalCapsuleOptionsWidget
+from .stream_capsule_options import StreamCapsuleOptionsWidget

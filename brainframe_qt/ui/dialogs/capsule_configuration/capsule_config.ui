@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PluginConfigDialog</class>
- <widget class="QDialog" name="PluginConfigDialog">
+ <class>CapsuleConfigDialog</class>
+ <widget class="QDialog" name="CapsuleConfigDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Plugin Options</string>
+   <string>Capsule Options</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,0" columnstretch="3,5">
    <item row="1" column="0">
-    <widget class="PluginList" name="PluginList">
+    <widget class="CapsuleList" name="CapsuleList">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -42,7 +42,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Loaded Plugins</string>
+      <string>Loaded Capsules</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -66,9 +66,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PluginList</class>
+   <class>CapsuleList</class>
    <extends>QListWidget</extends>
-   <header>brainframe.client.ui.dialogs.plugin_configuration.plugin_list.plugin_list</header>
+   <header>brainframe.client.ui.dialogs.capsule_configuration.capsule_list.capsule_list</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -76,7 +76,7 @@
   <connection>
    <sender>dialog_button_box</sender>
    <signal>accepted()</signal>
-   <receiver>PluginConfigDialog</receiver>
+   <receiver>CapsuleConfigDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -92,7 +92,7 @@
   <connection>
    <sender>dialog_button_box</sender>
    <signal>rejected()</signal>
-   <receiver>PluginConfigDialog</receiver>
+   <receiver>CapsuleConfigDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -106,10 +106,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>PluginList</sender>
-   <signal>plugin_selection_changed(QString)</signal>
-   <receiver>PluginConfigDialog</receiver>
-   <slot>on_plugin_change(QString)</slot>
+   <sender>CapsuleList</sender>
+   <signal>capsule_selection_changed(QString)</signal>
+   <receiver>CapsuleConfigDialog</receiver>
+   <slot>on_capsule_change(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>265</x>
@@ -123,6 +123,6 @@
   </connection>
  </connections>
  <slots>
-  <slot>on_plugin_change(QString)</slot>
+  <slot>on_capsule_change(QString)</slot>
  </slots>
 </ui>

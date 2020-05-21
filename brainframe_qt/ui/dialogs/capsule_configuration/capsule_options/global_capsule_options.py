@@ -2,14 +2,14 @@ from PyQt5.QtWidgets import QPushButton, QGridLayout, QMessageBox
 
 from brainframe.client.api import api
 
-from .base_plugin_options import BasePluginOptionsWidget
+from .base_capsule_options import BaseCapsuleOptionsWidget
 
 
-class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
+class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        self.window().setWindowTitle(self.tr("Global Plugin Options"))
+        self.window().setWindowTitle(self.tr("Global Capsule Options"))
         self.override_label.hide()
 
         self._reset_overriding_btn = QPushButton(
@@ -40,7 +40,7 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
 
         default_values = {key: option.default
                           for key, option in
-                          api.get_plugin(self.current_plugin).options.items()}
+                          api.get_plugin(self.current_capsule).options.items()}
 
         # Check if there are any changed options
         changed_options = []
@@ -80,12 +80,13 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
         # Check if any streams override this
         changed_stream_ids = []
         for stream_id in all_stream_ids:
-            # Check if plugin options or plugin activity is changed server-side
+            # Check if capsule options or capsule activity is changed
+            # server-side
             opts = api.get_plugin_option_vals(
-                plugin_name=self.current_plugin,
+                plugin_name=self.current_capsule,
                 stream_id=stream_id)
             is_active = api.is_plugin_active(
-                plugin_name=self.current_plugin,
+                plugin_name=self.current_capsule,
                 stream_id=stream_id)
 
             if len(opts) or is_active is not None:
@@ -109,15 +110,15 @@ class GlobalPluginOptionsWidget(BasePluginOptionsWidget):
             # Change the options to default
             for stream_id in changed_stream_ids:
                 api.set_plugin_option_vals(
-                    plugin_name=self.current_plugin,
+                    plugin_name=self.current_capsule,
                     stream_id=stream_id,
                     option_vals={})
                 api.set_plugin_active(
-                    plugin_name=self.current_plugin,
+                    plugin_name=self.current_capsule,
                     stream_id=stream_id,
                     active=None)
         else:
             desc = self.tr("There are no streams that override the global "
-                           "options for this plugin.")
+                           "options for this capsule.")
             QMessageBox.information(
                 self, title, desc)

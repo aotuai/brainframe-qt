@@ -7,11 +7,11 @@ from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
 from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
     QPushButton, QSizePolicy, QApplication, QMessageBox
 
-from brainframe.client.ui.dialogs.plugin_configuration import plugin_utils
+from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
 from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
 
 
-class PluginOptionItem(ABC):
+class CapsuleOptionItem(ABC):
     # To be filled in by subclass
     option_widget: QWidget = None
     change_signal = None
@@ -28,7 +28,7 @@ class PluginOptionItem(ABC):
         self.override_checkbox: QCheckBox = None
         self.tooltip_button: QPushButton = None
 
-        self.pretty_name = plugin_utils.pretty_snakecase(self.option_name)
+        self.pretty_name = capsule_utils.pretty_snakecase(self.option_name)
         self.init_ui(self.pretty_name, description, parent)
 
         self.locked = None
@@ -85,7 +85,7 @@ class PluginOptionItem(ABC):
     @abstractmethod
     def is_valid(self):
         """Should return True or False if the current value of the option is
-        valid, or if it does not fit the rules set by the plugin."""
+        valid, or if it does not fit the rules set by the capsule."""
         raise NotImplementedError
 
     def show_lock(self, status: bool):
@@ -110,8 +110,9 @@ class PluginOptionItem(ABC):
             self.tooltip_button.deleteLater()
 
 
-class EnumOptionItem(PluginOptionItem):
-    """A plugin option that holds a choice from a discrete set of string values.
+class EnumOptionItem(CapsuleOptionItem):
+    """A capsule option that holds a choice from a discrete set of string
+    values.
     """
 
     def __init__(self, name: str, value: str, constraints,
@@ -124,7 +125,7 @@ class EnumOptionItem(PluginOptionItem):
         self._choices = constraints["choices"]
 
         for choice_text in self._choices:
-            pretty_choice = plugin_utils.pretty_snakecase(choice_text)
+            pretty_choice = capsule_utils.pretty_snakecase(choice_text)
             self.option_widget.addItem(pretty_choice)
 
         super().__init__(name, value, description, parent=parent)
@@ -141,8 +142,8 @@ class EnumOptionItem(PluginOptionItem):
         return self.val in self._choices
 
 
-class FloatOptionItem(PluginOptionItem):
-    """A plugin option that holds a floating point value with defined
+class FloatOptionItem(CapsuleOptionItem):
+    """A capsule option that holds a floating point value with defined
     boundaries.
 
     Can have min_val or max_val be None"""
@@ -192,7 +193,7 @@ class FloatOptionItem(PluginOptionItem):
 
 
 class IntOptionItem(FloatOptionItem):
-    """A plugin option that holds an integer value.
+    """A capsule option that holds an integer value.
 
     Can have min_val and max_val be None
     """
@@ -208,8 +209,8 @@ class IntOptionItem(FloatOptionItem):
         return int(super().val)
 
 
-class BoolOptionItem(PluginOptionItem):
-    """A plugin option that holds an boolean value."""
+class BoolOptionItem(CapsuleOptionItem):
+    """A capsule option that holds an boolean value."""
 
     def __init__(self, name: str, value: bool, _,
                  description: Optional[str] = None,

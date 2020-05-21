@@ -1,2 +1,0 @@
-from .global_plugin_options import GlobalPluginOptionsWidget
-from .stream_plugin_options import StreamPluginOptionsWidget

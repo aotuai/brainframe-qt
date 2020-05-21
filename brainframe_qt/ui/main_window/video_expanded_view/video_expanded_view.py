@@ -7,7 +7,7 @@ from requests.exceptions import RequestException
 
 from brainframe.client.api import api
 from brainframe.client.api.codecs import StreamConfiguration
-from brainframe.client.ui.dialogs import PluginConfigDialog, TaskConfiguration
+from brainframe.client.ui.dialogs import CapsuleConfigDialog, TaskConfiguration
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
@@ -150,13 +150,13 @@ class VideoExpandedView(QWidget):
         self.expanded_stream_closed_slot()
 
     @pyqtSlot()
-    def open_stream_plugin_config(self):
+    def open_stream_capsule_config(self):
         """
         Connected to:
         - QPushButton -- QtDesigner
-          self.open_stream_plugin_config.clicked
+          self.open_stream_capsule_config.clicked
         """
-        PluginConfigDialog.show_dialog(self, self.stream_conf.id)
+        CapsuleConfigDialog.show_dialog(self, self.stream_conf.id)
 
     @pyqtSlot()
     def open_task_config(self):
