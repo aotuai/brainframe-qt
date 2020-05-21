@@ -711,7 +711,7 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
-        <source>Unable to authenticate with the BrainFrame server.
+        <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
@@ -723,7 +723,7 @@ Please recheck the entered credentials.</source>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
-        <source>Unable to connect to the BrainFrame server.
+        <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
