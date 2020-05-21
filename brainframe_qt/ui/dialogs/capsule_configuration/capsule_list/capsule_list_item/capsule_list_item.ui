@@ -32,7 +32,7 @@
    <string notr="true">CapsuleListItem</string>
   </property>
   <property name="text">
-   <string notr="true">[Plugin Name]</string>
+   <string notr="true">[Capsule Name]</string>
   </property>
   <property name="indent">
    <number>6</number>

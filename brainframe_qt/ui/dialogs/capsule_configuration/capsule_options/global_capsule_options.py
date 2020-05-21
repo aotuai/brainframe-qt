@@ -9,7 +9,7 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        self.window().setWindowTitle(self.tr("Global Plugin Options"))
+        self.window().setWindowTitle(self.tr("Global Capsule Options"))
         self.override_label.hide()
 
         self._reset_overriding_btn = QPushButton(
@@ -119,6 +119,6 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
                     active=None)
         else:
             desc = self.tr("There are no streams that override the global "
-                           "options for this plugin.")
+                           "options for this capsule.")
             QMessageBox.information(
                 self, title, desc)

@@ -240,13 +240,13 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="69"/>
-        <source>Plugin Enabled</source>
-        <translation>已启用插件</translation>
+        <source>Capsule Enabled</source>
+        <translation>已启用算法胶囊</translation>
     </message>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="113"/>
-        <source>The plugin option of name {} has an invalid type of type {}</source>
-        <translation>名称为 {} 的插件选项的类型 {} 类型无效</translation>
+        <source>The capsule option of name {} has an invalid type of type {}</source>
+        <translation>名称为 {} 的算法胶囊选项的类型 {} 类型无效 </translation>
     </message>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="147"/>
@@ -255,8 +255,8 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="152"/>
-        <source>You can&apos;t apply changes if the plugin never got set!</source>
-        <translation>如果插件永远未被设置，则无法应用更改！</translation>
+        <source>You can&apos;t apply changes if the capsule never got set!</source>
+        <translation>如果算法胶囊尚未被设置，则无法应用更改！</translation>
     </message>
 </context>
 <context>
@@ -281,21 +281,21 @@ Read the manual to learn about the required directory structure.</source>
     <name>CapsuleConfigDialog</name>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_config.ui" line="14"/>
-        <source>Plugin Options</source>
-        <translation>插件选项</translation>
+        <source>Capsule Options</source>
+        <translation>算法胶囊选项</translation>
     </message>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_config.ui" line="45"/>
-        <source>Loaded Plugins</source>
-        <translation>已加载插件</translation>
+        <source>Loaded Capsules</source>
+        <translation>已加载算法胶囊</translation>
     </message>
 </context>
 <context>
     <name>CapsuleOptions</name>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="51"/>
-        <source>Plugin Description</source>
-        <translation>差价描述</translation>
+        <source>Capsule Description</source>
+        <translation>算法胶囊描述</translation>
     </message>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="104"/>
@@ -443,8 +443,8 @@ Read the manual to learn about the required directory structure.</source>
     <name>GlobalCapsuleOptionsWidget</name>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="12"/>
-        <source>Global Plugin Options</source>
-        <translation>全局插件选项</translation>
+        <source>Global Capsule Options</source>
+        <translation>全局算法胶囊选项</translation>
     </message>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="95"/>
@@ -473,8 +473,8 @@ Read the manual to learn about the required directory structure.</source>
     </message>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="121"/>
-        <source>There are no streams that override the global options for this plugin.</source>
-        <translation>没有流覆盖了此插件的全局选项。</translation>
+        <source>There are no streams that override the global options for this capsule.</source>
+        <translation>没有流覆盖了此算法胶囊的全局选项。</translation>
     </message>
 </context>
 <context>
@@ -794,8 +794,8 @@ Please recheck the entered server address.</source>
     <name>StreamCapsuleOptionsWidget</name>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/stream_capsule_options.py" line="10"/>
-        <source>Stream Plugin Options</source>
-        <translation>视频流插件选项</translation>
+        <source>Stream Capsule Options</source>
+        <translation>视频流算法胶囊选项</translation>
     </message>
 </context>
 <context>
@@ -1022,8 +1022,8 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
-        <source>Stream Plugin Config</source>
-        <translation>视频流插件配置</translation>
+        <source>Stream Capsule Config</source>
+        <translation>视频流算法胶囊配置</translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="137"/>

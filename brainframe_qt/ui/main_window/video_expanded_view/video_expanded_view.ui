@@ -121,7 +121,7 @@
          <item>
           <widget class="QPushButton" name="capsule_stream_config_button">
            <property name="text">
-            <string>Stream Plugin Config</string>
+            <string>Stream Capsule Config</string>
            </property>
           </widget>
          </item>

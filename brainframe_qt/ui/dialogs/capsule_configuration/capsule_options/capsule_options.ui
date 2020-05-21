@@ -48,7 +48,7 @@
         <item>
          <widget class="QLabel" name="capsule_description_label">
           <property name="text">
-           <string>Plugin Description</string>
+           <string>Capsule Description</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

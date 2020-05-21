@@ -67,7 +67,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
 
         # Add configuration that every capsule _always_ has
         self.enabled_option = self._add_option(
-            name=self.tr("Plugin Enabled"),
+            name=self.tr("Capsule Enabled"),
             type_=OptionType.BOOL,
             value=api.is_plugin_active(capsule_name, stream_id=None),
             constraints={})
@@ -112,7 +112,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         else:
             message = QApplication.translate(
                 "BaseCapsuleOptionsWidget",
-                "The plugin option of name {} has an invalid type of type {}")
+                "The capsule option of name {} has an invalid type of type {}")
             message = message.format(name, type_)
             raise TypeError(message)
 
@@ -151,7 +151,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         if not len(self.all_items):
             message = QApplication.translate(
                 "BaseCapsuleOptionsWidget",
-                "You can't apply changes if the plugin never got set!")
+                "You can't apply changes if the capsule never got set!")
             raise RuntimeError(message)
 
         unlocked_option_vals = {option_item.option_name: option_item.val

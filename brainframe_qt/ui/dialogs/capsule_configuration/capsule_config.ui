@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Plugin Options</string>
+   <string>Capsule Options</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,0" columnstretch="3,5">
    <item row="1" column="0">
@@ -42,7 +42,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Loaded Plugins</string>
+      <string>Loaded Capsules</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>

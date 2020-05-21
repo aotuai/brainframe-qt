@@ -7,7 +7,7 @@ class StreamCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
     def __init__(self, stream_id, parent=None):
         super().__init__(parent=parent)
         assert stream_id is not None
-        self.window().setWindowTitle(self.tr("Stream Plugin Options"))
+        self.window().setWindowTitle(self.tr("Stream Capsule Options"))
         self.stream_id = stream_id
 
     def change_capsule(self, capsule_name):
