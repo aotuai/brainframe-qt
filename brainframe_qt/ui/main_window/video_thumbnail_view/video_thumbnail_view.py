@@ -1,7 +1,8 @@
 import logging
 from typing import Dict, List
 
-from PyQt5.QtCore import QTimer, pyqtSignal
+from PyQt5.QtCore import QMetaObject, QThread, QTimer, Q_ARG, Qt, pyqtSignal, \
+    pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
 
 from brainframe.client.api import api, codecs
@@ -77,7 +78,15 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         self.alertless_stream_layout.expand_grid(expand)
         self.alert_stream_layout.expand_grid(expand)
 
+    @pyqtSlot(List[codecs.Alert])
     def _handle_alerts(self, alerts: List[codecs.Alert]):
+
+        if QThread.currentThread() != self.thread():
+            # Move to the UI Thread
+            QMetaObject.invokeMethod(self, self._handle_alerts.__name__,
+                                     Qt.QueuedConnection,
+                                     Q_ARG("PyQt_PyObject", alerts))
+            return
 
         alert_streams = self.alert_stream_layout.stream_widgets
         alertless_streams = self.alertless_stream_layout.stream_widgets

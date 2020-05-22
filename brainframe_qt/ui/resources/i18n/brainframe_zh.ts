@@ -1044,17 +1044,17 @@ Please recheck the entered server address.</source>
 <context>
     <name>VideoThumbnailView</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="109"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="118"/>
         <source>Error retrieving stream configurations</source>
         <translation>检索流配置时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="110"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="119"/>
         <source>Exception:</source>
         <translation>异常：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="111"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="120"/>
         <source>Retry or Close Client?</source>
         <translation>重试或关闭客户端？</translation>
     </message>
