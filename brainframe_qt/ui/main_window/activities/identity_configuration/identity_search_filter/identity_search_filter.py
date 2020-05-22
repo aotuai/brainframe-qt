@@ -48,12 +48,12 @@ class IdentitySearchFilter(QWidget):
     def init_encoding_list(self):
 
         def func():
-            plugins = api.get_plugins()
+            capsules = api.get_plugins()
 
             # Get names of all classes that encodable
             encoding_class_names = set()
-            for plugin in plugins:
-                output_type = plugin.output_type
+            for capsule in capsules:
+                output_type = capsule.output_type
                 if not output_type.encoded:
                     continue
                 encoding_class_names.update(output_type.detections)
@@ -88,7 +88,7 @@ class IdentitySearchFilter(QWidget):
 
         def callback(_):
             # Refresh the encoding class list. The one we just deleted could be
-            # gone if there is no corresponding encoder plugin loaded
+            # gone if there is no corresponding encoder capsule loaded
             self.init_encoding_list()
 
             # Tell the grid to not filter by anything anymore

@@ -14,7 +14,7 @@ class MainToolbar(QToolBar):
         identity_text = self.tr("Identities")
         alert_text = self.tr("Alerts")
         task_config_text = self.tr("Tasks")
-        plugin_config_text = self.tr("Capsules")
+        capsule_config_text = self.tr("Capsules")
         client_config_text = self.tr("Client")
         server_config_text = self.tr("Server")
         about_page_text = self.tr("About")
@@ -29,7 +29,7 @@ class MainToolbar(QToolBar):
             = self._init_action(":/icons/settings_gear", task_config_text)
         self.capsule_config_action \
             = self._init_action(":/icons/capsule_toolbar",
-                                plugin_config_text)
+                                capsule_config_text)
         self.client_config_action \
             = self._init_action(":/icons/client_config", client_config_text)
         self.server_config_action \

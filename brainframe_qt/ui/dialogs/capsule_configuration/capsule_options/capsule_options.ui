@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PluginOptions</class>
- <widget class="QGroupBox" name="PluginOptions">
+ <class>CapsuleOptions</class>
+ <widget class="QGroupBox" name="CapsuleOptions">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +14,7 @@
    <string notr="true"/>
   </property>
   <property name="title">
-   <string notr="true">Plugin Name</string>
+   <string notr="true">Capsule Name</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -25,7 +25,7 @@
      <property name="childrenCollapsible">
       <bool>false</bool>
      </property>
-     <widget class="QScrollArea" name="plugin_description_area">
+     <widget class="QScrollArea" name="capsule_description_area">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -46,9 +46,9 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLabel" name="plugin_description_label">
+         <widget class="QLabel" name="capsule_description_label">
           <property name="text">
-           <string>Plugin Description</string>
+           <string>Capsule Description</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -64,7 +64,7 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QScrollArea" name="plugin_options_area">
+     <widget class="QScrollArea" name="capsule_options_area">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>

@@ -3,33 +3,33 @@ from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QPushButton
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from .plugin_options import StreamPluginOptionsWidget, GlobalPluginOptionsWidget
+from .capsule_options import StreamCapsuleOptionsWidget, GlobalCapsuleOptionsWidget
 
 
-class PluginConfigDialog(QDialog):
+class CapsuleConfigDialog(QDialog):
 
     def __init__(self, stream_id=None, parent=None):
         """
 
         :param stream_id: If not None, this will show options for a specific
-        stream and the plugin optinos will render with the checkboxes for
+        stream and the capsule options will render with the checkboxes for
         Override Global Configuration. Furthermore, when applied it will
         set the options only for the specific stream.
         :param parent:
         """
         super().__init__(parent=parent)
-        loadUi(qt_ui_paths.plugin_config_dialog_ui, self)
+        loadUi(qt_ui_paths.capsule_config_dialog_ui, self)
 
         # Add the appropriate options widget
         if stream_id:
-            options_widget = StreamPluginOptionsWidget(stream_id, parent=self)
+            options_widget = StreamCapsuleOptionsWidget(stream_id, parent=self)
         else:
-            options_widget = GlobalPluginOptionsWidget(parent=self)
-        self.plugin_options_widget = options_widget
-        self.layout().addWidget(self.plugin_options_widget, 1, 1)
+            options_widget = GlobalCapsuleOptionsWidget(parent=self)
+        self.capsule_options_widget = options_widget
+        self.layout().addWidget(self.capsule_options_widget, 1, 1)
 
         # Connect signals
-        self.plugin_options_widget.plugin_options_changed.connect(
+        self.capsule_options_widget.capsule_options_changed.connect(
             self.is_inputs_valid)
 
         self.stream_id = stream_id
@@ -38,16 +38,16 @@ class PluginConfigDialog(QDialog):
         apply_btn: QPushButton = self.dialog_button_box.button(
             QDialogButtonBox.Apply)
         apply_btn.clicked.connect(
-            lambda: self.plugin_options_widget.apply_changes(stream_id))
+            lambda: self.capsule_options_widget.apply_changes(stream_id))
 
-        # Set all buttons that require a plugin to be loaded to disabled,
-        # until a plugin is 'set' they shouldn't be usable.
+        # Set all buttons that require a capsule to be loaded to disabled,
+        # until a capsule is 'set' they shouldn't be usable.
         self.set_buttons_disabled(True)
 
     def set_buttons_disabled(self, val: bool):
         self.dialog_button_box.button(QDialogButtonBox.Apply).setDisabled(val)
         self.dialog_button_box.button(QDialogButtonBox.Ok).setDisabled(val)
-        self.plugin_options_widget.setDisabled(val)
+        self.capsule_options_widget.setDisabled(val)
 
     @classmethod
     def show_dialog(cls, parent, stream_id=None):
@@ -60,12 +60,12 @@ class PluginConfigDialog(QDialog):
         have not been changed.
 
         Connected to:
-        - BasePluginOptionsWidget -- Dynamic
-          [child].plugin_options_changed
+        - BaseCapsuleOptionsWidget -- Dynamic
+          [child].capsule_options_changed
         """
 
         is_valid = True
-        if not self.plugin_options_widget.options_valid():
+        if not self.capsule_options_widget.options_valid():
             is_valid = False
 
         buttons = QDialogButtonBox
@@ -73,18 +73,18 @@ class PluginConfigDialog(QDialog):
         self.dialog_button_box.button(buttons.Apply).setEnabled(is_valid)
 
     @pyqtSlot(str)
-    def on_plugin_change(self, plugin_name):
+    def on_capsule_change(self, capsule_name):
         """
-        :param plugin_name: The name of the plugin that has been selected
-        by the plugin list.
+        :param capsule_name: The name of the capsule that has been selected
+        by the capsule list.
 
         Connected to:
-        - PluginList -- QtDesigner
-          [peer].plugin_selection_changed
+        - CapsuleList -- QtDesigner
+          [peer].capsule_selection_changed
         """
-        self.plugin_options_widget.change_plugin(plugin_name)
+        self.capsule_options_widget.change_capsule(capsule_name)
 
-        # Now that a plugin is loaded, allow the user to interact with buttons
+        # Now that a capsule is loaded, allow the user to interact with buttons
         self.set_buttons_disabled(False)
 
     def accept(self):
@@ -94,5 +94,5 @@ class PluginConfigDialog(QDialog):
         - QButtonBox -- QtDesigner
           [child].accepted
         """
-        self.plugin_options_widget.apply_changes()
+        self.capsule_options_widget.apply_changes()
         super().accept()

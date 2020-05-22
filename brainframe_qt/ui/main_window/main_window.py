@@ -8,8 +8,8 @@ from PyQt5.QtWidgets import QAction, QDockWidget, QWidget
 
 from brainframe.api import bf_codecs
 from brainframe.client.ui.dialogs.about_page.about_page import AboutPage
-from brainframe.client.ui.dialogs.plugin_configuration.plugin_config import \
-    PluginConfigDialog
+from brainframe.client.ui.dialogs.capsule_configuration.capsule_config import \
+    CapsuleConfigDialog
 from brainframe.client.ui.dialogs.server_configuration.server_configuration import \
     ServerConfigurationDialog
 from brainframe.client.ui.dialogs.client_configuration \
@@ -31,7 +31,7 @@ class MainWindow(MainWindowUI):
             self.toolbar.alert_view_activity_action: self.alert_activity
         }
         self.dialog_action_map = {
-            self.toolbar.capsule_config_action: PluginConfigDialog,
+            self.toolbar.capsule_config_action: CapsuleConfigDialog,
             self.toolbar.client_config_action: RenderConfiguration,
             self.toolbar.server_config_action: ServerConfigurationDialog,
             self.toolbar.about_page_action: AboutPage

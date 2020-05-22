@@ -174,7 +174,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertDetail</name>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_preview/alert_detail/alert_detail.py" line="96"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_preview/alert_detail/alert_detail.py" line="97"/>
         <source>&quot;{0}&quot; in region &quot;{1}&quot;</source>
         <translation>“{0}” 在 “{1}” 区域</translation>
     </message>
@@ -232,49 +232,85 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>BasePluginOptionsWidget</name>
+    <name>BaseCapsuleOptionsWidget</name>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="60"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="60"/>
         <source>Options</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="69"/>
-        <source>Plugin Enabled</source>
-        <translation>已启用插件</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="69"/>
+        <source>Capsule Enabled</source>
+        <translation>已启用算法胶囊</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="113"/>
-        <source>The plugin option of name {} has an invalid type of type {}</source>
-        <translation>名称为 {} 的插件选项的类型 {} 类型无效</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="113"/>
+        <source>The capsule option of name {} has an invalid type of type {}</source>
+        <translation>名称为 {} 的算法胶囊选项的类型 {} 类型无效 </translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="147"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="147"/>
         <source>Not all options are valid!</source>
         <translation>并非所有选项都有效！</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/base_plugin_options.py" line="152"/>
-        <source>You can&apos;t apply changes if the plugin never got set!</source>
-        <translation>如果插件永远未被设置，则无法应用更改！</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="152"/>
+        <source>You can&apos;t apply changes if the capsule never got set!</source>
+        <translation>如果算法胶囊尚未被设置，则无法应用更改！</translation>
     </message>
 </context>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="70"/>
+        <location filename="../../brainframe_app.py" line="69"/>
         <source>Attempting to connect to server at {}</source>
         <translation>尝试连接至服务器地址: {}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="93"/>
+        <location filename="../../brainframe_app.py" line="92"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="166"/>
+        <location filename="../../brainframe_app.py" line="165"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
+    </message>
+</context>
+<context>
+    <name>CapsuleConfigDialog</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.ui" line="14"/>
+        <source>Capsule Options</source>
+        <translation>算法胶囊选项</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.ui" line="45"/>
+        <source>Loaded Capsules</source>
+        <translation>已加载算法胶囊</translation>
+    </message>
+</context>
+<context>
+    <name>CapsuleOptions</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="51"/>
+        <source>Capsule Description</source>
+        <translation>算法胶囊描述</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="104"/>
+        <source>Value</source>
+        <translation>值</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="139"/>
+        <source>Option</source>
+        <translation>选项</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="155"/>
+        <source>Override Global</source>
+        <translation>覆盖全局选项</translation>
     </message>
 </context>
 <context>
@@ -398,47 +434,47 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>FloatOptionItem</name>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/option_items.py" line="182"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/option_items.py" line="183"/>
         <source>{} is not a float!</source>
         <translation>{}不是浮点数！</translation>
     </message>
 </context>
 <context>
-    <name>GlobalPluginOptionsWidget</name>
+    <name>GlobalCapsuleOptionsWidget</name>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="12"/>
-        <source>Global Plugin Options</source>
-        <translation>全局插件选项</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="12"/>
+        <source>Global Capsule Options</source>
+        <translation>全局算法胶囊选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="94"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="95"/>
         <source>Reset All Overriding Streams</source>
         <translation>重置所有覆盖全局选项的流</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="39"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="39"/>
         <source>Reset to Defaults</source>
         <translation>重置为预设值</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="53"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="53"/>
         <source>The following options will be reset to default:</source>
         <translation>以下选项将重置为预设值：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="67"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="67"/>
         <source>There are no changes to reset</source>
         <translation>无需重置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="96"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="97"/>
         <source>The following streams have overrides that will be cleared:</source>
         <translation>以下覆盖全局选项的流将被清除：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/global_plugin_options.py" line="120"/>
-        <source>There are no streams that override the global options for this plugin.</source>
-        <translation>没有流覆盖了此插件的全局选项。</translation>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="121"/>
+        <source>There are no streams that override the global options for this capsule.</source>
+        <translation>没有流覆盖了此算法胶囊的全局选项。</translation>
     </message>
 </context>
 <context>
@@ -632,42 +668,6 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
-    <name>PluginConfigDialog</name>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="14"/>
-        <source>Plugin Options</source>
-        <translation>插件选项</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_config.ui" line="45"/>
-        <source>Loaded Plugins</source>
-        <translation>已加载插件</translation>
-    </message>
-</context>
-<context>
-    <name>PluginOptions</name>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="51"/>
-        <source>Plugin Description</source>
-        <translation>差价描述</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="104"/>
-        <source>Value</source>
-        <translation>值</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="139"/>
-        <source>Option</source>
-        <translation>选项</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/plugin_options.ui" line="155"/>
-        <source>Override Global</source>
-        <translation>覆盖全局选项</translation>
-    </message>
-</context>
-<context>
     <name>ServerConfigurationDialog</name>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="34"/>
@@ -700,41 +700,41 @@ Read the manual to learn about the required directory structure.</source>
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="43"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="42"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="98"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="100"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="103"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="105"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="86"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
@@ -750,27 +750,27 @@ Please recheck the entered server address.</source>
 <context>
     <name>StandardError</name>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="45"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="41"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="47"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="43"/>
         <source>Connection to server lost. Client must be closed</source>
         <translation>与服务器的连接丢失。客户必须关闭</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="75"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="71"/>
         <source>Copy to Clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="83"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="79"/>
         <source>Close Client</source>
         <translation>关闭客户端</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="127"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="123"/>
         <source>Error copied to clipboard</source>
         <translation>错误信息已复制到剪贴板</translation>
     </message>
@@ -780,80 +780,88 @@ Please recheck the entered server address.</source>
         <translation>正在推出</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="52"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="48"/>
         <source>An exception has occurred.</source>
         <translation>发生了一个例外。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="54"/>
+        <location filename="../../dialogs/standard_error/standard_error.py" line="50"/>
         <source>The client must be closed.</source>
         <translation>必须关闭客户端。</translation>
     </message>
 </context>
 <context>
+    <name>StreamCapsuleOptionsWidget</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/stream_capsule_options.py" line="10"/>
+        <source>Stream Capsule Options</source>
+        <translation>视频流算法胶囊选项</translation>
+    </message>
+</context>
+<context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="581"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="582"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="276"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="277"/>
         <source>Error encountered while uploading video file</source>
         <translation>上传视频文件过程中发生了一个错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="537"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="538"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="538"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="539"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="558"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="559"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="555"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="556"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="556"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="557"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="557"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="558"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="582"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="583"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="583"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="584"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="598"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
         <source>Error uploading file</source>
         <translation>上传文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="600"/>
         <source>File does not exist</source>
         <translation>文件不存在</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="600"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="601"/>
         <source>No such file: {filepath}</source>
         <translation>没有这样的文件：{filepath}</translation>
     </message>
@@ -861,42 +869,34 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfigurationUI</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="68"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="69"/>
         <source>Stream Options</source>
         <translation>视频流选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="43"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="44"/>
         <source>Stream Name</source>
         <translation>视频流名称</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="48"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="49"/>
         <source>Connection Type</source>
         <translation>连接类型</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="56"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="57"/>
         <source>IP Camera</source>
         <translation>网络摄像头</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="57"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="58"/>
         <source>Webcam</source>
         <translation>摄像头</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="58"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="59"/>
         <source>Video File</source>
         <translation>视频文件</translation>
-    </message>
-</context>
-<context>
-    <name>StreamPluginOptionsWidget</name>
-    <message>
-        <location filename="../../dialogs/plugin_configuration/plugin_options/stream_plugin_options.py" line="10"/>
-        <source>Stream Plugin Options</source>
-        <translation>视频流插件选项</translation>
     </message>
 </context>
 <context>
@@ -1022,8 +1022,8 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
-        <source>Stream Plugin Config</source>
-        <translation>视频流插件配置</translation>
+        <source>Stream Capsule Config</source>
+        <translation>视频流算法胶囊配置</translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="137"/>
@@ -1044,17 +1044,17 @@ Please recheck the entered server address.</source>
 <context>
     <name>VideoThumbnailView</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="110"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="109"/>
         <source>Error retrieving stream configurations</source>
         <translation>检索流配置时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="111"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="110"/>
         <source>Exception:</source>
         <translation>异常：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="112"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="111"/>
         <source>Retry or Close Client?</source>
         <translation>重试或关闭客户端？</translation>
     </message>
@@ -1085,22 +1085,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>_AdvancedOptionsGroupBox</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="247"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="248"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="259"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="260"/>
         <source>Avoid transcoding</source>
         <translation>避免转码</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="254"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="255"/>
         <source>None</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="265"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="266"/>
         <source>Keyframe-only streaming</source>
         <translation>仅传输关键帧</translation>
     </message>
@@ -1116,32 +1116,32 @@ Please recheck the entered server address.</source>
 <context>
     <name>_StreamOptions</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="187"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="188"/>
         <source>Advanced Options</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="153"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="154"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="163"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="164"/>
         <source>Premises</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="169"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="170"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="133"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="134"/>
         <source>Network address</source>
         <translation>网络地址</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="143"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="144"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
