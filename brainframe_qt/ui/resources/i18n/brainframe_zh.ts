@@ -195,22 +195,22 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>AlertHeader</name>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="192"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="190"/>
         <source>Verify alert</source>
         <translation>标记“检测结果正确”</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="193"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="191"/>
         <source>Mark alert as false positive</source>
         <translation>标记“检测结果错误”</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="194"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="192"/>
         <source>Unverify alert</source>
         <translation>取消“检测结果正确”标记</translation>
     </message>
     <message>
-        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="195"/>
+        <location filename="../alarms/alarm_bundle/alarm_card/alert_log/alert_log_entry/alert_header/alert_header.py" line="193"/>
         <source>Unmark alert as false positive</source>
         <translation>取消“检测结果错误”标记</translation>
     </message>
