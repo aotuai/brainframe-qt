@@ -393,13 +393,28 @@ class StreamConfiguration(StreamConfigurationUI):
             return True
 
         # Runtime Options
+        # Check equivalency. If either the client or server option is
+        # hidden/missing, assume it is the default value
         runtime_options = self._reset_stream_conf.runtime_options
-        keyframes_only = runtime_options.get("keyframes_only")
-        if self.keyframe_only_streaming != keyframes_only:
+        client_keyframes_only = self.keyframe_only_streaming
+        server_keyframes_only = runtime_options.get("keyframes_only", None)
+        if client_keyframes_only is None:
+            client_keyframes_only = DefaultOptions.KEYFRAME_ONLY_STREAMING
+        if server_keyframes_only is None:
+            server_keyframes_only = DefaultOptions.KEYFRAME_ONLY_STREAMING
+        if server_keyframes_only != client_keyframes_only:
             return True
 
-        avoid_transcoding = runtime_options.get("transcode")
-        if self.avoid_transcoding != avoid_transcoding:
+        # Avoid transcoding
+        # Check equivalency. If either the client or server option is
+        # hidden/missing, assume it is the default value
+        client_avoid_transcoding = self.avoid_transcoding
+        server_avoid_transcoding = runtime_options.get("transcode", None)
+        if client_avoid_transcoding is None:
+            client_avoid_transcoding = DefaultOptions.AVOID_TRANSCODING
+        if server_avoid_transcoding is None:
+            server_avoid_transcoding = DefaultOptions.AVOID_TRANSCODING
+        if server_avoid_transcoding != client_avoid_transcoding:
             return True
 
         return False

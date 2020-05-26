@@ -3,7 +3,7 @@ from typing import Dict, List
 
 import pendulum
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox
+from PyQt5.QtWidgets import QComboBox, QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
 
 from brainframe.api.bf_codecs import (
@@ -39,6 +39,12 @@ class AlarmCreationDialog(QDialog):
 
         self.capsules = capsules
         self.zones = zones
+
+        self.countable_combo_box: QComboBox
+        self.behavior_combo_box: QComboBox
+        self.countable_combo_box.setMaximumWidth(300)
+        self.behavior_combo_box.setSizeAdjustPolicy(QComboBox.AdjustToContents)
+        self.behavior_combo_box.setMaximumWidth(300)
 
         self._update_combo_box(self.countable_combo_box,
                                self._detection_classes())
