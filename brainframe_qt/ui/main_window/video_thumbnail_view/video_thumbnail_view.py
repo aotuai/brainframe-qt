@@ -68,8 +68,17 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         self.show_background_image(False)
 
     def delete_stream_conf(self, stream_conf: codecs.StreamConfiguration):
-        stream_widget = self.streams[stream_conf.id]
-        stream_widget.deleteLater()
+
+        # Figure out which layout the stream is in, and remove it
+        for layout in [self.alert_stream_layout, self.alertless_stream_layout]:
+            for stream_id, stream_widget in layout.stream_widgets.items():
+                if stream_id == stream_conf.id:
+                    layout.pop_stream_widget(stream_id)
+                    break
+            # https://stackoverflow.com/a/654002/8134178
+            else:
+                continue
+            break
 
         if len(self.streams) == 0:
             self.show_background_image(True)
