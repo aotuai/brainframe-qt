@@ -47,12 +47,18 @@ alarm_view_qss = route_path(alarm_view_dir / "alarm_view.qss")
 ###############################################################################
 
 resource_dir = route_path(ui_dir / "resources")
+ui_elements_dir = route_path(resource_dir / "ui_elements")
 
 # Widgets
-widget_resource_dir = route_path(resource_dir / "ui_elements" / "widgets")
+widget_resource_dir = route_path(ui_elements_dir / "widgets")
+
+# Containers
+container_resource_dir = route_path(ui_elements_dir / "containers")
+sidebar_dock_widget_qss = route_path(
+    container_resource_dir / "sidebar_dock_widget" / "sidebar_dock_widget.qss")
 
 ###############################################################################
-# BrainFrame Resources
+# Alert Resources
 ###############################################################################
 
 # AlarmBundle
