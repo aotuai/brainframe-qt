@@ -6,7 +6,6 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
 from brainframe.client.api import api, api_errors, codecs
-from brainframe.client.api.zss_pubsub import zss_publisher
 from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
 from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
@@ -17,7 +16,6 @@ from brainframe.shared.codec_enums import ConnType
 
 
 class StreamConfiguration(StreamConfigurationUI):
-
     stream_conf_deleted = pyqtSignal()
     stream_conf_modified = pyqtSignal(codecs.StreamConfiguration)
     """Sent when a new or modified stream_conf has been sent to, and accepted
@@ -92,7 +90,7 @@ class StreamConfiguration(StreamConfigurationUI):
         self.connection_options = {}
         self.runtime_options = {}
 
-        self.advanced_options_enabled = True
+        self.advanced_options_enabled = False
 
         self.disable_input_fields(False)
 
@@ -373,7 +371,7 @@ class StreamConfiguration(StreamConfigurationUI):
     @property
     def fields_changed(self) -> bool:
         if self._reset_stream_conf is None:
-            return True
+            return self._fields_changed_new_stream()
 
         if self.stream_name != self._reset_stream_conf.name:
             return True
@@ -416,6 +414,22 @@ class StreamConfiguration(StreamConfigurationUI):
         if server_avoid_transcoding is None:
             server_avoid_transcoding = DefaultOptions.AVOID_TRANSCODING
         if server_avoid_transcoding != client_avoid_transcoding:
+            return True
+
+        return False
+
+    def _fields_changed_new_stream(self) -> bool:
+        if self.stream_name != "":
+            return True
+        if self.connection_type is not None:
+            return True
+        if self.premises is not None:
+            return True
+
+        # Connection Options
+        if self.connection_options != {}:
+            return True
+        if self.runtime_options != {}:
             return True
 
         return False
