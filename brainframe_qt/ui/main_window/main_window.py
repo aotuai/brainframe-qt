@@ -133,15 +133,30 @@ class MainWindow(MainWindowUI):
 
         self.sidebar_dock_widget.show()
 
-    def _connect_sidebar_widget_signals(self):
+    def _connect_sidebar_widget_signals(self) -> None:
 
         sidebar_widget = self.sidebar_dock_widget.widget()
 
         if isinstance(sidebar_widget, StreamConfiguration):
             sidebar_widget.stream_conf_modified.connect(
                 self.stream_activity.video_thumbnail_view.add_stream_conf)
+            sidebar_widget.stream_conf_modified.connect(
+                self._handle_stream_config_modification)
+
             sidebar_widget.stream_conf_deleted.connect(
                 self.close_sidebar_widget)
+
+    def _handle_stream_config_modification(
+            self, stream_conf: codecs.StreamConfiguration) \
+            -> None:
+
+        sidebar_widget = self.sidebar_dock_widget.widget()
+
+        # Failsafe
+        if not isinstance(sidebar_widget, StreamConfiguration):
+            return
+
+        self.stream_activity.open_expanded_view(stream_conf)
 
     def _handle_action_click(self) -> None:
         action = typing.cast(QAction, self.sender())
