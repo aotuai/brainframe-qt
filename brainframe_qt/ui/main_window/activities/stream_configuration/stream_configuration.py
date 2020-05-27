@@ -2,7 +2,8 @@ import string
 from pathlib import Path
 from typing import Callable, List, Optional, Union
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
 from brainframe.client.api import api, api_errors, codecs
@@ -64,6 +65,16 @@ class StreamConfiguration(StreamConfigurationUI):
         # stream_sub = zss_publisher.subscribe_streams(
         #     self._handle_stream_stream)
         # self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        # Simulate a click on the apply button if Enter/Return is pressed while
+        # the inputs are valid
+        if event.key() in [Qt.Key_Enter, Qt.Key_Return]:
+            if self.inputs_valid:
+                apply_button = self.button_box.button(QDialogButtonBox.Apply)
+                apply_button.click()
+        else:
+            event.ignore()
 
     def load_from_conf(
             self, stream_conf: Optional[codecs.StreamConfiguration]) -> None:

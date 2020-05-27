@@ -801,67 +801,67 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="611"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="622"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="275"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="286"/>
         <source>Error encountered while uploading video file</source>
         <translation>上传视频文件过程中发生了一个错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="567"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="578"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="568"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="579"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="588"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="585"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="596"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="586"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="597"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="587"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="598"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="612"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="623"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="613"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="624"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="628"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="639"/>
         <source>Error uploading file</source>
         <translation>上传文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="629"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="640"/>
         <source>File does not exist</source>
         <translation>文件不存在</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="630"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="641"/>
         <source>No such file: {filepath}</source>
         <translation>没有这样的文件：{filepath}</translation>
     </message>
