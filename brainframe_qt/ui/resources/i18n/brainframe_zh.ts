@@ -1037,8 +1037,8 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
-        <source>Stream Config</source>
-        <translation>视频流配置</translation>
+        <source>Toggle Stream Config</source>
+        <translation>切换视频流配置</translation>
     </message>
 </context>
 <context>

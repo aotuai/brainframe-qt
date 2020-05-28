@@ -101,7 +101,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Stream Config</string>
+            <string>Toggle Stream Config</string>
            </property>
           </widget>
          </item>

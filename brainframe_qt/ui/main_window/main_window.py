@@ -69,6 +69,17 @@ class MainWindow(MainWindowUI):
                 stream_configuration.load_from_conf(stream_conf)
             self.show_sidebar_widget(stream_configuration)
 
+        def toggle_stream_configuration(
+                stream_conf: Optional[codecs.StreamConfiguration]):
+            """Toggle the stream configuration if the passed stream_conf is
+            the same as the displayed one"""
+            sidebar_widget = self.sidebar_dock_widget.widget()
+            if isinstance(sidebar_widget, StreamConfiguration) \
+                    and sidebar_widget.stream_id == stream_conf.id:
+                close_stream_configuration()
+            else:
+                display_stream_configuration(stream_conf)
+
         def close_stream_configuration():
             sidebar_widget = self.sidebar_dock_widget.widget()
             if isinstance(sidebar_widget, StreamConfiguration):
@@ -86,8 +97,8 @@ class MainWindow(MainWindowUI):
         thumbnail_view.stream_clicked.connect(change_stream_configuration)
 
         expanded_view = self.stream_activity.video_expanded_view
-        expanded_view.open_stream_config_signal.connect(
-            display_stream_configuration)
+        expanded_view.toggle_stream_config_signal.connect(
+            toggle_stream_configuration)
         expanded_view.stream_delete_signal.connect(
             close_stream_configuration)
 
