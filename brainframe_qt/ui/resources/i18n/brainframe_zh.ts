@@ -167,8 +167,8 @@ Read the manual to learn about the required directory structure.</source>
     <name>AlarmViewUI</name>
     <message>
         <location filename="../../dialogs/alarm_view/alarm_view_ui.py" line="24"/>
-        <source>No streams are being analyzed right now, so there is nothing to show here</source>
-        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
+        <source>Add streams to start receiving alerts</source>
+        <translation>添加视频流以开始接收报警信息</translation>
     </message>
 </context>
 <context>
@@ -1157,19 +1157,19 @@ Please recheck the entered server address.</source>
 <context>
     <name>_VideoThumbnailViewUI</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
-        <source>No streams are being analyzed right now, so there is nothing to show here</source>
-        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="74"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="73"/>
         <source>Streams with ongoing alerts:</source>
         <translation>正在警报的视频流：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="84"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="83"/>
         <source>Streams without alerts:</source>
         <translation>无警报的视频流：</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
+        <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
+        <translation>点击 ➕ 按钮以添加新的视频流</translation>
     </message>
 </context>
 </TS>

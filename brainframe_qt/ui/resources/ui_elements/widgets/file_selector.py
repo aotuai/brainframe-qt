@@ -76,7 +76,7 @@ class FileSelector(_FileSelectorUI):
         # Second return value is ignored. PyQt5 returns what appears to be a
         # filter as a string as well, differing from the C++ implementation
         file_path, _ = QFileDialog().getOpenFileName(
-            self,
+            self.window(),
             self.tr("Select video file"),
             QStandardPaths.writableLocation(QStandardPaths.HomeLocation))
 
