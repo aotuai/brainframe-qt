@@ -87,7 +87,7 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         self.alertless_stream_layout.expand_grid(expand)
         self.alert_stream_layout.expand_grid(expand)
 
-    @pyqtSlot(list)
+    @pyqtSlot(object)
     def _handle_alerts(self, alerts: List[codecs.Alert]):
 
         if QThread.currentThread() != self.thread():
