@@ -75,6 +75,7 @@ class MainWindow(MainWindowUI):
             the same as the displayed one"""
             sidebar_widget = self.sidebar_dock_widget.widget()
             if isinstance(sidebar_widget, StreamConfiguration) \
+                    and sidebar_widget.isVisible() \
                     and sidebar_widget.stream_id == stream_conf.id:
                 close_stream_configuration()
             else:
