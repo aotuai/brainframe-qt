@@ -65,8 +65,7 @@ class MainWindow(MainWindowUI):
                 stream_conf: Optional[codecs.StreamConfiguration]):
 
             stream_configuration = StreamConfiguration(self)
-            if stream_conf is not None:
-                stream_configuration.load_from_conf(stream_conf)
+            stream_configuration.load_from_conf(stream_conf)
             self.show_sidebar_widget(stream_configuration)
 
         def toggle_stream_configuration(
