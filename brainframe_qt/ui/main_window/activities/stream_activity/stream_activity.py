@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget
 
+from brainframe.client.api import codecs
 from brainframe.client.ui.main_window.activities.stream_activity.stream_activity_ui import \
     _StreamActivityUI
 
@@ -14,9 +15,7 @@ class StreamActivity(_StreamActivityUI):
 
     def _init_signals(self):
         self.video_thumbnail_view.stream_clicked.connect(
-            lambda: self.display_expanded_video(True))
-        self.video_thumbnail_view.stream_clicked.connect(
-            self.video_expanded_view.open_expanded_view_slot)
+            self.open_expanded_view)
 
         self.video_expanded_view.expanded_stream_closed_signal.connect(
             lambda: self.display_expanded_video(False))
@@ -25,6 +24,10 @@ class StreamActivity(_StreamActivityUI):
             self.video_thumbnail_view.delete_stream_conf)
         self.video_expanded_view.stream_delete_signal.connect(
             lambda: self.display_expanded_video(False))
+
+    def open_expanded_view(self, stream_conf: codecs.StreamConfiguration):
+        self.video_expanded_view.open_expanded_view_slot(stream_conf)
+        self.display_expanded_video(True)
 
     def display_expanded_video(self, display: bool):
         self.video_expanded_view.setVisible(display)

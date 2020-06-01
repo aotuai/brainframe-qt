@@ -29,7 +29,7 @@ class VideoExpandedView(QWidget):
     stream_delete_signal = pyqtSignal(StreamConfiguration)
     """Called when the user wants to delete a stream"""
 
-    open_stream_config_signal = pyqtSignal(StreamConfiguration)
+    toggle_stream_config_signal = pyqtSignal(StreamConfiguration)
     """Called when the user clicks the Stream Config button"""
 
     def __init__(self, parent):
@@ -60,8 +60,7 @@ class VideoExpandedView(QWidget):
 
     def _init_signals(self):
         self.stream_config_button.clicked.connect(
-            lambda: self.open_stream_config_signal.emit(self.stream_conf)
-        )
+            lambda: self.toggle_stream_config_signal.emit(self.stream_conf))
 
     def enterEvent(self, event: QEvent):
         self.hide_button.show()

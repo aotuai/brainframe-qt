@@ -21,8 +21,7 @@ class AlarmViewUI(QWidget):
         self._init_style()
 
     def _init_background_widget(self) -> BackgroundImageText:
-        text = self.tr("No streams are being analyzed right now, so there is "
-                       "nothing to show here")
+        text = self.tr("Add streams to start receiving alerts")
         svg_path = ":/icons/no_streams_for_alerts"
 
         background_widget = BackgroundImageText(text, svg_path, self)

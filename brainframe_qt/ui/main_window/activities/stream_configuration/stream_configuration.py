@@ -2,7 +2,8 @@ import string
 from pathlib import Path
 from typing import Callable, List, Optional, Union
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
 
 from brainframe.api import bf_codecs, bf_errors
@@ -65,9 +66,18 @@ class StreamConfiguration(StreamConfigurationUI):
         #     self._handle_stream_stream)
         # self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
 
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        # Simulate a click on the apply button if Enter/Return is pressed while
+        # the inputs are valid
+        if event.key() in [Qt.Key_Enter, Qt.Key_Return]:
+            if self.inputs_valid:
+                apply_button = self.button_box.button(QDialogButtonBox.Apply)
+                apply_button.click()
+        else:
+            event.ignore()
+
     def load_from_conf(
-            self,
-            stream_conf: Optional[bf_codecs.StreamConfiguration]) -> None:
+            self, stream_conf: Optional[bf_codecs.StreamConfiguration]) -> None:
 
         self._reset_stream_conf = stream_conf
 
@@ -91,7 +101,7 @@ class StreamConfiguration(StreamConfigurationUI):
         self.connection_options = {}
         self.runtime_options = {}
 
-        self.advanced_options_enabled = True
+        self.advanced_options_enabled = False
 
         self.disable_input_fields(False)
 
@@ -372,7 +382,7 @@ class StreamConfiguration(StreamConfigurationUI):
     @property
     def fields_changed(self) -> bool:
         if self._reset_stream_conf is None:
-            return True
+            return self._fields_changed_new_stream()
 
         if self.stream_name != self._reset_stream_conf.name:
             return True
@@ -415,6 +425,22 @@ class StreamConfiguration(StreamConfigurationUI):
         if server_avoid_transcoding is None:
             server_avoid_transcoding = DefaultOptions.AVOID_TRANSCODING
         if server_avoid_transcoding != client_avoid_transcoding:
+            return True
+
+        return False
+
+    def _fields_changed_new_stream(self) -> bool:
+        if self.stream_name != "":
+            return True
+        if self.connection_type is not None:
+            return True
+        if self.premises is not None:
+            return True
+
+        # Connection Options
+        if self.connection_options != {}:
+            return True
+        if self.runtime_options != {}:
             return True
 
         return False

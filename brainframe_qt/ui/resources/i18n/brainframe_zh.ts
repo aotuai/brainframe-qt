@@ -167,8 +167,8 @@ Read the manual to learn about the required directory structure.</source>
     <name>AlarmViewUI</name>
     <message>
         <location filename="../../dialogs/alarm_view/alarm_view_ui.py" line="24"/>
-        <source>No streams are being analyzed right now, so there is nothing to show here</source>
-        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
+        <source>Add streams to start receiving alerts</source>
+        <translation>添加视频流以开始接收报警信息</translation>
     </message>
 </context>
 <context>
@@ -801,67 +801,67 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="593"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="622"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="277"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="286"/>
         <source>Error encountered while uploading video file</source>
         <translation>上传视频文件过程中发生了一个错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="549"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="578"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="550"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="579"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="570"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="567"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="596"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="568"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="597"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="569"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="598"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="594"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="623"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="595"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="624"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="610"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="639"/>
         <source>Error uploading file</source>
         <translation>上传文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="611"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="640"/>
         <source>File does not exist</source>
         <translation>文件不存在</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="612"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="641"/>
         <source>No such file: {filepath}</source>
         <translation>没有这样的文件：{filepath}</translation>
     </message>
@@ -1037,24 +1037,24 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
-        <source>Stream Config</source>
-        <translation>视频流配置</translation>
+        <source>Toggle Stream Config</source>
+        <translation>切换视频流配置</translation>
     </message>
 </context>
 <context>
     <name>VideoThumbnailView</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="118"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="127"/>
         <source>Error retrieving stream configurations</source>
         <translation>检索流配置时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="119"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="128"/>
         <source>Exception:</source>
         <translation>异常：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="120"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="129"/>
         <source>Retry or Close Client?</source>
         <translation>重试或关闭客户端？</translation>
     </message>
@@ -1157,19 +1157,19 @@ Please recheck the entered server address.</source>
 <context>
     <name>_VideoThumbnailViewUI</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
-        <source>No streams are being analyzed right now, so there is nothing to show here</source>
-        <translation>目前没有视频流正在被分析，因此此处无内容显示</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="74"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="73"/>
         <source>Streams with ongoing alerts:</source>
         <translation>正在警报的视频流：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="84"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="83"/>
         <source>Streams without alerts:</source>
         <translation>无警报的视频流：</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
+        <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
+        <translation>点击 ➕ 按钮以添加新的视频流</translation>
     </message>
 </context>
 </TS>

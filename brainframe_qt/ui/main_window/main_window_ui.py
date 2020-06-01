@@ -11,6 +11,8 @@ from brainframe.client.ui.main_window.activities.stream_activity import \
 from brainframe.client.ui.main_window.toolbar import MainToolbar
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe.client.ui.resources.ui_elements.containers import \
+    SidebarDockWidget
 
 
 class MainWindowUI(QMainWindow):
@@ -24,6 +26,8 @@ class MainWindowUI(QMainWindow):
         self.stream_activity = self._init_stream_activity()
         self.identity_activity = self._init_identity_activity()
         self.alert_activity = self._init_alert_activity()
+
+        self.sidebar_dock_widget = self._init_sidebar_dock_widget()
 
         self._init_layout()
         self._init_style()
@@ -52,6 +56,10 @@ class MainWindowUI(QMainWindow):
 
         return toolbar
 
+    def _init_sidebar_dock_widget(self) -> SidebarDockWidget:
+        sidebar_dock_widget = SidebarDockWidget(self)
+        return sidebar_dock_widget
+
     def _init_layout(self) -> None:
         self.setCentralWidget(self.stacked_widget)
         self.addToolBar(Qt.LeftToolBarArea, self.toolbar)
@@ -59,6 +67,9 @@ class MainWindowUI(QMainWindow):
         self.stacked_widget.addWidget(self.stream_activity)
         self.stacked_widget.addWidget(self.identity_activity)
         self.stacked_widget.addWidget(self.alert_activity)
+
+        self.addDockWidget(Qt.RightDockWidgetArea, self.sidebar_dock_widget)
+        self.sidebar_dock_widget.hide()
 
     def _init_style(self) -> None:
         # Allow background of widget to be styled
