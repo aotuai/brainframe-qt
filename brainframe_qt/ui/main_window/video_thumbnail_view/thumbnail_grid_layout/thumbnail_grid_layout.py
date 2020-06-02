@@ -127,8 +127,9 @@ class ThumbnailGridLayout(QWidget):
                 # Hide columns that have nothing in them
                 self.grid_layout.setColumnStretch(col, 0)
 
-    def pop_stream_widget(self, stream_id):
-        """Delete widget in layout with stream id = stream_id"""
+    def pop_stream_widget(self, stream_id) -> VideoSmall:
+        """Remove widget with stream id = stream_id from layout and return
+        it"""
 
         stream_widget = self.stream_widgets.pop(stream_id)
         self.grid_layout.removeWidget(stream_widget)

@@ -73,7 +73,8 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         for layout in [self.alert_stream_layout, self.alertless_stream_layout]:
             for stream_id, stream_widget in layout.stream_widgets.items():
                 if stream_id == stream_conf.id:
-                    layout.pop_stream_widget(stream_id)
+                    widget = layout.pop_stream_widget(stream_id)
+                    widget.deleteLater()
                     break
             # https://stackoverflow.com/a/654002/8134178
             else:
@@ -121,6 +122,16 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
 
         streams_with_alerts = len(self.alert_stream_layout.stream_widgets) > 0
         self.alert_stream_layout.setVisible(streams_with_alerts)
+
+        # Make sure we remove any streams that got left behind, such as when
+        # an alarm is deleted while an alert is active
+        stream_ids_with_alerts = set(alert.stream_id for alert in alerts)
+
+        abandoned_stream_ids = alert_streams.keys() - stream_ids_with_alerts
+        for stream_id in abandoned_stream_ids:
+            video_widget = self.alert_stream_layout \
+                .pop_stream_widget(stream_id)
+            self.alertless_stream_layout.add_video(video_widget)
 
     def _handle_get_stream_conf_error(self, exc: BaseException):
 
