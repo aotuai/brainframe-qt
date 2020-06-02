@@ -73,7 +73,8 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         for layout in [self.alert_stream_layout, self.alertless_stream_layout]:
             for stream_id, stream_widget in layout.stream_widgets.items():
                 if stream_id == stream_conf.id:
-                    layout.pop_stream_widget(stream_id)
+                    widget = layout.pop_stream_widget(stream_id)
+                    widget.deleteLater()
                     break
             # https://stackoverflow.com/a/654002/8134178
             else:
