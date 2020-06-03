@@ -42,6 +42,9 @@ dialog_dir = route_path(ui_dir / "dialogs")
 alarm_view_dir = route_path(dialog_dir / "alarm_view")
 alarm_view_qss = route_path(alarm_view_dir / "alarm_view.qss")
 
+license_dialog_dir = route_path(dialog_dir / "license_dialog")
+license_dialog_qss = route_path(license_dialog_dir / "license_dialog.qss")
+
 ###############################################################################
 # BrainFrame Resources
 ###############################################################################
