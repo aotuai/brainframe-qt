@@ -7,8 +7,13 @@ from .product_widget_ui import _ProductWidgetUI
 
 
 class ProductWidget(_ProductWidgetUI):
-    def __init__(self, parent: QWidget):
+    def __init__(self, product_name: str, icon_path: str,
+                 license_end: pendulum.DateTime, parent: QWidget):
         super().__init__(parent)
+
+        self.set_product_name(product_name)
+        self.set_icon(icon_path)
+        self.set_license_end(license_end)
 
     def set_icon(self, icon_path: str) -> None:
         new_icon = AspectRatioSVGWidget(icon_path, self)
@@ -19,6 +24,6 @@ class ProductWidget(_ProductWidgetUI):
     def set_product_name(self, name: str):
         self.product_name.setText(name)
 
-    def set_license_end_datetime(self, end_datetime: pendulum.DateTime):
-        date_str = end_datetime.format("MMMM DD, YYYY")
+    def set_license_end(self, license_end: pendulum.DateTime):
+        date_str = license_end.format("MMMM DD, YYYY")
         self.license_period = f"License active until {date_str}"
