@@ -1,0 +1,6 @@
+ProductWidget > #product_icon {
+    min-width: 35px;
+    max-width: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}

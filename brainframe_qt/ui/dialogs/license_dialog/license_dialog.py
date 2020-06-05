@@ -17,17 +17,26 @@ class LicenseDialog(_LicenseDialogUI):
 
         self._init_products()
 
+    @classmethod
+    def show_dialog(cls, parent):
+
+        dialog = cls(parent)
+        dialog.exec_()
+
     def _init_signals(self) -> None:
         ...
 
     def _init_products(self):
         def on_success(license_info: bf_codecs.LicenseInfo):
-            _exp_date = license_info.terms.expiration_date
-            expiration = self._date_to_pdl_datetime(_exp_date)
+            expiration_date = license_info.terms.expiration_date
+
+            # Convert date to a UTC datetime
+            if expiration_date is not None:
+                expiration_date = self._date_to_pdl_datetime(expiration_date)
 
             icon_path = ":/icons/capsule_toolbar"
             self.product_sidebar.add_product(
-                "BrainFrame", expiration, icon_path)
+                "BrainFrame", icon_path, expiration_date)
 
         def on_error():
             pass

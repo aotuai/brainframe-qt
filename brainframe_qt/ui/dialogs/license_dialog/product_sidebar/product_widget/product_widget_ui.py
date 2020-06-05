@@ -1,3 +1,5 @@
+from typing import Optional
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
@@ -16,8 +18,11 @@ class _ProductWidgetUI(QWidget):
         self._init_layout()
         self._init_style()
 
-    def _init_product_icon(self) -> AspectRatioSVGWidget:
-        product_icon = AspectRatioSVGWidget(self)
+    def _init_product_icon(self, icon_path: Optional[str] = None) \
+            -> AspectRatioSVGWidget:
+        product_icon = AspectRatioSVGWidget(icon_path, self)
+
+        product_icon.setObjectName("product_icon")
 
         return product_icon
 
