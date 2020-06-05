@@ -3,8 +3,6 @@ from typing import Optional
 import pendulum
 from PyQt5.QtWidgets import QWidget
 
-from brainframe.client.ui.resources.ui_elements.widgets import \
-    AspectRatioSVGWidget
 from .product_widget_ui import _ProductWidgetUI
 
 
@@ -21,6 +19,7 @@ class ProductWidget(_ProductWidgetUI):
         new_icon = self._init_product_icon(icon_path)
         self.layout().replaceWidget(self.product_icon, new_icon)
 
+        self.product_icon.deleteLater()
         self.product_icon = new_icon
 
     def set_product_name(self, name: str) -> None:
