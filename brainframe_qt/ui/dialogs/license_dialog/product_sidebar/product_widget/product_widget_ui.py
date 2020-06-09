@@ -20,6 +20,9 @@ class _ProductWidgetUI(QWidget):
 
     def _init_product_icon(self, icon_path: Optional[str] = None) \
             -> AspectRatioSVGWidget:
+        if icon_path is None:
+            # TODO: Use a different icon
+            icon_path = ":/icons/capsule_toolbar"
         product_icon = AspectRatioSVGWidget(icon_path, self)
 
         product_icon.setObjectName("product_icon")
