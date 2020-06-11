@@ -617,7 +617,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>LicenseSourceSelector</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="26"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="24"/>
         <source>License Source:</source>
         <translation>授权来源：</translation>
     </message>
@@ -1183,6 +1183,19 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="143"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
+    </message>
+</context>
+<context>
+    <name>_TextLicenseEditorUI</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="24"/>
+        <source>Remove License</source>
+        <translation>删除许可证</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="30"/>
+        <source>Update License</source>
+        <translation>更新许可证</translation>
     </message>
 </context>
 <context>
