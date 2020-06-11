@@ -4,3 +4,10 @@ ProductWidget > #product_icon {
     min-height: 35px;
     max-height: 35px;
 }
+
+/* TODO: Why does this only work after a stylesheet reload? */
+QTextEdit {
+    border-radius: 4px;
+    /* https://forum.qt.io/post/306956 */
+    background-color: palette(base);
+}

@@ -597,6 +597,32 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>LicenseSourceButtons</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="20"/>
+        <source>License Key</source>
+        <translation>注册码</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="26"/>
+        <source>Aotu Account</source>
+        <translation>Aotu账号</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="30"/>
+        <source>Coming soon</source>
+        <translation>敬请期待</translation>
+    </message>
+</context>
+<context>
+    <name>LicenseSourceSelector</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="26"/>
+        <source>License Source:</source>
+        <translation>授权来源：</translation>
+    </message>
+</context>
+<context>
     <name>MainToolbar</name>
     <message>
         <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
@@ -1103,6 +1129,19 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="265"/>
         <source>Keyframe-only streaming</source>
         <translation>仅传输关键帧</translation>
+    </message>
+</context>
+<context>
+    <name>_LicenseDetailsUI</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="35"/>
+        <source>Licensed to:</source>
+        <translation>授权给：</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="46"/>
+        <source>License active until:</source>
+        <translation>授权有效期至：</translation>
     </message>
 </context>
 <context>

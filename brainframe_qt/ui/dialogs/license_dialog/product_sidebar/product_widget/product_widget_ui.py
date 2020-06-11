@@ -12,7 +12,7 @@ class _ProductWidgetUI(QWidget):
         super().__init__(parent)
 
         self.product_icon = self._init_product_icon()
-        self.product_name = self._init_product_name()
+        self.product_name_label = self._init_product_name()
         self.license_period = self._init_license_period()
 
         self._init_layout()
@@ -46,7 +46,7 @@ class _ProductWidgetUI(QWidget):
         main_layout.addWidget(self.product_icon)
         main_layout.addLayout(text_layout)
 
-        text_layout.addWidget(self.product_name)
+        text_layout.addWidget(self.product_name_label)
         text_layout.addWidget(self.license_period)
 
         self.setLayout(main_layout)
