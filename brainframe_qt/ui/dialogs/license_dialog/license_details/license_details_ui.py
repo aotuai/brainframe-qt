@@ -1,7 +1,8 @@
 import pendulum
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget
+from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QWidget
 
+from brainframe.client.ui.resources.ui_elements.widgets import Line
 from .license_source_selector import LicenseSourceSelector
 
 
@@ -67,11 +68,13 @@ class _LicenseDetailsUI(QWidget):
 
         layout.addWidget(self.product_name, 0, 0, 1, 2)
 
-        layout.addWidget(self.licensee_label, 1, 0)
-        layout.addWidget(self.licensee, 1, 1)
-        layout.addWidget(self.license_end_label, 2, 0)
-        layout.addWidget(self.license_end, 2, 1)
-        layout.addWidget(self.license_source_selector, 3, 0, 1, 2)
+        layout.addWidget(Line(QFrame.HLine, self), 1, 0, 1, 2)
+
+        layout.addWidget(self.licensee_label, 2, 0)
+        layout.addWidget(self.licensee, 2, 1)
+        layout.addWidget(self.license_end_label, 3, 0)
+        layout.addWidget(self.license_end, 3, 1)
+        layout.addWidget(self.license_source_selector, 4, 0, 1, 2)
 
         # TODO: These are hidden because the information is not provided by
         #       the server yet
@@ -85,3 +88,9 @@ class _LicenseDetailsUI(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         self.layout().setAlignment(Qt.AlignTop)
+
+        # Remove contents margins from top and bottom
+        contents_margins = self.layout().contentsMargins()
+        contents_margins.setBottom(0)
+        contents_margins.setTop(0)
+        self.layout().setContentsMargins(contents_margins)
