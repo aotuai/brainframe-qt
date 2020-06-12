@@ -17,6 +17,7 @@ class LicenseSourceSelector(QWidget):
         self.text_license_editor = self._init_text_license_editor()
         self.license_stack_widget = self._init_license_stack_widget()
 
+        self._source_selector_layout = self._init_source_selector_layout()
         self._init_layout()
         self._init_style()
 
@@ -43,14 +44,18 @@ class LicenseSourceSelector(QWidget):
 
         return license_stack_widget
 
-    def _init_layout(self) -> None:
-        main_layout = QVBoxLayout()
-
+    def _init_source_selector_layout(self) -> QHBoxLayout:
         source_selector_layout = QHBoxLayout()
+
         source_selector_layout.addWidget(self.license_source_label)
         source_selector_layout.addWidget(self.license_source_buttons)
 
-        main_layout.addLayout(source_selector_layout)
+        return source_selector_layout
+
+    def _init_layout(self) -> None:
+        main_layout = QVBoxLayout()
+
+        main_layout.addLayout(self._source_selector_layout)
         main_layout.addWidget(self.license_stack_widget)
 
         self.setLayout(main_layout)
@@ -60,3 +65,5 @@ class LicenseSourceSelector(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         self.layout().setContentsMargins(0, 0, 0, 0)
+
+        self._source_selector_layout.setAlignment(Qt.AlignLeft)
