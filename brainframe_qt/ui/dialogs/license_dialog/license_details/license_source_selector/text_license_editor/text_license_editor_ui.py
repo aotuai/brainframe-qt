@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFontDatabase, QTextOption
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QTextEdit, QVBoxLayout, \
-    QWidget
+from PyQt5.QtWidgets import QHBoxLayout, QPlainTextEdit, QPushButton, \
+    QVBoxLayout, QWidget
 
 
 class _TextLicenseEditorUI(QWidget):
@@ -16,8 +16,8 @@ class _TextLicenseEditorUI(QWidget):
         self._init_layout()
         self._init_style()
 
-    def _init_license_textbox(self) -> QTextEdit:
-        license_textbox = QTextEdit(self)
+    def _init_license_textbox(self) -> QPlainTextEdit:
+        license_textbox = QPlainTextEdit(self)
 
         return license_textbox
 
@@ -68,4 +68,3 @@ class _TextLicenseEditorUI(QWidget):
         self.license_textbox.setFont(monospace_font)
 
         self.license_textbox.setWordWrapMode(QTextOption.WrapAnywhere)
-
