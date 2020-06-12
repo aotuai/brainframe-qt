@@ -55,10 +55,11 @@ class ProductWidget(_ProductWidgetUI):
     def set_license_end(self, license_end: pendulum.DateTime) -> None:
 
         if license_end is None:
-            license_period = "Perpetual License"
+            license_period = self.tr("Perpetual License")
         else:
             date_str = license_end.format("MMMM DD, YYYY")
-            license_period = f"License active until {date_str}"
+            license_period = self.tr("License active until {date_str}") \
+                .format(date_str=date_str)
 
         self.license_period.setText(license_period)
 

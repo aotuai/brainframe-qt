@@ -617,7 +617,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>LicenseSourceSelector</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="24"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="25"/>
         <source>License Source:</source>
         <translation>授权来源：</translation>
     </message>
@@ -691,6 +691,19 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../ui_elements/containers/paginator.ui" line="119"/>
         <source>of</source>
         <translation>中的</translation>
+    </message>
+</context>
+<context>
+    <name>ProductWidget</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="58"/>
+        <source>Perpetual License</source>
+        <translation>永久授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="61"/>
+        <source>License active until {date_str}</source>
+        <translation>授权有效期至{date_str}</translation>
     </message>
 </context>
 <context>
@@ -1134,12 +1147,12 @@ Please recheck the entered server address.</source>
 <context>
     <name>_LicenseDetailsUI</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="35"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="37"/>
         <source>Licensed to:</source>
         <translation>授权给：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="46"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="48"/>
         <source>License active until:</source>
         <translation>授权有效期至：</translation>
     </message>
@@ -1188,12 +1201,12 @@ Please recheck the entered server address.</source>
 <context>
     <name>_TextLicenseEditorUI</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="24"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="25"/>
         <source>Remove License</source>
         <translation>删除许可证</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="30"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="31"/>
         <source>Update License</source>
         <translation>更新许可证</translation>
     </message>
