@@ -1035,6 +1035,19 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>TextLicenseEditor</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor.py" line="41"/>
+        <source>Invalid License Format</source>
+        <translation>无效的授权格式</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor.py" line="42"/>
+        <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
+        <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
+    </message>
+</context>
+<context>
     <name>VersionMismatch</name>
     <message>
         <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="16"/>
