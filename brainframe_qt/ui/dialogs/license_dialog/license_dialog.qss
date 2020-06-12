@@ -1,12 +1,33 @@
-ProductWidget > #product_icon {
+/******************************************************************************
+/* Main layout
+/*****************************************************************************/
+
+ProductSidebar {
+    min-width: 250px;
+    max-width: 250px;
+}
+
+/******************************************************************************
+/* Sidebar
+/*****************************************************************************/
+
+ProductSidebar ProductWidget > #product_icon {
     min-width: 35px;
     max-width: 35px;
     min-height: 35px;
     max-height: 35px;
 }
 
+/******************************************************************************
+/* License detail
+/*****************************************************************************/
+
+LicenseDetails > #product_name {
+    font-size: 20px;
+}
+
 /* TODO: Why does this only work after a stylesheet reload? */
-QTextEdit {
+TextLicenseEditor > QTextEdit {
     border-radius: 4px;
     /* https://forum.qt.io/post/306956 */
     background-color: palette(base);

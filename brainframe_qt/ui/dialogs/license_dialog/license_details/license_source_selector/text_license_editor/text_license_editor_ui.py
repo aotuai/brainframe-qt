@@ -12,6 +12,7 @@ class _TextLicenseEditorUI(QWidget):
         self.remove_license_button = self._init_remove_license_button()
         self.update_license_button = self._init_update_license_button()
 
+        self._button_layout = self._init_button_layout()
         self._init_layout()
         self._init_style()
 
@@ -30,17 +31,27 @@ class _TextLicenseEditorUI(QWidget):
         button_text = self.tr("Update License")
         update_license_button = QPushButton(button_text, self)
 
+        # Disabled until textbox has content
+        update_license_button.setDisabled(True)
+
         return update_license_button
+
+    def _init_button_layout(self) -> QHBoxLayout:
+        button_layout = QHBoxLayout()
+
+        button_layout.addWidget(self.remove_license_button)
+        button_layout.addWidget(self.update_license_button)
+
+        return button_layout
 
     def _init_layout(self) -> None:
         main_layout = QVBoxLayout()
 
-        button_layout = QHBoxLayout()
-        button_layout.addWidget(self.remove_license_button)
-        button_layout.addWidget(self.update_license_button)
-
         main_layout.addWidget(self.license_textbox)
-        main_layout.addLayout(button_layout)
+        main_layout.addLayout(self._button_layout)
+
+        # TODO: Hidden for now. May be used in future
+        self.remove_license_button.hide()
 
         self.setLayout(main_layout)
 
@@ -48,9 +59,13 @@ class _TextLicenseEditorUI(QWidget):
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
 
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self._button_layout.setAlignment(Qt.AlignRight)
+
         # TODO: Verify that this works on all builds
         # https://stackoverflow.com/q/1468022/8134178
         monospace_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         self.license_textbox.setFont(monospace_font)
 
         self.license_textbox.setWordWrapMode(QTextOption.WrapAnywhere)
+

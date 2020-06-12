@@ -7,7 +7,6 @@ from .license_source_selector import LicenseSourceSelector
 
 
 class _LicenseDetailsUI(QWidget):
-
     LICENSE_END_FORMAT = "MMMM DD, YYYY [at] HH:mm:ss zz"
 
     def __init__(self, parent: QWidget):
@@ -29,6 +28,8 @@ class _LicenseDetailsUI(QWidget):
     def _init_product_name(self) -> QLabel:
         label_text = "[Product Name]"
         product_name = QLabel(label_text, self)
+
+        product_name.setObjectName("product_name")
 
         return product_name
 
