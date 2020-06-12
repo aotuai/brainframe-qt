@@ -3,6 +3,9 @@ from PyQt5.QtGui import QFontDatabase, QTextOption
 from PyQt5.QtWidgets import QHBoxLayout, QPlainTextEdit, QPushButton, \
     QVBoxLayout, QWidget
 
+from brainframe.client.ui.resources.ui_elements.widgets.text_edit import \
+    PlaceholderTextEdit
+
 
 class _TextLicenseEditorUI(QWidget):
     def __init__(self, parent: QWidget):
@@ -16,8 +19,10 @@ class _TextLicenseEditorUI(QWidget):
         self._init_layout()
         self._init_style()
 
-    def _init_license_textbox(self) -> QPlainTextEdit:
-        license_textbox = QPlainTextEdit(self)
+    def _init_license_textbox(self) -> PlaceholderTextEdit:
+        license_textbox = PlaceholderTextEdit(self)
+        license_textbox.placeholder_text = \
+            self.tr("Paste license text or drag-and-drop license file here")
 
         return license_textbox
 

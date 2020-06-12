@@ -1214,14 +1214,19 @@ Please recheck the entered server address.</source>
 <context>
     <name>_TextLicenseEditorUI</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="25"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="30"/>
         <source>Remove License</source>
         <translation>删除许可证</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="31"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="36"/>
         <source>Update License</source>
         <translation>更新许可证</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="25"/>
+        <source>Paste license text or drag-and-drop license file here</source>
+        <translation>在此处粘贴授权文本或将授权文件拖拽至此</translation>
     </message>
 </context>
 <context>
