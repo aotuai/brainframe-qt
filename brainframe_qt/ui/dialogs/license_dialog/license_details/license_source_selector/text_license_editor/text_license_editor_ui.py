@@ -1,10 +1,11 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFontDatabase, QTextOption
-from PyQt5.QtWidgets import QHBoxLayout, QPlainTextEdit, QPushButton, \
+from PyQt5.QtGui import QFontDatabase, \
+    QTextOption
+from PyQt5.QtWidgets import QHBoxLayout, QPushButton, \
     QVBoxLayout, QWidget
 
 from brainframe.client.ui.resources.ui_elements.widgets.text_edit import \
-    PlaceholderTextEdit
+    DragAndDropTextEditor
 
 
 class _TextLicenseEditorUI(QWidget):
@@ -19,8 +20,8 @@ class _TextLicenseEditorUI(QWidget):
         self._init_layout()
         self._init_style()
 
-    def _init_license_textbox(self) -> PlaceholderTextEdit:
-        license_textbox = PlaceholderTextEdit(self)
+    def _init_license_textbox(self) -> DragAndDropTextEditor:
+        license_textbox = DragAndDropTextEditor(self)
         license_textbox.placeholder_text = \
             self.tr("Paste license text or drag-and-drop license file here")
 
