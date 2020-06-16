@@ -597,6 +597,19 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>LicenseDialog</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="85"/>
+        <source>Invalid License Format</source>
+        <translation>无效的授权格式</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="86"/>
+        <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
+        <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
+    </message>
+</context>
+<context>
     <name>LicenseSourceButtons</name>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="20"/>
@@ -617,7 +630,7 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>LicenseSourceSelector</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="25"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="28"/>
         <source>License Source:</source>
         <translation>授权来源：</translation>
     </message>
@@ -1045,19 +1058,6 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="210"/>
         <source>Cancel</source>
         <translation>取消</translation>
-    </message>
-</context>
-<context>
-    <name>TextLicenseEditor</name>
-    <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor.py" line="41"/>
-        <source>Invalid License Format</source>
-        <translation>无效的授权格式</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor.py" line="42"/>
-        <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
-        <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
     </message>
 </context>
 <context>

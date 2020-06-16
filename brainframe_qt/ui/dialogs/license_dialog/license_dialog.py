@@ -1,10 +1,13 @@
-from PyQt5.QtWidgets import QListWidgetItem, QWidget
+from PyQt5.QtWidgets import QListWidgetItem, QMessageBox, QWidget
 
-from brainframe.api import bf_codecs
+from brainframe.api import bf_codecs, bf_errors
 from brainframe.client.api_utils import api
 from brainframe.client.ui.resources import QTAsyncWorker
 from .license_dialog_ui import _LicenseDialogUI
 from .product_sidebar.product_widget import ProductWidget
+
+LICENSE_DOCS_LINK = "https://aotu.ai/docs/user_guide/server_setup/" \
+                    "#getting-a-license"
 
 
 class LicenseDialog(_LicenseDialogUI):
@@ -27,6 +30,9 @@ class LicenseDialog(_LicenseDialogUI):
 
     def _init_signals(self) -> None:
         self.product_sidebar.currentItemChanged.connect(self.change_product)
+
+        self.license_details.license_text_update.connect(
+            self.send_update_license_text)
 
     def _init_products(self):
         def on_success(license_info: bf_codecs.LicenseInfo):
@@ -51,3 +57,37 @@ class LicenseDialog(_LicenseDialogUI):
 
         self.license_details.set_product(widget.product_name,
                                          widget.license_info)
+
+    def send_update_license_text(self, license_key: str):
+        # TODO: Support more than BrainFrame license (if we ever support
+        #       capsule licensing)
+
+        def on_success(license_info: bf_codecs.LicenseInfo):
+            self.update_license_info("BrainFrame", license_info)
+
+        QTAsyncWorker(self, api.set_license_key, f_args=(license_key,),
+                      on_success=on_success,
+                      on_error=self._handle_update_license_error) \
+            .start()
+
+    def update_license_info(self, product_name: str,
+                            license_info: bf_codecs.LicenseInfo) -> None:
+
+        self.product_sidebar.update_license_info(product_name, license_info)
+
+        # Only change the license details if the product is already displayed
+        if self.license_details.product_name == product_name:
+            self.license_details.set_product(product_name, license_info)
+
+    def _handle_update_license_error(self, exc: BaseException):
+        if isinstance(exc, bf_errors.LicenseInvalidError):
+
+            message_title = self.tr("Invalid License Format")
+            message = self.tr(
+                "The provided license has an invalid format. Please "
+                "<a href='{license_docs_link}'>download a new license</a>.") \
+                .format(license_docs_link=LICENSE_DOCS_LINK)
+        else:
+            raise exc
+
+        QMessageBox.information(self, message_title, message)

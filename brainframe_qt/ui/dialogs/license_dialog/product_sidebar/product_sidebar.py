@@ -1,6 +1,5 @@
-from typing import Optional
+import typing
 
-import pendulum
 from PyQt5.QtWidgets import QListWidgetItem, QWidget
 
 from brainframe.api import bf_codecs
@@ -31,3 +30,19 @@ class ProductSidebar(_ProductSidebarUI):
 
         self.addItem(list_item)
         self.setItemWidget(list_item, product)
+
+    def update_license_info(self, product_name: str,
+                            license_info: bf_codecs.LicenseInfo) -> None:
+
+        # Find the correct widget
+        for row in range(self.count()):
+            item = self.item(row)
+            widget = typing.cast(ProductWidget, self.itemWidget(item))
+
+            if widget.product_name == product_name:
+                widget.license_info = license_info
+                return
+
+        # The product is inexplicably missing
+        raise LookupError(f"Unable to update the license information for "
+                          f"{product_name}")

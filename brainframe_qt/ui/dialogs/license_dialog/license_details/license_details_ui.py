@@ -11,7 +11,7 @@ class _LicenseDetailsUI(QWidget):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.product_name = self._init_product_name()
+        self.product_name_label = self._init_product_name_label()
 
         self.licensee_label = self._init_licensee_label()
         self.licensee = self._init_licensee()
@@ -23,13 +23,13 @@ class _LicenseDetailsUI(QWidget):
         self._init_layout()
         self._init_style()
 
-    def _init_product_name(self) -> QLabel:
+    def _init_product_name_label(self) -> QLabel:
         label_text = "[Product Name]"
-        product_name = QLabel(label_text, self)
+        product_name_label = QLabel(label_text, self)
 
-        product_name.setObjectName("product_name")
+        product_name_label.setObjectName("product_name")
 
-        return product_name
+        return product_name_label
 
     def _init_licensee_label(self) -> QLabel:
         label_text = self.tr("Licensed to:")
@@ -55,7 +55,7 @@ class _LicenseDetailsUI(QWidget):
     def _init_layout(self) -> None:
         layout = QGridLayout()
 
-        layout.addWidget(self.product_name, 0, 0, 1, 2)
+        layout.addWidget(self.product_name_label, 0, 0, 1, 2)
 
         layout.addWidget(Line(QFrame.HLine, self), 1, 0, 1, 2)
 

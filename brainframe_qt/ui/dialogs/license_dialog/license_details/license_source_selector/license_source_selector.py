@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QStackedWidget, QVBoxLayout, \
     QWidget
 
@@ -7,6 +7,7 @@ from .text_license_editor import TextLicenseEditor
 
 
 class LicenseSourceSelector(QWidget):
+    license_text_update = pyqtSignal(str)
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -20,6 +21,8 @@ class LicenseSourceSelector(QWidget):
         self._source_selector_layout = self._init_source_selector_layout()
         self._init_layout()
         self._init_style()
+
+        self._init_signals()
 
     def _init_license_source_label(self) -> QLabel:
         label_text = self.tr("License Source:")
@@ -67,3 +70,7 @@ class LicenseSourceSelector(QWidget):
         self.layout().setContentsMargins(0, 0, 0, 0)
 
         self._source_selector_layout.setAlignment(Qt.AlignLeft)
+
+    def _init_signals(self) -> None:
+        self.text_license_editor.license_text_update.connect(
+            self.license_text_update)
