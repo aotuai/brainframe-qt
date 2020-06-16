@@ -623,6 +623,19 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>LicenseTerms</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="87"/>
+        <source>Perpetual License</source>
+        <translation>永久授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="74"/>
+        <source>{days}d{hours}h{minutes}m</source>
+        <translation>{days}日{hours}点{minutes}分</translation>
+    </message>
+</context>
+<context>
     <name>MainToolbar</name>
     <message>
         <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
@@ -1160,14 +1173,9 @@ Please recheck the entered server address.</source>
 <context>
     <name>_LicenseDetailsUI</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="37"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="36"/>
         <source>Licensed to:</source>
         <translation>授权给：</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="48"/>
-        <source>License active until:</source>
-        <translation>授权有效期至：</translation>
     </message>
 </context>
 <context>
