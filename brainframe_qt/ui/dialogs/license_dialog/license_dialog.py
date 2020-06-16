@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import QListWidgetItem, QMessageBox, QWidget
 from brainframe.api import bf_codecs, bf_errors
 from brainframe.client.api_utils import api
 from brainframe.client.ui.resources import QTAsyncWorker
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    WorkingIndicator
 from .license_dialog_ui import _LicenseDialogUI
 from .product_sidebar.product_widget import ProductWidget
 
@@ -62,12 +64,21 @@ class LicenseDialog(_LicenseDialogUI):
         # TODO: Support more than BrainFrame license (if we ever support
         #       capsule licensing)
 
+        working_indicator = WorkingIndicator(self)
+        working_indicator.setLabelText(self.tr("Uploading license..."))
+        working_indicator.show()
+
         def on_success(license_info: bf_codecs.LicenseInfo):
             self.update_license_info("BrainFrame", license_info)
+            working_indicator.cancel()
+
+        def on_error(exc: BaseException):
+            working_indicator.cancel()
+            self._handle_update_license_error(exc)
 
         QTAsyncWorker(self, api.set_license_key, f_args=(license_key,),
                       on_success=on_success,
-                      on_error=self._handle_update_license_error) \
+                      on_error=on_error) \
             .start()
 
     def update_license_info(self, product_name: str,

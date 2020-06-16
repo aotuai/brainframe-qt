@@ -599,14 +599,19 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>LicenseDialog</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="85"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="96"/>
         <source>Invalid License Format</source>
         <translation>无效的授权格式</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="86"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="97"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
         <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="68"/>
+        <source>Uploading license...</source>
+        <translation>正在上传授权⋯⋯</translation>
     </message>
 </context>
 <context>
