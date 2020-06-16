@@ -17,3 +17,5 @@ class _LicenseTermsUI(QWidget):
     def _init_style(self) -> None:
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
+
+        self.layout().setContentsMargins(0, 0, 0, 0)

@@ -67,6 +67,8 @@ class LicenseTerms(_LicenseTermsUI):
         # https://stackoverflow.com/a/10439207/8134178
         QWidget().setLayout(self.layout())
         self._init_layout()
+        # Refreshes layout style
+        self._init_style()
 
     def _journal_age_to_str(self, journaling_age: float) -> str:
         duration = pendulum.Duration(seconds=journaling_age)

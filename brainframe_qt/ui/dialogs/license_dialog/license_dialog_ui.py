@@ -40,3 +40,5 @@ class _LicenseDialogUI(QDialog):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         stylesheet_watcher.watch(self, qt_qss_paths.license_dialog_qss)
+
+        self.layout().setContentsMargins(0, 0, 0, 0)

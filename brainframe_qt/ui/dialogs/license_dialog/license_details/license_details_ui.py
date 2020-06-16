@@ -76,9 +76,3 @@ class _LicenseDetailsUI(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         self.layout().setAlignment(Qt.AlignTop)
-
-        # Remove contents margins from top and bottom
-        contents_margins = self.layout().contentsMargins()
-        contents_margins.setBottom(0)
-        contents_margins.setTop(0)
-        self.layout().setContentsMargins(contents_margins)

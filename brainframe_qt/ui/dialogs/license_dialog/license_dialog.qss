@@ -11,6 +11,11 @@ ProductSidebar {
 /* Sidebar
 /*****************************************************************************/
 
+ProductSidebar {
+    border: none;
+    background: transparent;
+}
+
 ProductSidebar ProductWidget > #product_icon {
     min-width: 35px;
     max-width: 35px;

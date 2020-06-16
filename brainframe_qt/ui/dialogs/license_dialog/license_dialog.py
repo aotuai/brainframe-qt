@@ -20,6 +20,9 @@ class LicenseDialog(_LicenseDialogUI):
     @classmethod
     def show_dialog(cls, parent):
         dialog = cls(parent)
+
+        dialog.resize(900, 500)
+
         dialog.exec_()
 
     def _init_signals(self) -> None:
