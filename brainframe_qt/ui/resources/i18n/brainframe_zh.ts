@@ -622,9 +622,9 @@ Read the manual to learn about the required directory structure.</source>
         <translation>无效的授权格式</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="110"/>
-        <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
-        <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="111"/>
+        <source>The provided license is either invalid or requires internet connection to verify. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
+        <translation>提供的授权无效或需要互联网连接才能进行验证。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="74"/>
@@ -637,22 +637,22 @@ Read the manual to learn about the required directory structure.</source>
         <translation>授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="129"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="131"/>
         <source>Connection error while communicating with the server</source>
         <translation>与服务器通讯时出现连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="128"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="130"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="119"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="121"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="120"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="122"/>
         <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
         <translation>提供的授权已过期。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
     </message>

@@ -107,8 +107,10 @@ class LicenseDialog(_LicenseDialogUI):
     def _handle_invalid_license_error(self, _exc):
 
         message_title = self.tr("Invalid License Format")
+        # TODO: BF-1332 - Failed online check-in results in an Invalid license
         message = self.tr(
-            "The provided license has an invalid format. Please "
+            "The provided license is either invalid or requires internet "
+            "connection to verify. Please "
             "<a href='{license_docs_link}'>download a new license</a>.") \
             .format(license_docs_link=LICENSE_DOCS_LINK)
 
