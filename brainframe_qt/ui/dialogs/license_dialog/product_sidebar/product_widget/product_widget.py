@@ -57,8 +57,9 @@ class ProductWidget(_ProductWidgetUI):
         if license_end is None:
             license_period = self.tr("Perpetual License")
         else:
-            date_str = license_end.format("MMMM DD, YYYY")
-            license_period = self.tr("License active until {date_str}") \
+            license_end = license_end.in_timezone('local')
+            date_str = license_end.format("MMM DD, YYYY")
+            license_period = self.tr("Active until {date_str}") \
                 .format(date_str=date_str)
 
         self.license_period.setText(license_period)

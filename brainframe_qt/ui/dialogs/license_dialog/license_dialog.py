@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QListWidgetItem, QMessageBox, QWidget
+from PyQt5.QtWidgets import QApplication, QListWidgetItem, QMessageBox, QWidget
 
 from brainframe.api import bf_codecs, bf_errors
 from brainframe.client.api_utils import api
@@ -26,6 +26,8 @@ class LicenseDialog(_LicenseDialogUI):
     def show_dialog(cls, parent):
         dialog = cls(parent)
 
+        dialog.setWindowTitle(
+            QApplication.translate("LicenseDialog", "Licenses"))
         dialog.resize(900, 500)
 
         dialog.exec_()

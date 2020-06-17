@@ -11,11 +11,6 @@ class ProductSidebar(_ProductSidebarUI):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self._init_signals()
-
-    def _init_signals(self) -> None:
-        ...
-
     def add_product(self, product_name: str, icon_path: str,
                     license_info: bf_codecs.LicenseInfo) \
             -> None:

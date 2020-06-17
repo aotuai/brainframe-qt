@@ -24,11 +24,13 @@ class LicenseTerms(_LicenseTermsUI):
         journal_age = license_terms.journal_max_allowed_age
         journal_age_str = self._journal_age_to_str(journal_age)
 
+        online_checkin_str = "❌" if license_terms.online_checkin else "✔️"
+
         license_terms = {
-            "License active until": license_end_str,
-            "Online check-in required": license_terms.online_checkin,
-            "Max streams": license_terms.max_streams,
-            "Max journaling age": journal_age_str
+            self.tr("License active until"): license_end_str,
+            self.tr("Online check-in required"): online_checkin_str,
+            self.tr("Max streams"): license_terms.max_streams,
+            self.tr("Max journaling age"): journal_age_str
         }
         self._add_license_terms(license_terms)
 

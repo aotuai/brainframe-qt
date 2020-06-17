@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFontDatabase, \
     QTextOption
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton, \
+from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, \
     QVBoxLayout, QWidget
 
 from brainframe.client.ui.resources.ui_elements.widgets.text_edit import \
@@ -23,7 +23,9 @@ class _TextLicenseEditorUI(QWidget):
     def _init_license_textbox(self) -> DragAndDropTextEditor:
         license_textbox = DragAndDropTextEditor(self)
         license_textbox.placeholder_text = \
-            self.tr("Paste license text or drag-and-drop license file here")
+            QApplication.translate(
+                "TextLicenseEditor",
+                "Paste license text or drag-and-drop license file here")
 
         return license_textbox
 
@@ -34,7 +36,8 @@ class _TextLicenseEditorUI(QWidget):
         return remove_license_button
 
     def _init_update_license_button(self) -> QPushButton:
-        button_text = self.tr("Update License")
+        button_text = QApplication.translate("TextLicenseEditor",
+                                             "Update License")
         update_license_button = QPushButton(button_text, self)
 
         # Disabled until textbox has content

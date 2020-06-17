@@ -599,19 +599,24 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>LicenseDialog</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="96"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="98"/>
         <source>Invalid License Format</source>
         <translation>无效的授权格式</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="97"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="99"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
         <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="68"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="70"/>
         <source>Uploading license...</source>
         <translation>正在上传授权⋯⋯</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="29"/>
+        <source>Licenses</source>
+        <translation>授权</translation>
     </message>
 </context>
 <context>
@@ -643,14 +648,34 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>LicenseTerms</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="89"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="91"/>
         <source>Perpetual License</source>
         <translation>永久授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="76"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="78"/>
         <source>{days}d{hours}h{minutes}m</source>
         <translation>{days}日{hours}点{minutes}分</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="30"/>
+        <source>License active until</source>
+        <translation>授权有效期至</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="31"/>
+        <source>Online check-in required</source>
+        <translation>需要线上激活</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="32"/>
+        <source>Max streams</source>
+        <translation>最大视频流数量</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="33"/>
+        <source>Max journaling age</source>
+        <translation>数据保留时限</translation>
     </message>
 </context>
 <context>
@@ -732,8 +757,8 @@ Read the manual to learn about the required directory structure.</source>
         <translation>永久授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="61"/>
-        <source>License active until {date_str}</source>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="62"/>
+        <source>Active until {date_str}</source>
         <translation>授权有效期至{date_str}</translation>
     </message>
 </context>
@@ -1066,6 +1091,19 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>TextLicenseEditor</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="26"/>
+        <source>Paste license text or drag-and-drop license file here</source>
+        <translation>在此处粘贴授权文本或将授权文件拖拽至此</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="39"/>
+        <source>Update License</source>
+        <translation>更新许可证</translation>
+    </message>
+</context>
+<context>
     <name>VersionMismatch</name>
     <message>
         <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="16"/>
@@ -1227,19 +1265,9 @@ Please recheck the entered server address.</source>
 <context>
     <name>_TextLicenseEditorUI</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="31"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="33"/>
         <source>Remove License</source>
         <translation>删除许可证</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="37"/>
-        <source>Update License</source>
-        <translation>更新许可证</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="26"/>
-        <source>Paste license text or drag-and-drop license file here</source>
-        <translation>在此处粘贴授权文本或将授权文件拖拽至此</translation>
     </message>
 </context>
 <context>
