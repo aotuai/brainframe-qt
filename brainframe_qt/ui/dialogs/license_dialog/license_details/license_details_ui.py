@@ -16,6 +16,7 @@ class _LicenseDetailsUI(QWidget):
         self.license_terms = self._init_license_terms()
         self.missing_license_message = self._init_missing_license_message()
         self.invalid_license_message = self._init_invalid_license_message()
+        self.expired_license_message = self._init_expired_license_message()
 
         self.licensee_label = self._init_licensee_label()
         self.licensee = self._init_licensee()
@@ -40,6 +41,8 @@ class _LicenseDetailsUI(QWidget):
         )
         missing_license_message = QLabel(message_text, self)
 
+        missing_license_message.setObjectName("error_message")
+
         return missing_license_message
 
     def _init_invalid_license_message(self) -> QLabel:
@@ -49,7 +52,20 @@ class _LicenseDetailsUI(QWidget):
         )
         invalid_license_message = QLabel(message_text, self)
 
+        invalid_license_message.setObjectName("error_message")
+
         return invalid_license_message
+
+    def _init_expired_license_message(self) -> QLabel:
+        message_text = QApplication.translate(
+            "LicenseDetails",
+            "License is expired. Please upload a new one."
+        )
+        expired_license_message = QLabel(message_text, self)
+
+        expired_license_message.setObjectName("error_message")
+
+        return expired_license_message
 
     def _init_licensee_label(self) -> QLabel:
         label_text = self.tr("Licensed to:")
@@ -84,9 +100,10 @@ class _LicenseDetailsUI(QWidget):
 
         layout.addWidget(self.missing_license_message, 3, 0, 1, 2)
         layout.addWidget(self.invalid_license_message, 4, 0, 1, 2)
+        layout.addWidget(self.expired_license_message, 5, 0, 1, 2)
 
-        layout.addWidget(self.license_terms, 5, 0, 1, 2)
-        layout.addWidget(self.license_source_selector, 6, 0, 1, 2)
+        layout.addWidget(self.license_terms, 6, 0, 1, 2)
+        layout.addWidget(self.license_source_selector, 7, 0, 1, 2)
 
         # TODO: These are hidden because the information is not provided by
         #       the server yet
@@ -96,6 +113,7 @@ class _LicenseDetailsUI(QWidget):
         # Hide error messages
         self.missing_license_message.hide()
         self.invalid_license_message.hide()
+        self.expired_license_message.hide()
 
         self.setLayout(layout)
 

@@ -33,6 +33,9 @@ class ProductWidget(_ProductWidgetUI):
             expiration_date = None
         elif license_info.state is bf_codecs.LicenseState.INVALID:
             expiration_date = None
+        elif license_info.state is bf_codecs.LicenseState.EXPIRED:
+            # TODO: BF-1328
+            expiration_date = None
         else:
             # Convert date to a pendulum UTC datetime
             expiration_date = license_info.terms.expiration_date

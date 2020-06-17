@@ -97,6 +97,27 @@
        </property>
       </widget>
      </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="connection_status_label">
+       <property name="text">
+        <string notr="true">❓</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QPushButton" name="check_connection_button">
+       <property name="text">
+        <string>Check Connection</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLabel" name="connection_report_label">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

@@ -83,6 +83,8 @@ class LicenseDialog(_LicenseDialogUI):
 
             if isinstance(exc, bf_errors.LicenseInvalidError):
                 self._handle_invalid_license_error(exc)
+            elif isinstance(exc, bf_errors.LicenseExpiredError):
+                self._handle_expired_license_error(exc)
             elif isinstance(exc, requests.exceptions.ConnectionError):
                 self._handle_connection_error(exc)
             else:
@@ -107,6 +109,16 @@ class LicenseDialog(_LicenseDialogUI):
         message_title = self.tr("Invalid License Format")
         message = self.tr(
             "The provided license has an invalid format. Please "
+            "<a href='{license_docs_link}'>download a new license</a>.") \
+            .format(license_docs_link=LICENSE_DOCS_LINK)
+
+        QMessageBox.information(self, message_title, message)
+
+    def _handle_expired_license_error(self, _exc):
+
+        message_title = self.tr("Expired License")
+        message = self.tr(
+            "The provided license has expired. Please "
             "<a href='{license_docs_link}'>download a new license</a>.") \
             .format(license_docs_link=LICENSE_DOCS_LINK)
 
