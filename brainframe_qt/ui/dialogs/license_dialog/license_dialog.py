@@ -49,7 +49,7 @@ class LicenseDialog(_LicenseDialogUI):
             self.product_sidebar.setCurrentRow(0)
 
         def on_error(exc: BaseException):
-            if isinstance(exc, requests.ConnectionError):
+            if isinstance(exc, requests.exceptions.ConnectionError):
                 self._handle_connection_error(exc)
             else:
                 self._handle_unknown_error(exc)
@@ -83,7 +83,7 @@ class LicenseDialog(_LicenseDialogUI):
 
             if isinstance(exc, bf_errors.LicenseInvalidError):
                 self._handle_invalid_license_error(exc)
-            elif isinstance(exc, requests.ConnectionError):
+            elif isinstance(exc, requests.exceptions.ConnectionError):
                 self._handle_connection_error(exc)
             else:
                 self._handle_unknown_error(exc)
