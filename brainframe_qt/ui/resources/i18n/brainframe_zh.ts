@@ -655,7 +655,7 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="78"/>
         <source>{days}d{hours}h{minutes}m</source>
-        <translation>{days}日{hours}点{minutes}分</translation>
+        <translation>{days}天{hours}小时{minutes}分钟</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="30"/>
