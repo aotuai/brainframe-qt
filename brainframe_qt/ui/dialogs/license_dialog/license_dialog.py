@@ -1,3 +1,4 @@
+import requests
 from PyQt5.QtWidgets import QApplication, QListWidgetItem, QMessageBox, QWidget
 
 from brainframe.api import bf_codecs, bf_errors
@@ -47,8 +48,11 @@ class LicenseDialog(_LicenseDialogUI):
             # BrainFrame product should always be first in list
             self.product_sidebar.setCurrentRow(0)
 
-        def on_error():
-            pass
+        def on_error(exc: BaseException):
+            if isinstance(exc, requests.ConnectionError):
+                self._handle_connection_error(exc)
+            else:
+                self._handle_unknown_error(exc)
 
         QTAsyncWorker(self, api.get_license_info,
                       on_success=on_success, on_error=on_error) \
@@ -76,7 +80,13 @@ class LicenseDialog(_LicenseDialogUI):
 
         def on_error(exc: BaseException):
             working_indicator.cancel()
-            self._handle_update_license_error(exc)
+
+            if isinstance(exc, bf_errors.LicenseInvalidError):
+                self._handle_invalid_license_error(exc)
+            elif isinstance(exc, requests.ConnectionError):
+                self._handle_connection_error(exc)
+            else:
+                self._handle_unknown_error(exc)
 
         QTAsyncWorker(self, api.set_license_key, f_args=(license_key,),
                       on_success=on_success,
@@ -92,15 +102,24 @@ class LicenseDialog(_LicenseDialogUI):
         if self.license_details.product_name == product_name:
             self.license_details.set_product(product_name, license_info)
 
-    def _handle_update_license_error(self, exc: BaseException):
-        if isinstance(exc, bf_errors.LicenseInvalidError):
+    def _handle_invalid_license_error(self, _exc):
 
-            message_title = self.tr("Invalid License Format")
-            message = self.tr(
-                "The provided license has an invalid format. Please "
-                "<a href='{license_docs_link}'>download a new license</a>.") \
-                .format(license_docs_link=LICENSE_DOCS_LINK)
-        else:
-            raise exc
+        message_title = self.tr("Invalid License Format")
+        message = self.tr(
+            "The provided license has an invalid format. Please "
+            "<a href='{license_docs_link}'>download a new license</a>.") \
+            .format(license_docs_link=LICENSE_DOCS_LINK)
 
         QMessageBox.information(self, message_title, message)
+
+    def _handle_connection_error(self, _exc):
+        message_title = self.tr("Connection Error")
+        message = self.tr("Connection error while communicating with the "
+                          "server")
+        QMessageBox.information(self, message_title, message)
+
+        # Close dialog
+        self.close()
+
+    def _handle_unknown_error(self, exc):
+        raise exc

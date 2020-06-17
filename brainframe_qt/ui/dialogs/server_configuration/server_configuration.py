@@ -1,13 +1,14 @@
 import logging
 
+from PyQt5.QtWidgets import QCheckBox, QDialog, QDialogButtonBox, QLineEdit, \
+    QMessageBox, QPushButton
+from PyQt5.uic import loadUi
 from requests.exceptions import ConnectionError
 
-from PyQt5.QtWidgets import QDialog, QLineEdit, QCheckBox, QDialogButtonBox, \
-    QMessageBox
-from PyQt5.uic import loadUi
-
-from brainframe.client.api_utils import api
 from brainframe.api.bf_errors import UnauthorizedError
+from brainframe.client.api_utils import api
+from brainframe.client.ui.dialogs.license_dialog.license_dialog import \
+    LicenseDialog
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.shared.secret import decrypt, encrypt
@@ -29,6 +30,7 @@ class ServerConfigurationDialog(QDialog):
         self.server_password_line_edit: QLineEdit
         self.save_password_checkbox: QCheckBox
         self.button_box: QDialogButtonBox
+        self.license_config_button: QPushButton
 
         self.server_address_line_edit.setText(settings.server_url.val())
         self.server_username_line_edit.setText(settings.server_username.val())
@@ -60,6 +62,8 @@ class ServerConfigurationDialog(QDialog):
         self.server_password_line_edit.textChanged.connect(self._verify)
         # noinspection PyUnresolvedReferences
         self.save_password_checkbox.stateChanged.connect(self._verify)
+
+        self.license_config_button.clicked.connect(self._open_license_dialog)
 
     def accept(self):
 
@@ -121,6 +125,9 @@ class ServerConfigurationDialog(QDialog):
     @classmethod
     def show_dialog(cls, parent):
         cls(parent=parent).exec()
+
+    def _open_license_dialog(self):
+        LicenseDialog.show_dialog(self)
 
     def _verify(self):
         """Make sure that the ok button should be enabled"""

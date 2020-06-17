@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QWidget
+from PyQt5.QtWidgets import QApplication, QFrame, QGridLayout, QLabel, QWidget
 
 from brainframe.client.ui.resources.ui_elements.widgets import Line
 from .license_source_selector import LicenseSourceSelector
@@ -13,12 +13,14 @@ class _LicenseDetailsUI(QWidget):
 
         self.product_name_label = self._init_product_name_label()
 
+        self.license_terms = self._init_license_terms()
+        self.missing_license_message = self._init_missing_license_message()
+        self.invalid_license_message = self._init_invalid_license_message()
+
         self.licensee_label = self._init_licensee_label()
         self.licensee = self._init_licensee()
 
         self.license_source_selector = self._init_license_source_selector()
-
-        self.license_terms = self._init_license_terms()
 
         self._init_layout()
         self._init_style()
@@ -30,6 +32,24 @@ class _LicenseDetailsUI(QWidget):
         product_name_label.setObjectName("product_name")
 
         return product_name_label
+
+    def _init_missing_license_message(self) -> QLabel:
+        message_text = QApplication.translate(
+            "LicenseDetails",
+            "No license exists on the server. Please upload one."
+        )
+        missing_license_message = QLabel(message_text, self)
+
+        return missing_license_message
+
+    def _init_invalid_license_message(self) -> QLabel:
+        message_text = QApplication.translate(
+            "LicenseDetails",
+            "Server holds an invalid license. Please upload a new one."
+        )
+        invalid_license_message = QLabel(message_text, self)
+
+        return invalid_license_message
 
     def _init_licensee_label(self) -> QLabel:
         label_text = self.tr("Licensed to:")
@@ -61,13 +81,21 @@ class _LicenseDetailsUI(QWidget):
 
         layout.addWidget(self.licensee_label, 2, 0)
         layout.addWidget(self.licensee, 2, 1)
-        layout.addWidget(self.license_terms, 3, 0, 1, 2)
-        layout.addWidget(self.license_source_selector, 4, 0, 1, 2)
+
+        layout.addWidget(self.missing_license_message, 3, 0, 1, 2)
+        layout.addWidget(self.invalid_license_message, 4, 0, 1, 2)
+
+        layout.addWidget(self.license_terms, 5, 0, 1, 2)
+        layout.addWidget(self.license_source_selector, 6, 0, 1, 2)
 
         # TODO: These are hidden because the information is not provided by
         #       the server yet
         self.licensee_label.hide()
         self.licensee.hide()
+
+        # Hide error messages
+        self.missing_license_message.hide()
+        self.invalid_license_message.hide()
 
         self.setLayout(layout)
 

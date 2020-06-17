@@ -597,26 +597,49 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>LicenseDetails</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="37"/>
+        <source>No license exists on the server. Please upload one.</source>
+        <translation>服务器上没有授权。请上传一个。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="46"/>
+        <source>Server holds an invalid license. Please upload a new one.</source>
+        <translation>服务器持有的授权无效。请上传一个新的=授权。</translation>
+    </message>
+</context>
+<context>
     <name>LicenseDialog</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="98"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="107"/>
         <source>Invalid License Format</source>
         <translation>无效的授权格式</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="99"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="108"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
         <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="70"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="74"/>
         <source>Uploading license...</source>
         <translation>正在上传授权⋯⋯</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="29"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="30"/>
         <source>Licenses</source>
         <translation>授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="117"/>
+        <source>Connection error while communicating with the server</source>
+        <translation>与服务器通讯时出现连接错误</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="116"/>
+        <source>Connection Error</source>
+        <translation>连接错误</translation>
     </message>
 </context>
 <context>
@@ -752,14 +775,29 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>ProductWidget</name>
     <message>
-        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="58"/>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="72"/>
         <source>Perpetual License</source>
         <translation>永久授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="62"/>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="76"/>
         <source>Active until {date_str}</source>
         <translation>授权有效期至{date_str}</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="65"/>
+        <source>Unlicensed</source>
+        <translation>无授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="67"/>
+        <source>Invalid License</source>
+        <translation>无效授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="69"/>
+        <source>Expired License</source>
+        <translation>过期授权</translation>
     </message>
 </context>
 <context>
@@ -795,43 +833,48 @@ Read the manual to learn about the required directory structure.</source>
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="43"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="46"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="100"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="105"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="109"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="105"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="110"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="90"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="86"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="91"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="107"/>
+        <source>License Config</source>
+        <translation>授权配置</translation>
     </message>
 </context>
 <context>
@@ -1216,7 +1259,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>_LicenseDetailsUI</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="35"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="55"/>
         <source>Licensed to:</source>
         <translation>授权给：</translation>
     </message>

@@ -29,12 +29,17 @@ class ProductWidget(_ProductWidgetUI):
     def license_info(self, license_info: bf_codecs.LicenseInfo):
         self._license_info = license_info
 
-        # Convert date to a pendulum UTC datetime
-        expiration_date = license_info.terms.expiration_date
-        if expiration_date is not None:
-            expiration_date = self._date_to_pdl_datetime(expiration_date)
+        if license_info.state is bf_codecs.LicenseState.MISSING:
+            expiration_date = None
+        elif license_info.state is bf_codecs.LicenseState.INVALID:
+            expiration_date = None
+        else:
+            # Convert date to a pendulum UTC datetime
+            expiration_date = license_info.terms.expiration_date
+            if expiration_date is not None:
+                expiration_date = self._date_to_pdl_datetime(expiration_date)
 
-        self.set_license_end(expiration_date)
+        self.set_license_end(expiration_date, license_info.state)
 
     def set_icon(self, icon_path: str) -> None:
         new_icon = self._init_product_icon(icon_path)
@@ -52,15 +57,24 @@ class ProductWidget(_ProductWidgetUI):
         self._product_name = product_name
         self.product_name_label.setText(product_name)
 
-    def set_license_end(self, license_end: pendulum.DateTime) -> None:
+    def set_license_end(self, license_end: typing.Optional[pendulum.DateTime],
+                        license_state: bf_codecs.LicenseState) \
+            -> None:
 
-        if license_end is None:
-            license_period = self.tr("Perpetual License")
+        if license_state is bf_codecs.LicenseState.MISSING:
+            license_period = self.tr("Unlicensed")
+        elif license_state is bf_codecs.LicenseState.INVALID:
+            license_period = self.tr("Invalid License")
+        elif license_state is bf_codecs.LicenseState.EXPIRED:
+            license_period = self.tr("Expired License")
         else:
-            license_end = license_end.in_timezone('local')
-            date_str = license_end.format("MMM DD, YYYY")
-            license_period = self.tr("Active until {date_str}") \
-                .format(date_str=date_str)
+            if license_end is None:
+                license_period = self.tr("Perpetual License")
+            else:
+                license_end = license_end.in_timezone('local')
+                date_str = license_end.format("MMM DD, YYYY")
+                license_period = self.tr("Active until {date_str}") \
+                    .format(date_str=date_str)
 
         self.license_period.setText(license_period)
 

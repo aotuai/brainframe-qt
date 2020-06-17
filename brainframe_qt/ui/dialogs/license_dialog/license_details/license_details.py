@@ -22,7 +22,17 @@ class LicenseDetails(_LicenseDetailsUI):
         self.product_name = product_name
         # self.set_licensee(license_info.licensee)
 
-        self.license_terms.set_license_terms(license_info.terms)
+        if license_info.state is bf_codecs.LicenseState.MISSING:
+            self.license_terms.hide()
+            self.missing_license_message.show()
+        elif license_info.state is bf_codecs.LicenseState.INVALID:
+            self.license_terms.hide()
+            self.invalid_license_message.show()
+        else:
+            self.license_terms.show()
+            self.missing_license_message.hide()
+            self.invalid_license_message.hide()
+            self.license_terms.set_license_terms(license_info.terms)
 
     @property
     def product_name(self) -> str:
