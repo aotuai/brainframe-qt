@@ -24,7 +24,7 @@ class LicenseTerms(_LicenseTermsUI):
         journal_age = license_terms.journal_max_allowed_age
         journal_age_str = self._journal_age_to_str(journal_age)
 
-        online_checkin_str = "❌" if license_terms.online_checkin else "✔️"
+        online_checkin_str = "✔️" if license_terms.online_checkin else "❌"
 
         license_terms = {
             self.tr("License active until"): license_end_str,
