@@ -55,7 +55,7 @@ class SplashScreen(QSplashScreen):
         # Change the current message if provided, otherwise just update it
         self.current_message = message or self.current_message
 
-        message = self.message() + ("." * self.num_periods)
+        message = self.message() + (self.tr(".") * self.num_periods)
         super().showMessage(message, alignment, color)
 
     def increase_ellipses(self, max_periods=6):
