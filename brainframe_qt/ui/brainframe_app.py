@@ -133,9 +133,10 @@ class BrainFrameApplication(QApplication):
         api.set_url(settings.server_url.val())
 
         username = settings.server_username.val()
+        password = settings.server_password.val()
 
-        if username:
-            password = decrypt(settings.server_password.val())
+        if username and password:
+            password = decrypt(password)
             api.set_credentials((username, password))
 
     # noinspection PyMethodMayBeStatic
