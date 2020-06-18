@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
+<!DOCTYPE TS>
+<TS version="2.1" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -684,17 +685,17 @@ Read the manual to learn about the required directory structure.</source>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="113"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;;下载新授权&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="132"/>
         <source>License Server Connection Failure</source>
-        <translation type="unfinished"></translation>
+        <translation>授权服务器连接失败</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="133"/>
         <source>The BrainFrame server was unable to contact the licensing server to validate the license. Please ensure that the BrainFrame server has internet access.</source>
-        <translation type="unfinished"></translation>
+        <translation>BrainFrame无法连接至授权服务器以验证授权，请确保BrainFrame可以访问互联网。</translation>
     </message>
 </context>
 <context>
@@ -1435,7 +1436,7 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
-        <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
+        <source>Click the â button to add a new stream</source>
         <translation>点击 ➕ 按钮以添加新的视频流</translation>
     </message>
 </context>
