@@ -81,11 +81,8 @@ class DetectionPolygon(StreamPolygon):
                 if isinstance(val, float):
                     val = round(val, 3)
                 elif type(val) not in [str, float, int]:
-                    # Get the repr, and shorten it to a maximum length of 10
-                    val = repr(val)
-                    if len(val) > 13:
-                        val = val[:10] + "..."
-
+                    # Not a valid datatype for rendering
+                    continue
                 keyval_data.append((key, str(val)))
 
         # Add any metadata (attributes, extra data) to the text
