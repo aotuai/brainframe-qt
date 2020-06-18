@@ -85,6 +85,8 @@ class LicenseDialog(_LicenseDialogUI):
                 self._handle_invalid_license_error(exc)
             elif isinstance(exc, bf_errors.LicenseExpiredError):
                 self._handle_expired_license_error(exc)
+            elif isinstance(exc, bf_errors.RemoteConnectionError):
+                self._handle_license_server_connection_error(exc)
             elif isinstance(exc, requests.exceptions.ConnectionError):
                 self._handle_connection_error(exc)
             else:
@@ -109,8 +111,7 @@ class LicenseDialog(_LicenseDialogUI):
         message_title = self.tr("Invalid License Format")
         # TODO: BF-1332 - Failed online check-in results in an Invalid license
         message = self.tr(
-            "The provided license is either invalid or requires internet "
-            "connection to verify. Please "
+            "The provided license has an invalid format. Please "
             "<a href='{license_docs_link}'>download a new license</a>.") \
             .format(license_docs_link=LICENSE_DOCS_LINK)
 
@@ -123,6 +124,16 @@ class LicenseDialog(_LicenseDialogUI):
             "The provided license has expired. Please "
             "<a href='{license_docs_link}'>download a new license</a>.") \
             .format(license_docs_link=LICENSE_DOCS_LINK)
+
+        QMessageBox.information(self, message_title, message)
+
+    def _handle_license_server_connection_error(self, exc):
+
+        message_title = self.tr("License Server Connection Failure")
+        message = self.tr(
+            "The BrainFrame server was unable to contact the licensing server "
+            "to validate the license. Please ensure that the BrainFrame "
+            "server has internet access.")
 
         QMessageBox.information(self, message_title, message)
 
