@@ -662,11 +662,6 @@ Read the manual to learn about the required directory structure.</source>
         <translation>正在上传授权⋯⋯</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="109"/>
-        <source>Invalid License Format</source>
-        <translation>无效的授权格式</translation>
-    </message>
-    <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="142"/>
         <source>Connection error while communicating with the server</source>
         <translation>与服务器通讯时出现连接错误</translation>
@@ -700,16 +695,6 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="133"/>
         <source>The BrainFrame server was unable to contact the licensing server to validate the license. Please ensure that the BrainFrame server has internet access.</source>
         <translation>BrainFrame无法连接至授权服务器以验证授权，请确保BrainFrame可以访问互联网。</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="130"/>
-        <source>Connection Error</source>
-        <translation>连接错误</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="131"/>
-        <source>Connection error while communicating with the server</source>
-        <translation>与服务器通讯时出现连接错误</translation>
     </message>
 </context>
 <context>
