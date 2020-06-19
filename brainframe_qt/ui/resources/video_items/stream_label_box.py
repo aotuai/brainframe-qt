@@ -7,6 +7,9 @@ from PyQt5.QtWidgets import QGraphicsTextItem
 from .stream_polygon import StreamPolygon
 
 
+MIN_TEXT_WIDTH = 150
+
+
 class StreamLabelBox(StreamPolygon):
     """This is a textbox that is intended to look pretty and go on top of
     detection or zone objects
@@ -23,18 +26,19 @@ class StreamLabelBox(StreamPolygon):
         font = self.label_text.font()
         font.setPointSizeF(text_size)
 
+        # Don'Make sure we can at least see _some_ of the text
+        max_width = max(MIN_TEXT_WIDTH, max_width)
+
         # Elide the text to ensure it always fits
         metric = QFontMetrics(font)
-        elided_text = "\n".join([
+        elided_text = "\n".join(
             metric.elidedText(line, Qt.ElideRight, max_width)
             for line in title_text.split("\n")
-        ])
+        )
         self.label_text.setPlainText(elided_text)
 
-
-
         self.label_text.setFont(font)
-        self.label_text.adjustSize()
+        # self.label_text.adjustSize()
 
         rect = self.label_text.sceneBoundingRect().getCoords()
         coords = [QPointF(rect[0], rect[1]),
