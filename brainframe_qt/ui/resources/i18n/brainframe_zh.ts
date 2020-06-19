@@ -262,19 +262,49 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="70"/>
-        <source>Attempting to connect to server at {}</source>
-        <translation>尝试连接至服务器地址: {}</translation>
-    </message>
-    <message>
-        <location filename="../../brainframe_app.py" line="93"/>
+        <location filename="../../brainframe_app.py" line="77"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="166"/>
+        <location filename="../../brainframe_app.py" line="151"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="158"/>
+        <source>Attempting to communicate with server at {url}</source>
+        <translation>尝试连接服务器至{url}</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="165"/>
+        <source>Connected to server. Validating license</source>
+        <translation>已连接到服务器，正在验证授权</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="202"/>
+        <source>Successfully connected to server</source>
+        <translation>连接服务器成功</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="204"/>
+        <source>License is expired. Please upload a new one</source>
+        <translation>授权出现问题，请重新配置配置</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="207"/>
+        <source>Server holds an invalid license. Please upload a new one</source>
+        <translation>服务器持有的授权无效，请上传一个新的授权。</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="210"/>
+        <source>No license exists on the server. Please upload one</source>
+        <translation>服务器上没有授权。请上传一个</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="213"/>
+        <source>Unknown issue with license. Contact Aotu</source>
+        <translation>授权出现未知问题，请联系Aotu</translation>
     </message>
 </context>
 <context>
@@ -597,6 +627,126 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>LicenseDetails</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="38"/>
+        <source>No license exists on the server. Please upload one.</source>
+        <translation>服务器上没有授权。请上传一个。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="49"/>
+        <source>Server holds an invalid license. Please upload a new one.</source>
+        <translation>服务器持有的授权无效。请上传一个新的=授权。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="60"/>
+        <source>License is expired. Please upload a new one.</source>
+        <translation>授权已过期。请上传一个新的。</translation>
+    </message>
+</context>
+<context>
+    <name>LicenseDialog</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="30"/>
+        <source>Licenses</source>
+        <translation>授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="74"/>
+        <source>Uploading license...</source>
+        <translation>正在上传授权⋯⋯</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="109"/>
+        <source>Invalid License Format</source>
+        <translation>无效的授权格式</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="111"/>
+        <source>The provided license is either invalid or requires internet connection to verify. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
+        <translation>提供的授权无效或需要互联网连接才能进行验证。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="121"/>
+        <source>Expired License</source>
+        <translation>过期授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="122"/>
+        <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
+        <translation>提供的授权已过期。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="130"/>
+        <source>Connection Error</source>
+        <translation>连接错误</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="131"/>
+        <source>Connection error while communicating with the server</source>
+        <translation>与服务器通讯时出现连接错误</translation>
+    </message>
+</context>
+<context>
+    <name>LicenseSourceButtons</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="20"/>
+        <source>License Key</source>
+        <translation>注册码</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="26"/>
+        <source>Aotu Account</source>
+        <translation>Aotu账号</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="30"/>
+        <source>Coming soon</source>
+        <translation>敬请期待</translation>
+    </message>
+</context>
+<context>
+    <name>LicenseSourceSelector</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="28"/>
+        <source>License Source:</source>
+        <translation>授权来源：</translation>
+    </message>
+</context>
+<context>
+    <name>LicenseTerms</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="30"/>
+        <source>License active until</source>
+        <translation>授权有效期至</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="31"/>
+        <source>Online check-in required</source>
+        <translation>需要线上激活</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="32"/>
+        <source>Max streams</source>
+        <translation>最大视频流数量</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="33"/>
+        <source>Max journaling age</source>
+        <translation>数据保留时限</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="78"/>
+        <source>{days}d{hours}h{minutes}m</source>
+        <translation>{days}天{hours}小时{minutes}分钟</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="91"/>
+        <source>Perpetual License</source>
+        <translation>永久授权</translation>
+    </message>
+</context>
+<context>
     <name>MainToolbar</name>
     <message>
         <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
@@ -668,6 +818,34 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>ProductWidget</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="68"/>
+        <source>Unlicensed</source>
+        <translation>无授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="70"/>
+        <source>Invalid License</source>
+        <translation>无效授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="72"/>
+        <source>Expired License</source>
+        <translation>过期授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="75"/>
+        <source>Perpetual License</source>
+        <translation>永久授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="79"/>
+        <source>Active until {date_str}</source>
+        <translation>授权有效期至{date_str}</translation>
+    </message>
+</context>
+<context>
     <name>ServerConfigurationDialog</name>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="34"/>
@@ -700,43 +878,88 @@ Read the manual to learn about the required directory structure.</source>
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="43"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="55"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="99"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="159"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="100"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="160"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="104"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="164"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="105"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="165"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="85"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="148"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="86"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="149"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="110"/>
+        <source>Check Connection</source>
+        <translation>检查连接状态</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="128"/>
+        <source>License Config</source>
+        <translation>授权配置</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="193"/>
+        <source>Expired License</source>
+        <translation>过期授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="196"/>
+        <source>Invalid License</source>
+        <translation>无效授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="199"/>
+        <source>Missing License</source>
+        <translation>未检测到授权</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="202"/>
+        <source>Connection Successful</source>
+        <translation>连接成功</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="205"/>
+        <source>Unknown license state</source>
+        <translation>未知的授权状态</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="216"/>
+        <source>Invalid credentials</source>
+        <translation>证书无效</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="219"/>
+        <source>Unable to locate server</source>
+        <translation>无法连接到服务器</translation>
     </message>
 </context>
 <context>
@@ -745,6 +968,11 @@ Please recheck the entered server address.</source>
         <location filename="../../splash_screen/splash_screen.py" line="73"/>
         <source>Configure</source>
         <translation>配置</translation>
+    </message>
+    <message>
+        <location filename="../../splash_screen/splash_screen.py" line="58"/>
+        <source>.</source>
+        <translation>。</translation>
     </message>
 </context>
 <context>
@@ -996,6 +1224,19 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>TextLicenseEditor</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="26"/>
+        <source>Paste license text or drag-and-drop license file here</source>
+        <translation>在此处粘贴授权文本或将授权文件拖拽至此</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="39"/>
+        <source>Update License</source>
+        <translation>更新许可证</translation>
+    </message>
+</context>
+<context>
     <name>VersionMismatch</name>
     <message>
         <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="16"/>
@@ -1106,6 +1347,14 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>_LicenseDetailsUI</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="71"/>
+        <source>Licensed to:</source>
+        <translation>授权给：</translation>
+    </message>
+</context>
+<context>
     <name>_StreamActivityUI</name>
     <message>
         <location filename="../../main_window/activities/stream_activity/stream_activity_ui.py" line="37"/>
@@ -1144,6 +1393,14 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="143"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
+    </message>
+</context>
+<context>
+    <name>_TextLicenseEditorUI</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="33"/>
+        <source>Remove License</source>
+        <translation>删除许可证</translation>
     </message>
 </context>
 <context>
