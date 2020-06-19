@@ -34,7 +34,9 @@ class Setting:
 
     def val(self):
         if self._cache is None:
-            self._cache = _settings.value(self.name, type=self.type)
+            self._cache = _settings.value(self.name,
+                                          defaultValue=self.default,
+                                          type=self.type)
         return self._cache
 
     def delete(self):

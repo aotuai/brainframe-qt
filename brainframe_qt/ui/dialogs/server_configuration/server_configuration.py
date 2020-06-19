@@ -61,6 +61,8 @@ class ServerConfigurationDialog(QDialog):
         self._show_authentication_fields(use_auth)
         self.authentication_checkbox.setChecked(use_auth)
 
+        self.save_password_checkbox.setChecked(bool(self.server_password))
+
         # noinspection PyUnresolvedReferences
         self.authentication_checkbox.stateChanged.connect(
             self._show_authentication_fields)
@@ -72,8 +74,6 @@ class ServerConfigurationDialog(QDialog):
         self.server_username_line_edit.textChanged.connect(self._verify)
         # noinspection PyUnresolvedReferences
         self.server_password_line_edit.textChanged.connect(self._verify)
-        # noinspection PyUnresolvedReferences
-        self.save_password_checkbox.stateChanged.connect(self._verify)
 
         self.license_config_button.clicked.connect(self._open_license_dialog)
 
