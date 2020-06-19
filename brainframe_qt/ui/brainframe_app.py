@@ -1,15 +1,17 @@
 import sys
-from queue import Queue
+import typing
 from typing import List, Optional
 
+import requests
 from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
     pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
 import brainframe
-from brainframe.client.api_utils import api
+from brainframe.api import bf_codecs, bf_errors
 from brainframe.api.bf_errors import BaseAPIError
+from brainframe.client.api_utils import api
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
 from brainframe.client.ui.dialogs import StandardError, VersionMismatch
 # noinspection PyUnresolvedReferences
@@ -23,6 +25,8 @@ from brainframe.shared.secret import decrypt
 class BrainFrameApplication(QApplication):
     def __init__(self, argv: Optional[List] = ()):
         super().__init__(argv or [])
+
+        self.splash_screen = typing.cast(SplashScreen, None)
 
         # noinspection PyUnresolvedReferences
         self.aboutToQuit.connect(self._shutdown)
@@ -66,35 +70,15 @@ class BrainFrameApplication(QApplication):
     def exec(self):
 
         # Show splash screen while waiting for server connection
-        with SplashScreen() as splash_screen:
-            message = self.tr("Attempting to connect to server at {}")
-            f_message = message.format(settings.server_url.val())
-            splash_screen.showMessage(f_message)
-
-            worker = QTAsyncWorker(self, api.wait_for_server_initialization)
-            worker.start()
-            self._wait_for_event(worker.finished_event)
-
-            version_queue = Queue(maxsize=1)
-
-            worker = QTAsyncWorker(
-                self, api.version,
-                on_success=lambda result: version_queue.put(result))
-            worker.start()
-            self._wait_for_event(worker.finished_event)
-
-            version = version_queue.get()
-            if version != brainframe.__version__:
-                dialog = VersionMismatch(
-                    server_version=version,
-                    client_version=brainframe.__version__)
-                dialog.exec_()
+        with SplashScreen() as self.splash_screen:
+            self._connect_to_server()
+            self._verify_version_match()
 
             message = self.tr("Successfully connected to server. Starting UI")
-            splash_screen.showMessage(message)
+            self.splash_screen.showMessage(message)
 
             main_window = MainWindow()
-            splash_screen.finish(main_window)
+            self.splash_screen.finish(main_window)
             main_window.show()
 
         super().exec()
@@ -149,9 +133,10 @@ class BrainFrameApplication(QApplication):
         api.set_url(settings.server_url.val())
 
         username = settings.server_username.val()
+        password = settings.server_password.val()
 
-        if username:
-            password = decrypt(settings.server_password.val())
+        if username and password:
+            password = decrypt(password)
             api.set_credentials((username, password))
 
     # noinspection PyMethodMayBeStatic
@@ -164,6 +149,81 @@ class BrainFrameApplication(QApplication):
         # Otherwise close program
         if not LicenseAgreement.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
+
+    def _connect_to_server(self):
+
+        server_visible = False
+        while not server_visible:
+
+            message = self.tr("Attempting to communicate with server at {url}")
+            f_message = message.format(url=settings.server_url.val())
+            self.splash_screen.showMessage(f_message)
+
+            self._wait_for_server()
+            server_visible = True
+
+            message = self.tr("Connected to server. Validating license")
+            self.splash_screen.showMessage(message)
+
+            connected = False
+            while not connected:
+                try:
+                    self._wait_for_valid_license()
+                except (ConnectionError, ConnectionRefusedError,
+                        bf_errors.UnauthorizedError,
+                        requests.exceptions.ReadTimeout):
+                    # Server address change or disappeared for whatever reason
+                    # Go back to waiting for server
+                    server_visible = False
+                else:
+                    # Successfully connected
+                    connected = True
+
+    def _wait_for_server(self):
+        worker = QTAsyncWorker(self, api.wait_for_server_initialization)
+        worker.start()
+        self._wait_for_event(worker.finished_event)
+
+    def _wait_for_valid_license(self):
+        license_valid = False
+        while not license_valid:
+            def on_error(exc: BaseException):
+                raise exc
+
+            worker = QTAsyncWorker(self, api.get_license_info,
+                                   on_error=on_error)
+            worker.start()
+            self._wait_for_event(worker.finished_event)
+
+            # noinspection PyTypeHints
+            worker.data: bf_codecs.LicenseInfo
+            if worker.data.state is bf_codecs.LicenseState.VALID:
+                license_valid = True
+                message = self.tr("Successfully connected to server")
+            elif worker.data.state is bf_codecs.LicenseState.EXPIRED:
+                message = self.tr("License is expired. Please upload a new "
+                                  "one")
+            elif worker.data.state is bf_codecs.LicenseState.INVALID:
+                message = self.tr("Server holds an invalid license. Please "
+                                  "upload a new one")
+            elif worker.data.state is bf_codecs.LicenseState.MISSING:
+                message = self.tr("No license exists on the server. Please "
+                                  "upload one")
+            else:
+                message = self.tr("Unknown issue with license. Contact Aotu")
+            self.splash_screen.showMessage(message)
+
+    def _verify_version_match(self):
+        worker = QTAsyncWorker(self, api.version)
+        worker.start()
+        self._wait_for_event(worker.finished_event)
+
+        version = worker.data
+        if version != brainframe.__version__:
+            dialog = VersionMismatch(
+                server_version=version,
+                client_version=brainframe.__version__)
+            dialog.exec_()
 
     def _wait_for_event(self, event):
         """Runs the Qt event loop while waiting on an event to be triggered."""
