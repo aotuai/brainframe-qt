@@ -1,7 +1,5 @@
-from typing import Tuple
-
-from PyQt5.QtCore import QPoint, QPointF, Qt
-from PyQt5.QtGui import QColor, QFontMetrics
+from PyQt5.QtCore import QPoint, QPointF
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QGraphicsTextItem
 
 from .stream_polygon import StreamPolygon
@@ -11,28 +9,15 @@ class StreamLabelBox(StreamPolygon):
     """This is a textbox that is intended to look pretty and go on top of
     detection or zone objects
     """
-    def __init__(self, title_text,
-                 top_left: Tuple[int, int],
-                 text_size: int,
-                 max_width: int,
-                 parent=None):
+    def __init__(self, title_text, top_left, text_size, parent=None):
+
         # Create the text item
-        self.label_text = QGraphicsTextItem(parent=parent)
+        self.label_text = QGraphicsTextItem(title_text, parent=parent)
         self.label_text.setPos(QPoint(int(top_left[0]), int(top_left[1])))
         self.label_text.setDefaultTextColor(QColor(255, 255, 255))
+
         font = self.label_text.font()
         font.setPointSizeF(text_size)
-
-        # Elide the text to ensure it always fits
-        metric = QFontMetrics(font)
-        elided_text = "\n".join([
-            metric.elidedText(line, Qt.ElideRight, max_width)
-            for line in title_text.split("\n")
-        ])
-        self.label_text.setPlainText(elided_text)
-
-
-
         self.label_text.setFont(font)
         self.label_text.adjustSize()
 
