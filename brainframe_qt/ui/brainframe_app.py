@@ -1,23 +1,27 @@
+import logging
 import sys
 import typing
+from traceback import TracebackException
 from typing import List, Optional
 
 import requests
 from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
     pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
 
 import brainframe
 from brainframe.api import bf_codecs, bf_errors
 from brainframe.api.bf_errors import BaseAPIError
 from brainframe.client.api_utils import api
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
-from brainframe.client.ui.dialogs import StandardError, VersionMismatch
+from brainframe.client.ui.dialogs import VersionMismatch
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
     settings
 from brainframe.client.ui.resources.paths import text_paths
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.secret import decrypt
 
@@ -90,16 +94,39 @@ class BrainFrameApplication(QApplication):
         # Check if exception occurred in the UI thread
         if QThread.currentThread() is self.thread():
 
+            title = self.tr("Error")
+            description = self.tr("An exception has occurred")
+            buttons = BrainFrameMessage.PresetButtons.EXCEPTION
+            traceback_exc = TracebackException(exc_type, exc_obj, exc_tb)
+
             # Close the client if the exception was thrown in another thread,
             # or if it was not an BaseAPIError
             close_client = other_thread \
                            or not isinstance(exc_obj, BaseAPIError)
 
-            StandardError.show_error(exc_type, exc_obj, exc_tb, close_client)
+            if close_client:
+                description += ". The client must be closed."
+            else:
+                buttons &= ~BrainFrameMessage.PresetButtons.CLOSE_CLIENT
+                buttons |= BrainFrameMessage.PresetButtons.OK
+
+            # Log exception as well as show it to user
+            log_func = logging.critical if close_client else logging.error
+            exc_str = "".join(traceback_exc.format()).rstrip()
+            log_func(exc_str)
+
+            BrainFrameMessage.exception(
+                parent=typing.cast(QWidget, None),  # No parent
+                title=title,
+                description=description,
+                traceback=traceback_exc,
+                buttons=buttons
+            ).exec()
+
         else:
             # Call this function again, but from the correct (UI) thread.
-            # If a QWidget (the StandardError dialog) is used from another
-            # thread we WILL segfault. This is undesirable
+            # If a QWidget (the BrainFrameMessage in this case) is used from
+            # another thread we WILL segfault. This is undesirable
             QMetaObject.invokeMethod(
                 self, "_handle_error",
                 Qt.BlockingQueuedConnection,

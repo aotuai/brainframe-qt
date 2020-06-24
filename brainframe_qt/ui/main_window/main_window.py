@@ -6,13 +6,8 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QAction, QWidget
 
 from brainframe.api import bf_codecs
-from brainframe.client.ui.dialogs.about_page.about_page import AboutPage
-from brainframe.client.ui.dialogs.capsule_configuration.capsule_config import \
-    CapsuleConfigDialog
-from brainframe.client.ui.dialogs.client_configuration \
-    import RenderConfiguration
-from brainframe.client.ui.dialogs.server_configuration.server_configuration import \
-    ServerConfigurationDialog
+from brainframe.client.ui.dialogs import AboutPage, CapsuleConfigDialog, \
+    RenderConfiguration, ServerConfigurationDialog
 from brainframe.client.ui.main_window.activities import StreamConfiguration
 from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
 from brainframe.client.ui.resources import stylesheet_watcher

@@ -262,49 +262,59 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="77"/>
+        <location filename="../../brainframe_app.py" line="81"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="151"/>
+        <location filename="../../brainframe_app.py" line="178"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="158"/>
+        <location filename="../../brainframe_app.py" line="185"/>
         <source>Attempting to communicate with server at {url}</source>
         <translation>尝试连接服务器至{url}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="165"/>
+        <location filename="../../brainframe_app.py" line="192"/>
         <source>Connected to server. Validating license</source>
         <translation>已连接到服务器，正在验证授权</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="202"/>
+        <location filename="../../brainframe_app.py" line="229"/>
         <source>Successfully connected to server</source>
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="204"/>
+        <location filename="../../brainframe_app.py" line="231"/>
         <source>License is expired. Please upload a new one</source>
         <translation>授权出现问题，请重新配置配置</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="207"/>
+        <location filename="../../brainframe_app.py" line="234"/>
         <source>Server holds an invalid license. Please upload a new one</source>
         <translation>服务器持有的授权无效，请上传一个新的授权。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="210"/>
+        <location filename="../../brainframe_app.py" line="237"/>
         <source>No license exists on the server. Please upload one</source>
         <translation>服务器上没有授权。请上传一个</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="213"/>
+        <location filename="../../brainframe_app.py" line="240"/>
         <source>Unknown issue with license. Contact Aotu</source>
         <translation>授权出现未知问题，请联系Aotu</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="97"/>
+        <source>Error</source>
+        <translation>错误信息</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="98"/>
+        <source>An exception has occurred</source>
+        <translation>发生了一个例外</translation>
     </message>
 </context>
 <context>
@@ -443,6 +453,14 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../../main_window/activities/identity_configuration/encoding_list/encoding_list.ui" line="68"/>
         <source>None</source>
         <translation>空</translation>
+    </message>
+</context>
+<context>
+    <name>ErrorMessage</name>
+    <message>
+        <location filename="../actions/exiting.py" line="8"/>
+        <source>Quitting</source>
+        <translation>正在推出</translation>
     </message>
 </context>
 <context>
@@ -828,6 +846,24 @@ Read the manual to learn about the required directory structure.</source>
     </message>
 </context>
 <context>
+    <name>PresetButtons</name>
+    <message>
+        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="229"/>
+        <source>Close client</source>
+        <translation>关闭客户端</translation>
+    </message>
+    <message>
+        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="233"/>
+        <source>Copy to clipboard</source>
+        <translation>复制到剪贴板</translation>
+    </message>
+    <message>
+        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="237"/>
+        <source>Server config</source>
+        <translation>服务器选项</translation>
+    </message>
+</context>
+<context>
     <name>ProductWidget</name>
     <message>
         <location filename="../../dialogs/license_dialog/product_sidebar/product_widget/product_widget.py" line="68"/>
@@ -983,49 +1019,6 @@ Please recheck the entered server address.</source>
         <location filename="../../splash_screen/splash_screen.py" line="58"/>
         <source>.</source>
         <translation>。</translation>
-    </message>
-</context>
-<context>
-    <name>StandardError</name>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="41"/>
-        <source>An exception has occurred</source>
-        <translation>发生了一个例外</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="43"/>
-        <source>Connection to server lost. Client must be closed</source>
-        <translation>与服务器的连接丢失。客户必须关闭</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="71"/>
-        <source>Copy to Clipboard</source>
-        <translation>复制到剪贴板</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="79"/>
-        <source>Close Client</source>
-        <translation>关闭客户端</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="123"/>
-        <source>Error copied to clipboard</source>
-        <translation>错误信息已复制到剪贴板</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/dialog_actions.py" line="8"/>
-        <source>Quitting</source>
-        <translation>正在推出</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="48"/>
-        <source>An exception has occurred.</source>
-        <translation>发生了一个例外。</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/standard_error/standard_error.py" line="50"/>
-        <source>The client must be closed.</source>
-        <translation>必须关闭客户端。</translation>
     </message>
 </context>
 <context>
