@@ -89,7 +89,9 @@ class ZoneStatusPolygon(StreamPolygon):
                          parent=parent)
 
         # Create the label box
-        self.label_box = StreamLabelBox(text,
-                                        text_size=text_size,
-                                        top_left=top_left,
-                                        parent=self)
+        self.label_box = StreamLabelBox(
+            text,
+            text_size=text_size,
+            top_left=top_left,
+            max_width=self.boundingRect().width(),
+            parent=self)
