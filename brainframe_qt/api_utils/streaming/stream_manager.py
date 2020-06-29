@@ -1,7 +1,7 @@
 import logging
 
 from brainframe.api import BrainFrameAPI, StatusReceiver
-from brainframe.api.bf_codecs import StreamConfiguration, ConnType
+from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.stream_reader import StreamReader
@@ -13,7 +13,8 @@ class StreamManager:
     necessary.
     """
 
-    REHOSTED_VIDEO_TYPES = [ConnType.WEBCAM, ConnType.FILE]
+    REHOSTED_VIDEO_TYPES = [StreamConfiguration.ConnType.WEBCAM,
+                            StreamConfiguration.ConnType.FILE]
     """These video types are re-hosted by the server."""
 
     def __init__(self, status_receiver: StatusReceiver):

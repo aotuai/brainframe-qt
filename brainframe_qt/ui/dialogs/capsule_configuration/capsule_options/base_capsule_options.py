@@ -11,7 +11,7 @@ from .option_items import (
     IntOptionItem,
     BoolOptionItem
 )
-from brainframe.api.bf_codecs import OptionType
+from brainframe.api.bf_codecs import PluginOption
 from brainframe.client.api_utils import api
 from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -68,7 +68,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         # Add configuration that every capsule _always_ has
         self.enabled_option = self._add_option(
             name=self.tr("Capsule Enabled"),
-            type_=OptionType.BOOL,
+            type_=PluginOption.Type.BOOL,
             value=api.is_plugin_active(capsule_name, stream_id=None),
             constraints={})
         self.all_items.append(self.enabled_option)
@@ -95,19 +95,19 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         """
         return all(option.is_valid() for option in self.all_items)
 
-    def _add_option(self, name: str, type_: OptionType, value,
+    def _add_option(self, name: str, type_: PluginOption.Type, value,
                     constraints: Dict, description: Optional[str] = None):
 
         parent = self
         args = name, value, constraints, description, parent
 
-        if type_ is OptionType.BOOL:
+        if type_ is PluginOption.Type.BOOL:
             item = BoolOptionItem(*args)
-        elif type_ is OptionType.ENUM:
+        elif type_ is PluginOption.Type.ENUM:
             item = EnumOptionItem(*args)
-        elif type_ is OptionType.FLOAT:
+        elif type_ is PluginOption.Type.FLOAT:
             item = FloatOptionItem(*args)
-        elif type_ is OptionType.INT:
+        elif type_ is PluginOption.Type.INT:
             item = IntOptionItem(*args)
         else:
             message = QApplication.translate(

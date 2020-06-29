@@ -197,16 +197,16 @@ class BrainFrameApplication(QApplication):
 
             # noinspection PyTypeHints
             worker.data: bf_codecs.LicenseInfo
-            if worker.data.state is bf_codecs.LicenseState.VALID:
+            if worker.data.state is bf_codecs.LicenseInfo.State.VALID:
                 license_valid = True
                 message = self.tr("Successfully connected to server")
-            elif worker.data.state is bf_codecs.LicenseState.EXPIRED:
+            elif worker.data.state is bf_codecs.LicenseInfo.State.EXPIRED:
                 message = self.tr("License is expired. Please upload a new "
                                   "one")
-            elif worker.data.state is bf_codecs.LicenseState.INVALID:
+            elif worker.data.state is bf_codecs.LicenseInfo.State.INVALID:
                 message = self.tr("Server holds an invalid license. Please "
                                   "upload a new one")
-            elif worker.data.state is bf_codecs.LicenseState.MISSING:
+            elif worker.data.state is bf_codecs.LicenseInfo.State.MISSING:
                 message = self.tr("No license exists on the server. Please "
                                   "upload one")
             else:

@@ -29,11 +29,11 @@ class ProductWidget(_ProductWidgetUI):
     def license_info(self, license_info: bf_codecs.LicenseInfo):
         self._license_info = license_info
 
-        if license_info.state is bf_codecs.LicenseState.MISSING:
+        if license_info.state is bf_codecs.LicenseInfo.State.MISSING:
             expiration_date = None
-        elif license_info.state is bf_codecs.LicenseState.INVALID:
+        elif license_info.state is bf_codecs.LicenseInfo.State.INVALID:
             expiration_date = None
-        elif license_info.state is bf_codecs.LicenseState.EXPIRED:
+        elif license_info.state is bf_codecs.LicenseInfo.State.EXPIRED:
             # TODO: BF-1328
             expiration_date = None
         else:
@@ -61,14 +61,14 @@ class ProductWidget(_ProductWidgetUI):
         self.product_name_label.setText(product_name)
 
     def set_license_end(self, license_end: typing.Optional[pendulum.DateTime],
-                        license_state: bf_codecs.LicenseState) \
+                        license_state: bf_codecs.LicenseInfo.State) \
             -> None:
 
-        if license_state is bf_codecs.LicenseState.MISSING:
+        if license_state is bf_codecs.LicenseInfo.State.MISSING:
             license_period = self.tr("Unlicensed")
-        elif license_state is bf_codecs.LicenseState.INVALID:
+        elif license_state is bf_codecs.LicenseInfo.State.INVALID:
             license_period = self.tr("Invalid License")
-        elif license_state is bf_codecs.LicenseState.EXPIRED:
+        elif license_state is bf_codecs.LicenseInfo.State.EXPIRED:
             license_period = self.tr("Expired License")
         else:
             if license_end is None:
