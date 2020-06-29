@@ -10,7 +10,7 @@ from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
 
-import brainframe
+from brainframe import client
 from brainframe.api import bf_codecs, bf_errors
 from brainframe.api.bf_errors import BaseAPIError
 from brainframe.client.api_utils import api
@@ -246,10 +246,10 @@ class BrainFrameApplication(QApplication):
         self._wait_for_event(worker.finished_event)
 
         version = worker.data
-        if version != brainframe.__version__:
+        if version != client.__version__:
             dialog = VersionMismatch(
                 server_version=version,
-                client_version=brainframe.__version__)
+                client_version=client.__version__)
             dialog.exec_()
 
     def _wait_for_event(self, event):
