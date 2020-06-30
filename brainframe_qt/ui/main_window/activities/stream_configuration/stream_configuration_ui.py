@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialogButtonBox, \
     QLabel, QLineEdit, QSizePolicy, QWidget
 
 from brainframe.client.api_utils import api
-from brainframe.api.bf_codecs import Premises, ConnType
+from brainframe.api.bf_codecs import Premises, StreamConfiguration
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.mixins.display import ExpandableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
@@ -58,9 +58,12 @@ class StreamConfigurationUI(QWidget):
         video_file_text = self.tr("Video File")
 
         connection_type_combobox.addItem("", None)
-        connection_type_combobox.addItem(ip_camera_text, ConnType.IP_CAMERA)
-        connection_type_combobox.addItem(webcam_text, ConnType.WEBCAM)
-        connection_type_combobox.addItem(video_file_text, ConnType.FILE)
+        connection_type_combobox.addItem(
+            ip_camera_text, StreamConfiguration.ConnType.IP_CAMERA)
+        connection_type_combobox.addItem(
+            webcam_text, StreamConfiguration.ConnType.WEBCAM)
+        connection_type_combobox.addItem(
+            video_file_text, StreamConfiguration.ConnType.FILE)
 
         return connection_type_combobox
 

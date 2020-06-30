@@ -22,13 +22,13 @@ class LicenseDetails(_LicenseDetailsUI):
         self.product_name = product_name
         # self.set_licensee(license_info.licensee)
 
-        if license_info.state is bf_codecs.LicenseState.MISSING:
+        if license_info.state is bf_codecs.LicenseInfo.State.MISSING:
             self.license_terms.hide()
             self.missing_license_message.show()
-        elif license_info.state is bf_codecs.LicenseState.INVALID:
+        elif license_info.state is bf_codecs.LicenseInfo.State.INVALID:
             self.license_terms.hide()
             self.invalid_license_message.show()
-        elif license_info.state is bf_codecs.LicenseState.EXPIRED:
+        elif license_info.state is bf_codecs.LicenseInfo.State.EXPIRED:
             # TODO: BF-1328
             self.license_terms.hide()
             self.expired_license_message.show()

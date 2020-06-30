@@ -158,17 +158,17 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options = self.stream_options.advanced_options
         advanced_options_visible = advanced_options.expanded
 
-        if self.connection_type is bf_codecs.ConnType.IP_CAMERA:
+        if self.connection_type is bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             self.stream_options.network_address_label.setVisible(True)
             self.stream_options.network_address_line_edit.setVisible(True)
             self.stream_options.premises_label.setVisible(True)
             self.stream_options.premises_combobox.setVisible(True)
             if advanced_options_visible:
                 advanced_options.keyframe_only_checkbox.setVisible(True)
-        elif self.connection_type is bf_codecs.ConnType.WEBCAM:
+        elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.WEBCAM:
             self.stream_options.webcam_device_label.setVisible(True)
             self.stream_options.webcam_device_line_edit.setVisible(True)
-        elif self.connection_type is bf_codecs.ConnType.FILE:
+        elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.FILE:
             self.stream_options.filepath_label.setVisible(True)
             self.stream_options.file_selector.setVisible(True)
             if advanced_options_visible:
@@ -196,21 +196,21 @@ class StreamConfiguration(StreamConfigurationUI):
         def pipeline_valid() -> bool:
             return not self.pipeline or "{url}" in self.pipeline
 
-        if self.connection_type is bf_codecs.ConnType.IP_CAMERA:
+        if self.connection_type is bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             if not self.network_address:
                 return False
             if self.advanced_options_enabled:
                 if not pipeline_valid:
                     return False
 
-        elif self.connection_type is bf_codecs.ConnType.FILE:
+        elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.FILE:
             if not self.filepath:
                 return False
             if self.advanced_options_enabled:
                 if not pipeline_valid:
                     return False
 
-        elif self.connection_type is bf_codecs.ConnType.WEBCAM:
+        elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.WEBCAM:
             if not self.webcam_device:
                 return False
 
@@ -232,7 +232,7 @@ class StreamConfiguration(StreamConfigurationUI):
             metadata={}
         )
 
-        if self.connection_type is bf_codecs.ConnType.FILE:
+        if self.connection_type is bf_codecs.StreamConfiguration.ConnType.FILE:
 
             if not Path(self.filepath).is_file():
                 self._handle_missing_file_error(self.filepath)
@@ -334,7 +334,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def avoid_transcoding(self) -> Optional[bool]:
-        if self.connection_type is not bf_codecs.ConnType.FILE:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.FILE:
             return None
         if not self.advanced_options_enabled:
             return DefaultOptions.AVOID_TRANSCODING
@@ -371,11 +371,11 @@ class StreamConfiguration(StreamConfigurationUI):
             "transcode", DefaultOptions.KEYFRAME_ONLY_STREAMING)
 
     @property
-    def connection_type(self) -> bf_codecs.ConnType:
+    def connection_type(self) -> bf_codecs.StreamConfiguration.ConnType:
         return self.connection_type_combobox.currentData()
 
     @connection_type.setter
-    def connection_type(self, connection_type: bf_codecs.ConnType) -> None:
+    def connection_type(self, connection_type: bf_codecs.StreamConfiguration.ConnType) -> None:
         index = self.connection_type_combobox.findData(connection_type)
         self.connection_type_combobox.setCurrentIndex(index)
 
@@ -447,13 +447,13 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def filepath(self) -> Optional[Path]:
-        if self.connection_type is not bf_codecs.ConnType.FILE:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.FILE:
             return None
         return self.stream_options.file_selector.filepath
 
     @property
     def keyframe_only_streaming(self) -> Optional[bool]:
-        if self.connection_type is not bf_codecs.ConnType.IP_CAMERA:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             return None
         if not self.advanced_options_enabled:
             return DefaultOptions.KEYFRAME_ONLY_STREAMING
@@ -470,7 +470,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def network_address(self) -> Optional[str]:
-        if self.connection_type is not bf_codecs.ConnType.IP_CAMERA:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             return None
 
         network_address = self.stream_options.network_address_line_edit.text()
@@ -500,7 +500,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def premises(self) -> Optional[bf_codecs.Premises]:
-        if self.connection_type is not bf_codecs.ConnType.IP_CAMERA:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             return None
         return self.stream_options.premises_combobox.currentData()
 
@@ -559,7 +559,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def webcam_device(self) -> Optional[str]:
-        if self.connection_type is not bf_codecs.ConnType.WEBCAM:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.WEBCAM:
             return None
 
         webcam_device = self.stream_options.webcam_device_line_edit.text()

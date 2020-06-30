@@ -8,7 +8,7 @@ from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
-import brainframe
+from brainframe import client
 from brainframe.api import bf_codecs, bf_errors
 from brainframe.api.bf_errors import BaseAPIError
 from brainframe.client.api_utils import api
@@ -197,16 +197,16 @@ class BrainFrameApplication(QApplication):
 
             # noinspection PyTypeHints
             worker.data: bf_codecs.LicenseInfo
-            if worker.data.state is bf_codecs.LicenseState.VALID:
+            if worker.data.state is bf_codecs.LicenseInfo.State.VALID:
                 license_valid = True
                 message = self.tr("Successfully connected to server")
-            elif worker.data.state is bf_codecs.LicenseState.EXPIRED:
+            elif worker.data.state is bf_codecs.LicenseInfo.State.EXPIRED:
                 message = self.tr("License is expired. Please upload a new "
                                   "one")
-            elif worker.data.state is bf_codecs.LicenseState.INVALID:
+            elif worker.data.state is bf_codecs.LicenseInfo.State.INVALID:
                 message = self.tr("Server holds an invalid license. Please "
                                   "upload a new one")
-            elif worker.data.state is bf_codecs.LicenseState.MISSING:
+            elif worker.data.state is bf_codecs.LicenseInfo.State.MISSING:
                 message = self.tr("No license exists on the server. Please "
                                   "upload one")
             else:
@@ -219,10 +219,10 @@ class BrainFrameApplication(QApplication):
         self._wait_for_event(worker.finished_event)
 
         version = worker.data
-        if version != brainframe.__version__:
+        if version != client.__version__:
             dialog = VersionMismatch(
                 server_version=version,
-                client_version=brainframe.__version__)
+                client_version=client.__version__)
             dialog.exec_()
 
     def _wait_for_event(self, event):
