@@ -211,7 +211,7 @@ class StreamConfiguration(StreamConfigurationUI):
                     return False
 
         elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.WEBCAM:
-            if not self.webcam_device:
+            if self.webcam_device is None:
                 return False
 
         else:
@@ -558,12 +558,19 @@ class StreamConfiguration(StreamConfigurationUI):
         self.stream_name_line_edit.setText(stream_name)
 
     @property
-    def webcam_device(self) -> Optional[str]:
+    def webcam_device(self) -> Optional[int]:
         if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.WEBCAM:
             return None
 
         webcam_device = self.stream_options.webcam_device_line_edit.text()
-        return webcam_device.strip(string.whitespace)
+        webcam_device = webcam_device.strip(string.whitespace)
+
+        try:
+            webcam_device = int(webcam_device)
+        except ValueError:
+            return None
+
+        return webcam_device
 
     @webcam_device.setter
     def webcam_device(self, webcam_device: Optional[int]) -> None:
