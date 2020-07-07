@@ -1,20 +1,18 @@
 import logging
 from typing import Optional, Tuple
 
-import requests
-from PyQt5.QtWidgets import QCheckBox, QDialog, QDialogButtonBox, QGridLayout, \
-    QLabel, \
-    QLineEdit, \
-    QMessageBox, QPushButton
+from PyQt5.QtWidgets import QCheckBox, QDialog, QDialogButtonBox, \
+    QGridLayout, QLabel, QLineEdit, QPushButton
 from PyQt5.uic import loadUi
-from requests.exceptions import ConnectionError
-
 from brainframe.api import BrainFrameAPI, bf_codecs, bf_errors
+
 from brainframe.client.api_utils import api
 from brainframe.client.ui.dialogs.license_dialog.license_dialog import \
     LicenseDialog
 from brainframe.client.ui.resources import QTAsyncWorker, settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 from brainframe.shared.secret import decrypt, encrypt
 
 
@@ -170,11 +168,15 @@ class ServerConfigurationDialog(QDialog):
                 super().accept()
                 return
 
-        buttons = QMessageBox.Ok | QMessageBox.Ignore
+        message = BrainFrameMessage.warning(
+            parent=self,
+            title=title,
+            warning=message
+        )
+        message.add_button(standard_button=BrainFrameMessage.Ignore)
+        result = message.exec()
 
-        result = QMessageBox.warning(self, title, message, buttons)
-
-        if result == QMessageBox.Ignore:
+        if result == BrainFrameMessage.Ignore:
             _save_settings()
             super().accept()
 
