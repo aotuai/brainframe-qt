@@ -1296,24 +1296,6 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
-    <name>VideoThumbnailView</name>
-    <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="138"/>
-        <source>Error retrieving stream configurations</source>
-        <translation>检索流配置时发生错误</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="139"/>
-        <source>Exception:</source>
-        <translation>异常：</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view.py" line="140"/>
-        <source>Retry or Close Client?</source>
-        <translation>重试或关闭客户端？</translation>
-    </message>
-</context>
-<context>
     <name>ZoneStatusPolygon</name>
     <message>
         <location filename="../video_items/stream_zone_status.py" line="28"/>

@@ -1,12 +1,11 @@
-import logging
 from typing import Dict, List
 
-from PyQt5.QtCore import QMetaObject, QThread, QTimer, Q_ARG, Qt, pyqtSignal, \
+from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, \
     pyqtSlot
-from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
+from PyQt5.QtWidgets import QWidget
+from brainframe.api import bf_codecs
 
 from brainframe.client.api_utils import api
-from brainframe.api import bf_codecs
 from brainframe.client.api_utils.zss_pubsub import zss_publisher
 from brainframe.client.ui.main_window.video_thumbnail_view \
     .thumbnail_grid_layout.video_small.video_small import VideoSmall
@@ -46,8 +45,7 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
             self._init_alert_pubsub()
 
         QTAsyncWorker(self, api.get_stream_configurations,
-                      on_success=on_success,
-                      on_error=self._handle_get_stream_conf_error) \
+                      on_success=on_success) \
             .start()
 
     @property
@@ -132,28 +130,3 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
             video_widget = self.alert_stream_layout \
                 .pop_stream_widget(stream_id)
             self.alertless_stream_layout.add_video(video_widget)
-
-    def _handle_get_stream_conf_error(self, exc: BaseException):
-
-        message_title = self.tr("Error retrieving stream configurations")
-        message = self.tr("Exception:")
-        question = self.tr("Retry or Close Client?")
-        message = (f"<{message}<br>"
-                   f"<br>"
-                   f"{exc}<br>"
-                   f"<br>"
-                   f"{question}")
-
-        logging.error(message)
-
-        buttons = QMessageBox.Retry | QMessageBox.Close
-        ret_button = QMessageBox.question(self, message_title, message,
-                                          buttons=buttons,
-                                          defaultButton=QMessageBox.Retry)
-
-        if ret_button is QMessageBox.Close:
-            QApplication.instance().quit()
-        else:
-            # Retry again in 1 second. (Don't want to go to fast if holding
-            # the escape key down or something)
-            QTimer.singleShot(1000, self.update_streams)
