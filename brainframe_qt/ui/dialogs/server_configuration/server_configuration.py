@@ -160,7 +160,7 @@ class ServerConfigurationDialog(QDialog):
                 message = self.tr(
                     "Unable to authenticate with the BrainFrame server. \n"
                     "Please recheck the entered credentials.")
-            except ConnectionError:
+            except bf_errors.ServerNotReadyError:
                 title = self.tr("Connection Error")
                 message = self.tr(
                     "Unable to connect to the BrainFrame server. \n"
@@ -214,7 +214,7 @@ class ServerConfigurationDialog(QDialog):
             if isinstance(exc, bf_errors.UnauthorizedError):
                 label_text = "❗"
                 report_text = self.tr("Invalid credentials")
-            elif isinstance(exc, requests.exceptions.ConnectionError):
+            elif isinstance(exc, bf_errors.ServerNotReadyError):
                 label_text = "❌"
                 report_text = self.tr("Unable to locate server")
             else:

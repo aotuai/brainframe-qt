@@ -267,42 +267,42 @@ Read the manual to learn about the required directory structure.</source>
         <translation>连接服务器成功，正在启动UI</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="178"/>
+        <location filename="../../brainframe_app.py" line="185"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="185"/>
+        <location filename="../../brainframe_app.py" line="192"/>
         <source>Attempting to communicate with server at {url}</source>
         <translation>尝试连接服务器至{url}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="192"/>
+        <location filename="../../brainframe_app.py" line="199"/>
         <source>Connected to server. Validating license</source>
         <translation>已连接到服务器，正在验证授权</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="229"/>
+        <location filename="../../brainframe_app.py" line="253"/>
         <source>Successfully connected to server</source>
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="231"/>
+        <location filename="../../brainframe_app.py" line="255"/>
         <source>License is expired. Please upload a new one</source>
         <translation>授权出现问题，请重新配置配置</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="234"/>
+        <location filename="../../brainframe_app.py" line="258"/>
         <source>Server holds an invalid license. Please upload a new one</source>
         <translation>服务器持有的授权无效，请上传一个新的授权。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="237"/>
+        <location filename="../../brainframe_app.py" line="261"/>
         <source>No license exists on the server. Please upload one</source>
         <translation>服务器上没有授权。请上传一个</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="240"/>
+        <location filename="../../brainframe_app.py" line="264"/>
         <source>Unknown issue with license. Contact Aotu</source>
         <translation>授权出现未知问题，请联系Aotu</translation>
     </message>
@@ -315,6 +315,16 @@ Read the manual to learn about the required directory structure.</source>
         <location filename="../../brainframe_app.py" line="98"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="110"/>
+        <source>An unhandled exception occurred while communicating with the BrainFrame server</source>
+        <translation>与BrainFrame服务器通信时发生未处理的异常</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="114"/>
+        <source>. The client must be closed.</source>
+        <translation>。客户端必须关闭。</translation>
     </message>
 </context>
 <context>
@@ -1032,7 +1042,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="622"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="629"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
@@ -1042,57 +1052,57 @@ Please recheck the entered server address.</source>
         <translation>上传视频文件过程中发生了一个错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="578"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="585"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="579"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="586"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="606"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="596"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="603"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="597"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="604"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="598"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="605"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="623"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="630"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="624"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="631"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="639"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="646"/>
         <source>Error uploading file</source>
         <translation>上传文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="640"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="647"/>
         <source>File does not exist</source>
         <translation>文件不存在</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="641"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="648"/>
         <source>No such file: {filepath}</source>
         <translation>没有这样的文件：{filepath}</translation>
     </message>

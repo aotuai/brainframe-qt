@@ -98,15 +98,22 @@ class BrainFrameApplication(QApplication):
             description = self.tr("An exception has occurred")
             buttons = BrainFrameMessage.PresetButtons.EXCEPTION
             traceback_exc = TracebackException(exc_type, exc_obj, exc_tb)
+            close_client = False
 
-            # Close the client if the exception was thrown in another thread,
-            # or if it was not an BaseAPIError
-            close_client = other_thread \
-                           or not isinstance(exc_obj, BaseAPIError)
+            # Close the client if the exception was thrown in another thread
+            if other_thread:
+                close_client = True
+            if not isinstance(exc_obj, bf_errors.BaseAPIError):
+                close_client = True
+
+            if isinstance(exc_obj, bf_errors.ServerNotReadyError):
+                description = self.tr(
+                    "An unhandled exception occurred while communicating with "
+                    "the BrainFrame server")
+            else:
+                description += self.tr(". The client must be closed.")
 
             if close_client:
-                description += ". The client must be closed."
-            else:
                 buttons &= ~BrainFrameMessage.PresetButtons.CLOSE_CLIENT
                 buttons |= BrainFrameMessage.PresetButtons.OK
 
@@ -196,9 +203,8 @@ class BrainFrameApplication(QApplication):
             while not connected:
                 try:
                     self._wait_for_valid_license()
-                except (ConnectionError, ConnectionRefusedError,
-                        bf_errors.UnauthorizedError,
-                        requests.exceptions.ReadTimeout):
+                except (bf_errors.ServerNotReadyError,
+                        bf_errors.UnauthorizedError):
                     # Server address change or disappeared for whatever reason
                     # Go back to waiting for server
                     server_visible = False
@@ -207,20 +213,38 @@ class BrainFrameApplication(QApplication):
                     connected = True
 
     def _wait_for_server(self):
-        worker = QTAsyncWorker(self, api.wait_for_server_initialization)
-        worker.start()
-        self._wait_for_event(worker.finished_event)
+
+        def on_error(_):
+            # Do nothing. We'll handle the error using worker.err
+            pass
+
+        while True:
+            worker = QTAsyncWorker(self, api.wait_for_server_initialization,
+                                   on_error=on_error)
+            worker.start()
+            self._wait_for_event(worker.finished_event)
+
+            # Connection successful
+            if worker.err is None:
+                break
+
+            # Ignore standard communication errors
+            elif not isinstance(worker.err, bf_errors.ServerNotReadyError):
+                raise worker.err
 
     def _wait_for_valid_license(self):
         license_valid = False
         while not license_valid:
-            def on_error(exc: BaseException):
-                raise exc
+            def on_error(_):
+                # Do nothing. We'll handle the error using worker.err
+                pass
 
             worker = QTAsyncWorker(self, api.get_license_info,
                                    on_error=on_error)
             worker.start()
             self._wait_for_event(worker.finished_event)
+            if worker.err is not None:
+                raise worker.err
 
             # noinspection PyTypeHints
             worker.data: bf_codecs.LicenseInfo
