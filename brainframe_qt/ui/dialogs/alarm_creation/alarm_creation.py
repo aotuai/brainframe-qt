@@ -8,7 +8,7 @@ from PyQt5.uic import loadUi
 
 from brainframe.api.bf_codecs import (
     Attribute,
-    Plugin,
+    Capsule,
     Zone,
     ZoneAlarm,
     ZoneAlarmCountCondition,
@@ -31,7 +31,7 @@ class AlarmCreationDialog(QDialog):
     """The default window threshold for count events."""
 
     def __init__(self, zones: List[Zone],
-                 capsules: List[Plugin],
+                 capsules: List[Capsule],
                  parent=None):
         super().__init__(parent)
 
@@ -118,7 +118,7 @@ class AlarmCreationDialog(QDialog):
         self.seconds_label.setHidden(hidden)
 
     @classmethod
-    def new_alarm(cls, parent, *, zones, capsules: List[Plugin]):
+    def new_alarm(cls, parent, *, zones, capsules: List[Capsule]):
         dialog = cls(zones, capsules, parent=parent)
         result = dialog.exec_()
 
