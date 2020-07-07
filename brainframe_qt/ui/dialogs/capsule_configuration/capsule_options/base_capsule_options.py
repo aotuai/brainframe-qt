@@ -53,7 +53,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         """
         self._reset()
         self.current_capsule = capsule_name
-        capsule = api.get_capsules(capsule_name)
+        capsule = api.get_capsule(capsule_name)
 
         # Change name of capsule
         title = f"[{capsule_utils.pretty_snakecase(capsule_name)}] "
