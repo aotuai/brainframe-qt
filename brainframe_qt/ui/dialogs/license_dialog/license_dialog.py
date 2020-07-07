@@ -1,11 +1,10 @@
-import requests
-from PyQt5.QtWidgets import QApplication, QListWidgetItem, QMessageBox, QWidget
-
+from PyQt5.QtWidgets import QApplication, QListWidgetItem, QWidget
 from brainframe.api import bf_codecs, bf_errors
+
 from brainframe.client.api_utils import api
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
-    WorkingIndicator
+    BrainFrameMessage, WorkingIndicator
 from .license_dialog_ui import _LicenseDialogUI
 from .product_sidebar.product_widget import ProductWidget
 
@@ -49,7 +48,7 @@ class LicenseDialog(_LicenseDialogUI):
             self.product_sidebar.setCurrentRow(0)
 
         def on_error(exc: BaseException):
-            if isinstance(exc, requests.exceptions.ConnectionError):
+            if isinstance(exc, bf_errors.ServerNotReadyError):
                 self._handle_connection_error(exc)
             else:
                 self._handle_unknown_error(exc)
@@ -87,7 +86,7 @@ class LicenseDialog(_LicenseDialogUI):
                 self._handle_expired_license_error(exc)
             elif isinstance(exc, bf_errors.RemoteConnectionError):
                 self._handle_license_server_connection_error(exc)
-            elif isinstance(exc, requests.exceptions.ConnectionError):
+            elif isinstance(exc, bf_errors.ServerNotReadyError):
                 self._handle_connection_error(exc)
             else:
                 self._handle_unknown_error(exc)
@@ -115,7 +114,11 @@ class LicenseDialog(_LicenseDialogUI):
             "<a href='{license_docs_link}'>download a new license</a>.") \
             .format(license_docs_link=LICENSE_DOCS_LINK)
 
-        QMessageBox.information(self, message_title, message)
+        BrainFrameMessage.information(
+            parent=self,
+            title=message_title,
+            message=message
+        ).exec()
 
     def _handle_expired_license_error(self, _exc):
 
@@ -125,7 +128,11 @@ class LicenseDialog(_LicenseDialogUI):
             "<a href='{license_docs_link}'>download a new license</a>.") \
             .format(license_docs_link=LICENSE_DOCS_LINK)
 
-        QMessageBox.information(self, message_title, message)
+        BrainFrameMessage.information(
+            parent=self,
+            title=message_title,
+            message=message
+        ).exec()
 
     def _handle_license_server_connection_error(self, exc):
 
@@ -135,13 +142,22 @@ class LicenseDialog(_LicenseDialogUI):
             "to validate the license. Please ensure that the BrainFrame "
             "server has internet access.")
 
-        QMessageBox.information(self, message_title, message)
+        BrainFrameMessage.information(
+            parent=self,
+            title=message_title,
+            message=message
+        ).exec()
 
     def _handle_connection_error(self, _exc):
         message_title = self.tr("Connection Error")
         message = self.tr("Connection error while communicating with the "
                           "server")
-        QMessageBox.information(self, message_title, message)
+
+        BrainFrameMessage.information(
+            parent=self,
+            title=message_title,
+            message=message
+        ).exec()
 
         # Close dialog
         self.close()

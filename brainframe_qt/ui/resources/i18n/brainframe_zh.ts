@@ -675,52 +675,52 @@ Read the manual to learn about the required directory structure.</source>
 <context>
     <name>LicenseDialog</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="111"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="110"/>
         <source>Invalid License Format</source>
         <translation>无效的授权格式</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="30"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="29"/>
         <source>Licenses</source>
         <translation>授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="74"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="73"/>
         <source>Uploading license...</source>
         <translation>正在上传授权⋯⋯</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="142"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="153"/>
         <source>Connection error while communicating with the server</source>
         <translation>与服务器通讯时出现连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="141"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="152"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="122"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="125"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="123"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="126"/>
         <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
         <translation>提供的授权已过期。请&lt;a href=&apos;{license_docs_link}&apos;&gt;下载新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="113"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="112"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;download a new license&lt;/a&gt;.</source>
         <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;;下载新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="132"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="139"/>
         <source>License Server Connection Failure</source>
         <translation>授权服务器连接失败</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="133"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="140"/>
         <source>The BrainFrame server was unable to contact the licensing server to validate the license. Please ensure that the BrainFrame server has internet access.</source>
         <translation>BrainFrame无法连接至授权服务器以验证授权，请确保BrainFrame可以访问互联网。</translation>
     </message>
