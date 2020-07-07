@@ -1,12 +1,13 @@
 import string
 from pathlib import Path
+from traceback import TracebackException
 from typing import Callable, List, Optional, Union
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QKeyEvent
-from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
-
+from PyQt5.QtWidgets import QDialogButtonBox, QWidget
 from brainframe.api import bf_codecs, bf_errors
+
 from brainframe.client.api_utils import api
 from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
@@ -14,6 +15,8 @@ from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
     QTAsyncWorker
 from brainframe.client.ui.resources.ui_elements.widgets import \
     FileUploadProgressDialog
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 
 
 class StreamConfiguration(StreamConfigurationUI):
@@ -77,7 +80,8 @@ class StreamConfiguration(StreamConfigurationUI):
             event.ignore()
 
     def load_from_conf(
-            self, stream_conf: Optional[bf_codecs.StreamConfiguration]) -> None:
+            self,
+            stream_conf: Optional[bf_codecs.StreamConfiguration]) -> None:
 
         self._reset_stream_conf = stream_conf
 
@@ -285,10 +289,15 @@ class StreamConfiguration(StreamConfigurationUI):
             message_title = self.tr("Error Opening Stream")
             message_desc = self.tr(
                 "Error encountered while uploading video file")
-            message = (f"<b>{message_desc}</b>"
-                       f"<br><br>"
-                       f"{exc}")
-            QMessageBox.information(self, message_title, message)
+
+            traceback_exc = TracebackException.from_exception(exc)
+
+            BrainFrameMessage.exception(
+                parent=self,
+                title=message_title,
+                description=message_desc,
+                traceback=traceback_exc
+            ).exec()
 
         QTAsyncWorker(self, upload, on_success=on_success, on_error=on_error) \
             .start()
@@ -375,7 +384,8 @@ class StreamConfiguration(StreamConfigurationUI):
         return self.connection_type_combobox.currentData()
 
     @connection_type.setter
-    def connection_type(self, connection_type: bf_codecs.StreamConfiguration.ConnType) -> None:
+    def connection_type(self,
+                        connection_type: bf_codecs.StreamConfiguration.ConnType) -> None:
         index = self.connection_type_combobox.findData(connection_type)
         self.connection_type_combobox.setCurrentIndex(index)
 
@@ -613,7 +623,11 @@ class StreamConfiguration(StreamConfigurationUI):
         else:
             raise exc
 
-        QMessageBox.information(self, message_title, message)
+        BrainFrameMessage.information(
+            parent=self,
+            title=message_title,
+            message=message
+        ).exec()
 
     def _handle_start_analysis_error(
             self, stream_conf: bf_codecs.StreamConfiguration,
@@ -626,32 +640,31 @@ class StreamConfiguration(StreamConfigurationUI):
                           f_args=(stream_conf.id,)) \
                 .start()
 
-            message_title = self.tr("Error Opening Stream")
-            message_desc = self.tr("Active Stream Limit Exceeded")
-            message_info1 = self.tr(
+            message_title = self.tr("Active Stream Limit Exceeded")
+            message_desc = self.tr(
                 "You have exceeded the number of active streams available to "
                 "you under the terms of your license. Consider deleting "
                 "another stream or contacting Aotu to increase your "
                 "active stream limit.")
-            message = (f"<b>{message_desc}</b>"
-                       f"<br><br>"
-                       f"{message_info1}")
 
-            QMessageBox.information(self, message_title, message)
+            BrainFrameMessage.warning(
+                parent=self,
+                title=message_title,
+                warning=message_desc)
 
         else:
             raise exc
 
     def _handle_missing_file_error(self, filepath: Path) -> None:
         message_title = self.tr("Error uploading file")
-        message_desc = self.tr("File does not exist")
         message_info = self.tr("No such file: {filepath}") \
             .format(filepath=filepath)
-        message = (f"<b>{message_desc}</b>"
-                   f"<br><br>"
-                   f"{message_info}")
 
-        QMessageBox.information(self, message_title, message)
+        BrainFrameMessage.warning(
+            parent=self,
+            title=message_title,
+            warning=message_info
+        ).exec()
 
 
 class DefaultOptions:
