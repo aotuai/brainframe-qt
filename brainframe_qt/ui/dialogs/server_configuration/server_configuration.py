@@ -184,20 +184,20 @@ class ServerConfigurationDialog(QDialog):
 
     def check_connection(self):
 
-        def on_success(license_state: bf_codecs.LicenseState):
+        def on_success(license_state: bf_codecs.LicenseInfo.State):
 
             self.license_config_button.setEnabled(True)
 
-            if license_state is bf_codecs.LicenseState.EXPIRED:
+            if license_state is bf_codecs.LicenseInfo.State.EXPIRED:
                 label_text = "❗"
                 report_text = self.tr("Expired License")
-            elif license_state is bf_codecs.LicenseState.INVALID:
+            elif license_state is bf_codecs.LicenseInfo.State.INVALID:
                 label_text = "❗"
                 report_text = self.tr("Invalid License")
-            elif license_state is bf_codecs.LicenseState.MISSING:
+            elif license_state is bf_codecs.LicenseInfo.State.MISSING:
                 label_text = "❗"
                 report_text = self.tr("Missing License")
-            elif license_state is bf_codecs.LicenseState.VALID:
+            elif license_state is bf_codecs.LicenseInfo.State.VALID:
                 label_text = "✔️"
                 report_text = self.tr("Connection Successful")
             else:
@@ -227,7 +227,7 @@ class ServerConfigurationDialog(QDialog):
                       on_success=on_success, on_error=on_error) \
             .start()
 
-    def _check_connection(self) -> bf_codecs.LicenseState:
+    def _check_connection(self) -> bf_codecs.LicenseInfo.State:
         # Create a temporary API object to check connection with
         temp_api = BrainFrameAPI(self.server_address, self.credentials)
 

@@ -14,8 +14,6 @@ from brainframe.api.bf_codecs import (
     ZoneAlarmCountCondition,
     ZoneAlarmRateCondition,
     IntersectionPointType,
-    CountConditionTestType,
-    RateConditionTestType,
 )
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -96,13 +94,13 @@ class AlarmCreationDialog(QDialog):
             self.hide_rate_widgets(True)
             self._update_combo_box(
                 self.test_type_combo_box,
-                CountConditionTestType.values())
+                ZoneAlarmCountCondition.TestType.values())
             self.count_spin_box.setMinimum(0)
         if condition_type == ConditionType.RATE:
             self.hide_count_widgets(True)
             self.hide_rate_widgets(False)
             self._update_combo_box(self.test_type_combo_box,
-                                   RateConditionTestType.values())
+                                   ZoneAlarmRateCondition.TestType.values())
             self.count_spin_box.setMinimum(1)
 
         self.condition_type = condition_type
@@ -161,7 +159,7 @@ class AlarmCreationDialog(QDialog):
                                       value=behavior)
 
             count_condition.append(ZoneAlarmCountCondition(
-                test=CountConditionTestType(test_type),
+                test=ZoneAlarmCountCondition.TestType(test_type),
                 check_value=count,
                 with_class_name=countable,
                 with_attribute=attribute,
@@ -182,7 +180,7 @@ class AlarmCreationDialog(QDialog):
                     ZoneAlarmRateCondition.DirectionType.ENTERING_OR_EXITING
 
             rate_condition.append(ZoneAlarmRateCondition(
-                test=RateConditionTestType(test_type),
+                test=ZoneAlarmRateCondition.TestType(test_type),
                 change=count,
                 direction=direction,
                 duration=duration,
