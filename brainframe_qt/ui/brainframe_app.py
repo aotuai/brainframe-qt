@@ -4,15 +4,13 @@ import typing
 from traceback import TracebackException
 from typing import List, Optional
 
-import requests
 from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
     pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
+from brainframe.api import bf_codecs, bf_errors
 
 from brainframe import client
-from brainframe.api import bf_codecs, bf_errors
-from brainframe.api.bf_errors import BaseAPIError
 from brainframe.client.api_utils import api
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
 from brainframe.client.ui.dialogs import VersionMismatch
