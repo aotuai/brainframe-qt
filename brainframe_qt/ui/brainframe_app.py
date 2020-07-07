@@ -7,7 +7,7 @@ from typing import List, Optional
 from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
     pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
+from PyQt5.QtWidgets import QApplication, QWidget
 from brainframe.api import bf_codecs, bf_errors
 
 from brainframe import client
@@ -64,7 +64,11 @@ class BrainFrameApplication(QApplication):
                            f"fallback.")
 
                 # noinspection PyTypeChecker
-                QMessageBox.warning(None, title, message)
+                BrainFrameMessage.warning(
+                    parent=None,
+                    title=title,
+                    warning=message
+                ).exec()
 
         else:
             self.installTranslator(translator)
