@@ -1151,47 +1151,47 @@ Please recheck the entered server address.</source>
 <context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="73"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="75"/>
         <source>New Line</source>
         <translation>新检测线段</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="73"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="75"/>
         <source>Name for new line:</source>
         <translation>新检测线段名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="82"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="84"/>
         <source>New Region</source>
         <translation>新检测区域</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="82"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="84"/>
         <source>Name for new region:</source>
         <translation>新检测区域名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="109"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="111"/>
         <source>New zone cannot have fewer than 2 points</source>
         <translation>新检测区域不能由于少于两个点组成</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="151"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="153"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="196"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="198"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="197"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="199"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="199"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="201"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>

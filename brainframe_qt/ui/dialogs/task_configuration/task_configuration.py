@@ -1,12 +1,14 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QInputDialog,
-                             QMessageBox)
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QInputDialog
 from PyQt5.uic import loadUi
-from brainframe.client.api_utils import api
 from brainframe.api.bf_codecs import StreamConfiguration, Zone
+
+from brainframe.client.api_utils import api
 from brainframe.client.ui.dialogs import AlarmCreationDialog
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 
 
 class TaskConfiguration(QDialog):
@@ -197,7 +199,13 @@ class TaskConfiguration(QDialog):
                 message = self.tr("Item {} already exists in Stream").format(
                     region_name)
                 message += "<br>" + self.tr("Please use another name.")
-                QMessageBox.information(self, title, message)
+
+                BrainFrameMessage.information(
+                    parent=self,
+                    title=title,
+                    message=message
+                ).exec()
+
                 continue
 
             break
