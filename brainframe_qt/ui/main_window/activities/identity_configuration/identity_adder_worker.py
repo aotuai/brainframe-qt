@@ -1,15 +1,16 @@
+import typing
 from pathlib import Path
 from typing import List, Set
 
-import typing
-from PyQt5.QtCore import QThread, QObject, pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
+from PyQt5.QtWidgets import QWidget
+from brainframe.api import bf_codecs, bf_errors
 
 from brainframe.client.api_utils import api
-from brainframe.api import bf_codecs, bf_errors
-from brainframe.client.api_utils.identities import FileTreeIdentityFinder
-from brainframe.client.api_utils.identities import IdentityPrototype
-
+from brainframe.client.api_utils.identities import FileTreeIdentityFinder, \
+    IdentityPrototype
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 from .directory_selector import DirectorySelector
 from .identity_error_popup import IdentityError, IdentityErrorPopup
 
@@ -46,25 +47,24 @@ class AddNewIdentitiesWorker(QThread):
         # TODO: Error is excessively vague. Should be within the function
         try:
             identity_finder = FileTreeIdentityFinder(path)
-            self.num_images = identity_finder.num_encodings
-        except ValueError as err:
+        except ValueError as exc:
 
+            title = self.tr("Invalid directory format")
             message = self.tr("Unable to parse this directory!\n\n"
-                              "Reason:\n"
-                              "{}\n\n"
                               "Read the manual to learn about the required "
-                              "directory structure.").format(err)
+                              "directory structure.<br><br>"
+                              "{exc}").format(exc=exc)
 
-            error_dialog = QMessageBox(self)
-            error_dialog.setIcon(QMessageBox.Critical)
-            error_dialog.setWindowTitle(self.tr("Invalid Format"))
-            error_dialog.setText(message)
-            error_dialog.exec_()
-            return
+            BrainFrameMessage.warning(
+                parent=typing.cast(QWidget, self.parent()),
+                title=title,
+                warning=message,
+            ).exec()
 
-        self.identity_prototypes = identity_finder.find()
-
-        self.start()
+        else:
+            self.num_images = identity_finder.num_encodings
+            self.identity_prototypes = identity_finder.find()
+            self.start()
 
     def show_errors(self):
         # If there are errors, show them to the user
@@ -174,4 +174,8 @@ class AddNewIdentitiesWorker(QThread):
                   f"{filepath}"
 
         parent = typing.cast(QWidget, self.parent())
-        QMessageBox.information(parent, message_title, message)
+        BrainFrameMessage.information(
+            parent=parent,
+            title=message_title,
+            message=message
+        ).exec()

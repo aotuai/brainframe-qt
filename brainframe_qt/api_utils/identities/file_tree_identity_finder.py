@@ -1,13 +1,12 @@
-from pathlib import Path
-import re
-from typing import List
-import ujson
 import logging
+import re
+from pathlib import Path
+from typing import List
 
-from brainframe.client.api_utils.identities.identity_finder import (
-    IdentityPrototype,
-    IdentityFinder
-)
+import ujson
+
+from brainframe.client.api_utils.identities.identity_finder import \
+    IdentityFinder, IdentityPrototype
 
 
 class FileTreeIdentityFinder(IdentityFinder):
@@ -77,25 +76,30 @@ def verify_directory_structure(path: Path) -> int:
     num_encodings = 0
 
     if not path.is_dir():
-        raise ValueError(f"Path {path} is not a directory.")
+        raise ValueError(f"Base path {path} is not a directory.")
 
-    if not path.iterdir():
-        raise ValueError(f"Path {path} has no children")
+    if next(path.iterdir(), None) is None:
+        raise ValueError(f"Base path {path} is empty and has no children.")
 
     for identity_dir in path.iterdir():
 
         if not identity_dir.is_dir():
-            raise ValueError(f"Identity {identity_dir} is not a directory.")
+            message = f"{identity_dir} is not a directory. It should be a " \
+                      f"directory containing encoding class directories."
+            raise ValueError(message)
 
         for encoding_dir in identity_dir.iterdir():
 
             if not encoding_dir.is_dir():
-                raise ValueError(f"Class {encoding_dir} is not a "
-                                 f"directory.")
+                message = f"{encoding_dir} is not a directory. It should be " \
+                          f"a directory containing encodings."
+                raise ValueError(message)
 
             for file_path in encoding_dir.iterdir():
                 if not file_path.is_file():
-                    raise ValueError(f"{file_path} is not a file.")
+                    message = f"{file_path} is not a file. It should be a " \
+                              f"file containing encoding data."
+                    raise ValueError(message)
 
                 num_encodings += 1
 
