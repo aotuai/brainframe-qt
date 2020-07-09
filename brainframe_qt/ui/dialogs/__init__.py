@@ -9,4 +9,3 @@ from .license_dialog.license_dialog import LicenseDialog
 from .server_configuration.server_configuration import \
     ServerConfigurationDialog
 from .task_configuration.task_configuration import TaskConfiguration
-from .version_mismatch import VersionMismatch

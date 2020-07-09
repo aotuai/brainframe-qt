@@ -320,6 +320,16 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <source>. The client must be closed.</source>
         <translation>。客户端必须关闭。</translation>
     </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="277"/>
+        <source>Version Mismatch</source>
+        <translation>版本不匹配</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="278"/>
+        <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
+        <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
+    </message>
 </context>
 <context>
     <name>CapsuleConfigDialog</name>
@@ -867,12 +877,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>关闭客户端</translation>
     </message>
     <message>
-        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="281"/>
+        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="287"/>
         <source>Copy to clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="285"/>
+        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="291"/>
         <source>Server config</source>
         <translation>服务器选项</translation>
     </message>
@@ -1246,24 +1256,6 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/license_dialog/license_details/license_source_selector/text_license_editor/text_license_editor_ui.py" line="39"/>
         <source>Update License</source>
         <translation>更新许可证</translation>
-    </message>
-</context>
-<context>
-    <name>VersionMismatch</name>
-    <message>
-        <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="16"/>
-        <source>Version Mismatch</source>
-        <translation>版本不匹配</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="31"/>
-        <source>Close Client</source>
-        <translation>关闭客户端</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/version_mismatch/version_mismatch.py" line="21"/>
-        <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
-        <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
     </message>
 </context>
 <context>

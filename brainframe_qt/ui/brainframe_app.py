@@ -13,7 +13,6 @@ from brainframe.api import bf_codecs, bf_errors
 from brainframe import client
 from brainframe.client.api_utils import api
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
-from brainframe.client.ui.dialogs import VersionMismatch
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
     settings
@@ -273,10 +272,25 @@ class BrainFrameApplication(QApplication):
 
         version = worker.data
         if version != client.__version__:
-            dialog = VersionMismatch(
+            title = self.tr("Version Mismatch")
+            message = self.tr(
+                "The server is using version {server_version} but this client "
+                "is on version {client_version}. Please download the matching "
+                "version of the client at {download_url}.")
+            message = message.format(
                 server_version=version,
-                client_version=client.__version__)
-            dialog.exec_()
+                client_version=client.__version__,
+                download_url="aotu.ai/docs/downloads/")
+
+            dialog = BrainFrameMessage.critical(
+                parent=typing.cast(QWidget, None),
+                title=title,
+                text=message
+            )
+
+            dialog.setTextInteractionFlags(Qt.TextSelectableByMouse)
+
+            dialog.exec()
 
     def _wait_for_event(self, event):
         """Runs the Qt event loop while waiting on an event to be triggered."""
