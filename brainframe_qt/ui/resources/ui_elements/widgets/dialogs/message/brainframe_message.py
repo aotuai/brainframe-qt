@@ -275,8 +275,14 @@ class BrainFrameMessage(_BrainFrameMessageUI):
             self.add_button(standard_button=QMessageBox.No)
         if buttons & self.PresetButtons.CLOSE_CLIENT:
             button_text = self.tr("Close client")
-            self.add_button(button_role=QMessageBox.DestructiveRole,
-                            text=button_text, on_click=actions.close_client)
+            button = self.add_button(
+                button_role=QMessageBox.DestructiveRole,
+                text=button_text,
+                on_click=actions.close_client)
+
+            self.setDefaultButton(button)
+            self.setEscapeButton(button)
+
         if buttons & self.PresetButtons.COPY_TO_CLIPBOARD:
             button_text = self.tr("Copy to clipboard")
             self.add_button(button_role=QMessageBox.ActionRole,
