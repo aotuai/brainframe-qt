@@ -585,26 +585,31 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>昵称：</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="81"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="82"/>
         <source>Unique Name: {}</source>
         <comment>After setting</comment>
         <translation>唯一名称：{}</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="83"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="84"/>
         <source>Nickname: {}</source>
         <comment>After setting</comment>
         <translation>昵称：{}</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="99"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="101"/>
         <source>Are you sure you want to delete all encodings with class {0} from identity for {1}?</source>
         <translation>您确定要从 {1} 的标识中删除所有带有类别为 {0} 的编码吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="102"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="104"/>
         <source>This operation cannot be undone.</source>
         <translation>此操作无法撤消。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/identity_configuration/identity_info/identity_info.py" line="100"/>
+        <source>Are you sure?</source>
+        <translation>你确定吗？</translation>
     </message>
 </context>
 <context>
@@ -615,17 +620,17 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="110"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="107"/>
         <source>This operation cannot be undone.</source>
         <translation>此操作无法撤消。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="106"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="103"/>
         <source>Are you sure?</source>
         <translation>你确定吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="107"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="104"/>
         <source>Are you sure you want to delete all encodings with class &quot;{encoding_class}&quot; from the database?</source>
         <translation>您确定要从数据库中删除所有类别为 “{encoding_class}“ 的编码吗？</translation>
     </message>

@@ -2,15 +2,16 @@ from collections import defaultdict
 from typing import Dict, List
 
 from PyQt5 import QtCore
-from PyQt5.QtCore import pyqtSlot, QMetaObject, Qt
-from PyQt5.QtWidgets import QWidget, QLabel, QMessageBox
+from PyQt5.QtCore import QMetaObject, Qt, pyqtSlot
+from PyQt5.QtWidgets import QLabel, QWidget
 from PyQt5.uic import loadUi
+from brainframe.api.bf_codecs import Encoding, Identity
 
 from brainframe.client.api_utils import api
-from brainframe.api.bf_codecs import Identity, Encoding
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
-
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 from ..encoding_list import EncodingList
 
 
@@ -96,15 +97,21 @@ class IdentityInfo(QWidget):
 
     # noinspection DuplicatedCode
     def _prompt_encoding_class_deletion(self, encoding_class: str) -> bool:
+        title = self.tr("Are you sure?")
         message = self.tr("Are you sure you want to delete all encodings with "
                           "class {0} from identity for {1}?") \
             .format(encoding_class, self.identity.unique_name)
         info_text = self.tr("This operation cannot be undone.")
 
-        message_box = QMessageBox(self)
-        message_box.setText(message)
-        message_box.setInformativeText(info_text)
-        message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
-        message_box.setDefaultButton(QMessageBox.Abort)
+        dialog = BrainFrameMessage.question(
+            parent=self,
+            title=title,
+            question=message,
+            subtext=info_text,
+            buttons=BrainFrameMessage.PresetButtons.YES
+        )
 
-        return message_box.exec_() == QMessageBox.Yes
+        dialog.add_button(standard_button=BrainFrameMessage.Abort)
+        dialog.setDefaultButton(BrainFrameMessage.Abort)
+
+        return dialog.exec() == BrainFrameMessage.Yes
