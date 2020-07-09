@@ -48,7 +48,7 @@ class IdentitySearchFilter(QWidget):
     def init_encoding_list(self):
 
         def func():
-            capsules = api.get_plugins()
+            capsules = api.get_capsules()
 
             # Get names of all classes that encodable
             encoding_class_names = set()

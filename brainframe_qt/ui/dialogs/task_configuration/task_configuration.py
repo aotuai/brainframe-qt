@@ -43,7 +43,7 @@ class TaskConfiguration(QDialog):
     def new_alarm(self):
 
         def get_capsules_and_zones():
-            capsules = api.get_plugins()
+            capsules = api.get_capsules()
             zones = api.get_zones(self.stream_conf.id)
             return capsules, zones
 

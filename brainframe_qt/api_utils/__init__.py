@@ -28,7 +28,7 @@ class APIWrapper(StreamManagerAPI):
             return self._empty_func([])
         if item == "get_status_receiver":
             return self._empty_func(None)
-        if item == "get_plugins":
+        if item == "get_capsules":
             return self._empty_func([])
         if item == "get_identities":
             return self._empty_func([], 0)

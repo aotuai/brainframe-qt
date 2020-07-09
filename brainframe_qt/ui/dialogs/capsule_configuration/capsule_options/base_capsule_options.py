@@ -11,7 +11,7 @@ from .option_items import (
     IntOptionItem,
     BoolOptionItem
 )
-from brainframe.api.bf_codecs import PluginOption
+from brainframe.api.bf_codecs import CapsuleOption
 from brainframe.client.api_utils import api
 from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
 from brainframe.client.ui.resources.paths import qt_ui_paths
@@ -34,7 +34,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
 
         self.option_items: List[CapsuleOptionItem] = []
         """Only capsule-specific option items. This does not include items that 
-        exist for all capsules, such as 'plugin_enabled'."""
+        exist for all capsules, such as 'capsule_enabled'."""
 
         self.all_items: List[CapsuleOptionItem] = []
         """All option items, including special cases such as 
@@ -53,7 +53,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         """
         self._reset()
         self.current_capsule = capsule_name
-        capsule = api.get_plugin(capsule_name)
+        capsule = api.get_capsule(capsule_name)
 
         # Change name of capsule
         title = f"[{capsule_utils.pretty_snakecase(capsule_name)}] "
@@ -68,13 +68,13 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         # Add configuration that every capsule _always_ has
         self.enabled_option = self._add_option(
             name=self.tr("Capsule Enabled"),
-            type_=PluginOption.Type.BOOL,
-            value=api.is_plugin_active(capsule_name, stream_id=None),
+            type_=CapsuleOption.Type.BOOL,
+            value=api.is_capsule_active(capsule_name, stream_id=None),
             constraints={})
         self.all_items.append(self.enabled_option)
 
         # Add options specific to this capsule
-        option_values = api.get_plugin_option_vals(capsule_name)
+        option_values = api.get_capsule_option_vals(capsule_name)
         for option_name, option in capsule.options.items():
             item = self._add_option(
                 name=option_name,
@@ -95,19 +95,19 @@ class BaseCapsuleOptionsWidget(QGroupBox):
         """
         return all(option.is_valid() for option in self.all_items)
 
-    def _add_option(self, name: str, type_: PluginOption.Type, value,
+    def _add_option(self, name: str, type_: CapsuleOption.Type, value,
                     constraints: Dict, description: Optional[str] = None):
 
         parent = self
         args = name, value, constraints, description, parent
 
-        if type_ is PluginOption.Type.BOOL:
+        if type_ is CapsuleOption.Type.BOOL:
             item = BoolOptionItem(*args)
-        elif type_ is PluginOption.Type.ENUM:
+        elif type_ is CapsuleOption.Type.ENUM:
             item = EnumOptionItem(*args)
-        elif type_ is PluginOption.Type.FLOAT:
+        elif type_ is CapsuleOption.Type.FLOAT:
             item = FloatOptionItem(*args)
-        elif type_ is PluginOption.Type.INT:
+        elif type_ is CapsuleOption.Type.INT:
             item = IntOptionItem(*args)
         else:
             message = QApplication.translate(
@@ -158,19 +158,19 @@ class BaseCapsuleOptionsWidget(QGroupBox):
                                 for option_item in self.option_items
                                 if not option_item.locked}
 
-        api.set_plugin_option_vals(
-            plugin_name=self.current_capsule,
+        api.set_capsule_option_vals(
+            capsule_name=self.current_capsule,
             stream_id=stream_id,
             option_vals=unlocked_option_vals)
 
         if not self.enabled_option.locked:
-            api.set_plugin_active(
-                plugin_name=self.current_capsule,
+            api.set_capsule_active(
+                capsule_name=self.current_capsule,
                 stream_id=stream_id,
                 active=self.enabled_option.val)
         else:
-            api.set_plugin_active(
-                plugin_name=self.current_capsule,
+            api.set_capsule_active(
+                capsule_name=self.current_capsule,
                 stream_id=stream_id,
                 active=None)
 

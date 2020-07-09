@@ -38,7 +38,7 @@ class CapsuleList(QListWidget):
         """Populate capsule container layout with those capsules"""
 
         def get_capsules():
-            return api.get_plugins()
+            return api.get_capsules()
 
         def add_capsules(capsules: List[Plugin]):
 
