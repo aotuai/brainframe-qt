@@ -28,8 +28,8 @@ class BrainFrameMessage(_BrainFrameMessageUI):
         ERROR = CLOSE_CLIENT | COPY_TO_CLIPBOARD | SERVER_CONFIG
         CRITICAL = CLOSE_CLIENT | COPY_TO_CLIPBOARD
 
-    def __init__(self, parent: QWidget, title: str, text: str,
-                 buttons: PresetButtons):
+    def __init__(self, *, parent: QWidget, title: str, text: str,
+                 subtext: Optional[str], buttons: PresetButtons):
         super().__init__(parent)
 
         self._title: str = typing.cast(str, None)
@@ -39,16 +39,23 @@ class BrainFrameMessage(_BrainFrameMessageUI):
 
         self.title = title
         self.text = text
+        self.subtext = subtext
         self._create_preset_buttons(buttons)
 
     # noinspection PyMethodOverriding
     @classmethod
-    def information(cls, parent: QWidget, title: str, message: str,
+    def information(cls, *, parent: QWidget, title: str, message: str,
+                    subtext: Optional[str] = None,
                     buttons: PresetButtons = PresetButtons.INFORMATION) \
             -> 'BrainFrameMessage':
         """Provide a user with some information"""
 
-        message = cls(parent, title, message, buttons)
+        message = cls(
+            parent=parent,
+            title=title,
+            text=message,
+            subtext=subtext,
+            buttons=buttons)
         message.icon = QMessageBox.Information
 
         return message
@@ -56,11 +63,17 @@ class BrainFrameMessage(_BrainFrameMessageUI):
     # noinspection PyMethodOverriding
     @classmethod
     def question(cls, parent: QWidget, title: str, question: str,
+                 subtext: Optional[str] = None,
                  buttons: PresetButtons = PresetButtons.QUESTION) \
             -> 'BrainFrameMessage':
         """Ask a user a question"""
 
-        message = cls(parent, title, question, buttons)
+        message = cls(
+            parent=parent,
+            title=title,
+            text=question,
+            subtext=subtext,
+            buttons=buttons)
         message.icon = QMessageBox.Question
 
         return message
@@ -68,12 +81,18 @@ class BrainFrameMessage(_BrainFrameMessageUI):
     # noinspection PyMethodOverriding
     @classmethod
     def warning(cls, parent: QWidget, title: str, warning: str,
+                subtext: Optional[str] = None,
                 buttons: PresetButtons = PresetButtons.WARNING) \
             -> 'BrainFrameMessage':
         """Warn a user of an event, occurrence, or otherwise impactful piece of
         information"""
 
-        message = cls(parent, title, warning, buttons)
+        message = cls(
+            parent=parent,
+            title=title,
+            text=warning,
+            subtext=subtext,
+            buttons=buttons)
         message.icon = QMessageBox.Warning
 
         return message
@@ -81,12 +100,18 @@ class BrainFrameMessage(_BrainFrameMessageUI):
     # noinspection PyMethodOverriding
     @classmethod
     def error(cls, parent: QWidget, title: str, error: str,
+              subtext: Optional[str] = None,
               buttons: PresetButtons = PresetButtons.ERROR) \
             -> 'BrainFrameMessage':
         """Display information about a caught exception or other error state
         that has occurred. The client will usually not need to close."""
 
-        message = cls(parent, title, error, buttons)
+        message = cls(
+            parent=parent,
+            title=title,
+            text=error,
+            subtext=subtext,
+            buttons=buttons)
         message.icon = QMessageBox.Critical
 
         return message
@@ -100,7 +125,12 @@ class BrainFrameMessage(_BrainFrameMessageUI):
         """Display information about an uncaught exception. The client will
         usually need to close"""
 
-        message = cls(parent, title, description, buttons)
+        message = cls(
+            parent=parent,
+            title=title,
+            text=description,
+            subtext=None,  # Used by traceback
+            buttons=buttons)
         message.traceback = traceback
 
         message.icon = QMessageBox.Critical
@@ -116,7 +146,12 @@ class BrainFrameMessage(_BrainFrameMessageUI):
         """A critical failure that will usually require the client to close,
         but not an uncaught exception"""
 
-        message = cls(parent, title, text, buttons)
+        message = cls(
+            parent=parent,
+            title=title,
+            text=text,
+            subtext=None,  # Used by traceback
+            buttons=buttons)
         message.traceback = traceback
 
         message.icon = QMessageBox.Critical
@@ -130,6 +165,17 @@ class BrainFrameMessage(_BrainFrameMessageUI):
     @icon.setter
     def icon(self, icon: QMessageBox.Icon):
         self.setIcon(icon)
+        self.expand_width()
+
+    @property
+    def subtext(self) -> Optional[str]:
+        return self._subtext
+
+    @subtext.setter
+    def subtext(self, subtext: Optional[str]):
+        self._subtext = subtext
+        self.setInformativeText(subtext)
+
         self.expand_width()
 
     @property
@@ -219,6 +265,8 @@ class BrainFrameMessage(_BrainFrameMessageUI):
         return button
 
     def _create_preset_buttons(self, buttons: PresetButtons):
+        if not buttons:
+            return
         if buttons & self.PresetButtons.OK:
             self.add_button(standard_button=QMessageBox.Ok)
         if buttons & self.PresetButtons.YES:
