@@ -39,10 +39,11 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
         """
         title = self.tr("Reset to Defaults")
 
-        default_values = {key: option.default
-                          for key, option in
-                          api.get_capsule(
-                              self.current_capsule).options.items()}
+        capsule = api.get_capsule(self.current_capsule)
+        default_values = {
+            key: option.default
+            for key, option in capsule.options.items()
+        }
 
         # Check if there are any changed options
         changed_options = []

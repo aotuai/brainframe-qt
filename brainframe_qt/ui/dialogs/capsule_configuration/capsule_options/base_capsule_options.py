@@ -34,7 +34,7 @@ class BaseCapsuleOptionsWidget(QGroupBox):
 
         self.option_items: List[CapsuleOptionItem] = []
         """Only capsule-specific option items. This does not include items that 
-        exist for all capsules, such as 'plugin_enabled'."""
+        exist for all capsules, such as 'capsule_enabled'."""
 
         self.all_items: List[CapsuleOptionItem] = []
         """All option items, including special cases such as 
