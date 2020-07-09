@@ -650,7 +650,7 @@ class StreamConfiguration(StreamConfigurationUI):
             BrainFrameMessage.warning(
                 parent=self,
                 title=message_title,
-                warning=message_desc)
+                warning=message_desc).exec()
 
         else:
             raise exc
