@@ -1,13 +1,12 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import QLineEdit, QWidget
 from PyQt5.uic import loadUi
 
 from brainframe.client.api_utils import api
-from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources import QTAsyncWorker
+from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
-
 from ..encoding_list import EncodingList
 
 
@@ -103,7 +102,7 @@ class IdentitySearchFilter(QWidget):
     def _prompt_encoding_class_deletion(self, encoding_class: str) -> bool:
         title = self.tr("Are you sure?")
         message = self.tr('Are you sure you want to delete all encodings with '
-                          'class "{encoding_class}" from the database?')\
+                          'class "{encoding_class}" from the database?') \
             .format(encoding_class=encoding_class)
         info_text = self.tr("This operation cannot be undone.")
 
@@ -118,4 +117,4 @@ class IdentitySearchFilter(QWidget):
         dialog.add_button(standard_button=BrainFrameMessage.Abort)
         dialog.setDefaultButton(BrainFrameMessage.Abort)
 
-        return dialog.exec() == QMessageBox.Yes
+        return dialog.exec() == BrainFrameMessage.Yes
