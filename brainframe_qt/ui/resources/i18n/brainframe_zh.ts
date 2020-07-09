@@ -16,22 +16,22 @@
 <context>
     <name>AddNewIdentitiesWorker</name>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="172"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="171"/>
         <source>Invalid directory</source>
         <translation>无效目录</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="173"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="172"/>
         <source>Directory does not exist or is a file:</source>
         <translation>目录不存在或为文件：</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="53"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="52"/>
         <source>Invalid directory format</source>
         <translation>文件夹格式无效</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="54"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="53"/>
         <source>Unable to parse this directory!
 
 Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br&gt;{exc}</source>
@@ -615,14 +615,19 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="102"/>
-        <source>Are you sure you want to delete all encodings with class {} from the database?</source>
-        <translation>您确定要从数据库中删除所有类别为{}的编码吗？</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="104"/>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="110"/>
         <source>This operation cannot be undone.</source>
         <translation>此操作无法撤消。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="106"/>
+        <source>Are you sure?</source>
+        <translation>你确定吗？</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/identity_configuration/identity_search_filter/identity_search_filter.py" line="107"/>
+        <source>Are you sure you want to delete all encodings with class &quot;{encoding_class}&quot; from the database?</source>
+        <translation>您确定要从数据库中删除所有类别为 “{encoding_class}“ 的编码吗？</translation>
     </message>
 </context>
 <context>
@@ -852,17 +857,17 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>PresetButtons</name>
     <message>
-        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="229"/>
+        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="277"/>
         <source>Close client</source>
         <translation>关闭客户端</translation>
     </message>
     <message>
-        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="233"/>
+        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="281"/>
         <source>Copy to clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="237"/>
+        <location filename="../ui_elements/widgets/dialogs/message/brainframe_message.py" line="285"/>
         <source>Server config</source>
         <translation>服务器选项</translation>
     </message>
