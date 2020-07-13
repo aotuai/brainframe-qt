@@ -509,7 +509,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>全局算法胶囊选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="105"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="106"/>
         <source>Reset All Overriding Streams</source>
         <translation>重置所有覆盖全局选项的流</translation>
     </message>
@@ -519,22 +519,22 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>重置为预设值</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="55"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="56"/>
         <source>The following options will be reset to default:</source>
         <translation>以下选项将重置为预设值：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="73"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="74"/>
         <source>There are no changes to reset</source>
         <translation>无需重置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="107"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="108"/>
         <source>The following streams have overrides that will be cleared:</source>
         <translation>以下覆盖全局选项的流将被清除：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="136"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="137"/>
         <source>There are no streams that override the global options for this capsule.</source>
         <translation>没有流覆盖了此算法胶囊的全局选项。</translation>
     </message>

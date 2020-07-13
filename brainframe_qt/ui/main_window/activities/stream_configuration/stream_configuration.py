@@ -368,7 +368,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if self.webcam_device is not None:
             connection_options["device_id"] = self.webcam_device
         if self.avoid_transcoding is not None:
-            connection_options["transcode"] = self.avoid_transcoding
+            connection_options["transcode"] = not self.avoid_transcoding
         return connection_options
 
     @connection_options.setter
