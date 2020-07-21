@@ -1,6 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
     <qresource prefix="/images">
-        <file alias="background_logo_svg">images/background.svg</file>
         <file alias="connecting_to_stream_png">images/connecting_to_stream.png</file>
         <file alias="connection_lost_png">images/connection_lost.png</file>
         <file alias="error_message_png">images/error_message.png</file>
