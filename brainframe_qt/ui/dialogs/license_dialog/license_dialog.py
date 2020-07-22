@@ -3,13 +3,12 @@ from brainframe.api import bf_codecs, bf_errors
 
 from brainframe.client.api_utils import api
 from brainframe.client.ui.resources import QTAsyncWorker
+from brainframe.client.ui.resources.links.documentation import \
+    LICENSE_DOCS_LINK
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage, WorkingIndicator
 from .license_dialog_ui import _LicenseDialogUI
 from .product_sidebar.product_widget import ProductWidget
-
-LICENSE_DOCS_LINK = "https://aotu.ai/docs/user_guide/server_setup/" \
-                    "#getting-a-license"
 
 
 class LicenseDialog(_LicenseDialogUI):
@@ -111,7 +110,7 @@ class LicenseDialog(_LicenseDialogUI):
         # TODO: BF-1332 - Failed online check-in results in an Invalid license
         message = self.tr(
             "The provided license has an invalid format. Please "
-            "<a href='{license_docs_link}'>download a new license</a>.") \
+            "<a href='{license_docs_link}'>upload a new license</a>.") \
             .format(license_docs_link=LICENSE_DOCS_LINK)
 
         BrainFrameMessage.information(
@@ -125,7 +124,7 @@ class LicenseDialog(_LicenseDialogUI):
         message_title = self.tr("Expired License")
         message = self.tr(
             "The provided license has expired. Please "
-            "<a href='{license_docs_link}'>download a new license</a>.") \
+            "<a href='{license_docs_link}'>upload a new license</a>.") \
             .format(license_docs_link=LICENSE_DOCS_LINK)
 
         BrainFrameMessage.information(

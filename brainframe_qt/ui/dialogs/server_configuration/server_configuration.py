@@ -10,6 +10,8 @@ from brainframe.client.api_utils import api
 from brainframe.client.ui.dialogs.license_dialog.license_dialog import \
     LicenseDialog
 from brainframe.client.ui.resources import QTAsyncWorker, settings
+from brainframe.client.ui.resources.links.documentation import \
+    LICENSE_DOCS_LINK
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
@@ -39,6 +41,8 @@ class ServerConfigurationDialog(QDialog):
         self.connection_status_label: QLabel
         self.connection_report_label: QLabel
         self.check_connection_button: QPushButton
+
+        self.connection_report_label.setOpenExternalLinks(True)
 
         self.server_address_line_edit.setText(settings.server_url.val())
         self.server_username_line_edit.setText(settings.server_username.val())
@@ -190,15 +194,23 @@ class ServerConfigurationDialog(QDialog):
 
             self.license_config_button.setEnabled(True)
 
+            license_link = "<br>"
+            license_link += self.tr(
+                "<a href='{license_docs_link}'>Download</a> a new one") \
+                .format(license_docs_link=LICENSE_DOCS_LINK)
+
             if license_state is bf_codecs.LicenseInfo.State.EXPIRED:
                 label_text = "❗"
                 report_text = self.tr("Expired License")
+                report_text += license_link
             elif license_state is bf_codecs.LicenseInfo.State.INVALID:
                 label_text = "❗"
                 report_text = self.tr("Invalid License")
+                report_text += license_link
             elif license_state is bf_codecs.LicenseInfo.State.MISSING:
                 label_text = "❗"
                 report_text = self.tr("Missing License")
+                report_text += license_link
             elif license_state is bf_codecs.LicenseInfo.State.VALID:
                 label_text = "✔️"
                 report_text = self.tr("Connection Successful")

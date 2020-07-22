@@ -1,6 +1,8 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QFrame, QGridLayout, QLabel, QWidget
 
+from brainframe.client.ui.resources.links.documentation import \
+    LICENSE_DOCS_LINK
 from brainframe.client.ui.resources.ui_elements.widgets import Line
 from .license_source_selector import LicenseSourceSelector
 from .license_terms import LicenseTerms
@@ -37,33 +39,42 @@ class _LicenseDetailsUI(QWidget):
     def _init_missing_license_message(self) -> QLabel:
         message_text = QApplication.translate(
             "LicenseDetails",
-            "No license exists on the server. Please upload one."
-        )
+            "No license exists on the server. Please "
+            "<a href='{license_docs_link}'>upload one</a>."
+        ).format(license_docs_link=LICENSE_DOCS_LINK)
+
         missing_license_message = QLabel(message_text, self)
 
         missing_license_message.setObjectName("error_message")
+        missing_license_message.setOpenExternalLinks(True)
 
         return missing_license_message
 
     def _init_invalid_license_message(self) -> QLabel:
         message_text = QApplication.translate(
             "LicenseDetails",
-            "Server holds an invalid license. Please upload a new one."
-        )
+            "Server holds an invalid license. Please "
+            "<a href='{license_docs_link}'>upload a new one</a>."
+        ).format(license_docs_link=LICENSE_DOCS_LINK)
+
         invalid_license_message = QLabel(message_text, self)
 
         invalid_license_message.setObjectName("error_message")
+        invalid_license_message.setOpenExternalLinks(True)
 
         return invalid_license_message
 
     def _init_expired_license_message(self) -> QLabel:
         message_text = QApplication.translate(
             "LicenseDetails",
-            "License is expired. Please upload a new one."
-        )
+            "License is expired. Please "
+            "<a href='{license_docs_link}'>upload a new one</a>."
+        ).format(license_docs_link=LICENSE_DOCS_LINK)
+
         expired_license_message = QLabel(message_text, self)
 
         expired_license_message.setObjectName("error_message")
+        expired_license_message.setOpenExternalLinks(True)
 
         return expired_license_message
 
