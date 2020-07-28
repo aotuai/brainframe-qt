@@ -41,7 +41,7 @@ class CapsuleList(QListWidget):
             return api.get_capsules()
 
         def add_capsules(capsules: List[Capsule]):
-
+            capsules.sort(key=lambda capsule: capsule.name)
             for capsule in capsules:
                 capsule_item = QListWidgetItem(parent=self)
                 self.addItem(capsule_item)
