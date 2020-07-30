@@ -51,7 +51,7 @@ class StreamManager:
                 url,
                 latency=latency,
                 runtime_options=stream_config.runtime_options,
-                pipeline=pipeline,
+                pipeline_str=pipeline,
                 proxied=proxied)
             synced_stream_reader = SyncedStreamReader(
                 stream_config.id,
