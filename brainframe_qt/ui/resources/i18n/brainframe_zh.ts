@@ -287,8 +287,8 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     </message>
     <message>
         <location filename="../../brainframe_app.py" line="259"/>
-        <source>Server holds an invalid license. Please upload a new one</source>
-        <translation>服务器持有的授权无效，请上传一个新的授权。</translation>
+        <source>Invalid License. Does the server have a connection to the internet?</source>
+        <translation>授权无效，服务器是否已连接到互联网？</translation>
     </message>
     <message>
         <location filename="../../brainframe_app.py" line="262"/>

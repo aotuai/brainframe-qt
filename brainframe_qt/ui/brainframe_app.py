@@ -256,8 +256,8 @@ class BrainFrameApplication(QApplication):
                 message = self.tr("License is expired. Please upload a new "
                                   "one")
             elif worker.data.state is bf_codecs.LicenseInfo.State.INVALID:
-                message = self.tr("Server holds an invalid license. Please "
-                                  "upload a new one")
+                message = self.tr("Invalid License. Does the server have a "
+                                  "connection to the internet?")
             elif worker.data.state is bf_codecs.LicenseInfo.State.MISSING:
                 message = self.tr("No license exists on the server. Please "
                                   "upload one")
