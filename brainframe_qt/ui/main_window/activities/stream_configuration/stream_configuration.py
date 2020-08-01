@@ -58,6 +58,9 @@ class StreamConfiguration(StreamConfigurationUI):
             self._gather_and_send_stream_configuration)
         self.button_box.button(QDialogButtonBox.Reset).clicked.connect(
             self.reset_conf)
+        self.stream_options.webcam_device_help_button.clicked.connect(
+            self._display_webcam_help
+        )
 
         # GroupBox
         self.stream_options.advanced_options.expansion_changed.connect(
@@ -172,6 +175,7 @@ class StreamConfiguration(StreamConfigurationUI):
         elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.WEBCAM:
             self.stream_options.webcam_device_label.setVisible(True)
             self.stream_options.webcam_device_line_edit.setVisible(True)
+            self.stream_options.webcam_device_help_button.setVisible(True)
         elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.FILE:
             self.stream_options.filepath_label.setVisible(True)
             self.stream_options.file_selector.setVisible(True)
@@ -586,6 +590,27 @@ class StreamConfiguration(StreamConfigurationUI):
     def webcam_device(self, webcam_device: Optional[int]) -> None:
         webcam_device = "" if webcam_device is None else str(webcam_device)
         self.stream_options.webcam_device_line_edit.setText(webcam_device)
+
+    def _display_webcam_help(self):
+        title = self.tr("Adding a webcam")
+        message = self.tr(
+            'Webcams and other video devices must be attached to the computer '
+            'running BrainFrame server.'
+            '<br><br>'
+            'To add a webcam, open a terminal and run `ls /dev/video*`. If '
+            'you get a message about "No such file or directory", you do not '
+            'have any webcams attached to the server computer.'
+            '<br><br>'
+            'Otherwise, select the digit at the end of the results and '
+            'provide it to BrainFrame. For example, if the command returns '
+            '"/dev/video0", input "0" (without the quotes).'
+        )
+
+        BrainFrameMessage.information(
+            parent=self,
+            title=title,
+            message=message
+        ).exec()
 
     def _handle_send_stream_conf_error(self, exc: BaseException) -> None:
 

@@ -4,12 +4,13 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QCheckBox, QComboBox, QDialogButtonBox, \
     QGridLayout, QGroupBox, \
     QLabel, QLineEdit, QSizePolicy, QWidget
+from brainframe.api.bf_codecs import Premises, StreamConfiguration
 
 from brainframe.client.api_utils import api
-from brainframe.api.bf_codecs import Premises, StreamConfiguration
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.mixins.display import ExpandableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
 from brainframe.client.ui.resources.ui_elements.widgets import FileSelector, \
     Line
 
@@ -121,6 +122,7 @@ class _StreamOptions(QGroupBox):
 
         self.webcam_device_label = self._init_webcam_device_label()
         self.webcam_device_line_edit = self._init_webcam_device_line_edit()
+        self.webcam_device_help_button = self._init_webcam_device_help_button()
 
         self.filepath_label = self._init_filepath_label()
         self.file_selector = self._init_file_selector()
@@ -151,6 +153,14 @@ class _StreamOptions(QGroupBox):
     def _init_webcam_device_line_edit(self) -> QLineEdit:
         webcam_device_line_edit = QLineEdit(self)
         return webcam_device_line_edit
+
+    def _init_webcam_device_help_button(self) -> TextIconButton:
+        webcam_device_help_button = TextIconButton("?️", self)
+        webcam_device_help_button.setObjectName("help_button")
+
+        webcam_device_help_button.setFlat(True)
+
+        return webcam_device_help_button
 
     def _init_filepath_label(self) -> QLabel:
         text = self.tr("Filepath")
@@ -200,20 +210,21 @@ class _StreamOptions(QGroupBox):
         layout = QGridLayout()
 
         layout.addWidget(self.network_address_label, 0, 0)
-        layout.addWidget(self.network_address_line_edit, 0, 1)
+        layout.addWidget(self.network_address_line_edit, 0, 1, 1, 2)
 
         layout.addWidget(self.webcam_device_label, 1, 0)
         layout.addWidget(self.webcam_device_line_edit, 1, 1)
+        layout.addWidget(self.webcam_device_help_button, 1, 2)
 
         layout.addWidget(self.filepath_label, 2, 0)
-        layout.addWidget(self.file_selector, 2, 1)
+        layout.addWidget(self.file_selector, 2, 1, 1, 2)
 
         layout.addWidget(self.premises_label, 3, 0)
-        layout.addWidget(self.premises_combobox, 3, 1)
+        layout.addWidget(self.premises_combobox, 3, 1, 1, 2)
 
-        layout.addWidget(Line.h_line(self), 4, 0, 1, 2)
+        layout.addWidget(Line.h_line(self), 4, 0, 1, 3)
 
-        layout.addWidget(self.advanced_options, 5, 0, 1, 2)
+        layout.addWidget(self.advanced_options, 5, 0, 1, 3)
 
         self.setLayout(layout)
 
@@ -222,6 +233,7 @@ class _StreamOptions(QGroupBox):
         self.network_address_line_edit.setHidden(hidden)
         self.webcam_device_label.setHidden(hidden)
         self.webcam_device_line_edit.setHidden(hidden)
+        self.webcam_device_help_button.setHidden(hidden)
         self.filepath_label.setHidden(hidden)
         self.file_selector.setHidden(hidden)
         self.premises_label.setHidden(hidden)
