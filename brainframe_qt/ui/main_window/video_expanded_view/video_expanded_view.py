@@ -1,16 +1,19 @@
 import logging
+import typing
 
 from PyQt5.QtCore import QEvent, QTimerEvent, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
+from brainframe.api.bf_codecs import StreamConfiguration
 from requests.exceptions import RequestException
 
 from brainframe.client.api_utils import api
-from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.client.ui.dialogs import CapsuleConfigDialog, TaskConfiguration
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 
 
 class VideoExpandedView(QWidget):
@@ -39,7 +42,7 @@ class VideoExpandedView(QWidget):
 
         self.hide_button: FloatingXButton = None
 
-        self.stream_conf = None
+        self.stream_conf = typing.cast(StreamConfiguration, None)
 
         self._init_ui()
         self._init_signals()
@@ -139,11 +142,16 @@ class VideoExpandedView(QWidget):
           self.delete_stream_button.clicked
         """
 
+        if not self._confirm_stream_delete():
+            return
+
         # Delete stream from database
-        api.delete_stream_configuration(self.stream_conf.id)
+        QTAsyncWorker(
+            self, api.delete_stream_configuration,
+            f_args=(self.stream_conf.id, 600)
+        ).start()
 
         # Remove StreamWidgets associated with stream being deleted
-        # noinspection PyUnresolvedReferences
         self.stream_delete_signal.emit(self.stream_conf)
 
         self.expanded_stream_closed_slot()
@@ -165,3 +173,27 @@ class VideoExpandedView(QWidget):
           self.task_config_button.clicked
         """
         TaskConfiguration.open_configuration(self.stream_conf, self)
+
+    def _confirm_stream_delete(self) -> bool:
+        title = self.tr("Delete stream?")
+
+        question = self.tr(
+            'Deleting stream "{stream_name}".'
+        ).format(stream_name=self.stream_conf.name)
+
+        subtext = self.tr(
+            "This will delete all Zones, Detections, Alarms, Alerts, etc. "
+            "associated with this stream and cannot be undone. This process "
+            "will happen in the background and can take several minutes."
+            "<br><br>"
+            "Are you sure you want to continue?"
+        )
+
+        result = BrainFrameMessage.question(
+            parent=self,
+            title=title,
+            question=question,
+            subtext=subtext
+        ).exec()
+
+        return result == BrainFrameMessage.Yes

@@ -1291,7 +1291,7 @@ Please recheck the entered server address.</source>
         <translation>删除视频流</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="57"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="60"/>
         <source>Close expanded video view</source>
         <translation>关闭扩展视频视图</translation>
     </message>
@@ -1299,6 +1299,21 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
         <source>Toggle Stream Config</source>
         <translation>切换视频流配置</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="178"/>
+        <source>Delete stream?</source>
+        <translation>删除视频流？</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="180"/>
+        <source>Deleting stream &quot;{stream_name}&quot;.</source>
+        <translation>正在删除视频流“{stream_name}“。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="184"/>
+        <source>This will delete all Zones, Detections, Alarms, Alerts, etc. associated with this stream and cannot be undone. This process will happen in the background and can take several minutes.&lt;br&gt;&lt;br&gt;Are you sure you want to continue?</source>
+        <translation>这将删除所有此视频流相关的区域、检测结果、警报、报警信息等，并且无法撤消。这个流程会在后台发生&lt;br&gt;&lt;br&gt;可能需要几分钟。</translation>
     </message>
 </context>
 <context>
