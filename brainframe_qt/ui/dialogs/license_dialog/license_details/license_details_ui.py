@@ -53,8 +53,10 @@ class _LicenseDetailsUI(QWidget):
     def _init_invalid_license_message(self) -> QLabel:
         message_text = QApplication.translate(
             "LicenseDetails",
-            "Server holds an invalid license. Please "
-            "<a href='{license_docs_link}'>upload a new one</a>."
+            "Server holds an invalid license or the BrainFrame server was "
+            "unable to talk to Aotu's licensing servers.<br>"
+            "Please <a href='{license_docs_link}'>upload a new license</a> or "
+            "ensure that the server is connected to the internet."
         ).format(license_docs_link=LICENSE_DOCS_LINK)
 
         invalid_license_message = QLabel(message_text, self)
