@@ -677,8 +677,8 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="54"/>
-        <source>Server holds an invalid license or the BrainFrame server was unable to talk to Aotu&apos;s licensing servers. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt; or ensure that the server is connected to the internet.</source>
-        <translation>服务器持有的授权无效，或者BrainFrame服务器无法与Aotu的授权服务器进行通信。请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;或确保服务器已连接到互联网。</translation>
+        <source>Server holds an invalid license or the BrainFrame server was unable to talk to Aotu&apos;s licensing servers.&lt;br&gt;Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt; or ensure that the server is connected to the internet.</source>
+        <translation>服务器持有的授权无效，或者BrainFrame服务器无法与Aotu的授权服务器进行通信。&lt;br&gt;请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;或确保服务器已连接到互联网。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="70"/>
