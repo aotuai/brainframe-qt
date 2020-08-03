@@ -595,7 +595,7 @@ class StreamConfiguration(StreamConfigurationUI):
         title = self.tr("Adding a webcam")
         message = self.tr(
             'Webcams and other video devices must be attached to the computer '
-            'running BrainFrame server.'
+            'running the BrainFrame server.'
             '<br><br>'
             'To add a webcam, open a terminal on the server machine and run '
             '<pre>ls /dev/video*</pre>'
