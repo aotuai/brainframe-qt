@@ -1123,12 +1123,12 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="595"/>
         <source>Adding a webcam</source>
-        <translation type="unfinished"></translation>
+        <translation>添加一个网络摄像头</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="596"/>
         <source>Webcams and other video devices must be attached to the computer running BrainFrame server.&lt;br&gt;&lt;br&gt;To add a webcam, open a terminal and run `ls /dev/video*`. If you get a message about &quot;No such file or directory&quot;, you do not have any webcams attached to the server computer.&lt;br&gt;&lt;br&gt;Otherwise, select the digit at the end of the results and provide it to BrainFrame. For example, if the command returns &quot;/dev/video0&quot;, input &quot;0&quot; (without the quotes).</source>
-        <translation type="unfinished"></translation>
+        <translation>网络摄像头和其他视频设备必须连接到运行BrainFrame的计算机。如果在启动BrainFrame后插入设备，请重新启动BrainFrame。&lt;br&gt;&lt;br&gt;要添加网络摄像头，请打开终端并运行`ls /dev/video*`。如果收到类似“No such file or directory“的消息，则说明运行BrainFrame的计算机没有连接任何网络摄像头。&lt;br&gt;&lt;br&gt;否则，请选择结果末尾的数字并将其提供给BrainFrame。例如，如果命令返回“/dev/video0“，则输入“0“（不带引号）。</translation>
     </message>
 </context>
 <context>
