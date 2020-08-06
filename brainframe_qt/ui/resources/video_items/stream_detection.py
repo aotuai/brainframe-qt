@@ -3,8 +3,8 @@ import random
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 
-from brainframe.client.api.detection_tracks import DetectionTrack
-from brainframe.client.api.codecs import Detection
+from brainframe.client.api_utils.detection_tracks import DetectionTrack
+from brainframe.api.bf_codecs import Detection
 from brainframe.client.ui.resources.video_items import (
     StreamLabelBox,
     StreamPolygon
@@ -80,10 +80,7 @@ class DetectionPolygon(StreamPolygon):
             for key, val in detection.extra_data.items():
                 if isinstance(val, float):
                     val = round(val, 3)
-                elif type(val) not in [str, float, int]:
-                    # Not a valid datatype for rendering
-                    continue
-                keyval_data.append((key, str(val)))
+                keyval_data.append((key, repr(val)))
 
         # Add any metadata (attributes, extra data) to the text
         attributes_str_list = [
@@ -96,10 +93,12 @@ class DetectionPolygon(StreamPolygon):
         if text:
             # Create the description box
             top_left = coords[0]
+            width = int(detection.bbox[1][0] - detection.bbox[0][0])
             self.label_box = StreamLabelBox(
                 title_text=text,
                 top_left=top_left,
                 text_size=text_size,
+                max_width=width,
                 parent=self)
 
         if show_tracks and len(track) > 1:

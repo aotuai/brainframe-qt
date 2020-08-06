@@ -7,8 +7,9 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QAbstractButton, QButtonGroup, QFrame, \
     QHBoxLayout, QLabel, QSizePolicy, QWidget
 
-from brainframe.client.api import api, api_errors
-from brainframe.client.api.codecs import Alert
+from brainframe.api.bf_codecs import Alert
+from brainframe.api import bf_errors
+from brainframe.client.api_utils import api
 from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths
@@ -161,7 +162,7 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
         def on_success(_):
             self.alert.verified_as = verification
 
-        def on_error(exc: api_errors.BaseAPIError):
+        def on_error(exc: bf_errors.BaseAPIError):
             self._set_ui_verification(self.alert.verified_as)
 
             logging.warning("An error occurred while attempting to set alert "
@@ -169,7 +170,7 @@ class AlertHeader(AlertHeaderUI, ClickableMI):
                             "The value has been reverted on the client.")
 
             # Reset to the current stored state
-            if isinstance(exc, api_errors.AlertNotFoundError):
+            if isinstance(exc, bf_errors.AlertNotFoundError):
                 # TODO: Delete entry? Wait for AlertLog to clean up?
                 pass
             else:

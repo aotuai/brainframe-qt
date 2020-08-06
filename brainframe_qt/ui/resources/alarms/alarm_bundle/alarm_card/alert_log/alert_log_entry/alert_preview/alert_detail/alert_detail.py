@@ -4,9 +4,8 @@ from typing import List, Union, Tuple
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QSizePolicy
 
-from brainframe.client.api import api
-from brainframe.client.api.codecs import Alert, ZoneAlarm, \
-    ZoneAlarmCountCondition, ZoneAlarmRateCondition, Zone
+from brainframe.client.api_utils import api
+from brainframe.api import bf_codecs
 from brainframe.client.ui.resources import stylesheet_watcher, QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_qss_paths
 
@@ -62,14 +61,14 @@ class AlertDetail(AlertDetailUI):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.alert = typing.cast(Alert, None)
+        self.alert = typing.cast(bf_codecs.Alert, None)
 
     def populate_from_server(self):
 
         if not self.alert:
             return
 
-        def get_alert_info() -> Tuple[ZoneAlarm, Zone]:
+        def get_alert_info() -> Tuple[bf_codecs.ZoneAlarm, bf_codecs.Zone]:
             alarm = api.get_zone_alarm(self.alert.alarm_id)
             zone = api.get_zone(alarm.zone_id)
 
@@ -84,14 +83,14 @@ class AlertDetail(AlertDetailUI):
             .start()
 
     def display_alert_info(self, alarm_zone):
-        alarm: ZoneAlarm
-        zone: Zone
+        alarm: bf_codecs.ZoneAlarm
+        zone: bf_codecs.Zone
         alarm, zone = alarm_zone
 
         # Create text for alert
         description = ""
-        conditions: List[Union[ZoneAlarmCountCondition,
-                               ZoneAlarmRateCondition]] \
+        conditions: List[Union[bf_codecs.ZoneAlarmCountCondition,
+                               bf_codecs.ZoneAlarmRateCondition]] \
             = alarm.count_conditions + alarm.rate_conditions
         for condition in conditions:
             text = self.tr('"{0}" in region "{1}"')
@@ -100,5 +99,5 @@ class AlertDetail(AlertDetailUI):
 
         self.description = description
 
-    def set_alert(self, alert: Alert) -> None:
+    def set_alert(self, alert: bf_codecs.Alert) -> None:
         self.alert = alert

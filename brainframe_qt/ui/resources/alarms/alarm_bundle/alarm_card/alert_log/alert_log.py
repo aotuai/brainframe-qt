@@ -4,7 +4,7 @@ import typing
 from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QScrollArea, QWidget
 
-from brainframe.client.api.codecs import Alert
+from brainframe.api.bf_codecs import Alert
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.mixins.mouse import ClickableMI
 from brainframe.client.ui.resources.mixins.style import TransientScrollbarMI

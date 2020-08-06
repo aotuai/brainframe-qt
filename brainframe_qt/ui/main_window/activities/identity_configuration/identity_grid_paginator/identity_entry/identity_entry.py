@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFontMetrics, QMouseEvent, QPaintEvent, QPalette, \
 from PyQt5.QtWidgets import QLabel, QStyle, QStyleOption
 from PyQt5.uic import loadUiType
 
-from brainframe.client.api.codecs import Identity
+from brainframe.api.bf_codecs import Identity
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import qt_resources
 from brainframe.client.ui.resources.paths import qt_ui_paths

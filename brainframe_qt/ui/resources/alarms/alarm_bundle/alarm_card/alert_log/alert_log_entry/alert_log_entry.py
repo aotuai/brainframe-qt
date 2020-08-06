@@ -4,8 +4,8 @@ import typing
 from PyQt5.QtCore import Qt, QThread, QMetaObject, Q_ARG, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QFrame, QWidget, QVBoxLayout
 
-from brainframe.client.api.codecs import Alert
-from brainframe.client.api.zss_pubsub import zss_publisher, Subscription
+from brainframe.api.bf_codecs import Alert
+from brainframe.client.api_utils.zss_pubsub import zss_publisher, Subscription
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.mixins.display import ExpandableMI
 from brainframe.client.ui.resources.paths import qt_qss_paths

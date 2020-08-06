@@ -6,17 +6,17 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QComboBox, QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
 
-from brainframe.client.api.codecs import (
+from brainframe.api.bf_codecs import (
     Attribute,
-    Plugin,
+    Capsule,
     Zone,
     ZoneAlarm,
     ZoneAlarmCountCondition,
-    ZoneAlarmRateCondition
+    ZoneAlarmRateCondition,
+    IntersectionPointType,
 )
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.shared.codec_enums import IntersectionPointType
 
 
 class ConditionType(Enum):
@@ -31,7 +31,7 @@ class AlarmCreationDialog(QDialog):
     """The default window threshold for count events."""
 
     def __init__(self, zones: List[Zone],
-                 capsules: List[Plugin],
+                 capsules: List[Capsule],
                  parent=None):
         super().__init__(parent)
 
@@ -118,7 +118,7 @@ class AlarmCreationDialog(QDialog):
         self.seconds_label.setHidden(hidden)
 
     @classmethod
-    def new_alarm(cls, parent, *, zones, capsules: List[Plugin]):
+    def new_alarm(cls, parent, *, zones, capsules: List[Capsule]):
         dialog = cls(zones, capsules, parent=parent)
         result = dialog.exec_()
 

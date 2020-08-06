@@ -1,20 +1,24 @@
+import logging
 import sys
-from queue import Queue
+import typing
+from traceback import TracebackException
 from typing import List, Optional
 
 from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
     pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget
+from brainframe.api import bf_codecs, bf_errors
 
-import brainframe
-from brainframe.client.api import api, api_errors
+from brainframe import client
+from brainframe.client.api_utils import api
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
-from brainframe.client.ui.dialogs import StandardError, VersionMismatch
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
     settings
 from brainframe.client.ui.resources.paths import text_paths
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.secret import decrypt
 
@@ -22,6 +26,8 @@ from brainframe.shared.secret import decrypt
 class BrainFrameApplication(QApplication):
     def __init__(self, argv: Optional[List] = ()):
         super().__init__(argv or [])
+
+        self.splash_screen = typing.cast(SplashScreen, None)
 
         # noinspection PyUnresolvedReferences
         self.aboutToQuit.connect(self._shutdown)
@@ -57,7 +63,11 @@ class BrainFrameApplication(QApplication):
                            f"fallback.")
 
                 # noinspection PyTypeChecker
-                QMessageBox.warning(None, title, message)
+                BrainFrameMessage.warning(
+                    parent=None,
+                    title=title,
+                    warning=message
+                ).exec()
 
         else:
             self.installTranslator(translator)
@@ -65,35 +75,15 @@ class BrainFrameApplication(QApplication):
     def exec(self):
 
         # Show splash screen while waiting for server connection
-        with SplashScreen() as splash_screen:
-            message = self.tr("Attempting to connect to server at {}")
-            f_message = message.format(settings.server_url.val())
-            splash_screen.showMessage(f_message)
-
-            worker = QTAsyncWorker(self, api.wait_for_server_initialization)
-            worker.start()
-            self._wait_for_event(worker.finished_event)
-
-            version_queue = Queue(maxsize=1)
-
-            worker = QTAsyncWorker(
-                self, api.version,
-                on_success=lambda result: version_queue.put(result))
-            worker.start()
-            self._wait_for_event(worker.finished_event)
-
-            version = version_queue.get()
-            if version != brainframe.__version__:
-                dialog = VersionMismatch(
-                    server_version=version,
-                    client_version=brainframe.__version__)
-                dialog.exec_()
+        with SplashScreen() as self.splash_screen:
+            self._connect_to_server()
+            self._verify_version_match()
 
             message = self.tr("Successfully connected to server. Starting UI")
-            splash_screen.showMessage(message)
+            self.splash_screen.showMessage(message)
 
             main_window = MainWindow()
-            splash_screen.finish(main_window)
+            self.splash_screen.finish(main_window)
             main_window.show()
 
         super().exec()
@@ -105,16 +95,46 @@ class BrainFrameApplication(QApplication):
         # Check if exception occurred in the UI thread
         if QThread.currentThread() is self.thread():
 
-            # Close the client if the exception was thrown in another thread,
-            # or if it was not an BaseAPIError
-            close_client = other_thread \
-                           or not isinstance(exc_obj, api_errors.BaseAPIError)
+            title = self.tr("Error")
+            description = self.tr("An exception has occurred")
+            buttons = BrainFrameMessage.PresetButtons.EXCEPTION
+            traceback_exc = TracebackException(exc_type, exc_obj, exc_tb)
+            close_client = False
 
-            StandardError.show_error(exc_type, exc_obj, exc_tb, close_client)
+            # Close the client if the exception was thrown in another thread
+            if other_thread:
+                close_client = True
+            if not isinstance(exc_obj, bf_errors.BaseAPIError):
+                close_client = True
+
+            if isinstance(exc_obj, bf_errors.ServerNotReadyError):
+                description = self.tr(
+                    "An unhandled exception occurred while communicating with "
+                    "the BrainFrame server")
+            else:
+                description += self.tr(". The client must be closed.")
+
+            if close_client:
+                buttons &= ~BrainFrameMessage.PresetButtons.CLOSE_CLIENT
+                buttons |= BrainFrameMessage.PresetButtons.OK
+
+            # Log exception as well as show it to user
+            log_func = logging.critical if close_client else logging.error
+            exc_str = "".join(traceback_exc.format()).rstrip()
+            log_func(exc_str)
+
+            BrainFrameMessage.exception(
+                parent=typing.cast(QWidget, None),  # No parent
+                title=title,
+                description=description,
+                traceback=traceback_exc,
+                buttons=buttons
+            ).exec()
+
         else:
             # Call this function again, but from the correct (UI) thread.
-            # If a QWidget (the StandardError dialog) is used from another
-            # thread we WILL segfault. This is undesirable
+            # If a QWidget (the BrainFrameMessage in this case) is used from
+            # another thread we WILL segfault. This is undesirable
             QMetaObject.invokeMethod(
                 self, "_handle_error",
                 Qt.BlockingQueuedConnection,
@@ -148,9 +168,10 @@ class BrainFrameApplication(QApplication):
         api.set_url(settings.server_url.val())
 
         username = settings.server_username.val()
+        password = settings.server_password.val()
 
-        if username:
-            password = decrypt(settings.server_password.val())
+        if username and password:
+            password = decrypt(password)
             api.set_credentials((username, password))
 
     # noinspection PyMethodMayBeStatic
@@ -163,6 +184,113 @@ class BrainFrameApplication(QApplication):
         # Otherwise close program
         if not LicenseAgreement.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
+
+    def _connect_to_server(self):
+
+        server_visible = False
+        while not server_visible:
+
+            message = self.tr("Attempting to communicate with server at {url}")
+            f_message = message.format(url=settings.server_url.val())
+            self.splash_screen.showMessage(f_message)
+
+            self._wait_for_server()
+            server_visible = True
+
+            message = self.tr("Connected to server. Validating license")
+            self.splash_screen.showMessage(message)
+
+            connected = False
+            while not connected:
+                try:
+                    self._wait_for_valid_license()
+                except (bf_errors.ServerNotReadyError,
+                        bf_errors.UnauthorizedError):
+                    # Server address change or disappeared for whatever reason
+                    # Go back to waiting for server
+                    server_visible = False
+                else:
+                    # Successfully connected
+                    connected = True
+
+    def _wait_for_server(self):
+
+        def on_error(_):
+            # Do nothing. We'll handle the error using worker.err
+            pass
+
+        while True:
+            worker = QTAsyncWorker(self, api.wait_for_server_initialization,
+                                   on_error=on_error)
+            worker.start()
+            self._wait_for_event(worker.finished_event)
+
+            # Connection successful
+            if worker.err is None:
+                break
+
+            # Ignore standard communication errors
+            elif not isinstance(worker.err, bf_errors.ServerNotReadyError):
+                raise worker.err
+
+    def _wait_for_valid_license(self):
+        license_valid = False
+        while not license_valid:
+            def on_error(_):
+                # Do nothing. We'll handle the error using worker.err
+                pass
+
+            worker = QTAsyncWorker(self, api.get_license_info,
+                                   on_error=on_error)
+            worker.start()
+            self._wait_for_event(worker.finished_event)
+            if worker.err is not None:
+                raise worker.err
+
+            # noinspection PyTypeHints
+            worker.data: bf_codecs.LicenseInfo
+            if worker.data.state is bf_codecs.LicenseInfo.State.VALID:
+                license_valid = True
+                message = self.tr("Successfully connected to server")
+            elif worker.data.state is bf_codecs.LicenseInfo.State.EXPIRED:
+                message = self.tr("License is expired. Please upload a new "
+                                  "one")
+            elif worker.data.state is bf_codecs.LicenseInfo.State.INVALID:
+                message = self.tr("Invalid License. Does the server have a "
+                                  "connection to the internet?")
+            elif worker.data.state is bf_codecs.LicenseInfo.State.MISSING:
+                message = self.tr("No license exists on the server. Please "
+                                  "upload one")
+            else:
+                message = self.tr("Unknown issue with license. Contact Aotu")
+            self.splash_screen.showMessage(message)
+
+    def _verify_version_match(self):
+        worker = QTAsyncWorker(self, api.version)
+        worker.start()
+        self._wait_for_event(worker.finished_event)
+
+        version = worker.data
+        if version != client.__version__:
+            title = self.tr("Version Mismatch")
+            message = self.tr(
+                "The server is using version {server_version} but this client "
+                "is on version {client_version}. Please download the matching "
+                "version of the client at {download_url}.")
+            message = message.format(
+                server_version=version,
+                client_version=client.__version__,
+                download_url="aotu.ai/docs/downloads/")
+
+            dialog = BrainFrameMessage.critical(
+                parent=typing.cast(QWidget, None),
+                title=title,
+                text=message
+            )
+
+            dialog.setTextInteractionFlags(Qt.TextSelectableByMouse)
+
+            dialog.exec()
 
     def _wait_for_event(self, event):
         """Runs the Qt event loop while waiting on an event to be triggered."""

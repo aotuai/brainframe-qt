@@ -1,12 +1,12 @@
-import logging
 from typing import Dict, List
 
-from PyQt5.QtCore import QMetaObject, QThread, QTimer, Q_ARG, Qt, pyqtSignal, \
+from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, \
     pyqtSlot
-from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
+from PyQt5.QtWidgets import QWidget
+from brainframe.api import bf_codecs
 
-from brainframe.client.api import api, codecs
-from brainframe.client.api.zss_pubsub import zss_publisher
+from brainframe.client.api_utils import api
+from brainframe.client.api_utils.zss_pubsub import zss_publisher
 from brainframe.client.ui.main_window.video_thumbnail_view \
     .thumbnail_grid_layout.video_small.video_small import VideoSmall
 from brainframe.client.ui.main_window.video_thumbnail_view \
@@ -15,7 +15,7 @@ from brainframe.client.ui.resources import QTAsyncWorker
 
 
 class VideoThumbnailView(_VideoThumbnailViewUI):
-    stream_clicked = pyqtSignal(codecs.StreamConfiguration)
+    stream_clicked = pyqtSignal(bf_codecs.StreamConfiguration)
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -38,15 +38,14 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
 
     def update_streams(self):
 
-        def on_success(stream_confs: List[codecs.StreamConfiguration]):
+        def on_success(stream_confs: List[bf_codecs.StreamConfiguration]):
             for stream_conf in stream_confs:
                 self.add_stream_conf(stream_conf)
 
             self._init_alert_pubsub()
 
         QTAsyncWorker(self, api.get_stream_configurations,
-                      on_success=on_success,
-                      on_error=self._handle_get_stream_conf_error) \
+                      on_success=on_success) \
             .start()
 
     @property
@@ -62,13 +61,12 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         self.scroll_area.setHidden(show_background)
         self.background_widget.setVisible(show_background)
 
-    def add_stream_conf(self, stream_conf: codecs.StreamConfiguration):
+    def add_stream_conf(self, stream_conf: bf_codecs.StreamConfiguration):
         self.alertless_stream_layout.new_stream_widget(stream_conf)
 
         self.show_background_image(False)
 
-    def delete_stream_conf(self, stream_conf: codecs.StreamConfiguration):
-
+    def delete_stream_conf(self, stream_conf: bf_codecs.StreamConfiguration):
         # Figure out which layout the stream is in, and remove it
         for layout in [self.alert_stream_layout, self.alertless_stream_layout]:
             for stream_id, stream_widget in layout.stream_widgets.items():
@@ -89,7 +87,7 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         self.alert_stream_layout.expand_grid(expand)
 
     @pyqtSlot(object)
-    def _handle_alerts(self, alerts: List[codecs.Alert]):
+    def _handle_alerts(self, alerts: List[bf_codecs.Alert]):
 
         if QThread.currentThread() != self.thread():
             # Move to the UI Thread
@@ -132,28 +130,3 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
             video_widget = self.alert_stream_layout \
                 .pop_stream_widget(stream_id)
             self.alertless_stream_layout.add_video(video_widget)
-
-    def _handle_get_stream_conf_error(self, exc: BaseException):
-
-        message_title = self.tr("Error retrieving stream configurations")
-        message = self.tr("Exception:")
-        question = self.tr("Retry or Close Client?")
-        message = (f"<{message}<br>"
-                   f"<br>"
-                   f"{exc}<br>"
-                   f"<br>"
-                   f"{question}")
-
-        logging.error(message)
-
-        buttons = QMessageBox.Retry | QMessageBox.Close
-        ret_button = QMessageBox.question(self, message_title, message,
-                                          buttons=buttons,
-                                          defaultButton=QMessageBox.Retry)
-
-        if ret_button is QMessageBox.Close:
-            QApplication.instance().quit()
-        else:
-            # Retry again in 1 second. (Don't want to go to fast if holding
-            # the escape key down or something)
-            QTimer.singleShot(1000, self.update_streams)

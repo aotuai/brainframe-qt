@@ -4,7 +4,7 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.uic import loadUi
 
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.api import api
+from brainframe.client.api_utils import api
 
 
 class AlertEntryPopup(QDialog):

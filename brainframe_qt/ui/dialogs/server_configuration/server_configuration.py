@@ -1,14 +1,20 @@
 import logging
+from typing import Optional, Tuple
 
-from requests.exceptions import ConnectionError, InvalidSchema
-
-from PyQt5.QtWidgets import QDialog, QLineEdit, QCheckBox, QDialogButtonBox, \
-    QMessageBox
+from PyQt5.QtWidgets import QCheckBox, QDialog, QDialogButtonBox, \
+    QGridLayout, QLabel, QLineEdit, QPushButton
 from PyQt5.uic import loadUi
+from brainframe.api import BrainFrameAPI, bf_codecs, bf_errors
 
-from brainframe.client.api import api, api_errors
-from brainframe.client.ui.resources import settings
+from brainframe.client.api_utils import api
+from brainframe.client.ui.dialogs.license_dialog.license_dialog import \
+    LicenseDialog
+from brainframe.client.ui.resources import QTAsyncWorker, settings
+from brainframe.client.ui.resources.links.documentation import \
+    LICENSE_DOCS_LINK
 from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 from brainframe.shared.secret import decrypt, encrypt
 
 
@@ -22,12 +28,21 @@ class ServerConfigurationDialog(QDialog):
         self._init_ui()
 
     def _init_ui(self):
+        self.grid_layout: QGridLayout
+
         self.server_address_line_edit: QLineEdit
         self.authentication_checkbox: QCheckBox
         self.server_username_line_edit: QLineEdit
         self.server_password_line_edit: QLineEdit
         self.save_password_checkbox: QCheckBox
         self.button_box: QDialogButtonBox
+        self.license_config_button: QPushButton
+
+        self.connection_status_label: QLabel
+        self.connection_report_label: QLabel
+        self.check_connection_button: QPushButton
+
+        self.connection_report_label.setOpenExternalLinks(True)
 
         self.server_address_line_edit.setText(settings.server_url.val())
         self.server_username_line_edit.setText(settings.server_username.val())
@@ -48,38 +63,89 @@ class ServerConfigurationDialog(QDialog):
         self._show_authentication_fields(use_auth)
         self.authentication_checkbox.setChecked(use_auth)
 
+        self.save_password_checkbox.setChecked(bool(self.server_password))
+
         # noinspection PyUnresolvedReferences
         self.authentication_checkbox.stateChanged.connect(
             self._show_authentication_fields)
+        self.authentication_checkbox.stateChanged.connect(
+            self._verify)
         # noinspection PyUnresolvedReferences
         self.server_address_line_edit.textChanged.connect(self._verify)
         # noinspection PyUnresolvedReferences
         self.server_username_line_edit.textChanged.connect(self._verify)
         # noinspection PyUnresolvedReferences
         self.server_password_line_edit.textChanged.connect(self._verify)
-        # noinspection PyUnresolvedReferences
-        self.save_password_checkbox.stateChanged.connect(self._verify)
+
+        self.license_config_button.clicked.connect(self._open_license_dialog)
+
+        self.check_connection_button.clicked.connect(self.check_connection)
+
+        self._verify()
+        if self.fields_filled:
+            self.check_connection()
+
+    @property
+    def authentication_enabled(self) -> bool:
+        return self.authentication_checkbox.isChecked()
+
+    @property
+    def credentials(self) -> Optional[Tuple[str, str]]:
+        if not self.authentication_enabled:
+            return None
+        return self.server_username, self.server_password
+
+    @property
+    def fields_filled(self) -> bool:
+        if not self.server_address:
+            return False
+        if self.authentication_enabled:
+            if not self.server_username:
+                return False
+            if not self.server_password:
+                return False
+        return True
+
+    @property
+    def save_password(self) -> bool:
+        if self.authentication_enabled \
+                and self.save_password_checkbox.isChecked():
+            return True
+        return False
+
+    @property
+    def server_address(self) -> str:
+        return self.server_address_line_edit.text()
+
+    @property
+    def server_password(self) -> Optional[str]:
+        if self.authentication_enabled:
+            return self.server_password_line_edit.text()
+        else:
+            return None
+
+    @property
+    def server_username(self) -> Optional[str]:
+        if self.authentication_enabled:
+            return self.server_username_line_edit.text()
+        else:
+            return None
 
     def accept(self):
 
-        server_address = self.server_address_line_edit.text()
-        server_auth: bool = self.authentication_checkbox.isChecked()
-        server_username = self.server_username_line_edit.text()
-        server_password = self.server_password_line_edit.text()
-        save_password = self.save_password_checkbox.isChecked()
-
         def _save_settings():
-            settings.server_url.set(server_address)
-            settings.server_username.set(server_username)
+            settings.server_url.set(self.server_address)
 
-            if server_auth and save_password:
-                encrypted = encrypt(server_password)
-                settings.server_password.set(encrypted)
-            else:
+            if self.authentication_enabled:
+                settings.server_username.set(self.server_username)
+                if self.save_password:
+                    encrypted = encrypt(self.server_password)
+                    settings.server_password.set(encrypted)
+            if not self.authentication_enabled or not self.save_password:
                 settings.server_password.delete()
 
         try:
-            api.set_url(server_address)
+            api.set_url(self.server_address)
         except ValueError:
             title = self.tr("Invalid Schema")
             message = self.tr(
@@ -87,19 +153,16 @@ class ServerConfigurationDialog(QDialog):
                 "URL schema. Supported schemas are {0} and {1}.") \
                 .format("http://", "https://")
         else:
-            if server_auth:
-                api.set_credentials((server_username, server_password))
-            else:
-                api.set_credentials(None)
+            api.set_credentials(self.credentials)
 
             try:
                 api.version()
-            except api_errors.UnauthorizedError:
+            except bf_errors.UnauthorizedError:
                 title = self.tr("Server Authentication Error")
                 message = self.tr(
                     "Unable to authenticate with the BrainFrame server. \n"
                     "Please recheck the entered credentials.")
-            except ConnectionError:
+            except bf_errors.ServerNotReadyError:
                 title = self.tr("Connection Error")
                 message = self.tr(
                     "Unable to connect to the BrainFrame server. \n"
@@ -109,11 +172,15 @@ class ServerConfigurationDialog(QDialog):
                 super().accept()
                 return
 
-        buttons = QMessageBox.Ok | QMessageBox.Ignore
+        message = BrainFrameMessage.warning(
+            parent=self,
+            title=title,
+            warning=message
+        )
+        message.add_button(standard_button=BrainFrameMessage.Ignore)
+        result = message.exec()
 
-        result = QMessageBox.warning(self, title, message, buttons)
-
-        if result == QMessageBox.Ignore:
+        if result == BrainFrameMessage.Ignore:
             _save_settings()
             super().accept()
 
@@ -121,27 +188,83 @@ class ServerConfigurationDialog(QDialog):
     def show_dialog(cls, parent):
         cls(parent=parent).exec()
 
+    def check_connection(self):
+
+        def on_success(license_state: bf_codecs.LicenseInfo.State):
+
+            self.license_config_button.setEnabled(True)
+
+            license_link = "<br>"
+            license_link += self.tr(
+                "<a href='{license_docs_link}'>Download</a> a new one") \
+                .format(license_docs_link=LICENSE_DOCS_LINK)
+
+            if license_state is bf_codecs.LicenseInfo.State.EXPIRED:
+                label_text = "❗"
+                report_text = self.tr("Expired License")
+                report_text += license_link
+            elif license_state is bf_codecs.LicenseInfo.State.INVALID:
+                label_text = "❗"
+                report_text = self.tr("Invalid License")
+                report_text += license_link
+            elif license_state is bf_codecs.LicenseInfo.State.MISSING:
+                label_text = "❗"
+                report_text = self.tr("Missing License")
+                report_text += license_link
+            elif license_state is bf_codecs.LicenseInfo.State.VALID:
+                label_text = "✔️"
+                report_text = self.tr("Connection Successful")
+            else:
+                label_text = "❗"
+                report_text = self.tr("Unknown license state")
+
+            self.connection_status_label.setText(label_text)
+            self.connection_report_label.setText(report_text)
+
+        def on_error(exc: BaseException):
+
+            self.license_config_button.setDisabled(True)
+
+            if isinstance(exc, bf_errors.UnauthorizedError):
+                label_text = "❗"
+                report_text = self.tr("Invalid credentials")
+            elif isinstance(exc, bf_errors.ServerNotReadyError):
+                label_text = "❌"
+                report_text = self.tr("Unable to locate server")
+            else:
+                raise exc
+
+            self.connection_status_label.setText(label_text)
+            self.connection_report_label.setText(report_text)
+
+        QTAsyncWorker(self, self._check_connection,
+                      on_success=on_success, on_error=on_error) \
+            .start()
+
+    def _check_connection(self) -> bf_codecs.LicenseInfo.State:
+        # Create a temporary API object to check connection with
+        temp_api = BrainFrameAPI(self.server_address, self.credentials)
+
+        # Check connection
+        temp_api.version()
+
+        # Check license state
+        license_state = temp_api.get_license_info().state
+
+        return license_state
+
+    def _open_license_dialog(self):
+        LicenseDialog.show_dialog(self)
+        self.check_connection()
+
     def _verify(self):
-        """Make sure that the ok button should be enabled"""
 
-        server_address = self.server_address_line_edit.text()
-        server_auth: bool = self.authentication_checkbox.isChecked()
-        server_username = self.server_username_line_edit.text()
-        server_password = self.server_password_line_edit.text()
+        self.connection_status_label.setText("❓")
+        self.connection_report_label.setText("")
 
-        self.button_box: QDialogButtonBox
-
-        enabled = True
-
-        if not server_address:
-            enabled = False
-        if server_auth:
-            if not server_username:
-                enabled = False
-            if not server_password:
-                enabled = False
-
+        enabled = self.fields_filled
         self.button_box.button(QDialogButtonBox.Ok).setEnabled(enabled)
+        self.check_connection_button.setEnabled(enabled)
 
     def _show_authentication_fields(self, show: bool):
 

@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QPushButton, QGridLayout, QMessageBox
+from PyQt5.QtWidgets import QPushButton
 
-from brainframe.client.api import api
-
+from brainframe.client.api_utils import api
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 from .base_capsule_options import BaseCapsuleOptionsWidget
 
 
@@ -38,9 +39,11 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
         """
         title = self.tr("Reset to Defaults")
 
-        default_values = {key: option.default
-                          for key, option in
-                          api.get_plugin(self.current_capsule).options.items()}
+        capsule = api.get_capsule(self.current_capsule)
+        default_values = {
+            key: option.default
+            for key, option in capsule.options.items()
+        }
 
         # Check if there are any changed options
         changed_options = []
@@ -52,8 +55,12 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
         if len(changed_options):
             desc = self.tr("The following options will be reset to default:")
             desc += "\n\t" + "\n\t".join(changed_options)
-            result = QMessageBox.question(self, title, desc)
-            if result != QMessageBox.Yes:
+            result = BrainFrameMessage.question(
+                parent=self,
+                title=title,
+                question=desc
+            ).exec()
+            if result != BrainFrameMessage.Yes:
                 # The user cancelled, so exit early.
                 return
 
@@ -65,7 +72,11 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
             self.enabled_option.set_val(True)
         else:
             desc = self.tr("There are no changes to reset")
-            QMessageBox.information(self, title, desc)
+            BrainFrameMessage.information(
+                parent=self,
+                title=title,
+                message=desc
+            ).exec()
 
     def on_reset_overriding_streams(self):
         """
@@ -82,11 +93,11 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
         for stream_id in all_stream_ids:
             # Check if capsule options or capsule activity is changed
             # server-side
-            opts = api.get_plugin_option_vals(
-                plugin_name=self.current_capsule,
+            opts = api.get_capsule_option_vals(
+                capsule_name=self.current_capsule,
                 stream_id=stream_id)
-            is_active = api.is_plugin_active(
-                plugin_name=self.current_capsule,
+            is_active = api.is_capsule_active(
+                capsule_name=self.current_capsule,
                 stream_id=stream_id)
 
             if len(opts) or is_active is not None:
@@ -102,23 +113,31 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
                             if s.id in changed_stream_ids]
 
             desc += ", \n\t".join(stream_names)
-            result = QMessageBox.question(self, title, desc)
-            if result != QMessageBox.Yes:
+            result = BrainFrameMessage.question(
+                parent=self,
+                title=title,
+                question=desc
+            ).exec()
+
+            if result is not BrainFrameMessage.Yes:
                 # The user cancelled, so exit early.
                 return
 
             # Change the options to default
             for stream_id in changed_stream_ids:
-                api.set_plugin_option_vals(
-                    plugin_name=self.current_capsule,
+                api.set_capsule_option_vals(
+                    capsule_name=self.current_capsule,
                     stream_id=stream_id,
                     option_vals={})
-                api.set_plugin_active(
-                    plugin_name=self.current_capsule,
+                api.set_capsule_active(
+                    capsule_name=self.current_capsule,
                     stream_id=stream_id,
                     active=None)
         else:
             desc = self.tr("There are no streams that override the global "
                            "options for this capsule.")
-            QMessageBox.information(
-                self, title, desc)
+            BrainFrameMessage.information(
+                parent=self,
+                title=title,
+                message=desc
+            ).exec()

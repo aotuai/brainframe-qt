@@ -5,8 +5,8 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QListWidget, QListWidgetItem
 from PyQt5.uic import loadUi
 
-from brainframe.client.api import api
-from brainframe.client.api.codecs import Plugin
+from brainframe.client.api_utils import api
+from brainframe.api.bf_codecs import Capsule
 from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 
@@ -38,10 +38,10 @@ class CapsuleList(QListWidget):
         """Populate capsule container layout with those capsules"""
 
         def get_capsules():
-            return api.get_plugins()
+            return api.get_capsules()
 
-        def add_capsules(capsules: List[Plugin]):
-
+        def add_capsules(capsules: List[Capsule]):
+            capsules.sort(key=lambda capsule: capsule.name)
             for capsule in capsules:
                 capsule_item = QListWidgetItem(parent=self)
                 self.addItem(capsule_item)

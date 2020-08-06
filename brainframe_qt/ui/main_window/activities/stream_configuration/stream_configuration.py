@@ -1,31 +1,34 @@
 import string
 from pathlib import Path
+from traceback import TracebackException
 from typing import Callable, List, Optional, Union
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QKeyEvent
-from PyQt5.QtWidgets import QDialogButtonBox, QMessageBox, QWidget
+from PyQt5.QtWidgets import QDialogButtonBox, QWidget
+from brainframe.api import bf_codecs, bf_errors
 
-from brainframe.client.api import api, api_errors, codecs
+from brainframe.client.api_utils import api
 from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
 from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
     QTAsyncWorker
 from brainframe.client.ui.resources.ui_elements.widgets import \
     FileUploadProgressDialog
-from brainframe.shared.codec_enums import ConnType
+from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
 
 
 class StreamConfiguration(StreamConfigurationUI):
     stream_conf_deleted = pyqtSignal()
-    stream_conf_modified = pyqtSignal(codecs.StreamConfiguration)
+    stream_conf_modified = pyqtSignal(bf_codecs.StreamConfiguration)
     """Sent when a new or modified stream_conf has been sent to, and accepted
     by, the server"""
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self._reset_stream_conf: Optional[codecs.StreamConfiguration] = None
+        self._reset_stream_conf: Optional[bf_codecs.StreamConfiguration] = None
         """Holds the loaded stream configuration to revert to when Reset button
         is pressed"""
 
@@ -55,6 +58,9 @@ class StreamConfiguration(StreamConfigurationUI):
             self._gather_and_send_stream_configuration)
         self.button_box.button(QDialogButtonBox.Reset).clicked.connect(
             self.reset_conf)
+        self.stream_options.webcam_device_help_button.clicked.connect(
+            self._display_webcam_help
+        )
 
         # GroupBox
         self.stream_options.advanced_options.expansion_changed.connect(
@@ -77,7 +83,8 @@ class StreamConfiguration(StreamConfigurationUI):
             event.ignore()
 
     def load_from_conf(
-            self, stream_conf: Optional[codecs.StreamConfiguration]) -> None:
+            self,
+            stream_conf: Optional[bf_codecs.StreamConfiguration]) -> None:
 
         self._reset_stream_conf = stream_conf
 
@@ -136,7 +143,7 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options.setDisabled(disable)
 
     def _handle_stream_stream(
-            self, stream_confs: List[codecs.StreamConfiguration]) \
+            self, stream_confs: List[bf_codecs.StreamConfiguration]) \
             -> None:
         """Handles the stream of StreamConfiguration information from the
         pubsub system"""
@@ -158,17 +165,18 @@ class StreamConfiguration(StreamConfigurationUI):
         advanced_options = self.stream_options.advanced_options
         advanced_options_visible = advanced_options.expanded
 
-        if self.connection_type is ConnType.IP_CAMERA:
+        if self.connection_type is bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             self.stream_options.network_address_label.setVisible(True)
             self.stream_options.network_address_line_edit.setVisible(True)
             self.stream_options.premises_label.setVisible(True)
             self.stream_options.premises_combobox.setVisible(True)
             if advanced_options_visible:
                 advanced_options.keyframe_only_checkbox.setVisible(True)
-        elif self.connection_type is ConnType.WEBCAM:
+        elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.WEBCAM:
             self.stream_options.webcam_device_label.setVisible(True)
             self.stream_options.webcam_device_line_edit.setVisible(True)
-        elif self.connection_type is ConnType.FILE:
+            self.stream_options.webcam_device_help_button.setVisible(True)
+        elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.FILE:
             self.stream_options.filepath_label.setVisible(True)
             self.stream_options.file_selector.setVisible(True)
             if advanced_options_visible:
@@ -196,22 +204,22 @@ class StreamConfiguration(StreamConfigurationUI):
         def pipeline_valid() -> bool:
             return not self.pipeline or "{url}" in self.pipeline
 
-        if self.connection_type is ConnType.IP_CAMERA:
+        if self.connection_type is bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             if not self.network_address:
                 return False
             if self.advanced_options_enabled:
                 if not pipeline_valid:
                     return False
 
-        elif self.connection_type is ConnType.FILE:
+        elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.FILE:
             if not self.filepath:
                 return False
             if self.advanced_options_enabled:
                 if not pipeline_valid:
                     return False
 
-        elif self.connection_type is ConnType.WEBCAM:
-            if not self.webcam_device:
+        elif self.connection_type is bf_codecs.StreamConfiguration.ConnType.WEBCAM:
+            if self.webcam_device is None:
                 return False
 
         else:
@@ -223,7 +231,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if not self.inputs_valid:
             raise ValueError("Invalid stream configuration")
 
-        stream_conf = codecs.StreamConfiguration(
+        stream_conf = bf_codecs.StreamConfiguration(
             name=self.stream_name,
             connection_type=self.connection_type,
             connection_options=self.connection_options,
@@ -232,7 +240,7 @@ class StreamConfiguration(StreamConfigurationUI):
             metadata={}
         )
 
-        if self.connection_type is ConnType.FILE:
+        if self.connection_type is bf_codecs.StreamConfiguration.ConnType.FILE:
 
             if not Path(self.filepath).is_file():
                 self._handle_missing_file_error(self.filepath)
@@ -285,29 +293,34 @@ class StreamConfiguration(StreamConfigurationUI):
             message_title = self.tr("Error Opening Stream")
             message_desc = self.tr(
                 "Error encountered while uploading video file")
-            message = (f"<b>{message_desc}</b>"
-                       f"<br><br>"
-                       f"{exc}")
-            QMessageBox.information(self, message_title, message)
+
+            traceback_exc = TracebackException.from_exception(exc)
+
+            BrainFrameMessage.exception(
+                parent=self,
+                title=message_title,
+                description=message_desc,
+                traceback=traceback_exc
+            ).exec()
 
         QTAsyncWorker(self, upload, on_success=on_success, on_error=on_error) \
             .start()
 
     def _send_stream_configuration(
-            self, stream_conf: codecs.StreamConfiguration) \
+            self, stream_conf: bf_codecs.StreamConfiguration) \
             -> None:
 
         # Two stage QtAsyncWorker because we need to catch exceptions on both
         # api.set_stream_configuration and api.start_analyzing, but the handler
         # for exceptions in the latter needs the result of the former.
 
-        def on_success(enabled_stream_conf: codecs.StreamConfiguration):
+        def on_success(enabled_stream_conf: bf_codecs.StreamConfiguration):
             self.disable_input_fields(True)
             self._reset_stream_conf = enabled_stream_conf
 
             self.stream_conf_modified.emit(enabled_stream_conf)
 
-        def start_analysis(sent_stream_conf: codecs.StreamConfiguration):
+        def start_analysis(sent_stream_conf: bf_codecs.StreamConfiguration):
             def on_error(exc: BaseException):
                 self._handle_start_analysis_error(sent_stream_conf, exc)
 
@@ -334,7 +347,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def avoid_transcoding(self) -> Optional[bool]:
-        if self.connection_type is not ConnType.FILE:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.FILE:
             return None
         if not self.advanced_options_enabled:
             return DefaultOptions.AVOID_TRANSCODING
@@ -359,7 +372,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if self.webcam_device is not None:
             connection_options["device_id"] = self.webcam_device
         if self.avoid_transcoding is not None:
-            connection_options["transcode"] = self.avoid_transcoding
+            connection_options["transcode"] = not self.avoid_transcoding
         return connection_options
 
     @connection_options.setter
@@ -371,11 +384,12 @@ class StreamConfiguration(StreamConfigurationUI):
             "transcode", DefaultOptions.KEYFRAME_ONLY_STREAMING)
 
     @property
-    def connection_type(self) -> ConnType:
+    def connection_type(self) -> bf_codecs.StreamConfiguration.ConnType:
         return self.connection_type_combobox.currentData()
 
     @connection_type.setter
-    def connection_type(self, connection_type: ConnType) -> None:
+    def connection_type(self,
+                        connection_type: bf_codecs.StreamConfiguration.ConnType) -> None:
         index = self.connection_type_combobox.findData(connection_type)
         self.connection_type_combobox.setCurrentIndex(index)
 
@@ -447,13 +461,13 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def filepath(self) -> Optional[Path]:
-        if self.connection_type is not ConnType.FILE:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.FILE:
             return None
         return self.stream_options.file_selector.filepath
 
     @property
     def keyframe_only_streaming(self) -> Optional[bool]:
-        if self.connection_type is not ConnType.IP_CAMERA:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             return None
         if not self.advanced_options_enabled:
             return DefaultOptions.KEYFRAME_ONLY_STREAMING
@@ -470,7 +484,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     @property
     def network_address(self) -> Optional[str]:
-        if self.connection_type is not ConnType.IP_CAMERA:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             return None
 
         network_address = self.stream_options.network_address_line_edit.text()
@@ -499,16 +513,16 @@ class StreamConfiguration(StreamConfigurationUI):
         pipeline_line_edit.setText(pipeline)
 
     @property
-    def premises(self) -> Optional[codecs.Premises]:
-        if self.connection_type is not ConnType.IP_CAMERA:
+    def premises(self) -> Optional[bf_codecs.Premises]:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             return None
         return self.stream_options.premises_combobox.currentData()
 
     @premises.setter
-    def premises(self, premises: Optional[Union[int, codecs.Premises]]) \
+    def premises(self, premises: Optional[Union[int, bf_codecs.Premises]]) \
             -> None:
 
-        if premises is None or isinstance(premises, codecs.Premises):
+        if premises is None or isinstance(premises, bf_codecs.Premises):
             index = self.stream_options.premises_combobox.findData(premises)
             self.stream_options.premises_combobox.setCurrentIndex(index)
 
@@ -517,7 +531,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     def _set_premises_by_id(self, premises_id: int) -> None:
 
-        def on_success(premises: codecs.Premises) -> None:
+        def on_success(premises: bf_codecs.Premises) -> None:
             self.premises = premises
 
         def on_error(exc: BaseException) -> None:
@@ -558,23 +572,53 @@ class StreamConfiguration(StreamConfigurationUI):
         self.stream_name_line_edit.setText(stream_name)
 
     @property
-    def webcam_device(self) -> Optional[str]:
-        if self.connection_type is not ConnType.WEBCAM:
+    def webcam_device(self) -> Optional[int]:
+        if self.connection_type is not bf_codecs.StreamConfiguration.ConnType.WEBCAM:
             return None
 
         webcam_device = self.stream_options.webcam_device_line_edit.text()
-        return webcam_device.strip(string.whitespace)
+        webcam_device = webcam_device.strip(string.whitespace)
+
+        try:
+            webcam_device = int(webcam_device)
+        except ValueError:
+            return None
+
+        return webcam_device
 
     @webcam_device.setter
     def webcam_device(self, webcam_device: Optional[int]) -> None:
         webcam_device = "" if webcam_device is None else str(webcam_device)
         self.stream_options.webcam_device_line_edit.setText(webcam_device)
 
+    def _display_webcam_help(self):
+        title = self.tr("Adding a webcam")
+        message = self.tr(
+            'Webcams and other video devices must be attached to the computer '
+            'running the BrainFrame server.'
+            '<br><br>'
+            'To add a webcam, open a terminal on the server machine and run '
+            '<pre>ls /dev/video*</pre>'
+            'If you get a message about "No such '
+            'file or directory", you do not have any webcams attached to the'
+            'server computer.'
+            '<br><br>'
+            'Otherwise, select the digit at the end of the results and '
+            'provide it to BrainFrame. For example, if the command returns '
+            '"/dev/video0", input "0" (without the quotes).'
+        )
+
+        BrainFrameMessage.information(
+            parent=self,
+            title=title,
+            message=message
+        ).exec()
+
     def _handle_send_stream_conf_error(self, exc: BaseException) -> None:
 
         message_title = self.tr("Error Opening Stream")
 
-        if isinstance(exc, api_errors.DuplicateStreamSourceError):
+        if isinstance(exc, bf_errors.DuplicateStreamSourceError):
             message_desc = self.tr("Stream source already open")
             message_info = self.tr("You already have the stream source open.")
             error_text = self.tr("Error: ")
@@ -583,7 +627,7 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{message_info}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif isinstance(exc, api_errors.StreamNotOpenedError):
+        elif isinstance(exc, bf_errors.StreamNotOpenedError):
             message_desc = self.tr("Error encountered while opening stream")
             error_text = self.tr("Error: ")
             message = f"<b>{message_desc}</b>" \
@@ -592,7 +636,7 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{exc.description}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif isinstance(exc, api_errors.BaseAPIError):
+        elif isinstance(exc, bf_errors.BaseAPIError):
             message_desc = self.tr("Error encountered while opening stream")
             message_info1 = self.tr("Is stream already open?")
             message_info2 = self.tr("Is this a valid stream source?")
@@ -606,45 +650,48 @@ class StreamConfiguration(StreamConfigurationUI):
         else:
             raise exc
 
-        QMessageBox.information(self, message_title, message)
+        BrainFrameMessage.information(
+            parent=self,
+            title=message_title,
+            message=message
+        ).exec()
 
     def _handle_start_analysis_error(
-            self, stream_conf: codecs.StreamConfiguration,
+            self, stream_conf: bf_codecs.StreamConfiguration,
             exc: BaseException) \
             -> None:
-        if isinstance(exc, api_errors.AnalysisLimitExceededError):
+        if isinstance(exc, bf_errors.AnalysisLimitExceededError):
             # Delete the stream configuration, since you almost never want to
             # have a stream that can't have analysis running
             QTAsyncWorker(self, api.delete_stream_configuration,
                           f_args=(stream_conf.id,)) \
                 .start()
 
-            message_title = self.tr("Error Opening Stream")
-            message_desc = self.tr("Active Stream Limit Exceeded")
-            message_info1 = self.tr(
+            message_title = self.tr("Active Stream Limit Exceeded")
+            message_desc = self.tr(
                 "You have exceeded the number of active streams available to "
                 "you under the terms of your license. Consider deleting "
                 "another stream or contacting Aotu to increase your "
                 "active stream limit.")
-            message = (f"<b>{message_desc}</b>"
-                       f"<br><br>"
-                       f"{message_info1}")
 
-            QMessageBox.information(self, message_title, message)
+            BrainFrameMessage.warning(
+                parent=self,
+                title=message_title,
+                warning=message_desc).exec()
 
         else:
             raise exc
 
     def _handle_missing_file_error(self, filepath: Path) -> None:
         message_title = self.tr("Error uploading file")
-        message_desc = self.tr("File does not exist")
         message_info = self.tr("No such file: {filepath}") \
             .format(filepath=filepath)
-        message = (f"<b>{message_desc}</b>"
-                   f"<br><br>"
-                   f"{message_info}")
 
-        QMessageBox.information(self, message_title, message)
+        BrainFrameMessage.warning(
+            parent=self,
+            title=message_title,
+            warning=message_info
+        ).exec()
 
 
 class DefaultOptions:

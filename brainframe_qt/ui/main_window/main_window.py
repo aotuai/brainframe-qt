@@ -5,14 +5,9 @@ from typing import Optional
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QAction, QWidget
 
-from brainframe.client.api import codecs
-from brainframe.client.ui.dialogs.about_page.about_page import AboutPage
-from brainframe.client.ui.dialogs.capsule_configuration.capsule_config import \
-    CapsuleConfigDialog
-from brainframe.client.ui.dialogs.client_configuration \
-    import RenderConfiguration
-from brainframe.client.ui.dialogs.server_configuration.server_configuration import \
-    ServerConfigurationDialog
+from brainframe.api import bf_codecs
+from brainframe.client.ui.dialogs import AboutPage, CapsuleConfigDialog, \
+    RenderConfiguration, ServerConfigurationDialog
 from brainframe.client.ui.main_window.activities import StreamConfiguration
 from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
 from brainframe.client.ui.resources import stylesheet_watcher
@@ -62,14 +57,14 @@ class MainWindow(MainWindowUI):
     def _init_sidebar_signals(self) -> None:
 
         def display_stream_configuration(
-                stream_conf: Optional[codecs.StreamConfiguration]):
+                stream_conf: Optional[bf_codecs.StreamConfiguration]):
 
             stream_configuration = StreamConfiguration(self)
             stream_configuration.load_from_conf(stream_conf)
             self.show_sidebar_widget(stream_configuration)
 
         def toggle_stream_configuration(
-                stream_conf: Optional[codecs.StreamConfiguration]):
+                stream_conf: Optional[bf_codecs.StreamConfiguration]):
             """Toggle the stream configuration if the passed stream_conf is
             the same as the displayed one"""
             sidebar_widget = self.sidebar_dock_widget.widget()
@@ -86,7 +81,7 @@ class MainWindow(MainWindowUI):
                 self.close_sidebar_widget()
 
         def change_stream_configuration(
-                stream_conf: Optional[codecs.StreamConfiguration]):
+                stream_conf: Optional[bf_codecs.StreamConfiguration]):
             sidebar_widget = self.sidebar_dock_widget.widget()
             if not isinstance(sidebar_widget, StreamConfiguration):
                 return
@@ -158,7 +153,7 @@ class MainWindow(MainWindowUI):
                 self.close_sidebar_widget)
 
     def _handle_stream_config_modification(
-            self, stream_conf: codecs.StreamConfiguration) \
+            self, stream_conf: bf_codecs.StreamConfiguration) \
             -> None:
 
         sidebar_widget = self.sidebar_dock_widget.widget()
