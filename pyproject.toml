@@ -32,6 +32,10 @@ PyGObject = "~3.34.0"
 readerwriterlock = "^1.0.6"
 pycryptodomex = "^3.9.6"
 
+tabulate = "^0.8.7"
+# Match build environment
+opencv-python = "4.4.0"
+
 pip = { version = "^20.2.1", optional = true }
 cython = { version = "^0.29.21", optional = true }
 
@@ -62,6 +66,12 @@ server = [
     "pyyaml",
     "py-openapi-schema-json-schema",
     "jsonschema"
+]
+build = [
+    "vcap",
+    "vcap-utils",
+    "tabulate",
+    "opencv-python"
 ]
 client = [
     "brainframe-api",
