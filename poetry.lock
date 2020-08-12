@@ -120,7 +120,7 @@ description = "Highly-optimized, pure-python HTTP server"
 name = "cheroot"
 optional = true
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
-version = "8.4.2"
+version = "8.4.3"
 
 [package.dependencies]
 "jaraco.functools" = "*"
@@ -128,7 +128,7 @@ more-itertools = ">=2.6"
 six = ">=1.11.0"
 
 [package.extras]
-docs = ["sphinx (>=1.8.2)", "jaraco.packaging (>=3.2)", "sphinx-tabs (>=1.1.0)", "docutils", "alabaster", "python-dateutil", "sphinxcontrib-spelling (>=4.3.0)"]
+docs = ["sphinx (>=1.8.2)", "jaraco.packaging (>=3.2)", "sphinx-tabs (>=1.1.0)", "docutils", "alabaster", "python-dateutil", "sphinxcontrib-spelling (>=5.2.0)"]
 testing = ["pytest (>=4.6.6)", "pytest-mock (>=1.11.0)", "pytest-sugar (>=0.9.3)", "pytest-testmon (<1.0.0)", "pytest-watch (4.2.0)", "pytest-xdist (>=1.28.0)", "jaraco.text (>=3.1)", "codecov (2.0.22)", "pytest-cov (2.7.1)", "trustme (>=0.4.0)", "pyopenssl", "requests-unixsocket", "portend", "requests-toolbelt", "jaraco.context", "coverage (5.1)", "urllib3 (>=1.25)", "futures", "coverage (<5)", "urllib3 (<1.25)", "colorama (!=0.4.2)", "pytest-forked (>=1.2.0)", "pytest-forked (>=1.1.3)"]
 
 [[package]]
@@ -297,7 +297,7 @@ description = "Google API client core library"
 name = "google-api-core"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
-version = "1.22.0"
+version = "1.22.1"
 
 [package.dependencies]
 google-auth = ">=1.19.1,<2.0dev"
@@ -656,6 +656,14 @@ pyasn1 = ">=0.1.7"
 pyasn1-modules = ">=0.0.5"
 rsa = ">=3.1.4"
 six = ">=1.6.1"
+
+[[package]]
+category = "main"
+description = "Wrapper package for OpenCV python bindings."
+name = "opencv-python-headless"
+optional = false
+python-versions = ">=3.5"
+version = "4.4.0.40"
 
 [[package]]
 category = "main"
@@ -1084,6 +1092,17 @@ version = "1.15.0"
 
 [[package]]
 category = "main"
+description = "Pretty-print tabular data"
+name = "tabulate"
+optional = false
+python-versions = "*"
+version = "0.8.7"
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
+category = "main"
 description = "Objects and routines pertaining to date and time (tempora)"
 name = "tempora"
 optional = true
@@ -1328,13 +1347,14 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [extras]
+build = ["vcap", "vcap-utils", "tabulate", "opencv-python-headless"]
 client = ["brainframe-api", "pendulum", "numpy", "shapely", "ujson", "requests", "python-dateutil", "PyGObject", "readerwriterlock", "pycryptodomex"]
 client_build = ["pyinstaller"]
 client_res_build = ["pyqt5ac"]
-server = ["vcap", "vcap-utils", "falcon", "falcon-multipart", "peewee", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "jsonschema"]
+server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewee", "psycopg2-binary", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "py-openapi-schema-to-json-schema", "jsonschema"]
 
 [metadata]
-content-hash = "a241882519a978acf4f3483dd6d57d1a77dea694ec2e08c5cedce008a4e6b244"
+content-hash = "37495e4a6a58ded6488e888a9d8beca74cfe29b52943af0d68a6fd0f6ba4ed16"
 lock-version = "1.0"
 python-versions = "~3.6"
 
@@ -1423,8 +1443,8 @@ chardet = [
     {file = "chardet-3.0.4.tar.gz", hash = "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"},
 ]
 cheroot = [
-    {file = "cheroot-8.4.2-py2.py3-none-any.whl", hash = "sha256:931bd488d1465e6f7ddc862537e3d85a2f437b90b13e8ff08ce085b52572f56b"},
-    {file = "cheroot-8.4.2.tar.gz", hash = "sha256:2cab51836f57e340746245eb59dba652428b398fc24f5b2ee75e6671a2cc2a8d"},
+    {file = "cheroot-8.4.3-py2.py3-none-any.whl", hash = "sha256:c7be2d67a9ac69b46c6438b18f961e5766690e653337200a407893d9973758fa"},
+    {file = "cheroot-8.4.3.tar.gz", hash = "sha256:b500e36fb87406ca09f220561b4c61577fc1e4d1aaa7a60d57f2b5020a84d397"},
 ]
 cherrypy = [
     {file = "CherryPy-18.6.0-py2.py3-none-any.whl", hash = "sha256:c0a7283f02a384c112a0a18404fd3abd849fc7fd4bec19378067150a2573d2e4"},
@@ -1532,8 +1552,8 @@ gast = [
     {file = "gast-0.2.2.tar.gz", hash = "sha256:fe939df4583692f0512161ec1c880e0a10e71e6a232da045ab8edd3756fbadf0"},
 ]
 google-api-core = [
-    {file = "google-api-core-1.22.0.tar.gz", hash = "sha256:aaedc40ae977dbc2710f0de0012b673c8c7644f81ca0c93e839d22895f2ff29d"},
-    {file = "google_api_core-1.22.0-py2.py3-none-any.whl", hash = "sha256:c4e3b3d914e09d181287abb7101b42f308204fa5e8f89efc4839f607303caa2f"},
+    {file = "google-api-core-1.22.1.tar.gz", hash = "sha256:35cba563034d668ae90ffe1f03193a84e745b38f09592f60258358b5e5ee6238"},
+    {file = "google_api_core-1.22.1-py2.py3-none-any.whl", hash = "sha256:431839101b7edc7b0e6cccca0441cb9015f728fc5f098e146e123bf523e8cf71"},
 ]
 google-api-python-client = [
     {file = "google-api-python-client-1.10.0.tar.gz", hash = "sha256:fa24f07f6124ff2e91ee9b7550e240481bcb31b8f77a75e8d481be1c44a6ff07"},
@@ -1718,6 +1738,29 @@ numpy = [
 oauth2client = [
     {file = "oauth2client-4.1.3-py2.py3-none-any.whl", hash = "sha256:b8a81cc5d60e2d364f0b1b98f958dbd472887acaf1a5b05e21c28c31a2d6d3ac"},
     {file = "oauth2client-4.1.3.tar.gz", hash = "sha256:d486741e451287f69568a4d26d70d9acd73a2bbfa275746c535b4209891cccc6"},
+]
+opencv-python-headless = [
+    {file = "opencv-python-headless-4.4.0.40.tar.gz", hash = "sha256:4f6560c279a096602960c9234fad1e9c89b36b22da7580149304fda91599cdb1"},
+    {file = "opencv_python_headless-4.4.0.40-cp35-cp35m-macosx_10_13_x86_64.whl", hash = "sha256:1db432e5f45ad3cad47176c345fd29b4dcd0fa2e90b996de1ddfd979bce43371"},
+    {file = "opencv_python_headless-4.4.0.40-cp35-cp35m-manylinux2014_i686.whl", hash = "sha256:4a114a6f92a0dffd674491477595cf80e62264e2327ad0741d32484fd50cec5c"},
+    {file = "opencv_python_headless-4.4.0.40-cp35-cp35m-manylinux2014_x86_64.whl", hash = "sha256:7bfdf34c09a62b22d698c2f335c21047ba0430004f4f43b5ef72bd5284c6bf6e"},
+    {file = "opencv_python_headless-4.4.0.40-cp35-cp35m-win32.whl", hash = "sha256:3af570e326d19edebfe082cf4af240f3c318157ec157f954fbda4a344c442dd9"},
+    {file = "opencv_python_headless-4.4.0.40-cp35-cp35m-win_amd64.whl", hash = "sha256:fa8c4536f8a4264f6fb0b030c81cd84a2df0705eed2dd722f41e5f97b9df01d1"},
+    {file = "opencv_python_headless-4.4.0.40-cp36-cp36m-macosx_10_13_x86_64.whl", hash = "sha256:0ba87d4fed2ec4a19c4f9ee84fb71ec2c144e4efcb0fb31e7d339c585f9b2bcb"},
+    {file = "opencv_python_headless-4.4.0.40-cp36-cp36m-manylinux2014_i686.whl", hash = "sha256:880c69983c51c42ba5d017bf3a1414b007ce53e1a8c8edf66c42f1a6f312d7ac"},
+    {file = "opencv_python_headless-4.4.0.40-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:ecf93fc299510728e6baa1f4ea0e3dbaccf6ebf5e666eae44d7a4928b67a5850"},
+    {file = "opencv_python_headless-4.4.0.40-cp36-cp36m-win32.whl", hash = "sha256:10275fdb1333a3760d70830eba947450c3239a4c46f8972ceed2b1b074dbc063"},
+    {file = "opencv_python_headless-4.4.0.40-cp36-cp36m-win_amd64.whl", hash = "sha256:5bdbfa724c15b5aec489064e6a2c4b5c047dcd501e2a0deec143f4ddd3e4d4a7"},
+    {file = "opencv_python_headless-4.4.0.40-cp37-cp37m-macosx_10_13_x86_64.whl", hash = "sha256:8ffd36371e4f6cb7ba004eaf6311eb49a3b1a2fc14ed2698583a5834e5f729de"},
+    {file = "opencv_python_headless-4.4.0.40-cp37-cp37m-manylinux2014_i686.whl", hash = "sha256:80c88627eb47c4c6ee86734b2638a135c608f516b5888f248a7f12c6fbd3b194"},
+    {file = "opencv_python_headless-4.4.0.40-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:d82af90707ca102ddf420f5d193ce3d5028e7c025f9117afad94182e1e0c6cf6"},
+    {file = "opencv_python_headless-4.4.0.40-cp37-cp37m-win32.whl", hash = "sha256:6382b07d933b3411409bf444159382f459fe2e76f988aeb56d1756b572e6aedb"},
+    {file = "opencv_python_headless-4.4.0.40-cp37-cp37m-win_amd64.whl", hash = "sha256:0826c9470a80fa26ee90c82118b3317716f3b680e393381648c397439de30f42"},
+    {file = "opencv_python_headless-4.4.0.40-cp38-cp38-macosx_10_13_x86_64.whl", hash = "sha256:03325510b727bc02c48d5c8fc84688821b86c9cbae8c65df7128463796286149"},
+    {file = "opencv_python_headless-4.4.0.40-cp38-cp38-manylinux2014_i686.whl", hash = "sha256:bb8e2037ce402563cb62e29628acf59b851dfd59c51f0fe4160a5e28baf47a8c"},
+    {file = "opencv_python_headless-4.4.0.40-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:644e043e9281075e38736f13a77f104f2807f084fec3ee14f4d07d86a3b86ea1"},
+    {file = "opencv_python_headless-4.4.0.40-cp38-cp38-win32.whl", hash = "sha256:2384306f1934ec2f6799c9ddbe5dd0df63703b6a0d11d11b67d0c78f5650e7e5"},
+    {file = "opencv_python_headless-4.4.0.40-cp38-cp38-win_amd64.whl", hash = "sha256:923c8c1bdd0027d91f1cf7d4d2e32c8581eff7863574a414d8885048b9df3339"},
 ]
 opt-einsum = [
     {file = "opt_einsum-3.3.0-py3-none-any.whl", hash = "sha256:2455e59e3947d3c275477df7f5205b30635e266fe6dc300e3d9f9646bfcea147"},
@@ -2082,6 +2125,10 @@ shapely = [
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
     {file = "six-1.15.0.tar.gz", hash = "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"},
+]
+tabulate = [
+    {file = "tabulate-0.8.7-py3-none-any.whl", hash = "sha256:ac64cb76d53b1231d364babcd72abbb16855adac7de6665122f97b593f1eb2ba"},
+    {file = "tabulate-0.8.7.tar.gz", hash = "sha256:db2723a20d04bcda8522165c73eea7c300eda74e0ce852d9022e0159d7895007"},
 ]
 tempora = [
     {file = "tempora-4.0.0-py3-none-any.whl", hash = "sha256:9f46de767be7dd21d9602a8a5b0978fd55abc70af3e2a7814c85c00d7a8fffa3"},
