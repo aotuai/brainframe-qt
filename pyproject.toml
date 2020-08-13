@@ -32,6 +32,8 @@ PyGObject = "~3.34.0"
 readerwriterlock = "^1.0.6"
 pycryptodomex = "^3.9.6"
 
+cython = "^0.29.21"
+
 tabulate = "^0.8.7"
 # Match build environment
 opencv-python-headless = "^4.4.0"
@@ -65,6 +67,9 @@ server = [
     "jsonschema"
 ]
 build = [
+    "cython"
+]
+build_downloads = [
     "vcap",
     "vcap-utils",
     "tabulate",
