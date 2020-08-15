@@ -46,14 +46,13 @@ tabulate = "^0.8.7"
 # Match build environment
 opencv-python-headless = { version = "^4.4.0", optional = true }
 
-brainframe-api = { version = "~0.26", optional = true }
+brainframe-api = { git = "https://github.com/aotuai/brainframe_python", rev = "54fe078", optional = true }
 pendulum = { version = "^2.0.5", optional = true }
 
 pyqt5ac = { version = "^1.1.0", optional = true }
 pyinstaller = { version = "^3.6", optional = true }
 
 [tool.poetry.dev-dependencies]
-brainframe-api = "brainframe-api"
 pytest = "^6.0.1"
 mock = "^4.0.2"
 fabrisnake = { git = "ssh://git@bitbucket.org/teamdll/fabrisnake.git", rev = "v0.10.4" }
