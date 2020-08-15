@@ -20,7 +20,15 @@ cryptography = { version = "^3.0", optional = true }
 pyyaml = { version = "^5.3.1", optional = true }
 py-openapi-schema-to-json-schema = { version = "^0.0.3", optional = true }
 jsonschema = { version = "^3.2.0", optional = true }
-numpy = "^1.18.0"
+# Windows is locked to 1.16, due to gcc version on windows being 8.3. https://github.com/numpy/numpy/issues/14787
+# However, using markers and sys_platform doesn't work because of https://github.com/python-poetry/poetry/pull/2342
+# So. Once poetry fixes it's recursion error and once we update gcc on windows builds, we can bump numpy
+# We are using python versions as a workaround for the poetry issue, since the windows build _happens_ to use 3.7
+numpy = [
+    { version = "~1.16", python = "~3.7" },
+    { version = "^1.16", python = "~3.6" },
+]
+
 shapely = "1.6.4"  # Because our windows build requires 1.6.4.post2
 ujson = "^1.35"
 requests = "^2.23.0"
