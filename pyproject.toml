@@ -23,7 +23,7 @@ jsonschema = { version = "^3.2.0", optional = true }
 
 # Windows is locked to 1.16, due to gcc version on windows being 8.3. https://github.com/numpy/numpy/issues/14787
 numpy = [
-    { version = "~1.16", markers = "sys_platform == 'win32'"},
+    { version = "1.16.5", markers = "sys_platform == 'win32'"},
     { version = "^1.16", markers = "sys_platform == 'linux'"},
 ]
 
