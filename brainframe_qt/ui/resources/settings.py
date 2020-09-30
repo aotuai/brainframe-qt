@@ -1,9 +1,8 @@
 import sys
 
-from PyQt5.QtCore import QSettings
 import pendulum
+from PyQt5.QtCore import QSettings
 from pendulum.tz.timezone import Timezone
-
 
 _settings = QSettings(
     # MacOS uses internet domain instead of organization name
@@ -77,7 +76,7 @@ use_polygons = Setting(
     True, type_=bool, name="video_use_polygons")
 show_detection_tracks = Setting(
     True, type_=bool, name="video_show_tracks")
-show_recognition_confidence = Setting(
+show_recognition_labels = Setting(
     True, type_=bool, name="video_show_confidence")
 show_detection_labels = Setting(
     True, type_=bool, name="video_show_detection_labels")

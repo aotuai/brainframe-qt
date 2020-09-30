@@ -1,177 +1,148 @@
-import logging
+from enum import Enum, auto
+from typing import List, Optional
 
-from PyQt5.QtCore import pyqtSignal, QPointF, Qt
-from PyQt5.QtGui import QMouseEvent, QColor
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QMouseEvent
 from shapely import geometry
 
-from brainframe.client.ui.resources.video_items import (
-    ClickCircle,
-    StreamWidget,
-    StreamPolygon
-)
+from brainframe.client.ui.resources.video_items.base import VideoItem
+from brainframe.client.ui.resources.video_items.stream_widget import \
+    StreamWidget
+from brainframe.client.ui.resources.video_items.zones import \
+    InProgressLineItem, InProgressRegionItem, InProgressZoneItem
 
 
 class VideoTaskConfig(StreamWidget):
     polygon_is_valid_signal = pyqtSignal(bool)
 
-    draw_detections = False
-    draw_lines = True
-    draw_regions = True
+    class InProgressZoneType(Enum):
+        REGION = auto()
+        LINE = auto()
 
     def __init__(self, parent=None, stream_conf=None):
         super().__init__(stream_conf, parent)
 
-        # Variables related to making a new polygon
-        self.unconfirmed_polygon: StreamPolygon = None
-        self.max_points = None
+        # Allow for real-time zone previews
+        self.setMouseTracking(True)
 
-        # Set when a mousePressEvent occurs on top of a ClickCircle during
-        # edits
-        self.clicked_circle = None  # type: ClickCircle
+        # Always draw regions and lines. Never draw detections.
+        self.render_config.draw_regions = True
+        self.render_config.draw_lines = True
+        self.render_config.draw_detections = False
+
+        self.in_progress_zone: Optional[InProgressZoneItem] = None
+        """Displays to the user a zone with all the points they've chosen,
+        before the whole zone is confirmed
+        """
+        self.preview_zone: Optional[InProgressZoneItem] = None
+        """Displays to the user a zone with all the points they've chosen as
+        well as a point following the mouse cursor. This gives the user a
+        preview of what the zone would look like if they click.
+        """
+
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        click_pos = self.mapToScene(event.pos())
+        click_pos = (click_pos.x(), click_pos.y())
+        self._handle_click(click_pos)
+        super().mouseReleaseEvent(event)
+
+    def mouseMoveEvent(self, event: QMouseEvent):
+        # Don't do anything if we're not currently making a zone
+        if self.preview_zone is None:
+            return
+
+        # Update the preview zone if the user has the option to add more points
+        if self.in_progress_zone.takes_additional_points():
+            mouse_pos = self.mapToScene(event.pos())
+            mouse_pos = (mouse_pos.x(), mouse_pos.y())
+            self.preview_zone.update_latest_vertex(mouse_pos)
+
+    def _handle_click(self, click_pos: VideoItem.PointType) -> None:
+        # Don't do anything if we're not currently making a zone
+        if self.in_progress_zone is None:
+            return
+
+        # Don't do anything if the zone can't take any more points
+        if not self.in_progress_zone.takes_additional_points():
+            return
+
+        vertices = self.in_progress_zone.current_vertices
+
+        # Make sure click will result in a valid zone
+        if len(vertices) >= 3:
+            potential_vertices = vertices + [click_pos]
+            if not self._is_valid_polygon(potential_vertices):
+                return
+
+        # Add point to in-progress zone
+        self.in_progress_zone.add_vertex(click_pos)
+        # Add a new point to the preview zone, if a new point can be created
+        if self.in_progress_zone.takes_additional_points():
+            self.preview_zone.add_vertex(click_pos)
+
+        # Allow the user to confirm the zone if it's valid
+        if self.in_progress_zone.is_shape_ready():
+            self.polygon_is_valid_signal.emit(True)
 
     def handle_frame(self):
-
-        if self.unconfirmed_polygon is None:
+        # Only change the video frame if we're in the process of creating a new
+        # zone
+        if self.in_progress_zone is None:
             super().handle_frame()
         else:
             processed_frame = self.stream_reader.latest_processed_frame
             self.scene().set_frame(frame=processed_frame.frame)
 
-    def mousePressEvent(self, event: QMouseEvent):
-        item_at = self.itemAt(event.pos())
-        if isinstance(item_at, ClickCircle):
-            self.clicked_circle = self.itemAt(event.pos())
-
-    def mouseReleaseEvent(self, event: QMouseEvent):
-        """Called when mouse click is _released_ on Widget"""
-
-        # Don't do anything if a ClickCircle was clicked on mouse _press_
-        if self.clicked_circle:
-            self.clicked_circle = None
-            return
-
-        # Ignore mouseEvents (until new region is begun)
-        if self.unconfirmed_polygon is not None:
-            points = self.unconfirmed_polygon.points_list
-
-            # If maximum points has already been reached
-            if self.max_points is not None and len(points) >= self.max_points:
-                return
-
-            # Get the coordinates of the mouse press in the scene's coordinates
-            click = self.mapToScene(event.pos())
-
-            # Don't allow the user to input an invalid polygon
-            if len(self.unconfirmed_polygon.polygon) > 2:
-                if not self._is_polygon_valid(points, click):
-                    return
-
-            # Create new circle
-            circle = ClickCircle(click.x(), click.y(),
-                                 diameter=self.scene().width() / 50,
-                                 border_thickness=self.scene().width() / 100,
-                                 color=QColor(200, 50, 50))
-            self.scene().addItem(circle)
-            circle.setZValue(self.unconfirmed_polygon.zValue() + 1)
-
-            self.unconfirmed_polygon.insert_point(click)
-
-            # Draw item if not already drawn
-            if self.unconfirmed_polygon not in self.scene().items():
-                self.scene().addItem(self.unconfirmed_polygon)
-
-        super().mouseReleaseEvent(event)
-
-    def mouseMoveEvent(self, event: QMouseEvent):
-        """Render a line being drawn to show what the polygon will look like
-        if the mouse is clicked"""
-
-        if self.unconfirmed_polygon is None:
-            return
-        if len(self.unconfirmed_polygon.polygon) < 1:
-            return
-
-        mouse_pos = self.mapToScene(event.pos())
-        points = self.unconfirmed_polygon.points_list
-
-        self.scene().remove_items_by_type(StreamPolygon)
-
-        # Draw current polygon
-        self.scene().addItem(self.unconfirmed_polygon)
-
-        if event.buttons() == Qt.LeftButton and self.clicked_circle:
-            # We're dragging a circle
-
-            # Create a temp polygon and check if it's valid after dragging
-            temp_polygon = StreamPolygon(self.unconfirmed_polygon.polygon)
-            temp_polygon.move_point(self.clicked_circle.pos(), mouse_pos)
-
-            if (len(temp_polygon.polygon) > 2  # Don't check lines
-                    and not self._is_polygon_valid(temp_polygon.points_list)):
-                # If not valid, don't move anything
-                return
-
-                # Move polygon point and click circle
-            self.unconfirmed_polygon.move_point(self.clicked_circle.pos(),
-                                                mouse_pos)
-            self.clicked_circle.setPos(mouse_pos)
-
-        else:  # Nothing is being dragged.
-
-            # Only create a preview polygon if we have more points to add
-            # Otherwise, polygon drawn is what will be confirmed
-            if self.max_points is None or len(points) < self.max_points:
-                points.append((mouse_pos.x(), mouse_pos.y()))
-
-            preview_polygon = StreamPolygon(
-                points,
-                opacity=.25,
-                border_thickness=self.scene().width() / 200,
-                border_color=QColor(50, 255, 50))
-
-            # Draw preview polygon
-            self.scene().addItem(preview_polygon)
-
-    def start_new_polygon(self, max_points=None):
-
-        self.draw_regions = False
-        self.draw_lines = False
+    def start_new_zone(self, zone_type: InProgressZoneType) -> None:
+        # Temporarily disable region and line drawing
+        self.render_config.draw_regions = False
+        self.render_config.draw_lines = False
 
         self.scene().remove_all_items()
 
-        self.setMouseTracking(True)  # Allow for realtime zone updating
-        self.unconfirmed_polygon = StreamPolygon(
-            border_thickness=self.scene().width() / 200,
-            border_color=QColor(50, 255, 50))
-        self.max_points = max_points
+        if zone_type is self.InProgressZoneType.LINE:
+            self.in_progress_zone = InProgressLineItem(
+                coords=[],
+                render_config=self.render_config)
+            self.preview_zone = InProgressLineItem(
+                coords=[],
+                render_config=self.render_config,
+                line_style=Qt.DotLine)
+        elif zone_type is self.InProgressZoneType.REGION:
+            self.in_progress_zone = InProgressRegionItem(
+                coords=[],
+                render_config=self.render_config)
+            self.preview_zone = InProgressRegionItem(
+                coords=[],
+                render_config=self.render_config,
+                line_style=Qt.DotLine)
+        else:
+            raise NotImplementedError(f"Unknown zone type: {zone_type}")
 
-    def confirm_unconfirmed_polygon(self):
-        # Clear all objects that built up while making the polygon
-        new_polygon = self.unconfirmed_polygon.polygon
-        self.clean_up()
-        return new_polygon
+        # Add the first vertex to the preview zone
+        self.preview_zone.add_vertex((0.0, 0.0))
 
-    def clean_up(self):
-        """Return the widget back to the normal mode, where it is ready to start
-        creating a new polygon"""
-        if self.unconfirmed_polygon is not None:
-            self.scene().removeItem(self.unconfirmed_polygon)
-            self.scene().remove_items_by_type(StreamPolygon)
-            self.scene().remove_items_by_type(ClickCircle)
-            self.unconfirmed_polygon = None
-            self.max_points = None
+        self.scene().addItem(self.in_progress_zone)
+        self.scene().addItem(self.preview_zone)
 
-        self.draw_regions = True
-        self.draw_lines = True
+    def confirm_new_zone(self) -> List[VideoItem.PointType]:
+        zone_vertices = self.in_progress_zone.current_vertices
+        self.discard_new_zone()
+
+        return zone_vertices
+
+    def discard_new_zone(self) -> None:
+        # Re-enable region and line drawing
+        self.render_config.draw_regions = True
+        self.render_config.draw_lines = True
+
+        # Clear out in-progress state
+        self.scene().removeItem(self.in_progress_zone)
+        self.scene().removeItem(self.preview_zone)
+        self.in_progress_zone = None
+        self.preview_zone = None
 
     @staticmethod
-    def _is_polygon_valid(point_list, new_point: QPointF = None):
-        """Verify that a list of points is a valid shapely Polygon"""
-        if new_point:
-            if isinstance(new_point, QPointF):
-                new_point = new_point.x(), new_point.y()
-            point_list.append(new_point)
-
-        shapely_polygon = geometry.Polygon(point_list)
-
+    def _is_valid_polygon(vertices: List[VideoItem.PointType]) -> bool:
+        shapely_polygon = geometry.Polygon(vertices)
         return shapely_polygon.is_valid

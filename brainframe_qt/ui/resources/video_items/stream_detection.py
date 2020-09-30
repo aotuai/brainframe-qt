@@ -2,13 +2,13 @@ import random
 
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
+from brainframe.api.bf_codecs import Detection
 
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.api.bf_codecs import Detection
-from brainframe.client.ui.resources.video_items import (
-    StreamLabelBox,
+from brainframe.client.ui.resources.video_items.stream_label_box import \
+    StreamLabelBox
+from brainframe.client.ui.resources.video_items.stream_polygon import \
     StreamPolygon
-)
 
 _qcolor_cache = {}
 

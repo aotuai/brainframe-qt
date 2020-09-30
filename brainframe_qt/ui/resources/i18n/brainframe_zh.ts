@@ -1175,47 +1175,27 @@ Please recheck the entered server address.</source>
 <context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="75"/>
-        <source>New Line</source>
-        <translation>新检测线段</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="75"/>
-        <source>Name for new line:</source>
-        <translation>新检测线段名称：</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="84"/>
-        <source>New Region</source>
-        <translation>新检测区域</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="84"/>
-        <source>Name for new region:</source>
-        <translation>新检测区域名称：</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="111"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="113"/>
         <source>New zone cannot have fewer than 2 points</source>
         <translation>新检测区域不能由于少于两个点组成</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="153"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="156"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="198"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="204"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="199"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="205"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="201"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="207"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>
@@ -1258,6 +1238,26 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="210"/>
         <source>Cancel</source>
         <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="76"/>
+        <source>New Line</source>
+        <translation>新检测线段</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="76"/>
+        <source>Name for new line:</source>
+        <translation>新检测线段名称：</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="85"/>
+        <source>New Region</source>
+        <translation>新检测区域</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="85"/>
+        <source>Name for new region:</source>
+        <translation>新检测区域名称：</translation>
     </message>
 </context>
 <context>
@@ -1317,24 +1317,47 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
-    <name>ZoneStatusPolygon</name>
+    <name>ZoneStatusLabelItem</name>
     <message>
-        <location filename="../video_items/stream_zone_status.py" line="28"/>
+        <location filename="../video_items/zone_statuses/zone_status_label_item.py" line="63"/>
         <source>Entering: </source>
         <translation>进入： </translation>
     </message>
     <message>
-        <location filename="../video_items/stream_zone_status.py" line="40"/>
+        <location filename="../video_items/zone_statuses/zone_status_label_item.py" line="78"/>
         <source>Exiting: </source>
         <translation>离开： </translation>
     </message>
     <message>
-        <location filename="../video_items/stream_zone_status.py" line="52"/>
+        <location filename="../video_items/zone_statuses/zone_status_label_item.py" line="93"/>
         <source>Within: </source>
         <translation>在内： </translation>
     </message>
     <message>
-        <location filename="../video_items/stream_zone_status.py" line="70"/>
+        <location filename="../video_items/zone_statuses/zone_status_label_item.py" line="106"/>
+        <source>Alert!</source>
+        <translation>警报！</translation>
+    </message>
+</context>
+<context>
+    <name>ZoneStatusPolygon</name>
+    <message>
+        <location filename="../video_items/stream_zone_status.py" line="30"/>
+        <source>Entering: </source>
+        <translation>进入： </translation>
+    </message>
+    <message>
+        <location filename="../video_items/stream_zone_status.py" line="42"/>
+        <source>Exiting: </source>
+        <translation>离开： </translation>
+    </message>
+    <message>
+        <location filename="../video_items/stream_zone_status.py" line="54"/>
+        <source>Within: </source>
+        <translation>在内： </translation>
+    </message>
+    <message>
+        <location filename="../video_items/stream_zone_status.py" line="72"/>
         <source>Alert!</source>
         <translation>警报！</translation>
     </message>

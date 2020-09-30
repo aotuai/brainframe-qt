@@ -1,3 +1,5 @@
+from typing import Optional
+
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QInputDialog
 from PyQt5.uic import loadUi
@@ -9,6 +11,7 @@ from brainframe.client.ui.resources import QTAsyncWorker
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
+from .video_task_config import VideoTaskConfig
 
 
 class TaskConfiguration(QDialog):
@@ -32,7 +35,7 @@ class TaskConfiguration(QDialog):
 
         self._hide_operation_widgets(True)
 
-        self.cancel_op_button.clicked.connect(self.new_region_canceled)
+        self.cancel_op_button.clicked.connect(self.new_zone_canceled)
 
     @classmethod
     def open_configuration(cls, stream_conf, parent):
@@ -77,7 +80,7 @@ class TaskConfiguration(QDialog):
             self.tr("Name for new line:"))
         if line_name is None:
             return
-        self.new_zone(line_name, max_points=2)
+        self.new_zone(VideoTaskConfig.InProgressZoneType.LINE, line_name)
 
     @pyqtSlot()
     def new_region(self):
@@ -86,17 +89,17 @@ class TaskConfiguration(QDialog):
             self.tr("Name for new region:"))
         if region_name is None:
             return
-        self.new_zone(region_name)
+        self.new_zone(VideoTaskConfig.InProgressZoneType.REGION, region_name)
 
     @pyqtSlot()
-    def new_region_confirmed(self):
+    def new_zone_confirmed(self):
         self.instruction_label.setText("")
 
-        # Instruct the VideoTaskConfig to confirm the unconfirmed polygon and
-        # return its polygon for its points
-        polygon = self.video_task_config.confirm_unconfirmed_polygon()
+        # Instruct the VideoTaskConfig to confirm the unconfirmed zone and
+        # return its coordinates
+        self.unconfirmed_zone.coords \
+            = self.video_task_config.confirm_new_zone()
 
-        self.unconfirmed_zone.coords = [(pt.x(), pt.y()) for pt in polygon]
         """List of based point tuples
         
         Eg. [(0, 0), (100, 0), (100, 100), (0, 100)]
@@ -127,7 +130,7 @@ class TaskConfiguration(QDialog):
         self._hide_operation_widgets(True)
 
     @pyqtSlot()
-    def new_region_canceled(self):
+    def new_zone_canceled(self):
         if None in self.zone_list.zones:
             # Remove instruction text
             self.instruction_label.setText("")
@@ -136,16 +139,17 @@ class TaskConfiguration(QDialog):
             self.zone_list.delete_zone(None)
 
             # Instruct the VideoTaskConfig instance to delete its unconfirmed
-            # polygon
-            self.video_task_config.clean_up()
+            # zone
+            self.video_task_config.discard_new_zone()
 
             self._set_widgets_enabled(True)
             self._hide_operation_widgets(True)
 
-    def new_zone(self, new_zone_name, max_points=None):
+    def new_zone(self, zone_type: VideoTaskConfig.InProgressZoneType,
+                 zone_name: str) -> None:
         """Create a new zone (either line or region)"""
         # Create a new Zone
-        self.unconfirmed_zone = Zone(name=new_zone_name,
+        self.unconfirmed_zone = Zone(name=zone_name,
                                      stream_id=self.stream_conf.id,
                                      coords=[])
 
@@ -160,21 +164,25 @@ class TaskConfiguration(QDialog):
         # zone
         unconfirmed_zone_item.trash_button.clicked.disconnect()
         unconfirmed_zone_item.trash_button.clicked.connect(
-            self.new_region_canceled
+            self.new_zone_canceled
         )
 
         # Instruct the VideoTaskConfig instance to start accepting mouseEvents
-        self.video_task_config.start_new_polygon(max_points)
+        self.video_task_config.start_new_zone(zone_type)
 
         # Disable critical widgets from being interacted with during creation
         self._set_widgets_enabled(False)
         self._hide_operation_widgets(False)
 
+        # Disable confirmation until the zone has enough points to be valid
+        self.confirm_op_button.setEnabled(False)
+
     @pyqtSlot(bool)
     def enable_confirm_op_button(self, enable):
         self.confirm_op_button.setEnabled(enable)
 
-    def get_new_zone_name(self, prompt_title, prompt_text):
+    def get_new_zone_name(self, prompt_title: str, prompt_text: str) \
+            -> Optional[str]:
         """Get the name for a new zone, while checking if it exists"""
         while True:
             region_name, ok = QInputDialog.getText(self, prompt_title,

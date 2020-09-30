@@ -1,9 +1,10 @@
-from PyQt5.QtCore import pyqtSignal, QRectF, Qt
-from PyQt5.QtGui import QPainter, QColor, QImage, QFontMetricsF
+from PyQt5.QtCore import QRectF, Qt, pyqtSignal
+from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter
 
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import qt_resources
-from brainframe.client.ui.resources.video_items import StreamWidget
+from brainframe.client.ui.resources.video_items.stream_widget import \
+    StreamWidget
 
 
 class VideoSmall(StreamWidget):
@@ -102,7 +103,7 @@ class VideoSmall(StreamWidget):
                     - (bar_height * (1 - image_percent) / 2)),
                 image)
 
-            image_width_with_margins = image.width() + (2.5*image_margin)
+            image_width_with_margins = image.width() + (2.5 * image_margin)
 
         # Draw text
         font = painter.font()

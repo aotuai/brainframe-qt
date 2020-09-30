@@ -2,16 +2,17 @@ from typing import Callable
 
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QGraphicsView
-
-from brainframe.client.api_utils import api
 from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.api.bf_errors import StreamConfigNotFoundError, \
     StreamNotOpenedError
+
+from brainframe.client.api_utils import api
 from brainframe.client.api_utils.streaming import StreamListener, \
     SyncedStreamReader
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
     settings
+from brainframe.client.ui.resources.config import QSettingsRenderConfig
 from .stream_graphics_scene import StreamGraphicsScene
 
 
@@ -20,16 +21,6 @@ class StreamWidget(QGraphicsView):
 
     Makes use of a QTimer to get frames
     """
-    _draw_lines = None
-    _draw_regions = None
-    _draw_detections = None
-    _use_polygons = None
-    _show_detection_labels = None
-    _show_recognition_label = None
-    _show_detection_tracks = None
-    _show_attributes = None
-    _show_extra_data = None
-
     # Type hint that self.scene() is more than just a QGraphicsScene
     scene: Callable[[], StreamGraphicsScene]
 
@@ -37,11 +28,17 @@ class StreamWidget(QGraphicsView):
         # Order matters here, unfortunately
         super().__init__(parent)
 
+        self.render_config = QSettingsRenderConfig()
+
         # Remove ugly white background and border from QGraphicsView
         self.setStyleSheet("background-color: transparent; border: 0px")
 
         # Scene to draw items to
-        self.setScene(StreamGraphicsScene())
+        scene = StreamGraphicsScene(
+            render_config=self.render_config,
+            parent=self
+        )
+        self.setScene(scene)
 
         self.stream_listener = StreamListener()
         self.stream_reader: SyncedStreamReader = None  # Set in change_stream
@@ -76,22 +73,17 @@ class StreamWidget(QGraphicsView):
         self.scene().remove_all_items()
         self.scene().set_frame(frame=processed_frame.frame)
 
-        if self.draw_lines:
+        if self.render_config.draw_lines:
             self.scene().draw_lines(processed_frame.zone_statuses)
 
-        if self.draw_regions:
+        if self.render_config.draw_regions:
             self.scene().draw_regions(processed_frame.zone_statuses)
 
-        if self.draw_detections:
+        if self.render_config.draw_detections:
             self.scene().draw_detections(
                 frame_tstamp=processed_frame.tstamp,
-                tracks=processed_frame.tracks,
-                use_polygons=self.use_polygons,
-                show_recognition=self.show_recognition_label,
-                show_tracks=self.show_detection_tracks,
-                show_detection_labels=self.show_detection_labels,
-                show_attributes=self.show_attributes,
-                show_extra_data=self.show_extra_data)
+                tracks=processed_frame.tracks
+            )
 
     def handle_stream_initializing(self):
         self.scene().remove_all_items()
@@ -195,93 +187,3 @@ class StreamWidget(QGraphicsView):
             QCoreApplication.removePostedEvents(self)
 
             self.stream_reader = None
-
-    @property
-    def draw_lines(self):
-        if self._draw_lines is not None:
-            return self._draw_lines
-        return settings.draw_lines.val()
-
-    @draw_lines.setter
-    def draw_lines(self, draw_lines):
-        self._draw_lines = draw_lines
-
-    @property
-    def draw_regions(self):
-        if self._draw_regions is not None:
-            return self._draw_regions
-        return settings.draw_regions.val()
-
-    @draw_regions.setter
-    def draw_regions(self, draw_regions):
-        self._draw_regions = draw_regions
-
-    @property
-    def draw_detections(self):
-        if self._draw_detections is not None:
-            return self._draw_detections
-        return settings.draw_detections.val()
-
-    @draw_detections.setter
-    def draw_detections(self, draw_detections):
-        self._draw_detections = draw_detections
-
-    @property
-    def use_polygons(self):
-        if self._use_polygons is not None:
-            return self._use_polygons
-        return settings.use_polygons.val()
-
-    @use_polygons.setter
-    def use_polygons(self, use_polygons):
-        self._use_polygons = use_polygons
-
-    @property
-    def show_recognition_label(self):
-        if self._show_recognition_label is not None:
-            return self._show_recognition_label
-        return settings.show_recognition_confidence.val()
-
-    @show_recognition_label.setter
-    def show_recognition_label(self, show_detection_confidence):
-        self._show_recognition_label = show_detection_confidence
-
-    @property
-    def show_detection_tracks(self):
-        if self._show_detection_tracks is not None:
-            return self._show_detection_tracks
-        return settings.show_detection_tracks.val()
-
-    @show_detection_tracks.setter
-    def show_detection_tracks(self, show_detection_tracks):
-        self._show_detection_tracks = show_detection_tracks
-
-    @property
-    def show_detection_labels(self):
-        if self._show_detection_labels is not None:
-            return self._show_detection_labels
-        return settings.show_detection_labels.val()
-
-    @show_detection_labels.setter
-    def show_detection_labels(self, show_detection_labels):
-        self._show_detection_labels = show_detection_labels
-
-    @property
-    def show_attributes(self):
-        if self._show_attributes is not None:
-            return self._show_attributes
-        return settings.show_attributes.val()
-
-    @property
-    def show_extra_data(self):
-        if self._show_extra_data is not None:
-            return self._show_extra_data
-        return settings.show_extra_data.val()
-
-    @show_extra_data.setter
-    def show_extra_data(self, show_extra_data):
-        self._show_extra_data = show_extra_data
-
-    @show_attributes.setter
-    def show_attributes(self, show_attributes):
-        self._show_attributes = show_attributes

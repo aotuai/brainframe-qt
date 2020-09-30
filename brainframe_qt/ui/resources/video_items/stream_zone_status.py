@@ -1,10 +1,12 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
-
 from brainframe.api.bf_codecs import ZoneStatus
-from brainframe.client.ui.resources.video_items import StreamPolygon, \
+
+from brainframe.client.ui.resources.video_items.stream_label_box import \
     StreamLabelBox
+from brainframe.client.ui.resources.video_items.stream_polygon import \
+    StreamPolygon
 
 
 class ZoneStatusPolygon(StreamPolygon):

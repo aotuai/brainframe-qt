@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources import settings
+from brainframe.client.ui.resources.paths import qt_ui_paths
 
 
 class RenderConfiguration(QDialog):
@@ -38,7 +38,7 @@ class RenderConfiguration(QDialog):
         self.tracks_checkbox.setChecked(
             settings.show_detection_tracks.val())
         self.recognition_checkbox.setChecked(
-            settings.show_recognition_confidence.val())
+            settings.show_recognition_labels.val())
         self.extra_data_checkbox.setChecked(
             settings.show_extra_data.val())
 
@@ -71,7 +71,7 @@ class RenderConfiguration(QDialog):
             dialog.detection_attributes_checkbox.isChecked())
         settings.show_detection_tracks.set(
             dialog.tracks_checkbox.isChecked())
-        settings.show_recognition_confidence.set(
+        settings.show_recognition_labels.set(
             dialog.recognition_checkbox.isChecked())
         settings.show_extra_data.set(
             dialog.extra_data_checkbox.isChecked())
