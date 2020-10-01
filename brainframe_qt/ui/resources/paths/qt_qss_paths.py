@@ -21,7 +21,7 @@ activity_dir = route_path(main_window_dir / "activities")
 
 # Stream Activity
 stream_activity_dir = route_path(activity_dir / "stream_activity")
-stream_activity_qss = route_path(stream_activity_dir / "stream_activity.qss")
+stream_view_qss = route_path(stream_activity_dir / "stream_view.qss")
 
 # Video Thumbnail View
 video_thumbnail_view_dir = route_path(main_window_dir / "video_thumbnail_view")

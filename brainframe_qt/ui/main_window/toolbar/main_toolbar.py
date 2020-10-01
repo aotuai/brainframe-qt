@@ -1,90 +1,94 @@
-from typing import List
+from enum import Enum, auto
+from typing import Dict, List
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction, QToolBar, QSizePolicy, QToolButton, \
+from PyQt5.QtWidgets import QAction, QSizePolicy, QToolBar, QToolButton, \
     QWidget
 
 
 class MainToolbar(QToolBar):
+    class ToolbarSection(Enum):
+        WINDOWED = auto()
+        EXTENSION = auto()
+        DIALOG = auto()
+        ABOUT = auto()
+
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        stream_text = self.tr("Streams")
-        identity_text = self.tr("Identities")
-        alert_text = self.tr("Alerts")
-        task_config_text = self.tr("Tasks")
-        capsule_config_text = self.tr("Capsules")
-        client_config_text = self.tr("Client")
-        server_config_text = self.tr("Server")
-        about_page_text = self.tr("About")
-
-        self.stream_activity_action \
-            = self._init_action(":/icons/stream_toolbar", stream_text)
-        self.identity_activity_action \
-            = self._init_action(":/icons/identity_toolbar", identity_text)
-        self.alert_view_activity_action \
-            = self._init_action(":/icons/alert_view", alert_text)
-        self.task_config_action \
-            = self._init_action(":/icons/settings_gear", task_config_text)
-        self.capsule_config_action \
-            = self._init_action(":/icons/capsule_toolbar",
-                                capsule_config_text)
-        self.client_config_action \
-            = self._init_action(":/icons/client_config", client_config_text)
-        self.server_config_action \
-            = self._init_action(":/icons/server_config", server_config_text)
-        self.about_page_action \
-            = self._init_action(":/icons/info", about_page_text)
+        self._section_termini: Dict[self.ToolbarSection, QAction] = {}
 
         self._init_layout()
-        self._init_style()
-
-    def _init_action(self, icon_path: str, text: str) -> QAction:
-        icon = QIcon(icon_path)
-        return QAction(icon, text, self)
 
     def _init_layout(self) -> None:
-        self.addAction(self.stream_activity_action)
-        self.addAction(self.identity_activity_action)
-        self.addAction(self.alert_view_activity_action)
 
-        self.addWidget(self._create_spacer_widget())
+        # Create the invisible actions that we can insert other actions
+        # relative to
+        for toolbar_section in self.ToolbarSection:
+            section_terminus = self._create_terminus_action()
 
-        self.addSeparator()
+            self.addAction(section_terminus)
+            self._section_termini[toolbar_section] = section_terminus
 
-        # self.addAction(self.task_config_action)
-        self.addAction(self.capsule_config_action)
-        self.addAction(self.client_config_action)
-        self.addAction(self.server_config_action)
+        # Add spacer between extension and dialog sections
+        spacer = self._create_spacer_widget()
+        dialog_section_terminus \
+            = self._section_termini[self.ToolbarSection.DIALOG]
+        self.insertWidget(dialog_section_terminus, spacer)
 
-        self.addSeparator()
+        # Add separator before each section, except the first
+        for toolbar_section in list(self.ToolbarSection)[1:]:
+            section_terminus = self._section_termini[toolbar_section]
+            self.insertSeparator(section_terminus)
 
-        self.addAction(self.about_page_action)
+    def add_action(self, icon: QIcon, text: str,
+                   toolbar_section: ToolbarSection) -> QAction:
+        action = QAction(icon, text, self)
+        section_terminus = self._section_termini[toolbar_section]
+        self.insertAction(section_terminus, action)
 
-    def _init_style(self) -> None:
-        for action in self.button_actions:
-            button = self.widgetForAction(action)
+        button = self.widgetForAction(action)
 
-            button.setObjectName("unselected")
+        button.setObjectName("deselected")
+        # TODO: This is supposed to make all the buttons the same width,
+        #  not sure why it doesn't work. I set the button min-width to an
+        #  arbitrary value in the qss instead
+        button.setSizePolicy(QSizePolicy.Expanding,
+                             QSizePolicy.Preferred)
+        button.setCursor(Qt.PointingHandCursor)
 
-            # TODO: This is supposed to make all the buttons the same width,
-            #  not sure why it doesn't work. I set the button min-width to an
-            #  arbitrary value in the qss instead
-            button.setSizePolicy(QSizePolicy.Expanding,
-                                 QSizePolicy.Preferred)
-
-            button.setCursor(Qt.PointingHandCursor)
+        return action
 
     @property
     def button_actions(self) -> List[QAction]:
         actions = []
         for action in self.actions():
             button = self.widgetForAction(action)
+
+            # Hidden actions are used to insert other actions. We don't care
+            # about them here
+            if not action.isVisible():
+                continue
+
             if isinstance(button, QToolButton):
                 actions.append(action)
 
         return actions
+
+    def set_selected_action(self, action: QAction) -> None:
+
+        for action_ in self.button_actions:
+            button = self.widgetForAction(action_)
+
+            tag = "selected" if action_ is action else "deselected"
+            button.setObjectName(tag)
+
+    def _create_terminus_action(self) -> QAction:
+        """This is so that we can use QWidget.insertAction(before=...)"""
+        action = QAction(self)
+        action.setVisible(False)
+        return action
 
     def _create_spacer_widget(self) -> QWidget:
         widget = QWidget(self)

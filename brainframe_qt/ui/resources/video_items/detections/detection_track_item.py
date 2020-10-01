@@ -1,3 +1,4 @@
+import random
 import typing
 from typing import List
 
@@ -7,8 +8,6 @@ from PyQt5.QtWidgets import QGraphicsPathItem
 
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
 from brainframe.client.ui.resources.video_items.base import VideoItem
-from brainframe.client.ui.resources.video_items.stream_detection import \
-    generate_unique_qcolor
 
 
 class DetectionTrackItem(QGraphicsPathItem):
@@ -79,3 +78,17 @@ class DetectionTrackItem(QGraphicsPathItem):
         pen.setWidth(thickness)
 
         self.setPen(pen)
+
+
+_qcolor_cache = {}
+
+
+# TODO: Move to a utility file
+def generate_unique_qcolor(seed: str):
+    """Generate a unique QColor based on a string seed"""
+    if seed not in _qcolor_cache:
+        rand_seed = random.Random(seed)
+        hue = rand_seed.random()
+        _qcolor_cache[seed] = QColor.fromHsvF(hue, 1.0, 1.0)
+
+    return _qcolor_cache[seed]

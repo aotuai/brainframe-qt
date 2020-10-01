@@ -12,6 +12,7 @@ from brainframe.api import bf_codecs, bf_errors
 
 from brainframe import client
 from brainframe.client.api_utils import api
+from brainframe.client.extensions.loader import ExtensionLoader
 from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
@@ -81,6 +82,8 @@ class BrainFrameApplication(QApplication):
 
             message = self.tr("Successfully connected to server. Starting UI")
             self.splash_screen.showMessage(message)
+
+            ExtensionLoader().load_extensions()
 
             main_window = MainWindow()
             self.splash_screen.finish(main_window)

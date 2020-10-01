@@ -6,12 +6,9 @@ from PyQt5.QtWidgets import QGraphicsScene, QWidget
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
 from brainframe.client.ui.resources.config import QSettingsRenderConfig
 from brainframe.client.ui.resources.video_items.detections import DetectionItem
-from brainframe.client.ui.resources.video_items.stream_zone_status import \
-    ZoneStatusPolygon
 from brainframe.client.ui.resources.video_items.zone_statuses import \
     ZoneStatusItem
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
-from .stream_detection import DetectionPolygon
 
 
 class StreamGraphicsScene(QGraphicsScene):
@@ -87,18 +84,6 @@ class StreamGraphicsScene(QGraphicsScene):
                 track=track,
                 render_config=self.render_config
             )
-
-            # # Draw the detection on the screen
-            # det_polygon = DetectionPolygon(
-            #     detection=track.get_interpolated_detection(frame_tstamp),
-            #     track=track,
-            #     text_size=self._item_text_size,
-            #     use_polygons=render_config.use_polygons,
-            #     show_recognition=render_config.show_recognition_labels,
-            #     show_tracks=render_config.show_detection_tracks,
-            #     show_detection_labels=render_config.show_detection_labels,
-            #     show_attributes=render_config.show_attributes,
-            #     show_extra_data=render_config.show_extra_data)
             self.addItem(detection_item)
 
     def remove_items(self, items, condition=any):
@@ -106,45 +91,12 @@ class StreamGraphicsScene(QGraphicsScene):
             if condition is any or condition(item):
                 self.removeItem(item)
 
-    def remove_items_by_type(self, item_type):
-
-        def condition(item):
-            return type(item) == item_type
-
-        self.remove_items(self.items(), condition)
-
     def remove_all_items(self):
 
         def condition(item):
             return item is not self.current_frame
 
         self.remove_items(self.items(), condition)
-
-    def remove_detections(self):
-        self.remove_items_by_type(DetectionPolygon)
-
-    def remove_regions(self):
-        self.remove_items_by_type(ZoneStatusPolygon)
-
-    def remove_lines(self):
-        region_polygons = self.get_items_by_type(ZoneStatusPolygon)
-
-        def condition(item):
-            return len(item.polygon) == 2
-
-        self.remove_items(region_polygons, condition)
-
-    def remove_zones(self):
-        region_polygons = self.get_items_by_type(ZoneStatusPolygon)
-
-        def condition(item):
-            return len(item.polygon) > 2
-
-        self.remove_items(region_polygons, condition)
-
-    def get_items_by_type(self, item_type):
-        items = self.items()
-        return filter(lambda item: type(item) == item_type, items)
 
     @staticmethod
     def _get_pixmap_from_numpy_frame(frame):
@@ -161,14 +113,6 @@ class StreamGraphicsScene(QGraphicsScene):
         )
 
         self.addItem(zone_status_item)
-        # Border thickness as % of screen size
-        # border = self.width() / 200
-        # polygon = ZoneStatusPolygon(
-        #     zone_status,
-        #     text_size=self._item_text_size,
-        #     border_thickness=border)
-        #
-        # self.addItem(polygon)
 
     @property
     def _item_text_size(self):

@@ -1,8 +1,30 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QDialog, QWidget
 from PyQt5.uic import loadUi
 
+from brainframe.client.extensions import DialogActivity
 from brainframe.client.ui.resources import settings
 from brainframe.client.ui.resources.paths import qt_ui_paths
+
+
+class ClientConfigActivity(DialogActivity):
+
+    _built_in = True
+
+    def open(self, *, parent: QWidget):
+        RenderConfiguration.show_dialog(parent=parent)
+
+    def window_title(self) -> str:
+        return QApplication.translate("ClientConfigActivity",
+                                      "Client Configuration")
+
+    @staticmethod
+    def icon() -> QIcon:
+        return QIcon(":/icons/client_config")
+
+    @staticmethod
+    def short_name() -> str:
+        return QApplication.translate("ClientConfigActivity", "Client")
 
 
 class RenderConfiguration(QDialog):

@@ -1,9 +1,32 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QPushButton
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QDialog, QDialogButtonBox, \
+    QPushButton, QWidget
 from PyQt5.uic import loadUi
 
+from brainframe.client.extensions import DialogActivity
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from .capsule_options import StreamCapsuleOptionsWidget, GlobalCapsuleOptionsWidget
+from .capsule_options import GlobalCapsuleOptionsWidget, \
+    StreamCapsuleOptionsWidget
+
+
+class CapsuleConfigActivity(DialogActivity):
+    _built_in = True
+
+    def open(self, *, parent: QWidget):
+        CapsuleConfigDialog.show_dialog(parent=parent)
+
+    def window_title(self) -> str:
+        return QApplication.translate("CapsuleConfigActivity",
+                                      "Capsule Configuration")
+
+    @staticmethod
+    def icon() -> QIcon:
+        return QIcon(":/icons/capsule_toolbar")
+
+    @staticmethod
+    def short_name() -> str:
+        return QApplication.translate("CapsuleConfigActivity", "Capsules")
 
 
 class CapsuleConfigDialog(QDialog):

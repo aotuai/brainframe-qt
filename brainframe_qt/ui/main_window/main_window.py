@@ -1,15 +1,19 @@
-import functools
+from typing import Dict, Optional
+
 import typing
-from typing import Optional
-
-from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QAction, QWidget
-
 from brainframe.api import bf_codecs
-from brainframe.client.ui.dialogs import AboutPage, CapsuleConfigDialog, \
-    RenderConfiguration, ServerConfigurationDialog
-from brainframe.client.ui.main_window.activities import StreamConfiguration
+
+from brainframe.client.extensions import AboutActivity, ClientActivity, \
+    ClientExtension, DialogActivity, WindowedActivity
+from brainframe.client.ui.dialogs import AboutPageActivity, AlertActivity, \
+    CapsuleConfigActivity, ClientConfigActivity, ServerConfigActivity
+from brainframe.client.ui.main_window.activities import IdentityActivity, \
+    StreamActivity, StreamConfiguration
 from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
+from brainframe.client.ui.main_window.toolbar import MainToolbar
+from brainframe.client.ui.main_window.video_thumbnail_view import \
+    VideoThumbnailView
 from brainframe.client.ui.resources import stylesheet_watcher
 
 
@@ -18,41 +22,85 @@ class MainWindow(MainWindowUI):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
 
-        self.activity_action_map = {
-            self.toolbar.stream_activity_action: self.stream_activity,
-            self.toolbar.identity_activity_action: self.identity_activity,
-            self.toolbar.alert_view_activity_action: self.alert_activity
-        }
-        self.dialog_action_map = {
-            self.toolbar.capsule_config_action: CapsuleConfigDialog,
-            self.toolbar.client_config_action: RenderConfiguration,
-            self.toolbar.server_config_action: ServerConfigurationDialog,
-            self.toolbar.about_page_action: AboutPage
-        }
+        self._action_activity_map: Dict[QAction, ClientActivity] = {}
+        self._activity_widget_map: Dict[WindowedActivity, QWidget] = {}
+
+        # TODO: This is so we can manually connect signals between the
+        #       StreamConfiguration sidebar and the StreamView widget. It would
+        #       be nice to have a first-class way of interacting with the
+        #       sidebar
+        self._stream_activity = typing.cast(StreamActivity, None)
+
+        self._init_builtin_activities()
+        self._init_extension_activities()
 
         self._init_signals()
 
-        # Explicitly make the stream activity active (helps with styling)
-        # Not sure why the delay is necessary
-        select_stream_activity = functools.partial(
-            self.change_activity, self.toolbar.stream_activity_action)
-        QTimer.singleShot(0, select_stream_activity)
-
     def _init_signals(self) -> None:
-
-        self._init_activity_signals()
-        self._init_dialog_signals()
         self._init_sidebar_signals()
 
-    def _init_activity_signals(self) -> None:
+    def _init_builtin_activities(self):
 
-        for action in self.activity_action_map.keys():
-            action.triggered.connect(self._handle_action_click)
+        self._stream_activity = StreamActivity()
 
-    def _init_dialog_signals(self) -> None:
+        for activity in (
+                self._stream_activity,
+                IdentityActivity(),
+                AlertActivity(),
+                AboutPageActivity(),
+                CapsuleConfigActivity(),
+                ClientConfigActivity(),
+                ServerConfigActivity()
+        ):
+            self._init_activity(activity)
 
-        for action in self.dialog_action_map.keys():
-            action.triggered.connect(self._handle_action_click)
+    def _init_extension_activities(self):
+
+        for extension in ClientExtension.__subclasses__():
+            for activity_cls in extension.activities():
+                activity = activity_cls()
+                self._init_activity(activity)
+
+    def _init_activity(self, activity: ClientActivity):
+
+        toolbar_section = self._get_toolbar_section_for_activity(activity)
+
+        action = self.toolbar.add_action(
+            icon=activity.icon(),
+            text=activity.short_name(),
+            toolbar_section=toolbar_section)
+
+        self._action_activity_map[action] = activity
+
+        if isinstance(activity, WindowedActivity):
+            widget = activity.main_widget(parent=self)
+
+            self.stacked_widget.addWidget(widget)
+            self._activity_widget_map[activity] = widget
+
+            action.triggered.connect(lambda: self.change_activity(activity))
+        elif isinstance(activity, DialogActivity):
+            action.triggered.connect(lambda: activity.open(parent=self))
+
+        self.toolbar.set_selected_action(self._current_action)
+
+    def change_activity(self, activity: WindowedActivity):
+
+        prev_activity: WindowedActivity = self._current_activity
+        # TODO: Call this
+        # prev_activity.on_hide()
+
+        action = self._action_for_activity(activity)
+        self.toolbar.set_selected_action(action)
+
+        # Update stylesheet because we changed object names (must force reload)
+        stylesheet_watcher.update_widget(self)
+
+        widget = self._activity_widget_map[activity]
+        self.stacked_widget.setCurrentWidget(widget)
+
+        # TODO:
+        # activity.on_show()
 
     def _init_sidebar_signals(self) -> None:
 
@@ -88,41 +136,24 @@ class MainWindow(MainWindowUI):
 
             sidebar_widget.load_from_conf(stream_conf)
 
-        thumbnail_view = self.stream_activity.video_thumbnail_view
+        stream_view = self._activity_widget_map[self._stream_activity]
+        thumbnail_view: VideoThumbnailView = stream_view.video_thumbnail_view
         thumbnail_view.stream_clicked.connect(change_stream_configuration)
 
-        expanded_view = self.stream_activity.video_expanded_view
+        expanded_view = stream_view.video_expanded_view
         expanded_view.toggle_stream_config_signal.connect(
             toggle_stream_configuration)
         expanded_view.stream_delete_signal.connect(
             close_stream_configuration)
 
-        self.stream_activity.new_stream_button.clicked.connect(
+        # TODO: ...
+        stream_view.new_stream_button.clicked.connect(
             lambda: display_stream_configuration(None))
-
-    def change_activity(self, action: QAction) -> None:
-        # Change action button background
-        for action_ in self.toolbar.button_actions:
-            button = self.toolbar.widgetForAction(action_)
-
-            tag = "selected" if action_ is action else "deselected"
-            button.setObjectName(tag)
-
-        # Update stylesheet because we changed object names (must force reload)
-        stylesheet_watcher.update_widget(self)
-
-        # Open activity
-        widget = self.activity_action_map[action]
-        self.stacked_widget.setCurrentWidget(widget)
 
     def close_sidebar_widget(self):
         # TODO: What happens to previous widget
         self.sidebar_dock_widget.setWidget(None)
         self.sidebar_dock_widget.hide()
-
-    def open_dialog(self, action) -> None:
-        dialog = self.dialog_action_map[action]
-        dialog.show_dialog(self)
 
     def show_sidebar_widget(self, widget: QWidget):
         if widget is self.sidebar_dock_widget.widget():
@@ -139,18 +170,57 @@ class MainWindow(MainWindowUI):
 
         self.sidebar_dock_widget.show()
 
+    def _action_for_activity(self, activity: ClientActivity) -> QAction:
+
+        for action, activity_ in self._action_activity_map.items():
+            if activity_ is activity:
+                return action
+
+        raise RuntimeError(f"Unknown activity {activity}")
+
     def _connect_sidebar_widget_signals(self) -> None:
 
         sidebar_widget = self.sidebar_dock_widget.widget()
 
         if isinstance(sidebar_widget, StreamConfiguration):
+            stream_view = self._activity_widget_map[self._stream_activity]
             sidebar_widget.stream_conf_modified.connect(
-                self.stream_activity.video_thumbnail_view.add_stream_conf)
+                stream_view.video_thumbnail_view.add_stream_conf)
             sidebar_widget.stream_conf_modified.connect(
                 self._handle_stream_config_modification)
 
             sidebar_widget.stream_conf_deleted.connect(
                 self.close_sidebar_widget)
+
+    @property
+    def _current_activity(self) -> WindowedActivity:
+        current_widget = self.stacked_widget.currentWidget()
+
+        for activity, widget in self._activity_widget_map.items():
+            if widget is current_widget:
+                return activity
+
+        raise RuntimeError("Unknown current widget state")
+
+    @property
+    def _current_action(self) -> QAction:
+        return self._action_for_activity(self._current_activity)
+
+    @staticmethod
+    def _get_toolbar_section_for_activity(activity: ClientActivity) \
+            -> MainToolbar.ToolbarSection:
+        # noinspection PyProtectedMember
+        if not activity._built_in:
+            return MainToolbar.ToolbarSection.EXTENSION
+
+        if isinstance(activity, WindowedActivity):
+            return MainToolbar.ToolbarSection.WINDOWED
+        elif isinstance(activity, AboutActivity):
+            return MainToolbar.ToolbarSection.ABOUT
+        elif isinstance(activity, DialogActivity):
+            return MainToolbar.ToolbarSection.DIALOG
+        else:
+            raise ValueError
 
     def _handle_stream_config_modification(
             self, stream_conf: bf_codecs.StreamConfiguration) \
@@ -162,11 +232,5 @@ class MainWindow(MainWindowUI):
         if not isinstance(sidebar_widget, StreamConfiguration):
             return
 
-        self.stream_activity.open_expanded_view(stream_conf)
-
-    def _handle_action_click(self) -> None:
-        action = typing.cast(QAction, self.sender())
-        if action in self.activity_action_map:
-            self.change_activity(action)
-        elif action in self.dialog_action_map:
-            self.open_dialog(action)
+        stream_view = self._activity_widget_map[self._stream_activity]
+        stream_view.open_expanded_view(stream_conf)

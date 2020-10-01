@@ -1,17 +1,29 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import (
-    QDialog,
-    QPlainTextEdit,
-    QStyle,
-    QStyleOptionTab,
-    QStylePainter,
-    QTabBar,
-    QTabWidget
-)
+from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtWidgets import QApplication, QDialog, QPlainTextEdit, QStyle, \
+    QStyleOptionTab, QStylePainter, QTabBar, QTabWidget, QWidget
 from PyQt5.uic import loadUi
 
+from brainframe.client.extensions import AboutActivity
 from brainframe.client.ui.resources.paths import qt_ui_paths, text_paths
+
+
+class AboutPageActivity(AboutActivity):
+    _built_in = True
+
+    def open(self, *, parent: QWidget):
+        return AboutPage.show_dialog(parent=parent)
+
+    def window_title(self) -> str:
+        return QApplication.translate("AboutPageActivity", "About BrainFrame")
+
+    @staticmethod
+    def icon() -> QIcon:
+        return QIcon(":/icons/info")
+
+    @staticmethod
+    def short_name() -> str:
+        return QApplication.translate("AboutPageActivity", "About")
 
 
 class AboutPage(QDialog):
@@ -27,7 +39,6 @@ class AboutPage(QDialog):
         self.tab_widget.setTabPosition(QTabWidget.West)
 
         for license_ in sorted(text_paths.license_dir.iterdir()):
-
             # Create text field to display license
             tab = QPlainTextEdit(license_.read_text(encoding="utf8"), self)
             tab.setReadOnly(True)
@@ -43,7 +54,6 @@ class AboutPage(QDialog):
 
     @classmethod
     def show_dialog(cls, parent):
-
         dialog = cls(parent)
         dialog.exec_()
 

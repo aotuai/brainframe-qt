@@ -1,13 +1,10 @@
-import sys
+import typing
+from typing import Any
 
 import pendulum
+import sys
 from PyQt5.QtCore import QSettings
 from pendulum.tz.timezone import Timezone
-
-_settings = QSettings(
-    # MacOS uses internet domain instead of organization name
-    'aotu.ai' if sys.platform == 'darwin' else 'aotu',
-    'brainframe')
 
 
 class Setting:
@@ -15,6 +12,10 @@ class Setting:
     and also allows you to 'import' settings around the project without having
     to worry about keeping the name the same everywhere. It also helps refactor.
     """
+    _settings = QSettings(
+        # MacOS uses internet domain instead of organization name
+        'aotu.ai' if sys.platform == 'darwin' else 'aotu',
+        'brainframe')
 
     def __init__(self, default, type_, name):
         """Set the default if it doesn't exist yet"""
@@ -24,23 +25,57 @@ class Setting:
         self._cache = None
 
         # Record the setting officially if they don't exist yet
-        if default is not None and _settings.value(name) is None:
+        if default is not None and self._settings.value(name) is None:
             self.set(self.default)
 
     def set(self, value):
-        _settings.setValue(self.name, value)
+        self._settings.setValue(self.name, value)
         self._cache = value
 
     def val(self):
         if self._cache is None:
-            self._cache = _settings.value(self.name,
-                                          defaultValue=self.default,
-                                          type=self.type)
+            self._cache = self._settings.value(self.name,
+                                               defaultValue=self.default,
+                                               type=self.type)
         return self._cache
 
     def delete(self):
-        _settings.remove(self.name)
+        self._settings.remove(self.name)
         self._cache = None
+
+
+# TODO: Having to pass in a settings_object is less than ideal
+class QSettingsConfig:
+
+    def __init__(self, settings_object):
+        super().__setattr__("_settings", settings_object)
+        super().__setattr__("_overrides", {})
+
+    def __getattribute__(self, item: str) -> Any:
+        if item not in typing.get_type_hints(type(self)):
+            return super().__getattribute__(item)
+
+        _overrides = super().__getattribute__("_overrides")
+        try:
+            return _overrides[item]
+        except KeyError:
+            _settings = super().__getattribute__("_settings")
+            return getattr(_settings, item).val()
+
+    def __setattr__(self, key: str, value: Any):
+        if key not in typing.get_type_hints(type(self)):
+            raise AttributeError(f"Unknown option '{key}'")
+
+        _overrides = super().__getattribute__("_overrides")
+        _overrides[key] = value
+
+    def save_to_disk(self):
+        _settings = super().__getattribute__("_settings")
+        _overrides = super().__getattribute__("_overrides")
+
+        for key, value in _overrides.items():
+            settings_item: Setting = getattr(_settings, key)
+            settings_item.set(value)
 
 
 # System configuration settings
@@ -64,26 +99,6 @@ client_license_accepted = Setting(
     False, type_=bool, name="client_license_accepted")
 client_license_md5 = Setting(
     None, type_=str, name="client_license_md5")
-
-# Render Configuration Settings
-draw_lines = Setting(
-    True, type_=bool, name="video_draw_lines")
-draw_regions = Setting(
-    True, type_=bool, name="video_draw_regions")
-draw_detections = Setting(
-    True, type_=bool, name="video_draw_detections")
-use_polygons = Setting(
-    True, type_=bool, name="video_use_polygons")
-show_detection_tracks = Setting(
-    True, type_=bool, name="video_show_tracks")
-show_recognition_labels = Setting(
-    True, type_=bool, name="video_show_confidence")
-show_detection_labels = Setting(
-    True, type_=bool, name="video_show_detection_labels")
-show_attributes = Setting(
-    True, type_=bool, name="video_show_attributes")
-show_extra_data = Setting(
-    False, type_=bool, name="video_show_extra_data")
 
 
 def get_user_timezone() -> Timezone:

@@ -14,6 +14,19 @@
     </message>
 </context>
 <context>
+    <name>AboutPageActivity</name>
+    <message>
+        <location filename="../../dialogs/about_page/about_page.py" line="18"/>
+        <source>About BrainFrame</source>
+        <translation>关于BrainFrame</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/about_page/about_page.py" line="26"/>
+        <source>About</source>
+        <translation>关于</translation>
+    </message>
+</context>
+<context>
     <name>AddNewIdentitiesWorker</name>
     <message>
         <location filename="../../main_window/activities/identity_configuration/identity_adder_worker.py" line="171"/>
@@ -152,7 +165,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>AlarmView</name>
     <message>
-        <location filename="../../dialogs/alarm_view/alarm_view.py" line="31"/>
+        <location filename="../../dialogs/alarm_view/alarm_view.py" line="50"/>
         <source>Alarm Status</source>
         <translation>警报状态</translation>
     </message>
@@ -163,6 +176,14 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <location filename="../../dialogs/alarm_view/alarm_view_ui.py" line="24"/>
         <source>Add streams to start receiving alerts</source>
         <translation>添加视频流以开始接收报警信息</translation>
+    </message>
+</context>
+<context>
+    <name>AlertActivity</name>
+    <message>
+        <location filename="../../dialogs/alarm_view/alarm_view.py" line="31"/>
+        <source>Alerts</source>
+        <translation>警报</translation>
     </message>
 </context>
 <context>
@@ -256,79 +277,92 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="82"/>
+        <location filename="../../brainframe_app.py" line="83"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="186"/>
+        <location filename="../../brainframe_app.py" line="189"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="193"/>
+        <location filename="../../brainframe_app.py" line="196"/>
         <source>Attempting to communicate with server at {url}</source>
         <translation>尝试连接服务器至{url}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="200"/>
+        <location filename="../../brainframe_app.py" line="203"/>
         <source>Connected to server. Validating license</source>
         <translation>已连接到服务器，正在验证授权</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="254"/>
+        <location filename="../../brainframe_app.py" line="257"/>
         <source>Successfully connected to server</source>
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="256"/>
+        <location filename="../../brainframe_app.py" line="259"/>
         <source>License is expired. Please upload a new one</source>
         <translation>授权出现问题，请重新配置配置</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="259"/>
+        <location filename="../../brainframe_app.py" line="262"/>
         <source>Invalid License. Does the server have a connection to the internet?</source>
         <translation>授权无效，服务器是否已连接到互联网？</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="262"/>
+        <location filename="../../brainframe_app.py" line="265"/>
         <source>No license exists on the server. Please upload one</source>
         <translation>服务器上没有授权。请上传一个</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="265"/>
+        <location filename="../../brainframe_app.py" line="268"/>
         <source>Unknown issue with license. Contact Aotu</source>
         <translation>授权出现未知问题，请联系Aotu</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="98"/>
+        <location filename="../../brainframe_app.py" line="101"/>
         <source>Error</source>
         <translation>错误信息</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="99"/>
+        <location filename="../../brainframe_app.py" line="102"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="111"/>
+        <location filename="../../brainframe_app.py" line="114"/>
         <source>An unhandled exception occurred while communicating with the BrainFrame server</source>
         <translation>与BrainFrame服务器通信时发生未处理的异常</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="115"/>
+        <location filename="../../brainframe_app.py" line="118"/>
         <source>. The client must be closed.</source>
         <translation>。客户端必须关闭。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="275"/>
+        <location filename="../../brainframe_app.py" line="278"/>
         <source>Version Mismatch</source>
         <translation>版本不匹配</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="276"/>
+        <location filename="../../brainframe_app.py" line="279"/>
         <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
         <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
+    </message>
+</context>
+<context>
+    <name>CapsuleConfigActivity</name>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.py" line="20"/>
+        <source>Capsule Configuration</source>
+        <translation>算法胶囊配置</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.py" line="29"/>
+        <source>Capsules</source>
+        <translation>胶囊配置</translation>
     </message>
 </context>
 <context>
@@ -365,6 +399,19 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <location filename="../../dialogs/capsule_configuration/capsule_options/capsule_options.ui" line="155"/>
         <source>Override Global</source>
         <translation>覆盖全局选项</translation>
+    </message>
+</context>
+<context>
+    <name>ClientConfigActivity</name>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.py" line="18"/>
+        <source>Client Configuration</source>
+        <translation>客户端配置</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.py" line="27"/>
+        <source>Client</source>
+        <translation>客户端配置</translation>
     </message>
 </context>
 <context>
@@ -537,6 +584,14 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <location filename="../../dialogs/capsule_configuration/capsule_options/global_capsule_options.py" line="137"/>
         <source>There are no streams that override the global options for this capsule.</source>
         <translation>没有流覆盖了此算法胶囊的全局选项。</translation>
+    </message>
+</context>
+<context>
+    <name>IdentityActivity</name>
+    <message>
+        <location filename="../../main_window/activities/identity_configuration/identity_configuration.py" line="27"/>
+        <source>Identities</source>
+        <translation>身份</translation>
     </message>
 </context>
 <context>
@@ -799,49 +854,6 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     </message>
 </context>
 <context>
-    <name>MainToolbar</name>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="13"/>
-        <source>Streams</source>
-        <translation>视频流</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="14"/>
-        <source>Identities</source>
-        <translation>身份</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="15"/>
-        <source>Alerts</source>
-        <translation>警报</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="16"/>
-        <source>Tasks</source>
-        <translation>任务</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="19"/>
-        <source>Server</source>
-        <translation>服务器配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="20"/>
-        <source>About</source>
-        <translation>相关</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="18"/>
-        <source>Client</source>
-        <translation>客户端配置</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/toolbar/main_toolbar.py" line="17"/>
-        <source>Capsules</source>
-        <translation>胶囊</translation>
-    </message>
-</context>
-<context>
     <name>Paginator</name>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="62"/>
@@ -916,6 +928,19 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     </message>
 </context>
 <context>
+    <name>ServerConfigActivity</name>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="30"/>
+        <source>Server Configuration</source>
+        <translation>服务器选项</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="39"/>
+        <source>Server</source>
+        <translation>服务器选项</translation>
+    </message>
+</context>
+<context>
     <name>ServerConfigurationDialog</name>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="34"/>
@@ -948,41 +973,41 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="57"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="78"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="161"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="182"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="162"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="183"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="166"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="187"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="167"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="188"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="150"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="171"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="151"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="172"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
@@ -997,42 +1022,42 @@ Please recheck the entered server address.</source>
         <translation>授权配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="204"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="225"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="208"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="229"/>
         <source>Invalid License</source>
         <translation>无效授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="212"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="233"/>
         <source>Missing License</source>
         <translation>未检测到授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="216"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="237"/>
         <source>Connection Successful</source>
         <translation>连接成功</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="219"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="240"/>
         <source>Unknown license state</source>
         <translation>未知的授权状态</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="230"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="251"/>
         <source>Invalid credentials</source>
         <translation>证书无效</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="233"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="254"/>
         <source>Unable to locate server</source>
         <translation>无法连接到服务器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="198"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="219"/>
         <source>&lt;a href=&apos;{license_docs_link}&apos;&gt;Download&lt;/a&gt; a new one</source>
         <translation>&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个新的授权&lt;/a&gt;</translation>
     </message>
@@ -1048,6 +1073,14 @@ Please recheck the entered server address.</source>
         <location filename="../../splash_screen/splash_screen.py" line="58"/>
         <source>.</source>
         <translation>。</translation>
+    </message>
+</context>
+<context>
+    <name>StreamActivity</name>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_activity.py" line="21"/>
+        <source>Streams</source>
+        <translation>视频流</translation>
     </message>
 </context>
 <context>
@@ -1165,37 +1198,29 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
-    <name>StreamPolygon</name>
-    <message>
-        <location filename="../video_items/stream_detection.py" line="66"/>
-        <source>Name: </source>
-        <translation>名称： </translation>
-    </message>
-</context>
-<context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="113"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="114"/>
         <source>New zone cannot have fewer than 2 points</source>
         <translation>新检测区域不能由于少于两个点组成</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="156"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="157"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="204"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="206"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="205"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="207"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="207"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="209"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>
@@ -1240,22 +1265,22 @@ Please recheck the entered server address.</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="76"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="78"/>
         <source>New Line</source>
         <translation>新检测线段</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="76"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="78"/>
         <source>Name for new line:</source>
         <translation>新检测线段名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="85"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="87"/>
         <source>New Region</source>
         <translation>新检测区域</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="85"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="87"/>
         <source>Name for new region:</source>
         <translation>新检测区域名称：</translation>
     </message>
@@ -1340,29 +1365,6 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
-    <name>ZoneStatusPolygon</name>
-    <message>
-        <location filename="../video_items/stream_zone_status.py" line="30"/>
-        <source>Entering: </source>
-        <translation>进入： </translation>
-    </message>
-    <message>
-        <location filename="../video_items/stream_zone_status.py" line="42"/>
-        <source>Exiting: </source>
-        <translation>离开： </translation>
-    </message>
-    <message>
-        <location filename="../video_items/stream_zone_status.py" line="54"/>
-        <source>Within: </source>
-        <translation>在内： </translation>
-    </message>
-    <message>
-        <location filename="../video_items/stream_zone_status.py" line="72"/>
-        <source>Alert!</source>
-        <translation>警报！</translation>
-    </message>
-</context>
-<context>
     <name>_AdvancedOptionsGroupBox</name>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="262"/>
@@ -1391,14 +1393,6 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="84"/>
         <source>Licensed to:</source>
         <translation>授权给：</translation>
-    </message>
-</context>
-<context>
-    <name>_StreamActivityUI</name>
-    <message>
-        <location filename="../../main_window/activities/stream_activity/stream_activity_ui.py" line="37"/>
-        <source>Add new stream</source>
-        <translation>添加新视频流</translation>
     </message>
 </context>
 <context>
@@ -1432,6 +1426,14 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="148"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
+    </message>
+</context>
+<context>
+    <name>_StreamViewUI</name>
+    <message>
+        <location filename="../../main_window/activities/stream_activity/stream_view_ui.py" line="37"/>
+        <source>Add new stream</source>
+        <translation>添加新视频流</translation>
     </message>
 </context>
 <context>

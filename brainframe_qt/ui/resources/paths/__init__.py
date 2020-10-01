@@ -3,3 +3,4 @@
 from . import qt_qss_paths
 from . import qt_ui_paths
 from . import text_paths
+from .all_resource_paths import route_path

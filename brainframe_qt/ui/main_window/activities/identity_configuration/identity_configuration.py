@@ -1,16 +1,32 @@
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QDialog, QLineEdit, QProgressBar, QWidget
+from PyQt5.QtGui import QIcon, QPalette
+from PyQt5.QtWidgets import QApplication, QLineEdit, QProgressBar, QWidget
 from PyQt5.uic import loadUi
 
+from brainframe.client.extensions import WindowedActivity
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import \
     FloatingActionButton
 from brainframe.client.ui.resources.ui_elements.containers import Paginator
-
+from .identity_adder_worker import AddNewIdentitiesWorker
 from .identity_info import IdentityInfo
 from .identity_search_filter import IdentitySearchFilter
-from .identity_adder_worker import AddNewIdentitiesWorker
+
+
+class IdentityActivity(WindowedActivity):
+    @staticmethod
+    def icon() -> QIcon:
+        return QIcon(":/icons/identity_toolbar")
+
+    @staticmethod
+    def main_widget(*, parent: QWidget) -> QWidget:
+        return IdentityConfiguration(parent)
+
+    @staticmethod
+    def short_name() -> str:
+        return QApplication.translate("IdentityActivity", "Identities")
+
+    _built_in = True
 
 
 class IdentityConfiguration(QWidget):

@@ -13,7 +13,7 @@ from brainframe.client.ui.resources.ui_elements.buttons import \
     FloatingActionButton
 
 
-class _StreamActivityUI(QWidget):
+class _StreamViewUI(QWidget):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
@@ -70,4 +70,4 @@ class _StreamActivityUI(QWidget):
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
 
-        stylesheet_watcher.watch(self, qt_qss_paths.stream_activity_qss)
+        stylesheet_watcher.watch(self, qt_qss_paths.stream_view_qss)
