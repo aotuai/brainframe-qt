@@ -119,6 +119,8 @@ class _StreamOptions(QGroupBox):
 
         self.network_address_label = self._init_network_address_label()
         self.network_address_line_edit = self._init_network_address_line_edit()
+        self.network_address_help_button \
+            = self._init_network_address_help_button()
 
         self.webcam_device_label = self._init_webcam_device_label()
         self.webcam_device_line_edit = self._init_webcam_device_line_edit()
@@ -143,6 +145,14 @@ class _StreamOptions(QGroupBox):
     def _init_network_address_line_edit(self) -> QLineEdit:
         network_address_line_edit = QLineEdit(self)
         return network_address_line_edit
+
+    def _init_network_address_help_button(self) -> TextIconButton:
+        network_address_help_button = TextIconButton("?️", self)
+        network_address_help_button.setObjectName("help_button")
+
+        network_address_help_button.setFlat(True)
+
+        return network_address_help_button
 
     def _init_webcam_device_label(self) -> QLabel:
         text = self.tr("Device ID")
@@ -210,27 +220,29 @@ class _StreamOptions(QGroupBox):
         layout = QGridLayout()
 
         layout.addWidget(self.network_address_label, 0, 0)
-        layout.addWidget(self.network_address_line_edit, 0, 1, 1, 2)
+        layout.addWidget(self.network_address_line_edit, 0, 1)
+        layout.addWidget(self.network_address_help_button, 0, 2)
 
-        layout.addWidget(self.webcam_device_label, 1, 0)
-        layout.addWidget(self.webcam_device_line_edit, 1, 1)
-        layout.addWidget(self.webcam_device_help_button, 1, 2)
+        layout.addWidget(self.webcam_device_label, 2, 0)
+        layout.addWidget(self.webcam_device_line_edit, 2, 1)
+        layout.addWidget(self.webcam_device_help_button, 2, 2)
 
-        layout.addWidget(self.filepath_label, 2, 0)
-        layout.addWidget(self.file_selector, 2, 1, 1, 2)
+        layout.addWidget(self.filepath_label, 3, 0)
+        layout.addWidget(self.file_selector, 3, 1, 1, 2)
 
-        layout.addWidget(self.premises_label, 3, 0)
-        layout.addWidget(self.premises_combobox, 3, 1, 1, 2)
+        layout.addWidget(self.premises_label, 4, 0)
+        layout.addWidget(self.premises_combobox, 4, 1, 1, 2)
 
-        layout.addWidget(Line.h_line(self), 4, 0, 1, 3)
+        layout.addWidget(Line.h_line(self), 5, 0, 1, 3)
 
-        layout.addWidget(self.advanced_options, 5, 0, 1, 3)
+        layout.addWidget(self.advanced_options, 6, 0, 1, 3)
 
         self.setLayout(layout)
 
     def hide_all(self, hidden: bool) -> None:
         self.network_address_label.setHidden(hidden)
         self.network_address_line_edit.setHidden(hidden)
+        self.network_address_help_button.setHidden(hidden)
         self.webcam_device_label.setHidden(hidden)
         self.webcam_device_line_edit.setHidden(hidden)
         self.webcam_device_help_button.setHidden(hidden)

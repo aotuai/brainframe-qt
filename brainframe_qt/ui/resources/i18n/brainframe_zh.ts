@@ -1094,74 +1094,89 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="619"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="653"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="294"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="300"/>
         <source>Error encountered while uploading video file</source>
         <translation>上传视频文件过程中发生了一个错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="622"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="656"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="623"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="657"/>
         <source>You already have the stream source open.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="643"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="677"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="640"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="674"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="641"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="675"/>
         <source>Is stream already open?</source>
         <translation>视频流是否已打开？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="642"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="676"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="670"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="704"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="671"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="705"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="686"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="720"/>
         <source>Error uploading file</source>
         <translation>上传文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="687"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="721"/>
         <source>No such file: {filepath}</source>
         <translation>没有这样的文件：{filepath}</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="595"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="601"/>
         <source>Adding a webcam</source>
         <translation>添加一个网络摄像头</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="596"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="602"/>
         <source>Webcams and other video devices must be attached to the computer running the BrainFrame server.&lt;br&gt;&lt;br&gt;To add a webcam, open a terminal on the server machine and run &lt;pre&gt;ls /dev/video*&lt;/pre&gt;If you get a message about &quot;No such file or directory&quot;, you do not have any webcams attached to theserver computer.&lt;br&gt;&lt;br&gt;Otherwise, select the digit at the end of the results and provide it to BrainFrame. For example, if the command returns &quot;/dev/video0&quot;, input &quot;0&quot; (without the quotes).</source>
         <translation>网络摄像头和其他视频设备必须连接到运行BrainFrame的计算机。如果在启动BrainFrame后插入设备，请重新启动BrainFrame。&lt;br&gt;&lt;br&gt;要添加网络摄像头，请在服务器上打开终端并运行&lt;pre&gt;ls /dev/video*&lt;/pre&gt;如果收到类似“No such file or directory“的消息，则说明运行BrainFrame的计算机没有连接任何网络摄像头。&lt;br&gt;&lt;br&gt;否则，请选择结果末尾的数字并将其提供给BrainFrame。例如，如果命令返回“/dev/video0“，则输入“0“（不带引号）。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="627"/>
+        <source>Adding an IP Camera</source>
+        <translation>添加IP摄像头</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="631"/>
+        <source>Please see the &lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;documentation&lt;/a&gt; for more information on adding IP Cameras.</source>
+        <translation>有关添加IP摄像机的详细信息，请参见&lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;文档&lt;/a&gt;。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="628"/>
+        <source>Standard RTSP format:&lt;br&gt;{rtsp_format}</source>
+        <translation>标准RTSP格式：&lt;br&gt;{rtsp_format}</translation>
     </message>
 </context>
 <context>
@@ -1367,22 +1382,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>_AdvancedOptionsGroupBox</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="262"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="274"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="274"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="286"/>
         <source>Avoid transcoding</source>
         <translation>避免转码</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="269"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="281"/>
         <source>None</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="280"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="292"/>
         <source>Keyframe-only streaming</source>
         <translation>仅传输关键帧</translation>
     </message>
@@ -1398,32 +1413,32 @@ Please recheck the entered server address.</source>
 <context>
     <name>_StreamOptions</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="200"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="210"/>
         <source>Advanced Options</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="166"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="176"/>
         <source>Filepath</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="176"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="186"/>
         <source>Premises</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="182"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="192"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="138"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="140"/>
         <source>Network address</source>
         <translation>网络地址</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="148"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="158"/>
         <source>Device ID</source>
         <translation>设备编号</translation>
     </message>
