@@ -1,3 +1,5 @@
+from typing import Optional
+
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QDialog, QDialogButtonBox, \
@@ -31,7 +33,7 @@ class CapsuleConfigActivity(DialogActivity):
 
 class CapsuleConfigDialog(QDialog):
 
-    def __init__(self, stream_id=None, parent=None):
+    def __init__(self, stream_id: Optional[int] = None, parent=None):
         """
 
         :param stream_id: If not None, this will show options for a specific
@@ -44,10 +46,10 @@ class CapsuleConfigDialog(QDialog):
         loadUi(qt_ui_paths.capsule_config_dialog_ui, self)
 
         # Add the appropriate options widget
-        if stream_id:
-            options_widget = StreamCapsuleOptionsWidget(stream_id, parent=self)
-        else:
+        if stream_id is None:
             options_widget = GlobalCapsuleOptionsWidget(parent=self)
+        else:
+            options_widget = StreamCapsuleOptionsWidget(stream_id, parent=self)
         self.capsule_options_widget = options_widget
         self.layout().addWidget(self.capsule_options_widget, 1, 1)
 
