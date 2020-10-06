@@ -355,12 +355,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>CapsuleConfigActivity</name>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_config.py" line="20"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.py" line="22"/>
         <source>Capsule Configuration</source>
         <translation>算法胶囊配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_config.py" line="29"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_config.py" line="31"/>
         <source>Capsules</source>
         <translation>胶囊配置</translation>
     </message>
