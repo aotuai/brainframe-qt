@@ -1,14 +1,13 @@
-from distutils.util import strtobool
 import hashlib
 
 from PyQt5.QtWidgets import QBoxLayout, QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import qt_ui_paths, text_paths
 from brainframe.client.ui.resources import settings
+from brainframe.client.ui.resources.paths import qt_ui_paths, text_paths
 
 
-class LicenseAgreement(QDialog):
+class EULADialog(QDialog):
     """License agreement that a customer must agree to before using software"""
 
     def __init__(self, parent=None):

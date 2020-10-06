@@ -1,9 +1,9 @@
 import logging
-import sys
 import typing
 from traceback import TracebackException
 from typing import List, Optional
 
+import sys
 from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
     pyqtSlot
 from PyQt5.QtGui import QIcon
@@ -13,7 +13,7 @@ from brainframe.api import bf_codecs, bf_errors
 from brainframe import client
 from brainframe.client.api_utils import api
 from brainframe.client.extensions.loader import ExtensionLoader
-from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
+from brainframe.client.ui import EULADialog, MainWindow, SplashScreen
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
     settings
@@ -74,6 +74,8 @@ class BrainFrameApplication(QApplication):
             self.installTranslator(translator)
 
     def exec(self):
+
+        self._verify_eula()
 
         # Show splash screen while waiting for server connection
         with SplashScreen() as self.splash_screen:
@@ -182,10 +184,10 @@ class BrainFrameApplication(QApplication):
         api.close()
         gobject_init.close()
 
-    def _verify_license(self):
+    def _verify_eula(self):
         # Ensure that user has accepted license agreement.
         # Otherwise close program
-        if not LicenseAgreement.get_agreement(parent=None):
+        if not EULADialog.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
 
     def _connect_to_server(self):
