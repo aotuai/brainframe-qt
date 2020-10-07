@@ -16,15 +16,13 @@ class ExtensionLoader:
 
         root_dir = Path(sys.modules['__main__'].__file__).parent
 
-        return Path(os.environ.get("EXTENSION_LIB", root_dir / "extensions"))
+        extensions_dir = Path(os.environ.get("EXTENSION_LIB",
+                                             root_dir / "extensions"))
+        return route_path(extensions_dir)
 
     def load_extensions(self):
 
-        if not self.extension_dir.is_dir():
-            return
-
-        extension_dir = route_path(self.extension_dir)
-        extension_pattern = str(extension_dir / "**" / "extension.py")
+        extension_pattern = str(self.extension_dir / "**" / "extension.py")
         # Can't use Path.glob: https://bugs.python.org/issue33428
         for extension_init in map(Path, glob.glob(extension_pattern)):
             extension_dir = extension_init.parent

@@ -10,14 +10,34 @@ all_paths = []
 to make sure that all used resources get packaged into the executable"""
 
 
-def route_path(*args: Union[str, Path]) -> Path:
-    """This function takes a path, routes it to the correct spot, records it,
-    and returns a pathlib Path object"""
-    global all_paths
-    if hasattr(sys, '_MEIPASS'):
-        return Path(sys._MEIPASS, *args)
+def _running_in_build() -> bool:
+    return hasattr(sys, '_MEIPASS')
 
-    # Check if this file should be saved for pyinstaller
+
+def route_path(*args: Union[str, Path]) -> Path:
+    """This function takes a path, and routes it to the correct path based on
+    whether the client is running from source or in a build.
+
+    :returns: The Path object relative to the build path or source path.
+    """
+    if _running_in_build():
+        return Path(sys._MEIPASS, *args)
+    return Path(*args)
+
+
+def register_path(*args: Union[str, Path]) -> Path:
+    """ This function takes a path, routes it, records it for use in
+    pyinstaller builds, and returns a pathlib Path object
+
+    :raises FileNotFoundError: If the file/directory doesn't exist
+    :returns: The routed (and verified as existing) Path
+    """
+    if _running_in_build():
+        return route_path(*args)
+
+    global all_paths
+
+    # Check if this is a static file to be packaged by Pyinstaller
     path = Path(*args)
     if path.is_file():
         all_paths.append(str(path))
