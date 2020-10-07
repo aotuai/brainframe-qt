@@ -404,12 +404,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>ClientConfigActivity</name>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.py" line="18"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.py" line="19"/>
         <source>Client Configuration</source>
         <translation>客户端配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.py" line="27"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.py" line="28"/>
         <source>Client</source>
         <translation>客户端配置</translation>
     </message>
