@@ -1,7 +1,7 @@
 import bisect
 from dataclasses import dataclass
 from threading import RLock
-from typing import ClassVar, Dict, Final, List, Optional, TYPE_CHECKING, Tuple
+from typing import ClassVar, Dict, List, Optional, TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from brainframe.client.api_utils.streaming import SyncedStreamReader
@@ -19,7 +19,7 @@ class ReaderFrame:
 
 
 class SyncedFrameBuffer:
-    MAX_BUF_SIZE: Final[int] = 300  # Arbitrary but not too big
+    MAX_BUF_SIZE: int = 300  # Arbitrary but not too big
     _buffer_lock: ClassVar[RLock] = RLock()
 
     combined_buffer: ClassVar[List[Tuple[ReaderFrame]]] = []
