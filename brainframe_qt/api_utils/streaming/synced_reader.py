@@ -15,7 +15,7 @@ from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.utils import or_events
 from .frame_buffer import SyncedFrameBuffer
-from .processed_frame import ProcessedFrame
+from .zone_status_frame import ZoneStatusFrame
 
 
 class StreamListener:
@@ -63,7 +63,7 @@ class SyncedStreamReader(StreamReader):
         self._stream_reader = stream_reader
         self.status_receiver = status_receiver
 
-        self.latest_processed_frame = typing.cast(ProcessedFrame, None)
+        self.latest_processed_frame = typing.cast(ZoneStatusFrame, None)
 
         self.stream_listeners: Set[StreamListener] = set()
         self._stream_listeners_lock = RLock()
@@ -185,7 +185,7 @@ class SyncedStreamReader(StreamReader):
 
         logging.info("SyncedStreamReader: Closing")
 
-    def sync_frames(self) -> Generator[ProcessedFrame,
+    def sync_frames(self) -> Generator[ZoneStatusFrame,
                                        Tuple[float,
                                              np.ndarray,
                                              Dict[str, ZoneStatus]],
@@ -227,7 +227,7 @@ class SyncedStreamReader(StreamReader):
         while True:
             frame_tstamp, frame, statuses = yield latest_processed
 
-            processed_frame = ProcessedFrame(
+            processed_frame = ZoneStatusFrame(
                 frame, frame_tstamp, None, False, None)
             buffer.add_frame(processed_frame)
 
@@ -264,7 +264,7 @@ class SyncedStreamReader(StreamReader):
                 relevant_dets = [dt.copy() for dt in tracks.values()
                                  if dt.latest_tstamp == status_tstamp]
 
-                latest_processed = ProcessedFrame(
+                latest_processed = ZoneStatusFrame(
                     frame=frame.frame_rgb,
                     tstamp=frame.tstamp,
                     zone_statuses=statuses,

@@ -6,7 +6,7 @@ from brainframe.api.bf_codecs import ZoneStatus
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
 
 
-class ProcessedFrame:
+class ZoneStatusFrame:
     """A frame that may or may not have undergone processing on the server."""
 
     def __init__(self, frame, tstamp, zone_statuses, has_new_statuses, tracks):

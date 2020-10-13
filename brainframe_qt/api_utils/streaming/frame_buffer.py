@@ -5,16 +5,16 @@ from typing import ClassVar, Dict, List, Optional, TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from brainframe.client.api_utils.streaming import SyncedStreamReader
-from brainframe.client.api_utils.streaming.processed_frame import \
-    ProcessedFrame
+from brainframe.client.api_utils.streaming.zone_status_frame import \
+    ZoneStatusFrame
 
-_BUFFER_TYPE = List[ProcessedFrame]
+_BUFFER_TYPE = List[ZoneStatusFrame]
 
 
 @dataclass
 class ReaderFrame:
     stream_reader: 'SyncedStreamReader'
-    frame: 'ProcessedFrame'
+    frame: 'ZoneStatusFrame'
 
     def __lt__(self, other: 'ReaderFrame'):
         return self.frame.tstamp < other.frame.tstamp
@@ -25,7 +25,6 @@ class SyncedFrameBuffer:
     _buffer_lock: ClassVar[RLock] = RLock()
 
     combined_buffer: ClassVar[List[ReaderFrame]] = []
-
     instance_buffers: ClassVar[Dict['SyncedStreamReader', _BUFFER_TYPE]] = {}
 
     def __init__(self, stream_reader: 'SyncedStreamReader'):
@@ -33,7 +32,8 @@ class SyncedFrameBuffer:
         self.instance_buffers[stream_reader] = []
 
     def __del__(self):
-        # This could be done by looping over self.pop, but this is faster
+        # This could be done by looping over self.pop_oldest, but this is
+        # faster
         with self._buffer_lock:
             # Filter all frames in queue and remove those belonging to
             # this instance's SyncedStreamReader
@@ -46,7 +46,7 @@ class SyncedFrameBuffer:
             # Remove dict entry to this SyncedStreamReader entirely
             self.instance_buffers.pop(self.stream_reader)
 
-    def add_frame(self, frame: ProcessedFrame) -> None:
+    def add_frame(self, frame: ZoneStatusFrame) -> None:
         with self._buffer_lock:
             while len(self.combined_buffer) >= self.MAX_BUF_SIZE:
                 self._remove_oldest_frame()
@@ -59,7 +59,7 @@ class SyncedFrameBuffer:
             bisect.insort_left(self.combined_buffer, reader_frame)
             self._instance_buffer.append(frame)
 
-    def pop_oldest(self) -> ProcessedFrame:
+    def pop_oldest(self) -> ZoneStatusFrame:
         """Pop the oldest frame from this instance's buffer"""
         with self._buffer_lock:
             # Get oldest frame for stream
@@ -77,11 +77,11 @@ class SyncedFrameBuffer:
 
         return frame
 
-    def pop_until(self, tstamp: float) -> Optional[ProcessedFrame]:
+    def pop_until(self, tstamp: float) -> Optional[ZoneStatusFrame]:
         """Pop frames until the provided oldest frame in the buffer is newer
         than the provided tstamp
         """
-        oldest_frame: Optional[ProcessedFrame] = None
+        oldest_frame: Optional[ZoneStatusFrame] = None
 
         with self._buffer_lock:
             while True:
@@ -94,7 +94,7 @@ class SyncedFrameBuffer:
 
         return oldest_frame
 
-    def pop_if_older(self, tstamp: float) -> Optional[ProcessedFrame]:
+    def pop_if_older(self, tstamp: float) -> Optional[ZoneStatusFrame]:
         """Pop the oldest frame in the buffer if its tstamp is older than the
         one supplied.
 
