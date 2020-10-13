@@ -1,7 +1,7 @@
 import bisect
 from dataclasses import dataclass
 from threading import RLock
-from typing import ClassVar, Dict, List, Optional, TYPE_CHECKING, Tuple
+from typing import ClassVar, Dict, List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from brainframe.client.api_utils.streaming import SyncedStreamReader
