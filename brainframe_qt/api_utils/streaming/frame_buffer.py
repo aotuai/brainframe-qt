@@ -37,7 +37,7 @@ class SyncedFrameBuffer:
         with self._buffer_lock:
             # Filter all frames in queue and remove those belonging to
             # this instance's SyncedStreamReader
-            self.combined_buffer = [
+            type(self).combined_buffer = [
                 reader_frame
                 for reader_frame in self.combined_buffer
                 if reader_frame.stream_reader is not self.stream_reader
