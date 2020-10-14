@@ -22,7 +22,7 @@ class EULADialog(QDialog):
         # Reverse the order of the buttons to be standard (accept on left)
         self.button_box.layout().setDirection(QBoxLayout.RightToLeft)
 
-        self.text = self.get_text_from_file(text_paths.license_agreement_txt)
+        self.text = self.get_text_from_file(text_paths.eula_txt)
         self.license_text.setPlainText(self.text)
 
     @classmethod

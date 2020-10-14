@@ -6,7 +6,7 @@ for translation_file in i18n_dir.glob("*.qm"):
     register_path(translation_file)
 
 # License paths
-license_agreement_txt = register_path("license.txt")
+eula_txt = register_path("licenses", "eula.txt")
 license_dir = register_path("brainframe", "shared", "licenses")
 for license_file in license_dir.iterdir():
     register_path(license_file)
