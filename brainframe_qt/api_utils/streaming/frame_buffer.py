@@ -1,5 +1,6 @@
 import bisect
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime
 from threading import RLock
 from typing import ClassVar, Dict, List, Optional, TYPE_CHECKING
 
@@ -15,9 +16,16 @@ _BUFFER_TYPE = List[ZoneStatusFrame]
 class ReaderFrame:
     stream_reader: 'SyncedStreamReader'
     frame: 'ZoneStatusFrame'
+    tstamp: datetime = field(compare=False, default=-1)
 
     def __lt__(self, other: 'ReaderFrame'):
-        return self.frame.tstamp < other.frame.tstamp
+        # Compare frame timestamps if same stream reader, in the off chance we
+        # get out-of-order frames for a stream
+        if self.stream_reader is other.stream_reader:
+            return self.frame.tstamp < other.frame.tstamp
+
+        # Otherwise, compare frame reception times
+        return self.tstamp < other.tstamp
 
 
 class SyncedFrameBuffer:
@@ -53,7 +61,8 @@ class SyncedFrameBuffer:
 
             reader_frame = ReaderFrame(
                 stream_reader=self.stream_reader,
-                frame=frame
+                frame=frame,
+                tstamp=datetime.now()
             )
 
             bisect.insort_left(self.combined_buffer, reader_frame)
