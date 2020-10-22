@@ -1,14 +1,14 @@
 import logging
 import typing
 from threading import Event, RLock, Thread
-from time import sleep
-from typing import Dict, Generator, List, Set, Tuple
+from typing import Dict, Generator, List, Optional, Set, Tuple
 from uuid import UUID, uuid4
 
 import numpy as np
-
 from brainframe.api import StatusReceiver
 from brainframe.api.bf_codecs import ZoneStatus
+from time import sleep
+
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
@@ -226,8 +226,8 @@ class SyncedStreamReader(StreamReader):
         """Keep track of the timestamp of the last new zonestatus that was 
         received."""
 
-        last_used_zone_statuses = None
-        """The last zone statuse object that was put into a processed frame.
+        last_used_zone_statuses: Optional[Dict[str, ZoneStatus]] = None
+        """The last zone status object that was put into a processed frame.
         Useful for identifying if a ProcessFrame has new information, or is 
         simply paired with old information."""
 
@@ -256,14 +256,25 @@ class SyncedStreamReader(StreamReader):
             frame_tstamp, frame, statuses = yield latest_processed
 
             buffer.append(
-                ProcessedFrame(frame, frame_tstamp, None, False, None))
+                ProcessedFrame(
+                    frame=frame,
+                    tstamp=frame_tstamp,
+                    zone_statuses=None,
+                    has_new_statuses=False,
+                    tracks=None
+                )
+            )
 
-            # Get a timestamp from any of the zone statuses
-            status_tstamp = (statuses[DEFAULT_ZONE_NAME].tstamp
-                             if len(statuses) else None)
+            # Analysis still spinning up. Skip
+            if not len(statuses):
+                latest_processed = None
+                continue
+
+            # Get timestamp off of default zone's status (all should be equal)
+            status_tstamp = statuses[DEFAULT_ZONE_NAME].tstamp
 
             # Check if this is a fresh zone_status or not
-            if len(statuses) and last_status_tstamp != status_tstamp:
+            if last_status_tstamp != status_tstamp:
                 # Catch up to the previous inference frame
                 while len(buffer) and buffer[0].tstamp < last_status_tstamp:
                     buffer.pop(0)
@@ -279,33 +290,26 @@ class SyncedStreamReader(StreamReader):
                         tracks[track_id] = DetectionTrack()
                     tracks[track_id].add_detection(det, status_tstamp)
 
-            # If we have inference later than the current frame, update the
-            # current frame
-            if len(buffer) and buffer[0].tstamp <= last_status_tstamp:
+            # Process old frame and/or drain the buffer if over capacity
+            if (
+                (len(buffer) and buffer[0].tstamp <= last_status_tstamp)
+                or len(buffer) > self.MAX_BUF_SIZE
+            ):
                 frame = buffer.pop(0)
 
-                # Get a list of DetectionTracks that had a detection for
-                # this timestamp
-                relevant_dets = [dt.copy() for dt in tracks.values()
-                                 if dt.latest_tstamp == status_tstamp]
+                latest_processed = self._apply_statuses_to_frame(
+                    frame=frame,
+                    statuses=statuses,
+                    tracks=tracks,
+                    has_new_statuses=last_used_zone_statuses != statuses
+                )
 
-                latest_processed = ProcessedFrame(
-                    frame=frame.frame_rgb,
-                    tstamp=frame.tstamp,
-                    zone_statuses=statuses,
-                    has_new_statuses=statuses != last_used_zone_statuses,
-                    tracks=relevant_dets)
                 last_used_zone_statuses = statuses
-            else:
-                latest_processed = None
-
-            # Drain the buffer if it is getting too large
-            while len(buffer) > self.MAX_BUF_SIZE:
-                buffer.pop(0)
 
             # Prune DetectionTracks that haven't had a detection in a while
             for uuid, track in list(tracks.items()):
-                if frame_tstamp - track.latest_tstamp > self.MAX_CACHE_TRACK_SECONDS:
+                detection_lapse = frame_tstamp - track.latest_tstamp
+                if detection_lapse > self.MAX_CACHE_TRACK_SECONDS:
                     del tracks[uuid]
 
     def close(self):
@@ -316,3 +320,27 @@ class SyncedStreamReader(StreamReader):
         """Hangs until the SyncedStreamReader has been closed."""
         self._stream_reader.wait_until_closed()
         self._thread.join()
+
+    # noinspection PyMethodMayBeStatic
+    def _apply_statuses_to_frame(self, frame: ProcessedFrame,
+                                 statuses: Dict[str, ZoneStatus],
+                                 tracks: Dict[UUID, DetectionTrack],
+                                 has_new_statuses: bool) \
+            -> ProcessedFrame:
+
+        # Get timestamp off of default zone's status (all should be equal)
+        status_tstamp = statuses[DEFAULT_ZONE_NAME].tstamp
+
+        # Get a list of DetectionTracks that had a detection for
+        # this timestamp
+        relevant_dets = [dt.copy() for dt in tracks.values()
+                         if dt.latest_tstamp == status_tstamp]
+
+        applied_frame = ProcessedFrame(
+            frame=frame.frame_rgb,
+            tstamp=frame.tstamp,
+            zone_statuses=statuses,
+            has_new_statuses=has_new_statuses,
+            tracks=relevant_dets)
+
+        return applied_frame
