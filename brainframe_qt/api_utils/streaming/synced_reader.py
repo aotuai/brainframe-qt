@@ -228,15 +228,24 @@ class SyncedStreamReader(StreamReader):
             frame_tstamp, frame, statuses = yield latest_processed
 
             processed_frame = ZoneStatusFrame(
-                frame, frame_tstamp, None, False, None)
-            buffer.add_frame(processed_frame)
+                frame=frame,
+                tstamp=frame_tstamp,
+                zone_statuses=None,
+                has_new_statuses=False,
+                tracks=None
+            )
+            popped_frame = buffer.add_frame(processed_frame)
 
-            # Get a timestamp from any of the zone statuses
-            status_tstamp = (statuses[DEFAULT_ZONE_NAME].tstamp
-                             if len(statuses) else None)
+            # Analysis still spinning up. Skip
+            if not len(statuses):
+                latest_processed = None
+                continue
+
+            # Get timestamp off of default zone's status (all should be equal)
+            status_tstamp = statuses[DEFAULT_ZONE_NAME].tstamp
 
             # Check if this is a fresh zone_status or not
-            if len(statuses) and last_status_tstamp != status_tstamp:
+            if last_status_tstamp != status_tstamp:
                 # Catch buffer up to the previous inference frame (get rid of
                 # frames that the client will never render because it's running
                 # too far behind)
@@ -257,26 +266,23 @@ class SyncedStreamReader(StreamReader):
             # If we have a zone status/inference result newer than the latest
             # received frame, associate the buffer's oldest frame with the zone
             # status
-            frame = buffer.pop_if_older(last_status_tstamp)
-            if frame is not None:
-                # Get a list of DetectionTracks that had a detection for
-                # this timestamp
-                relevant_dets = [dt.copy() for dt in tracks.values()
-                                 if dt.latest_tstamp == status_tstamp]
+            if not popped_frame:
+                popped_frame = buffer.pop_if_older(last_status_tstamp)
+            if popped_frame is not None:
 
-                latest_processed = ZoneStatusFrame(
-                    frame=frame.frame_rgb,
-                    tstamp=frame.tstamp,
-                    zone_statuses=statuses,
-                    has_new_statuses=statuses != last_used_zone_statuses,
-                    tracks=relevant_dets)
+                latest_processed = self._apply_statuses_to_frame(
+                    frame=popped_frame,
+                    statuses=statuses,
+                    tracks=tracks,
+                    has_new_statuses=last_used_zone_statuses != statuses
+                )
+
                 last_used_zone_statuses = statuses
-            else:
-                latest_processed = None
 
             # Prune DetectionTracks that haven't had a detection in a while
             for uuid, track in list(tracks.items()):
-                if frame_tstamp - track.latest_tstamp > self.MAX_CACHE_TRACK_SECONDS:
+                detection_lapse = frame_tstamp - track.latest_tstamp
+                if detection_lapse > self.MAX_CACHE_TRACK_SECONDS:
                     del tracks[uuid]
 
     def close(self):
@@ -287,3 +293,27 @@ class SyncedStreamReader(StreamReader):
         """Hangs until the SyncedStreamReader has been closed."""
         self._stream_reader.wait_until_closed()
         self._thread.join()
+
+    # noinspection PyMethodMayBeStatic
+    def _apply_statuses_to_frame(self, frame: ZoneStatusFrame,
+                                 statuses: Dict[str, ZoneStatus],
+                                 tracks: Dict[UUID, DetectionTrack],
+                                 has_new_statuses: bool) \
+            -> ZoneStatusFrame:
+
+        # Get timestamp off of default zone's status (all should be equal)
+        status_tstamp = statuses[DEFAULT_ZONE_NAME].tstamp
+
+        # Get a list of DetectionTracks that had a detection for
+        # this timestamp
+        relevant_dets = [dt.copy() for dt in tracks.values()
+                         if dt.latest_tstamp == status_tstamp]
+
+        applied_frame = ZoneStatusFrame(
+            frame=frame.frame_rgb,
+            tstamp=frame.tstamp,
+            zone_statuses=statuses,
+            has_new_statuses=has_new_statuses,
+            tracks=relevant_dets)
+
+        return applied_frame

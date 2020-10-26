@@ -46,10 +46,14 @@ class SyncedFrameBuffer:
             # Remove dict entry to this SyncedStreamReader entirely
             self.instance_buffers.pop(self.stream_reader)
 
-    def add_frame(self, frame: ZoneStatusFrame) -> None:
+    def add_frame(self, frame: ZoneStatusFrame) -> ZoneStatusFrame:
+
+        popped_frame: Optional[ZoneStatusFrame] = None
+
         with self._buffer_lock:
-            while len(self.combined_buffer) >= self.MAX_BUF_SIZE:
-                self._remove_oldest_frame()
+            if len(self.combined_buffer) == self.MAX_BUF_SIZE:
+                popped_frame = self.pop_oldest()
+            assert len(self.combined_buffer) < self.MAX_BUF_SIZE
 
             reader_frame = ReaderFrame(
                 stream_reader=self.stream_reader,
@@ -58,6 +62,8 @@ class SyncedFrameBuffer:
 
             bisect.insort_left(self.combined_buffer, reader_frame)
             self._instance_buffer.append(frame)
+
+        return popped_frame
 
     def pop_oldest(self) -> ZoneStatusFrame:
         """Pop the oldest frame from this instance's buffer"""
