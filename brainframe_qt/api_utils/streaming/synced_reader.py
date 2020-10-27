@@ -16,6 +16,38 @@ from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.utils import or_events
 
 
+class BufferSize:
+    MAX_BUFFER_SIZE = 300
+    MIN_BUFFER_GUARANTEE = 30
+    """If the buffer is full, we guarantee a new/slow stream at least this many
+    frames of space even if it means going over the max buffer size"""
+
+    def __init__(self):
+        self._lock = RLock()
+        self._buffer_size: int = 0
+
+    def increment(self):
+        with self._lock:
+            self._buffer_size += 1
+
+    def decrement(self):
+        with self._lock:
+            self._buffer_size -= 1
+
+    def is_full(self):
+        return self._buffer_size >= self.MAX_BUFFER_SIZE
+
+    def lock(self) -> RLock:
+        return self._lock
+
+    @property
+    def value(self) -> int:
+        return self._buffer_size
+
+
+buffer_size = BufferSize()
+
+
 class StreamListener:
     """This is used by SyncedStreamReader to pass events to the UI"""
 
@@ -264,6 +296,8 @@ class SyncedStreamReader(StreamReader):
                     tracks=None
                 )
             )
+            buffer_size.increment()
+            print("Buffer size:", buffer_size.value)
 
             # Analysis still spinning up. Skip
             if not len(statuses):
@@ -278,6 +312,7 @@ class SyncedStreamReader(StreamReader):
                 # Catch up to the previous inference frame
                 while len(buffer) and buffer[0].tstamp < last_status_tstamp:
                     buffer.pop(0)
+                    buffer_size.decrement()
                 last_status_tstamp = status_tstamp
 
                 # Iterate over all new detections, and add them to their tracks
@@ -290,12 +325,17 @@ class SyncedStreamReader(StreamReader):
                         tracks[track_id] = DetectionTrack()
                     tracks[track_id].add_detection(det, status_tstamp)
 
+            frame_to_match: bool = (
+                    len(buffer)
+                    and buffer[0].tstamp <= last_status_tstamp)
+            buffer_full: bool = buffer_size.is_full()
+            needs_guarantee: bool \
+                = len(buffer) < buffer_size.MIN_BUFFER_GUARANTEE
+
             # Process old frame and/or drain the buffer if over capacity
-            if (
-                (len(buffer) and buffer[0].tstamp <= last_status_tstamp)
-                or len(buffer) > self.MAX_BUF_SIZE
-            ):
+            if frame_to_match or (buffer_full and not needs_guarantee):
                 frame = buffer.pop(0)
+                buffer_size.decrement()
 
                 latest_processed = self._apply_statuses_to_frame(
                     frame=frame,
