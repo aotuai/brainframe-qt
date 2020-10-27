@@ -1,13 +1,13 @@
 import logging
 import typing
 from threading import Event, RLock, Thread
-from typing import Dict, Generator, Set, Tuple
+from time import sleep
+from typing import Dict, Generator, List, Optional, Set, Tuple
 from uuid import UUID, uuid4
 
 import numpy as np
 from brainframe.api import StatusReceiver
 from brainframe.api.bf_codecs import ZoneStatus
-from time import sleep
 
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
 from brainframe.shared.constants import DEFAULT_ZONE_NAME
@@ -198,8 +198,8 @@ class SyncedStreamReader(StreamReader):
         """Keep track of the timestamp of the last new zonestatus that was 
         received."""
 
-        last_used_zone_statuses = None
-        """The last zone statuse object that was put into a processed frame.
+        last_used_zone_statuses: Optional[Dict[str, ZoneStatus]] = None
+        """The last zone status object that was put into a processed frame.
         Useful for identifying if a ProcessFrame has new information, or is 
         simply paired with old information."""
 
@@ -227,14 +227,16 @@ class SyncedStreamReader(StreamReader):
         while True:
             frame_tstamp, frame, statuses = yield latest_processed
 
-            processed_frame = ZoneStatusFrame(
-                frame=frame,
-                tstamp=frame_tstamp,
-                zone_statuses=None,
-                has_new_statuses=False,
-                tracks=None
+            buffer.add_frame(
+                ZoneStatusFrame(
+                    frame=frame,
+                    tstamp=frame_tstamp,
+                    zone_statuses=None,
+                    has_new_statuses=False,
+                    tracks=None
+                )
             )
-            popped_frame = buffer.add_frame(processed_frame)
+            buffer_size.increment()
 
             # Analysis still spinning up. Skip
             if not len(statuses):
@@ -250,6 +252,7 @@ class SyncedStreamReader(StreamReader):
                 # frames that the client will never render because it's running
                 # too far behind)
                 buffer.pop_until(last_status_tstamp)
+                buffer_size.decrement()
 
                 last_status_tstamp = status_tstamp
 
@@ -266,12 +269,18 @@ class SyncedStreamReader(StreamReader):
             # If we have a zone status/inference result newer than the latest
             # received frame, associate the buffer's oldest frame with the zone
             # status
-            if not popped_frame:
-                popped_frame = buffer.pop_if_older(last_status_tstamp)
-            if popped_frame is not None:
+            popped_frame = buffer.pop_if_older(last_status_tstamp)
 
+            # Pop a frame if we're over the combined buffer max, but we
+            # also have more frames than the guaranteed minimum
+            if popped_frame is not None:
+                if buffer.is_full() or buffer.needs_guaranteed_space():
+                    popped_frame = buffer.pop_oldest()
+
+            # If we have a frame using any means, use it
+            if popped_frame is not None:
                 latest_processed = self._apply_statuses_to_frame(
-                    frame=popped_frame,
+                    frame=frame,
                     statuses=statuses,
                     tracks=tracks,
                     has_new_statuses=last_used_zone_statuses != statuses
