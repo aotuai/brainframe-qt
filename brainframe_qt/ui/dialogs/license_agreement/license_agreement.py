@@ -51,6 +51,6 @@ class EULADialog(QDialog):
     @staticmethod
     def get_text_from_file(path):
         """Get text from path as a string"""
-        with open(path) as fi:
+        with open(path, encoding="UTF8") as fi:
             text = fi.read()
         return text
