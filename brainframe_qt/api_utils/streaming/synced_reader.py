@@ -271,7 +271,7 @@ class SyncedStreamReader(StreamReader):
 
             # Pop a frame if we're over the combined buffer max, but we
             # also have more frames than the guaranteed minimum
-            if popped_frame is not None:
+            if popped_frame is None:
                 if buffer.is_full and not buffer.needs_guaranteed_space:
                     popped_frame = buffer.pop_oldest()
 
