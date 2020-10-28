@@ -1,87 +1,52 @@
-import bisect
-from dataclasses import dataclass
 from threading import RLock
-from typing import ClassVar, Dict, List, Optional, TYPE_CHECKING
+from typing import ClassVar, List, Optional
+from weakref import WeakSet
 
-if TYPE_CHECKING:
-    from brainframe.client.api_utils.streaming import SyncedStreamReader
 from brainframe.client.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrame
-
-_BUFFER_TYPE = List[ZoneStatusFrame]
-
-
-@dataclass
-class ReaderFrame:
-    stream_reader: 'SyncedStreamReader'
-    frame: 'ZoneStatusFrame'
-
-    def __lt__(self, other: 'ReaderFrame'):
-        return self.frame.tstamp < other.frame.tstamp
 
 
 class SyncedFrameBuffer:
     MAX_BUF_SIZE: int = 300  # Arbitrary but not too big
+    GUARANTEED_BUFFER_SPACE: int = 30
+    """Amount of space each buffer is allocated, even if total is over max"""
+
     _buffer_lock: ClassVar[RLock] = RLock()
 
-    combined_buffer: ClassVar[List[ReaderFrame]] = []
-    instance_buffers: ClassVar[Dict['SyncedStreamReader', _BUFFER_TYPE]] = {}
+    _instances = WeakSet()  # type: ClassVar[WeakSet[SyncedFrameBuffer]]
 
-    def __init__(self, stream_reader: 'SyncedStreamReader'):
-        self.stream_reader = stream_reader
-        self.instance_buffers[stream_reader] = []
+    def __init__(self):
+        self._buffer: List[ZoneStatusFrame] = []
+        self._instances.add(self)
 
-    def __del__(self):
-        # This could be done by looping over self.pop_oldest, but this is
-        # faster
+    def __len__(self) -> int:
+        return len(self._buffer)
+
+    def add_frame(self, frame: ZoneStatusFrame) -> None:
         with self._buffer_lock:
-            # Filter all frames in queue and remove those belonging to
-            # this instance's SyncedStreamReader
-            type(self).combined_buffer = [
-                reader_frame
-                for reader_frame in self.combined_buffer
-                if reader_frame.stream_reader is not self.stream_reader
-            ]
+            self._buffer.append(frame)
 
-            # Remove dict entry to this SyncedStreamReader entirely
-            self.instance_buffers.pop(self.stream_reader)
+    @property
+    def is_empty(self) -> bool:
+        return not len(self)
 
-    def add_frame(self, frame: ZoneStatusFrame) -> ZoneStatusFrame:
+    @property
+    def is_full(self) -> bool:
+        return self._total_length >= self.MAX_BUF_SIZE
 
-        popped_frame: Optional[ZoneStatusFrame] = None
+    @property
+    def needs_guaranteed_space(self) -> bool:
+        return len(self) < self.GUARANTEED_BUFFER_SPACE
 
+    def pop_oldest(self) -> Optional[ZoneStatusFrame]:
+        """Pop the oldest frame from this instance's buffer. None if buffer is
+        empty"""
         with self._buffer_lock:
-            if len(self.combined_buffer) == self.MAX_BUF_SIZE:
-                popped_frame = self.pop_oldest()
-            assert len(self.combined_buffer) < self.MAX_BUF_SIZE
+            if self.is_empty:
+                return None
 
-            reader_frame = ReaderFrame(
-                stream_reader=self.stream_reader,
-                frame=frame
-            )
-
-            bisect.insort_left(self.combined_buffer, reader_frame)
-            self._instance_buffer.append(frame)
-
-        return popped_frame
-
-    def pop_oldest(self) -> ZoneStatusFrame:
-        """Pop the oldest frame from this instance's buffer"""
-        with self._buffer_lock:
             # Get oldest frame for stream
-            frame = self._instance_buffer.pop(0)
-
-            reader_frame = ReaderFrame(
-                stream_reader=self.stream_reader,
-                frame=frame
-            )
-
-            # TODO: Test with really large buffer. Make sure not too
-            #       computationally intensive
-            # Remove it from combined buffer
-            self.combined_buffer.remove(reader_frame)
-
-        return frame
+            return self._buffer.pop(0)
 
     def pop_until(self, tstamp: float) -> Optional[ZoneStatusFrame]:
         """Pop frames until the provided oldest frame in the buffer is newer
@@ -109,10 +74,10 @@ class SyncedFrameBuffer:
 
         """
         with self._buffer_lock:
-            if not len(self._instance_buffer):
+            if self.is_empty:
                 return None
 
-            oldest_frame = self._instance_buffer[0]
+            oldest_frame = self._buffer[0]
 
             if oldest_frame.tstamp < tstamp:
                 # Pop the frame from both instance and combined buffers
@@ -123,18 +88,7 @@ class SyncedFrameBuffer:
             else:
                 return None
 
-    def _remove_oldest_frame(self) -> None:
-        with self._buffer_lock:
-            reader_frame = self.combined_buffer.pop(0)
-
-            frame = reader_frame.frame
-            stream_reader = reader_frame.stream_reader
-
-            # Note that we're popping a frame from a potentially different
-            # instance's buffer
-            popped_frame = self.instance_buffers[stream_reader].pop(0)
-            assert frame is popped_frame
-
     @property
-    def _instance_buffer(self) -> _BUFFER_TYPE:
-        return self.instance_buffers[self.stream_reader]
+    def _total_length(self) -> int:
+        with self._buffer_lock:
+            return sum(map(len, self._instances))

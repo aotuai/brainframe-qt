@@ -206,7 +206,7 @@ class SyncedStreamReader(StreamReader):
         latest_processed = None
         """Keeps track of the latest ProcessedFrame with information"""
 
-        buffer = SyncedFrameBuffer(stream_reader=self)
+        buffer = SyncedFrameBuffer()
         """Holds a queue of empty ProcessedFrames until a new status comes in
         that is
                                       sB
@@ -236,7 +236,6 @@ class SyncedStreamReader(StreamReader):
                     tracks=None
                 )
             )
-            buffer_size.increment()
 
             # Analysis still spinning up. Skip
             if not len(statuses):
@@ -252,7 +251,6 @@ class SyncedStreamReader(StreamReader):
                 # frames that the client will never render because it's running
                 # too far behind)
                 buffer.pop_until(last_status_tstamp)
-                buffer_size.decrement()
 
                 last_status_tstamp = status_tstamp
 
@@ -274,13 +272,13 @@ class SyncedStreamReader(StreamReader):
             # Pop a frame if we're over the combined buffer max, but we
             # also have more frames than the guaranteed minimum
             if popped_frame is not None:
-                if buffer.is_full() or buffer.needs_guaranteed_space():
+                if buffer.is_full and not buffer.needs_guaranteed_space:
                     popped_frame = buffer.pop_oldest()
 
             # If we have a frame using any means, use it
             if popped_frame is not None:
                 latest_processed = self._apply_statuses_to_frame(
-                    frame=frame,
+                    frame=popped_frame,
                     statuses=statuses,
                     tracks=tracks,
                     has_new_statuses=last_used_zone_statuses != statuses
