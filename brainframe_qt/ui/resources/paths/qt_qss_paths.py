@@ -63,6 +63,16 @@ sidebar_dock_widget_qss = register_path(
     container_resource_dir / "sidebar_dock_widget" / "sidebar_dock_widget.qss")
 
 ###############################################################################
+# Video Resources
+###############################################################################
+
+video_items_dir = register_path(resource_dir / "video_items")
+
+streams_items_dir = register_path(video_items_dir / "streams")
+stream_widget_qss = register_path(streams_items_dir / "stream_widget.qss")
+
+
+###############################################################################
 # Alert Resources
 ###############################################################################
 

@@ -1,7 +1,6 @@
-from typing import Callable, Optional
+from typing import Optional
 
 from PyQt5.QtCore import QCoreApplication, Qt
-from PyQt5.QtWidgets import QGraphicsView
 from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.api.bf_errors import StreamConfigNotFoundError, \
     StreamNotOpenedError
@@ -10,42 +9,36 @@ from brainframe.client.api_utils import api
 from brainframe.client.api_utils.streaming import StreamListener, \
     SyncedStreamReader
 # noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
-    settings
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.stream_graphics_scene import \
-    StreamGraphicsScene
+from brainframe.client.ui.resources import QTAsyncWorker, qt_resources
+from .stream_widget_ui import StreamWidgetUI
 
 
-class StreamWidget(QGraphicsView):
+class StreamWidget(StreamWidgetUI):
     """Base widget that uses Stream object to get frames.
 
     Makes use of a QTimer to get frames
     """
-    # Type hint that self.scene() is more than just a QGraphicsScene
-    scene: Callable[[], StreamGraphicsScene]
 
-    def __init__(self, stream_conf, parent=None):
+    def __init__(self, stream_conf, *, parent=None):
         # Order matters here, unfortunately
-        super().__init__(parent)
-
-        self.render_config = QSettingsRenderConfig()
-
-        # Remove ugly white background and border from QGraphicsView
-        self.setStyleSheet("background-color: transparent; border: 0px")
-
-        # Scene to draw items to
-        scene = StreamGraphicsScene(
-            render_config=self.render_config,
-            parent=self
-        )
-        self.setScene(scene)
+        super().__init__(parent=parent)
 
         self.stream_listener = StreamListener()
-        self.stream_reader: SyncedStreamReader = None  # Set in change_stream
+        self.stream_reader: Optional[SyncedStreamReader] = None
         self.change_stream(stream_conf)
 
         self.startTimer(1000 // 30)
+
+    def resizeEvent(self, event=None):
+        """Take up entire width using aspect ratio of scene"""
+
+        current_frame = self.scene().current_frame
+
+        if current_frame is not None:
+            # EXTREMELY IMPORTANT LINE!
+            # The sceneRect grows but never shrinks automatically
+            self.scene().setSceneRect(current_frame.boundingRect())
+            self.fitInView(current_frame.boundingRect(), Qt.KeepAspectRatio)
 
     def timerEvent(self, a0):
         if self.stream_listener.frame_event.is_set():
@@ -153,30 +146,6 @@ class StreamWidget(QGraphicsView):
         QTAsyncWorker(self, get_stream_url,
                       on_success=subscribe_to_stream_reader) \
             .start()
-
-    def hasHeightForWidth(self):
-        """Enable the use of heightForWidth"""
-        return True
-
-    def heightForWidth(self, width: int):
-        """Lock the aspect ratio of the widget to match the aspect ratio of the
-        scene and its video frame
-        """
-        if not self.scene().width():
-            return 0
-
-        return width * self.scene().height() / self.scene().width()
-
-    def resizeEvent(self, event=None):
-        """Take up entire width using aspect ratio of scene"""
-
-        current_frame = self.scene().current_frame
-
-        if current_frame is not None:
-            # EXTREMELY IMPORTANT LINE!
-            # The sceneRect grows but never shrinks automatically
-            self.scene().setSceneRect(current_frame.boundingRect())
-            self.fitInView(current_frame.boundingRect(), Qt.KeepAspectRatio)
 
     def _clear_current_stream_reader(self):
         # If we currently have a stream reader, unsubscribe its listener

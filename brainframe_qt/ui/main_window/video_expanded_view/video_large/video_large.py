@@ -6,7 +6,7 @@ from brainframe.client.ui.resources.video_items.streams import StreamWidget
 class VideoLarge(StreamWidget):
 
     def __init__(self, parent=None, stream_conf=None):
-        super().__init__(stream_conf, parent)
+        super().__init__(stream_conf, parent=parent)
 
         # I was under the impression that this was the default size policy, but
         # removing it prevents the alert log from expanding into more than half
