@@ -44,18 +44,14 @@ class DetectionTrack:
         detections at tstamp n-1 and n+1, where n is interpolate tstamp
 
 
-        :param interpolate_to_tstamp: The timestamp that we would like to
-        estimate the position of the detection at.
+        :param interp_to_tstamp: The timestamp that we would like to estimate
+        the position of the detection at.
         """
         if len(self._history) == 1:
             return self._history[0][0]
 
-        if interp_to_tstamp == self.latest_tstamp:
+        if interp_to_tstamp >= self.latest_tstamp:
             return self.latest_det
-
-        if interp_to_tstamp > self.latest_tstamp:
-            raise ValueError("You can't interpolate to a timestamp that's "
-                             "higher than the current tracks latest timestamp!")
 
         recent: DET_TSTAMP_TUPLE = None
         older: DET_TSTAMP_TUPLE = None
