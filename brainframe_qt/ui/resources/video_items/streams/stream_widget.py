@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Optional
 
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QGraphicsView
@@ -13,7 +13,8 @@ from brainframe.client.api_utils.streaming import StreamListener, \
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
     settings
 from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from .stream_graphics_scene import StreamGraphicsScene
+from brainframe.client.ui.resources.video_items.stream_graphics_scene import \
+    StreamGraphicsScene
 
 
 class StreamWidget(QGraphicsView):

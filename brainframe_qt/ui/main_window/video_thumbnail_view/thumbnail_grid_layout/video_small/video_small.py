@@ -3,8 +3,7 @@ from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter
 
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import qt_resources
-from brainframe.client.ui.resources.video_items.stream_widget import \
-    StreamWidget
+from brainframe.client.ui.resources.video_items.streams import StreamWidget
 
 
 class VideoSmall(StreamWidget):
