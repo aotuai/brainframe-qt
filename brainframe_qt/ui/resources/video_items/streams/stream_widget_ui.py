@@ -6,8 +6,7 @@ from PyQt5.QtWidgets import QGraphicsView, QWidget
 from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.config import QSettingsRenderConfig
 from brainframe.client.ui.resources.paths import qt_qss_paths
-from brainframe.client.ui.resources.video_items.stream_graphics_scene import \
-    StreamGraphicsScene
+from .stream_graphics_scene import StreamGraphicsScene
 
 
 class StreamWidgetUI(QGraphicsView):
