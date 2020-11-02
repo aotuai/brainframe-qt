@@ -43,57 +43,25 @@ class StreamWidget(StreamWidgetUI):
     def timerEvent(self, a0):
         if self.stream_listener.frame_event.is_set():
             self.stream_listener.frame_event.clear()
-            self.handle_frame()
+
+            zone_status_frame = self.stream_reader.latest_processed_frame
+            self.scene().handle_frame(zone_status_frame)
 
         if self.stream_listener.stream_initializing_event.is_set():
             self.stream_listener.stream_initializing_event.clear()
-            self.handle_stream_initializing()
+            self.scene().handle_stream_initializing()
 
         if self.stream_listener.stream_halted_event.is_set():
             self.stream_listener.stream_halted_event.clear()
-            self.handle_stream_halted()
+            self.scene().handle_stream_halted()
 
         if self.stream_listener.stream_closed_event.is_set():
             self.stream_listener.stream_closed_event.clear()
-            self.handle_stream_closed()
+            self.scene().handle_stream_closed()
 
         if self.stream_listener.stream_error_event.is_set():
             self.stream_listener.stream_error_event.clear()
-            self.handle_stream_error()
-
-    def handle_frame(self):
-        processed_frame = self.stream_reader.latest_processed_frame
-
-        self.scene().remove_all_items()
-        self.scene().set_frame(frame=processed_frame.frame)
-
-        if self.render_config.draw_lines:
-            self.scene().draw_lines(processed_frame.zone_statuses)
-
-        if self.render_config.draw_regions:
-            self.scene().draw_regions(processed_frame.zone_statuses)
-
-        if self.render_config.draw_detections:
-            self.scene().draw_detections(
-                frame_tstamp=processed_frame.tstamp,
-                tracks=processed_frame.tracks
-            )
-
-    def handle_stream_initializing(self):
-        self.scene().remove_all_items()
-        self.scene().set_frame(path=":/images/connecting_to_stream_png")
-        ...
-
-    def handle_stream_halted(self):
-        self.scene().remove_all_items()
-        self.scene().set_frame(path=":/images/connection_lost_png")
-
-    def handle_stream_closed(self):
-        self.handle_stream_halted()
-
-    def handle_stream_error(self):
-        self.scene().remove_all_items()
-        self.scene().set_frame(path=":/images/error_message_png")
+            self.scene().handle_stream_error()
 
     def change_stream(self, stream_conf: StreamConfiguration):
 
@@ -103,7 +71,7 @@ class StreamWidget(StreamWidgetUI):
 
             # Typically a user shouldn't see this, but sometimes the client is
             # laggy in closing the widget, so we don't use the error message
-            self.handle_stream_closed()
+            self.scene().handle_stream_closed()
             return
 
         def get_stream_url():
