@@ -12,11 +12,12 @@ from brainframe.shared.constants import DEFAULT_ZONE_NAME
 
 
 class StreamGraphicsScene(QGraphicsScene):
-    def __init__(self, *, parent: QWidget):
+    def __init__(self, *, render_config: QSettingsRenderConfig,
+                 parent: QWidget):
 
         super().__init__(parent)
 
-        self.render_config = QSettingsRenderConfig()
+        self.render_config = render_config
 
         self.current_frame = None
 
