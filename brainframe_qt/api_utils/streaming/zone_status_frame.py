@@ -20,7 +20,7 @@ class ZoneStatusFrame:
         """
         self.frame: np.ndarray = frame
         self.tstamp: float = tstamp
-        self.zone_statuses: Dict[str, ZoneStatus] = zone_statuses
+        self.zone_statuses: List[ZoneStatus] = zone_statuses
         self.has_new_zone_statuses = has_new_statuses
         self.tracks: List[DetectionTrack] = tracks
 
