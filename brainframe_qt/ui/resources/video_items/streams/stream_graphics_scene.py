@@ -4,8 +4,6 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QWidget
 
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.client.api_utils.streaming.zone_status_frame import \
-    ZoneStatusFrame
 from brainframe.client.ui.resources.config import QSettingsRenderConfig
 from brainframe.client.ui.resources.video_items.detections import DetectionItem
 from brainframe.client.ui.resources.video_items.zone_statuses import \
@@ -21,38 +19,6 @@ class StreamGraphicsScene(QGraphicsScene):
         self.render_config = QSettingsRenderConfig()
 
         self.current_frame = None
-
-    def handle_frame(self, zone_status_frame: ZoneStatusFrame):
-
-        self.remove_all_items()
-        self.set_frame(frame=zone_status_frame.frame)
-
-        if self.render_config.draw_lines:
-            self.draw_lines(zone_status_frame.zone_statuses)
-
-        if self.render_config.draw_regions:
-            self.draw_regions(zone_status_frame.zone_statuses)
-
-        if self.render_config.draw_detections:
-            self.draw_detections(
-                frame_tstamp=zone_status_frame.tstamp,
-                tracks=zone_status_frame.tracks
-            )
-
-    def handle_stream_initializing(self):
-        self.remove_all_items()
-        self.set_frame(path=":/images/connecting_to_stream_png")
-
-    def handle_stream_halted(self):
-        self.remove_all_items()
-        self.set_frame(path=":/images/connection_lost_png")
-
-    def handle_stream_closed(self):
-        self.handle_stream_halted()
-
-    def handle_stream_error(self):
-        self.remove_all_items()
-        self.set_frame(path=":/images/error_message_png")
 
     def set_frame(self, *, pixmap=None, frame=None, path=None):
 

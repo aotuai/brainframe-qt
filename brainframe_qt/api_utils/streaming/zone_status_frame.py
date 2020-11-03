@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 
 import numpy as np
 from brainframe.api.bf_codecs import ZoneStatus
