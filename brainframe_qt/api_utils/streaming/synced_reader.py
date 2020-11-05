@@ -1,6 +1,6 @@
 import logging
 import typing
-from threading import Event, RLock, Thread
+from threading import Event, RLock
 from time import sleep
 from typing import Dict, Generator, List, Optional, Set, Tuple
 from uuid import UUID, uuid4
@@ -14,6 +14,7 @@ from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.utils import or_events
+from brainframe.shared.exiting import ServiceThread
 from .frame_buffer import SyncedFrameBuffer
 from .zone_status_frame import ZoneStatusFrame
 
@@ -69,7 +70,7 @@ class SyncedStreamReader(StreamReader):
         self._stream_listeners_lock = RLock()
 
         # Start threads, now that the object is all set up
-        self._thread = Thread(
+        self._thread = ServiceThread(
             name=f"SyncedStreamReader thread for stream ID {stream_reader}",
             target=self._sync_detections_with_stream)
         self._thread.start()
