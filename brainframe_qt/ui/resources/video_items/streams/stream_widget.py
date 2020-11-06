@@ -64,6 +64,9 @@ class StreamWidget(StreamWidgetUI):
     def handle_frame(self):
         processed_frame = self.stream_reader.latest_processed_frame
 
+        self.widget_overlay.handle_frame_metadata(
+            processed_frame.frame_metadata)
+
         self.scene().remove_all_items()
         self.scene().set_frame(frame=processed_frame.frame)
 
