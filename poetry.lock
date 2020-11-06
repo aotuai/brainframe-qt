@@ -1237,7 +1237,7 @@ description = "A library for creating OpenVisionCapsules in Python"
 name = "vcap"
 optional = true
 python-versions = ">=3.6"
-version = "0.2.6.dev4"
+version = "0.2.6"
 
 [package.dependencies]
 numpy = ">=1.16,<2"
@@ -1255,7 +1255,7 @@ description = "Utilities for creating OpenVisionCapsules easily in Python"
 name = "vcap-utils"
 optional = true
 python-versions = ">=3.6"
-version = "0.2.6.dev4"
+version = "0.2.6"
 
 [package.dependencies]
 vcap = "*"
@@ -1351,7 +1351,7 @@ client_res_build = ["pyqt5ac"]
 server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewee", "psycopg2-binary", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "py-openapi-schema-to-json-schema", "jsonschema", "opencv-python-headless"]
 
 [metadata]
-content-hash = "205132f95b054218f6c03f6bbcf52e51e7dfdbc6d7cd4396c421f6142aab2fd3"
+content-hash = "f146041e2037aa377c2feb4b1a45b3ce8f40285e5d1fe040c53e98d148299c86"
 lock-version = "1.1"
 python-versions = "^3.6"
 
@@ -2236,12 +2236,12 @@ urllib3 = [
     {file = "urllib3-1.25.11.tar.gz", hash = "sha256:8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2"},
 ]
 vcap = [
-    {file = "vcap-0.2.6.dev4-py3-none-any.whl", hash = "sha256:4432e4bd729af417920be97cebf3e8278bcf5e600454ecbf253485e752702653"},
-    {file = "vcap-0.2.6.dev4.tar.gz", hash = "sha256:d5ba604836a64c612ccd77ad3cce46258a06485ad95e958194421fead2272c5b"},
+    {file = "vcap-0.2.6-py3-none-any.whl", hash = "sha256:b68d650cb5f4ee198500fc2ff915d4744f094c5c121567fbaef5fd78c7cdaf0b"},
+    {file = "vcap-0.2.6.tar.gz", hash = "sha256:7378400e9989a3d5cf7474d4fe9586256b95ad5e2727041185cab921c663098c"},
 ]
 vcap-utils = [
-    {file = "vcap-utils-0.2.6.dev4.tar.gz", hash = "sha256:1cafb519b9d702269c428c051c79c51cf7f06f0a91d0d7a4e49693ede83166b2"},
-    {file = "vcap_utils-0.2.6.dev4-py3-none-any.whl", hash = "sha256:48523c90973fb363ffaa9add6871c52e42298db88a1d2205eb7bfdaf8ddacd64"},
+    {file = "vcap-utils-0.2.6.tar.gz", hash = "sha256:d4e1d9e849e047eedb41693e7dcc6aa8f76c709d67c0911908ccfac88f14e2ff"},
+    {file = "vcap_utils-0.2.6-py3-none-any.whl", hash = "sha256:3329949bc0e00111063568d00080e9717685072a86a0ba1662b235bbcd974193"},
 ]
 watchdog = [
     {file = "watchdog-0.10.3.tar.gz", hash = "sha256:4214e1379d128b0588021880ccaf40317ee156d4603ac388b9adcf29165e0c04"},
