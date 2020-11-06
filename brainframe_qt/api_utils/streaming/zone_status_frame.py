@@ -29,7 +29,16 @@ class ZoneStatusFrame:
     tracks: Optional[List[DetectionTrack]]
     """DetectionTrack history for the frame"""
 
+    frame_metadata: 'ZoneStatusFrameMeta' \
+        = field(default_factory=lambda: ZoneStatusFrameMeta())
+
     @cached_property
     def frame_rgb(self):
         """Flip the BGR channels to RGB"""
         return self.frame[..., ::-1].copy()
+
+
+@dataclass
+class ZoneStatusFrameMeta:
+    client_buffer_full: bool = False
+    stream_broken: bool = False
