@@ -56,11 +56,11 @@ description = "Classes Without Boilerplate"
 name = "attrs"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "20.2.0"
+version = "20.3.0"
 
 [package.extras]
-dev = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "sphinx", "sphinx-rtd-theme", "pre-commit"]
-docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
+dev = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "furo", "sphinx", "pre-commit"]
+docs = ["furo", "sphinx", "zope.interface"]
 tests = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface"]
 tests_no_zope = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six"]
 
@@ -1237,7 +1237,7 @@ description = "A library for creating OpenVisionCapsules in Python"
 name = "vcap"
 optional = true
 python-versions = ">=3.6"
-version = "0.2.6.dev7"
+version = "0.2.6.dev4"
 
 [package.dependencies]
 numpy = ">=1.16,<2"
@@ -1255,7 +1255,7 @@ description = "Utilities for creating OpenVisionCapsules easily in Python"
 name = "vcap-utils"
 optional = true
 python-versions = ">=3.6"
-version = "0.2.6.dev7"
+version = "0.2.6.dev4"
 
 [package.dependencies]
 vcap = "*"
@@ -1351,7 +1351,7 @@ client_res_build = ["pyqt5ac"]
 server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewee", "psycopg2-binary", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "py-openapi-schema-to-json-schema", "jsonschema", "opencv-python-headless"]
 
 [metadata]
-content-hash = "df32c95f7ca0d85bd4f47991f16ab827dd2eb9e2c718950e9a5ae7bed4eb92ac"
+content-hash = "205132f95b054218f6c03f6bbcf52e51e7dfdbc6d7cd4396c421f6142aab2fd3"
 lock-version = "1.1"
 python-versions = "^3.6"
 
@@ -1391,8 +1391,8 @@ atomicwrites = [
     {file = "atomicwrites-1.4.0.tar.gz", hash = "sha256:ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a"},
 ]
 attrs = [
-    {file = "attrs-20.2.0-py2.py3-none-any.whl", hash = "sha256:fce7fc47dfc976152e82d53ff92fa0407700c21acd20886a13777a0d20e655dc"},
-    {file = "attrs-20.2.0.tar.gz", hash = "sha256:26b54ddbbb9ee1d34d5d3668dd37d6cf74990ab23c828c2888dccdceee395594"},
+    {file = "attrs-20.3.0-py2.py3-none-any.whl", hash = "sha256:31b2eced602aa8423c2aea9c76a724617ed67cf9513173fd3a4f03e3a929c7e6"},
+    {file = "attrs-20.3.0.tar.gz", hash = "sha256:832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700"},
 ]
 brainframe-api = []
 cached-property = [
@@ -2236,12 +2236,12 @@ urllib3 = [
     {file = "urllib3-1.25.11.tar.gz", hash = "sha256:8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2"},
 ]
 vcap = [
-    {file = "vcap-0.2.6.dev7-py3-none-any.whl", hash = "sha256:43172830aff706912a9466139513bf9f17966043b9b9b331a1e5cb94c8ef0052"},
-    {file = "vcap-0.2.6.dev7.tar.gz", hash = "sha256:20eca263ccb0dd7933fbc5b812b84f899faec2dfbe111219a7e7234b39ae5b07"},
+    {file = "vcap-0.2.6.dev4-py3-none-any.whl", hash = "sha256:4432e4bd729af417920be97cebf3e8278bcf5e600454ecbf253485e752702653"},
+    {file = "vcap-0.2.6.dev4.tar.gz", hash = "sha256:d5ba604836a64c612ccd77ad3cce46258a06485ad95e958194421fead2272c5b"},
 ]
 vcap-utils = [
-    {file = "vcap-utils-0.2.6.dev7.tar.gz", hash = "sha256:a22113555f1ef10533a4357b49550229216dbc3126267331e520447fe75c8274"},
-    {file = "vcap_utils-0.2.6.dev7-py3-none-any.whl", hash = "sha256:bd6aec73075a8587b0504d5a4d6c8e44f7c061e8150e67d035c1e57b08e2d417"},
+    {file = "vcap-utils-0.2.6.dev4.tar.gz", hash = "sha256:1cafb519b9d702269c428c051c79c51cf7f06f0a91d0d7a4e49693ede83166b2"},
+    {file = "vcap_utils-0.2.6.dev4-py3-none-any.whl", hash = "sha256:48523c90973fb363ffaa9add6871c52e42298db88a1d2205eb7bfdaf8ddacd64"},
 ]
 watchdog = [
     {file = "watchdog-0.10.3.tar.gz", hash = "sha256:4214e1379d128b0588021880ccaf40317ee156d4603ac388b9adcf29165e0c04"},
