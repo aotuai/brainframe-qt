@@ -439,6 +439,28 @@ markers = "python_version == \"3.8\""
 version = ">=1.17.5"
 
 [[package]]
+category = "main"
+description = "Read and write HDF5 files from Python"
+name = "h5py"
+optional = true
+python-versions = ">=3.6"
+version = "3.1.0"
+
+[package.dependencies]
+cached-property = {version = "*", markers = "python_version < \"3.8\""}
+[[package.dependencies.numpy]]
+markers = "python_version == \"3.6\""
+version = ">=1.12"
+
+[[package.dependencies.numpy]]
+markers = "python_version == \"3.7\""
+version = ">=1.14.5"
+
+[[package.dependencies.numpy]]
+markers = "python_version == \"3.8\""
+version = ">=1.17.5"
+
+[[package]]
 category = "dev"
 description = "A comprehensive HTTP client library."
 name = "httplib2"
@@ -1237,7 +1259,7 @@ description = "A library for creating OpenVisionCapsules in Python"
 name = "vcap"
 optional = true
 python-versions = ">=3.6"
-version = "0.2.6"
+version = "0.2.7"
 
 [package.dependencies]
 numpy = ">=1.16,<2"
@@ -1255,7 +1277,7 @@ description = "Utilities for creating OpenVisionCapsules easily in Python"
 name = "vcap-utils"
 optional = true
 python-versions = ">=3.6"
-version = "0.2.6"
+version = "0.2.7"
 
 [package.dependencies]
 vcap = "*"
@@ -1351,7 +1373,7 @@ client_res_build = ["pyqt5ac"]
 server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewee", "psycopg2-binary", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "py-openapi-schema-to-json-schema", "jsonschema", "opencv-python-headless"]
 
 [metadata]
-content-hash = "f146041e2037aa377c2feb4b1a45b3ce8f40285e5d1fe040c53e98d148299c86"
+content-hash = "94ec7442e35d8a732c3c6e51b3e24afc4c993763b68ed7c7f81e069e5159fb70"
 lock-version = "1.1"
 python-versions = "^3.6"
 
@@ -1675,6 +1697,19 @@ h5py = [
     {file = "h5py-3.0.0-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:1ec6d29fe99f0bd7b431285117222a899cb1bbaff43d714157824a29f425db18"},
     {file = "h5py-3.0.0-cp39-cp39-win_amd64.whl", hash = "sha256:1a594ee690e3ec4ac2ec091cc53fc2626abcd898da138c9fb07580e2f1951adb"},
     {file = "h5py-3.0.0.tar.gz", hash = "sha256:7d3803be1b530c68c2955faba726dc0f591079b68941a0c0269b5384a42ab519"},
+    {file = "h5py-3.1.0-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:1cd367f89a5441236bdbb795e9fb9a9e3424929c00b4a54254ca760437f83d69"},
+    {file = "h5py-3.1.0-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:fea05349f63625a8fb808e57e42bb4c76930cf5d50ac58b678c52f913a48a89b"},
+    {file = "h5py-3.1.0-cp36-cp36m-win_amd64.whl", hash = "sha256:2e37352ddfcf9d77a2a47f7c8f7e125c6d20cc06c2995edeb7be222d4e152636"},
+    {file = "h5py-3.1.0-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:e33f61d3eb862614c0f273a1f993a64dc2f093e1a3094932c50ada9d2db2170f"},
+    {file = "h5py-3.1.0-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:236ac8d943be30b617ab615c3d4a4bf4a438add2be87e54af3687ab721a18fac"},
+    {file = "h5py-3.1.0-cp37-cp37m-win_amd64.whl", hash = "sha256:02c391fdb980762a1cc03a4bcaecd03dc463994a9a63a02264830114a96e111f"},
+    {file = "h5py-3.1.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:f89a3dae38843ffa49d17a31a3509a8129e9b46ece602a0138e1ed79e685c361"},
+    {file = "h5py-3.1.0-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:ba71f6229d2013fbb606476ecc29c6223fc16b244d35fcd8566ad9dbaf910857"},
+    {file = "h5py-3.1.0-cp38-cp38-win_amd64.whl", hash = "sha256:dccb89358bc84abcd711363c3e138f9f4eccfdf866f2139a8e72308328765b2c"},
+    {file = "h5py-3.1.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:cb74df83709d6d03d11e60b9480812f58da34f194beafa8c8314dbbeeedfe0a6"},
+    {file = "h5py-3.1.0-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:80c623be10479e81b64fa713b7ed4c0bbe9f02e8e7d2a2e5382336087b615ce4"},
+    {file = "h5py-3.1.0-cp39-cp39-win_amd64.whl", hash = "sha256:1cdfd1c5449ca1329d152f0b66830e93226ebce4f5e07dd8dc16bfc2b1a49d7b"},
+    {file = "h5py-3.1.0.tar.gz", hash = "sha256:1e2516f190652beedcb8c7acfa1c6fa92d99b42331cbef5e5c7ec2d65b0fc3c2"},
 ]
 httplib2 = [
     {file = "httplib2-0.18.1-py3-none-any.whl", hash = "sha256:ca2914b015b6247791c4866782fa6042f495b94401a0f0bd3e1d6e0ba2236782"},
@@ -2236,12 +2271,12 @@ urllib3 = [
     {file = "urllib3-1.25.11.tar.gz", hash = "sha256:8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2"},
 ]
 vcap = [
-    {file = "vcap-0.2.6-py3-none-any.whl", hash = "sha256:b68d650cb5f4ee198500fc2ff915d4744f094c5c121567fbaef5fd78c7cdaf0b"},
-    {file = "vcap-0.2.6.tar.gz", hash = "sha256:7378400e9989a3d5cf7474d4fe9586256b95ad5e2727041185cab921c663098c"},
+    {file = "vcap-0.2.7-py3-none-any.whl", hash = "sha256:63637aa20a7685e461245a289213c33125a60b85897912fb65962b6a6f0d4696"},
+    {file = "vcap-0.2.7.tar.gz", hash = "sha256:119c94791a25a33dc2332365d2e5917149e10d2d2ed427f7cec90fd3c5a29f77"},
 ]
 vcap-utils = [
-    {file = "vcap-utils-0.2.6.tar.gz", hash = "sha256:d4e1d9e849e047eedb41693e7dcc6aa8f76c709d67c0911908ccfac88f14e2ff"},
-    {file = "vcap_utils-0.2.6-py3-none-any.whl", hash = "sha256:3329949bc0e00111063568d00080e9717685072a86a0ba1662b235bbcd974193"},
+    {file = "vcap-utils-0.2.7.tar.gz", hash = "sha256:7af65ffe229877d6dadfb1cc6fbdc8b55e275147ca60db184deb25044fad89c4"},
+    {file = "vcap_utils-0.2.7-py3-none-any.whl", hash = "sha256:9858a01e42d8de3dd7b11a07aa0f45341b9adc4105c783b621e1099fabc0e5b0"},
 ]
 watchdog = [
     {file = "watchdog-0.10.3.tar.gz", hash = "sha256:4214e1379d128b0588021880ccaf40317ee156d4603ac388b9adcf29165e0c04"},
