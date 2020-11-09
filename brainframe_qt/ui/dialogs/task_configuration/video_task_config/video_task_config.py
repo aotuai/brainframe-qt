@@ -3,8 +3,11 @@ from typing import List, Optional
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QMouseEvent
+from PyQt5.QtWidgets import QWidget
 from shapely import geometry
 
+from brainframe.client.api_utils.streaming.zone_status_frame import \
+    ZoneStatusFrame
 from brainframe.client.ui.resources.video_items.base import VideoItem
 from brainframe.client.ui.resources.video_items.streams import StreamWidget
 from brainframe.client.ui.resources.video_items.zones import \
@@ -18,8 +21,8 @@ class VideoTaskConfig(StreamWidget):
         REGION = auto()
         LINE = auto()
 
-    def __init__(self, parent=None, stream_conf=None):
-        super().__init__(stream_conf, parent)
+    def __init__(self, parent: QWidget):
+        super().__init__(parent=parent)
 
         # Allow for real-time zone previews
         self.setMouseTracking(True)
@@ -83,14 +86,13 @@ class VideoTaskConfig(StreamWidget):
         if self.in_progress_zone.is_shape_ready():
             self.polygon_is_valid_signal.emit(True)
 
-    def handle_frame(self):
+    def on_frame(self, frame: ZoneStatusFrame):
         # Only change the video frame if we're in the process of creating a new
         # zone
         if self.in_progress_zone is None:
-            super().handle_frame()
+            super().on_frame(frame)
         else:
-            processed_frame = self.stream_reader.latest_processed_frame
-            self.scene().set_frame(frame=processed_frame.frame)
+            self.scene().set_frame(frame=frame.frame)
 
     def start_new_zone(self, zone_type: InProgressZoneType) -> None:
         # Temporarily disable region and line drawing
