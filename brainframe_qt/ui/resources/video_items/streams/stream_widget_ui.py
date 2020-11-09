@@ -7,7 +7,7 @@ from brainframe.client.ui.resources import stylesheet_watcher
 from brainframe.client.ui.resources.config import QSettingsRenderConfig
 from brainframe.client.ui.resources.paths import qt_qss_paths
 from .stream_graphics_scene import StreamGraphicsScene
-from .stream_widget_overlay import StreamWidgetOverlay
+from .stream_overlay import StreamWidgetOverlay
 
 
 class StreamWidgetUI(QGraphicsView):

@@ -1216,19 +1216,6 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
-    <name>StreamWidgetOverlay</name>
-    <message>
-        <location filename="../video_items/streams/stream_widget_overlay.py" line="25"/>
-        <source>The server is not processing frames quickly enough.</source>
-        <translation>服务器未能及时处理视频帧。</translation>
-    </message>
-    <message>
-        <location filename="../video_items/streams/stream_widget_overlay.py" line="28"/>
-        <source>Results will not appear synced with the frames they correspond to.</source>
-        <translation>检测结果将不会与它们所对应的视频帧同步。</translation>
-    </message>
-</context>
-<context>
     <name>TaskConfiguration</name>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.py" line="114"/>

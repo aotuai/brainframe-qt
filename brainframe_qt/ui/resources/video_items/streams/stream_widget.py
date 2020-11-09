@@ -29,7 +29,7 @@ class StreamWidget(StreamWidgetUI, StreamListenerWidget):
 
     def on_frame(self, frame: ZoneStatusFrame):
 
-        self.widget_overlay.handle_frame_metadata(frame.frame_metadata)
+        # self.widget_overlay.handle_frame_metadata(frame.frame_metadata)
 
         self.scene().remove_all_items()
         self.scene().set_frame(frame=frame.frame)
