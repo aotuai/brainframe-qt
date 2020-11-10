@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QVBoxLayout, QWidget
 
 from .body import OverlayBody
@@ -68,13 +69,13 @@ class StreamWidgetOverlayUI(QWidget):
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
 
-        # layout.addWidget(self.lagging_stream_indicator)
-        # layout.addWidget(self.broken_stream_indicator)
-
         layout.addWidget(self.titlebar)
         layout.addWidget(self.body)
 
         self.setLayout(layout)
 
-    def _init_style(self):
-        ...
+    def _init_style(self) -> None:
+        # Allow background of widget to be styled
+        self.setAttribute(Qt.WA_StyledBackground, True)
+
+        self.layout().setContentsMargins(0, 0, 0, 0)

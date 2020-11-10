@@ -1,11 +1,15 @@
-from typing import Callable
+from typing import Callable, Optional
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QWidget
+from PyQt5.QtWidgets import QApplication, QFrame, QHBoxLayout, QLabel, \
+    QSizePolicy, QWidget
 
 
 class OverlayTitlebar(QFrame):
     label: Callable[..., QHBoxLayout]
+
+    NO_STREAM_NAME = QApplication.translate("OverlayTitlebar",
+                                            "No Active Stream")
 
     def __init__(self, parent: QWidget):
         super().__init__(parent=parent)
@@ -32,3 +36,9 @@ class OverlayTitlebar(QFrame):
 
         self.title_label.setSizePolicy(QSizePolicy.Maximum,
                                        QSizePolicy.Preferred)
+
+    def set_stream_name(self, stream_name: Optional[str]) -> None:
+        if stream_name is None:
+            self.title_label.setText(self.NO_STREAM_NAME)
+        else:
+            self.title_label.setText(stream_name)

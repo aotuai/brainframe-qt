@@ -1,0 +1,15 @@
+VideoLarge {
+    background: black;
+}
+
+OverlayTitlebar {
+    background-color: rgba(128, 128, 128, 80)
+}
+
+OverlayTitlebar > QLabel {
+    color: white;
+}
+
+StreamWidgetOverlay {
+    /*background: rgba(255, 128, 0, 100);*/
+}

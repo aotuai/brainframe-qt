@@ -2,11 +2,3 @@ StreamWidget {
     background-color: transparent;
     border: 0
 }
-
-OverlayTitlebar {
-    background-color: rgba(255, 255, 255, 20)
-}
-
-OverlayTitlebar > QLabel {
-    color: white;
-}
