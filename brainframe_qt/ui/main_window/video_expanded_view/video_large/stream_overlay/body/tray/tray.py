@@ -1,9 +1,8 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QWidget
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QSizePolicy, QVBoxLayout, QWidget
 
-from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
-    BrainFrameMessage
+from .stream_alert import StreamAlert
 
 
 class OverlayTray(QWidget):
@@ -17,7 +16,10 @@ class OverlayTray(QWidget):
         self._init_layout()
         self._init_style()
 
-    def _init_lagging_stream_indicator(self) -> "_StreamAlertButton":
+    def _init_lagging_stream_indicator(self) -> StreamAlert:
+        short_text = QApplication.translate("StreamWidgetOverlay",
+                                            "Desynced analysis")
+
         message_text1 = QApplication.translate(
             "StreamWidgetOverlay",
             "The server is not processing frames quickly enough.")
@@ -25,28 +27,30 @@ class OverlayTray(QWidget):
             "StreamWidgetOverlay",
             "Results will not appear synced with the frames they correspond "
             + "to.")
-
-        title = QApplication.translate("StreamWidgetOverlay", "Lagging stream")
-
         message_text = f"{message_text1}<br>{message_text2}"
-        lagging_stream_indicator = _StreamAlertButton("❗", message_text, title,
-                                                      parent=self)
+
+        icon = QIcon(":/icons/analysis_error")
+
+        lagging_stream_indicator = StreamAlert(icon, short_text, message_text,
+                                               parent=self)
 
         return lagging_stream_indicator
 
-    def _init_broken_stream_indicator(self) -> "_StreamAlertButton":
+    def _init_broken_stream_indicator(self) -> StreamAlert:
+        short_text = QApplication.translate(
+            "StreamWidgetOverlay",
+            "Broken stream"
+        )
+
         message_text = QApplication.translate(
             "StreamWidgetOverlay",
             "This stream is having trouble communicating"
         )
 
-        title = QApplication.translate(
-            "StreamWidgetOverlay",
-            "Stream is broken"
-        )
+        icon = QIcon(":/icons/analysis_error")
 
-        broken_stream_indicator = _StreamAlertButton("❗", message_text, title,
-                                                     parent=self)
+        broken_stream_indicator = StreamAlert(icon, short_text, message_text,
+                                              parent=self)
 
         return broken_stream_indicator
 
@@ -59,7 +63,14 @@ class OverlayTray(QWidget):
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
 
-        # self.layout().setContentsMargins(0, 0, 0, 0)
+        self.lagging_stream_indicator.setSizePolicy(QSizePolicy.Fixed,
+                                                    QSizePolicy.Fixed)
+        self.broken_stream_indicator.setSizePolicy(QSizePolicy.Fixed,
+                                                   QSizePolicy.Fixed)
+
+        # Hide until needed
+        self.lagging_stream_indicator.setHidden(True)
+        self.broken_stream_indicator.setHidden(True)
 
     def set_lagging(self, lagging: bool) -> None:
         self._display_alert_button(lagging, self.lagging_stream_indicator)
@@ -67,8 +78,7 @@ class OverlayTray(QWidget):
     def set_broken(self, broken: bool) -> None:
         self._display_alert_button(broken, self.broken_stream_indicator)
 
-    def _display_alert_button(self, display: bool,
-                              button: "_StreamAlertButton") \
+    def _display_alert_button(self, display: bool, button: StreamAlert) \
             -> None:
         if display:
             self.layout().addWidget(button)
@@ -76,22 +86,3 @@ class OverlayTray(QWidget):
             self.layout().removeWidget(button)
 
         button.setVisible(display)
-
-
-class _StreamAlertButton(TextIconButton):
-    def __init__(self, button_text: str, message_text: str, title: str, *,
-                 parent: QWidget):
-        super().__init__(button_text, parent)
-
-        self.setToolTip(message_text)
-
-        message = BrainFrameMessage.information(
-            parent=self,
-            title=title,
-            message=message_text
-        )
-
-        self.clicked.connect(message.show)
-
-        # Hide until needed
-        self.setHidden(True)
