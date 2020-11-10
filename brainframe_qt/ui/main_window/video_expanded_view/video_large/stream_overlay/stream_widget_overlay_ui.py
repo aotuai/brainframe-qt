@@ -25,47 +25,6 @@ class StreamWidgetOverlayUI(QWidget):
 
         return body
 
-    # def _init_lagging_stream_indicator(self) -> TextIconButton:
-    #     lagging_stream_indicator = TextIconButton("❗", self)
-    #
-    #     message_text1 = QApplication.translate(
-    #         "StreamWidgetOverlay",
-    #         "The server is not processing frames quickly enough.")
-    #     message_text2 = QApplication.translate(
-    #         "StreamWidgetOverlay",
-    #         "Results will not appear synced with the frames they correspond "
-    #         + "to.")
-    #
-    #     message_text = f"{message_text1}<br>{message_text2}"
-    #
-    #     lagging_stream_indicator.setToolTip(message_text)
-    #
-    #     message = BrainFrameMessage.information(
-    #         parent=lagging_stream_indicator,
-    #         title="Lagging stream",
-    #         message=message_text
-    #     )
-    #     lagging_stream_indicator.clicked.connect(message.show)
-    #
-    #     return lagging_stream_indicator
-    #
-    # def _init_broken_stream_indicator(self) -> TextIconButton:
-    #     broken_stream_indicator = TextIconButton("❗", self)
-    #
-    #     message_text = "This stream is having trouble communicating"
-    #
-    #     broken_stream_indicator.setToolTip(message_text)
-    #
-    #     message = BrainFrameMessage.information(
-    #         parent=broken_stream_indicator,
-    #         title="Stream is broken",
-    #         message=message_text
-    #     )
-    #
-    #     broken_stream_indicator.clicked.connect(message.show)
-    #
-    #     return broken_stream_indicator
-
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
 

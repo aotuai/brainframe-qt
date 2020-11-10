@@ -3,6 +3,8 @@ from typing import Optional
 from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs
 
+from brainframe.client.api_utils.streaming.zone_status_frame import \
+    ZoneStatusFrameMeta
 from .stream_widget_overlay_ui import StreamWidgetOverlayUI
 
 
@@ -19,15 +21,7 @@ class StreamWidgetOverlay(StreamWidgetOverlayUI):
         else:
             self.titlebar.set_stream_name(stream_conf.name)
 
-    #     self._init_signals()
-    #
-    # def _init_signals(self) -> None:
-    #     self.lagging_stream_indicator.clicked.connect(
-    #         lambda: BrainFrameMessage)
-    #     self.broken_stream_indicator.clicked.connect(lambda: print("B"))
-    #
-    # def handle_frame_metadata(self, frame_metadata: ZoneStatusFrameMeta) \
-    #         -> None:
-    #     self.lagging_stream_indicator.setVisible(
-    #         frame_metadata.client_buffer_full)
-    #     self.broken_stream_indicator.setVisible(frame_metadata.stream_broken)
+    def handle_frame_metadata(self, frame_metadata: ZoneStatusFrameMeta) \
+            -> None:
+        self.body.tray.set_lagging(frame_metadata.client_buffer_full)
+        self.body.tray.set_broken(frame_metadata.stream_broken)

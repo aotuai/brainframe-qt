@@ -10,6 +10,10 @@ OverlayTitlebar > QLabel {
     color: white;
 }
 
-StreamWidgetOverlay {
-    /*background: rgba(255, 128, 0, 100);*/
-}
+/*OverlayTray {*/
+/*    background: rgba(255, 128, 0, 100);*/
+/*}*/
+
+/*OverlayBody {*/
+/*    background: rgba(128, 255, 0, 100);*/
+/*}*/

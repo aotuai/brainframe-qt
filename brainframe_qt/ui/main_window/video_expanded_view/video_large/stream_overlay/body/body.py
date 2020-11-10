@@ -1,6 +1,9 @@
 from typing import Callable
 
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QHBoxLayout, QSizePolicy, QVBoxLayout, QWidget
+
+from .tray import OverlayTray
 
 
 class OverlayBody(QWidget):
@@ -15,8 +18,9 @@ class OverlayBody(QWidget):
         self._init_layout()
         self._init_style()
 
-    def _init_tray(self) -> ...:
-        return QWidget(parent=self)
+    def _init_tray(self) -> OverlayTray:
+        overlay_tray = OverlayTray(parent=self)
+        return overlay_tray
 
     def _init_button_widget(self) -> ...:
         return QWidget(parent=self)
@@ -34,4 +38,8 @@ class OverlayBody(QWidget):
         self.setLayout(main_layout)
 
     def _init_style(self) -> None:
-        ...
+        # Allow background of widget to be styled
+        self.setAttribute(Qt.WA_StyledBackground, True)
+
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.layout().setSpacing(0)
