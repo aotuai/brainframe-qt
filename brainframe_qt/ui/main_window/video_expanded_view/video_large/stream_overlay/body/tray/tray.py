@@ -11,7 +11,6 @@ class OverlayTray(QWidget):
         super().__init__(parent=parent)
 
         self.lagging_stream_indicator = self._init_lagging_stream_indicator()
-        self.broken_stream_indicator = self._init_broken_stream_indicator()
 
         self._init_layout()
         self._init_style()
@@ -36,24 +35,6 @@ class OverlayTray(QWidget):
 
         return lagging_stream_indicator
 
-    def _init_broken_stream_indicator(self) -> StreamAlert:
-        short_text = QApplication.translate(
-            "StreamWidgetOverlay",
-            "Broken stream"
-        )
-
-        message_text = QApplication.translate(
-            "StreamWidgetOverlay",
-            "This stream is having trouble communicating"
-        )
-
-        icon = QIcon(":/icons/analysis_error")
-
-        broken_stream_indicator = StreamAlert(icon, short_text, message_text,
-                                              parent=self)
-
-        return broken_stream_indicator
-
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
 
@@ -65,18 +46,12 @@ class OverlayTray(QWidget):
 
         self.lagging_stream_indicator.setSizePolicy(QSizePolicy.Fixed,
                                                     QSizePolicy.Fixed)
-        self.broken_stream_indicator.setSizePolicy(QSizePolicy.Fixed,
-                                                   QSizePolicy.Fixed)
 
         # Hide until needed
         self.lagging_stream_indicator.setHidden(True)
-        self.broken_stream_indicator.setHidden(True)
 
     def set_lagging(self, lagging: bool) -> None:
         self._display_alert_button(lagging, self.lagging_stream_indicator)
-
-    def set_broken(self, broken: bool) -> None:
-        self._display_alert_button(broken, self.broken_stream_indicator)
 
     def _display_alert_button(self, display: bool, button: StreamAlert) \
             -> None:
