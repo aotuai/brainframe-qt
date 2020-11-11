@@ -39,7 +39,9 @@ class SyncedStreamReader(StreamReader):
         # Start threads, now that the object is all set up
         self._thread = Thread(
             name=f"SyncedStreamReader thread for stream ID {stream_reader}",
-            target=self._sync_detections_with_stream)
+            target=self._sync_detections_with_stream,
+            daemon=True
+        )
         self._thread.start()
 
     def alert_frame_listeners(self):
