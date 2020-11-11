@@ -40,7 +40,7 @@ class SyncedStreamReader(StreamReader):
         self._thread = Thread(
             name=f"SyncedStreamReader thread for stream ID {stream_reader}",
             target=self._sync_detections_with_stream,
-            daemon=True
+            daemon=False
         )
         self._thread.start()
 

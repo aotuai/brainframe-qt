@@ -50,7 +50,6 @@ class FrameSyncer:
                 frame=frame,
                 tstamp=frame_tstamp,
                 zone_statuses=None,
-                has_new_statuses=False,
                 tracks=None
             )
         )
@@ -140,7 +139,6 @@ class FrameSyncer:
             frame=frame.frame,
             tstamp=frame.tstamp,
             zone_statuses=statuses,
-            has_new_statuses=has_new_statuses,
             tracks=relevant_dets)
 
         return applied_frame
