@@ -199,9 +199,10 @@ class _StreamOptions(QGroupBox):
             # TODO: Inform user
             raise exc
 
-        QTAsyncWorker(self, api.get_all_premises,
-                      on_success=handle_premises,
-                      on_error=handle_error)
+        worker = QTAsyncWorker(self, api.get_all_premises,
+                               on_success=handle_premises,
+                               on_error=handle_error)
+        worker.start()
 
         return premises_combobox
 

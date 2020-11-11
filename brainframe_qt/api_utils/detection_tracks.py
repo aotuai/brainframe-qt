@@ -1,6 +1,6 @@
-from uuid import UUID
-from typing import Tuple, Deque, Iterator
 from collections import deque
+from typing import Deque, Iterator, Tuple
+from uuid import UUID
 
 import numpy as np
 
