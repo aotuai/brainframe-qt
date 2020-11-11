@@ -1411,22 +1411,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>_AdvancedOptionsGroupBox</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="280"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="275"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="292"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="287"/>
         <source>Avoid transcoding</source>
         <translation>避免转码</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="287"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="282"/>
         <source>None</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="298"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="293"/>
         <source>Keyframe-only streaming</source>
         <translation>仅传输关键帧</translation>
     </message>
@@ -1442,7 +1442,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>_StreamOptions</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="216"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="211"/>
         <source>Advanced Options</source>
         <translation>高级选项</translation>
     </message>
@@ -1457,7 +1457,7 @@ Please recheck the entered server address.</source>
         <translation>场所</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="196"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="192"/>
         <source>Local Network</source>
         <translation>本地网络</translation>
     </message>
