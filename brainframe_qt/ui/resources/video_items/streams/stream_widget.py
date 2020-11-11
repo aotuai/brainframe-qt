@@ -1,4 +1,7 @@
+from typing import Optional
+
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QWidget
 
 from brainframe.client.api_utils.streaming.zone_status_frame import \
@@ -16,7 +19,7 @@ class StreamWidget(StreamWidgetUI, StreamListenerWidget):
     def __init__(self, *, parent: QWidget):
         super().__init__(parent=parent)
 
-    def resizeEvent(self, event=None):
+    def resizeEvent(self, _event: Optional[QResizeEvent] = None) -> None:
         """Take up entire width using aspect ratio of scene"""
 
         current_frame = self.scene().current_frame
@@ -27,7 +30,7 @@ class StreamWidget(StreamWidgetUI, StreamListenerWidget):
             self.scene().setSceneRect(current_frame.boundingRect())
             self.fitInView(current_frame.boundingRect(), Qt.KeepAspectRatio)
 
-    def on_frame(self, frame: ZoneStatusFrame):
+    def on_frame(self, frame: ZoneStatusFrame) -> None:
 
         # self.widget_overlay.handle_frame_metadata(frame.frame_metadata)
 
@@ -46,17 +49,17 @@ class StreamWidget(StreamWidgetUI, StreamListenerWidget):
                 tracks=frame.tracks
             )
 
-    def on_stream_init(self):
+    def on_stream_init(self) -> None:
         self.scene().remove_all_items()
         self.scene().set_frame(path=":/images/connecting_to_stream_png")
 
-    def on_stream_halted(self):
+    def on_stream_halted(self) -> None:
         self.scene().remove_all_items()
         self.scene().set_frame(path=":/images/connection_lost_png")
 
-    def on_stream_closed(self):
+    def on_stream_closed(self) -> None:
         self.on_stream_halted()
 
-    def on_stream_error(self):
+    def on_stream_error(self) -> None:
         self.scene().remove_all_items()
         self.scene().set_frame(path=":/images/error_message_png")
