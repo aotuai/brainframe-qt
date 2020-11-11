@@ -131,7 +131,9 @@ class SyncedStreamReader(StreamReader):
             self._stream_reader.new_frame_event.clear()
 
             # Get the new frame + timestamp
-            frame_tstamp, frame = self._stream_reader.latest_frame
+            frame_tstamp, frame_bgr = self._stream_reader.latest_frame
+            frame_rgb = frame_bgr[..., ::-1].copy()
+            del frame_bgr
 
             # Get the latest zone statuses from thread status receiver thread
             statuses = self.status_receiver.latest_statuses(self.stream_id)
@@ -139,7 +141,7 @@ class SyncedStreamReader(StreamReader):
             # Run the syncing algorithm
             new_processed_frame = frame_syncer.sync(
                 frame_tstamp=frame_tstamp,
-                frame=frame,
+                frame=frame_rgb,
                 zone_statuses=statuses
             )
 

@@ -73,6 +73,14 @@ class StreamWidget(QGraphicsView):
         self.scene().remove_all_items()
         self.scene().set_frame(frame=processed_frame.frame)
 
+        # This frame has never been paired with ZoneStatuses from the server
+        # so nothing should be rendered. This occurs when the server has
+        # never ever returned results for this stream. This could happen if the
+        # server was unable to connect to the stream, or inference crashed
+        # immediately on the first frame of processing
+        if processed_frame.zone_statuses is None:
+            return
+
         if self.render_config.draw_lines:
             self.scene().draw_lines(processed_frame.zone_statuses)
 

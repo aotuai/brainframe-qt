@@ -38,7 +38,11 @@ class VideoSmall(StreamWidget):
         super().handle_frame()
 
         processed_frame = self.stream_reader.latest_processed_frame
-        self.manage_alert_indication(processed_frame.zone_statuses)
+
+        # zone_statuses can be None if the server has never once returned a
+        # result for this stream.
+        if processed_frame.zone_statuses is not None:
+            self.manage_alert_indication(processed_frame.zone_statuses)
 
     def manage_alert_indication(self, zone_statuses):
 

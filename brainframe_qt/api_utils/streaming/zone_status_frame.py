@@ -20,16 +20,5 @@ class ZoneStatusFrame:
         """
         self.frame: np.ndarray = frame
         self.tstamp: float = tstamp
-        self.zone_statuses: List[ZoneStatus] = zone_statuses
-        self.has_new_zone_statuses = has_new_statuses
+        self.zone_statuses: Optional[Dict[str, ZoneStatus]] = zone_statuses
         self.tracks: List[DetectionTrack] = tracks
-
-        # Cachable properties
-        self._frame_rgb = None
-
-    @property
-    def frame_rgb(self):
-        """Flip the BGR channels to RGB"""
-        if not self._frame_rgb:
-            self._frame_rgb = self.frame[..., ::-1].copy()
-        return self._frame_rgb
