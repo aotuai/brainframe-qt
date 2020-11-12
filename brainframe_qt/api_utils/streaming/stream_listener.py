@@ -6,7 +6,7 @@ class StreamListener:
 
     def __init__(self):
         self.frame_event = Event()
-        """Called when a new ProcessedFrame is ready"""
+        """Called when a new ZoneStatusFrame is ready"""
 
         self.stream_initializing_event = Event()
         """Called when the stream starts initializing"""

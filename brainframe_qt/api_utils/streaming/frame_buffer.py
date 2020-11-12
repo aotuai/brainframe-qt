@@ -70,7 +70,7 @@ class SyncedFrameBuffer:
         one supplied.
 
         :return: None if there are no frames, or if the oldest frame has a
-                 newer timestamp. The ProcessedFrame, if it's older.
+                 newer timestamp. The ZoneStatusFrame, if it's older.
 
         """
         with self._buffer_lock:

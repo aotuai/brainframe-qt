@@ -25,11 +25,10 @@ class FrameSyncer:
         simply paired with old information."""
 
         self.latest_processed = None
-        """Keeps track of the latest ProcessedFrame with information"""
+        """Keeps track of the latest ZoneStatusFrame with information"""
 
         self.buffer = SyncedFrameBuffer()
-        """Holds a queue of empty ProcessedFrames until a new status comes in
-        that is"""
+        """Holds a queue of empty ZoneStatusFrames"""
 
         self.tracks: Dict[UUID, DetectionTrack] = {}
         """Keep a dict of Detection.track_id: DetectionTrack of all detections
@@ -42,8 +41,8 @@ class FrameSyncer:
             frame: np.ndarray,
             zone_statuses: Dict[str, ZoneStatus]
     ):
-        """Input is frame_tstamp, frame, statuses and returns ProcessedFrames
-        where the zonestatus and frames are synced up."""
+        """Input is frame_tstamp, frame, statuses and returns ZoneStatusFrames
+        where the ZoneStatuses and frames are synced up."""
 
         self.buffer.add_frame(
             ZoneStatusFrame(
