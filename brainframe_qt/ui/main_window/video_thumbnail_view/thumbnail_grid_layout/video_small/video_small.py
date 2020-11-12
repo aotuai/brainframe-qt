@@ -35,7 +35,10 @@ class VideoSmall(StreamWidget):
     def on_frame(self, frame: ZoneStatusFrame):
         super().on_frame(frame)
 
-        self.manage_alert_indication(frame.zone_statuses)
+        # zone_statuses can be None if the server has never once returned a
+        # result for this stream.
+        if frame.zone_statuses is not None:
+            self.manage_alert_indication(frame.zone_statuses)
 
     def manage_alert_indication(self, zone_statuses):
 

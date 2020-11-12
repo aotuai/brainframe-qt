@@ -25,11 +25,10 @@ class FrameSyncer:
         simply paired with old information."""
 
         self.latest_processed = None
-        """Keeps track of the latest ProcessedFrame with information"""
+        """Keeps track of the latest ZoneStatusFrame with information"""
 
         self.buffer = SyncedFrameBuffer()
-        """Holds a queue of empty ProcessedFrames until a new status comes in
-        that is"""
+        """Holds a queue of empty ZoneStatusFrames"""
 
         self.tracks: Dict[UUID, DetectionTrack] = {}
         """Keep a dict of Detection.track_id: DetectionTrack of all detections
@@ -41,23 +40,31 @@ class FrameSyncer:
             frame_tstamp: float,
             frame: np.ndarray,
             zone_statuses: Dict[str, ZoneStatus]
-    ):
-        """Input is frame_tstamp, frame, statuses and returns ProcessedFrames
-        where the zonestatus and frames are synced up."""
+    ) -> Optional[ZoneStatusFrame]:
+        """Input is frame_tstamp, frame, statuses and returns ZoneStatusFrames
+        where the ZoneStatuses and frames are synced up."""
 
         self.buffer.add_frame(
             ZoneStatusFrame(
                 frame=frame,
                 tstamp=frame_tstamp,
                 zone_statuses=None,
-                has_new_statuses=False,
                 tracks=None
             )
         )
 
         # Analysis still spinning up. Skip
         if not len(zone_statuses):
-            self.latest_processed = None
+            if self.buffer.is_full and not self.buffer.needs_guaranteed_space:
+                # Pop the unpaired frame anyways to ensure no memory leak and
+                # so the client can show a frame, even if there's nothing to
+                # render
+                self.latest_processed = self.buffer.pop_oldest()
+            # This returns None if the buffer isn't full and no zone statuses
+            # have ever been returned by the server. It returns a
+            # ZoneStatusFrame with zone_statuses=None in the case when the
+            # buffer is already full, but the server still has never returned
+            # a zone status.
             return self.latest_processed
 
         # Get timestamp off of default zone's status (all should be equal)
@@ -129,11 +136,11 @@ class FrameSyncer:
                          if dt.latest_tstamp == status_tstamp]
 
         applied_frame = ZoneStatusFrame(
-            frame=frame.frame_rgb,
+            frame=frame.frame,
             tstamp=frame.tstamp,
             zone_statuses=statuses,
-            has_new_statuses=has_new_statuses,
             tracks=relevant_dets,
-            frame_metadata=frame.frame_metadata)
+            frame_metadata=frame.frame_metadata
+        )
 
         return applied_frame
