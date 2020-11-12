@@ -3,17 +3,15 @@ from typing import Dict, List, Optional
 
 import numpy as np
 from brainframe.api.bf_codecs import ZoneStatus
-from cached_property import cached_property
 
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
 
 
-@dataclass
+@dataclass(eq=False)  # eq=False as np frames can't be compared using __eq__
 class ZoneStatusFrame:
     """A frame that may or may not have undergone processing on the server."""
 
-    # compare=False to prevent numpy complaining about truthiness of arrays
-    frame: np.ndarray = field(compare=False)
+    frame: np.ndarray
     """RGB data on the frame"""
 
     tstamp: float
@@ -28,7 +26,7 @@ class ZoneStatusFrame:
     frame_metadata: 'ZoneStatusFrameMeta' \
         = field(default_factory=lambda: ZoneStatusFrameMeta())
 
+
 @dataclass
 class ZoneStatusFrameMeta:
     client_buffer_full: bool = False
-    stream_broken: bool = False
