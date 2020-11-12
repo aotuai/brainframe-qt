@@ -40,7 +40,7 @@ class FrameSyncer:
             frame_tstamp: float,
             frame: np.ndarray,
             zone_statuses: Dict[str, ZoneStatus]
-    ):
+    ) -> Optional[ZoneStatusFrame]:
         """Input is frame_tstamp, frame, statuses and returns ZoneStatusFrames
         where the ZoneStatuses and frames are synced up."""
 
@@ -49,14 +49,22 @@ class FrameSyncer:
                 frame=frame,
                 tstamp=frame_tstamp,
                 zone_statuses=None,
-                has_new_statuses=False,
                 tracks=None
             )
         )
 
         # Analysis still spinning up. Skip
         if not len(zone_statuses):
-            self.latest_processed = None
+            if self.buffer.is_full and not self.buffer.needs_guaranteed_space:
+                # Pop the unpaired frame anyways to ensure no memory leak and
+                # so the client can show a frame, even if there's nothing to
+                # render
+                self.latest_processed = self.buffer.pop_oldest()
+            # This returns None if the buffer isn't full and no zone statuses
+            # have ever been returned by the server. It returns a
+            # ZoneStatusFrame with zone_statuses=None in the case when the
+            # buffer is already full, but the server still has never returned
+            # a zone status.
             return self.latest_processed
 
         # Get timestamp off of default zone's status (all should be equal)
@@ -127,10 +135,9 @@ class FrameSyncer:
                          if dt.latest_tstamp == status_tstamp]
 
         applied_frame = ZoneStatusFrame(
-            frame=frame.frame_rgb,
+            frame=frame.frame,
             tstamp=frame.tstamp,
             zone_statuses=statuses,
-            has_new_statuses=has_new_statuses,
             tracks=relevant_dets)
 
         return applied_frame
