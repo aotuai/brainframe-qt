@@ -32,10 +32,16 @@ class StreamWidget(StreamWidgetUI, StreamListenerWidget):
 
     def on_frame(self, frame: ZoneStatusFrame) -> None:
 
-        # self.widget_overlay.handle_frame_metadata(frame.frame_metadata)
-
         self.scene().remove_all_items()
         self.scene().set_frame(frame=frame.frame)
+
+        # This frame has never been paired with ZoneStatuses from the server
+        # so nothing should be rendered. This occurs when the server has
+        # never ever returned results for this stream. This could happen if the
+        # server was unable to connect to the stream, or inference crashed
+        # immediately on the first frame of processing
+        if frame.zone_statuses is None:
+            return
 
         if self.render_config.draw_lines:
             self.scene().draw_lines(frame.zone_statuses)
