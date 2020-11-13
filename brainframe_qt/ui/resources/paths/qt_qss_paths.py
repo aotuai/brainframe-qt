@@ -30,6 +30,12 @@ video_thumbnail_view_dir = register_path(
 video_thumbnail_view_qss = register_path(
     video_thumbnail_view_dir / "video_thumbnail_view.qss")
 
+# Video Expanded View
+video_expanded_view_dir = register_path(
+    main_window_dir / "video_expanded_view")
+video_expanded_view_qss = register_path(
+    video_expanded_view_dir / "video_expanded_view.qss")
+
 # Stream Configuration
 stream_configuration_dir = register_path(activity_dir / "stream_configuration")
 stream_configuration_qss = register_path(
@@ -61,6 +67,15 @@ widget_resource_dir = register_path(ui_elements_dir / "widgets")
 container_resource_dir = register_path(ui_elements_dir / "containers")
 sidebar_dock_widget_qss = register_path(
     container_resource_dir / "sidebar_dock_widget" / "sidebar_dock_widget.qss")
+
+###############################################################################
+# Video Resources
+###############################################################################
+
+video_items_dir = register_path(resource_dir / "video_items")
+
+streams_items_dir = register_path(video_items_dir / "streams")
+stream_widget_qss = register_path(streams_items_dir / "stream_widget.qss")
 
 ###############################################################################
 # Alert Resources

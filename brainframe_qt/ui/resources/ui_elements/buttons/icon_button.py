@@ -1,12 +1,9 @@
-from PyQt5.QtCore import Qt, QEvent
-from PyQt5.QtWidgets import QPushButton, QStyleOptionButton, QStyle
+from PyQt5.QtCore import QEvent, Qt
+from PyQt5.QtWidgets import QPushButton, QStyle, QStyleOptionButton
 
 
-class TextIconButton(QPushButton):
-    """Button primarily for displaying emojis as if they were icons
-
-    This class fixes a problem with the width of the button not matching the
-    the text if the text is very short.
+class IconButton(QPushButton):
+    """Button primarily for displaying buttons with just icons
 
     It also forces mouse hovering to still have a visual effect even if the
     button is flat
@@ -19,8 +16,6 @@ class TextIconButton(QPushButton):
         """Store whether or not we want the button to be flat. 
         Real flatness temporarily changes when mouse is hovering in self.event
         """
-
-        self._fix_button_width()
 
     def event(self, event: QEvent) -> bool:
 
@@ -42,6 +37,18 @@ class TextIconButton(QPushButton):
     def setFlat(self, flat: bool):
         self.flat = flat
         super().setFlat(flat)
+
+
+class TextIconButton(IconButton):
+    """Button primarily for displaying emojis as if they were icons
+
+    This class fixes a problem with the width of the button not matching the
+    the text if the text is very short.
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._fix_button_width()
 
     def _fix_button_width(self):
         """Set min width of button properly

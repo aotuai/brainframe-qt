@@ -857,6 +857,14 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     </message>
 </context>
 <context>
+    <name>OverlayTitlebar</name>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/titlebar/titlebar.py" line="11"/>
+        <source>No Active Stream</source>
+        <translation>无活跃视频流</translation>
+    </message>
+</context>
+<context>
     <name>Paginator</name>
     <message>
         <location filename="../ui_elements/containers/paginator.ui" line="62"/>
@@ -1216,6 +1224,24 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>StreamWidgetOverlay</name>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/body/tray/tray.py" line="22"/>
+        <source>The server is not processing frames quickly enough.</source>
+        <translation>服务器未能及时处理视频帧。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/body/tray/tray.py" line="25"/>
+        <source>Results will not appear synced with the frames they correspond to.</source>
+        <translation>检测结果将不会与它们所对应的视频帧同步。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/body/tray/tray.py" line="19"/>
+        <source>Desynced analysis</source>
+        <translation>结果未同步</translation>
+    </message>
+</context>
+<context>
     <name>TaskConfiguration</name>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.py" line="114"/>
@@ -1319,17 +1345,17 @@ Please recheck the entered server address.</source>
 <context>
     <name>VideoExpandedView</name>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="117"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="71"/>
         <source>Task Config</source>
         <translation>任务选项</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="124"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="78"/>
         <source>Stream Capsule Config</source>
         <translation>视频流算法胶囊配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="137"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="91"/>
         <source>Delete Stream</source>
         <translation>删除视频流</translation>
     </message>
@@ -1339,22 +1365,22 @@ Please recheck the entered server address.</source>
         <translation>关闭扩展视频视图</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="104"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="58"/>
         <source>Toggle Stream Config</source>
         <translation>切换视频流配置</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="178"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="177"/>
         <source>Delete stream?</source>
         <translation>删除视频流？</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="180"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="179"/>
         <source>Deleting stream &quot;{stream_name}&quot;.</source>
         <translation>正在删除视频流“{stream_name}“。</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="184"/>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="183"/>
         <source>This will delete all Zones, Detections, Alarms, Alerts, etc. associated with this stream and cannot be undone. This process will happen in the background and can take several minutes.&lt;br&gt;&lt;br&gt;Are you sure you want to continue?</source>
         <translation>这将删除所有此视频流相关的区域、检测结果、警报、报警信息等，并且无法撤消。这个流程会在后台发生&lt;br&gt;&lt;br&gt;可能需要几分钟。</translation>
     </message>

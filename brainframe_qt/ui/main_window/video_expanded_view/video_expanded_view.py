@@ -9,8 +9,8 @@ from requests.exceptions import RequestException
 
 from brainframe.client.api_utils import api
 from brainframe.client.ui.dialogs import CapsuleConfigDialog, TaskConfiguration
-from brainframe.client.ui.resources import QTAsyncWorker
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
+from brainframe.client.ui.resources.paths import qt_qss_paths, qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
@@ -60,6 +60,8 @@ class VideoExpandedView(QWidget):
         self.hide_button.setToolTip(self.tr("Close expanded video view"))
         # noinspection PyUnresolvedReferences
         self.hide_button.clicked.connect(self.expanded_stream_closed_slot)
+
+        stylesheet_watcher.watch(self, qt_qss_paths.video_expanded_view_qss)
 
     def _init_signals(self):
         self.stream_config_button.clicked.connect(
@@ -111,9 +113,6 @@ class VideoExpandedView(QWidget):
         self.expanded_video.change_stream(stream_conf)
         self.alert_log.change_stream(stream_conf.id)
         self.stream_conf = stream_conf
-
-        # Set displayed title of stream
-        self.stream_name_label.setText(stream_conf.name)
 
     @pyqtSlot()
     def expanded_stream_closed_slot(self):

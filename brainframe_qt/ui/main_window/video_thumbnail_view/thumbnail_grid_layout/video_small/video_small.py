@@ -1,10 +1,10 @@
 from PyQt5.QtCore import QRectF, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter
+from PyQt5.QtWidgets import QWidget
 
-# noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import qt_resources
-from brainframe.client.ui.resources.video_items.stream_widget import \
-    StreamWidget
+from brainframe.client.api_utils.streaming.zone_status_frame import \
+    ZoneStatusFrame
+from brainframe.client.ui.resources.video_items.streams import StreamWidget
 
 
 class VideoSmall(StreamWidget):
@@ -26,23 +26,19 @@ class VideoSmall(StreamWidget):
       [parent].ongoing_alerts_slot
     """
 
-    def __init__(self, parent=None, stream_conf=None):
+    def __init__(self, parent: QWidget):
 
         self.alerts_ongoing: bool = False
 
-        super().__init__(stream_conf, parent=parent)
+        super().__init__(parent=parent)
 
-        self.stream_conf = stream_conf
-
-    def handle_frame(self):
-        super().handle_frame()
-
-        processed_frame = self.stream_reader.latest_processed_frame
+    def on_frame(self, frame: ZoneStatusFrame):
+        super().on_frame(frame)
 
         # zone_statuses can be None if the server has never once returned a
         # result for this stream.
-        if processed_frame.zone_statuses is not None:
-            self.manage_alert_indication(processed_frame.zone_statuses)
+        if frame.zone_statuses is not None:
+            self.manage_alert_indication(frame.zone_statuses)
 
     def manage_alert_indication(self, zone_statuses):
 

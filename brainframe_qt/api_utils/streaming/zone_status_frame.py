@@ -1,4 +1,5 @@
-from typing import List, Dict, Optional
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional
 
 import numpy as np
 from brainframe.api.bf_codecs import ZoneStatus
@@ -6,17 +7,44 @@ from brainframe.api.bf_codecs import ZoneStatus
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
 
 
+@dataclass(eq=False)  # eq=False as np frames can't be compared using __eq__
 class ZoneStatusFrame:
     """A frame that may or may not have undergone processing on the server."""
 
-    def __init__(self, frame, tstamp, zone_statuses, tracks):
-        """
-        :param frame: RGB data on the frame
-        :param tstamp: The timestamp of the frame
-        :param zone_statuses: A zone status that is most relevant to this
-            frame, though it might not be a result of this frame specifically
-        """
-        self.frame: np.ndarray = frame
-        self.tstamp: float = tstamp
-        self.zone_statuses: Optional[Dict[str, ZoneStatus]] = zone_statuses
-        self.tracks: List[DetectionTrack] = tracks
+    frame: np.ndarray
+    """RGB data on the frame"""
+
+    tstamp: float
+    """The timestamp of the frame"""
+
+    zone_statuses: Optional[Dict[str, ZoneStatus]]
+    """ZoneStatuses for the frame"""
+
+    tracks: Optional[List[DetectionTrack]]
+    """DetectionTrack history for the frame"""
+
+    frame_metadata: 'ZoneStatusFrameMeta' \
+        = field(default_factory=lambda: ZoneStatusFrameMeta())
+
+    # Cython currently isn't working with @dataclass or NamedTuple, but this
+    # fixes it. There's a PR to fix this, and here's the relevant issue:
+    # https://github.com/cython/cython/issues/2552
+    __annotations__ = {
+        'frame': np.ndarray,
+        'tstamp': float,
+        'zone_statuses': Optional[Dict[str, ZoneStatus]],
+        'tracks': Optional[List[DetectionTrack]],
+        'frame_metadata': 'ZoneStatusFrameMeta',
+    }
+
+
+@dataclass
+class ZoneStatusFrameMeta:
+    client_buffer_full: bool = False
+
+    # Cython currently isn't working with @dataclass or NamedTuple, but this
+    # fixes it. There's a PR to fix this, and here's the relevant issue:
+    # https://github.com/cython/cython/issues/2552
+    __annotations__ = {
+        'client_buffer_full': bool,
+    }

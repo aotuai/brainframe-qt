@@ -1,0 +1,33 @@
+VideoLarge {
+    background: black;
+}
+
+OverlayTitlebar {
+    background-color: rgba(128, 128, 128, 80)
+}
+
+OverlayTitlebar > QLabel {
+    color: white;
+}
+
+OverlayTray {
+    /*background: rgba(255, 128, 0, 100);*/
+}
+
+/*OverlayBody {*/
+/*    background: rgba(128, 255, 0, 100);*/
+/*}*/
+
+_StreamAlertButton {
+    qproperty-iconSize: 35px;
+    background: palevioletred;
+}
+
+StreamAlert {
+    border-radius: 5px;
+    background: rgba(128, 128, 128, 80);
+}
+
+StreamAlert > QLabel {
+    color: white;
+}

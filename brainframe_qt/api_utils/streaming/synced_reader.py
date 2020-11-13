@@ -9,8 +9,8 @@ from time import sleep
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.utils import or_events
-from .stream_listener import StreamListener
 from .frame_syncer import FrameSyncer
+from .stream_listener import StreamListener
 from .zone_status_frame import ZoneStatusFrame
 
 
@@ -146,7 +146,12 @@ class SyncedStreamReader(StreamReader):
             )
 
             if new_processed_frame is not None:
-                is_new = new_processed_frame != self.latest_processed_frame
+                if self.latest_processed_frame is None:
+                    is_new = True
+                else:
+                    previous_tstamp = self.latest_processed_frame.tstamp
+                    new_tstamp = new_processed_frame.tstamp
+                    is_new = new_tstamp > previous_tstamp
 
                 # This value must be set before alerting frame listeners. This
                 # prevents a race condition where latest_processed_frame is

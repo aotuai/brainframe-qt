@@ -99,6 +99,7 @@ class FrameSyncer:
         if popped_frame is None:
             if self.buffer.is_full and not self.buffer.needs_guaranteed_space:
                 popped_frame = self.buffer.pop_oldest()
+                popped_frame.frame_metadata.client_buffer_full = True
 
         # If we have a frame using any means, use it
         if popped_frame is not None:
@@ -138,6 +139,8 @@ class FrameSyncer:
             frame=frame.frame,
             tstamp=frame.tstamp,
             zone_statuses=statuses,
-            tracks=relevant_dets)
+            tracks=relevant_dets,
+            frame_metadata=frame.frame_metadata
+        )
 
         return applied_frame

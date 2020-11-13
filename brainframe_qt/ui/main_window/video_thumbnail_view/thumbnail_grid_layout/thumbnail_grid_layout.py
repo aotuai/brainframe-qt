@@ -1,10 +1,10 @@
-# noinspection PyUnresolvedReferences
-from PyQt5.QtCore import pyqtProperty
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
+from typing import Dict
+
+from PyQt5.QtCore import Qt, pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
-
 from brainframe.api.bf_codecs import StreamConfiguration
+
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from .video_small.video_small import VideoSmall
 
@@ -32,7 +32,7 @@ class ThumbnailGridLayout(QWidget):
         self._grid_num_columns_expanded = grid_num_columns
         """Number of columns in grid when thumbnail view is expanded"""
 
-        self.stream_widgets = {}
+        self.stream_widgets: Dict[int, VideoSmall] = {}
         """Streams currently in the ThumbnailGridLayout
 
         Dict is formatted as {stream_id: VideoSmall()}
@@ -47,14 +47,17 @@ class ThumbnailGridLayout(QWidget):
         self._init_style()
 
     def new_stream_widget(self, stream_conf: StreamConfiguration):
-        video = VideoSmall(self, stream_conf)
+        video = VideoSmall(parent=self)
+        video.change_stream(stream_conf)
+
         self.add_video(video)
 
         self._connect_widget_signals(video)
 
-    def add_video(self, video):
+    def add_video(self, video: VideoSmall) -> None:
 
-        self.stream_widgets[video.stream_conf.id] = video
+        stream_id = video.stream_conf.id
+        self.stream_widgets[stream_id] = video
         self._add_widget_to_layout(video)
 
         self._set_layout_equal_stretch()
