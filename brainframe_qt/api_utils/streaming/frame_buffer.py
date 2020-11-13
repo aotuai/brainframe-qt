@@ -7,13 +7,18 @@ from brainframe.client.api_utils.streaming.zone_status_frame import \
 
 
 class SyncedFrameBuffer:
-    MAX_BUF_SIZE: int = 300  # Arbitrary but not too big
     GUARANTEED_BUFFER_SPACE: int = 30
     """Amount of space each buffer is allocated, even if total is over max"""
 
     _buffer_lock: ClassVar[RLock] = RLock()
 
     _instances = WeakSet()  # type: ClassVar[WeakSet[SyncedFrameBuffer]]
+
+    _max_buffer_size: ClassVar[int] = 300
+    """The maximum size of the shared frame buffer. This value is given a
+    default for testing purposes but will be overridden by a user-configurable
+    setting when run normally.
+    """
 
     def __init__(self):
         self._buffer: List[ZoneStatusFrame] = []
@@ -26,13 +31,25 @@ class SyncedFrameBuffer:
         with self._buffer_lock:
             self._buffer.append(frame)
 
+    @classmethod
+    def set_max_buffer_size(cls, max_size: int) -> None:
+        """Sets the shared maximum size of the frame buffer.
+
+        If this value is decreased during runtime, the buffer will not
+        immediately decrease in size. It will slowly decrease as frames are
+        removed from the buffer.
+
+        :param max_size: The new buffer size
+        """
+        cls._max_buffer_size = max_size
+
     @property
     def is_empty(self) -> bool:
         return not len(self)
 
     @property
     def is_full(self) -> bool:
-        return self._total_length >= self.MAX_BUF_SIZE
+        return self._total_length >= self._max_buffer_size
 
     @property
     def needs_guaranteed_space(self) -> bool:
