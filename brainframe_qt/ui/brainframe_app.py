@@ -22,6 +22,8 @@ from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.secret import decrypt
+from brainframe.client.api_utils.streaming.frame_buffer import \
+    SyncedFrameBuffer
 
 
 class BrainFrameApplication(QApplication):
@@ -178,6 +180,11 @@ class BrainFrameApplication(QApplication):
         if username and password:
             password = decrypt(password)
             api.set_credentials((username, password))
+
+        SyncedFrameBuffer.set_max_buffer_size(settings.frame_buffer_size.val())
+        settings.frame_buffer_size.subscribe(
+            settings.Topic.CHANGED,
+            SyncedFrameBuffer.set_max_buffer_size)
 
     # noinspection PyMethodMayBeStatic
     def _shutdown(self):

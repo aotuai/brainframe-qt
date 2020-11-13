@@ -1,13 +1,16 @@
 import typing
 from typing import Any
+from enum import Enum
 
 import pendulum
 import sys
 from PyQt5.QtCore import QSettings
 from pendulum.tz.timezone import Timezone
 
+from brainframe.shared.pubsus import PubSubMixin
 
-class Setting:
+
+class Setting(PubSubMixin):
     """A small wrapper around QSettings that holds the name, type, and default,
     and also allows you to 'import' settings around the project without having
     to worry about keeping the name the same everywhere. It also helps refactor.
@@ -19,6 +22,8 @@ class Setting:
 
     def __init__(self, default, type_, name):
         """Set the default if it doesn't exist yet"""
+        super().__init__()
+
         self.default = default
         self.type = type_
         self.name = name
@@ -31,6 +36,7 @@ class Setting:
     def set(self, value):
         self._settings.setValue(self.name, value)
         self._cache = value
+        self.publish(Topic.CHANGED, value)
 
     def val(self):
         if self._cache is None:
@@ -42,6 +48,10 @@ class Setting:
     def delete(self):
         self._settings.remove(self.name)
         self._cache = None
+
+
+class Topic(Enum):
+    CHANGED = "changed"
 
 
 # TODO: Having to pass in a settings_object is less than ideal
@@ -96,9 +106,16 @@ user_timezone = Setting(
 
 # License settings
 client_license_accepted = Setting(
-    False, type_=bool, name="client_license_accepted")
+    False, type_=bool, name="client_license_accepted"
+)
 client_license_md5 = Setting(
-    None, type_=str, name="client_license_md5")
+    None, type_=str, name="client_license_md5"
+)
+
+# The maximum size of the frame buffer used for all streams
+frame_buffer_size = Setting(
+    300, type_=int, name="frame_buffer_size"
+)
 
 
 def get_user_timezone() -> Timezone:
