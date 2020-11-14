@@ -23,4 +23,7 @@ class StreamWidgetOverlay(StreamWidgetOverlayUI):
 
     def handle_frame_metadata(self, frame_metadata: ZoneStatusFrameMeta) \
             -> None:
-        self.body.tray.set_lagging(frame_metadata.client_buffer_full)
+        self.body.tray.set_no_analysis(frame_metadata.no_analysis)
+        self.body.tray.set_desynced_analysis(
+            frame_metadata.analysis_latency)
+        self.body.tray.set_buffer_full(frame_metadata.client_buffer_full)

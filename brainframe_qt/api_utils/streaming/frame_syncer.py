@@ -1,7 +1,6 @@
 from typing import Dict, Optional
 from uuid import UUID, uuid4
 
-import numpy as np
 from brainframe.api.bf_codecs import ZoneStatus
 
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
@@ -35,31 +34,27 @@ class FrameSyncer:
         that are ongoing. Then, every once in a while, prune DetectionTracks 
         that haven't gotten updates in a while."""
 
-    def sync(
-            self, *,
-            frame_tstamp: float,
-            frame: np.ndarray,
-            zone_statuses: Dict[str, ZoneStatus]
-    ) -> Optional[ZoneStatusFrame]:
+    def sync(self, *,
+             latest_frame: ZoneStatusFrame,
+             latest_zone_statuses: Dict[str, ZoneStatus]) \
+            -> Optional[ZoneStatusFrame]:
         """Input is frame_tstamp, frame, statuses and returns ZoneStatusFrames
         where the ZoneStatuses and frames are synced up."""
 
-        self.buffer.add_frame(
-            ZoneStatusFrame(
-                frame=frame,
-                tstamp=frame_tstamp,
-                zone_statuses=None,
-                tracks=None
-            )
-        )
+        self.buffer.add_frame(latest_frame)
 
         # Analysis still spinning up. Skip
-        if not len(zone_statuses):
+        if not len(latest_zone_statuses):
             if self.buffer.is_full and not self.buffer.needs_guaranteed_space:
                 # Pop the unpaired frame anyways to ensure no memory leak and
                 # so the client can show a frame, even if there's nothing to
                 # render
                 self.latest_processed = self.buffer.pop_oldest()
+                self.latest_processed.frame_metadata.client_buffer_full = True
+
+            if self.latest_processed is not None:
+                self.latest_processed.frame_metadata.no_analysis = True
+
             # This returns None if the buffer isn't full and no zone statuses
             # have ever been returned by the server. It returns a
             # ZoneStatusFrame with zone_statuses=None in the case when the
@@ -68,7 +63,7 @@ class FrameSyncer:
             return self.latest_processed
 
         # Get timestamp off of default zone's status (all should be equal)
-        status_tstamp = zone_statuses[DEFAULT_ZONE_NAME].tstamp
+        status_tstamp = latest_zone_statuses[DEFAULT_ZONE_NAME].tstamp
 
         # Check if this is a fresh zone_status or not
         if self.last_status_tstamp != status_tstamp:
@@ -80,7 +75,7 @@ class FrameSyncer:
             self.last_status_tstamp = status_tstamp
 
             # Iterate over all new detections, and add them to their tracks
-            dets = zone_statuses[DEFAULT_ZONE_NAME].within
+            dets = latest_zone_statuses[DEFAULT_ZONE_NAME].within
             for det in dets:
                 # Create new tracks where necessary
                 track_id = det.track_id if det.track_id else uuid4()
@@ -93,10 +88,13 @@ class FrameSyncer:
         # received frame, associate the buffer's oldest frame with the zone
         # status
         popped_frame = self.buffer.pop_if_older(self.last_status_tstamp)
+        if popped_frame is not None:
+            analysis_latency = latest_frame.tstamp - popped_frame.tstamp
+            popped_frame.frame_metadata.analysis_latency = analysis_latency
 
         # Pop a frame if we're over the combined buffer max, but we also have
         # more frames than the guaranteed minimum
-        if popped_frame is None:
+        else:
             if self.buffer.is_full and not self.buffer.needs_guaranteed_space:
                 popped_frame = self.buffer.pop_oldest()
                 popped_frame.frame_metadata.client_buffer_full = True
@@ -105,26 +103,21 @@ class FrameSyncer:
         if popped_frame is not None:
             self.latest_processed = self._apply_statuses_to_frame(
                 frame=popped_frame,
-                statuses=zone_statuses,
+                statuses=latest_zone_statuses,
                 tracks=self.tracks,
-                has_new_statuses=self.last_used_zone_statuses != zone_statuses
             )
 
-            self.last_used_zone_statuses = zone_statuses
+            self.last_used_zone_statuses = latest_zone_statuses
 
         # Prune DetectionTracks that haven't had a detection in a while
-        for uuid, track in list(self.tracks.items()):
-            detection_lapse = frame_tstamp - track.latest_tstamp
-            if detection_lapse > self.MAX_CACHE_TRACK_SECONDS:
-                del self.tracks[uuid]
+        self._prune_detection_tracks(latest_frame.tstamp)
 
         return self.latest_processed
 
     # noinspection PyMethodMayBeStatic
     def _apply_statuses_to_frame(self, frame: ZoneStatusFrame,
                                  statuses: Dict[str, ZoneStatus],
-                                 tracks: Dict[UUID, DetectionTrack],
-                                 has_new_statuses: bool) \
+                                 tracks: Dict[UUID, DetectionTrack]) \
             -> ZoneStatusFrame:
 
         # Get timestamp off of default zone's status (all should be equal)
@@ -144,3 +137,9 @@ class FrameSyncer:
         )
 
         return applied_frame
+
+    def _prune_detection_tracks(self, frame_tstamp: float) -> None:
+        for uuid, track in list(self.tracks.items()):
+            detection_lapse = frame_tstamp - track.latest_tstamp
+            if detection_lapse > self.MAX_CACHE_TRACK_SECONDS:
+                del self.tracks[uuid]
