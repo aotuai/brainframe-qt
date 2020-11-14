@@ -45,22 +45,24 @@ class FrameSyncer:
 
         # Analysis still spinning up. Skip
         if not len(latest_zone_statuses):
-            if self.buffer.is_full and not self.buffer.needs_guaranteed_space:
-                # Pop the unpaired frame anyways to ensure no memory leak and
-                # so the client can show a frame, even if there's nothing to
-                # render
-                self.latest_processed = self.buffer.pop_oldest()
-                self.latest_processed.frame_metadata.client_buffer_full = True
+            if not self.buffer.is_full or self.buffer.needs_guaranteed_space:
+                # Keep building buffer; nothing to do
+                return None
 
-            if self.latest_processed is not None:
-                self.latest_processed.frame_metadata.no_analysis = True
+            # Pop the unpaired frame anyways to ensure no memory leak and
+            # so the client can show a frame, even if there's nothing to
+            # render
+            popped_frame = self.buffer.pop_oldest()
+            popped_frame.frame_metadata.client_buffer_full = True
+            popped_frame.frame_metadata.no_analysis = True
 
             # This returns None if the buffer isn't full and no zone statuses
             # have ever been returned by the server. It returns a
             # ZoneStatusFrame with zone_statuses=None in the case when the
             # buffer is already full, but the server still has never returned
             # a zone status.
-            return self.latest_processed
+            self.latest_processed = popped_frame
+            return popped_frame
 
         # Get timestamp off of default zone's status (all should be equal)
         status_tstamp = latest_zone_statuses[DEFAULT_ZONE_NAME].tstamp
@@ -101,7 +103,7 @@ class FrameSyncer:
 
         # If we have a frame using any means, use it
         if popped_frame is not None:
-            self.latest_processed = self._apply_statuses_to_frame(
+            self._apply_statuses_to_frame(
                 frame=popped_frame,
                 statuses=latest_zone_statuses,
                 tracks=self.tracks,
@@ -112,13 +114,14 @@ class FrameSyncer:
         # Prune DetectionTracks that haven't had a detection in a while
         self._prune_detection_tracks(latest_frame.tstamp)
 
-        return self.latest_processed
+        self.latest_processed = popped_frame
+        return popped_frame
 
     # noinspection PyMethodMayBeStatic
-    def _apply_statuses_to_frame(self, frame: ZoneStatusFrame,
+    def _apply_statuses_to_frame(self, *, frame: ZoneStatusFrame,
                                  statuses: Dict[str, ZoneStatus],
                                  tracks: Dict[UUID, DetectionTrack]) \
-            -> ZoneStatusFrame:
+            -> None:
 
         # Get timestamp off of default zone's status (all should be equal)
         status_tstamp = statuses[DEFAULT_ZONE_NAME].tstamp
@@ -128,15 +131,8 @@ class FrameSyncer:
         relevant_dets = [dt.copy() for dt in tracks.values()
                          if dt.latest_tstamp == status_tstamp]
 
-        applied_frame = ZoneStatusFrame(
-            frame=frame.frame,
-            tstamp=frame.tstamp,
-            zone_statuses=statuses,
-            tracks=relevant_dets,
-            frame_metadata=frame.frame_metadata
-        )
-
-        return applied_frame
+        frame.zone_statuses = statuses
+        frame.tracks = relevant_dets
 
     def _prune_detection_tracks(self, frame_tstamp: float) -> None:
         for uuid, track in list(self.tracks.items()):

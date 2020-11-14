@@ -49,6 +49,6 @@ class ZoneStatusFrameMeta:
     # https://github.com/cython/cython/issues/2552
     __annotations__ = {
         'no_analysis': bool,
-        'frame_analysis_desync': bool,
+        'analysis_latency': bool,
         'client_buffer_full': bool
     }
