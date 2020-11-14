@@ -38,8 +38,13 @@ class FrameSyncer:
              latest_frame: ZoneStatusFrame,
              latest_zone_statuses: Dict[str, ZoneStatus]) \
             -> Optional[ZoneStatusFrame]:
-        """Input is frame_tstamp, frame, statuses and returns ZoneStatusFrames
-        where the ZoneStatuses and frames are synced up."""
+        """Sync frames with statuses
+
+        Input is a ZoneStatusFrame with a frame and tstamp, and the latest
+        ZoneStatuses
+
+        Returns a ZoneStatusFrame with the statuses synced to its frame, or
+        None if no frame to sync to."""
 
         self.buffer.add_frame(latest_frame)
 
