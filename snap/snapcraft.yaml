@@ -1,0 +1,113 @@
+name: brainframe-client
+version: '0.27.0'
+summary: A smart vision platform that is built to be easy to scale and deploy
+description: >
+  BrainFrame is a smart vision platform that is built to be easy to scale,
+  highly configurable, and deployable on-premises or to the cloud. This is its
+  client.
+
+  Powered by our automatic algorithm fusion and optimization engine,
+  BrainFrame enables plug and play integration of VisionCapsules. This platform
+  turns any connected camera into a smart sensor for sophisticated monitoring
+  and inspection tasks, serving a variety of vertical markets.
+
+  The client makes it easy to configure video streams, set up zones, and manage
+  VisionCapsules without any programming experience.
+# TODO: Update to core20 when the kde-neon extension supports it.
+#       See: https://bugs.kde.org/show_bug.cgi?id=427576
+base: core18
+confinement: strict
+grade: stable
+
+parts:
+  brainframe-client:
+    plugin: nil
+    override-build: |
+      # Install Poetry
+      curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
+        | python3 - --version 1.1.0b2
+      export PATH=$HOME/.poetry/bin:$PATH
+
+      # The PYTHONPATH doesn't seem to be configured properly be default
+      export PYTHONPATH=/usr/lib/python3.6:/usr/local/lib/python3.6/dist-packages:$PYTHONPATH
+      # Packages like ujson can't find "Python.h" without this
+      export C_INCLUDE_PATH=/usr/include/python3.6m
+
+      # Install dependencies
+      pip3 install --upgrade pip wheel
+      # These packages are installed by apt, and Poetry will try to uninstall
+      # them because their versions don't match ours. It will then fail since
+      # they're dist-packages. As a workaround, we install them with pip so
+      # that Poetry removes those instead.
+      python3 -m pip install --ignore-installed httplib2 pyyaml
+      # Install all Poetry dependencies globally
+      poetry config virtualenvs.create false
+      poetry install --no-root --no-dev --extras client --extras build
+
+      # Remove non-client code, so we don't waste time compiling it
+      rm -r brainframe/backend brainframe/tests stream_gateway
+
+      # Compile the client
+      export PATH="$SNAPCRAFT_PART_INSTALL/usr/local/bin:$PATH"
+      python3 compile.py build_ext --inplace
+
+      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
+      mkdir -p $PYTHON_INSTALL_DIR/brainframe
+
+      # Copy the project
+      cp -r licenses $PYTHON_INSTALL_DIR
+      cp -r --parents brainframe/shared $PYTHON_INSTALL_DIR
+      cp -r --parents brainframe/client $PYTHON_INSTALL_DIR
+      # Remove all undesirable file types from brainframe/shared
+      for undesirable in "*.py" "*.c" "*.pyc" "__pycache__"
+        do find $PYTHON_INSTALL_DIR/brainframe/shared -name "$undesirable" -delete
+      done
+
+      # Add the main Python file
+      cp brainframe_client.py $PYTHON_INSTALL_DIR/.
+    source: .
+    build-packages:
+      # Basic Python packages
+      - python3-pip
+      - python3-dev
+      - python3-setuptools
+      - python3-distutils
+      # Poetry dependencies
+      - python3-venv
+      - git
+      # PyGObject dependencies
+      - pkg-config
+      - libcairo2-dev
+      - libgirepository1.0-dev
+      # Qt dependencies
+      - qt5-default
+      - pyqt5-dev-tools
+      - qttools5-dev-tools
+    stage-packages:
+      # Basic Python packages
+      - python3-setuptools
+      - python3-distutils
+      # For theming
+      - adwaita-qt
+      # PyQt
+      - python3-pyqt5
+      - python3-pyqt5.qtsvg
+      # PyGObject dependencies
+      - libgirepository-1.0-1
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-libav
+      - gir1.2-gst-plugins-base-1.0
+
+apps:
+  brainframe-client:
+    command: python3 $SNAP/usr/local/lib/python3.6/site-packages/brainframe_client.py
+    extensions:
+      - kde-neon
+    plugs:
+      - opengl
+      - network
+      - home
+    environment:
+      PYTHONPATH: "$SNAP/usr/src/brainframe-api:$SNAP/usr/local/lib/python3.6/site-packages:$PYTHONPATH"
+      QT_STYLE_OVERRIDE: "adwaita-dark"
