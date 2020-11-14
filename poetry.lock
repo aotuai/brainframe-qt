@@ -268,7 +268,7 @@ docker_utils = ["docker"]
 
 [package.source]
 type = "git"
-url = "ssh://git@bitbucket.org/teamdll/fabrisnake.git"
+url = "ssh://git@github.com/aotuai/fabrisnake.git"
 reference = "v0.10.4"
 resolved_reference = "cc55243687234bbac31f4a87c7d0424950287412"
 

@@ -54,7 +54,7 @@ cached-property = "^1.5.2"
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.1"
 mock = "^4.0.2"
-fabrisnake = { git = "ssh://git@bitbucket.org/teamdll/fabrisnake.git", rev = "v0.10.4" }
+fabrisnake = { git = "ssh://git@github.com/aotuai/fabrisnake.git", rev = "v0.10.4" }
 pyqt5-stubs = { git="ssh://git@github.com/stlehmann/PyQt5-stubs.git", branch = "master" }
 
 [tool.poetry.extras]
