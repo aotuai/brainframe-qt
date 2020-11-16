@@ -1,7 +1,11 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QSizePolicy, QVBoxLayout, QWidget
+from typing import List, Set
 
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QVBoxLayout, QWidget
+
+# TODO: This is way too nested. Potentially make Alerts a more "generic" item
+from brainframe.client.ui.main_window.video_expanded_view.video_large.stream_overlay import \
+    AbstractOverlayAlert
 from .stream_alert import StreamAlert
 
 
@@ -10,68 +14,10 @@ class OverlayTray(QWidget):
     def __init__(self, parent: QWidget):
         super().__init__(parent=parent)
 
-        self.no_analysis_indicator = self._init_no_analysis_indicator()
-        self.desynced_analysis_indicator \
-            = self._init_desynced_analysis_indicator()
-        self.buffer_full_indicator = self._init_buffer_full_indicator()
+        self.alert_widgets: Set[StreamAlert] = set()
 
         self._init_layout()
         self._init_style()
-
-    def _init_no_analysis_indicator(self) -> StreamAlert:
-        short_text = QApplication.translate("StreamWidgetOverlay",
-                                            "Awaiting analysis")
-
-        message = QApplication.translate(
-            "StreamWidgetOverlay",
-            "No analysis results have been received for this stream yet")
-
-        icon = QIcon(":/icons/analysis_error")
-
-        lagging_stream_indicator = StreamAlert(icon, short_text, message,
-                                               parent=self)
-
-        return lagging_stream_indicator
-
-    def _init_desynced_analysis_indicator(self) -> StreamAlert:
-        short_text = QApplication.translate("StreamWidgetOverlay",
-                                            "Desynced analysis")
-
-        message_text1 = QApplication.translate(
-            "StreamWidgetOverlay",
-            "The server is not processing frames quickly enough.")
-        message_text2 = QApplication.translate(
-            "StreamWidgetOverlay",
-            "Low analysis FPS will cause detections to appear before their "
-            + "frames.")
-        message_text = f"{message_text1}<br>{message_text2}"
-
-        icon = QIcon(":/icons/analysis_error")
-
-        lagging_stream_indicator = StreamAlert(icon, short_text, message_text,
-                                               parent=self)
-
-        return lagging_stream_indicator
-
-    def _init_buffer_full_indicator(self) -> StreamAlert:
-        short_text = QApplication.translate("StreamWidgetOverlay",
-                                            "Severely desynced analysis")
-
-        message_text1 = QApplication.translate(
-            "StreamWidgetOverlay",
-            "The server is processing frames extremely slowly.")
-        message_text2 = QApplication.translate(
-            "StreamWidgetOverlay",
-            "Results will not appear synced with the frames they correspond "
-            + "to.")
-        message_text = f"{message_text1}<br>{message_text2}"
-
-        icon = QIcon(":/icons/analysis_error")
-
-        lagging_stream_indicator = StreamAlert(icon, short_text, message_text,
-                                               parent=self)
-
-        return lagging_stream_indicator
 
     def _init_layout(self) -> None:
         layout = QVBoxLayout()
@@ -82,33 +28,37 @@ class OverlayTray(QWidget):
         # Allow background of widget to be styled
         self.setAttribute(Qt.WA_StyledBackground, True)
 
-        self.no_analysis_indicator.setSizePolicy(QSizePolicy.Fixed,
-                                                 QSizePolicy.Fixed)
-        self.desynced_analysis_indicator.setSizePolicy(QSizePolicy.Fixed,
-                                                       QSizePolicy.Fixed)
-        self.buffer_full_indicator.setSizePolicy(QSizePolicy.Fixed,
-                                                 QSizePolicy.Fixed)
+    def handle_alerts(self, alerts: List[AbstractOverlayAlert]) -> None:
+        # Calculate which alerts we need to create and which we need to remove
+        widgets_to_remove = self.alert_widgets.copy()
+        alerts_to_add = alerts.copy()
+        all_widgets: List[StreamAlert] = []
 
-        # Hide until needed
-        self.no_analysis_indicator.setHidden(True)
-        self.desynced_analysis_indicator.setHidden(True)
-        self.buffer_full_indicator.setHidden(True)
+        # Iterate over all current alert widgets
+        for alert_widget in self.alert_widgets:
 
-    def set_no_analysis(self, no_analysis: bool) -> None:
-        self._display_alert_button(no_analysis, self.no_analysis_indicator)
+            # If we see an alert widget we need an alert for
+            if alert_widget.alert in alerts_to_add:
 
-    def set_desynced_analysis(self, desynced_analysis: bool) -> None:
-        self._display_alert_button(desynced_analysis,
-                                   self.desynced_analysis_indicator)
+                # Don't remove it
+                widgets_to_remove.remove(alert_widget)
 
-    def set_buffer_full(self, buffer_full: bool) -> None:
-        self._display_alert_button(buffer_full, self.buffer_full_indicator)
+                # Also don't create a new alert
+                alerts_to_add.remove(alert_widget.alert)
 
-    def _display_alert_button(self, display: bool, button: StreamAlert) \
-            -> None:
-        if display:
-            self.layout().addWidget(button)
-        else:
-            self.layout().removeWidget(button)
+                # Keep track of it
+                all_widgets.append(alert_widget)
 
-        button.setVisible(display)
+        # Remove the unneeded widgets
+        for alert_widget in widgets_to_remove:
+            self.layout().removeWidget(alert_widget)
+            alert_widget.deleteLater()
+
+            self.alert_widgets.remove(alert_widget)
+
+        # Add the new ones
+        for alert in alerts_to_add:
+            alert_widget = StreamAlert(alert, parent=self)
+            self.layout().addWidget(alert_widget)
+
+            self.alert_widgets.add(alert_widget)

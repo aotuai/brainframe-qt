@@ -1,10 +1,11 @@
-from typing import Optional
+from typing import List, Optional
 
 from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs
 
 from brainframe.client.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrameMeta
+from . import alerts as stream_alerts
 from .stream_widget_overlay_ui import StreamWidgetOverlayUI
 
 
@@ -23,7 +24,20 @@ class StreamWidgetOverlay(StreamWidgetOverlayUI):
 
     def handle_frame_metadata(self, frame_metadata: ZoneStatusFrameMeta) \
             -> None:
-        self.body.tray.set_no_analysis(frame_metadata.no_analysis)
-        self.body.tray.set_desynced_analysis(
-            frame_metadata.analysis_latency)
-        self.body.tray.set_buffer_full(frame_metadata.client_buffer_full)
+
+        alerts = self._metadata_to_alerts(frame_metadata)
+        self.body.handle_alerts(alerts)
+
+    @staticmethod
+    def _metadata_to_alerts(frame_metadata: ZoneStatusFrameMeta) \
+            -> List[stream_alerts.AbstractOverlayAlert]:
+        alerts: List[stream_alerts.AbstractOverlayAlert] = []
+
+        if frame_metadata.no_analysis:
+            alerts.append(stream_alerts.NO_ANALYSIS_ALERT)
+        if frame_metadata.analysis_latency:
+            alerts.append(stream_alerts.DESYNCED_ANALYSIS_ALERT)
+        if frame_metadata.client_buffer_full:
+            alerts.append(stream_alerts.BUFFER_FULL_ALERT)
+
+        return alerts
