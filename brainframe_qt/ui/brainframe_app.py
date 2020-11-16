@@ -22,6 +22,7 @@ from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.secret import decrypt
+from brainframe.shared.utils import or_events
 from brainframe.client.api_utils.streaming.frame_buffer import \
     SyncedFrameBuffer
 
@@ -235,10 +236,22 @@ class BrainFrameApplication(QApplication):
             worker = QTAsyncWorker(self, api.wait_for_server_initialization,
                                    on_error=on_error)
             worker.start()
-            self._wait_for_event(worker.finished_event)
+
+            # Wait until we get something back from the server or the user has
+            # changed the server URL
+            url_changed_event = settings.server_url.subscribe_as_event(
+                settings.Topic.CHANGED)
+            finished_or_url_changed_event = or_events(
+                worker.finished_event, url_changed_event)
+            self._wait_for_event(finished_or_url_changed_event)
+
+            # The server URL was changed while attempting to connect. Try
+            # again.
+            if url_changed_event.is_set():
+                continue
 
             # Connection successful
-            if worker.err is None:
+            elif worker.err is None:
                 break
 
             # Ignore standard communication errors
