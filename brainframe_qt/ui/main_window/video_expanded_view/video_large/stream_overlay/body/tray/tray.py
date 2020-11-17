@@ -39,8 +39,6 @@ class OverlayTray(QWidget):
 
             # If we see an alert widget we need an alert for
             if alert_widget.alert in alerts_to_add:
-
-                # Don't remove it
                 widgets_to_remove.remove(alert_widget)
 
                 # Also don't create a new alert
@@ -49,8 +47,15 @@ class OverlayTray(QWidget):
                 # Keep track of it
                 all_widgets.append(alert_widget)
 
+                # Refresh the widget's timeout
+                alert_widget.refresh_timeout()
+
         # Remove the unneeded widgets
         for alert_widget in widgets_to_remove:
+            # Don't remove widget if it hasn't been on screen for long enough
+            if not alert_widget.past_minimum_duration:
+                continue
+
             self.layout().removeWidget(alert_widget)
             alert_widget.deleteLater()
 

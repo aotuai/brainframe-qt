@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import timedelta
 from typing import Dict, List, Optional
 
 import numpy as np
@@ -41,7 +42,7 @@ class ZoneStatusFrame:
 @dataclass
 class ZoneStatusFrameMeta:
     no_analysis: bool = False
-    analysis_latency: bool = False
+    analysis_latency: timedelta = timedelta(seconds=0)
     client_buffer_full: bool = False
 
     # Cython currently isn't working with @dataclass or NamedTuple, but this
@@ -49,6 +50,6 @@ class ZoneStatusFrameMeta:
     # https://github.com/cython/cython/issues/2552
     __annotations__ = {
         'no_analysis': bool,
-        'analysis_latency': bool,
+        'analysis_latency': timedelta,
         'client_buffer_full': bool
     }

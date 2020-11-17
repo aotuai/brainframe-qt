@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QWidget
@@ -10,10 +12,17 @@ from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
 
 
 class StreamAlert(QWidget):
+    ALERT_TIMEOUT = timedelta(seconds=10)
+    """How long an inactive alert appears on screen before it is removed.
+    This gives the alert time to reappear without causing a jittering affect"""
+
     def __init__(self, alert: AbstractOverlayAlert, *, parent: QWidget):
         super().__init__(parent=parent)
 
         self.alert = alert
+
+        self._timeout = datetime.fromtimestamp(0)
+        self.refresh_timeout()
 
         self.icon_button = self._init_icon_button()
         self.label = self._init_label()
@@ -50,6 +59,13 @@ class StreamAlert(QWidget):
         self.setToolTip(self.alert.long_text())
 
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+
+    @property
+    def past_minimum_duration(self) -> bool:
+        return datetime.now() > self._timeout
+
+    def refresh_timeout(self) -> None:
+        self._timeout = datetime.now() + self.ALERT_TIMEOUT
 
 
 class _StreamAlertButton(IconButton):

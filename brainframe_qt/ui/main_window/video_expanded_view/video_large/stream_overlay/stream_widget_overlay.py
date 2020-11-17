@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import List, Optional
 
 from PyQt5.QtWidgets import QWidget
@@ -10,6 +11,8 @@ from .stream_widget_overlay_ui import StreamWidgetOverlayUI
 
 
 class StreamWidgetOverlay(StreamWidgetOverlayUI):
+    MIN_DESYNC_LATENCY_ALERT = timedelta(seconds=1)
+
     def __init__(self, *, parent: QWidget):
         super().__init__(parent=parent)
 
@@ -28,14 +31,13 @@ class StreamWidgetOverlay(StreamWidgetOverlayUI):
         alerts = self._metadata_to_alerts(frame_metadata)
         self.body.handle_alerts(alerts)
 
-    @staticmethod
-    def _metadata_to_alerts(frame_metadata: ZoneStatusFrameMeta) \
+    def _metadata_to_alerts(self, frame_metadata: ZoneStatusFrameMeta) \
             -> List[stream_alerts.AbstractOverlayAlert]:
         alerts: List[stream_alerts.AbstractOverlayAlert] = []
 
         if frame_metadata.no_analysis:
             alerts.append(stream_alerts.NO_ANALYSIS_ALERT)
-        if frame_metadata.analysis_latency:
+        if frame_metadata.analysis_latency > self.MIN_DESYNC_LATENCY_ALERT:
             alerts.append(stream_alerts.DESYNCED_ANALYSIS_ALERT)
         if frame_metadata.client_buffer_full:
             alerts.append(stream_alerts.BUFFER_FULL_ALERT)

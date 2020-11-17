@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Dict, Optional
 from uuid import UUID, uuid4
 
@@ -96,7 +97,8 @@ class FrameSyncer:
         # status
         popped_frame = self.buffer.pop_if_older(self.last_status_tstamp)
         if popped_frame is not None:
-            analysis_latency = latest_frame.tstamp - popped_frame.tstamp
+            analysis_latency = status_tstamp - popped_frame.tstamp
+            analysis_latency = timedelta(seconds=analysis_latency)
             popped_frame.frame_metadata.analysis_latency = analysis_latency
 
         # Pop a frame if we're over the combined buffer max, but we also have
