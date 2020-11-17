@@ -1,19 +1,23 @@
 from typing import List
 
 from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QGraphicsScene
+from PyQt5.QtWidgets import QGraphicsScene, QWidget
 
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.client.ui.resources.video_items import ZoneStatusPolygon
-
-from .stream_detection import DetectionPolygon
+from brainframe.client.ui.resources.config import QSettingsRenderConfig
+from brainframe.client.ui.resources.video_items.detections import DetectionItem
+from brainframe.client.ui.resources.video_items.zone_statuses import \
+    ZoneStatusItem
+from brainframe.shared.constants import DEFAULT_ZONE_NAME
 
 
 class StreamGraphicsScene(QGraphicsScene):
-    def __init__(self, parent=None):
+    def __init__(self, *, render_config: QSettingsRenderConfig,
+                 parent: QWidget):
 
         super().__init__(parent)
+
+        self.render_config = render_config
 
         self.current_frame = None
 
@@ -71,39 +75,21 @@ class StreamGraphicsScene(QGraphicsScene):
                     self._new_zone_status_polygon(zone_status)
 
     def draw_detections(self, frame_tstamp: float,
-                        tracks: List[DetectionTrack], *,
-                        use_polygons=True,
-                        show_recognition=True,
-                        show_tracks=True,
-                        show_detection_labels=True,
-                        show_attributes=True,
-                        show_extra_data=False):
+                        tracks: List[DetectionTrack]):
 
         for track in tracks:
-            # Draw the detection on the screen
-            det_polygon = DetectionPolygon(
-                detection=track.get_interpolated_detection(frame_tstamp),
+            detection = track.get_interpolated_detection(frame_tstamp)
+            detection_item = DetectionItem(
+                detection,
                 track=track,
-                text_size=self._item_text_size,
-                use_polygons=use_polygons,
-                show_recognition=show_recognition,
-                show_tracks=show_tracks,
-                show_detection_labels=show_detection_labels,
-                show_attributes=show_attributes,
-                show_extra_data=show_extra_data)
-            self.addItem(det_polygon)
+                render_config=self.render_config
+            )
+            self.addItem(detection_item)
 
     def remove_items(self, items, condition=any):
         for item in items:
             if condition is any or condition(item):
                 self.removeItem(item)
-
-    def remove_items_by_type(self, item_type):
-
-        def condition(item):
-            return type(item) == item_type
-
-        self.remove_items(self.items(), condition)
 
     def remove_all_items(self):
 
@@ -111,32 +97,6 @@ class StreamGraphicsScene(QGraphicsScene):
             return item is not self.current_frame
 
         self.remove_items(self.items(), condition)
-
-    def remove_detections(self):
-        self.remove_items_by_type(DetectionPolygon)
-
-    def remove_regions(self):
-        self.remove_items_by_type(ZoneStatusPolygon)
-
-    def remove_lines(self):
-        region_polygons = self.get_items_by_type(ZoneStatusPolygon)
-
-        def condition(item):
-            return len(item.polygon) == 2
-
-        self.remove_items(region_polygons, condition)
-
-    def remove_zones(self):
-        region_polygons = self.get_items_by_type(ZoneStatusPolygon)
-
-        def condition(item):
-            return len(item.polygon) > 2
-
-        self.remove_items(region_polygons, condition)
-
-    def get_items_by_type(self, item_type):
-        items = self.items()
-        return filter(lambda item: type(item) == item_type, items)
 
     @staticmethod
     def _get_pixmap_from_numpy_frame(frame):
@@ -147,14 +107,12 @@ class StreamGraphicsScene(QGraphicsScene):
         return QPixmap.fromImage(image)
 
     def _new_zone_status_polygon(self, zone_status):
-        # Border thickness as % of screen size
-        border = self.width() / 200
-        polygon = ZoneStatusPolygon(
+        zone_status_item = ZoneStatusItem(
             zone_status,
-            text_size=self._item_text_size,
-            border_thickness=border)
+            render_config=self.render_config
+        )
 
-        self.addItem(polygon)
+        self.addItem(zone_status_item)
 
     @property
     def _item_text_size(self):

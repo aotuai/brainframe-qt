@@ -1,1 +1,1 @@
-from .identity_configuration import IdentityConfiguration
+from .identity_configuration import IdentityActivity

@@ -1,1 +1,1 @@
-from .client_configuration import RenderConfiguration
+from .client_configuration import ClientConfigActivity, RenderConfiguration

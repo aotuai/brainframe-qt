@@ -1,81 +1,21 @@
 import logging
 import typing
-from threading import Event, RLock, Thread
-from time import sleep
-from typing import Dict, Generator, List, Set, Tuple
-from uuid import UUID, uuid4
-
-import numpy as np
+from threading import RLock, Thread
+from typing import Set
 
 from brainframe.api import StatusReceiver
-from brainframe.api.bf_codecs import ZoneStatus
-from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
+from time import sleep
+
 from brainframe.shared.gstreamer.stream_reader import GstStreamReader
 from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.utils import or_events
-
-
-class StreamListener:
-    """This is used by SyncedStreamReader to pass events to the UI"""
-
-    def __init__(self):
-        self.frame_event = Event()
-        """Called when a new ProcessedFrame is ready"""
-
-        self.stream_initializing_event = Event()
-        """Called when the stream starts initializing"""
-
-        self.stream_halted_event = Event()
-        """Called when the stream has halted"""
-
-        self.stream_closed_event = Event()
-        """Called when the stream connection has closed"""
-
-        self.stream_error_event = Event()
-        """Called upon serious error (this shouldn't happen?)"""
-
-    def clear_all_events(self):
-        self.frame_event.clear()
-        self.stream_initializing_event.clear()
-        self.stream_halted_event.clear()
-        self.stream_closed_event.clear()
-        self.stream_error_event.clear()
-
-
-class ProcessedFrame:
-    """A frame that may or may not have undergone processing on the server."""
-
-    def __init__(self, frame, tstamp, zone_statuses, has_new_statuses, tracks):
-        """
-        :param frame: RGB data on the frame
-        :param tstamp: The timestamp of the frame
-        :param zone_statuses: A zone status that is most relevant to this
-            frame, though it might not be a result of this frame specifically
-        :param has_new_statuses: True if this processed frame contains new
-            zone statuses that have not appeared in previous processed frames
-        """
-        self.frame: np.ndarray = frame
-        self.tstamp: float = tstamp
-        self.zone_statuses: List[ZoneStatus] = zone_statuses
-        self.has_new_zone_statuses = has_new_statuses
-        self.tracks: List[DetectionTrack] = tracks
-
-        # Cachable properties
-        self._frame_rgb = None
-
-    @property
-    def frame_rgb(self):
-        """Flip the BGR channels to RGB"""
-        if not self._frame_rgb:
-            self._frame_rgb = self.frame[..., ::-1].copy()
-        return self._frame_rgb
+from .frame_syncer import FrameSyncer
+from .stream_listener import StreamListener
+from .zone_status_frame import ZoneStatusFrame
 
 
 class SyncedStreamReader(StreamReader):
     """Reads frames from a stream and syncs them up with zone statuses."""
-    MAX_BUF_SIZE = 144  # Arbitrary but not too big
-    MAX_CACHE_TRACK_SECONDS = 30
 
     def __init__(self,
                  stream_id: int,
@@ -91,7 +31,7 @@ class SyncedStreamReader(StreamReader):
         self._stream_reader = stream_reader
         self.status_receiver = status_receiver
 
-        self.latest_processed_frame = typing.cast(ProcessedFrame, None)
+        self.latest_processed_frame = typing.cast(ZoneStatusFrame, None)
 
         self.stream_listeners: Set[StreamListener] = set()
         self._stream_listeners_lock = RLock()
@@ -99,7 +39,9 @@ class SyncedStreamReader(StreamReader):
         # Start threads, now that the object is all set up
         self._thread = Thread(
             name=f"SyncedStreamReader thread for stream ID {stream_reader}",
-            target=self._sync_detections_with_stream)
+            target=self._sync_detections_with_stream,
+            daemon=True
+        )
         self._thread.start()
 
     def alert_frame_listeners(self):
@@ -164,9 +106,8 @@ class SyncedStreamReader(StreamReader):
         while self.status != StreamStatus.INITIALIZING:
             sleep(0.01)
 
-        # Create the frame syncing generator and initialize it
-        frame_syncer = self.sync_frames()
-        next(frame_syncer)
+        # Create the FrameSyncer
+        frame_syncer = FrameSyncer()
 
         frame_or_status_event = or_events(self._stream_reader.new_frame_event,
                                           self._stream_reader.new_status_event)
@@ -190,21 +131,31 @@ class SyncedStreamReader(StreamReader):
             self._stream_reader.new_frame_event.clear()
 
             # Get the new frame + timestamp
-            frame_tstamp, frame = self._stream_reader.latest_frame
+            frame_tstamp, frame_bgr = self._stream_reader.latest_frame
+            frame_rgb = frame_bgr[..., ::-1].copy()
+            del frame_bgr
 
             # Get the latest zone statuses from thread status receiver thread
             statuses = self.status_receiver.latest_statuses(self.stream_id)
 
             # Run the syncing algorithm
-            new_processed_frame = frame_syncer.send(
-                (frame_tstamp, frame, statuses))
+            new_processed_frame = frame_syncer.sync(
+                frame_tstamp=frame_tstamp,
+                frame=frame_rgb,
+                zone_statuses=statuses
+            )
 
             if new_processed_frame is not None:
-                is_new = new_processed_frame != self.latest_processed_frame
+                if self.latest_processed_frame is None:
+                    is_new = True
+                else:
+                    previous_tstamp = self.latest_processed_frame.tstamp
+                    new_tstamp = new_processed_frame.tstamp
+                    is_new = new_tstamp > previous_tstamp
 
-                # This value must be set before alerting frame listeners
-                # this prevents a race condition where latest_processed_frame
-                #  is None
+                # This value must be set before alerting frame listeners. This
+                # prevents a race condition where latest_processed_frame is
+                # None
                 self.latest_processed_frame = new_processed_frame
 
                 # Alert frame listeners if this a new frame
@@ -212,101 +163,6 @@ class SyncedStreamReader(StreamReader):
                     self.alert_frame_listeners()
 
         logging.info("SyncedStreamReader: Closing")
-
-    def sync_frames(self) -> Generator[ProcessedFrame,
-                                       Tuple[float,
-                                             np.ndarray,
-                                             Dict[str, ZoneStatus]],
-                                       None]:
-        """A generator where the input is frame_tstamp, frame, statuses and
-        it yields out ProcessedFrames where the zonestatus and frames are
-        synced up. """
-
-        last_status_tstamp = -1
-        """Keep track of the timestamp of the last new zonestatus that was 
-        received."""
-
-        last_used_zone_statuses = None
-        """The last zone statuse object that was put into a processed frame.
-        Useful for identifying if a ProcessFrame has new information, or is 
-        simply paired with old information."""
-
-        latest_processed = None
-        """Keeps track of the latest ProcessedFrame with information"""
-
-        buffer: List[ProcessedFrame] = []
-        """Holds a list of empty ProcessedFrames until a new status comes in
-        that is
-                                      sB
-        [empty, empty, empty, empty, empty]
-        Turn the first index Empty into a nice and full frame, put it into
-        self._latest_processed
-        """
-
-        tracks: Dict[UUID, DetectionTrack] = {}
-        """Keep a dict of Detection.track_id: DetectionTrack of all detections
-        that are ongoing. Then, every once in a while, prune DetectionTracks 
-        that haven't gotten updates in a while."""
-
-        # Type-hint the input to the generator
-        # noinspection PyUnusedLocal
-        statuses: Dict[str, ZoneStatus]
-
-        while True:
-            frame_tstamp, frame, statuses = yield latest_processed
-
-            buffer.append(
-                ProcessedFrame(frame, frame_tstamp, None, False, None))
-
-            # Get a timestamp from any of the zone statuses
-            status_tstamp = (statuses[DEFAULT_ZONE_NAME].tstamp
-                             if len(statuses) else None)
-
-            # Check if this is a fresh zone_status or not
-            if len(statuses) and last_status_tstamp != status_tstamp:
-                # Catch up to the previous inference frame
-                while len(buffer) and buffer[0].tstamp < last_status_tstamp:
-                    buffer.pop(0)
-                last_status_tstamp = status_tstamp
-
-                # Iterate over all new detections, and add them to their tracks
-                dets = statuses[DEFAULT_ZONE_NAME].within
-                for det in dets:
-                    # Create new tracks where necessary
-                    track_id = det.track_id if det.track_id else uuid4()
-
-                    if det.track_id not in tracks:
-                        tracks[track_id] = DetectionTrack()
-                    tracks[track_id].add_detection(det, status_tstamp)
-
-            # If we have inference later than the current frame, update the
-            # current frame
-            if len(buffer) and buffer[0].tstamp <= last_status_tstamp:
-                frame = buffer.pop(0)
-
-                # Get a list of DetectionTracks that had a detection for
-                # this timestamp
-                relevant_dets = [dt.copy() for dt in tracks.values()
-                                 if dt.latest_tstamp == status_tstamp]
-
-                latest_processed = ProcessedFrame(
-                    frame=frame.frame_rgb,
-                    tstamp=frame.tstamp,
-                    zone_statuses=statuses,
-                    has_new_statuses=statuses != last_used_zone_statuses,
-                    tracks=relevant_dets)
-                last_used_zone_statuses = statuses
-            else:
-                latest_processed = None
-
-            # Drain the buffer if it is getting too large
-            while len(buffer) > self.MAX_BUF_SIZE:
-                buffer.pop(0)
-
-            # Prune DetectionTracks that haven't had a detection in a while
-            for uuid, track in list(tracks.items()):
-                if frame_tstamp - track.latest_tstamp > self.MAX_CACHE_TRACK_SECONDS:
-                    del tracks[uuid]
 
     def close(self):
         """Sends a request to close the SyncedStreamReader."""

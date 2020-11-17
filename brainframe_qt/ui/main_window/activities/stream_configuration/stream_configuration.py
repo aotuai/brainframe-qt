@@ -13,6 +13,8 @@ from brainframe.client.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
 from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
     QTAsyncWorker
+from brainframe.client.ui.resources.links.documentation \
+    import IP_CAMERA_DOCS_LINK
 from brainframe.client.ui.resources.ui_elements.widgets import \
     FileUploadProgressDialog
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
@@ -60,6 +62,9 @@ class StreamConfiguration(StreamConfigurationUI):
             self.reset_conf)
         self.stream_options.webcam_device_help_button.clicked.connect(
             self._display_webcam_help
+        )
+        self.stream_options.network_address_help_button.clicked.connect(
+            self._display_ip_camera_help
         )
 
         # GroupBox
@@ -168,6 +173,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if self.connection_type is bf_codecs.StreamConfiguration.ConnType.IP_CAMERA:
             self.stream_options.network_address_label.setVisible(True)
             self.stream_options.network_address_line_edit.setVisible(True)
+            self.stream_options.network_address_help_button.setVisible(True)
             self.stream_options.premises_label.setVisible(True)
             self.stream_options.premises_combobox.setVisible(True)
             if advanced_options_visible:
@@ -612,7 +618,35 @@ class StreamConfiguration(StreamConfigurationUI):
             parent=self,
             title=title,
             message=message
-        ).exec()
+        ).open()
+
+    def _display_ip_camera_help(self):
+
+        RTSP_FORMAT = "rtsp://[username]:[password]@[ip]:[port]"
+
+        title = self.tr("Adding an IP Camera")
+        message_desc = self.tr(
+            "Standard RTSP format:<br>{rtsp_format}"
+        ).format(rtsp_format=RTSP_FORMAT)
+        message_docs = self.tr(
+            "Please see the <a href='{ip_camera_docs_link}'>documentation</a> "
+            "for more information on adding IP Cameras."
+        ).format(ip_camera_docs_link=IP_CAMERA_DOCS_LINK)
+
+        message = (
+            f"{message_desc}"
+            f"<br><br>"
+            f"{message_docs}"
+        )
+
+        message_box = BrainFrameMessage.information(
+            parent=self,
+            title=title,
+            message=message
+        )
+
+        message_box.setTextInteractionFlags(Qt.TextBrowserInteraction)
+        message_box.open()
 
     def _handle_send_stream_conf_error(self, exc: BaseException) -> None:
 
@@ -654,7 +688,7 @@ class StreamConfiguration(StreamConfigurationUI):
             parent=self,
             title=message_title,
             message=message
-        ).exec()
+        ).open()
 
     def _handle_start_analysis_error(
             self, stream_conf: bf_codecs.StreamConfiguration,
@@ -691,7 +725,7 @@ class StreamConfiguration(StreamConfigurationUI):
             parent=self,
             title=message_title,
             warning=message_info
-        ).exec()
+        ).open()
 
 
 class DefaultOptions:

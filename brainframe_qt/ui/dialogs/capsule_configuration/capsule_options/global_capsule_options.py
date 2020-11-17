@@ -119,7 +119,7 @@ class GlobalCapsuleOptionsWidget(BaseCapsuleOptionsWidget):
                 question=desc
             ).exec()
 
-            if result is not BrainFrameMessage.Yes:
+            if result != BrainFrameMessage.Yes:
                 # The user cancelled, so exit early.
                 return
 

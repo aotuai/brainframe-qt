@@ -3,16 +3,18 @@ from enum import Enum, auto
 from threading import RLock
 from typing import Callable, Dict, List, Set, Union
 
-from brainframe.client.api_utils import api
-from brainframe.api.bf_codecs import Alert, StreamConfiguration, Zone, \
-    ZoneAlarm
 from brainframe.api import StatusReceiver, ZONE_STATUS_TYPE
+from brainframe.api.bf_codecs import Alert, StreamConfiguration, Zone, \
+    ZoneAlarm, ZoneStatus
+
+from brainframe.client.api_utils import api
 
 ZSSDatumType = Union[
     StreamConfiguration,
     Zone,
     ZoneAlarm,
-    Alert
+    Alert,
+    ZoneStatus,
 ]
 
 ZSSDataType = List[ZSSDatumType]
@@ -23,6 +25,7 @@ class ZSSTopic(Enum):
     ZONES = auto()
     ALARMS = auto()
     ALERTS = auto()
+    ZONE_STATUSES = auto()
 
 
 class Subscription:
@@ -46,6 +49,13 @@ class Subscription:
             return self._filter_alarm(datum)
         if self.topic is ZSSTopic.ALERTS:
             return self._filter_alert(datum)
+        if self.topic is ZSSTopic.ZONE_STATUSES:
+            return self._filter_zone_status(datum)
+
+    def _filter_zone_status(self, zone_status: ZoneStatus):
+        if self.filters["stream_id"] not in [any, zone_status.zone.stream_id]:
+            return False
+        return True
 
     def _filter_stream(self, stream: StreamConfiguration):
         if self.filters["stream_id"] not in [any, stream.id]:
@@ -90,10 +100,8 @@ class _ZSSPubSub:
 
         self.subscriptions_lock = RLock()
         self.subscriptions: Dict[ZSSTopic, Set[Subscription]] = {
-            ZSSTopic.STREAMS: set(),
-            ZSSTopic.ZONES: set(),
-            ZSSTopic.ALARMS: set(),
-            ZSSTopic.ALERTS: set()
+            topic: set()
+            for topic in ZSSTopic
         }
 
     def publish(self, message: Dict[ZSSTopic, ZSSDataType]):
@@ -127,13 +135,14 @@ class _ZSSPubSub:
                             #       f"QObject:\n\t{exc}"
                             # logging.error(msg)
 
-    def _publish(self, zone_statuses: ZONE_STATUS_TYPE):
+    def _publish(self, zone_status_packet: ZONE_STATUS_TYPE):
         streams = []
         zones = []
         alarms = []
         alerts = []
+        zone_statuses = []
 
-        for stream_id, zone in zone_statuses.items():
+        for stream_id, zone_name_to_zone_status in zone_status_packet.items():
 
             # MAJOR HACK. We want to send StreamConfiguration Codecs, but they
             # aren't in the ZoneStatusStream, so I hack this
@@ -144,7 +153,8 @@ class _ZSSPubSub:
             stream.id = stream_id
             streams.append(stream)
 
-            for zone_name, zone_status in zone.items():
+            for zone_name, zone_status in zone_name_to_zone_status.items():
+                zone_statuses.append(zone_status)
                 zones.append(zone_status.zone)
                 alarms.extend(zone_status.zone.alarms)
                 alerts.extend(zone_status.alerts)
@@ -152,7 +162,8 @@ class _ZSSPubSub:
         self.publish({ZSSTopic.STREAMS: streams,
                       ZSSTopic.ZONES: zones,
                       ZSSTopic.ALARMS: alarms,
-                      ZSSTopic.ALERTS: alerts})
+                      ZSSTopic.ALERTS: alerts,
+                      ZSSTopic.ZONE_STATUSES: zone_statuses})
 
     def subscribe(self, topic: ZSSTopic, callback: Callable, filters=None) \
             -> Subscription:
@@ -165,6 +176,12 @@ class _ZSSPubSub:
         with self.subscriptions_lock:
             self.subscriptions[topic].add(subscription)
         return subscription
+
+    def subscribe_zone_statuses(self, callback: Callable, stream_id=any):
+        filters = {"stream_id": stream_id}
+
+        return self.subscribe(ZSSTopic.ZONE_STATUSES, callback,
+                              filters=filters)
 
     def subscribe_streams(self, callback: Callable, stream_id=any) \
             -> Subscription:

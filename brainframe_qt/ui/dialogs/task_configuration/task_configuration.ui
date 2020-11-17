@@ -314,7 +314,7 @@
    <sender>confirm_op_button</sender>
    <signal>clicked()</signal>
    <receiver>TaskConfiguration</receiver>
-   <slot>new_region_confirmed()</slot>
+   <slot>new_zone_confirmed()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>555</x>
@@ -379,8 +379,8 @@
   <slot>new_alarm()</slot>
   <slot>new_region()</slot>
   <slot>new_line()</slot>
-  <slot>new_region_confirmed()</slot>
-  <slot>new_region_canceled(int)</slot>
+  <slot>new_zone_confirmed()</slot>
+  <slot>new_zone_canceled(int)</slot>
   <slot>enable_confirm_op_button(bool)</slot>
  </slots>
 </ui>

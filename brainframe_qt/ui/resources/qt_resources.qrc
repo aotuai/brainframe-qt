@@ -11,6 +11,7 @@
         <file alias="alarm">images/icons/alarm.svg</file>
         <file alias="alert">images/icons/alert.svg</file>
         <file alias="alert_view">images/icons/alarm_view_action.svg</file>
+        <file alias="analysis_error">images/icons/no_analysis_results_for_stream.svg</file>
         <file alias="app_icon_png">images/icons/app_icon.png</file>
         <file alias="capsule_toolbar">images/icons/capsule_toolbar.svg</file>
         <file alias="folder">images/icons/folder.svg</file>

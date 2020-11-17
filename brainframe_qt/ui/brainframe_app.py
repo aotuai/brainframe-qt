@@ -1,9 +1,9 @@
 import logging
-import sys
 import typing
 from traceback import TracebackException
 from typing import List, Optional
 
+import sys
 from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
     pyqtSlot
 from PyQt5.QtGui import QIcon
@@ -12,7 +12,8 @@ from brainframe.api import bf_codecs, bf_errors
 
 from brainframe import client
 from brainframe.client.api_utils import api
-from brainframe.client.ui import LicenseAgreement, MainWindow, SplashScreen
+from brainframe.client.extensions.loader import ExtensionLoader
+from brainframe.client.ui import EULADialog, MainWindow, SplashScreen
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
     settings
@@ -21,6 +22,9 @@ from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 from brainframe.shared.gstreamer import gobject_init
 from brainframe.shared.secret import decrypt
+from brainframe.shared.utils import or_events
+from brainframe.client.api_utils.streaming.frame_buffer import \
+    SyncedFrameBuffer
 
 
 class BrainFrameApplication(QApplication):
@@ -74,6 +78,8 @@ class BrainFrameApplication(QApplication):
 
     def exec(self):
 
+        self._verify_eula()
+
         # Show splash screen while waiting for server connection
         with SplashScreen() as self.splash_screen:
             self._connect_to_server()
@@ -81,6 +87,8 @@ class BrainFrameApplication(QApplication):
 
             message = self.tr("Successfully connected to server. Starting UI")
             self.splash_screen.showMessage(message)
+
+            ExtensionLoader().load_extensions()
 
             main_window = MainWindow()
             self.splash_screen.finish(main_window)
@@ -174,15 +182,20 @@ class BrainFrameApplication(QApplication):
             password = decrypt(password)
             api.set_credentials((username, password))
 
+        SyncedFrameBuffer.set_max_buffer_size(settings.frame_buffer_size.val())
+        settings.frame_buffer_size.subscribe(
+            settings.Topic.CHANGED,
+            SyncedFrameBuffer.set_max_buffer_size)
+
     # noinspection PyMethodMayBeStatic
     def _shutdown(self):
         api.close()
         gobject_init.close()
 
-    def _verify_license(self):
+    def _verify_eula(self):
         # Ensure that user has accepted license agreement.
         # Otherwise close program
-        if not LicenseAgreement.get_agreement(parent=None):
+        if not EULADialog.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
 
     def _connect_to_server(self):
@@ -223,10 +236,22 @@ class BrainFrameApplication(QApplication):
             worker = QTAsyncWorker(self, api.wait_for_server_initialization,
                                    on_error=on_error)
             worker.start()
-            self._wait_for_event(worker.finished_event)
+
+            # Wait until we get something back from the server or the user has
+            # changed the server URL
+            url_changed_event = settings.server_url.subscribe_as_event(
+                settings.Topic.CHANGED)
+            finished_or_url_changed_event = or_events(
+                worker.finished_event, url_changed_event)
+            self._wait_for_event(finished_or_url_changed_event)
+
+            # The server URL was changed while attempting to connect. Try
+            # again.
+            if url_changed_event.is_set():
+                continue
 
             # Connection successful
-            if worker.err is None:
+            elif worker.err is None:
                 break
 
             # Ignore standard communication errors
