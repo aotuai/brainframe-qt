@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Exec=brainframe-client
+Hidden=false
+NoDisplay=false
+Name[en_US]=BrainFrame Client
+Name=BrainFrame Client
+Comment[en_US]=Run the BrainFrame Client
+Comment=Run the BrainFrame client
+Icon=${SNAP}/meta/gui/brainframe-client.svg
+Categories=Video

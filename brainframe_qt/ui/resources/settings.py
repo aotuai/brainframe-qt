@@ -1,9 +1,9 @@
+import sys
 import typing
-from typing import Any
 from enum import Enum
+from typing import Any
 
 import pendulum
-import sys
 from PyQt5.QtCore import QSettings
 from pendulum.tz.timezone import Timezone
 

@@ -277,77 +277,77 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="87"/>
+        <location filename="../../brainframe_app.py" line="88"/>
         <source>Successfully connected to server. Starting UI</source>
         <translation>连接服务器成功，正在启动UI</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="198"/>
+        <location filename="../../brainframe_app.py" line="199"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="205"/>
+        <location filename="../../brainframe_app.py" line="206"/>
         <source>Attempting to communicate with server at {url}</source>
         <translation>尝试连接服务器至{url}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="212"/>
+        <location filename="../../brainframe_app.py" line="213"/>
         <source>Connected to server. Validating license</source>
         <translation>已连接到服务器，正在验证授权</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="266"/>
+        <location filename="../../brainframe_app.py" line="279"/>
         <source>Successfully connected to server</source>
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="268"/>
+        <location filename="../../brainframe_app.py" line="281"/>
         <source>License is expired. Please upload a new one</source>
         <translation>授权出现问题，请重新配置配置</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="271"/>
+        <location filename="../../brainframe_app.py" line="284"/>
         <source>Invalid License. Does the server have a connection to the internet?</source>
         <translation>授权无效，服务器是否已连接到互联网？</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="274"/>
+        <location filename="../../brainframe_app.py" line="287"/>
         <source>No license exists on the server. Please upload one</source>
         <translation>服务器上没有授权。请上传一个</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="277"/>
+        <location filename="../../brainframe_app.py" line="290"/>
         <source>Unknown issue with license. Contact Aotu</source>
         <translation>授权出现未知问题，请联系Aotu</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="105"/>
+        <location filename="../../brainframe_app.py" line="106"/>
         <source>Error</source>
         <translation>错误信息</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="106"/>
+        <location filename="../../brainframe_app.py" line="107"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="118"/>
+        <location filename="../../brainframe_app.py" line="119"/>
         <source>An unhandled exception occurred while communicating with the BrainFrame server</source>
         <translation>与BrainFrame服务器通信时发生未处理的异常</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="122"/>
+        <location filename="../../brainframe_app.py" line="123"/>
         <source>. The client must be closed.</source>
         <translation>。客户端必须关闭。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="287"/>
+        <location filename="../../brainframe_app.py" line="300"/>
         <source>Version Mismatch</source>
         <translation>版本不匹配</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="288"/>
+        <location filename="../../brainframe_app.py" line="301"/>
         <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
         <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
     </message>
@@ -747,7 +747,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>LicenseDialog</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="109"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="110"/>
         <source>Invalid License Format</source>
         <translation>无效的授权格式</translation>
     </message>
@@ -757,42 +757,42 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="72"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="73"/>
         <source>Uploading license...</source>
         <translation>正在上传授权⋯⋯</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="152"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="153"/>
         <source>Connection error while communicating with the server</source>
         <translation>与服务器通讯时出现连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="151"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="152"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="124"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="125"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="125"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="126"/>
         <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
         <translation>提供的授权已过期。请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="111"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="112"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
         <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;;上传新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="138"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="139"/>
         <source>License Server Connection Failure</source>
         <translation>授权服务器连接失败</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="139"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="140"/>
         <source>The BrainFrame server was unable to contact the licensing server to validate the license. Please ensure that the BrainFrame server has internet access.</source>
         <translation>BrainFrame无法连接至授权服务器以验证授权，请确保BrainFrame可以访问互联网。</translation>
     </message>

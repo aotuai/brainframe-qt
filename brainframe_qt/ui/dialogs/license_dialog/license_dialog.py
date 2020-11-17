@@ -58,7 +58,8 @@ class LicenseDialog(_LicenseDialogUI):
 
         # TODO: Also get capsule information if that's ever added
 
-    def change_product(self, item: QListWidgetItem) -> None:
+    def change_product(self, item: QListWidgetItem,
+                       _previous: QListWidgetItem) -> None:
         widget: ProductWidget = self.product_sidebar.itemWidget(item)
 
         self.license_details.set_product(widget.product_name,

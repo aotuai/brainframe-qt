@@ -5,7 +5,7 @@ from pathlib import Path
 
 import sys
 
-from brainframe.client.ui.resources.paths import route_path
+from brainframe.client.ui.resources.paths import route_path, find_client_root
 
 
 class ExtensionLoader:
@@ -14,7 +14,7 @@ class ExtensionLoader:
     @property
     def extension_dir(self) -> Path:
 
-        root_dir = Path(sys.modules['__main__'].__file__).parent
+        root_dir = find_client_root()
 
         extensions_dir = Path(os.environ.get("EXTENSION_LIB",
                                              root_dir / "extensions"))
