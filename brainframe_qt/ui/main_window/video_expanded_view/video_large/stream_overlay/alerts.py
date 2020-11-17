@@ -27,7 +27,7 @@ class _NoAnalysisAlert(AbstractOverlayAlert):
     def long_text(self) -> str:
         return QApplication.translate(
             "OverlayAlert",
-            "No analysis results have been received for this stream yet"
+            "No analysis results have been received for this stream yet."
         )
 
     def icon(self) -> QIcon:

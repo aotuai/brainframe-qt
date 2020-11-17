@@ -857,6 +857,49 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     </message>
 </context>
 <context>
+    <name>OverlayAlert</name>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/alerts.py" line="25"/>
+        <source>Awaiting analysis</source>
+        <translation>等待分析结果</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/alerts.py" line="28"/>
+        <source>No analysis results have been received for this stream yet.</source>
+        <translation>尚未收到此视频流的分析结果。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/alerts.py" line="39"/>
+        <source>Desynced Analysis</source>
+        <translation>分析结果未同步</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/alerts.py" line="42"/>
+        <source>The server is not processing frames quickly enough.</source>
+        <translation>服务器未能及时处理视频帧。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/alerts.py" line="45"/>
+        <source>Low analysis FPS will cause detections to appear before their frames.</source>
+        <translation>低分析FPS将导致检测结果出现在其视频帧之前。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/alerts.py" line="59"/>
+        <source>Severely desynced analysis</source>
+        <translation>分析结果严重不同步</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/alerts.py" line="65"/>
+        <source>The server is processing frames extremely slowly.</source>
+        <translation>服务器处理视频帧的速度非常慢</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/alerts.py" line="68"/>
+        <source>Results will not appear synced with the frames they correspond to.</source>
+        <translation>检测结果将不会与它们所对应的视频帧同步。</translation>
+    </message>
+</context>
+<context>
     <name>OverlayTitlebar</name>
     <message>
         <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/titlebar/titlebar.py" line="11"/>
@@ -1221,24 +1264,6 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="59"/>
         <source>Video File</source>
         <translation>视频文件</translation>
-    </message>
-</context>
-<context>
-    <name>StreamWidgetOverlay</name>
-    <message>
-        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/body/tray/tray.py" line="22"/>
-        <source>The server is not processing frames quickly enough.</source>
-        <translation>服务器未能及时处理视频帧。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/body/tray/tray.py" line="25"/>
-        <source>Results will not appear synced with the frames they correspond to.</source>
-        <translation>检测结果将不会与它们所对应的视频帧同步。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_expanded_view/video_large/stream_overlay/body/tray/tray.py" line="19"/>
-        <source>Desynced analysis</source>
-        <translation>结果未同步</translation>
     </message>
 </context>
 <context>
