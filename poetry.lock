@@ -66,24 +66,17 @@ tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>
 
 [[package]]
 name = "brainframe-api"
-version = "0.27.0.dev2"
+version = "0.27.0"
 description = "Provides a Python wrapper around the BrainFrame REST API."
 category = "main"
 optional = true
-python-versions = "^3.6"
-develop = false
+python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
-dataclasses = {version = "^0.7", markers = "python_version >= \"3.6\" and python_version < \"3.7\""}
-numpy = "^1.16"
-pillow = "^7.2.0"
-requests = "^2.24.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/aotuai/brainframe_python"
-reference = "8b75e25"
-resolved_reference = "8b75e25d31b9afd16aec2e2c4f1ee71c370bf285"
+dataclasses = {version = ">=0.7,<0.8", markers = "python_version >= \"3.6\" and python_version < \"3.7\""}
+numpy = ">=1.16,<2.0"
+pillow = ">=7.2.0,<8.0.0"
+requests = ">=2.24.0,<3.0.0"
 
 [[package]]
 name = "cached-property"
@@ -326,7 +319,7 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "1.12.5"
+version = "1.12.6"
 description = "Google API Client Library for Python"
 category = "dev"
 optional = false
@@ -1374,7 +1367,7 @@ server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewe
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "3f0d03a79025536737d9075e69c5b3db8ea798259f36367132e207b812179112"
+content-hash = "6fde1e81c0e77d88ecb97bc5849ada38a582e3205afb7a9ea3b37724ba452895"
 
 [metadata.files]
 absl-py = [
@@ -1415,7 +1408,10 @@ attrs = [
     {file = "attrs-20.3.0-py2.py3-none-any.whl", hash = "sha256:31b2eced602aa8423c2aea9c76a724617ed67cf9513173fd3a4f03e3a929c7e6"},
     {file = "attrs-20.3.0.tar.gz", hash = "sha256:832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700"},
 ]
-brainframe-api = []
+brainframe-api = [
+    {file = "brainframe-api-0.27.0.tar.gz", hash = "sha256:7aa7c72647a85a8d98d6f0d6600719a3a402a73d2eca5e72eed0fe50cdd3d253"},
+    {file = "brainframe_api-0.27.0-py3-none-any.whl", hash = "sha256:0cc4ff8b8f7c64fb5a6aceb28541c4c18083646077c6f6ea34088265b9b6cf61"},
+]
 cached-property = [
     {file = "cached-property-1.5.2.tar.gz", hash = "sha256:9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130"},
     {file = "cached_property-1.5.2-py2.py3-none-any.whl", hash = "sha256:df4f613cf7ad9a588cc381aaf4a512d26265ecebd5eb9e1ba12f1319eb85a6a0"},
@@ -1587,8 +1583,8 @@ google-api-core = [
     {file = "google_api_core-1.23.0-py2.py3-none-any.whl", hash = "sha256:94d8c707d358d8d9e8b0045c42be20efb58433d308bd92cf748511c7825569c8"},
 ]
 google-api-python-client = [
-    {file = "google-api-python-client-1.12.5.tar.gz", hash = "sha256:1892cd490d164e5ec2f2168dc3b4fa0af68f36ca15a88b91bca1826b3d4f2829"},
-    {file = "google_api_python_client-1.12.5-py2.py3-none-any.whl", hash = "sha256:203d5453660867136aae61922c5d849163fb9be478985fad84e09dee6f605c06"},
+    {file = "google-api-python-client-1.12.6.tar.gz", hash = "sha256:1f5cfcb92c8e3bd0a69cb2ff3cefa5ff16ffa1900af795a53f5bed93c8238951"},
+    {file = "google_api_python_client-1.12.6-py2.py3-none-any.whl", hash = "sha256:608552e52ea994a014be8bb0489923328a50776190e0858caaf7b186ebad22bf"},
 ]
 google-auth = [
     {file = "google-auth-1.23.0.tar.gz", hash = "sha256:5176db85f1e7e837a646cd9cede72c3c404ccf2e3373d9ee14b2db88febad440"},
