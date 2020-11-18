@@ -2,10 +2,9 @@ from typing import Dict, Optional
 from uuid import UUID, uuid4
 
 import numpy as np
-from brainframe.api.bf_codecs import ZoneStatus
+from brainframe.api.bf_codecs import ZoneStatus, Zone
 
 from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from .frame_buffer import SyncedFrameBuffer
 from .zone_status_frame import ZoneStatusFrame
 
@@ -68,7 +67,7 @@ class FrameSyncer:
             return self.latest_processed
 
         # Get timestamp off of default zone's status (all should be equal)
-        status_tstamp = zone_statuses[DEFAULT_ZONE_NAME].tstamp
+        status_tstamp = zone_statuses[Zone.FULL_FRAME_ZONE_NAME].tstamp
 
         # Check if this is a fresh zone_status or not
         if self.last_status_tstamp != status_tstamp:
@@ -80,7 +79,7 @@ class FrameSyncer:
             self.last_status_tstamp = status_tstamp
 
             # Iterate over all new detections, and add them to their tracks
-            dets = zone_statuses[DEFAULT_ZONE_NAME].within
+            dets = zone_statuses[Zone.FULL_FRAME_ZONE_NAME].within
             for det in dets:
                 # Create new tracks where necessary
                 track_id = det.track_id if det.track_id else uuid4()
@@ -107,7 +106,6 @@ class FrameSyncer:
                 frame=popped_frame,
                 statuses=zone_statuses,
                 tracks=self.tracks,
-                has_new_statuses=self.last_used_zone_statuses != zone_statuses
             )
 
             self.last_used_zone_statuses = zone_statuses
@@ -123,12 +121,11 @@ class FrameSyncer:
     # noinspection PyMethodMayBeStatic
     def _apply_statuses_to_frame(self, frame: ZoneStatusFrame,
                                  statuses: Dict[str, ZoneStatus],
-                                 tracks: Dict[UUID, DetectionTrack],
-                                 has_new_statuses: bool) \
+                                 tracks: Dict[UUID, DetectionTrack]) \
             -> ZoneStatusFrame:
 
         # Get timestamp off of default zone's status (all should be equal)
-        status_tstamp = statuses[DEFAULT_ZONE_NAME].tstamp
+        status_tstamp = statuses[Zone.FULL_FRAME_ZONE_NAME].tstamp
 
         # Get a list of DetectionTracks that had a detection for
         # this timestamp

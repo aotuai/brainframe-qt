@@ -12,7 +12,6 @@ from brainframe.api.bf_codecs import Zone, ZoneAlarm
 # noinspection PyUnresolvedReferences
 from brainframe.client.ui.resources import QTAsyncWorker, qt_resources
 from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
 from .zone_list_item import ZoneListItem
 
 
@@ -59,7 +58,7 @@ class ZoneList(QTreeWidget):
     def add_zone(self, zone: Zone):
         """Creates and returns the new ZoneListItem using the zone"""
 
-        if zone.name == DEFAULT_ZONE_NAME or len(zone.coords) > 2:
+        if zone.name == Zone.FULL_FRAME_ZONE_NAME or len(zone.coords) > 2:
             entry_type = self.EntryType.REGION
         elif len(zone.coords) == 2:
             entry_type = self.EntryType.LINE
@@ -70,7 +69,7 @@ class ZoneList(QTreeWidget):
         self.addTopLevelItem(zone_item)
 
         self._add_trash_button(zone_item)
-        if zone.name == DEFAULT_ZONE_NAME:
+        if zone.name == Zone.FULL_FRAME_ZONE_NAME:
             zone_item.trash_button.setDisabled(True)
         else:
             zone_item.trash_button.clicked.connect(
