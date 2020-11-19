@@ -1,6 +1,6 @@
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
-from brainframe.shared import preimport_hooks
+from brainframe.client.util import preimport_hooks
 
 import faulthandler
 import sys
