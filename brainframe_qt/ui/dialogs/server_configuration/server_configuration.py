@@ -17,7 +17,7 @@ from brainframe.client.ui.resources.links.documentation import \
 from brainframe.client.ui.resources.paths import qt_ui_paths
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
-from brainframe.shared.secret import decrypt, encrypt
+from brainframe.client.util.secret import decrypt, encrypt
 
 
 class ServerConfigActivity(DialogActivity):

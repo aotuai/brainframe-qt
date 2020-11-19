@@ -8,10 +8,12 @@ from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, 
     pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QWidget
-from brainframe.api import bf_codecs, bf_errors
 
 from brainframe import client
+from brainframe.api import bf_codecs, bf_errors
 from brainframe.client.api_utils import api
+from brainframe.client.api_utils.streaming.frame_buffer import \
+    SyncedFrameBuffer
 from brainframe.client.extensions.loader import ExtensionLoader
 from brainframe.client.ui import EULADialog, MainWindow, SplashScreen
 # noinspection PyUnresolvedReferences
@@ -20,11 +22,9 @@ from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
 from brainframe.client.ui.resources.paths import text_paths
 from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
+from brainframe.client.util.secret import decrypt
 from brainframe.shared.gstreamer import gobject_init
-from brainframe.shared.secret import decrypt
 from brainframe.shared.utils import or_events
-from brainframe.client.api_utils.streaming.frame_buffer import \
-    SyncedFrameBuffer
 
 
 class BrainFrameApplication(QApplication):
