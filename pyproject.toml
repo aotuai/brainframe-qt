@@ -46,6 +46,7 @@ opencv-python-headless = { version = "^4.4.0", optional = true }
 
 dataclasses = { version = "^0.7", python = ">=3.6,<3.7", optional = true }
 brainframe-api = { version = "0.27.0", optional = true }
+pubsus = { git = "https://github.com/aotuai/pubsus.git", branch = "main", optional = true }
 pendulum = { version = "^2.0.5", optional = true }
 
 pyqt5ac = { version = "^1.1.0", optional = true }
@@ -74,7 +75,8 @@ server = [
     "pyyaml",
     "py-openapi_schema_to_json_schema",
     "jsonschema",
-    "opencv-python-headless"
+    "opencv-python-headless",
+    "pubsus"
 ]
 build = [
     "cython"
@@ -96,7 +98,8 @@ client = [
     "python-dateutil",
     "PyGObject",
     "readerwriterlock",
-    "pycryptodomex"
+    "pycryptodomex",
+    "pubsus"
 ]
 
 # Separate from client_build because pyqt5ac brings in the wrong PyQt5 version

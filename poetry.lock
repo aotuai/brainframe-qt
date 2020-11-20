@@ -818,6 +818,21 @@ optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
 [[package]]
+name = "pubsus"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = true
+python-versions = "^3.6"
+develop = false
+
+[package.source]
+type = "git"
+url = "git@github.com:aotuai/pubsus.git"
+reference = "main"
+resolved_reference = "9cd2675a3e05c8f6b2756bd2580be03ddde2130e"
+
+[[package]]
 name = "py"
 version = "1.9.0"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
@@ -1370,15 +1385,15 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [extras]
 build = ["cython"]
 build_downloads = ["vcap", "vcap-utils", "tabulate", "opencv-python-headless"]
-client = ["dataclasses", "brainframe-api", "pendulum", "numpy", "shapely", "ujson", "requests", "python-dateutil", "PyGObject", "readerwriterlock", "pycryptodomex"]
+client = ["dataclasses", "brainframe-api", "pendulum", "numpy", "shapely", "ujson", "requests", "python-dateutil", "PyGObject", "readerwriterlock", "pycryptodomex", "pubsus"]
 client_build = ["pyinstaller"]
 client_res_build = ["pyqt5ac"]
-server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewee", "psycopg2-binary", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "py-openapi-schema-to-json-schema", "jsonschema", "opencv-python-headless"]
+server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewee", "psycopg2-binary", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "py-openapi-schema-to-json-schema", "jsonschema", "opencv-python-headless", "pubsus"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "2c419855ded6f59dcbc0b5a9ae8a7c7ec2f51541ec5f1628e2cf3e8ff7fb83f4"
+content-hash = "1842ad12d5a22086f1914002605f2fdb1bf7ca6c1a1a1f0c51fef4cc06a04658"
 
 [metadata.files]
 absl-py = [
@@ -1998,6 +2013,7 @@ psycopg2-binary = [
     {file = "psycopg2_binary-2.8.6-cp39-cp39-manylinux1_i686.whl", hash = "sha256:42ec1035841b389e8cc3692277a0bd81cdfe0b65d575a2c8862cec7a80e62e52"},
     {file = "psycopg2_binary-2.8.6-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:7312e931b90fe14f925729cde58022f5d034241918a5c4f9797cac62f6b3a9dd"},
 ]
+pubsus = []
 py = [
     {file = "py-1.9.0-py2.py3-none-any.whl", hash = "sha256:366389d1db726cd2fcfc79732e75410e5fe4d31db13692115529d34069a043c2"},
     {file = "py-1.9.0.tar.gz", hash = "sha256:9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342"},
