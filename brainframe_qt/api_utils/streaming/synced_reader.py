@@ -6,7 +6,7 @@ from typing import Set
 from brainframe.api import StatusReceiver
 from time import sleep
 
-from brainframe.shared.gstreamer.stream_reader import GstStreamReader
+from brainframe.shared.gstreamer.gst_stream_reader import GstStreamReader
 from brainframe.shared.stream_reader import StreamReader, StreamStatus
 from brainframe.shared.utils import or_events
 from .frame_syncer import FrameSyncer

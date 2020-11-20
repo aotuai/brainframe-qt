@@ -3,7 +3,7 @@ import logging
 from brainframe.api import BrainFrameAPI, StatusReceiver
 from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.shared.gstreamer import gobject_init
-from brainframe.shared.gstreamer.stream_reader import GstStreamReader
+from brainframe.shared.gstreamer.gst_stream_reader import GstStreamReader
 from brainframe.shared.stream_reader import StreamReader
 from .synced_reader import SyncedStreamReader
 
