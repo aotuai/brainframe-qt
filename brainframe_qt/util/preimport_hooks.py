@@ -6,7 +6,7 @@ import logging
 import os
 import sys
 
-from brainframe.shared.preimport_hooks import _gi_select_versions
+from brainframe.shared.gstreamer import gi_select_versions
 
 # PyInstaller changes sys.path[0] to be zip path, we really want sys.path[1]
 sys.path = [sys.path[1]] + [sys.path[0]] + sys.path[2:]
@@ -41,7 +41,7 @@ if pygobject_path:
                     f"{pygobject_path}")
     gi = import_from_path(pygobject_path, "gi")
 
-    _gi_select_versions(gi)
+    gi_select_versions(gi)
 
     gi_libraries = [
         "gi.repository.GObject",
@@ -57,7 +57,7 @@ if pygobject_path:
 else:
     import gi
 
-    _gi_select_versions(gi)
+    gi_select_versions(gi)
 
 # If the user has specified a custom path for argh to be imported from, import
 # from that location. This is necessary because argh is an LGPL library.
