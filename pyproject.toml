@@ -46,7 +46,7 @@ opencv-python-headless = { version = "^4.4.0", optional = true }
 
 dataclasses = { version = "^0.7", python = ">=3.6,<3.7", optional = true }
 brainframe-api = { version = "0.27.0", optional = true }
-gstly = { git = "git@github.com:aotuai/gstly.git", rev = "83aebe7", optional = true }
+gstly = { git = "git@github.com:aotuai/gstly.git", rev = "fc0bb63", optional = true }
 pubsus = { git = "https://github.com/aotuai/pubsus.git", branch = "main", optional = true }
 pendulum = { version = "^2.0.5", optional = true }
 

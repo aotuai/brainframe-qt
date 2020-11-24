@@ -418,8 +418,8 @@ PyGObject = "~3.34.0"
 [package.source]
 type = "git"
 url = "git@github.com:aotuai/gstly.git"
-reference = "c944f0f"
-resolved_reference = "c944f0f4dc346c5ce39d9a025416ef6510599c65"
+reference = "fc0bb63"
+resolved_reference = "fc0bb638d40e22b2211aecc65c75cad1f961c290"
 
 [[package]]
 name = "h5py"
@@ -1412,7 +1412,7 @@ server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewe
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "71e1318e9078ce0f2e99720a48d30d24ac6a0d9dbd7df040c39adee16debca69"
+content-hash = "15b35253ffe71ccee0733b9f639410e84fe0042c35a92df2d2f62e67d2cfe0c8"
 
 [metadata.files]
 absl-py = [
