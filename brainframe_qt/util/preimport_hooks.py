@@ -6,7 +6,7 @@ import logging
 import os
 import sys
 
-from brainframe.shared.gstreamer import gi_select_versions
+from gstly import gi_select_versions
 
 # PyInstaller changes sys.path[0] to be zip path, we really want sys.path[1]
 sys.path = [sys.path[1]] + [sys.path[0]] + sys.path[2:]

@@ -403,6 +403,25 @@ six = ">=1.5.2"
 protobuf = ["grpcio-tools (>=1.33.2)"]
 
 [[package]]
+name = "gstly"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = true
+python-versions = "^3.6"
+develop = false
+
+[package.dependencies]
+numpy = "^1.16"
+PyGObject = "~3.34.0"
+
+[package.source]
+type = "git"
+url = "git@github.com:aotuai/gstly.git"
+reference = "c944f0f"
+resolved_reference = "c944f0f4dc346c5ce39d9a025416ef6510599c65"
+
+[[package]]
 name = "h5py"
 version = "2.10.0"
 description = "Read and write HDF5 files from Python"
@@ -828,7 +847,7 @@ develop = false
 
 [package.source]
 type = "git"
-url = "git@github.com:aotuai/pubsus.git"
+url = "https://github.com/aotuai/pubsus.git"
 reference = "main"
 resolved_reference = "9cd2675a3e05c8f6b2756bd2580be03ddde2130e"
 
@@ -1385,15 +1404,15 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [extras]
 build = ["cython"]
 build_downloads = ["vcap", "vcap-utils", "tabulate", "opencv-python-headless"]
-client = ["dataclasses", "brainframe-api", "pendulum", "numpy", "shapely", "ujson", "requests", "python-dateutil", "PyGObject", "readerwriterlock", "pycryptodomex", "pubsus"]
+client = ["dataclasses", "brainframe-api", "pendulum", "numpy", "shapely", "ujson", "requests", "python-dateutil", "PyGObject", "readerwriterlock", "pycryptodomex", "pubsus", "gstly"]
 client_build = ["pyinstaller"]
 client_res_build = ["pyqt5ac"]
-server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewee", "psycopg2-binary", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "py-openapi-schema-to-json-schema", "jsonschema", "opencv-python-headless", "pubsus"]
+server = ["vcap", "vcap-utils", "cherrypy", "falcon", "falcon-multipart", "peewee", "psycopg2-binary", "argon2-cffi", "watchdog", "cryptography", "pyyaml", "py-openapi-schema-to-json-schema", "jsonschema", "opencv-python-headless", "pubsus", "gstly"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "1842ad12d5a22086f1914002605f2fdb1bf7ca6c1a1a1f0c51fef4cc06a04658"
+content-hash = "71e1318e9078ce0f2e99720a48d30d24ac6a0d9dbd7df040c39adee16debca69"
 
 [metadata.files]
 absl-py = [
@@ -1674,6 +1693,7 @@ grpcio = [
     {file = "grpcio-1.33.2-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:eff55d318a114742ed2a06972f5daacfe3d5ad0c0c0d9146bcaf10acb427e6be"},
     {file = "grpcio-1.33.2.tar.gz", hash = "sha256:21265511880056d19ce4f809ce3fbe2a3fa98ec1fc7167dbdf30a80d3276202e"},
 ]
+gstly = []
 h5py = [
     {file = "h5py-2.10.0-cp27-cp27m-macosx_10_6_intel.whl", hash = "sha256:ecf4d0b56ee394a0984de15bceeb97cbe1fe485f1ac205121293fc44dcf3f31f"},
     {file = "h5py-2.10.0-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:86868dc07b9cc8cb7627372a2e6636cdc7a53b7e2854ad020c9e9d8a4d3fd0f5"},
