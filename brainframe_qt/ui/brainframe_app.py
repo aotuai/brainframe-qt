@@ -297,7 +297,7 @@ class BrainFrameApplication(QApplication):
         self._wait_for_event(worker.finished_event)
 
         version = worker.data
-        if version != client.__version__:
+        if version != brainframe_qt.__version__:
             title = self.tr("Version Mismatch")
             message = self.tr(
                 "The server is using version {server_version} but this client "
@@ -305,7 +305,7 @@ class BrainFrameApplication(QApplication):
                 "version of the client at {download_url}.")
             message = message.format(
                 server_version=version,
-                client_version=client.__version__,
+                client_version=brainframe_qt.__version__,
                 download_url="aotu.ai/docs/downloads/")
 
             dialog = BrainFrameMessage.critical(

@@ -1,6 +1,6 @@
 from .all_resource_paths import register_path
 
-ui_dir = register_path("brainframe", "client", "ui")
+ui_dir = register_path("brainframe_qt", "ui")
 
 # Main Window
 main_window_dir            = register_path(ui_dir                    , "main_window"              )

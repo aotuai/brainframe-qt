@@ -32,7 +32,9 @@ pyqt5ac = { version = "^1.1.0", optional = true }
 pyinstaller = { version = "^3.6", optional = true }
 
 [tool.poetry.dev-dependencies]
+pyqt5 = "^5.15.0"
 pyqt5-stubs = { git = "ssh://git@github.com/stlehmann/PyQt5-stubs.git", branch = "master" }
+pyqt5ac = "^1.2.1"
 
 [tool.poetry.extras]
 # Separate from client_build because pyqt5ac brings in the wrong PyQt5 version

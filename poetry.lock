@@ -41,7 +41,7 @@ name = "click"
 version = "7.1.2"
 description = "Composable command line interface toolkit"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
@@ -182,7 +182,7 @@ name = "pyqt5"
 version = "5.15.2"
 description = "Python bindings for the Qt cross platform application toolkit"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.5"
 
 [package.dependencies]
@@ -193,7 +193,7 @@ name = "pyqt5-sip"
 version = "12.8.1"
 description = "The sip module support for PyQt5"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.5"
 
 [[package]]
@@ -219,7 +219,7 @@ name = "pyqt5ac"
 version = "1.2.1"
 description = "Python module to automatically compile UI and RC files in PyQt5 to Python files"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3"
 
 [package.dependencies]
@@ -257,7 +257,7 @@ name = "pyyaml"
 version = "5.3.1"
 description = "YAML parser and emitter for Python"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
@@ -346,7 +346,7 @@ client_res_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "505686cdcbd54efd314ffd92d0cd9578a27a7753e35524ff36638155f4de2156"
+content-hash = "659b121a158121bab028deaee49b4301500ee745c21fe0a21c5c2e98f0318474"
 
 [metadata.files]
 altgraph = [
