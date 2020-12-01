@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QLabel
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.dialogs.capsule_configuration import capsule_utils
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
 class CapsuleListItem(QLabel):

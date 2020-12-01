@@ -12,9 +12,9 @@ from .option_items import (
     BoolOptionItem
 )
 from brainframe.api.bf_codecs import CapsuleOption
-from brainframe.client.api_utils import api
-from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.api_utils import api
+from brainframe_qt.ui.dialogs.capsule_configuration import capsule_utils
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
 class BaseCapsuleOptionsWidget(QGroupBox):

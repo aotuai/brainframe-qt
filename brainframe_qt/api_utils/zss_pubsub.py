@@ -7,7 +7,7 @@ from brainframe.api import StatusReceiver, ZONE_STATUS_TYPE
 from brainframe.api.bf_codecs import Alert, StreamConfiguration, Zone, \
     ZoneAlarm, ZoneStatus
 
-from brainframe.client.api_utils import api
+from brainframe_qt.api_utils import api
 
 ZSSDatumType = Union[
     StreamConfiguration,

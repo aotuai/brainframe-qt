@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 import numpy as np
 from brainframe.api.bf_codecs import ZoneStatus, Zone
 
-from brainframe.client.api_utils.detection_tracks import DetectionTrack
+from brainframe_qt.api_utils.detection_tracks import DetectionTrack
 from .frame_buffer import SyncedFrameBuffer
 from .zone_status_frame import ZoneStatusFrame
 

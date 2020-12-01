@@ -4,9 +4,9 @@ from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QWidget, \
     QApplication
 
 from brainframe.api.bf_codecs import ZoneAlarm
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.mixins.mouse import ClickableMI
-from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.mixins.mouse import ClickableMI
+from brainframe_qt.ui.resources.paths import qt_qss_paths
 
 
 class AlarmHeaderUI(QFrame):

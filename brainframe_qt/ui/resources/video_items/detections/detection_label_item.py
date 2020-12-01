@@ -3,8 +3,8 @@ from typing import List, Optional, Tuple
 from PyQt5.QtGui import QColor
 from brainframe.api.bf_codecs import Detection
 
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.base import LabelItem, \
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.video_items.base import LabelItem, \
     VideoItem
 
 

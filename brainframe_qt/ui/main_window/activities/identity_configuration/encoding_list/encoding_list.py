@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPalette
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 from .encoding_entry import EncodingEntry
 

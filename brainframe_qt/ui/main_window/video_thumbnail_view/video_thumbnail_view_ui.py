@@ -2,12 +2,12 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
-from brainframe.client.ui.main_window.video_thumbnail_view.thumbnail_grid_layout.thumbnail_grid_layout import \
+from brainframe_qt.ui.main_window.video_thumbnail_view.thumbnail_grid_layout.thumbnail_grid_layout import \
     ThumbnailGridLayout
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.mixins.style import TransientScrollbarMI
-from brainframe.client.ui.resources.paths import qt_qss_paths
-from brainframe.client.ui.resources.ui_elements.widgets import \
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.mixins.style import TransientScrollbarMI
+from brainframe_qt.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources.ui_elements.widgets import \
     BackgroundImageText
 
 

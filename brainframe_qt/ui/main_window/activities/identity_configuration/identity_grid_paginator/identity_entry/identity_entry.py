@@ -6,9 +6,9 @@ from PyQt5.uic import loadUiType
 
 from brainframe.api.bf_codecs import Identity
 # noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import qt_resources
-from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
+from brainframe_qt.ui.resources import qt_resources
+from brainframe_qt.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources.ui_elements.buttons import FloatingXButton
 
 # Preload & parse the UI file into memory, for performance reasons
 _Form, _Base = loadUiType(qt_ui_paths.identity_entry_ui)

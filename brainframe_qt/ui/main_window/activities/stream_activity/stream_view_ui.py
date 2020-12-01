@@ -3,13 +3,13 @@ import functools
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QHBoxLayout, QSplitter, QWidget
 
-from brainframe.client.ui.main_window.video_expanded_view.video_expanded_view import \
+from brainframe_qt.ui.main_window.video_expanded_view.video_expanded_view import \
     VideoExpandedView
-from brainframe.client.ui.main_window.video_thumbnail_view import \
+from brainframe_qt.ui.main_window.video_thumbnail_view import \
     VideoThumbnailView
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.paths import qt_qss_paths
-from brainframe.client.ui.resources.ui_elements.buttons import \
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources.ui_elements.buttons import \
     FloatingActionButton
 
 

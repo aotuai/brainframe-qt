@@ -3,7 +3,7 @@ from typing import Tuple
 from PyQt5.QtCore import QRectF
 from PyQt5.QtWidgets import QGraphicsItem
 
-from brainframe.client.ui.resources.mixins.base_mixin import ABCObject
+from brainframe_qt.ui.resources.mixins.base_mixin import ABCObject
 
 
 class VideoItem(QGraphicsItem, metaclass=ABCObject):

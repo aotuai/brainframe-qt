@@ -7,12 +7,12 @@ from PyQt5.uic import loadUi
 from brainframe.api.bf_codecs import StreamConfiguration
 from requests.exceptions import RequestException
 
-from brainframe.client.api_utils import api
-from brainframe.client.ui.dialogs import CapsuleConfigDialog, TaskConfiguration
-from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
-from brainframe.client.ui.resources.paths import qt_qss_paths, qt_ui_paths
-from brainframe.client.ui.resources.ui_elements.buttons import FloatingXButton
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+from brainframe_qt.api_utils import api
+from brainframe_qt.ui.dialogs import CapsuleConfigDialog, TaskConfiguration
+from brainframe_qt.ui.resources import QTAsyncWorker, stylesheet_watcher
+from brainframe_qt.ui.resources.paths import qt_qss_paths, qt_ui_paths
+from brainframe_qt.ui.resources.ui_elements.buttons import FloatingXButton
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 
 

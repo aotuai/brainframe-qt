@@ -3,8 +3,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QTransform
 from brainframe.api.bf_codecs import Zone
 
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.base import ArrowItem, \
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.video_items.base import ArrowItem, \
     LineItem, VideoItem
 from .abstract_zone_item import AbstractZoneItem
 

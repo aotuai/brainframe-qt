@@ -2,7 +2,7 @@ import math
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QTransform
 
-from brainframe.client.ui.resources.ui_elements.constants import \
+from brainframe_qt.ui.resources.ui_elements.constants import \
     QColorConstants
 from .line_item import LineItem
 from .video_item import VideoItem

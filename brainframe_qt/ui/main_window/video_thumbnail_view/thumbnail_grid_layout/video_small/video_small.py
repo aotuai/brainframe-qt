@@ -2,9 +2,9 @@ from PyQt5.QtCore import QRectF, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter
 from PyQt5.QtWidgets import QWidget
 
-from brainframe.client.api_utils.streaming.zone_status_frame import \
+from brainframe_qt.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrame
-from brainframe.client.ui.resources.video_items.streams import StreamWidget
+from brainframe_qt.ui.resources.video_items.streams import StreamWidget
 
 
 class VideoSmall(StreamWidget):

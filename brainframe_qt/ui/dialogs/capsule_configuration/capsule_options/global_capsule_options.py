@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QPushButton
 
-from brainframe.client.api_utils import api
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+from brainframe_qt.api_utils import api
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 from .base_capsule_options import BaseCapsuleOptionsWidget
 

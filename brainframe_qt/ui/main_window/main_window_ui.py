@@ -3,10 +3,10 @@ from typing import Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget
 
-from brainframe.client.ui.main_window.toolbar import MainToolbar
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.paths import qt_qss_paths
-from brainframe.client.ui.resources.ui_elements.containers import \
+from brainframe_qt.ui.main_window.toolbar import MainToolbar
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources.ui_elements.containers import \
     SidebarDockWidget
 
 

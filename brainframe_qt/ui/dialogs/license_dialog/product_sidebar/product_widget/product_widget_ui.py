@@ -3,7 +3,7 @@ from typing import Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
-from brainframe.client.ui.resources.ui_elements.widgets import \
+from brainframe_qt.ui.resources.ui_elements.widgets import \
     AspectRatioSVGWidget
 
 

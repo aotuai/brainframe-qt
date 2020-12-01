@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QDialog, QFileDialog
 from PyQt5.uic import loadUi
 
 # noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import qt_resources
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources import qt_resources
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
 class DirectorySelector(QDialog):

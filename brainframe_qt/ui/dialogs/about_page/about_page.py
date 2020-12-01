@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import QApplication, QDialog, QPlainTextEdit, QStyle, \
     QStyleOptionTab, QStylePainter, QTabBar, QTabWidget, QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.client.extensions import AboutActivity
-from brainframe.client.ui.resources.paths import qt_ui_paths, text_paths
+from brainframe_qt.extensions import AboutActivity
+from brainframe_qt.ui.resources.paths import qt_ui_paths, text_paths
 
 
 class AboutPageActivity(AboutActivity):

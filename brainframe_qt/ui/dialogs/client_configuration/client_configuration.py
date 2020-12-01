@@ -2,10 +2,10 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QDialog, QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.client.extensions import DialogActivity
-from brainframe.client.ui.resources import settings
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.extensions import DialogActivity
+from brainframe_qt.ui.resources import settings
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
 class ClientConfigActivity(DialogActivity):

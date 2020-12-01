@@ -2,9 +2,9 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QSplashScreen, QVBoxLayout, QPushButton
 
-from brainframe.client.ui.dialogs import ServerConfigurationDialog
+from brainframe_qt.ui.dialogs import ServerConfigurationDialog
 # noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import qt_resources
+from brainframe_qt.ui.resources import qt_resources
 
 
 class SplashScreen(QSplashScreen):

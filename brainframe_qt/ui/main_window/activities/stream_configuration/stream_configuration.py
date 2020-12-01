@@ -8,16 +8,16 @@ from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QDialogButtonBox, QWidget
 from brainframe.api import bf_codecs, bf_errors
 
-from brainframe.client.api_utils import api
-from brainframe.client.ui.main_window.activities.stream_configuration \
+from brainframe_qt.api_utils import api
+from brainframe_qt.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
-from brainframe.client.ui.resources import CanceledError, ProgressFileReader, \
+from brainframe_qt.ui.resources import CanceledError, ProgressFileReader, \
     QTAsyncWorker
-from brainframe.client.ui.resources.links.documentation \
+from brainframe_qt.ui.resources.links.documentation \
     import IP_CAMERA_DOCS_LINK
-from brainframe.client.ui.resources.ui_elements.widgets import \
+from brainframe_qt.ui.resources.ui_elements.widgets import \
     FileUploadProgressDialog
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 
 

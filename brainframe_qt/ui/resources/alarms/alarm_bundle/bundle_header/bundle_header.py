@@ -1,9 +1,9 @@
 from PyQt5.QtCore import Qt, pyqtProperty
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QWidget
 
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.mixins.mouse import ClickableMI
-from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.mixins.mouse import ClickableMI
+from brainframe_qt.ui.resources.paths import qt_qss_paths
 
 
 class BundleHeaderUI(QFrame):

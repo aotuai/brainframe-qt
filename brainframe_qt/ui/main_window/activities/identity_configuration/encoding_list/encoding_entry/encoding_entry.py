@@ -3,7 +3,7 @@ from PyQt5.QtGui import QMouseEvent, QPalette
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
 class EncodingEntry(QWidget):

@@ -115,7 +115,7 @@ class StreamManagerAPI(BrainFrameAPI):
         """Returns a singleton StreamManager object"""
         # Lazily import streaming code to avoid OpenCV dependencies unless
         # necessary
-        from brainframe.client.api_utils.streaming import StreamManager
+        from brainframe_qt.api_utils.streaming import StreamManager
 
         if self._stream_manager is None:
             self._stream_manager = StreamManager(self.get_status_receiver())

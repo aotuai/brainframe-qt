@@ -1,10 +1,10 @@
 from PyQt5.QtCore import QMargins, Qt
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.mixins.style import TransientScrollbarMI
-from brainframe.client.ui.resources.paths import qt_qss_paths
-from brainframe.client.ui.resources.ui_elements.widgets import \
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.mixins.style import TransientScrollbarMI
+from brainframe_qt.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources.ui_elements.widgets import \
     BackgroundImageText
 
 

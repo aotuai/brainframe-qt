@@ -4,7 +4,7 @@ from PyQt5.QtCore import QPointF, Qt
 from PyQt5.QtGui import QColor, QFont, QFontMetrics
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsTextItem
 
-from brainframe.client.ui.resources.ui_elements.constants import \
+from brainframe_qt.ui.resources.ui_elements.constants import \
     QColorConstants
 from .video_item import VideoItem
 

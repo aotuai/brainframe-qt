@@ -7,8 +7,8 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QStyle
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
+from brainframe_qt.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources.ui_elements.buttons import TextIconButton
 
 
 # Hack to allow class to inherit from both QObject (type=sip.wrappertype) and

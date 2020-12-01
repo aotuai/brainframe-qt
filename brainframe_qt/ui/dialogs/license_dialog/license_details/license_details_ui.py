@@ -1,9 +1,9 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QFrame, QGridLayout, QLabel, QWidget
 
-from brainframe.client.ui.resources.links.documentation import \
+from brainframe_qt.ui.resources.links.documentation import \
     LICENSE_DOCS_LINK
-from brainframe.client.ui.resources.ui_elements.widgets import Line
+from brainframe_qt.ui.resources.ui_elements.widgets import Line
 from .license_source_selector import LicenseSourceSelector
 from .license_terms import LicenseTerms
 

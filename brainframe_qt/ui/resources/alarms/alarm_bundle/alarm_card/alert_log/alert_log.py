@@ -5,10 +5,10 @@ from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QScrollArea, QWidget
 
 from brainframe.api.bf_codecs import Alert
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.mixins.mouse import ClickableMI
-from brainframe.client.ui.resources.mixins.style import TransientScrollbarMI
-from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.mixins.mouse import ClickableMI
+from brainframe_qt.ui.resources.mixins.style import TransientScrollbarMI
+from brainframe_qt.ui.resources.paths import qt_qss_paths
 from .alert_log_entry import AlertLogEntry
 from .alert_log_layout import AlertLogLayout
 

@@ -2,8 +2,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QWidget
 
-from brainframe.client.ui.resources.ui_elements.buttons import IconButton
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+from brainframe_qt.ui.resources.ui_elements.buttons import IconButton
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 
 

@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFontDatabase, \
 from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, \
     QVBoxLayout, QWidget
 
-from brainframe.client.ui.resources.ui_elements.widgets.text_edit import \
+from brainframe_qt.ui.resources.ui_elements.widgets.text_edit import \
     DragAndDropTextEditor
 
 

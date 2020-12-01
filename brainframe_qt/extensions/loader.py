@@ -5,7 +5,7 @@ from pathlib import Path
 
 import sys
 
-from brainframe.client.ui.resources.paths import route_path, find_client_root
+from brainframe_qt.ui.resources.paths import route_path, find_client_root
 
 
 class ExtensionLoader:

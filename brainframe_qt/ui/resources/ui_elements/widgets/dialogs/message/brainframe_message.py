@@ -6,7 +6,7 @@ from typing import Callable, Optional
 from PyQt5.QtWidgets import QAbstractButton, QApplication, QMessageBox, \
     QPushButton, QWidget
 
-from brainframe.client.ui.resources import actions
+from brainframe_qt.ui.resources import actions
 from .brainframe_message_ui import _BrainFrameMessageUI
 
 
@@ -304,5 +304,5 @@ class BrainFrameMessage(_BrainFrameMessageUI):
 
     def _open_server_config(self):
         # Avoid circular imports
-        from brainframe.client.ui.dialogs import ServerConfigurationDialog
+        from brainframe_qt.ui.dialogs import ServerConfigurationDialog
         ServerConfigurationDialog.show_dialog(self)
