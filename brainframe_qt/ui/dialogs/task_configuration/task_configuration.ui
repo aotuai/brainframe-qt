@@ -252,12 +252,12 @@
   <customwidget>
    <class>VideoTaskConfig</class>
    <extends>QGraphicsView</extends>
-   <header>brainframe.client.ui.dialogs.task_configuration.video_task_config.video_task_config</header>
+   <header>brainframe_qt.ui.dialogs.task_configuration.video_task_config.video_task_config</header>
   </customwidget>
   <customwidget>
    <class>ZoneList</class>
    <extends>QTreeWidget</extends>
-   <header>brainframe.client.ui.dialogs.task_configuration.zone_list.zone_list</header>
+   <header>brainframe_qt.ui.dialogs.task_configuration.zone_list.zone_list</header>
   </customwidget>
  </customwidgets>
  <resources/>

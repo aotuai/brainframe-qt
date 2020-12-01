@@ -19,7 +19,7 @@ def _running_in_snap() -> bool:
     return "SNAP" in os.environ
 
 
-_RESOURCES_DIR = Path("brainframe/client/ui/resources")
+_RESOURCES_DIR = Path("brainframe_qt/ui/resources")
 """The resources directory, relative to the client's root directory"""
 
 

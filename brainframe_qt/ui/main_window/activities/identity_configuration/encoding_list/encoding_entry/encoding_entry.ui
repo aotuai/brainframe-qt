@@ -64,7 +64,7 @@
   <customwidget>
    <class>TextIconButton</class>
    <extends>QPushButton</extends>
-   <header>brainframe.client.ui.resources.ui_elements.buttons.icon_button</header>
+   <header>brainframe_qt.ui.resources.ui_elements.buttons.icon_button</header>
   </customwidget>
  </customwidgets>
 </ui>
