@@ -64,7 +64,7 @@ class DetectionLabelItem(LabelItem):
 
         confidence = self.detection.extra_data['encoding_distance']
 
-        return f"{name} ({round(confidence, 2)}"
+        return f"{name} ({round(confidence, 2)})"
 
     @property
     def _attributes_text(self) -> Optional[str]:
