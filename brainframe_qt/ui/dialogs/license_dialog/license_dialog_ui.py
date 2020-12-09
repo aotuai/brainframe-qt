@@ -1,8 +1,8 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QHBoxLayout, QWidget
 
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.paths import qt_qss_paths
 from .product_sidebar import ProductSidebar
 from .license_details import LicenseDetails
 

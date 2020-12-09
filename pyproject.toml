@@ -1,32 +1,18 @@
 [tool.poetry]
 name = "brainframe"
-version = "0.27.0"
+version = "0.28.0"
 description = "BrainFrame"
 authors = ["Aotu"]
 license = "Proprietary"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-vcap = { version = "0.2.7", optional = true }
-vcap-utils = { version = "0.2.7", optional = true }
-cherrypy = { version = "^18.6.0", optional = true }
-falcon = { version = "^2.0.0", optional = true }
-falcon-multipart = { version = "^0.2.0", optional = true }
-peewee = { version = "3.13.3", optional = true }
-psycopg2-binary = { version = "^2.8.5", optional = true }
-argon2-cffi = { version = "^20.1.0", optional = true }
-watchdog = { version = "^0.10.3", optional = true }
-cryptography = { version = "^3.0", optional = true }
-pyyaml = { version = "^5.3.1", optional = true }
-py-openapi-schema-to-json-schema = { version = "^0.0.3", optional = true }
-jsonschema = { version = "^3.2.0", optional = true }
-
+brainframe-api = "0.27.0"
 # Windows is locked to 1.16, due to gcc version on windows being 8.3. https://github.com/numpy/numpy/issues/14787
 numpy = [
     { version = "1.16.5", markers = "sys_platform == 'win32'"},
     { version = "^1.16", markers = "sys_platform == 'linux'"},
 ]
-
 shapely = "1.6.4"  # Because our windows build requires 1.6.4.post2
 ujson = "^1.35"
 requests = "^2.23.0"
@@ -37,66 +23,20 @@ python-dateutil = "^2.8.1"
 PyGObject = "~3.34.0"
 readerwriterlock = "^1.0.6"
 pycryptodomex = "^3.9.6"
-
-cython = "^0.29.21"
-
-tabulate = "^0.8.7"
-# Match build environment
-opencv-python-headless = { version = "^4.4.0", optional = true }
-
-brainframe-api = { git = "https://github.com/aotuai/brainframe_python", rev = "8b75e25", optional = true }
-pendulum = { version = "^2.0.5", optional = true }
+pendulum = "^2.0.5"
+dataclasses = { version = "^0.7", python = ">=3.6,<3.7" }
+gstly = { git = "git@github.com:aotuai/gstly.git", rev = "fc0bb63" }
+pubsus = { git = "https://github.com/aotuai/pubsus.git", branch = "main" }
 
 pyqt5ac = { version = "^1.1.0", optional = true }
 pyinstaller = { version = "^3.6", optional = true }
-packaging = "^20.4"
-cached-property = "^1.5.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.0.1"
-mock = "^4.0.2"
-fabrisnake = { git = "ssh://git@github.com/aotuai/fabrisnake.git", rev = "v0.10.4" }
-pyqt5-stubs = { git="ssh://git@github.com/stlehmann/PyQt5-stubs.git", branch = "master" }
+pyqt5 = "^5.15.0"
+pyqt5-stubs = { git = "ssh://git@github.com/stlehmann/PyQt5-stubs.git", branch = "master" }
+pyqt5ac = "^1.2.1"
 
 [tool.poetry.extras]
-server = [
-    "vcap",
-    "vcap-utils",
-    "cherrypy",
-    "falcon",
-    "falcon-multipart",
-    "peewee",
-    "psycopg2-binary",
-    "argon2-cffi",
-    "watchdog",
-    "cryptography",
-    "pyyaml",
-    "py-openapi_schema_to_json_schema",
-    "jsonschema",
-    "opencv-python-headless"
-]
-build = [
-    "cython"
-]
-build_downloads = [
-    "vcap",
-    "vcap-utils",
-    "tabulate",
-    "opencv-python-headless"
-]
-client = [
-    "brainframe-api",
-    "pendulum",
-    "numpy",
-    "shapely",
-    "ujson",
-    "requests",
-    "python-dateutil",
-    "PyGObject",
-    "readerwriterlock",
-    "pycryptodomex"
-]
-
 # Separate from client_build because pyqt5ac brings in the wrong PyQt5 version
 client_res_build = [
     "pyqt5ac"

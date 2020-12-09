@@ -3,7 +3,7 @@ from typing import Tuple
 from PyQt5.QtGui import QColor
 from brainframe.api.bf_codecs import Zone
 
-from brainframe.client.ui.resources.video_items.base import VideoItem
+from brainframe_qt.ui.resources.video_items.base import VideoItem
 
 
 class AbstractZoneItem:

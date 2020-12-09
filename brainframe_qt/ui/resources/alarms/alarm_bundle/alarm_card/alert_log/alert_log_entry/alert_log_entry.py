@@ -5,10 +5,10 @@ from PyQt5.QtCore import Qt, QThread, QMetaObject, Q_ARG, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QFrame, QWidget, QVBoxLayout
 
 from brainframe.api.bf_codecs import Alert
-from brainframe.client.api_utils.zss_pubsub import zss_publisher, Subscription
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.mixins.display import ExpandableMI
-from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe_qt.api_utils.zss_pubsub import zss_publisher, Subscription
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.mixins.display import ExpandableMI
+from brainframe_qt.ui.resources.paths import qt_qss_paths
 
 from .alert_header import AlertHeader
 from .alert_preview import AlertPreview

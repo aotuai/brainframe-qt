@@ -6,10 +6,10 @@ from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs, bf_errors
 
-from brainframe.client.api_utils import api
-from brainframe.client.api_utils.identities import FileTreeIdentityFinder, \
+from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils.identities import FileTreeIdentityFinder, \
     IdentityPrototype
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 from .directory_selector import DirectorySelector
 from .identity_error_popup import IdentityError, IdentityErrorPopup

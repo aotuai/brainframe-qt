@@ -15,8 +15,8 @@ from brainframe.api.bf_codecs import (
     ZoneAlarmRateCondition,
     IntersectionPointType,
 )
-from brainframe.client.ui.resources import settings
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources import settings
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
 class ConditionType(Enum):

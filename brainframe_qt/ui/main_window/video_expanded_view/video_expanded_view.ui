@@ -117,12 +117,12 @@
   <customwidget>
    <class>VideoLarge</class>
    <extends>QGraphicsView</extends>
-   <header>brainframe.client.ui.main_window.video_expanded_view.video_large.video_large</header>
+   <header>brainframe_qt.ui.main_window.video_expanded_view.video_large.video_large</header>
   </customwidget>
   <customwidget>
    <class>AlertLog</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.video_expanded_view.alert_log.alert_log</header>
+   <header>brainframe_qt.ui.main_window.video_expanded_view.alert_log.alert_log</header>
   </customwidget>
  </customwidgets>
  <resources/>

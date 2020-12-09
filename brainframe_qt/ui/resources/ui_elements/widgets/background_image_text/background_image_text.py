@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget
 
-from brainframe.client.ui.resources.ui_elements.widgets.background_image_text \
+from brainframe_qt.ui.resources.ui_elements.widgets.background_image_text \
     .background_image_text_ui import BackgroundImageTextUI
 
 

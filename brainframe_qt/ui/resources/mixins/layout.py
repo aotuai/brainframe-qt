@@ -3,8 +3,8 @@ from typing import Generic, TypeVar
 
 from PyQt5.QtWidgets import QWidget, QLayoutItem, QVBoxLayout
 
-from brainframe.client.ui.resources.mixins import BaseQMixin
-from brainframe.client.ui.resources.data_structures import SortedList
+from brainframe_qt.ui.resources.mixins import BaseQMixin
+from brainframe_qt.ui.resources.data_structures import SortedList
 
 W = TypeVar("W", bound=QWidget)
 

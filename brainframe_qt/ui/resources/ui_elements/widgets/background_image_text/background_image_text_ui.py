@@ -2,8 +2,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLabel, QVBoxLayout, QWidget
 
 # noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import qt_resources, stylesheet_watcher
-from brainframe.client.ui.resources.ui_elements.widgets import \
+from brainframe_qt.ui.resources import qt_resources, stylesheet_watcher
+from brainframe_qt.ui.resources.ui_elements.widgets import \
     AspectRatioSVGWidget
 
 

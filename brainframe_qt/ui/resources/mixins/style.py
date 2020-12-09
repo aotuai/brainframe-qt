@@ -3,7 +3,7 @@ from typing import Optional
 from PyQt5.QtWidgets import QProxyStyle, QStyleOption, QStyleHintReturn, \
     QWidget
 
-from brainframe.client.ui.resources.mixins import BaseWidgetMixin
+from brainframe_qt.ui.resources.mixins import BaseWidgetMixin
 
 
 class TransientScrollbarMI(BaseWidgetMixin):

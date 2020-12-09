@@ -5,13 +5,13 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QDialog, QLayout, QVBoxLayout, \
     QWidget
 
-from brainframe.client.api_utils import api
+from brainframe_qt.api_utils import api
 from brainframe.api.bf_codecs import StreamConfiguration, Zone, ZoneAlarm
-from brainframe.client.api_utils.zss_pubsub import zss_publisher
-from brainframe.client.extensions import WindowedActivity
-from brainframe.client.ui.dialogs.alarm_view.alarm_view_ui import AlarmViewUI
-from brainframe.client.ui.resources.alarms.alarm_bundle import AlarmBundle
-from brainframe.client.ui.resources.mixins.data_structure import IterableMI
+from brainframe_qt.api_utils.zss_pubsub import zss_publisher
+from brainframe_qt.extensions import WindowedActivity
+from brainframe_qt.ui.dialogs.alarm_view.alarm_view_ui import AlarmViewUI
+from brainframe_qt.ui.resources.alarms.alarm_bundle import AlarmBundle
+from brainframe_qt.ui.resources.mixins.data_structure import IterableMI
 
 
 class AlertActivity(WindowedActivity):

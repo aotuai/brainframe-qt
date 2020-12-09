@@ -7,8 +7,8 @@ from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
 from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
     QPushButton, QSizePolicy, QApplication, QMessageBox
 
-from brainframe.client.ui.dialogs.capsule_configuration import capsule_utils
-from brainframe.client.ui.resources.ui_elements.buttons import TextIconButton
+from brainframe_qt.ui.dialogs.capsule_configuration import capsule_utils
+from brainframe_qt.ui.resources.ui_elements.buttons import TextIconButton
 
 
 class CapsuleOptionItem(ABC):

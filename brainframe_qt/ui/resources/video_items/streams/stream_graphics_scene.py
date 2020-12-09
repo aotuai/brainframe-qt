@@ -2,13 +2,13 @@ from typing import List
 
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QWidget
+from brainframe.api import bf_codecs
 
-from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.detections import DetectionItem
-from brainframe.client.ui.resources.video_items.zone_statuses import \
+from brainframe_qt.api_utils.detection_tracks import DetectionTrack
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.video_items.detections import DetectionItem
+from brainframe_qt.ui.resources.video_items.zone_statuses import \
     ZoneStatusItem
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
 
 
 class StreamGraphicsScene(QGraphicsScene):
@@ -63,14 +63,14 @@ class StreamGraphicsScene(QGraphicsScene):
     def draw_lines(self, zone_statuses):
         # Draw all of the zones (except the default zone)
         for zone_status in zone_statuses.values():
-            if zone_status.zone.name != DEFAULT_ZONE_NAME:
+            if zone_status.zone.name != bf_codecs.Zone.FULL_FRAME_ZONE_NAME:
                 if len(zone_status.zone.coords) == 2:
                     self._new_zone_status_polygon(zone_status)
 
     def draw_regions(self, zone_statuses):
         # Draw all of the zones (except the default zone)
         for zone_status in zone_statuses.values():
-            if zone_status.zone.name != DEFAULT_ZONE_NAME:
+            if zone_status.zone.name != bf_codecs.Zone.FULL_FRAME_ZONE_NAME:
                 if len(zone_status.zone.coords) > 2:
                     self._new_zone_status_polygon(zone_status)
 

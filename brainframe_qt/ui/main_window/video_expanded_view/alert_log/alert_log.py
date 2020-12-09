@@ -6,11 +6,11 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.uic import loadUi
 
-from brainframe.client.api_utils import api
+from brainframe_qt.api_utils import api
 from brainframe.api.bf_codecs import Alert, Zone, ZoneAlarm
 from brainframe.api.bf_errors import StreamConfigNotFoundError
-from brainframe.client.ui.resources import QTAsyncWorker
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources import QTAsyncWorker
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 from .alert_log_entry import AlertLogEntry
 

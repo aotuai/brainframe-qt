@@ -6,8 +6,7 @@ from typing import Any
 import pendulum
 from PyQt5.QtCore import QSettings
 from pendulum.tz.timezone import Timezone
-
-from brainframe.shared.pubsus import PubSubMixin
+from pubsus import PubSubMixin
 
 
 class Setting(PubSubMixin):

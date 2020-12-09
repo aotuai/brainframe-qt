@@ -8,15 +8,15 @@ from PyQt5.QtWidgets import QApplication, QFrame, QVBoxLayout, QWidget, \
     QLayout, QSizePolicy
 
 from brainframe.api.bf_codecs import StreamConfiguration, ZoneAlarm, Zone
-from brainframe.client.api_utils.zss_pubsub import zss_publisher
-from brainframe.client.ui.resources import stylesheet_watcher
-from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card \
+from brainframe_qt.api_utils.zss_pubsub import zss_publisher
+from brainframe_qt.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources.alarms.alarm_bundle.alarm_card \
     import AlarmCard
-from brainframe.client.ui.resources.alarms.alarm_bundle.bundle_header import \
+from brainframe_qt.ui.resources.alarms.alarm_bundle.bundle_header import \
     BundleHeader
-from brainframe.client.ui.resources.mixins.data_structure import IterableMI
-from brainframe.client.ui.resources.mixins.display import ExpandableMI
-from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources.mixins.data_structure import IterableMI
+from brainframe_qt.ui.resources.mixins.display import ExpandableMI
+from brainframe_qt.ui.resources.paths import qt_qss_paths
 
 
 class AlarmBundleUI(QWidget):

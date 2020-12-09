@@ -7,17 +7,17 @@ from PyQt5.QtWidgets import QApplication, QCheckBox, QDialog, QDialogButtonBox, 
 from PyQt5.uic import loadUi
 from brainframe.api import BrainFrameAPI, bf_codecs, bf_errors
 
-from brainframe.client.api_utils import api
-from brainframe.client.extensions import DialogActivity
-from brainframe.client.ui.dialogs.license_dialog.license_dialog import \
+from brainframe_qt.api_utils import api
+from brainframe_qt.extensions import DialogActivity
+from brainframe_qt.ui.dialogs.license_dialog.license_dialog import \
     LicenseDialog
-from brainframe.client.ui.resources import QTAsyncWorker, settings
-from brainframe.client.ui.resources.links.documentation import \
+from brainframe_qt.ui.resources import QTAsyncWorker, settings
+from brainframe_qt.ui.resources.links.documentation import \
     LICENSE_DOCS_LINK
-from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+from brainframe_qt.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
-from brainframe.shared.secret import decrypt, encrypt
+from brainframe_qt.util.secret import decrypt, encrypt
 
 
 class ServerConfigActivity(DialogActivity):

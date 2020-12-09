@@ -2,9 +2,10 @@ import logging
 
 from brainframe.api import BrainFrameAPI, StatusReceiver
 from brainframe.api.bf_codecs import StreamConfiguration
-from brainframe.shared.gstreamer import gobject_init
-from brainframe.shared.gstreamer.stream_reader import GstStreamReader
-from brainframe.shared.stream_reader import StreamReader
+from gstly import gobject_init
+from gstly.gst_stream_reader import GstStreamReader
+from gstly.abstract_stream_reader import StreamReader
+
 from .synced_reader import SyncedStreamReader
 
 
@@ -114,7 +115,7 @@ class StreamManagerAPI(BrainFrameAPI):
         """Returns a singleton StreamManager object"""
         # Lazily import streaming code to avoid OpenCV dependencies unless
         # necessary
-        from brainframe.client.api_utils.streaming import StreamManager
+        from brainframe_qt.api_utils.streaming import StreamManager
 
         if self._stream_manager is None:
             self._stream_manager = StreamManager(self.get_status_receiver())

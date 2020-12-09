@@ -6,11 +6,11 @@ from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtWidgets import QWidget
 from shapely import geometry
 
-from brainframe.client.api_utils.streaming.zone_status_frame import \
+from brainframe_qt.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrame
-from brainframe.client.ui.resources.video_items.base import VideoItem
-from brainframe.client.ui.resources.video_items.streams import StreamWidget
-from brainframe.client.ui.resources.video_items.zones import \
+from brainframe_qt.ui.resources.video_items.base import VideoItem
+from brainframe_qt.ui.resources.video_items.streams import StreamWidget
+from brainframe_qt.ui.resources.video_items.zones import \
     InProgressLineItem, InProgressRegionItem, InProgressZoneItem
 
 

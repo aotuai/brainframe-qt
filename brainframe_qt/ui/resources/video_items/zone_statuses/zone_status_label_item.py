@@ -5,8 +5,8 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 from brainframe.api.bf_codecs import ZoneStatus
 
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.base import LabelItem, \
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.video_items.base import LabelItem, \
     VideoItem
 from .abstract_zone_status_item import AbstractZoneStatusItem
 

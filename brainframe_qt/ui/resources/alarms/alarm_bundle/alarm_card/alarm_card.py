@@ -5,18 +5,18 @@ from PyQt5.QtCore import QMetaObject, Q_ARG, Qt, pyqtProperty, pyqtSlot, \
     QThread
 from PyQt5.QtWidgets import QFrame, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
-from brainframe.client.api_utils import api
+from brainframe_qt.api_utils import api
 from brainframe.api.bf_codecs import Alert, ZoneAlarm
-from brainframe.client.api_utils.zss_pubsub import zss_publisher
-from brainframe.client.ui.resources import QTAsyncWorker, stylesheet_watcher
+from brainframe_qt.api_utils.zss_pubsub import zss_publisher
+from brainframe_qt.ui.resources import QTAsyncWorker, stylesheet_watcher
 # TODO: Change to relative imports?
-from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alarm_header \
+from brainframe_qt.ui.resources.alarms.alarm_bundle.alarm_card.alarm_header \
     import AlarmHeader
-from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alert_log \
+from brainframe_qt.ui.resources.alarms.alarm_bundle.alarm_card.alert_log \
     import AlertLog
-from brainframe.client.ui.resources.mixins.data_structure import IterableMI
-from brainframe.client.ui.resources.mixins.display import ExpandableMI
-from brainframe.client.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources.mixins.data_structure import IterableMI
+from brainframe_qt.ui.resources.mixins.display import ExpandableMI
+from brainframe_qt.ui.resources.paths import qt_qss_paths
 
 
 class AlarmCardUI(QFrame):

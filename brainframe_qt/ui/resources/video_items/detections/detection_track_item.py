@@ -6,8 +6,8 @@ from PyQt5.QtCore import QPointF
 from PyQt5.QtGui import QColor, QPainterPath, QPolygonF
 from PyQt5.QtWidgets import QGraphicsPathItem
 
-from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.client.ui.resources.video_items.base import VideoItem
+from brainframe_qt.api_utils.detection_tracks import DetectionTrack
+from brainframe_qt.ui.resources.video_items.base import VideoItem
 
 
 class DetectionTrackItem(QGraphicsPathItem):

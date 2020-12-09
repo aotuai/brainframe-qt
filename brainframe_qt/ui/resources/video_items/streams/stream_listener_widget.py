@@ -4,12 +4,12 @@ from PyQt5.QtCore import QCoreApplication, QTimer
 from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs, bf_errors
 
-from brainframe.client.api_utils import api
-from brainframe.client.api_utils.streaming import StreamListener, \
+from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils.streaming import StreamListener, \
     SyncedStreamReader
-from brainframe.client.api_utils.streaming.zone_status_frame import \
+from brainframe_qt.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrame
-from brainframe.client.ui.resources import QTAsyncWorker
+from brainframe_qt.ui.resources import QTAsyncWorker
 
 
 class StreamListenerWidget(QWidget, StreamListener):

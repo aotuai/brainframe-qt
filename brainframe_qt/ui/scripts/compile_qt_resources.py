@@ -15,7 +15,7 @@ TR_LANGUAGES = ["zh"]
 project_root = Path.cwd().resolve()
 script_dir = Path(__file__).resolve().parents[1]
 assert project_root == script_dir, "Error: Script must be run from root of " \
-                                   "client dir"
+                                   "client ui dir"
 
 
 def parse_args() -> argparse.Namespace:

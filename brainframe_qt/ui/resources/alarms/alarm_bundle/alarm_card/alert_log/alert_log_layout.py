@@ -3,7 +3,7 @@ import typing
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QVBoxLayout
 
-from brainframe.client.ui.resources.mixins.layout import SortedLayoutMI
+from brainframe_qt.ui.resources.mixins.layout import SortedLayoutMI
 from .alert_log_entry import AlertLogEntry
 
 

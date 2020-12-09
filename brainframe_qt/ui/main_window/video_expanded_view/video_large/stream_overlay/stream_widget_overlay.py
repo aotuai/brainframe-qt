@@ -4,7 +4,7 @@ from typing import List, Optional
 from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs
 
-from brainframe.client.api_utils.streaming.zone_status_frame import \
+from brainframe_qt.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrameMeta
 from . import alerts as stream_alerts
 from .stream_widget_overlay_ui import StreamWidgetOverlayUI

@@ -1,13 +1,13 @@
 import logging
 from threading import RLock, Thread
+from time import sleep
 from typing import Optional, Set
 
 from brainframe.api import StatusReceiver
-from time import sleep
+from gstly.abstract_stream_reader import StreamReader, StreamStatus
+from gstly.gst_stream_reader import GstStreamReader
 
-from brainframe.shared.gstreamer.stream_reader import GstStreamReader
-from brainframe.shared.stream_reader import StreamReader, StreamStatus
-from brainframe.shared.utils import or_events
+from brainframe_qt.util.events import or_events
 from .frame_syncer import FrameSyncer
 from .stream_listener import StreamListener
 from .zone_status_frame import ZoneStatusFrame

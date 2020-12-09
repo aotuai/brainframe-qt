@@ -3,7 +3,7 @@ from typing import Set
 from PyQt5.QtWidgets import QDialog, QHeaderView, QTreeWidgetItem
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
 # TODO: Use Python3.7 @dataclass attribute

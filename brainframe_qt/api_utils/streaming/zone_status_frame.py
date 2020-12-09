@@ -5,7 +5,7 @@ from typing import Dict, List, Optional
 import numpy as np
 from brainframe.api.bf_codecs import ZoneStatus
 
-from brainframe.client.api_utils.detection_tracks import DetectionTrack
+from brainframe_qt.api_utils.detection_tracks import DetectionTrack
 
 
 @dataclass(eq=False)  # eq=False as np frames can't be compared using __eq__

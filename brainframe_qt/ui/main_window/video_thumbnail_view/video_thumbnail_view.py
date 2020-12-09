@@ -5,13 +5,13 @@ from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, \
 from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs
 
-from brainframe.client.api_utils import api
-from brainframe.client.api_utils.zss_pubsub import zss_publisher
-from brainframe.client.ui.main_window.video_thumbnail_view \
+from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils.zss_pubsub import zss_publisher
+from brainframe_qt.ui.main_window.video_thumbnail_view \
     .thumbnail_grid_layout.video_small.video_small import VideoSmall
-from brainframe.client.ui.main_window.video_thumbnail_view \
+from brainframe_qt.ui.main_window.video_thumbnail_view \
     .video_thumbnail_view_ui import _VideoThumbnailViewUI
-from brainframe.client.ui.resources import QTAsyncWorker
+from brainframe_qt.ui.resources import QTAsyncWorker
 
 
 class VideoThumbnailView(_VideoThumbnailViewUI):

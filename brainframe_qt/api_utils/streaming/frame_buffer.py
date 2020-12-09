@@ -2,7 +2,7 @@ from threading import RLock
 from typing import ClassVar, List, Optional
 from weakref import WeakSet
 
-from brainframe.client.api_utils.streaming.zone_status_frame import \
+from brainframe_qt.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrame
 
 

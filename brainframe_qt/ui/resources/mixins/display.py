@@ -3,7 +3,7 @@ from abc import abstractmethod
 from PyQt5.QtCore import pyqtProperty, pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from brainframe.client.ui.resources.mixins import BaseWidgetMixin
+from brainframe_qt.ui.resources.mixins import BaseWidgetMixin
 
 
 class ExpandableMI(BaseWidgetMixin):

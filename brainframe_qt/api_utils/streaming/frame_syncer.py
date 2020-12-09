@@ -2,10 +2,9 @@ from datetime import timedelta
 from typing import Dict, Optional
 from uuid import UUID, uuid4
 
-from brainframe.api.bf_codecs import ZoneStatus
+from brainframe.api.bf_codecs import ZoneStatus, Zone
 
-from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.shared.constants import DEFAULT_ZONE_NAME
+from brainframe_qt.api_utils.detection_tracks import DetectionTrack
 from .frame_buffer import SyncedFrameBuffer
 from .zone_status_frame import ZoneStatusFrame
 
@@ -71,7 +70,7 @@ class FrameSyncer:
             return popped_frame
 
         # Get timestamp off of default zone's status (all should be equal)
-        status_tstamp = latest_zone_statuses[DEFAULT_ZONE_NAME].tstamp
+        status_tstamp = latest_zone_statuses[Zone.FULL_FRAME_ZONE_NAME].tstamp
 
         # Check if this is a fresh zone_status or not
         if self.last_status_tstamp != status_tstamp:
@@ -83,7 +82,7 @@ class FrameSyncer:
             self.last_status_tstamp = status_tstamp
 
             # Iterate over all new detections, and add them to their tracks
-            dets = latest_zone_statuses[DEFAULT_ZONE_NAME].within
+            dets = latest_zone_statuses[Zone.FULL_FRAME_ZONE_NAME].within
             for det in dets:
                 # Create new tracks where necessary
                 track_id = det.track_id if det.track_id else uuid4()
@@ -131,7 +130,7 @@ class FrameSyncer:
             -> None:
 
         # Get timestamp off of default zone's status (all should be equal)
-        status_tstamp = statuses[DEFAULT_ZONE_NAME].tstamp
+        status_tstamp = statuses[Zone.FULL_FRAME_ZONE_NAME].tstamp
 
         # Get a list of DetectionTracks that had a detection for
         # this timestamp

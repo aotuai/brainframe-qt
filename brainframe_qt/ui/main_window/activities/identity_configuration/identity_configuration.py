@@ -3,11 +3,11 @@ from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import QApplication, QLineEdit, QProgressBar, QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.client.extensions import WindowedActivity
-from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.ui.resources.ui_elements.buttons import \
+from brainframe_qt.extensions import WindowedActivity
+from brainframe_qt.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources.ui_elements.buttons import \
     FloatingActionButton
-from brainframe.client.ui.resources.ui_elements.containers import Paginator
+from brainframe_qt.ui.resources.ui_elements.containers import Paginator
 from .identity_adder_worker import AddNewIdentitiesWorker
 from .identity_info import IdentityInfo
 from .identity_search_filter import IdentitySearchFilter

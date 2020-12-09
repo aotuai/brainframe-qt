@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget
 
-from brainframe.client.ui.resources.ui_elements.widgets import Line
+from brainframe_qt.ui.resources.ui_elements.widgets import Line
 
 
 class ListDivider(QWidget):

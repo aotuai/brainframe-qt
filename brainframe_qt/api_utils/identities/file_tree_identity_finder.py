@@ -5,7 +5,7 @@ from typing import List
 
 import ujson
 
-from brainframe.client.api_utils.identities.identity_finder import \
+from brainframe_qt.api_utils.identities.identity_finder import \
     IdentityFinder, IdentityPrototype
 
 

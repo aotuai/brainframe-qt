@@ -1,9 +1,9 @@
 from PyQt5.QtCore import Qt
 from brainframe.api.bf_codecs import ZoneStatus
 
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.base import VideoItem
-from brainframe.client.ui.resources.video_items.zones import ZoneRegionItem
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.video_items.base import VideoItem
+from brainframe_qt.ui.resources.video_items.zones import ZoneRegionItem
 from .abstract_zone_status_item import AbstractZoneStatusItem
 
 

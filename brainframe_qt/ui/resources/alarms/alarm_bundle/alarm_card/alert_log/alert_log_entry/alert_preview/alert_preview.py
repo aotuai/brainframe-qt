@@ -6,15 +6,15 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QWidget
 
-from brainframe.client.api_utils import api
+from brainframe_qt.api_utils import api
 from brainframe.api.bf_codecs import Alert
 # noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
+from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources, \
     stylesheet_watcher
-from brainframe.client.ui.resources.alarms.alarm_bundle.alarm_card.alert_log \
+from brainframe_qt.ui.resources.alarms.alarm_bundle.alarm_card.alert_log \
     .alert_log_entry.alert_preview.alert_detail import AlertDetail
-from brainframe.client.ui.resources.paths import qt_qss_paths
-from brainframe.client.ui.resources.ui_elements.widgets import ImageLabel
+from brainframe_qt.ui.resources.paths import qt_qss_paths
+from brainframe_qt.ui.resources.ui_elements.widgets import ImageLabel
 
 
 class AlertPreviewUI(QFrame):

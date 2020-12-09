@@ -60,7 +60,7 @@
   <customwidget>
    <class>EncodingList</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.activities.identity_configuration.encoding_list.encoding_list</header>
+   <header>brainframe_qt.ui.main_window.activities.identity_configuration.encoding_list.encoding_list</header>
   </customwidget>
  </customwidgets>
  <resources/>

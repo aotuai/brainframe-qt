@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QApplication, QListWidgetItem, QWidget
 from brainframe.api import bf_codecs, bf_errors
 
-from brainframe.client.api_utils import api
-from brainframe.client.ui.resources import QTAsyncWorker
-from brainframe.client.ui.resources.links.documentation import \
+from brainframe_qt.api_utils import api
+from brainframe_qt.ui.resources import QTAsyncWorker
+from brainframe_qt.ui.resources.links.documentation import \
     LICENSE_DOCS_LINK
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage, WorkingIndicator
 from .license_dialog_ui import _LicenseDialogUI
 from .product_sidebar.product_widget import ProductWidget

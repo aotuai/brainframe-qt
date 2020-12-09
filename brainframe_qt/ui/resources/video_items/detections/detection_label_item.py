@@ -3,8 +3,8 @@ from typing import List, Optional, Tuple
 from PyQt5.QtGui import QColor
 from brainframe.api.bf_codecs import Detection
 
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.base import LabelItem, \
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.video_items.base import LabelItem, \
     VideoItem
 
 
@@ -64,7 +64,7 @@ class DetectionLabelItem(LabelItem):
 
         confidence = self.detection.extra_data['encoding_distance']
 
-        return f"{name} ({round(confidence, 2)}"
+        return f"{name} ({round(confidence, 2)})"
 
     @property
     def _attributes_text(self) -> Optional[str]:

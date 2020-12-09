@@ -8,23 +8,24 @@ from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, 
     pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QWidget
-from brainframe.api import bf_codecs, bf_errors
 
-from brainframe import client
-from brainframe.client.api_utils import api
-from brainframe.client.extensions.loader import ExtensionLoader
-from brainframe.client.ui import EULADialog, MainWindow, SplashScreen
-# noinspection PyUnresolvedReferences
-from brainframe.client.ui.resources import QTAsyncWorker, qt_resources, \
-    settings
-from brainframe.client.ui.resources.paths import text_paths
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
-    BrainFrameMessage
-from brainframe.shared.gstreamer import gobject_init
-from brainframe.shared.secret import decrypt
-from brainframe.shared.utils import or_events
-from brainframe.client.api_utils.streaming.frame_buffer import \
+from brainframe.api import bf_codecs, bf_errors
+from gstly import gobject_init
+
+import brainframe_qt
+from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils.streaming.frame_buffer import \
     SyncedFrameBuffer
+from brainframe_qt.extensions.loader import ExtensionLoader
+from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
+# noinspection PyUnresolvedReferences
+from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources, \
+    settings
+from brainframe_qt.ui.resources.paths import text_paths
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
+    BrainFrameMessage
+from brainframe_qt.util.events import or_events
+from brainframe_qt.util.secret import decrypt
 
 
 class BrainFrameApplication(QApplication):
@@ -296,7 +297,7 @@ class BrainFrameApplication(QApplication):
         self._wait_for_event(worker.finished_event)
 
         version = worker.data
-        if version != client.__version__:
+        if version != brainframe_qt.__version__:
             title = self.tr("Version Mismatch")
             message = self.tr(
                 "The server is using version {server_version} but this client "
@@ -304,7 +305,7 @@ class BrainFrameApplication(QApplication):
                 "version of the client at {download_url}.")
             message = message.format(
                 server_version=version,
-                client_version=client.__version__,
+                client_version=brainframe_qt.__version__,
                 download_url="aotu.ai/docs/downloads/")
 
             dialog = BrainFrameMessage.critical(

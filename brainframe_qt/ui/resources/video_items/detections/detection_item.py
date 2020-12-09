@@ -4,9 +4,9 @@ from typing import Dict, Optional
 from PyQt5.QtGui import QColor
 from brainframe.api.bf_codecs import Detection
 
-from brainframe.client.api_utils.detection_tracks import DetectionTrack
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.base import VideoItem
+from brainframe_qt.api_utils.detection_tracks import DetectionTrack
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.video_items.base import VideoItem
 from .detection_label_item import DetectionLabelItem
 from .detection_polygon_item import DetectionPolygonItem
 from .detection_track_item import DetectionTrackItem

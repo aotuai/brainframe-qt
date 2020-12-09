@@ -1,6 +1,6 @@
 from .base_capsule_options import BaseCapsuleOptionsWidget
 
-from brainframe.client.api_utils import api
+from brainframe_qt.api_utils import api
 
 
 class StreamCapsuleOptionsWidget(BaseCapsuleOptionsWidget):

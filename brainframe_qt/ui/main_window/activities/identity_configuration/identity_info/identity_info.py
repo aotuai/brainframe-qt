@@ -7,10 +7,10 @@ from PyQt5.QtWidgets import QLabel, QWidget
 from PyQt5.uic import loadUi
 from brainframe.api.bf_codecs import Encoding, Identity
 
-from brainframe.client.api_utils import api
-from brainframe.client.ui.resources import QTAsyncWorker
-from brainframe.client.ui.resources.paths import qt_ui_paths
-from brainframe.client.ui.resources.ui_elements.widgets.dialogs import \
+from brainframe_qt.api_utils import api
+from brainframe_qt.ui.resources import QTAsyncWorker
+from brainframe_qt.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 from ..encoding_list import EncodingList
 

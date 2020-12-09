@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QCursor, QMouseEvent
 
-from brainframe.client.ui.resources.mixins import BaseWidgetMixin
+from brainframe_qt.ui.resources.mixins import BaseWidgetMixin
 
 
 class ClickableMI(BaseWidgetMixin):

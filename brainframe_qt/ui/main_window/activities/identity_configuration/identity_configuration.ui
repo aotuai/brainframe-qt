@@ -68,18 +68,18 @@
   <customwidget>
    <class>IdentityGridPaginator</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_grid_paginator.identity_grid_paginator</header>
+   <header>brainframe_qt.ui.main_window.activities.identity_configuration.identity_grid_paginator.identity_grid_paginator</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>IdentitySearchFilter</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_search_filter.identity_search_filter</header>
+   <header>brainframe_qt.ui.main_window.activities.identity_configuration.identity_search_filter.identity_search_filter</header>
   </customwidget>
   <customwidget>
    <class>IdentityInfo</class>
    <extends>QWidget</extends>
-   <header>brainframe.client.ui.main_window.activities.identity_configuration.identity_info.identity_info</header>
+   <header>brainframe_qt.ui.main_window.activities.identity_configuration.identity_info.identity_info</header>
   </customwidget>
  </customwidgets>
  <connections>

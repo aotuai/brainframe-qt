@@ -2,9 +2,9 @@ from typing import Optional, Union
 
 from brainframe.api.bf_codecs import ZoneStatus
 
-from brainframe.client.ui.resources.config import QSettingsRenderConfig
-from brainframe.client.ui.resources.video_items.base import VideoItem
-from brainframe.client.ui.resources.video_items.zones import ZoneLineItem, \
+from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.video_items.base import VideoItem
+from brainframe_qt.ui.resources.video_items.zones import ZoneLineItem, \
     ZoneRegionItem
 from .zone_status_label_item import ZoneStatusLabelItem
 from .zone_status_line_item import ZoneStatusLineItem

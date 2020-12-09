@@ -4,17 +4,17 @@ import typing
 from PyQt5.QtWidgets import QAction, QWidget
 from brainframe.api import bf_codecs
 
-from brainframe.client.extensions import AboutActivity, ClientActivity, \
+from brainframe_qt.extensions import AboutActivity, ClientActivity, \
     ClientExtension, DialogActivity, WindowedActivity
-from brainframe.client.ui.dialogs import AboutPageActivity, AlertActivity, \
+from brainframe_qt.ui.dialogs import AboutPageActivity, AlertActivity, \
     CapsuleConfigActivity, ClientConfigActivity, ServerConfigActivity
-from brainframe.client.ui.main_window.activities import IdentityActivity, \
+from brainframe_qt.ui.main_window.activities import IdentityActivity, \
     StreamActivity, StreamConfiguration
-from brainframe.client.ui.main_window.main_window_ui import MainWindowUI
-from brainframe.client.ui.main_window.toolbar import MainToolbar
-from brainframe.client.ui.main_window.video_thumbnail_view import \
+from brainframe_qt.ui.main_window.main_window_ui import MainWindowUI
+from brainframe_qt.ui.main_window.toolbar import MainToolbar
+from brainframe_qt.ui.main_window.video_thumbnail_view import \
     VideoThumbnailView
-from brainframe.client.ui.resources import stylesheet_watcher
+from brainframe_qt.ui.resources import stylesheet_watcher
 
 
 class MainWindow(MainWindowUI):

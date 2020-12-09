@@ -1,12 +1,12 @@
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
-from brainframe.shared import preimport_hooks
+from brainframe_qt.util import preimport_hooks
 
 import faulthandler
 import sys
 
-from brainframe.client.ui.brainframe_app import BrainFrameApplication
-from brainframe.shared import environment
+from brainframe_qt.ui.brainframe_app import BrainFrameApplication
+from brainframe_qt.util import environment
 
 
 def main():

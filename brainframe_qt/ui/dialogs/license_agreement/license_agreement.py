@@ -3,8 +3,8 @@ import hashlib
 from PyQt5.QtWidgets import QBoxLayout, QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
 
-from brainframe.client.ui.resources import settings
-from brainframe.client.ui.resources.paths import qt_ui_paths, text_paths
+from brainframe_qt.ui.resources import settings
+from brainframe_qt.ui.resources.paths import qt_ui_paths, text_paths
 
 
 class EULADialog(QDialog):

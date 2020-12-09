@@ -6,8 +6,8 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QWidget, QPushButton, QLabel, QHBoxLayout,
                              QSizePolicy)
 
-from brainframe.client.ui.dialogs import AlertEntryPopup
-from brainframe.client.ui.resources.ui_elements.widgets import TimeLabel
+from brainframe_qt.ui.dialogs import AlertEntryPopup
+from brainframe_qt.ui.resources.ui_elements.widgets import TimeLabel
 
 # Preload the necessary icons for the AlertLogEntry
 pixmap = QPixmap(":/icons/alert")

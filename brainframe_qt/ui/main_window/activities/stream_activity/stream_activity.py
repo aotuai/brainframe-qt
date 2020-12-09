@@ -1,7 +1,7 @@
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QWidget
 
-from brainframe.client.extensions import WindowedActivity
+from brainframe_qt.extensions import WindowedActivity
 from .stream_view import StreamView
 
 

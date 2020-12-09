@@ -2,7 +2,7 @@ import pendulum
 
 from PyQt5.QtWidgets import QLabel, QWidget, QSizePolicy, QHBoxLayout
 
-from brainframe.client.ui.resources import settings
+from brainframe_qt.ui.resources import settings
 
 
 class TimeLabelUI(QWidget):

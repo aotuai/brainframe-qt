@@ -1,4 +1,4 @@
-from brainframe.client.ui.resources.settings import QSettingsConfig, Setting
+from brainframe_qt.ui.resources.settings import QSettingsConfig, Setting
 
 
 class RenderSettings:
