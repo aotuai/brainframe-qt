@@ -46,7 +46,8 @@ parts:
 
       # Add the main Python file
       export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
-      cp brainframe_client.py $PYTHON_INSTALL_DIR/.
+      mkdir -p $PYTHON_INSTALL_DIR
+      cp brainframe_client.py $PYTHON_INSTALL_DIR/
     source: .
     build-packages:
       # Basic Python packages
