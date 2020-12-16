@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QVBoxLayout, QWidget
 
 # TODO: This is way too nested. Potentially make Alerts a more "generic" item
-from brainframe.client.ui.main_window.video_expanded_view.video_large.stream_overlay import \
+from brainframe_qt.ui.main_window.video_expanded_view.video_large.stream_overlay import \
     AbstractOverlayAlert
 from .stream_alert import StreamAlert
 
