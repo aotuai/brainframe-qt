@@ -61,11 +61,9 @@ class FrameSyncer:
             popped_frame.frame_metadata.client_buffer_full = True
             popped_frame.frame_metadata.no_analysis = True
 
-            # This returns None if the buffer isn't full and no zone statuses
-            # have ever been returned by the server. It returns a
-            # ZoneStatusFrame with zone_statuses=None in the case when the
-            # buffer is already full, but the server still has never returned
-            # a zone status.
+            # Return a ZoneStatusFrame with zone_statuses=None in the case when
+            # the buffer is already full, but the server still has never
+            # returned a zone status.
             self.latest_processed = popped_frame
             return popped_frame
 
