@@ -1,5 +1,5 @@
 name: brainframe-client
-version: '0.27.0'
+version: '0.28.0'
 summary: A smart vision platform that is built to be easy to scale and deploy
 description: >
   BrainFrame is a smart vision platform that is built to be easy to scale,
@@ -28,7 +28,7 @@ parts:
         | python3 - --version 1.1.4
       export PATH=$HOME/.poetry/bin:$PATH
 
-      # The PYTHONPATH doesn't seem to be configured properly be default
+      # The PYTHONPATH doesn't seem to be configured properly by default
       export PYTHONPATH=/usr/lib/python3.6:/usr/local/lib/python3.6/dist-packages:$PYTHONPATH
       # Packages like ujson can't find "Python.h" without this
       export C_INCLUDE_PATH=/usr/include/python3.6m
@@ -42,29 +42,20 @@ parts:
       python3 -m pip install --ignore-installed httplib2 pyyaml
       # Install all Poetry dependencies globally
       poetry config virtualenvs.create false
-      poetry install --no-root --no-dev --extras client --extras build
-
-      # Remove non-client code, so we don't waste time compiling it
-      rm -r brainframe/backend brainframe/tests stream_gateway
-
-      # Compile the client
-      export PATH="$SNAPCRAFT_PART_INSTALL/usr/local/bin:$PATH"
-      python3 compile.py build_ext --inplace
+      poetry install --no-root --no-dev
 
       export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
-      mkdir -p $PYTHON_INSTALL_DIR/brainframe
+      mkdir -p $PYTHON_INSTALL_DIR
 
       # Copy the project
-      cp -r licenses $PYTHON_INSTALL_DIR
-      cp -r --parents brainframe/shared $PYTHON_INSTALL_DIR
-      cp -r --parents brainframe/client $PYTHON_INSTALL_DIR
-      # Remove all undesirable file types from brainframe/shared
-      for undesirable in "*.py" "*.c" "*.pyc" "__pycache__"
-        do find $PYTHON_INSTALL_DIR/brainframe/shared -name "$undesirable" -delete
+      cp -r brainframe_qt/ $PYTHON_INSTALL_DIR/
+      # Remove all undesirable file types
+      for undesirable in "*.pyc" "__pycache__"
+        do find $PYTHON_INSTALL_DIR/brainframe_qt/ -name "$undesirable" -delete
       done
 
       # Add the main Python file
-      cp brainframe_client.py $PYTHON_INSTALL_DIR/.
+      cp brainframe_client.py $PYTHON_INSTALL_DIR/
     source: .
     build-packages:
       # Basic Python packages
