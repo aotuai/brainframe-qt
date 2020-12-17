@@ -1,9 +1,10 @@
-from typing import Callable
+from typing import Callable, List
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QHBoxLayout, QSizePolicy, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
 from .tray import OverlayTray
+from .. import AbstractOverlayAlert
 
 
 class OverlayBody(QWidget):
@@ -43,3 +44,7 @@ class OverlayBody(QWidget):
 
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(0)
+
+    def handle_alerts(self, alerts: List[AbstractOverlayAlert]) -> None:
+        self.tray.handle_alerts(alerts)
+

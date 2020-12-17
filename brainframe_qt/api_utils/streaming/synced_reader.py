@@ -1,8 +1,7 @@
 import logging
-import typing
 from threading import RLock, Thread
 from time import sleep
-from typing import Set
+from typing import Optional, Set
 
 from brainframe.api import StatusReceiver
 from gstly.abstract_stream_reader import StreamReader, StreamStatus
@@ -31,7 +30,9 @@ class SyncedStreamReader(StreamReader):
         self._stream_reader = stream_reader
         self.status_receiver = status_receiver
 
-        self.latest_processed_frame = typing.cast(ZoneStatusFrame, None)
+        self.latest_processed_frame: Optional[ZoneStatusFrame] = None
+        """Latest frame synced with results. None if no frames have been synced 
+        yet"""
 
         self.stream_listeners: Set[StreamListener] = set()
         self._stream_listeners_lock = RLock()
@@ -140,9 +141,11 @@ class SyncedStreamReader(StreamReader):
 
             # Run the syncing algorithm
             new_processed_frame = frame_syncer.sync(
-                frame_tstamp=frame_tstamp,
-                frame=frame_rgb,
-                zone_statuses=statuses
+                latest_frame=ZoneStatusFrame(
+                    frame=frame_rgb,
+                    tstamp=frame_tstamp,
+                ),
+                latest_zone_statuses=statuses
             )
 
             if new_processed_frame is not None:
