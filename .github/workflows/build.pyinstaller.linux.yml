@@ -1,0 +1,30 @@
+name: PyInstaller Linux
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
+      - name: "Setup python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.6'
+
+      - name: "Install poetry"
+        uses: snok/install-poetry@v1.1.1
+        with:
+          version: 1.1.4
+
+      - name: "Install dependencies"
+        run: poetry install --no-dev -E client_build -E client_res_build
+
+      - name: "Build resources"
+        run: poetry run scripts/compile_qt_resources.py
+        working-directory: brainframe_qt/ui/
+
+      - name: "Build PyInstaller image"
+        run: poetry run pyinstaller deploy/pyinstaller/pyinstaller.spec
