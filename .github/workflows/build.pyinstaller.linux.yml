@@ -11,7 +11,7 @@ jobs:
         with:
           version: '5.15.2'
           host: linux
-          target: linux
+          target: desktop
 
       - name: "Checkout repository"
         uses: actions/checkout@v2
