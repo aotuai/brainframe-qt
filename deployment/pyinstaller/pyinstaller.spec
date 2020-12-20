@@ -9,8 +9,8 @@ import pkg_resources
 from PyInstaller.utils.hooks import collect_submodules
 
 from brainframe_qt.ui.resources.paths.all_resource_paths import all_paths
-from deploy.utils import gstreamer
-from deploy.utils.library_licensing import is_banned_library, \
+from deployment.utils import gstreamer
+from deployment.utils.library_licensing import is_banned_library, \
     is_external_library, check_for_unused_library_matchers
 
 # Patch an issue in PyInstaller on Msys2 that causes a mix of backslashes

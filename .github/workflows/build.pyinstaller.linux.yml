@@ -43,4 +43,4 @@ jobs:
         working-directory: brainframe_qt/ui/
 
       - name: "Build PyInstaller image"
-        run: poetry run pyinstaller deploy/pyinstaller/pyinstaller.spec
+        run: poetry run pyinstaller deployment/pyinstaller/pyinstaller.spec
