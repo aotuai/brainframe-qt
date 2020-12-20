@@ -6,15 +6,21 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
+
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
+      - name: "Setup SSH access"
+        uses: webfactory/ssh-agent@v0.4.1
+        with:
+          ssh-private-key: ${{ secrets.GSTLY_DEPLOY_KEY }}
+
       - name: "Install Qt"
         uses: jurplel/install-qt-action@v2
         with:
           version: '5.15.2'
           host: linux
           target: desktop
-
-      - name: "Checkout repository"
-        uses: actions/checkout@v2
 
       - name: "Setup python"
         uses: actions/setup-python@v2
