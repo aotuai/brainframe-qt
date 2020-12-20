@@ -3,7 +3,7 @@ name = "altgraph"
 version = "0.17"
 description = "Python graph (network) package"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -57,7 +57,7 @@ name = "dis3"
 version = "0.1.3"
 description = "Python 2.7 backport of the \"dis\" module from Python 3.5+"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -170,7 +170,7 @@ name = "pyinstaller"
 version = "3.6"
 description = "PyInstaller bundles a Python application and all its dependencies into a single package."
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
@@ -346,7 +346,7 @@ client_res_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "98c4bcebbf7ced5e3e728e7493744edcb8017b93fd6cd39bc5b7e0501bd4c6a6"
+content-hash = "29bb440e7d967ca97ee1ae11c9ade858f34c71cf18d56b8fcd99dfd6dba84d88"
 
 [metadata.files]
 altgraph = [
