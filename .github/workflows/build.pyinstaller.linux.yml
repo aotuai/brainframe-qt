@@ -23,7 +23,7 @@ jobs:
           target: desktop
 
       - name: "Install PyCairo/PyGObject dependencies"
-        run: sudo apt install libgirepository1.0-dev libcairo2-dev gir1.2-gtk-3.0
+        run: sudo apt install libcairo2-dev libgirepository1.0-dev gir1.2-gst-rtsp-server-1.0
 
       - name: "Set up python"
         uses: actions/setup-python@v2
