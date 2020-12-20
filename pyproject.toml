@@ -28,11 +28,11 @@ dataclasses = { version = "^0.7", python = ">=3.6,<3.7" }
 gstly = { git = "git@github.com:aotuai/gstly.git", rev = "fc0bb63" }
 pubsus = { git = "https://github.com/aotuai/pubsus.git", branch = "main" }
 
+pyqt5 = "^5.15.0"
 pyqt5ac = { version = "^1.1.0", optional = true }
 pyinstaller = { version = "^3.6", optional = true }
 
 [tool.poetry.dev-dependencies]
-pyqt5 = "^5.15.0"
 pyqt5-stubs = { git = "ssh://git@github.com/stlehmann/PyQt5-stubs.git", branch = "master" }
 pyqt5ac = "^1.2.1"
 
