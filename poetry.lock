@@ -198,7 +198,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "PyQt5-stubs"
-version = "5.15.1.0"
+version = "5.15.2.0"
 description = "PEP561 stub files for the PyQt5 framework"
 category = "dev"
 optional = false
@@ -212,7 +212,7 @@ build = ["docker (==4.2.0)"]
 type = "git"
 url = "ssh://git@github.com/stlehmann/PyQt5-stubs.git"
 reference = "master"
-resolved_reference = "704207e90bee7b36ec9861dfa6b39f06a27c6718"
+resolved_reference = "79844be57d44034915e876a6f734b5b2e1c5dceb"
 
 [[package]]
 name = "pyqt5ac"
@@ -346,7 +346,7 @@ client_res_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "966969df3a3be873f1874c508358142b75310ad45f992d7362d8c11235df98bf"
+content-hash = "98c4bcebbf7ced5e3e728e7493744edcb8017b93fd6cd39bc5b7e0501bd4c6a6"
 
 [metadata.files]
 altgraph = [
