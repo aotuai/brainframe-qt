@@ -39,7 +39,7 @@ jobs:
         run: poetry install --no-dev -E client_build -E client_res_build
 
       - name: "Build resources"
-        run: poetry run scripts/compile_qt_resources.py
+        run: poetry run python scripts/compile_qt_resources.py
         working-directory: brainframe_qt/ui/
 
       - name: "Build PyInstaller image"
