@@ -10,7 +10,7 @@ jobs:
       - name: "Checkout repository"
         uses: actions/checkout@v2
 
-      - name: "Setup SSH access"
+      - name: "Set up SSH access"
         uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.GSTLY_DEPLOY_KEY }}
@@ -25,7 +25,7 @@ jobs:
       - name: "Install PyCairo/PyGObject dependencies"
         run: sudo apt install libgirepository1.0-dev libcairo2-dev gir1.2-gtk-3.0
 
-      - name: "Setup python"
+      - name: "Set up python"
         uses: actions/setup-python@v2
         with:
           python-version: '3.6'
