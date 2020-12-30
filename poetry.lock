@@ -198,7 +198,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "PyQt5-stubs"
-version = "5.15.1.0"
+version = "5.15.2.0"
 description = "PEP561 stub files for the PyQt5 framework"
 category = "dev"
 optional = false
@@ -212,7 +212,7 @@ build = ["docker (==4.2.0)"]
 type = "git"
 url = "ssh://git@github.com/stlehmann/PyQt5-stubs.git"
 reference = "master"
-resolved_reference = "704207e90bee7b36ec9861dfa6b39f06a27c6718"
+resolved_reference = "e9a2f2d9f5fd8d6a2665b0b0be2f1e96db3b58eb"
 
 [[package]]
 name = "pyqt5ac"
@@ -291,14 +291,14 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
 name = "shapely"
-version = "1.6.4"
+version = "1.7.1"
 description = "Geometric objects, predicates, and operations"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.extras]
-all = ["pytest", "pytest-cov", "numpy"]
+all = ["numpy", "pytest", "pytest-cov"]
 test = ["pytest", "pytest-cov"]
 vectorized = ["numpy"]
 
@@ -346,7 +346,7 @@ client_res_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "966969df3a3be873f1874c508358142b75310ad45f992d7362d8c11235df98bf"
+content-hash = "36551a02d58855665ea6c20adcf91fd2e73c197f09187b71f5961e6506dcd973"
 
 [metadata.files]
 altgraph = [
@@ -617,16 +617,28 @@ requests = [
     {file = "requests-2.25.1.tar.gz", hash = "sha256:27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"},
 ]
 shapely = [
-    {file = "Shapely-1.6.4-cp27-cp27m-macosx_10_9_intel.macosx_10_9_x86_64.whl", hash = "sha256:f8befeeef0563f6af22117d0546e69429e8871331f2224f9f3d0b25be99cf2b9"},
-    {file = "Shapely-1.6.4-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:68d90a451c8a0681ac40ab3f2881dd55d9a22a5d8b0bce07c3052b48a2754f40"},
-    {file = "Shapely-1.6.4-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:af3319aecc99ca919e7ce38db228e6561bf7fd7d6bd878af5a412a3af3d7bbc0"},
-    {file = "Shapely-1.6.4-cp34-cp34m-macosx_10_9_intel.macosx_10_9_x86_64.whl", hash = "sha256:d5328b8d30c8bc2a57660ab060e0995a976b90f6e6d0eb4d67099ffdf953f65d"},
-    {file = "Shapely-1.6.4-cp34-cp34m-manylinux1_x86_64.whl", hash = "sha256:a8ba01527de33f998513beba60de1a4b42c19ef06c50ec5811879d9e2bdcc8d1"},
-    {file = "Shapely-1.6.4-cp35-cp35m-macosx_10_9_intel.macosx_10_9_x86_64.whl", hash = "sha256:bd6e3a7ec81b2ae069bf1e2a1db3ac796b39448e533e1d3bb35e25ad05bab374"},
-    {file = "Shapely-1.6.4-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:3d5dcc5745f0df07be533e5aa0cac1091779bf93b92e399a1c00ed877ba6b39b"},
-    {file = "Shapely-1.6.4-cp36-cp36m-macosx_10_9_intel.macosx_10_9_x86_64.whl", hash = "sha256:8250ce31153cc89fd80704f422348ea8a5e727021da763db84e81f5dca428351"},
-    {file = "Shapely-1.6.4-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:cbff48e1d3115c0831ef64584784f56dbfd94e4f0fcb7e67645f0b5ac7d42d74"},
-    {file = "Shapely-1.6.4.tar.gz", hash = "sha256:b10bc4199cfefcf1c0e5d932eac89369550320ca4bdf40559328d85f1ca4f655"},
+    {file = "Shapely-1.7.1-1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:46da0ea527da9cf9503e66c18bab6981c5556859e518fe71578b47126e54ca93"},
+    {file = "Shapely-1.7.1-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:4c10f317e379cc404f8fc510cd9982d5d3e7ba13a9cfd39aa251d894c6366798"},
+    {file = "Shapely-1.7.1-cp35-cp35m-macosx_10_6_intel.whl", hash = "sha256:17df66e87d0fe0193910aeaa938c99f0b04f67b430edb8adae01e7be557b141b"},
+    {file = "Shapely-1.7.1-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:da38ed3d65b8091447dc3717e5218cc336d20303b77b0634b261bc5c1aa2bae8"},
+    {file = "Shapely-1.7.1-cp35-cp35m-win32.whl", hash = "sha256:8e7659dd994792a0aad8fb80439f59055a21163e236faf2f9823beb63a380e19"},
+    {file = "Shapely-1.7.1-cp35-cp35m-win_amd64.whl", hash = "sha256:791477edb422692e7dc351c5ed6530eb0e949a31b45569946619a0d9cd5f53cb"},
+    {file = "Shapely-1.7.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:e3afccf0437edc108eef1e2bb9cc4c7073e7705924eb4cd0bf7715cd1ef0ce1b"},
+    {file = "Shapely-1.7.1-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:8f15b6ce67dcc05b61f19c689b60f3fe58550ba994290ff8332f711f5aaa9840"},
+    {file = "Shapely-1.7.1-cp36-cp36m-win32.whl", hash = "sha256:60e5b2282619249dbe8dc5266d781cc7d7fb1b27fa49f8241f2167672ad26719"},
+    {file = "Shapely-1.7.1-cp36-cp36m-win_amd64.whl", hash = "sha256:de618e67b64a51a0768d26a9963ecd7d338a2cf6e9e7582d2385f88ad005b3d1"},
+    {file = "Shapely-1.7.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:182716ffb500d114b5d1b75d7fd9d14b7d3414cef3c38c0490534cc9ce20981a"},
+    {file = "Shapely-1.7.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:4f3c59f6dbf86a9fc293546de492f5e07344e045f9333f3a753f2dda903c45d1"},
+    {file = "Shapely-1.7.1-cp37-cp37m-win32.whl", hash = "sha256:6871acba8fbe744efa4f9f34e726d070bfbf9bffb356a8f6d64557846324232b"},
+    {file = "Shapely-1.7.1-cp37-cp37m-win_amd64.whl", hash = "sha256:35be1c5d869966569d3dfd4ec31832d7c780e9df760e1fe52131105685941891"},
+    {file = "Shapely-1.7.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:052eb5b9ba756808a7825e8a8020fb146ec489dd5c919e7d139014775411e688"},
+    {file = "Shapely-1.7.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:90a3e2ae0d6d7d50ff2370ba168fbd416a53e7d8448410758c5d6a5920646c1d"},
+    {file = "Shapely-1.7.1-cp38-cp38-win32.whl", hash = "sha256:a3774516c8a83abfd1ddffb8b6ec1b0935d7fe6ea0ff5c31a18bfdae567b4eba"},
+    {file = "Shapely-1.7.1-cp38-cp38-win_amd64.whl", hash = "sha256:6593026cd3f5daaea12bcc51ae5c979318070fefee210e7990cb8ac2364e79a1"},
+    {file = "Shapely-1.7.1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:b40cc7bb089ae4aa9ddba1db900b4cd1bce3925d2a4b5837b639e49de054784f"},
+    {file = "Shapely-1.7.1-cp39-cp39-win32.whl", hash = "sha256:2df5260d0f2983309776cb41bfa85c464ec07018d88c0ecfca23d40bfadae2f1"},
+    {file = "Shapely-1.7.1-cp39-cp39-win_amd64.whl", hash = "sha256:a5c3a50d823c192f32615a2a6920e8c046b09e07a58eba220407335a9cd2e8ea"},
+    {file = "Shapely-1.7.1.tar.gz", hash = "sha256:1641724c1055459a7e2b8bbe47ba25bdc89554582e62aec23cb3f3ca25f9b129"},
 ]
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
