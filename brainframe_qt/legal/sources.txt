@@ -1,0 +1,45 @@
+These are links to the source code for open source libraries.
+
+- GEOS: <http://download.osgeo.org/geos/geos-3.6.3.tar.bz2>
+- GCC: <https://github.com/gcc-mirror/gcc>
+- gpg-error: <https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.32.tar.bz2>
+- libidn: <https://ftp.gnu.org/gnu/libidn/libidn2-2.0.5.tar.gz>
+- gstreamer: <https://github.com/gstreamer/gstreamer>
+- gst-plugins-core: <https://github.com/gstreamer/gst-plugins-base>
+- gst-plugins-good: <https://github.com/gstreamer/gst-plugins-good>
+- gst-plugins-bad: <https://github.com/gstreamer/gst-plugins-bad>
+- glibc: <https://ftp.gnu.org/gnu/glibc/>
+- glib: <https://github.com/GNOME/glib>
+- Qt:
+    - <https://github.com/qt/qtbase>
+    - <https://github.com/qt/qt5>
+- Graphite 2: <https://github.com/silnrsi/graphite>
+- util-linux: <https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git>
+- pango: <https://gitlab.gnome.org/GNOME/pango/>
+- libthai: <https://github.com/tlwg/libthai>
+- libdatrie: <https://github.com/tlwg/libdatrie>
+- libatspi: <https://github.com/GNOME/at-spi2-core/tree/master/doc/libatspi>
+- GTK:
+    - <https://github.com/GNOME/gtk>
+    - <https://github.com/GNOME/atk>
+- cairo: <https://cgit.freedesktop.org/cairo/>
+- libudev: <https://github.com/systemd/systemd/tree/master/src/libudev>
+- libgudev: <https://github.com/GNOME/libgudev>
+- libsystemd: <https://github.com/systemd/systemd/tree/master/src/libsystemd>
+- libgcrypt: <https://github.com/gpg/libgcrypt>
+- glib-networking: <https://gitlab.gnome.org/GNOME/glib-networking/>
+- dconf: <https://download.gnome.org/sources/dconf/>
+- gst-rtsp-server: <https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server>
+- fribidi: <https://github.com/fribidi/fribidi>
+- pulseaudio: <https://github.com/pulseaudio/pulseaudio>
+- libasyncns: git://git.0pointer.de/libasyncns
+- libsndfile: <http://www.mega-nerd.com/libsndfile/>
+- libtasn1: <https://www.gnu.org/software/libtasn1/>
+- libunistring: <https://www.gnu.org/software/libunistring/>
+- nettle: <https://ftp.gnu.org/gnu/nettle/>
+- GMP: <https://gmplib.org/#DOWNLOAD>
+- GnuTLS: <https://gitlab.com/gnutls/gnutls>
+- libproxy: <https://github.com/libproxy/libproxy>
+- alsa-lib: <https://www.alsa-project.org/main/index.php/Download>
+- gobject-introspection: <https://gitlab.gnome.org/GNOME/gobject-introspection>
+- FFmpeg: <https://github.com/FFmpeg/FFmpeg>
