@@ -76,8 +76,8 @@ PyGObject = "~3.34.0"
 [package.source]
 type = "git"
 url = "git@github.com:aotuai/gstly.git"
-reference = "fc0bb63"
-resolved_reference = "fc0bb638d40e22b2211aecc65c75cad1f961c290"
+reference = "v0.0.1"
+resolved_reference = "065aedbdcf7401f43f880dfdc719f4d4dd6548da"
 
 [[package]]
 name = "idna"
@@ -249,7 +249,7 @@ build = ["docker (==4.2.0)"]
 type = "git"
 url = "ssh://git@github.com/stlehmann/PyQt5-stubs.git"
 reference = "master"
-resolved_reference = "e9a2f2d9f5fd8d6a2665b0b0be2f1e96db3b58eb"
+resolved_reference = "6630551ef92d094ab36704fc461361785c6240fa"
 
 [[package]]
 name = "pyqt5ac"
@@ -391,7 +391,7 @@ client_res_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "9cfbdaae97cdf87e991bd6acdd82c63826b57808149c9d341ca6dbfe88b71d17"
+content-hash = "df8be0d2ccf75253a0519eeaef05aefc66376a5e935eaeee767fe6c454c6d5f9"
 
 [metadata.files]
 altgraph = [
