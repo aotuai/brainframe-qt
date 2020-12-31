@@ -7,6 +7,7 @@ for translation_file in i18n_dir.glob("*.qm"):
 
 # License paths
 eula_txt = register_path("brainframe_qt", "legal", "eula.txt")
+sources_txt = register_path("brainframe_qt", "legal", "sources.txt")
 license_dir = register_path("brainframe_qt", "legal", "licenses")
 for license_file in license_dir.iterdir():
     register_path(license_file)
