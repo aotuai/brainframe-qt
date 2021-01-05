@@ -3,7 +3,7 @@ name = "altgraph"
 version = "0.17"
 description = "Python graph (network) package"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -57,7 +57,7 @@ name = "future"
 version = "0.18.2"
 description = "Clean single-source support for Python 3 and 2"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
@@ -92,7 +92,7 @@ name = "macholib"
 version = "1.14"
 description = "Mach-O header analysis and editing"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [package.dependencies]
@@ -119,7 +119,7 @@ name = "pefile"
 version = "2019.4.18"
 description = "Python PE parsing module"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [package.dependencies]
@@ -192,7 +192,7 @@ name = "pyinstaller"
 version = "4.1"
 description = "PyInstaller bundles a Python application and all its dependencies into a single package."
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [package.dependencies]
@@ -211,7 +211,7 @@ name = "pyinstaller-hooks-contrib"
 version = "2020.11"
 description = "Community maintained hooks for PyInstaller"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -294,7 +294,7 @@ name = "pywin32-ctypes"
 version = "0.2.0"
 description = ""
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -391,7 +391,7 @@ client_res_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "69cefbb96c4c50a85146e6d5b160b620807d12c396791cbcbdb6383984a95309"
+content-hash = "a4cba48e33a692eb860d1087acd98ab27f5df7f993f935310b8c00b2bdb4f176"
 
 [metadata.files]
 altgraph = [
