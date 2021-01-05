@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 
 import pkg_resources
+from PyInstaller.building.api import PYZ, EXE, COLLECT
+from PyInstaller.building.build_main import Analysis
 from PyInstaller.utils.hooks import collect_submodules
 
 from brainframe_qt.ui.resources.paths.all_resource_paths import all_paths
