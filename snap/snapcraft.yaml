@@ -30,8 +30,6 @@ parts:
 
       # The PYTHONPATH doesn't seem to be configured properly by default
       export PYTHONPATH=/usr/lib/python3.6:/usr/local/lib/python3.6/dist-packages:$PYTHONPATH
-      # Packages like ujson can't find "Python.h" without this
-      export C_INCLUDE_PATH=/usr/include/python3.6m
 
       # Install dependencies
       pip3 install --upgrade pip wheel
