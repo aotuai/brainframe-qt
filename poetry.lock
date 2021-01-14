@@ -385,13 +385,13 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [extras]
-client_build = ["pyinstaller"]
-client_res_build = ["pyqt5ac"]
+build = ["pyinstaller"]
+resource_build = ["pyqt5ac"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "69cefbb96c4c50a85146e6d5b160b620807d12c396791cbcbdb6383984a95309"
+content-hash = "181a77effe96fce7bc2aa59b8feec8dde42b35a309076795148c98c81ab8502a"
 
 [metadata.files]
 altgraph = [
