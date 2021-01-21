@@ -1,5 +1,11 @@
+# JetBrains
 .idea/
 
-__pycache__
+# Python artifacts
 *.pyc
+__pycache__
+*.egg/
+*.egg-info
 
+# Build artifacts
+_build/
