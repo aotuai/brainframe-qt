@@ -35,6 +35,7 @@ extracts the files to the host computer.
 .. code-block:: bash
 
     python build/snap/build_snap.py
+    snap install --dangerous _build/brainframe-client_*.snap
 
 .. tip::
     Use the :code:`--help` flag to get a list of optional arguments for configuration.
