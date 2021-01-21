@@ -18,24 +18,27 @@ the client you want to be using.
 Build
 ======================
 
-.. note::
-    All build scripts must be run from the root of the project
+    Note: All build scripts must be run from the root of the project
 
 
 Snap
 ---------------
 
-.. note::
-    Make sure you have installed the Python development dependencies,
-    specifically :code:`docker`.
-
 We have provided a script that builds the Snap inside a Docker image, and then
-extracts the files to the host computer.
+extracts the files to the host computer. Make sure you have installed the Python
+development dependencies, specifically :code:`docker`.
 
 .. code-block:: bash
 
     python build/snap/build_snap.py
+
+Use the :code:`--help` flag to get a list of optional arguments (and default
+values) for configuration.
+
+Then, install the built Snap.
+
+.. code-block:: bash
+
     snap install --dangerous _build/brainframe-client_*.snap
 
-.. tip::
-    Use the :code:`--help` flag to get a list of optional arguments for configuration.
+The :code:`--dangerous` flag allows Snap to install local files.
