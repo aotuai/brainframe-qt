@@ -36,6 +36,8 @@ pyqt5 = "^5.15.0"
 pyqt5-stubs = { git = "ssh://git@github.com/stlehmann/PyQt5-stubs.git", branch = "master" }
 pyqt5ac = "^1.2.1"
 docker = "^4.4.1"
+# For Restructured files in PyCharm
+pygments = "*"
 
 [tool.poetry.extras]
 build = ["pyinstaller"]
