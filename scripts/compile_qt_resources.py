@@ -9,13 +9,17 @@ from shutil import which
 
 import pyqt5ac
 
-RESOURCE_DIR = Path("resources")
-TR_LANGUAGES = ["zh"]
+# Make sure we're running from correct path
+cwd = Path.cwd().resolve()
+script_dir = Path(__file__)
+project_root = script_dir.parents[1].resolve()
+assert cwd == project_root, (
+    f"Error: Script must be run from root of project:\n"
+    f"    CWD: {cwd} | Project Root: {project_root}"
+)
 
-project_root = Path.cwd().resolve()
-script_dir = Path(__file__).resolve().parents[1]
-assert project_root == script_dir, "Error: Script must be run from root of " \
-                                   "client ui dir"
+TR_LANGUAGES = ["zh"]
+RESOURCE_DIR = project_root / "brainframe_qt" / "ui" / "resources"
 
 
 def parse_args() -> argparse.Namespace:
