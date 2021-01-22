@@ -18,4 +18,4 @@ __pycache__
 build/*/Dockerfile
 
 # Build artifacts
-_build/
+dist/

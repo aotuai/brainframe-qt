@@ -10,9 +10,9 @@ from docker import DockerClient
 from docker.utils.json_stream import json_stream
 
 DEFAULT_PROJECT_DIR = Path(".").resolve()
-DEFAULT_DOCKERFILE = DEFAULT_PROJECT_DIR / "build" / "snap" / "Dockerfile"
+DEFAULT_DOCKERFILE = DEFAULT_PROJECT_DIR / "package" / "snap" / "Dockerfile"
 DEFAULT_IMAGE_NAME = "brainframe-qt"
-DEFAULT_OUTPUT_DIR = DEFAULT_PROJECT_DIR / "_build/"
+DEFAULT_OUTPUT_DIR = DEFAULT_PROJECT_DIR / "dist/"
 
 
 def parse_args() -> argparse.Namespace:

@@ -30,7 +30,7 @@ development dependencies, specifically :code:`docker`.
 
 .. code-block:: bash
 
-    python build/snap/build_snap.py
+    python package/snap/build_snap.py
 
 Use the :code:`--help` flag to get a list of optional arguments (and default
 values) for configuration.
@@ -39,6 +39,6 @@ Then, install the built Snap.
 
 .. code-block:: bash
 
-    snap install --dangerous _build/brainframe-client_*.snap
+    snap install --dangerous dist/brainframe-client_*.snap
 
 The :code:`--dangerous` flag allows Snap to install local files.

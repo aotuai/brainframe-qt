@@ -37,9 +37,7 @@ COPY --chown=circleci . .
 RUN poetry run python3 scripts/compile_qt_resources.py
 
 # Build snap
-RUN mkdir ./snap/ && \
-    cp build/snap/snapcraft.yaml ./snap/ && \
-    cp -r build/snap/gui/ ./snap/
+RUN mkdir ./snap/ && cp -r package/snap/snap/ .
 RUN snapcraft
 
 ################################################################################
