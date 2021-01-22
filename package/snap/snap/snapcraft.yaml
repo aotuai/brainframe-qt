@@ -28,11 +28,6 @@ parts:
         | python3 - --version 1.1.4
       export PATH=$HOME/.poetry/bin:$PATH
 
-      # The PYTHONPATH doesn't seem to be configured properly by default
-      export PYTHONPATH=/usr/lib/python3.6:/usr/local/lib/python3.6/dist-packages:$PYTHONPATH
-      # Packages like ujson can't find "Python.h" without this
-      export C_INCLUDE_PATH=/usr/include/python3.6m
-
       # Install dependencies
       pip3 install --upgrade pip wheel
       # These packages are installed by apt, and Poetry will try to uninstall
@@ -89,6 +84,9 @@ parts:
       - gstreamer1.0-plugins-good
       - gstreamer1.0-libav
       - gir1.2-gst-plugins-base-1.0
+    build-environment:
+      # https://bugs.launchpad.net/snapcraft/+bug/1802345
+      - C_INCLUDE_PATH: /usr/include/python3.6m
 
 apps:
   brainframe-client:

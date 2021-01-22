@@ -391,14 +391,6 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "ujson"
-version = "1.35"
-description = "Ultra fast JSON encoder and decoder for Python"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "urllib3"
 version = "1.26.2"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -429,7 +421,7 @@ resource_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "9bbb91bb1316c888950e04499fd9143263a4a26657c5707f7f0eeffbcbd423e4"
+content-hash = "a3252b1fd86797be2fe15252f4f64be9bc98e189b389b2100f03fcac433d4c3a"
 
 [metadata.files]
 altgraph = [
@@ -771,9 +763,6 @@ typing-extensions = [
     {file = "typing_extensions-3.7.4.3-py2-none-any.whl", hash = "sha256:dafc7639cde7f1b6e1acc0f457842a83e722ccca8eef5270af2d74792619a89f"},
     {file = "typing_extensions-3.7.4.3-py3-none-any.whl", hash = "sha256:7cb407020f00f7bfc3cb3e7881628838e69d8f3fcab2f64742a5e76b2f841918"},
     {file = "typing_extensions-3.7.4.3.tar.gz", hash = "sha256:99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c"},
-]
-ujson = [
-    {file = "ujson-1.35.tar.gz", hash = "sha256:f66073e5506e91d204ab0c614a148d5aa938bdbf104751be66f8ad7a222f5f86"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.2-py2.py3-none-any.whl", hash = "sha256:d8ff90d979214d7b4f8ce956e80f4028fc6860e4431f731ea4a8c08f23f99473"},

@@ -1,9 +1,8 @@
+import json
 import logging
 import re
 from pathlib import Path
 from typing import List
-
-import ujson
 
 from brainframe_qt.api_utils.identities.identity_finder import \
     IdentityFinder, IdentityPrototype
@@ -54,7 +53,7 @@ class FileTreeIdentityFinder(IdentityFinder):
 
                     if file_name.suffix == ".json":
                         # The file is a vector
-                        data_json = ujson.loads(data)
+                        data_json = json.loads(data)
                         prototype.vectors_by_class_name[class_dir.name].append(
                             (file_name, data_json))
                     else:
