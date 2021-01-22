@@ -1,0 +1,21 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# JetBrains
+.idea/
+
+# Python artifacts
+*.pyc
+*.egg/
+*.egg-info
+__pycache__
+.pytest_cache/
+
+# Docker
+.dockerignore
+build/*/Dockerfile
+
+# Build artifacts
+dist/

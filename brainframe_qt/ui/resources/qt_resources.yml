@@ -1,5 +1,5 @@
 ioPaths:
   -
-    - "resources/qt_resources.qrc"
-    - "resources/qt_resources.py"
+    - "brainframe_qt/ui/resources/qt_resources.qrc"
+    - "brainframe_qt/ui/resources/qt_resources.py"
 force: True

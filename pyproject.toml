@@ -25,7 +25,7 @@ readerwriterlock = "^1.0.6"
 pycryptodomex = "^3.9.6"
 pendulum = "^2.0.5"
 dataclasses = { version = "^0.7", python = ">=3.6,<3.7" }
-gstly = { git = "git@github.com:aotuai/gstly.git", tag = "v0.1.1" }
+gstly = "^0.1.4"
 pubsus = { git = "https://github.com/aotuai/pubsus.git", branch = "main" }
 
 pyqt5ac = { version = "^1.1.0", optional = true }
@@ -35,6 +35,9 @@ pyinstaller = { version = "^4.1", optional = true }
 pyqt5 = "^5.15.0"
 pyqt5-stubs = { git = "ssh://git@github.com/stlehmann/PyQt5-stubs.git", branch = "master" }
 pyqt5ac = "^1.2.1"
+docker = "^4.4.1"
+# For Restructured files in PyCharm
+pygments = "*"
 
 [tool.poetry.extras]
 build = ["pyinstaller"]
