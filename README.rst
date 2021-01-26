@@ -53,16 +53,18 @@ distribute the *source code* however you see fit, as long you comply with its
 license.
 
 However, distribution of a complete BrainFrame client (built or unbuilt) with
-dependencies is a bit tricky, due to licensing of some of the client's
-dependencies. Currently, the client depends on Gstly, an internal, proprietary
-library Aotu uses to manage GStreamer-based video streaming [#]_. The client
-*also* depends on PyQt5. When we, Aotu, distribute our client binaries_, we do
-so under the `PyQt5 commercial license`_, which we pay for. PyQt is also
-distributed under the GPL license, which this project defaults to using (but
-Aotu does not use for deployment).
+dependencies is a bit tricky, due to licensing of some of these dependencies.
+Currently, the client depends on Gstly, an internal, proprietary library Aotu
+uses to manage GStreamer-based video streaming [#]_. The client *also* depends
+on PyQt5. When we, Aotu, distribute our client binaries_, we do so under the
+`PyQt5 commercial license`_, which we pay for. PyQt is also distributed under
+the GPL, which this project defaults to using (but Aotu does not use for
+deployment).
 
-If you want to simply use the client, source or built, for your own *internal*
-use (i.e. *without distribution*) there is nothing for you to be concerned with
+PyQt (licensed under the GPL) and Gstly (with its proprietary licensing) are in
+conflict with one another, and cannot be distributed at the same time. If you
+want to simply use the client, source or built, for your own *internal* use
+(i.e. *without distribution*) there is nothing for you to be concerned with
 here. However, if want to *distribute* the client, you will need to take one of
 a few possible routes of action:
 
