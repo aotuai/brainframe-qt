@@ -160,6 +160,10 @@ class ServerConfigurationDialog(QDialog):
             if self.authentication_enabled:
                 settings.server_username.set(self.server_username)
                 if self.save_password:
+                    # Note that this is _not_ meant to be a form of security,
+                    # simply to prevent the password from sitting in plain text
+                    # on the client computer. The key is available in plain text
+                    # within this repo.
                     encrypted = encrypt(self.server_password)
                     settings.server_password.set(encrypted)
             if not self.authentication_enabled or not self.save_password:
