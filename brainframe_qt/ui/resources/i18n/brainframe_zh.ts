@@ -1017,7 +1017,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="93"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="96"/>
         <source>Save password between sessions</source>
         <translation>保存密码</translation>
     </message>
@@ -1032,88 +1032,93 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="182"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="186"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="183"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="187"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="187"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="191"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="188"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="192"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="171"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="175"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="172"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="176"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="110"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="113"/>
         <source>Check Connection</source>
         <translation>检查连接状态</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="128"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="131"/>
         <source>License Config</source>
         <translation>授权配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="225"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="229"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="229"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="233"/>
         <source>Invalid License</source>
         <translation>无效授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="233"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="237"/>
         <source>Missing License</source>
         <translation>未检测到授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="237"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="241"/>
         <source>Connection Successful</source>
         <translation>连接成功</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="240"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="244"/>
         <source>Unknown license state</source>
         <translation>未知的授权状态</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="251"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="255"/>
         <source>Invalid credentials</source>
         <translation>证书无效</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="254"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="258"/>
         <source>Unable to locate server</source>
         <translation>无法连接到服务器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="219"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="223"/>
         <source>&lt;a href=&apos;{license_docs_link}&apos;&gt;Download&lt;/a&gt; a new one</source>
         <translation>&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个新的授权&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.ui" line="93"/>
+        <source>This is stored unencrypted on your client&apos;s machine. If you have security concerns, do not use this option.</source>
+        <translation>这将以未加密形式存储在客户端计算机上的。 如果您安全性的顾虑，请不要使用此选项。</translation>
     </message>
 </context>
 <context>
