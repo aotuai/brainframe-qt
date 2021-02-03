@@ -47,5 +47,6 @@ The :code:`--dangerous` flag allows Snap to install local files.
 Distribution
 ======================
 
-If you would like to (re)distribute the client, or the client source code, refer
-to :code:`DISTRIBUTION.rst` in the project root.
+This repository is targeted for end-users of the BrainFrame Client. If you would
+like to (re)distribute the client, refer to :code:`DISTRIBUTION.rst` in the
+project root.
