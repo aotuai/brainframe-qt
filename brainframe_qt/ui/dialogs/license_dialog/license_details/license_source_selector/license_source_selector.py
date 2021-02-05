@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QStackedWidget, QVBoxLayout, \
     QWidget
 
+from .aotu_login_form import AotuLoginForm
 from .license_source_buttons import LicenseSourceButtons
 from .text_license_editor import TextLicenseEditor
 
@@ -16,6 +17,7 @@ class LicenseSourceSelector(QWidget):
         self.license_source_buttons = self._init_license_source_buttons()
 
         self.text_license_editor = self._init_text_license_editor()
+        self.aotu_login_form = self._init_aotu_login_form()
         self.license_stack_widget = self._init_license_stack_widget()
 
         self._source_selector_layout = self._init_source_selector_layout()
@@ -40,10 +42,18 @@ class LicenseSourceSelector(QWidget):
 
         return text_license_editor
 
+    def _init_aotu_login_form(self) -> AotuLoginForm:
+        aotu_login_form = AotuLoginForm(parent=self)
+
+        return aotu_login_form
+
     def _init_license_stack_widget(self) -> QStackedWidget:
         license_stack_widget = QStackedWidget(self)
 
         license_stack_widget.addWidget(self.text_license_editor)
+        license_stack_widget.addWidget(self.aotu_login_form)
+
+        license_stack_widget.setCurrentWidget(self.text_license_editor)
 
         return license_stack_widget
 
@@ -72,5 +82,19 @@ class LicenseSourceSelector(QWidget):
         self._source_selector_layout.setAlignment(Qt.AlignLeft)
 
     def _init_signals(self) -> None:
+        self.license_source_buttons.license_source_changed.connect(
+            self._change_license_source
+        )
+
         self.text_license_editor.license_text_update.connect(
             self.license_text_update)
+
+    def _change_license_source(self, license_source: str) -> None:
+        if license_source == "license_file":
+            desired_widget = self.text_license_editor
+        elif license_source == "aotu_account":
+            desired_widget = self.aotu_login_form
+        else:
+            raise ValueError(f"Unknown license source {license_source}")
+
+        self.license_stack_widget.setCurrentWidget(desired_widget)
