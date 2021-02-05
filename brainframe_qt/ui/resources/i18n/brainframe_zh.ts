@@ -247,6 +247,24 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     </message>
 </context>
 <context>
+    <name>AotuLoginFormUI</name>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/aotu_login_form/aotu_login_form_ui.py" line="45"/>
+        <source>Password</source>
+        <translation>密码</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/aotu_login_form/aotu_login_form_ui.py" line="36"/>
+        <source>Log in</source>
+        <translation>登录</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/aotu_login_form/aotu_login_form_ui.py" line="44"/>
+        <source>Email</source>
+        <translation>Email</translation>
+    </message>
+</context>
+<context>
     <name>BaseCapsuleOptionsWidget</name>
     <message>
         <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="60"/>
@@ -800,25 +818,20 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>LicenseSourceButtons</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="20"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="23"/>
         <source>License Key</source>
         <translation>注册码</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="26"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="29"/>
         <source>Aotu Account</source>
         <translation>Aotu账号</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_buttons.py" line="30"/>
-        <source>Coming soon</source>
-        <translation>敬请期待</translation>
     </message>
 </context>
 <context>
     <name>LicenseSourceSelector</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="28"/>
+        <location filename="../../dialogs/license_dialog/license_details/license_source_selector/license_source_selector.py" line="30"/>
         <source>License Source:</source>
         <translation>授权来源：</translation>
     </message>
