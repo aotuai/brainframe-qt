@@ -1,4 +1,9 @@
-The official BrainFrame client, written in PyQt
+This is the official BrainFrame_ client, written in PyQt5.
+
+.. image:: docs/img/client_screenshot.png
+    :align: center
+
+.. _BrainFrame: https://aotu.ai/docs/
 
 Installation
 ======================
