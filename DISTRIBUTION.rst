@@ -8,20 +8,17 @@ License (see the :code:`LICENSE` file at the project root).
 
 However, distribution of a BrainFrame Client (built or unbuilt) *with
 dependencies* is a bit tricky, due to the licensing of some of these
-dependencies. Currently, the client depends on Gstly, an internal, proprietary
-library Aotu.ai uses to manage GStreamer-based video streaming [#]_. The client
-*also* depends on PyQt5 which, without a commercial license, is only available
-for distribution under the GPL.
+dependencies. Currently, the client depends on Gstly, proprietary Aotu.ai
+library [#]_. The client also depends on PyQt5 which, without a commercial
+license, is only available for distribution under the GPL.
 
-While we plan on removing the dependency on Gstly in the near future, the
-PyQt Commercial License is available for purchase at Riverbank Computing's
-website_.
+While we plan on removing the dependency on Gstly in the near future, the PyQt
+Commercial License is available for purchase at Riverbank Computing's website_.
 
-Please contact an IP lawyer at your own discretion. This file does not
-constitute legal advice.
+Please note that this file does not constitute legal advice.
 
-.. [#] You can learn how we make Gstly available in the otherwise-open-source
-       BrainFrame client in our blog here_.
+.. [#] You can learn more about Gstly (and how we include it in the
+       otherwise-open-source BrainFrame client) in our blog here_.
 
 .. _here: https://aotu.ai/en/blog/2021/01/19/publishing-a-proprietary-python-package-on-pypi-using-poetry/
 .. _binaries: https://aotu.ai/docs/downloads/#brainframe-client
