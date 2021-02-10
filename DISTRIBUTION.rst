@@ -7,7 +7,7 @@ The *source code* for the BrainFrame Client is released under the BSD 3-Clause
 License (see the :code:`LICENSE` file at the project root).
 
 However, distribution of a BrainFrame Client (built or unbuilt) *with
-dependencies* is a bit tricky, due to the licensing of some of these
+dependencies* requires careful adherence to the licensing of the project's
 dependencies. Currently, the client depends on Gstly, proprietary Aotu.ai
 library [#]_. The client also depends on PyQt5 which, without a commercial
 license, is only available for distribution under the GPL.
