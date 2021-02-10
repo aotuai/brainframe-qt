@@ -14,6 +14,7 @@ Getting Started
 * `Direct Installation`_
 * `Building from source`_
 * Usage_
+* Distribution_
 
 ##############
 Prerequisites
@@ -100,3 +101,12 @@ client through your typical start/application menu.
     double click the :code:`.exe` to start the client.
 
 .. _`a direct installation`: `Direct Installation`_
+
+
+############
+Distribution
+############
+
+This repository is targeted for end-users of the BrainFrame Client. If you would
+like to (re)distribute the client, refer to :code:`DISTRIBUTION.rst` in the
+project root.
