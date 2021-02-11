@@ -1,10 +1,13 @@
-This is the official BrainFrame_ client, written in PyQt5.
+This is the official BrainFrame_ client, written using PyQt5. BrainFrame is a
+platform for realtime machine learning and video-analytics that makes inference
+easy when using OpenVisionCapsules_ capsules.
 
 .. image:: docs/img/client_screenshot.png
     :align: center
     :width: 75%
 
 .. _BrainFrame: https://aotu.ai/docs/
+.. _OpenVisionCapsules: https://github.com/opencv/open_vision_capsules
 
 ###############
 Getting Started
