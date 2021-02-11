@@ -16,8 +16,8 @@ Getting Started
 * Prerequisites_
 * `Direct Installation`_
 * `Building from source`_
-* Usage_
-* Distribution_
+* Running_
+* `(Re)distribution`_
 
 ##############
 Prerequisites
@@ -93,9 +93,20 @@ is necessary as you've built the :code:`.snap` yourself.
 
 .. _script: package/snap/build_snap.py
 
-#####
-Usage
-#####
+#######
+Running
+#######
+
+First, make sure you have the backend installed and running on your server
+machine. If not, follow the steps in the Prerequisites_ section.
+
+.. code-block:: bash
+
+    brainframe compose up
+
+************************
+From Direct Installation
+************************
 
 If you installed the client through `a direct installation`_, simply launch the
 client through your typical start/application menu.
@@ -105,10 +116,75 @@ client through your typical start/application menu.
 
 .. _`a direct installation`: `Direct Installation`_
 
+***********
+From Source
+***********
 
-############
-Distribution
-############
+If running from source, you'll need to install all the client dependencies.
+
+System Dependencies
+-------------------
+
+There are a few dependencies that need to be installed globally to your system.
+These are the dependencies for :code:`pygobject` and :code:`Qt`.
+
++------------------+-------------------------------------------------+
+| Operating System | Dependency installation command                 |
++==================+=================================================+
+| Ubuntu 18.04     | ::                                              |
++------------------+                                                 |
+| Ubuntu 20.04     |     apt install \\                              |
+|                  |         libcairo2-dev libgirepository1.0-dev \\ |
+|                  |         gir1.2-gst-rtsp-server \\               |
+|                  |         qtbase5-dev qt5-default qttools5-dev \\ |
+|                  |         qtbase5-dev-tools qttools5-dev-tools    |
++------------------+-------------------------------------------------+
+| Arch             | ::                                              |
+|                  |                                                 |
+|                  |     pacman -S --needed \\                       |
+|                  |         cairo gobject-introspection \\          |
+|                  |         qt5-tools qt5-base                      |
++------------------+-------------------------------------------------+
+| Windows          | :code:`TODO`                                    |
++------------------+-------------------------------------------------+
+
+Python Dependencies
+-------------------
+
+In order to pull down the Python dependencies, you'll need to install Poetry_.
+
++------------------+-----------------------------+
+| Operating System | Poetry installation         |
++==================+=============================+
+| Ubuntu 18.04     | See `Poetry instructions`_  |
++------------------+-----------------------------+
+| Ubuntu 20.04     | See `Poetry instructions`_  |
++------------------+-----------------------------+
+| Arch             | ::                          |
+|                  |                             |
+|                  |     pacman -S python-poetry |
++------------------+-----------------------------+
+| Windows          | See `Poetry instructions`_  |
++------------------+-----------------------------+
+
+Install the Python dependencies using Poetry.
+
+.. code-block:: bash
+
+    poetry install
+
+Finally, start the client
+
+.. code-block:: bash
+
+    python brainframe_client.py  # Use python3 if on an older system
+
+.. _Poetry: https://github.com/python-poetry/poetry
+.. _`Poetry instructions`: https://python-poetry.org/docs/#installation
+
+################
+(Re)distribution
+################
 
 This repository is targeted for end-users of the BrainFrame Client. If you would
 like to (re)distribute the client, refer to :code:`DISTRIBUTION.rst` in the
