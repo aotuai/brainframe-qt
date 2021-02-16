@@ -37,7 +37,7 @@ class BrainFrameApplication(QApplication):
         # noinspection PyUnresolvedReferences
         self.aboutToQuit.connect(self._shutdown)
 
-        self.setWindowIcon(QIcon(":/app_icon_png"))
+        self.setWindowIcon(QIcon(":/icons/window_icon"))
         self.setOrganizationDomain('aotu.ai')
 
         self._init_translator()
