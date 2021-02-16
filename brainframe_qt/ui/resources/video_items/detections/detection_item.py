@@ -31,7 +31,9 @@ class DetectionItem(VideoItem):
             detection, self.draw_color,
             render_config=render_config, parent=self)
 
-        self.detection_track = DetectionTrackItem(track, parent=self)
+        self.detection_track: Optional[DetectionTrackItem] = None
+        if render_config.show_detection_tracks:
+            self.detection_track = DetectionTrackItem(track, parent=self)
 
     @property
     def draw_color(self) -> QColor:
