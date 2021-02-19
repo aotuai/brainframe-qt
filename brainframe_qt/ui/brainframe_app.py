@@ -1,14 +1,12 @@
 import logging
+import sys
 import typing
 from traceback import TracebackException
-from typing import List, Optional
 
-import sys
-from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
-    pyqtSlot
+from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, \
+    Qt, pyqtSlot, QCoreApplication
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QWidget
-
+from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs, bf_errors
 from gstly import gobject_init
 
@@ -22,19 +20,20 @@ from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
 from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources, \
     settings
 from brainframe_qt.ui.resources.paths import text_paths
+from brainframe_qt.ui.resources.ui_elements.applications import \
+    SingletonApplication
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
 from brainframe_qt.util.events import or_events
 from brainframe_qt.util.secret import decrypt
 
 
-class BrainFrameApplication(QApplication):
-    def __init__(self, argv: Optional[List] = ()):
-        super().__init__(argv or [])
+class BrainFrameApplication(SingletonApplication):
+    def __init__(self):
+        super().__init__(internal_name="brainframe-qt")
 
         self.splash_screen = typing.cast(SplashScreen, None)
 
-        # noinspection PyUnresolvedReferences
         self.aboutToQuit.connect(self._shutdown)
 
         self.setWindowIcon(QIcon(":/icons/window_icon"))
@@ -45,6 +44,13 @@ class BrainFrameApplication(QApplication):
         gobject_init.start(start_main_loop=False)
 
         self._init_server_settings()
+
+        self.main_window = self._init_main_window()
+
+    # noinspection PyMethodMayBeStatic
+    def _init_main_window(self) -> MainWindow:
+        main_window = MainWindow()
+        return main_window
 
     def _init_translator(self):
         locale = QLocale.system()
@@ -90,10 +96,9 @@ class BrainFrameApplication(QApplication):
             self.splash_screen.showMessage(message)
 
             ExtensionLoader().load_extensions()
+            self.main_window.show()
 
-            main_window = MainWindow()
-            self.splash_screen.finish(main_window)
-            main_window.show()
+            self.splash_screen.finish(self.main_window)
 
         super().exec()
 
@@ -170,7 +175,7 @@ class BrainFrameApplication(QApplication):
         """
 
         # noinspection PyProtectedMember
-        return QApplication.instance()._handle_error(*args)
+        return QCoreApplication.instance()._handle_error(*args)
 
     # noinspection PyMethodMayBeStatic
     def _init_server_settings(self):
