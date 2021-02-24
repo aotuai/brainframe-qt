@@ -80,7 +80,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "gstly"
-version = "0.1.4"
+version = "0.1.5"
 description = "Internal GStreamer libraries for BrainFrame"
 category = "main"
 optional = false
@@ -421,7 +421,7 @@ resource_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "a3252b1fd86797be2fe15252f4f64be9bc98e189b389b2100f03fcac433d4c3a"
+content-hash = "d914615bc9d0dd0e08d9fb173ebc0be6c39d4ccffcda87a375d8f41cd786cdac"
 
 [metadata.files]
 altgraph = [
@@ -456,10 +456,14 @@ future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
 ]
 gstly = [
-    {file = "gstly-0.1.4-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:48dbf45b5fbd9f2a8039464ad4dcd3906e6cf02256b6e52ddce227e605f2640c"},
-    {file = "gstly-0.1.4-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:6b0baa5643874ddb6deb55a1a49e6e6884135e5dba242436e1f9503f6144630d"},
-    {file = "gstly-0.1.4-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:e77686a759d91aef27da194d6d14472bd008c47dade6b9e638280545b8d082ef"},
-    {file = "gstly-0.1.4-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:0f5947ba12fd4d7c50d5e54021a2405728e2bbad67564d872b11fb22273972dc"},
+    {file = "gstly-0.1.5-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:cc848ecac9c1b6c530578bbdd5b64426df4147d252f485e9602043f2a6e77ee8"},
+    {file = "gstly-0.1.5-cp36-cp36m-win_amd64.whl", hash = "sha256:b6659673b4ca0ce8c846ac117f9623b01eed3af41ff04f14776fc8d9bc1c85e3"},
+    {file = "gstly-0.1.5-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:41f3f24f6b74929461aa973dd5a34508c04d29731f7a2a8bd783b19971016216"},
+    {file = "gstly-0.1.5-cp37-cp37m-win_amd64.whl", hash = "sha256:80010b7a79b996258bd34b58dcc4a3c5f6597da8810b5b701ef645da58bb6cf4"},
+    {file = "gstly-0.1.5-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:0bfa34b1bab878036f4a6e930a1b6c27b2e2bc26715e588287d6eb4ebf825eb6"},
+    {file = "gstly-0.1.5-cp38-cp38-win_amd64.whl", hash = "sha256:33b1e9199a75c07fc91083c4dbeeb3d63a8ef0210bcde2a6f17d92a9c097865a"},
+    {file = "gstly-0.1.5-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:27a82e70a2b1b75d77423528ba9a40b14ee1812595527b823760210b9f6dbdce"},
+    {file = "gstly-0.1.5-cp39-cp39-win_amd64.whl", hash = "sha256:a02696b66e86e4f31e43c9e57674db55025a3642906fd1061aaf74d094820660"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},

@@ -24,7 +24,7 @@ readerwriterlock = "^1.0.6"
 pycryptodomex = "^3.9.6"
 pendulum = "^2.0.5"
 dataclasses = { version = "^0.7", python = ">=3.6,<3.7" }
-gstly = "^0.1.4"
+gstly = "^0.1.5"
 pubsus = { git = "https://github.com/aotuai/pubsus.git", branch = "main" }
 
 pyqt5ac = { version = "^1.1.0", optional = true }
