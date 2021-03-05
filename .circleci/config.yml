@@ -1,0 +1,71 @@
+version: 2.1
+
+
+orbs:
+  win: circleci/windows@2.2.0
+
+jobs:
+  build-windows-pyinstaller-commercial:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    steps:
+      - checkout
+      - win-install-sys-deps:
+          ffmpeg-version: ""
+          gstreamer-version: ""
+          python-version: "3.8.8"
+          qt-version: ""
+      - win-install-python-deps:
+          poetry-version: "1.1.4"
+
+commands:
+
+  win-install-ffmpeg:
+    parameters:
+      ffmpeg-version:
+        type: string
+    steps:
+      - run: echo 1
+
+  win-install-gstreamer:
+    parameters:
+      gstreamer-version:
+        type: string
+    steps:
+        - run: echo 1
+
+  win-install-python:
+    parameters:
+      python-version:
+        type: string
+    steps:
+      - run: choco install python --version << parameters.python-version>
+
+  win-install-qt:
+    parameters:
+      qt-version:
+        type: string
+    steps:
+      - run: pip install aqtinstall
+      - run: aqt install << parameters.qt-version >>
+
+  win-install-system-dependencies:
+    parameters:
+      gstreamer-version:
+        type: string
+      ffmpeg-version:
+        type: string
+      python-version:
+        type: string
+      qt-version:
+        type: string
+    steps:
+      - win-install-python:
+          python-version: << parameters.python-version >>
+      - win-install-qt:
+          qt-version: << parameters.qt-version >>
+      - win-install-gstreamer:
+          gstreamer-version: << parameters.gstreamer-version >>
+      - win-install-ffmpeg:
+          ffmpeg-version: << parameters.ffmpeg-version >>
