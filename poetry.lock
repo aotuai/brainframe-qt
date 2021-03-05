@@ -421,7 +421,7 @@ resource_build = ["pyqt5ac"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "d914615bc9d0dd0e08d9fb173ebc0be6c39d4ccffcda87a375d8f41cd786cdac"
+content-hash = "cbe8518da367b3ca917bb8c8d27e1d3c35ad88168e3ddc184b27a2793f1015fd"
 
 [metadata.files]
 altgraph = [
