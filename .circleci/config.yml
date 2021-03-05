@@ -47,7 +47,7 @@ commands:
       python-version:
         type: string
     steps:
-      - run: choco install python --version << parameters.python-version>
+      - run: choco install python --version << parameters.python-version >>
 
   win-install-qt:
     parameters:
