@@ -52,12 +52,12 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - python-v0-<< parameters.python-version >>
+            - python-v1-<< parameters.python-version >>
       - run: nuget install python -Version << parameters.python-version >> -OutputDirectory "<< parameters.install-dir >>"
       - save_cache:
           paths:
             - << parameters.install-dir >>
-          key: python-v0-<< parameters.python-version >>
+          key: python-v1-<< parameters.python-version >>
 
   win-install-qt:
     parameters:
