@@ -46,16 +46,41 @@ commands:
     parameters:
       python-version:
         type: string
+      install-dir:
+        type: string
+        default: C:/Program Files/Python/
     steps:
-      - run: choco install python --version << parameters.python-version >>
+      - restore_cache:
+          keys:
+            - python-v0-<< parameters.python-version >>
+      - run: choco install python --version << parameters.python-version >> --params "/InstallDir:<< paramaters.install-dir >>"
+      - save_cache:
+          paths:
+            - << parameters.install-dir >>
+          key: python-v0-<< parameters.python-version >>
 
   win-install-qt:
     parameters:
       qt-version:
         type: string
+      install-dir:
+        type: string
+        default: C:/Program Files/Qt/
+      arch:
+        type: string
+        default: win64_msvc2019_64
     steps:
-      - run: pip install aqtinstall
-      - run: aqt install << parameters.qt-version >> windows desktop win64_msvc2019_64
+      - restore_cache:
+          keys:
+            - qt-v0-<< parameters.qt-version >>-<< parameters.arch >>
+      - run: |
+          pip install aqtinstall
+          aqt install << parameters.qt-version >> windows desktop << parameters.arch >>
+      - save_cache:
+          paths:
+            - << parameters.install-dir >>
+          key: qt-v0-<< parameters.qt-version >>-<< parameters.arch >>
+
 
   win-install-sys-deps:
     parameters:
