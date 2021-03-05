@@ -53,7 +53,10 @@ commands:
       - restore_cache:
           keys:
             - python-v1-<< parameters.python-version >>
-      - run: nuget install python -Version << parameters.python-version >> -OutputDirectory "<< parameters.install-dir >>"
+      - run: |
+        nuget install python -Version << parameters.python-version >> -OutputDirectory "<< parameters.install-dir >>"
+        python --version
+        pip --version
       - save_cache:
           paths:
             - << parameters.install-dir >>
