@@ -75,7 +75,7 @@ commands:
             - qt-v0-<< parameters.qt-version >>-<< parameters.arch >>
       - run: |
           pip install aqtinstall
-          aqt install << parameters.qt-version >> windows desktop << parameters.arch >>
+          aqt install --outputdir << parameters.install-dir >> << parameters.qt-version >> windows desktop << parameters.arch >>
       - save_cache:
           paths:
             - << parameters.install-dir >>
