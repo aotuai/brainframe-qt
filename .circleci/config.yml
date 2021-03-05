@@ -53,7 +53,7 @@ commands:
       - restore_cache:
           keys:
             - python-v0-<< parameters.python-version >>
-      - run: choco install python --version << parameters.python-version >> --params "/InstallDir:<< paramaters.install-dir >>"
+      - run: choco install python --version << parameters.python-version >> --params "/InstallDir:<< parameters.install-dir >>"
       - save_cache:
           paths:
             - << parameters.install-dir >>
