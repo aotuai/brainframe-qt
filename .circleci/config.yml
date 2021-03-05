@@ -4,6 +4,13 @@ version: 2.1
 orbs:
   win: circleci/windows@2.2.0
 
+
+workflows:
+  build:
+    jobs:
+      - build-windows-pyinstaller-commercial
+
+
 jobs:
   build-windows-pyinstaller-commercial:
     executor:
@@ -33,7 +40,7 @@ commands:
       gstreamer-version:
         type: string
     steps:
-        - run: echo 1
+      - run: echo 1
 
   win-install-python:
     parameters:
