@@ -55,7 +55,7 @@ commands:
         type: string
     steps:
       - run: pip install aqtinstall
-      - run: aqt install << parameters.qt-version >> windows desktop
+      - run: aqt install << parameters.qt-version >> windows desktop win64_msvc2019_64
 
   win-install-sys-deps:
     parameters:
