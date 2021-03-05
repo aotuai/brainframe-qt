@@ -55,7 +55,7 @@ commands:
         type: string
     steps:
       - run: pip install aqtinstall
-      - run: aqt install << parameters.qt-version >>
+      - run: aqt install << parameters.qt-version >> windows desktop
 
   win-install-sys-deps:
     parameters:
