@@ -57,7 +57,7 @@ commands:
       - run: pip install aqtinstall
       - run: aqt install << parameters.qt-version >>
 
-  win-install-system-dependencies:
+  win-install-sys-deps:
     parameters:
       gstreamer-version:
         type: string
