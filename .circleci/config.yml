@@ -59,7 +59,7 @@ commands:
           "<< parameters.install-location >>/python/tools/python.exe" -m pip --version
       - save_cache:
           paths:
-            - << parameters.install-location >>
+            - << parameters.install-location >>/python/
           key: python-v2-<< parameters.python-version >>
 
   win-install-qt:
@@ -81,7 +81,7 @@ commands:
           aqt install --outputdir "<< parameters.install-dir >>" << parameters.qt-version >> windows desktop << parameters.arch >>
       - save_cache:
           paths:
-            - << parameters.install-dir >>/python/
+            - << parameters.install-dir >>
           key: qt-v0-<< parameters.qt-version >>-<< parameters.arch >>
 
 
