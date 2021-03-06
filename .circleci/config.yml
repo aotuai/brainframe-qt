@@ -39,7 +39,16 @@ commands:
       gstreamer-version:
         type: string
     steps:
-      - run: echo 1
+      - restore_cache:
+          keys:
+            - gstreamer-v0-<< parameters.gstreamer-version >>
+      - run: |
+          wget -O ~/Downloads/gstreamer.msi https://gstreamer.freedesktop.org/data/pkg/windows/1.18.3/msvc/gstreamer-1.0-msvc-x86_64-1.18.3.msi
+          ~/Downloads/gstreamer.msi /?
+      - save_cache:
+          paths:
+            - ~/Downloads/gstreamer.msi
+          key: gstreamer-v0-<< parameters.gstreamer-version >>
 
   win-install-qt:
     parameters:
