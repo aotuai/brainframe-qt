@@ -46,17 +46,17 @@ commands:
     parameters:
       python-version:
         type: string
-      install-dir:
+      install-location:
         type: string
-        default: "C:/Program Files/Python/"
+        default: "C:/Program Files/"
     steps:
       - restore_cache:
           keys:
             - python-v1-<< parameters.python-version >>
       - run: |
-          nuget install python -Version << parameters.python-version >> -OutputDirectory "<< parameters.install-dir >>"
-          python --version
-          pip --version
+          nuget install python -Version << parameters.python-version >> -ExcludeVersion -OutputDirectory "<< parameters.install-location >>"
+          << install-location>>/Python/tools/python.exe --version
+          << install-location>>/Python/tools/pip.exe --version
       - save_cache:
           paths:
             - << parameters.install-dir >>
