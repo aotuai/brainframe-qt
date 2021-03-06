@@ -15,7 +15,7 @@ jobs:
   build-windows-pyinstaller-commercial:
     executor:
       name: win/default
-      shell: powershell.exe
+      shell: bash.exe
     steps:
       - checkout
       - win-install-sys-deps:
