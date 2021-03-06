@@ -53,14 +53,17 @@ commands:
       - restore_cache:
           keys:
             - python-v2-<< parameters.python-version >>
-      - run: |
-          nuget install python -Version << parameters.python-version >> -ExcludeVersion -OutputDirectory "<< parameters.install-location >>"
-          "<< parameters.install-location >>/python/tools/python.exe" --version
-          "<< parameters.install-location >>/python/tools/python.exe" -m pip --version
+      - run: nuget install python -Version << parameters.python-version >> -ExcludeVersion -OutputDirectory "<< parameters.install-location >>"
       - save_cache:
           paths:
             - << parameters.install-location >>/python/
           key: python-v2-<< parameters.python-version >>
+      - run: |
+          echo "export PATH=<< parameters.install-location >>/python/tools/:$PATH" >> $BASH_ENV
+          echo "export PATH=<< parameters.install-location >>/python/tools/Scripts/:$PATH" >> $BASH_ENV
+      - run: |
+          python --version
+          pip --version
 
   win-install-qt:
     parameters:
@@ -77,7 +80,7 @@ commands:
           keys:
             - qt-v0-<< parameters.qt-version >>-<< parameters.arch >>
       - run: |
-          "C:/Program Files/python/tools/python.exe" -m pip install aqtinstall
+          pip install aqtinstall
           aqt install --outputdir "<< parameters.install-dir >>" << parameters.qt-version >> windows desktop << parameters.arch >>
       - save_cache:
           paths:
