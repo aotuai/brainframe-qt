@@ -55,8 +55,8 @@ commands:
             - python-v2-<< parameters.python-version >>
       - run: |
           nuget install python -Version << parameters.python-version >> -ExcludeVersion -OutputDirectory "<< parameters.install-location >>"
-          << parameters.install-location >>/Python/tools/python.exe --version
-          << parameters.install-location >>/Python/tools/pip.exe --version
+          "<< parameters.install-location >>"/Python/tools/python.exe --version
+          "<< parameters.install-location >>"/Python/tools/pip.exe --version
       - save_cache:
           paths:
             - << parameters.install-location >>
