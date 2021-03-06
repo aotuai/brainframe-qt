@@ -42,9 +42,13 @@ commands:
       - restore_cache:
           keys:
             - gstreamer-v0-<< parameters.gstreamer-version >>
-      - run: |
-          wget -O ~/Downloads/gstreamer.msi https://gstreamer.freedesktop.org/data/pkg/windows/1.18.3/msvc/gstreamer-1.0-msvc-x86_64-1.18.3.msi
-          ~/Downloads/gstreamer.msi /?
+      - run:
+          command: |
+            (new-object System.Net.WebClient).DownloadFile('%DOWNLOAD_URL%/','~/Downloads/gstreamer.msi')
+            msiexec /passive INSTALLDIR=C:/Desired/Folder /i gstreamer.msi
+          shell: powershell.exe
+          environment:
+            DOWNLOAD_URL: https://gstreamer.freedesktop.org/data/pkg/windows/< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi
       - save_cache:
           paths:
             - ~/Downloads/gstreamer.msi
