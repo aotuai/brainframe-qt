@@ -59,8 +59,8 @@ commands:
             - << parameters.install-location >>/python/
           key: python-v2-<< parameters.python-version >>
       - run: |
-          echo "export PATH=<< parameters.install-location >>/python/tools/:$PATH" >> $BASH_ENV
-          echo "export PATH=<< parameters.install-location >>/python/tools/Scripts/:$PATH" >> $BASH_ENV
+          echo "export \"PATH=<< parameters.install-location >>/python/tools/:$PATH\"" >> $BASH_ENV
+          echo "export \"PATH=<< parameters.install-location >>/python/tools/Scripts/:$PATH\"" >> $BASH_ENV
       - run: |
           python --version
           pip --version
