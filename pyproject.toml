@@ -25,8 +25,8 @@ pycryptodomex = "^3.9.6"
 pendulum = "^2.0.5"
 dataclasses = { version = "^0.7", python = ">=3.6,<3.7" }
 gstly = [
-    { version = "^0.1.6", markers = "sys_platform != 'win32'" },
-    { version = "^0.1.6", markers = "sys_platform == 'win32'", optional = true },
+    { version = "^0.1.6", platform = 'linux' },
+    { version = "^0.1.6", platform = 'windows', optional = true },
 ]
 pubsus = { git = "https://github.com/aotuai/pubsus.git", branch = "main" }
 
