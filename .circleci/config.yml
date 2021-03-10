@@ -63,7 +63,7 @@ commands:
         type: string
       install-dir:
         type: string
-        default: "C:/Program Files/Qt/"
+        default: "C:/Program\ Files/Qt/"
       arch:
         type: string
         default: win64_msvc2019_64
@@ -74,7 +74,7 @@ commands:
       - run: |
           if [ -f << parameters.install-dir >> ]; then exit 0
           pip install aqtinstall
-          aqt install --outputdir "<< parameters.install-dir >>" << parameters.qt-version >> windows desktop << parameters.arch >>
+          aqt install --outputdir << parameters.install-dir >> << parameters.qt-version >> windows desktop << parameters.arch >>
       - save_cache:
           paths:
             - << parameters.install-dir >>
