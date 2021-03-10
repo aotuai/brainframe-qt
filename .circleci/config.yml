@@ -72,7 +72,7 @@ commands:
           keys:
             - qt-v0-<< parameters.qt-version >>-<< parameters.arch >>
       - run: |
-          if [ -f << parameters.install-dir >> ]; then exit 0
+          if [ -f << parameters.install-dir >> ]; then exit 0; fi
           pip install aqtinstall
           aqt install --outputdir << parameters.install-dir >> << parameters.qt-version >> windows desktop << parameters.arch >>
       - save_cache:
