@@ -173,6 +173,9 @@ Install the Python dependencies using Poetry.
 
     poetry install
 
+    # If using Windows, installation requires an extra
+    poetry install --extra windows
+
 Finally, start the client
 
 .. code-block:: bash
