@@ -38,6 +38,9 @@ commands:
     parameters:
       gstreamer-version:
         type: string
+      install-dir:
+        type: string
+        default: "C:/Program Files/GStreamer/"
     steps:
       - restore_cache:
           keys:
@@ -56,7 +59,7 @@ commands:
           key: gstreamer-v0-<< parameters.gstreamer-version >>
       - run:
           name: "Install GStreamer"
-          command: msiexec /passive INSTALLDIR=C:/Desired/Folder /i gstreamer.msi
+          command: msiexec /passive INSTALLDIR="<< parameters.install-dir >> /i $HOME/Downloads/gstreamer.msi
           shell: powershell.exe
 
   win-install-qt:
