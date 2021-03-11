@@ -47,7 +47,7 @@ commands:
           command: (new-object System.Net.WebClient).DownloadFile("$env:DOWNLOAD_URL","$HOME/Downloads/gstreamer.msi")
           shell: powershell.exe
           environment:
-            DOWNLOAD_URL: https://gstreamer.freedesktop.org/data/pkg/windows/< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi
+            DOWNLOAD_URL: https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi
       - save_cache:
           paths:
             - ~/Downloads/gstreamer.msi
