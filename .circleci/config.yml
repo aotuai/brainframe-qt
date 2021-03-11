@@ -58,8 +58,9 @@ commands:
             - ~/Downloads/gstreamer.msi
           key: gstreamer-v0-<< parameters.gstreamer-version >>
       - run:
+          # Why there are backticks: https://stackoverflow.com/a/44499001
           name: "Install GStreamer"
-          command: msiexec /passive INSTALLDIR="<< parameters.install-dir >>" /i $HOME/Downloads/gstreamer.msi
+          command: msiexec /i $HOME/Downloads/gstreamer.msi INSTALLDIR=`"<< parameters.install-dir >>`" /passive
           shell: powershell.exe
 
   win-install-qt:
