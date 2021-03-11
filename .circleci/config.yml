@@ -66,7 +66,7 @@ commands:
             $installDir = "`"<< parameters.install-dir >>`"".Replace('/', '\')
             msiexec /i $msiFile INSTALLDIR=$installDir /passive
 
-            If (Test-Path "<< parameters.install-dir >>/blahahah") { "GStreamer succesfully installed to << parameters.install-dir >>" }
+            If (Test-Path "<< parameters.install-dir >>") { "GStreamer succesfully installed to << parameters.install-dir >>" }
             Else { Throw "GStreamer was not properly installed to << parameters.install-dir >>" }
           shell: powershell.exe
 
