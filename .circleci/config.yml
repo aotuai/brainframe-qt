@@ -65,7 +65,7 @@ commands:
             $msiFile = "$HOME/Downloads/gstreamer.msi".Replace('/', '\')
             $installDir = "`"<< parameters.install-dir >>`"".Replace('/', '\')
             msiexec /i $msiFile INSTALLDIR=$installDir /passive
-            return Test-Path -Path "<< parameters.install-dir >>/blahahah"
+            return Test-Path "<< parameters.install-dir >>/blahahah"
           shell: powershell.exe
 
   win-install-qt:
