@@ -59,8 +59,12 @@ commands:
           key: gstreamer-v0-<< parameters.gstreamer-version >>
       - run:
           # Why there are backticks: https://stackoverflow.com/a/44499001
+          # Also msiexec only works with backslash paths
           name: "Install GStreamer"
-          command: msiexec /i $HOME/Downloads/gstreamer.msi INSTALLDIR=`"<< parameters.install-dir >>`" /passive
+          command: |
+            $msiFile = "$HOME/Downloads/gstreamer.msi".Replace('/', '\')
+            $installDir = "`"<< parameters.install-dir >>`"".Replace('/', '\')
+            msiexec /i $msiFile INSTALLDIR=$installDir /passive
           shell: powershell.exe
 
   win-install-qt:
