@@ -44,7 +44,7 @@ commands:
             - gstreamer-v0-<< parameters.gstreamer-version >>
       - run:
           name: "Download GStreamer installer"
-          command: (new-object System.Net.WebClient).DownloadFile('$env:DOWNLOAD_URL','~/Downloads/gstreamer.msi')
+          command: (new-object System.Net.WebClient).DownloadFile("$env:DOWNLOAD_URL","~/Downloads/gstreamer.msi")
           shell: powershell.exe
           environment:
             DOWNLOAD_URL: https://gstreamer.freedesktop.org/data/pkg/windows/< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi
