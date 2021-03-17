@@ -1,5 +1,4 @@
 name: brainframe-client
-version: '0.28.0'
 summary: A smart vision platform that is built to be easy to scale and deploy
 description: >
   BrainFrame is a smart vision platform that is built to be easy to scale,
@@ -18,27 +17,34 @@ description: >
 base: core18
 confinement: strict
 grade: stable
+adopt-info: brainframe-client
 
 parts:
   brainframe-client:
     plugin: nil
-    override-build: |
+    override-pull: |
+      snapcraftctl pull
+
+      # Install dependencies
+      pip3 install --upgrade pip wheel
+
+      # These packages are installed by apt, and Poetry will try to uninstall
+      # them because their versions don't match ours. It will then fail since
+      # they're dist-packages. As a workaround, we install them with pip so
+      # that Poetry removes those instead.
+      pip3 install --ignore-installed httplib2 pyyaml
+
       # Install Poetry
       curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
         | python3 - --version 1.1.4
       export PATH=$HOME/.poetry/bin:$PATH
 
-      # Install dependencies
-      pip3 install --upgrade pip wheel
-      # These packages are installed by apt, and Poetry will try to uninstall
-      # them because their versions don't match ours. It will then fail since
-      # they're dist-packages. As a workaround, we install them with pip so
-      # that Poetry removes those instead.
-      python3 -m pip install --ignore-installed httplib2 pyyaml
       # Install all Poetry dependencies globally
       poetry config virtualenvs.create false
-      poetry install --no-root --no-dev
+      poetry install --no-dev
 
+      snapcraftctl set-version "$(python -c 'from importlib import metadata as md; print(md.version(\'brainframe_qt\')')"
+    override-stage: |
       export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
       mkdir -p $PYTHON_INSTALL_DIR
 
@@ -58,6 +64,8 @@ parts:
       - python3-dev
       - python3-setuptools
       - python3-distutils
+      # Used to get Poetry
+      - curl
       # Poetry dependencies
       - python3-venv
       - git
