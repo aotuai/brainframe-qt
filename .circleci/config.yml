@@ -43,7 +43,8 @@ commands:
             $registryKey = "Path"
 
             $oldPath = Get-ItemPropertyValue -Path "$registryPath" -Name $registryKey
-            $newPath = "$fmtPath:$oldPath"
+            # Backtick because: https://stackoverflow.com/a/8386259/8134178
+            $newPath = "$fmtPath`:$oldPath"
 
             Set-ItemProperty -Path $registryPath -Name $registryKey -Value $newPath
 
