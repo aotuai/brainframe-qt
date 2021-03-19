@@ -37,10 +37,7 @@ commands:
           command: |
             # Allows to except paths with forward slashes
             $fmtPath = "<< parameters.path >>".Replace('/', '\')
-
-            $oldPath = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine)
-            # Backtick because: https://stackoverflow.com/a/8386259/8134178
-            $newPath = "$fmtPath`:$oldPath"
+            $newPath = "$fmtPath;$env:Path"
 
             [Environment]::SetEnvironmentVariable("Path", $newPath, [EnvironmentVariableTarget]::Machine)
 
