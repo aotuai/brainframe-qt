@@ -27,6 +27,15 @@ jobs:
 
 commands:
 
+  bash-add-to-path:
+    parameters:
+      path:
+        type: string
+    steps:
+      - run:
+          name: "Add to Bash PATH"
+          command: echo "export PATH=<< parameters.path >>:$PATH" >> $BASH_ENV
+
   win-add-to-path:
     parameters:
       path:
@@ -44,6 +53,9 @@ commands:
             # Print saved value to be sure
             [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine)
           shell: powershell.exe
+      - bash-add-to-path:
+          # Add to bash PATH which doesn't seem to source from Windows global Path
+          path: << parameters.path >>
 
   win-install-ffmpeg:
     parameters:
