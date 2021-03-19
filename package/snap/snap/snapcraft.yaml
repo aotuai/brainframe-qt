@@ -1,5 +1,4 @@
 name: brainframe-client
-version: '0.28.0'
 summary: A smart vision platform that is built to be easy to scale and deploy
 description: >
   BrainFrame is a smart vision platform that is built to be easy to scale,
@@ -18,23 +17,31 @@ description: >
 base: core18
 confinement: strict
 grade: stable
+adopt-info: brainframe-client
 
 parts:
   brainframe-client:
     plugin: nil
+    override-pull: |
+      snapcraftctl pull
+      VERSION=$(awk -F'[ ="]+' '$1 == "version" { print $2 }' pyproject.toml)
+      snapcraftctl set-version ${VERSION}
     override-build: |
+
+      # Install dependencies
+      pip3 install --upgrade pip wheel
+
+      # These packages are installed by apt, and Poetry will try to uninstall
+      # them because their versions don't match ours. It will then fail since
+      # they're dist-packages. As a workaround, we install them with pip so
+      # that Poetry removes those instead.
+      pip3 install --ignore-installed httplib2 pyyaml
+
       # Install Poetry
       curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
         | python3 - --version 1.1.4
       export PATH=$HOME/.poetry/bin:$PATH
 
-      # Install dependencies
-      pip3 install --upgrade pip wheel
-      # These packages are installed by apt, and Poetry will try to uninstall
-      # them because their versions don't match ours. It will then fail since
-      # they're dist-packages. As a workaround, we install them with pip so
-      # that Poetry removes those instead.
-      python3 -m pip install --ignore-installed httplib2 pyyaml
       # Install all Poetry dependencies globally
       poetry config virtualenvs.create false
       poetry install --no-root --no-dev
