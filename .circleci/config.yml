@@ -102,6 +102,9 @@ commands:
           shell: powershell.exe
       - win-add-to-path:
           path: << parameters.install-dir >>/1.0/mscv_x86_64/bin/
+      - run:
+          name: "Ensure GStreamer properly installed"
+          command: gst-inspect-1.0 --gst-version
 
   win-install-qt:
     parameters:
