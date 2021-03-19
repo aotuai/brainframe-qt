@@ -65,6 +65,10 @@ commands:
           command: |
             $msiFile = "$HOME/Downloads/gstreamer.msi".Replace('/', '\')
             $installDir = "`"<< parameters.install-dir >>`"".Replace('/', '\')
+
+            # https://gstreamer.freedesktop.org/documentation/installing/on-windows.html?gi-language=c
+            # https://gstreamer.freedesktop.org/documentation/deploying/windows.html
+            # https://stackoverflow.com/q/63838725/8134178
             Start-Process msiexec -ArgumentList "/i $msiFile INSTALLDIR=$installDir ALLUSERS=1 Complete=1 /qn" -Wait -Passthru
 
             If (Test-Path "<< parameters.install-dir >>/*") { "GStreamer succesfully installed to << parameters.install-dir >>" }
