@@ -45,17 +45,20 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - gstreamer-v1-<< parameters.gstreamer-version >>
+            - gstreamer-v0-<< parameters.gstreamer-version >>
       - run:
+          # Use Powershell to download so we don't have to worry about getting curl or wget installed
           name: "Download GStreamer installer"
           command: |
-            GSTREAMER_VERSION=<< parameters.gstreamer-version >>
-            DOWNLOAD_URL=https://gstreamer.freedesktop.org/data/pkg/windows/${GSTREAMER_VERSION}/msvc/gstreamer-1.0-msvc-x86_64-${GSTREAMER_VERSION}.msi
-            wget -O ~/Downloads/gstreamer.msi ${DOWNLOAD_URL}
+            Write-Host "$env:DOWNLOAD_URL"
+            (new-object System.Net.WebClient).DownloadFile("$env:DOWNLOAD_URL","$HOME/Downloads/gstreamer.msi")
+          shell: powershell.exe
+          environment:
+            DOWNLOAD_URL: https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi
       - save_cache:
           paths:
             - ~/Downloads/gstreamer.msi
-          key: gstreamer-v1-<< parameters.gstreamer-version >>
+          key: gstreamer-v0-<< parameters.gstreamer-version >>
       - run:
           # Why there are backticks: https://stackoverflow.com/a/44499001
           # Also msiexec only works with backslash paths
