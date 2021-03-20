@@ -34,7 +34,7 @@ commands:
         type: string
     steps:
       - run:
-          name: "Add to Bash PATH"
+          name: "Add << parameters.path >> to Bash PATH"
           command: |
             # Replace C: with /c
             NEW_PATH="<< parameters.path >>"
@@ -142,6 +142,9 @@ commands:
             $downloadUrl = "https://raw.githubusercontent.com/python-poetry/poetry/$poetryVersion/get-poetry.py"
             (Invoke-WebRequest -Uri $downloadUrl -UseBasicParsing).Content | python - --version $poetryVersion
           shell: powershell.exe
+      - bash-add-to-path:
+          # get-poetry will add Poetry to Windows Path, but not the path the CircleCI bash uses
+          path: ~/.poetry/bin
       - run:
           name: "Ensure Poetry installed and in Path"
           command: poetry --version
