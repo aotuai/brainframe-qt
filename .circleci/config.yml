@@ -80,27 +80,30 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - gstreamer-v0-<< parameters.gstreamer-version >>
+            - gstreamer-v1-<< parameters.gstreamer-version >>
       - run:
           # Use Powershell to download so we don't have to worry about getting curl or wget installed
           name: "Download GStreamer installer"
           command: |
-            Write-Host "$env:DOWNLOAD_URL"
-            (new-object System.Net.WebClient).DownloadFile("$env:DOWNLOAD_URL","$HOME/Downloads/gstreamer.msi")
+            $downloadUrl = https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi
+            $downloadFile = $HOME/Downloads/gstreamer.msi
+
+            If (Test-Path $downloadFile) {
+                Write-Host "GStreamer installer restored from cache to $downloadFile"
+                Exit
+            }
+
+            (new-object System.Net.WebClient).DownloadFile("$downloadUrl", "$downloadFile")
           shell: powershell.exe
           environment:
-            DOWNLOAD_URL: https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi
-      - save_cache:
-          paths:
-            - ~/Downloads/gstreamer.msi
-          key: gstreamer-v0-<< parameters.gstreamer-version >>
+            DOWNLOAD_URL:
       - run:
           # Why there are backticks: https://stackoverflow.com/a/44499001
           # Also msiexec only works with backslash paths
           name: "Install GStreamer"
           command: |
             If (Test-Path "<< parameters.install-dir >>/*") {
-                "GStreamer restored from cache to << parameters.install-dir >>"
+                Write-Host "GStreamer restored from cache to << parameters.install-dir >>"
                 Exit
             }
 
@@ -112,7 +115,7 @@ commands:
             # https://stackoverflow.com/q/63838725/8134178
             Start-Process msiexec -ArgumentList "/i $msiFile INSTALLDIR=$installDir ALLUSERS=1 Complete=1 /qn" -Wait -Passthru
 
-            If (Test-Path "<< parameters.install-dir >>/*") { "GStreamer succesfully installed to << parameters.install-dir >>" }
+            If (Test-Path "<< parameters.install-dir >>/*") { Write-Host "GStreamer succesfully installed to << parameters.install-dir >>" }
             Else { Throw "GStreamer was not properly installed to << parameters.install-dir >>" }
           shell: powershell.exe
       - win-add-to-path:
@@ -120,6 +123,11 @@ commands:
       - run:
           name: "Ensure GStreamer properly installed"
           command: gst-inspect-1.0 --gst-version
+      - save_cache:
+          paths:
+            - ~/Downloads/gstreamer.msi
+            - << parameters.install-dir >>
+          key: gstreamer-v1-<< parameters.gstreamer-version >>
 
   win-install-qt:
     parameters:
