@@ -99,6 +99,9 @@ commands:
           # Also msiexec only works with backslash paths
           name: "Install GStreamer"
           command: |
+            If (Test-Path "<< parameters.install-dir >>/*") { "GStreamer restored from cache to << parameters.install-dir >>" }
+            Else { Exit }
+
             $msiFile = "$HOME/Downloads/gstreamer.msi".Replace('/', '\')
             $installDir = "`"<< parameters.install-dir >>`"".Replace('/', '\')
 
