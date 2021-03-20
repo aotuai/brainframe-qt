@@ -163,7 +163,7 @@ commands:
           name: "Clone gvsbuild repo"
           command: |
             GTK_BUILD_REPO="https://github.com/wingtk/gvsbuild.git"
-            DOWNLOAD_DIR="~/Downloads/gvsbuild/"
+            DOWNLOAD_DIR="${HOME}/Downloads/gvsbuild/"
 
             git clone ${GTK_BUILD_REPO} ${DOWNLOAD_DIR}
             cd ${DOWNLOAD_DIR}
@@ -171,8 +171,8 @@ commands:
       - run:
           name: "Build GTK3"
           command: |
-            cd ~/Downloads/gvsbuild/
             python ./build.py build -p x64 gtk3
+          working_directory: ~/Downloads/gvsbuild/
 
   win-install-poetry:
     parameters:
