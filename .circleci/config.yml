@@ -156,12 +156,12 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - poetry-v0-<< parameters.poetry-version >>
+            - poetry-v1-<< parameters.poetry-version >>
       - run:
           name: "Install Poetry"
           command: |
-            If (Test-Path "~/.poetry/bin") {
-                Write-Host "Poetry restored from cache to ~/.poetry/bin"
+            If (Test-Path "~/.poetry") {
+                Write-Host "Poetry restored from cache to ~/.poetry"
                 Exit
             }
 
@@ -177,8 +177,8 @@ commands:
           command: poetry --version
       - save_cache:
           paths:
-            - ~/.poetry/bin
-          key: poetry-v0-<< parameters.poetry-version >>
+            - ~/.poetry
+          key: poetry-v1-<< parameters.poetry-version >>
 
   win-install-qt:
     parameters:
