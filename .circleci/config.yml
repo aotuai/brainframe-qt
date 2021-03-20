@@ -86,7 +86,7 @@ commands:
           name: "Download GStreamer installer"
           command: |
             $downloadUrl = https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi
-            $downloadFile = $HOME/Downloads/gstreamer.msi
+            $downloadFile = "$HOME/Downloads/gstreamer.msi"
 
             If (Test-Path $downloadFile) {
                 Write-Host "GStreamer installer restored from cache to $downloadFile"
