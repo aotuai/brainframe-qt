@@ -154,9 +154,17 @@ commands:
       poetry-version:
         type: string
     steps:
+      - restore_cache:
+          keys:
+            - poetry-v0-<< parameters.poetry-version >>
       - run:
           name: "Install Poetry"
           command: |
+            If (Test-Path "~/.poetry/bin") {
+                Write-Host "Poetry restored from cache to ~/.poetry/bin"
+                Exit
+            }
+
             $poetryVersion = "<< parameters.poetry-version >>"
             $downloadUrl = "https://raw.githubusercontent.com/python-poetry/poetry/$poetryVersion/get-poetry.py"
             (Invoke-WebRequest -Uri $downloadUrl -UseBasicParsing).Content | python - --version $poetryVersion
@@ -167,6 +175,10 @@ commands:
       - run:
           name: "Ensure Poetry installed and in Path"
           command: poetry --version
+      - save_cache:
+          paths:
+            - ~/.poetry/bin
+          key: poetry-v0-<< parameters.poetry-version >>
 
   win-install-qt:
     parameters:
