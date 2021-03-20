@@ -99,8 +99,10 @@ commands:
           # Also msiexec only works with backslash paths
           name: "Install GStreamer"
           command: |
-            If (Test-Path "<< parameters.install-dir >>/*") { "GStreamer restored from cache to << parameters.install-dir >>" }
-            Else { Exit }
+            If (Test-Path "<< parameters.install-dir >>/*") {
+                "GStreamer restored from cache to << parameters.install-dir >>"
+                Exit
+            }
 
             $msiFile = "$HOME/Downloads/gstreamer.msi".Replace('/', '\')
             $installDir = "`"<< parameters.install-dir >>`"".Replace('/', '\')
@@ -143,7 +145,6 @@ commands:
           paths:
             - << parameters.install-dir >>
           key: qt-v0-<< parameters.qt-version >>-<< parameters.arch >>
-
 
   win-install-sys-deps:
     parameters:
