@@ -35,7 +35,10 @@ commands:
       - run:
           name: "Add to Bash PATH"
           command: |
-            QUOTED_PATH_VAR="\"PATH=<< parameters.path >>:${PATH}\""
+            # Replace C: with /c
+            NEW_PATH="<< parameters.path >>"
+            NEW_BASH_PATH=${NEW_PATH/C:/\/c}
+            QUOTED_PATH_VAR="\"PATH=${NEW_BASH_PATH}:${PATH}\""
             echo "export ${QUOTED_PATH_VAR}" >> ${BASH_ENV}
 
   win-add-to-path:
