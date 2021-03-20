@@ -36,7 +36,7 @@ commands:
           name: "Add to Bash PATH"
           command: |
             QUOTED_PATH_VAR="\"PATH=<< parameters.path >>:${PATH}\""
-            echo "export ${QUOTED_PATH_VAR} >> ${BASH_ENV}
+            echo "export ${QUOTED_PATH_VAR}" >> ${BASH_ENV}
 
   win-add-to-path:
     parameters:
