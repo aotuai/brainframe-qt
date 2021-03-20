@@ -171,8 +171,8 @@ commands:
       - run:
           name: "Build GTK3"
           command: |
+            cd ~/Downloads/gvsbuild/
             python ./build.py build -p x64 gtk3
-          working_directory: ~/Downloads/gvsbuild/
 
   win-install-poetry:
     parameters:
