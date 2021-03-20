@@ -23,8 +23,9 @@ jobs:
           qt-version: "5.15.2"
           poetry-version: "1.1.4"
       - checkout
-#      - win-install-python-deps:
-
+      - install-python-deps:
+          install-dev-packages: true
+          extras: "build resource_build windows"
 
 commands:
 
@@ -41,6 +42,24 @@ commands:
             NEW_BASH_PATH=${NEW_PATH/C:/\/c}
             QUOTED_PATH_VAR="\"PATH=${NEW_BASH_PATH}:${PATH}\""
             echo "export ${QUOTED_PATH_VAR}" >> ${BASH_ENV}
+
+  install-python-deps:
+    parameters:
+      install-dev-packages:
+        type: boolean
+        default: false
+      extras:
+        description: "A space separated list of extras to install"
+        type: string
+        default: ""
+    steps:
+      - run:
+          name: "Install Python dependencies with Poetry"
+          command: |
+              DEV_PACKAGES=$(( << parameters.install-dev-packages ? "" : "--no-dev" ))
+              EXTRAS=$(( << parameters.extras >> ? "--extras \"<< parameters.extras >>\"" : ""))
+
+              poetry install ${DEV_PACKAGES} ${EXTRAS}
 
   win-add-to-path:
     parameters:
