@@ -17,13 +17,14 @@ jobs:
       name: win/default
       shell: bash.exe -e
     steps:
-      - checkout
       - win-install-sys-deps:
           ffmpeg-version: ""
           gstreamer-version: "1.18.3"
           qt-version: "5.15.2"
+          poetry-version: "1.1.4"
+      - checkout
 #      - win-install-python-deps:
-#          poetry-version: "1.1.4"
+
 
 commands:
 
@@ -129,6 +130,21 @@ commands:
             - << parameters.install-dir >>
           key: gstreamer-v1-<< parameters.gstreamer-version >>
 
+  win-install-poetry:
+    parameters:
+      poetry-version:
+        type: string
+    steps:
+      - run:
+          name: "Install Poetry"
+          command: |
+            $poetryVersion = "<< parameters.poetry-version >>
+            $downloadUrl = "https://raw.githubusercontent.com/python-poetry/poetry/$poetryVersion/get-poetry.py"
+            (Invoke-WebRequest -Uri $downloadUrl -UseBasicParsing).Content | python - --version $poetryVersion
+      - run:
+          name: "Ensure Poetry installed and in Path"
+          command: poetry --version
+
   win-install-qt:
     parameters:
       qt-version:
@@ -162,6 +178,8 @@ commands:
         type: string
       ffmpeg-version:
         type: string
+      poetry-version:
+        type: string
       qt-version:
         type: string
     steps:
@@ -171,3 +189,5 @@ commands:
           gstreamer-version: << parameters.gstreamer-version >>
       - win-install-ffmpeg:
           ffmpeg-version: << parameters.ffmpeg-version >>
+      - win-install-poetry:
+          poetry-version: << parameters.poetry-version >>
