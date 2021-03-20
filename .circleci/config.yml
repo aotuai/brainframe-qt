@@ -180,9 +180,20 @@ commands:
       msys2-version:
         type: string
     steps:
+      - restore_cache:
+          keys:
+            - msys2-v0-<< parameters.msys2-version >>
       - run:
           name: "Install msys2 using Chocolatey"
-          command: choco install msys2 --version << parameters.msys2-version >>
+          command: |
+            if [ -d "/c/tools/msys64/" ]; then
+                echo "msys2 restored from cache to C:/tools/msys64"
+                exit 0; fi
+            choco install msys2 --version << parameters.msys2-version >>
+      - save_cache:
+          paths:
+            - C:/tools/msys64/
+          key: msys2-v0-<< parameters.msys2-version >>
 
   win-install-poetry:
     parameters:
