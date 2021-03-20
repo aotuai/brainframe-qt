@@ -135,12 +135,14 @@ commands:
       - restore_cache:
           keys:
             - qt-v0-<< parameters.qt-version >>-<< parameters.arch >>
-      - run: |
-          if [ -d "<< parameters.install-dir >>" ]; then
-              echo "Qt already installed. Skipping"
-              exit 0; fi
-          pip install aqtinstall
-          aqt install --outputdir "<< parameters.install-dir >>" << parameters.qt-version >> windows desktop << parameters.arch >>
+      - run:
+          name: "Install Qt"
+          command: |
+            if [ -d "<< parameters.install-dir >>" ]; then
+                echo "Qt already installed. Skipping"
+                exit 0; fi
+            pip install aqtinstall
+            aqt install --outputdir "<< parameters.install-dir >>" << parameters.qt-version >> windows desktop << parameters.arch >>
       - save_cache:
           paths:
             - << parameters.install-dir >>
