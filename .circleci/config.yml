@@ -49,7 +49,7 @@ commands:
       - run:
           name: "Add to Windows global Path"
           command: |
-            # Allows to except paths with forward slashes
+            # Accept paths with forward slashes
             $fmtPath = "<< parameters.path >>".Replace('/', '\')
             $newPath = "$fmtPath;$env:Path"
 
