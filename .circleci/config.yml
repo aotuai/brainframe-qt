@@ -21,6 +21,7 @@ jobs:
           ffmpeg-version: ""
           gstreamer-version: "1.18.3"
           gvsbuild-tag: "af62cec"
+          msys2-version: "20210215.0.0"
           poetry-version: "1.1.4"
           qt-version: "5.15.2"
       - checkout
@@ -174,6 +175,15 @@ commands:
             python ./build.py build -p x64 gtk3
           working_directory: ~/Downloads/gvsbuild/
 
+  win-install-msys2:
+    parameters: 
+      msys2-version:
+        type: string
+    steps:
+      - run:
+          name: "Install msys2 using Chocolatey"
+          command: choco install msys2 --version << parameters.msys2-version >>
+
   win-install-poetry:
     parameters:
       poetry-version:
@@ -240,11 +250,15 @@ commands:
         type: string
       gvsbuild-tag:
         type: string
+      msys2-version:
+        type: string
       poetry-version:
         type: string
       qt-version:
         type: string
     steps:
+      - win-install-msys2:
+          msys2-version: << parameters.msys2-version >>
       - win-install-qt:
           qt-version: << parameters.qt-version >>
       - win-install-gtk:
