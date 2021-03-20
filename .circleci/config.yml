@@ -141,6 +141,7 @@ commands:
             $poetryVersion = "<< parameters.poetry-version >>"
             $downloadUrl = "https://raw.githubusercontent.com/python-poetry/poetry/$poetryVersion/get-poetry.py"
             (Invoke-WebRequest -Uri $downloadUrl -UseBasicParsing).Content | python - --version $poetryVersion
+          shell: powershell.exe
       - run:
           name: "Ensure Poetry installed and in Path"
           command: poetry --version
