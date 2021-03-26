@@ -59,7 +59,7 @@ commands:
               DEV_PACKAGES=$( [[ << parameters.install-dev-packages >> ]] \
                   && echo "" \
                   || echo "--no-dev" )
-              EXTRAS=$( [[ << parameters.extras >> ]] \
+              EXTRAS=$( [[ -z "<< parameters.extras >>" ]] \
                   && echo "--extras \"<< parameters.extras >>\"" \
                   || echo "" )
 
