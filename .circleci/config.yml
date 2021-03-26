@@ -20,7 +20,6 @@ jobs:
       - win-install-sys-deps:
           ffmpeg-version: ""
           gstreamer-version: "1.18.3"
-          gvsbuild-tag: "af62cec"
           msys2-version: "20210215.0.0"
           poetry-version: "1.1.4"
           qt-version: "5.15.2"
@@ -152,30 +151,6 @@ commands:
             - << parameters.install-dir >>
           key: gstreamer-v2-<< parameters.gstreamer-version >>
 
-  win-install-gtk:
-    parameters:
-      gvsbuild-tag:
-        description: "Commit hash for https://github.com/wingtk/gvsbuild, which hardcodes dependency versions and does not make releases"
-        type: string
-      install-dir:
-        type: string
-        default: "C:/Program Files/GTK3/"
-    steps:
-      - run:
-          name: "Clone gvsbuild repo"
-          command: |
-            GTK_BUILD_REPO="https://github.com/wingtk/gvsbuild.git"
-            DOWNLOAD_DIR="${HOME}/Downloads/gvsbuild/"
-
-            git clone ${GTK_BUILD_REPO} ${DOWNLOAD_DIR}
-            cd ${DOWNLOAD_DIR}
-            git checkout << parameters.gvsbuild-tag >>
-      - run:
-          name: "Build GTK3"
-          command: |
-            python ./build.py build -p x64 gtk3
-          working_directory: ~/Downloads/gvsbuild/
-
   win-install-msys2:
     parameters: 
       msys2-version:
@@ -260,8 +235,6 @@ commands:
         type: string
       gstreamer-version:
         type: string
-      gvsbuild-tag:
-        type: string
       msys2-version:
         type: string
       poetry-version:
@@ -273,8 +246,6 @@ commands:
           msys2-version: << parameters.msys2-version >>
       - win-install-qt:
           qt-version: << parameters.qt-version >>
-      - win-install-gtk:
-          gvsbuild-tag: << parameters.gvsbuild-tag >>
       - win-install-gstreamer:
           gstreamer-version: << parameters.gstreamer-version >>
       - win-install-ffmpeg:
