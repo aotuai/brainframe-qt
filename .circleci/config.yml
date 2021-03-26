@@ -56,8 +56,12 @@ commands:
       - run:
           name: "Install Python dependencies with Poetry"
           command: |
-              DEV_PACKAGES=$(( << parameters.install-dev-packages >> ? "" : "--no-dev" ))
-              EXTRAS=$(( << parameters.extras >> ? "--extras \"<< parameters.extras >>\"" : ""))
+              DEV_PACKAGES=$( [[ << parameters.install-dev-packages >> ]] \
+                  && echo "" \
+                  || echo "--no-dev" )
+              EXTRAS=$( [[ << parameters.extras >> ]] \
+                  && echo "--extras \"<< parameters.extras >>\"" \
+                  || echo "" )
 
               poetry install ${DEV_PACKAGES} ${EXTRAS}
 
