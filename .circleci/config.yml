@@ -63,6 +63,7 @@ commands:
                   && echo "--extras \"<< parameters.extras >>\"" \
                   || echo "" )
 
+              export LD_LIBRARY_PATH="C:/Program Files (x86)/GStreamer/1.0/msvc_x86_64/include/glib-2.0/"
               poetry install ${DEV_PACKAGES} ${EXTRAS}
 
   win-add-to-path:
