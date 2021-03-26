@@ -20,7 +20,6 @@ jobs:
       - win-install-sys-deps:
           ffmpeg-version: ""
           gstreamer-version: "1.18.3"
-          msys2-version: "20210215.0.0"
           poetry-version: "1.1.4"
           qt-version: "5.15.2"
       - checkout
@@ -151,26 +150,6 @@ commands:
             - << parameters.install-dir >>
           key: gstreamer-v2-<< parameters.gstreamer-version >>
 
-  win-install-msys2:
-    parameters: 
-      msys2-version:
-        type: string
-    steps:
-      - restore_cache:
-          keys:
-            - msys2-v0-<< parameters.msys2-version >>
-      - run:
-          name: "Install msys2 using Chocolatey"
-          command: |
-            if [ -d "/c/tools/msys64/" ]; then
-                echo "msys2 restored from cache to C:/tools/msys64"
-                exit 0; fi
-            choco install msys2 --version << parameters.msys2-version >>
-      - save_cache:
-          paths:
-            - C:/tools/msys64/
-          key: msys2-v0-<< parameters.msys2-version >>
-
   win-install-poetry:
     parameters:
       poetry-version:
@@ -235,15 +214,11 @@ commands:
         type: string
       gstreamer-version:
         type: string
-      msys2-version:
-        type: string
       poetry-version:
         type: string
       qt-version:
         type: string
     steps:
-      - win-install-msys2:
-          msys2-version: << parameters.msys2-version >>
       - win-install-qt:
           qt-version: << parameters.qt-version >>
       - win-install-gstreamer:
