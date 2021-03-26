@@ -100,7 +100,7 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - gstreamer-v2-<< parameters.gstreamer-version >>
+            - gstreamer-v3-<< parameters.gstreamer-version >>
       - run:
           # Use Powershell to download so we don't have to worry about getting curl or wget installed
           name: "Download GStreamer installers"
@@ -156,7 +156,7 @@ commands:
             - ~/Downloads/gstreamer.msi
             - ~/Downloads/gstreamer-devel.msi
             - << parameters.install-dir >>
-          key: gstreamer-v2-<< parameters.gstreamer-version >>
+          key: gstreamer-v3-<< parameters.gstreamer-version >>
 
   win-install-poetry:
     parameters:
