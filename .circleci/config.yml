@@ -103,11 +103,14 @@ commands:
             - gstreamer-v2-<< parameters.gstreamer-version >>
       - run:
           # Use Powershell to download so we don't have to worry about getting curl or wget installed
-          name: "Download GStreamer installer"
+          name: "Download GStreamer installers"
           command: |
-            # Use the development version of GStreamer to get GLib libraries/headers for PyGObject
-            $downloadUrl = "https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-devel-msvc-x86_64-<< parameters.gstreamer-version >>.msi"
+            # Use the development files of GStreamer to get GLib libraries/headers for PyGObject
+            $downloadUrl = "https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi"
+            $downloadUrlDevel = "https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-devel-msvc-x86_64-<< parameters.gstreamer-version >>.msi"
+
             $downloadFile = "$HOME/Downloads/gstreamer.msi"
+            $downloadFileDevel = "$HOME/Downloads/gstreamer-devel.msi"
 
             If (Test-Path $downloadFile) {
                 Write-Host "GStreamer installer restored from cache to $downloadFile"
@@ -115,6 +118,7 @@ commands:
             }
 
             (new-object System.Net.WebClient).DownloadFile("$downloadUrl", "$downloadFile")
+            (new-object System.Net.WebClient).DownloadFile("$downloadUrlDevel", "$downloadFileDevel")
           shell: powershell.exe
           environment:
             DOWNLOAD_URL:
@@ -129,12 +133,15 @@ commands:
             }
 
             $msiFile = "$HOME/Downloads/gstreamer.msi".Replace('/', '\')
+            $msiFileDevel = "$HOME/Downloads/gstreamer-devel.msi".Replace('/', '\')
+
             $installDir = "`"<< parameters.install-dir >>`"".Replace('/', '\')
 
             # https://gstreamer.freedesktop.org/documentation/installing/on-windows.html?gi-language=c
             # https://gstreamer.freedesktop.org/documentation/deploying/windows.html
             # https://stackoverflow.com/q/63838725/8134178
             Start-Process msiexec -ArgumentList "/i $msiFile INSTALLDIR=$installDir ALLUSERS=1 Complete=1 /qn" -Wait -Passthru
+            Start-Process msiexec -ArgumentList "/i $msiFileDevel INSTALLDIR=$installDir ALLUSERS=1 Complete=1 /qn" -Wait -Passthru
 
             If (Test-Path "<< parameters.install-dir >>/*") { Write-Host "GStreamer succesfully installed to << parameters.install-dir >>" }
             Else { Throw "GStreamer was not properly installed to << parameters.install-dir >>" }
@@ -147,6 +154,7 @@ commands:
       - save_cache:
           paths:
             - ~/Downloads/gstreamer.msi
+            - ~/Downloads/gstreamer-devel.msi
             - << parameters.install-dir >>
           key: gstreamer-v2-<< parameters.gstreamer-version >>
 
