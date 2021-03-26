@@ -93,6 +93,17 @@ commands:
     steps:
       - run: echo 1
 
+  win-install-glib:
+    # This relies on GStreamer being installed with development files.
+    # Could not find a way to manually build GLib without msys
+    parameters:
+      gstreamer-path:
+        type: string
+        default: "C:/Program Files (x86)/GStreamer"
+    steps:
+      - win-add-to-path:
+          path: << parameters.gstreamer-path >>/1.0/msvc_x86_64/include/glib-2.0/
+
   win-install-gstreamer:
     parameters:
       gstreamer-version:
@@ -235,6 +246,7 @@ commands:
           qt-version: << parameters.qt-version >>
       - win-install-gstreamer:
           gstreamer-version: << parameters.gstreamer-version >>
+      - win-install-glib
       - win-install-ffmpeg:
           ffmpeg-version: << parameters.ffmpeg-version >>
       - win-install-poetry:
