@@ -107,7 +107,8 @@ commands:
           # Use Powershell to download so we don't have to worry about getting curl or wget installed
           name: "Download GStreamer installer"
           command: |
-            $downloadUrl = "https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-msvc-x86_64-<< parameters.gstreamer-version >>.msi"
+            # Use the development version of GStreamer to get GLib libraries/headers for PyGObject
+            $downloadUrl = "https://gstreamer.freedesktop.org/data/pkg/windows/<< parameters.gstreamer-version >>/msvc/gstreamer-1.0-devel-msvc-x86_64-<< parameters.gstreamer-version >>.msi"
             $downloadFile = "$HOME/Downloads/gstreamer.msi"
 
             If (Test-Path $downloadFile) {
