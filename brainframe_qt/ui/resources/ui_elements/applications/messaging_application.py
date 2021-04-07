@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 import typing
 from typing import NewType, Dict, Optional
@@ -33,7 +31,7 @@ class MessagingApplication(QApplication):
         self._init_signals()
 
     def _init_message_server(self, socket_name: str) \
-            -> Optional[MessagingServer]:
+            -> Optional["MessagingServer"]:
         message_server = MessagingServer(socket_name=socket_name, parent=self)
 
         if message_server.serverError() == QAbstractSocket.AddressInUseError:
@@ -53,7 +51,7 @@ class MessagingApplication(QApplication):
 
         return message_server
 
-    def _init_message_socket(self, server_name: str) -> MessagingSocket:
+    def _init_message_socket(self, server_name: str) -> "MessagingSocket":
         message_socket = MessagingSocket(server_name=server_name, parent=self)
 
         return message_socket

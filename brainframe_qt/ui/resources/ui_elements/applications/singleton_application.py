@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 import sys
 import tempfile
@@ -45,7 +43,7 @@ class SingletonApplication(MessagingApplication):
         self._main_window = widget
 
     # noinspection PyMethodMayBeStatic
-    def _attempt_get_lock(self) -> InstanceLock:
+    def _attempt_get_lock(self) -> "InstanceLock":
         try:
             return InstanceLock(self.internal_name)
         except InstanceLock.DuplicateInstanceError:
