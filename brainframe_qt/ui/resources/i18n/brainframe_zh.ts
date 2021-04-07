@@ -843,7 +843,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="33"/>
         <source>Max journaling age</source>
-        <translation>数据保留时限</translation>
+        <translation>历史记录存储时间</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_terms/license_terms.py" line="78"/>
