@@ -150,25 +150,33 @@ class MessagingServer(QLocalServer):
 
         if socket.canReadLine():
             # Immediate ready to read data
+            logging.debug("immediate _handle_ready_read")
             self._handle_ready_read()
         else:
+            logging.debug("connect _handle_ready_read")
             socket.readyRead.connect(self._handle_ready_read)
 
         if socket.error() not in [
             socket.UnknownSocketError, socket.PeerClosedError
         ]:
             # Immediate error
-            self._handle_socket_error()
+            logging.debug("immediate _handle_socket_error")
+            self._handle_socket_error(socket.error())
         else:
+            logging.debug("connect _handle_socket_error")
             socket.error.connect(self._handle_socket_error)
 
         if socket.state() == QLocalSocket.UnconnectedState:
             # Immediate disconnect
+            logging.debug("immediate _handle_disconnect")
             self._handle_disconnect()
         else:
+            logging.debug("connect _handle_disconnect")
             socket.disconnected.connect(self._handle_disconnect)
 
     def _handle_disconnect(self) -> None:
+        logging.debug("exec _handle_disconnect")
+
         socket = self.current_connection
         logging.debug(f"Client disconnected from server: 0x{id(socket):x}")
 
@@ -178,6 +186,8 @@ class MessagingServer(QLocalServer):
         self._handle_connection()
 
     def _handle_ready_read(self) -> None:
+        logging.debug("exec _handle_ready_read")
+
         socket = self.current_connection
         message_data = bytes(socket.readAll())
         logging.debug(
@@ -187,8 +197,8 @@ class MessagingServer(QLocalServer):
         message = self._parse_message_data(message_data)
         self.new_message.emit(message)
 
-    def _handle_socket_error(self, _error: QLocalSocket.LocalSocketError) \
-            -> None:
+    def _handle_socket_error(self, error: QLocalSocket.LocalSocketError) -> None:
+        logging.debug(f"exec _handle_socket_error | {error}")
         socket = self.current_connection
 
         if socket.error() == socket.PeerClosedError:
@@ -196,7 +206,7 @@ class MessagingServer(QLocalServer):
         else:
             error_message = (
                 f"Error occurred with IPC socket 0x{id(socket):x}: "
-                f"{socket.error()} | {self.errorString()}"
+                f"{error} | {self.errorString()}"
             )
             logging.error(error_message)
             raise self.UnknownSocketError(error_message)
