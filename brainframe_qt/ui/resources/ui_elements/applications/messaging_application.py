@@ -30,24 +30,39 @@ class MessagingApplication(QApplication):
 
         self._init_signals()
 
-    def _init_message_server(self, socket_name: str) \
+    def _init_message_server(self, socket_name: str, retries: int = 0) \
             -> Optional["MessagingServer"]:
+
+        # Check if there's already an active server that is ready to communicate
+        if MessagingSocket.is_server_alive(socket_name):
+            return None
+
         message_server = MessagingServer(socket_name=socket_name, parent=self)
 
+        # Note that this will only trigger on Linux:
+        # https://doc.qt.io/qt-5/qlocalserver.html#listen
+        # """
+        #   Note: On Unix if the server crashes without closing listen will fail with
+        #   AddressInUseError. To create a new server the file should be removed. On
+        #   Windows two local servers can listen to the same pipe at the same time, but
+        #   any connections will go to one of the server.
+        # """
         if message_server.serverError() == QAbstractSocket.AddressInUseError:
-            if not MessagingSocket.is_server_alive(socket_name):
-                logging.warning(f"Socket for IPC is open, but connection was "
-                                "refused. Attempting takeover.")
-                # Attempt hostile takeover of socket
-                MessagingServer.removeServer(socket_name)
-                message_server = self._init_message_server(socket_name)
-
-                if message_server:
-                    logging.info("IPC server socket takeover successful.")
-                else:
-                    logging.error("Unable to perform takeover on socket.")
-            else:
+            if retries > 3:
+                # Already retried. Give up trying to create the server.
+                logging.error(f"")
                 return None
+
+            logging.warning(f"Socket for IPC is open, but connection was refused. "
+                            f"Attempting takeover.")
+            # Attempt hostile takeover of socket
+            MessagingServer.removeServer(socket_name)
+            message_server = self._init_message_server(socket_name, retries=retries + 1)
+
+            if message_server:
+                logging.info("IPC server socket takeover successful.")
+            else:
+                logging.error("Unable to perform takeover on socket.")
 
         return message_server
 
@@ -204,6 +219,15 @@ class MessagingSocket(QLocalSocket):
     class MessageSendTimeoutError(TimeoutError):
         ...
 
+    class UnknownConnectionError(RuntimeError):
+        def __init__(self, server_name: str, error: QLocalSocket.LocalSocketError,
+                     error_string: str):
+            super().__init__(
+                f"Unknown error while attempting to connect to Messaging Server at "
+                f'"{server_name}": '
+                f"QLocalSocket.LocalSocketError={error} | {error_string}"
+            )
+
     _CONNECTION_TIMEOUT = 5000  # milliseconds
     _MESSAGE_SEND_TIMEOUT = 5000  # milliseconds
 
@@ -215,8 +239,22 @@ class MessagingSocket(QLocalSocket):
     def send_message(self, message: IntraInstanceMessage) -> None:
         """Send a message to the server Application. *Blocking call.*"""
 
+        # If an error occurs while connecting to the server, this property is set to
+        # None. Cache it to use it for error messages.
+        server_name = self.serverName()
+
         logging.debug(f"Sending message to main instance: {message}")
         self.connectToServer(QLocalSocket.WriteOnly)
+
+        if self.state() not in [
+            QLocalSocket.ConnectingState,
+            QLocalSocket.ConnectedState
+        ]:
+            raise self.UnknownConnectionError(
+                server_name=server_name,
+                error=self.error(),
+                error_string=self.errorString()
+            )
 
         if not self.waitForConnected(self._CONNECTION_TIMEOUT):
             raise self.ConnectionTimeoutError()
@@ -241,11 +279,8 @@ class MessagingSocket(QLocalSocket):
         )
         tmp_socket.connectToServer(MessagingSocket.ReadOnly)
 
-        # TODO: Should we check for _any_ error (i.e. != -1)?
-        connection_was_refused = (
-                tmp_socket.error() == MessagingSocket.ConnectionRefusedError
-        )
+        connection_successful = tmp_socket.waitForConnected(cls._CONNECTION_TIMEOUT)
 
         tmp_socket.disconnectFromServer()
 
-        return not connection_was_refused
+        return connection_successful
