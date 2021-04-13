@@ -2,6 +2,7 @@ import logging
 import typing
 from typing import NewType, Dict, Optional
 
+from PyQt5 import sip
 from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtNetwork import QLocalServer, QLocalSocket, QAbstractSocket
 from PyQt5.QtWidgets import QApplication
@@ -130,9 +131,34 @@ class MessagingServer(QLocalServer):
         super().__init__(parent)
 
         self.current_connection: Optional[QLocalSocket] = None
+        self.previous_connection: Optional[QLocalSocket] = None
+
         self.newConnection.connect(self._handle_connection)
 
         self.listen(socket_name)
+
+    def _get_socket(self) -> Optional[QLocalSocket]:
+        # Modeled after
+        # https://github.com/qutebrowser/qutebrowser/blob/dacaefaf/qutebrowser/misc/ipc.py#L359-L381
+        if self.current_connection is not None:
+            socket = self.current_connection
+        elif self.previous_connection is not None:
+            logging.debug(
+                "Attempted to get current socket, but current socket was None. Using "
+                "previous socket"
+            )
+            socket = self.previous_connection
+        else:
+            logging.warning(
+                "Attempted to retrieve current socket, but there is no current socket"
+            )
+            return None
+
+        if sip.isdeleted(socket):
+            logging.error("Attempted to retrieve deleted socket")
+            return None
+
+        return socket
 
     def _handle_connection(self) -> None:
         if not self.hasPendingConnections():
@@ -177,10 +203,15 @@ class MessagingServer(QLocalServer):
     def _handle_disconnect(self) -> None:
         logging.debug("exec _handle_disconnect")
 
+        if self.previous_connection is not None:
+            self.previous_connection.deleteLater()
+
         socket = self.current_connection
         logging.debug(f"Client disconnected from server: 0x{id(socket):x}")
 
-        self.current_connection = None
+        self.previous_connection, self.current_connection = (
+            self.current_connection, None
+        )
 
         # Deal with potential queue of connections
         self._handle_connection()
@@ -188,18 +219,30 @@ class MessagingServer(QLocalServer):
     def _handle_ready_read(self) -> None:
         logging.debug("exec _handle_ready_read")
 
-        socket = self.current_connection
+        socket = self._get_socket()
+        if socket is None:
+            logging.error(
+                "Attempted to read message from socket, but socket has already been "
+                "disconnected/deleted"
+            )
+            return
+
         message_data = bytes(socket.readAll())
-        logging.debug(
-            f"Received raw data from socket 0x{id(socket):x}: "
-            f"{message_data}"
-        )
+        logging.debug(f"Received raw data from socket 0x{id(socket):x}: {message_data}")
+
         message = self._parse_message_data(message_data)
         self.new_message.emit(message)
 
     def _handle_socket_error(self, error: QLocalSocket.LocalSocketError) -> None:
         logging.debug(f"exec _handle_socket_error | {error}")
-        socket = self.current_connection
+        socket = self._get_socket()
+
+        if socket is None:
+            logging.error(
+                "Attempted to deal with socket error, but socket has already been "
+                "disconnected/deleted"
+            )
+            return
 
         if socket.error() == socket.PeerClosedError:
             logging.debug(f"Peer disconnected on socket 0x{id(socket):x}")
@@ -277,7 +320,8 @@ class MessagingSocket(QLocalSocket):
         logging.debug(f"Message sending complete")
 
         self.disconnectFromServer()
-        self.waitForDisconnected(self._CONNECTION_TIMEOUT)
+        if self.state() != QLocalSocket.UnconnectedState:
+            self.waitForDisconnected(self._CONNECTION_TIMEOUT)
 
     @classmethod
     def is_server_alive(cls, server_name) -> bool:
