@@ -277,6 +277,7 @@ class MessagingSocket(QLocalSocket):
         logging.debug(f"Message sending complete")
 
         self.disconnectFromServer()
+        self.waitForDisconnected(self._CONNECTION_TIMEOUT)
 
     @classmethod
     def is_server_alive(cls, server_name) -> bool:
