@@ -38,6 +38,7 @@ class MessagingApplication(QApplication):
         if MessagingSocket.is_server_alive(socket_name):
             return None
 
+        # Otherwise, try becoming the server
         message_server = MessagingServer(socket_name=socket_name, parent=self)
 
         # Note that this will only trigger on Linux:
@@ -51,7 +52,7 @@ class MessagingApplication(QApplication):
         if message_server.serverError() == QAbstractSocket.AddressInUseError:
             if retries > 3:
                 # Already retried. Give up trying to create the server.
-                logging.error(f"")
+                logging.error(f"Max retries reached. Giving up on socket takeover")
                 return None
 
             logging.warning(f"Socket for IPC is open, but connection was refused. "
@@ -61,9 +62,9 @@ class MessagingApplication(QApplication):
             message_server = self._init_message_server(socket_name, retries=retries + 1)
 
             if message_server:
-                logging.info("IPC server socket takeover successful.")
+                logging.info("IPC server socket takeover successful")
             else:
-                logging.error("Unable to perform takeover on socket.")
+                logging.error("Unable to perform takeover on socket")
 
         return message_server
 
@@ -161,6 +162,10 @@ class MessagingServer(QLocalServer):
         return socket
 
     def _handle_connection(self) -> None:
+        """Called when a new connection is made to the server.
+
+        Connects handler functions to the different events that can occur with a socket
+        """
         if not self.hasPendingConnections():
             # Probably called from the end of _handle_disconnect()
             return
@@ -299,6 +304,8 @@ class MessagingSocket(QLocalSocket):
         logging.debug(f"Sending message to main instance: {message}")
         self.connectToServer(QLocalSocket.WriteOnly)
 
+        # After QLocalSocket.connectToServer is called, the socket state will be one of
+        # the following unless an error has occurred
         if self.state() not in [
             QLocalSocket.ConnectingState,
             QLocalSocket.ConnectedState
@@ -309,16 +316,21 @@ class MessagingSocket(QLocalSocket):
                 error_string=self.errorString()
             )
 
+        # Wait for connection to establish if it didn't happen immediately
         if not self.waitForConnected(self._CONNECTION_TIMEOUT):
             raise self.ConnectionTimeoutError()
 
+        # Write our message
         self.write(message.encode())
 
+        # Wait for message to be completely written. I guess QLocalSocket.write can
+        # finish early?
         if not self.waitForBytesWritten(self._MESSAGE_SEND_TIMEOUT):
             raise self.MessageSendTimeoutError()
 
         logging.debug(f"Message sending complete")
 
+        # Disconnect from server and wait for disconnect to finish
         self.disconnectFromServer()
         if self.state() != QLocalSocket.UnconnectedState:
             self.waitForDisconnected(self._CONNECTION_TIMEOUT)
@@ -332,7 +344,8 @@ class MessagingSocket(QLocalSocket):
             server_name=server_name,
             parent=typing.cast(QObject, None)
         )
-        tmp_socket.connectToServer(MessagingSocket.ReadOnly)
+
+        tmp_socket.connectToServer(QLocalSocket.ReadOnly)
 
         connection_successful = tmp_socket.waitForConnected(cls._CONNECTION_TIMEOUT)
 
