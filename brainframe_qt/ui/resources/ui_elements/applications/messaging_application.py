@@ -16,16 +16,21 @@ class MessagingApplication(QApplication):
     class UnknownMessageError(RuntimeError):
         ...
 
-    def __init__(self, *, socket_name: str):
+    def __init__(self, *, socket_name: str, force_client=False):
         super().__init__([])
 
         self._known_messages: Dict[IntraInstanceMessage, pyqtSignal] = {}
 
         # Application will either be a server or client (with socket)
-        self.message_server = self._init_message_server(socket_name)
+        if force_client:
+            self.message_server = None
+        else:
+            # Note that this can return None as well
+            self.message_server = self._init_message_server(socket_name)
+
         self.message_socket = (
             self._init_message_socket(socket_name)
-            if not self.message_server
+            if self.message_server is None
             else None
         )
 

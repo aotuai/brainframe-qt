@@ -20,7 +20,15 @@ class SingletonApplication(MessagingApplication):
     new_instance_attempted = pyqtSignal()
 
     def __init__(self, *, internal_name: str):
-        super().__init__(socket_name=internal_name)
+
+        # Try to acquire global lock first
+        self._lock: Optional[InstanceLock]
+        try:
+            self._lock = InstanceLock(internal_name)
+        except InstanceLock.DuplicateInstanceError:
+            self._lock = None
+
+        super().__init__(socket_name=internal_name, force_client=self._lock is None)
 
         self._main_window: Optional[QWidget] = None
 
@@ -32,7 +40,9 @@ class SingletonApplication(MessagingApplication):
         )
         self.new_instance_attempted.connect(self._bring_main_window_to_front)
 
-        self._lock: InstanceLock = self._attempt_get_lock()
+        # We weren't able to acquire a lock before, so we need to close
+        if self._lock is None:
+            self._close_as_duplicate_instance()
 
     @property
     def main_window(self) -> QWidget:
@@ -41,13 +51,6 @@ class SingletonApplication(MessagingApplication):
     @main_window.setter
     def main_window(self, widget: QWidget) -> None:
         self._main_window = widget
-
-    # noinspection PyMethodMayBeStatic
-    def _attempt_get_lock(self) -> "InstanceLock":
-        try:
-            return InstanceLock(self.internal_name)
-        except InstanceLock.DuplicateInstanceError:
-            self._close_as_duplicate_instance()
 
     def _close_as_duplicate_instance(self) -> None:
         logging.warning("Client is already running. Using other instance "
