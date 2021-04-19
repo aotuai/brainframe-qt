@@ -43,7 +43,7 @@ parts:
       # Install PyQt5 commercial and SIP
       PYQT_VERSION=5.12.2
       mkdir pyqt && cd pyqt
-      update-ca-certificates && \
+      sudo update-ca-certificates && \
           wget --quiet https://brainframe-build-resources.s3-us-west-1.amazonaws.com/PyQt5_commercial-$PYQT_VERSION.tar.gz && \
           wget --quiet https://brainframe-build-resources.s3-us-west-1.amazonaws.com/pyqt-commercial.sip
       tar --strip-components=1 -xzf PyQt5_commercial-$PYQT_VERSION.tar.gz
