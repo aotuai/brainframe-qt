@@ -37,6 +37,23 @@ parts:
       # that Poetry removes those instead.
       pip3 install --ignore-installed httplib2 pyyaml
 
+      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
+      mkdir -p $PYTHON_INSTALL_DIR
+
+      # Install PyQt5 commercial and SIP
+      PYQT_VERSION=5.12.2
+      mkdir pyqt && cd pyqt
+      update-ca-certificates && \
+          wget --quiet https://brainframe-build-resources.s3-us-west-1.amazonaws.com/PyQt5_commercial-$PYQT_VERSION.tar.gz && \
+          wget --quiet https://brainframe-build-resources.s3-us-west-1.amazonaws.com/pyqt-commercial.sip
+      tar --strip-components=1 -xzf PyQt5_commercial-$PYQT_VERSION.tar.gz
+      cp /pyqt/pyqt-commercial.sip sip/.
+      python3 configure.py \
+          --confirm-license \
+          --destdir=$PYTHON_INSTALL_DIR \
+          --bindir=/usr/local/bin
+      CPATH=/usr/local/include/python3.6 make install
+
       # Install Poetry
       curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
         | python3 - --version 1.1.4
@@ -45,9 +62,6 @@ parts:
       # Install all Poetry dependencies globally
       poetry config virtualenvs.create false
       poetry install --no-root --no-dev
-
-      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
-      mkdir -p $PYTHON_INSTALL_DIR
 
       # Copy the project
       cp -r brainframe_qt/ $PYTHON_INSTALL_DIR/
@@ -85,7 +99,6 @@ parts:
       # PyQt
       - python3-pyqt5
       - python3-pyqt5.qtsvg
-      - python3-pyqt5.sip
       # PyGObject dependencies
       - libgirepository-1.0-1
       - gstreamer1.0-plugins-base
