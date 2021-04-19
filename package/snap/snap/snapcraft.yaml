@@ -47,7 +47,7 @@ parts:
           wget --quiet https://brainframe-build-resources.s3-us-west-1.amazonaws.com/PyQt5_commercial-$PYQT_VERSION.tar.gz && \
           wget --quiet https://brainframe-build-resources.s3-us-west-1.amazonaws.com/pyqt-commercial.sip
       tar --strip-components=1 -xzf PyQt5_commercial-$PYQT_VERSION.tar.gz
-      cp pyqt/pyqt-commercial.sip sip/.
+      cp pyqt-commercial.sip sip/.
       python3 configure.py \
           --confirm-license \
           --destdir=$PYTHON_INSTALL_DIR \
