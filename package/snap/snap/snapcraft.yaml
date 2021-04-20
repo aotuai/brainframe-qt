@@ -41,16 +41,13 @@ parts:
       mkdir -p $PYTHON_INSTALL_DIR
 
       # Install Poetry
-      curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
-        | python3 - --version 1.1.4
+      curl -sSL --output /tmp/get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
+      python3 /tmp/get-poetry.py --version 1.1.4
       export PATH=$HOME/.poetry/bin:$PATH
 
       # Install all Poetry dependencies globally
       poetry config virtualenvs.create false
       poetry install --no-root --no-dev
-
-      # Install Sip manually
-      poetry run pip install sip
 
       # Copy the project
       cp -r brainframe_qt/ $PYTHON_INSTALL_DIR/
@@ -69,6 +66,7 @@ parts:
       - python3-setuptools
       - python3-distutils
       # Poetry dependencies
+      - curl
       - python3-venv
       - git
       # PyGObject dependencies
