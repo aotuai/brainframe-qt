@@ -18,8 +18,11 @@ IntraInstanceMessage = NewType("IntraInstanceMessage", str)
 class MessagingApplication(QApplication):
     """A QApplication that supports IPC over sockets"""
 
-    class UnknownMessageError(RuntimeError):
-        ...
+    class BaseMessagingError(Exception):
+        pass
+
+    class UnknownMessageError(BaseMessagingError):
+        pass
 
     def __init__(self, *, socket_name: str, force_client=False):
         super().__init__([])
@@ -130,11 +133,11 @@ class MessagingServer(QLocalServer):
     Emits new_message signal with message when a message is received.
     """
 
-    class MessageReadTimeoutError(TimeoutError):
-        ...
+    class MessageReadTimeoutError(MessagingApplication.BaseMessagingError):
+        pass
 
-    class UnknownSocketError(RuntimeError):
-        ...
+    class UnknownSocketError(MessagingApplication.BaseMessagingError):
+        pass
 
     new_message = pyqtSignal(str)
 
@@ -281,13 +284,13 @@ class MessagingServer(QLocalServer):
 
 
 class MessagingSocket(QLocalSocket):
-    class ConnectionTimeoutError(TimeoutError):
-        ...
+    class ConnectionTimeoutError(MessagingApplication.BaseMessagingError):
+        pass
 
-    class MessageSendTimeoutError(TimeoutError):
-        ...
+    class MessageSendTimeoutError(MessagingApplication.BaseMessagingError):
+        pass
 
-    class UnknownConnectionError(RuntimeError):
+    class UnknownConnectionError(MessagingApplication.BaseMessagingError):
         def __init__(self, server_name: str, error: QLocalSocket.LocalSocketError,
                      error_string: str):
             super().__init__(
