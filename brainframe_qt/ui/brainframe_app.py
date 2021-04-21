@@ -4,7 +4,7 @@ import typing
 from traceback import TracebackException
 
 from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, \
-    Qt, pyqtSlot, QCoreApplication
+    Qt, pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs, bf_errors
@@ -44,13 +44,6 @@ class BrainFrameApplication(SingletonApplication):
         gobject_init.start(start_main_loop=False)
 
         self._init_server_settings()
-
-        self.main_window = self._init_main_window()
-
-    # noinspection PyMethodMayBeStatic
-    def _init_main_window(self) -> MainWindow:
-        main_window = MainWindow()
-        return main_window
 
     def _init_translator(self):
         locale = QLocale.system()
@@ -96,9 +89,11 @@ class BrainFrameApplication(SingletonApplication):
             self.splash_screen.showMessage(message)
 
             ExtensionLoader().load_extensions()
-            self.main_window.show()
 
-            self.splash_screen.finish(self.main_window)
+            main_window = MainWindow()
+            main_window.show()
+
+            self.splash_screen.finish(main_window)
 
         super().exec()
 
@@ -175,7 +170,7 @@ class BrainFrameApplication(SingletonApplication):
         """
 
         # noinspection PyProtectedMember
-        return QCoreApplication.instance()._handle_error(*args)
+        return BrainFrameApplication.instance()._handle_error(*args)
 
     # noinspection PyMethodMayBeStatic
     def _init_server_settings(self):
