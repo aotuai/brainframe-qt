@@ -90,10 +90,10 @@ class BrainFrameApplication(SingletonApplication):
 
             ExtensionLoader().load_extensions()
 
-            main_window = MainWindow()
-            main_window.show()
+            self.main_window = MainWindow()
+            self.main_window.show()
 
-            self.splash_screen.finish(main_window)
+            self.splash_screen.finish(self.main_window)
 
         super().exec()
 

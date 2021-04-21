@@ -62,6 +62,12 @@ class SingletonApplication(MessagingApplication):
         sys.exit()
 
     def _bring_main_window_to_front(self) -> None:
+        if self.main_window is None:
+            logging.warning(
+                "Instructed to bring MainWindow to front, but MainWindow was None"
+            )
+            return
+
         current_state = self.main_window.windowState()
         self.main_window.setWindowState(current_state & ~Qt.WindowMinimized)
         self.main_window.raise_()
