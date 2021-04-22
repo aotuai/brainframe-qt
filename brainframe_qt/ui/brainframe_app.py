@@ -28,10 +28,9 @@ from brainframe_qt.util.events import or_events
 from brainframe_qt.util.secret import decrypt
 
 
-class BrainFrameApplication(QApplication):
+class BrainFrameApplication(SingletonApplication):
     def __init__(self):
-        # super().__init__(internal_name="brainframe-qt")
-        super().__init__([])
+        super().__init__(internal_name="brainframe-qt")
 
         self.splash_screen = typing.cast(SplashScreen, None)
 

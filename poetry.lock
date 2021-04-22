@@ -8,7 +8,7 @@ python-versions = "*"
 
 [[package]]
 name = "brainframe-api"
-version = "0.28.0"
+version = "0.28.1"
 description = "Provides a Python wrapper around the BrainFrame REST API."
 category = "main"
 optional = false
@@ -17,7 +17,7 @@ python-versions = ">=3.6,<4.0"
 [package.dependencies]
 dataclasses = {version = ">=0.7,<0.8", markers = "python_version >= \"3.6\" and python_version < \"3.7\""}
 numpy = ">=1.16,<2.0"
-pillow = ">=7.2.0,<8.0.0"
+pillow = ">=7.2,<9.0"
 requests = ">=2.24.0,<3.0.0"
 
 [[package]]
@@ -453,7 +453,7 @@ windows = ["gstly"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "28771fb5c5a9e2f23d5a87ca7c93130bfa34d6816c49abcd282263baf9d66592"
+content-hash = "8317fe4634565b57b8d76791b2c5f9277118315667176907abe3e46c0e9ed198"
 
 [metadata.files]
 altgraph = [
@@ -461,8 +461,8 @@ altgraph = [
     {file = "altgraph-0.17.tar.gz", hash = "sha256:1f05a47122542f97028caf78775a095fbe6a2699b5089de8477eb583167d69aa"},
 ]
 brainframe-api = [
-    {file = "brainframe-api-0.28.0.tar.gz", hash = "sha256:d614beff5b15d28b8e1a5339f3955127ed09c54d671aa251198511a3361b1bd8"},
-    {file = "brainframe_api-0.28.0-py3-none-any.whl", hash = "sha256:67062f3214cc17a02ebdc36a9eb7c691f4fe80c55072e8557bee677db40b6cfc"},
+    {file = "brainframe-api-0.28.1.tar.gz", hash = "sha256:8fd090197a8058114dbcf714afa15c0451d08a43ccf33057ff40c7830e374bed"},
+    {file = "brainframe_api-0.28.1-py3-none-any.whl", hash = "sha256:e5f92f44561362edc21a0af3064c4e8b16239db9352acd36da2acb8fe663becf"},
 ]
 certifi = [
     {file = "certifi-2020.12.5-py2.py3-none-any.whl", hash = "sha256:719a74fb9e33b9bd44cc7f3a8d94bc35e4049deebe19ba7d8e108280cfd59830"},
