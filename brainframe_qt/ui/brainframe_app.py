@@ -32,19 +32,22 @@ class BrainFrameApplication(QApplication):
     def __init__(self, argv: Optional[List] = ()):
         super().__init__(argv or [])
 
-        self.splash_screen = typing.cast(SplashScreen, None)
+        self.splash_screen: Optional[SplashScreen] = None
+        self.main_window: Optional[MainWindow] = None
 
-        # noinspection PyUnresolvedReferences
-        self.aboutToQuit.connect(self._shutdown)
-
-        self.setWindowIcon(QIcon(":/icons/window_icon"))
-        self.setOrganizationDomain('aotu.ai')
-
+        self._init_style()
         self._init_translator()
+
+        self._init_config()
+        self._init_signals()
 
         gobject_init.start(start_main_loop=False)
 
-        self._init_server_settings()
+    def _init_signals(self) -> None:
+        self.aboutToQuit.connect(self._shutdown)
+
+    def _init_style(self) -> None:
+        self.setWindowIcon(QIcon(":/icons/window_icon"))
 
     def _init_translator(self):
         locale = QLocale.system()
@@ -173,7 +176,9 @@ class BrainFrameApplication(QApplication):
         return QApplication.instance()._handle_error(*args)
 
     # noinspection PyMethodMayBeStatic
-    def _init_server_settings(self):
+    def _init_config(self):
+        self.setOrganizationDomain('aotu.ai')
+
         api.set_url(settings.server_url.val())
 
         username = settings.server_username.val()
