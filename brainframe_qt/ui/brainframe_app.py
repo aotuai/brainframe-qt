@@ -4,8 +4,7 @@ from traceback import TracebackException
 from typing import List, Optional
 
 import sys
-from PyQt5.QtCore import QLocale, QMetaObject, QThread, QTranslator, Q_ARG, Qt, \
-    pyqtSlot
+from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QWidget
 
@@ -14,16 +13,12 @@ from gstly import gobject_init
 
 import brainframe_qt
 from brainframe_qt.api_utils import api
-from brainframe_qt.api_utils.streaming.frame_buffer import \
-    SyncedFrameBuffer
+from brainframe_qt.api_utils.streaming.frame_buffer import SyncedFrameBuffer
 from brainframe_qt.extensions.loader import ExtensionLoader
 from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
-# noinspection PyUnresolvedReferences
-from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources, \
-    settings
-from brainframe_qt.ui.resources.paths import text_paths
-from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
-    BrainFrameMessage
+from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources, settings
+from brainframe_qt.ui.resources.i18n.translator import BrainFrameTranslator
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 from brainframe_qt.util.events import or_events
 from brainframe_qt.util.secret import decrypt
 
@@ -35,11 +30,12 @@ class BrainFrameApplication(QApplication):
         self.splash_screen: Optional[SplashScreen] = None
         self.main_window: Optional[MainWindow] = None
 
+        self.translator = self._init_translator()
+
         self._init_style()
-        self._init_translator()
+        self._init_signals()
 
         self._init_config()
-        self._init_signals()
 
         gobject_init.start(start_main_loop=False)
 
@@ -49,36 +45,11 @@ class BrainFrameApplication(QApplication):
     def _init_style(self) -> None:
         self.setWindowIcon(QIcon(":/icons/window_icon"))
 
-    def _init_translator(self):
-        locale = QLocale.system()
-        translator = QTranslator(self)
-        i18n_dir = str(text_paths.i18n_dir)
-        if not translator.load(locale, "brainframe", '_', i18n_dir):
+    def _init_translator(self) -> BrainFrameTranslator:
+        translator = BrainFrameTranslator()
+        self.installTranslator(translator)
 
-            if locale.language() != locale.English:
-                # TODO: Find a better way that doesn't rely on a _list of
-                #  preferences_. If, say, zh_BA (which isn't a thing) is
-                #  used, locale.name() returns zh_CN (which _is_ a real
-                #  language). If there is no `zh` language, we want to throw
-                #  a warning with zh_BA specified, not zh_CN. We settle for
-                #  locale.uiLanguages() because it returns ['zh_BA']. Not
-                #  sure if it might have other entries under some conditions.
-                locale_str = locale.uiLanguages()[0]
-
-                title = "Error loading language files"
-                message = (f"Unable to load translation file for "
-                           f"[{locale_str}] locale. Using English as a "
-                           f"fallback.")
-
-                # noinspection PyTypeChecker
-                BrainFrameMessage.warning(
-                    parent=None,
-                    title=title,
-                    warning=message
-                ).exec()
-
-        else:
-            self.installTranslator(translator)
+        return translator
 
     def exec(self):
 
@@ -332,3 +303,7 @@ class BrainFrameApplication(QApplication):
     # https://stackoverflow.com/a/41921291/8134178
     # noinspection PyUnresolvedReferences
     sys.excepthook = _handle_error_.__func__
+
+
+# Import has side effects
+_ = qt_resources
