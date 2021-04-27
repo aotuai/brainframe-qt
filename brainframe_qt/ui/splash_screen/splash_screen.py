@@ -8,6 +8,8 @@ from brainframe_qt.ui.resources import qt_resources
 
 class SplashScreen(QSplashScreen):
 
+    manually_closed = pyqtSignal()
+
     def __init__(self):
         pixmap = QPixmap(":/images/splash_screen_png")
 
@@ -56,6 +58,11 @@ class SplashScreen(QSplashScreen):
 
         message = self.message() + (self.tr(".") * self.num_periods)
         super().showMessage(message, alignment, color)
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        if event.spontaneous():
+            self.manually_closed.emit()
+        super().closeEvent(event)
 
     def increase_ellipses(self, max_periods=6):
         """Turn the number of periods at the end of the string into a loading

@@ -44,6 +44,9 @@ class BrainFrameApplication(QApplication):
             self._on_connection_state_change
         )
 
+        # If the splashscreen is manually closed, we should just exit
+        self.splash_screen.manually_closed.connect(self.quit)
+
     def _init_style(self) -> None:
         self.setWindowIcon(QIcon(":/icons/window_icon"))
 
