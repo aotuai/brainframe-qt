@@ -28,12 +28,14 @@ class EULADialog(QDialog):
     @classmethod
     def get_agreement(cls, parent):
 
+        license_config = LicensingSettings()
+
         dialog = cls(parent)
         license_md5 = hashlib.md5(dialog.text.encode('utf-8')).hexdigest()
 
         # Check if the license was already agreed to
-        license_accepted = LicensingSettings().eula_accepted
-        license_accepted_md5 = LicensingSettings().eula_md5
+        license_accepted = license_config.eula_accepted
+        license_accepted_md5 = license_config.eula_md5
 
         if license_accepted:
             # Ensure that the license agreed to was the current version
@@ -43,8 +45,8 @@ class EULADialog(QDialog):
         # License has not been accepted. Prompt user
         result = dialog.exec_()
 
-        LicensingSettings().eula_accepted = result
-        LicensingSettings().eula_md5 = license_md5
+        license_config.eula_accepted = result
+        license_config.eula_md5 = license_md5
 
         return result
 
