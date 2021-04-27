@@ -8,8 +8,6 @@ from brainframe_qt.ui.resources import qt_resources
 
 class SplashScreen(QSplashScreen):
 
-    server_config_changed = pyqtSignal()
-
     def __init__(self):
         pixmap = QPixmap(":/images/splash_screen_png")
 
@@ -80,10 +78,7 @@ class SplashScreen(QSplashScreen):
         self.layout().setAlignment(button, Qt.AlignBottom | Qt.AlignRight)
 
     def _open_server_config(self) -> None:
-        server_config = ServerConfigurationDialog(parent=self)
-        server_config.accepted.connect(self.server_config_changed)
-
-        server_config.exec()
+        ServerConfigurationDialog.show_dialog(parent=self)
 
 
 # Import has side-effects

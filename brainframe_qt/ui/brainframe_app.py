@@ -43,9 +43,6 @@ class BrainFrameApplication(QApplication):
         self.connection_manager.connection_state_changed.connect(
             self._on_connection_state_change
         )
-        self.splash_screen.server_config_changed.connect(
-            self._on_server_config_change
-        )
 
     def _init_style(self) -> None:
         self.setWindowIcon(QIcon(":/icons/window_icon"))
@@ -87,12 +84,6 @@ class BrainFrameApplication(QApplication):
             raise RuntimeError(f"Unknown ConnectionState {connection_state}")
 
         self.splash_screen.showMessage(message)
-
-    def _on_server_config_change(self) -> None:
-        if self.main_window:
-            self.main_window.close()
-        self.splash_screen.show()
-        self.connection_manager.credentials_changed()
 
     @pyqtSlot(object, object, object, bool)
     def _handle_error(self, exc_type, exc_obj, exc_tb, other_thread=False):

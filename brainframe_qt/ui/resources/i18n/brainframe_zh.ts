@@ -277,72 +277,72 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="68"/>
+        <location filename="../../brainframe_app.py" line="66"/>
         <source>Successfully connected to server</source>
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="201"/>
+        <location filename="../../brainframe_app.py" line="187"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="73"/>
+        <location filename="../../brainframe_app.py" line="71"/>
         <source>Attempting to communicate with server at {url}</source>
         <translation>尝试连接服务器至{url}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="76"/>
+        <location filename="../../brainframe_app.py" line="74"/>
         <source>Connected to server. Validating license</source>
         <translation>已连接到服务器，正在验证授权</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="78"/>
+        <location filename="../../brainframe_app.py" line="76"/>
         <source>License is expired. Please upload a new one</source>
         <translation>授权出现问题，请重新配置配置</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="80"/>
+        <location filename="../../brainframe_app.py" line="78"/>
         <source>Invalid License. Does the server have a connection to the internet?</source>
         <translation>授权无效，服务器是否已连接到互联网？</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="84"/>
+        <location filename="../../brainframe_app.py" line="82"/>
         <source>No license exists on the server. Please upload one</source>
         <translation>服务器上没有授权。请上传一个</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="103"/>
+        <location filename="../../brainframe_app.py" line="95"/>
         <source>Error</source>
         <translation>错误信息</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="104"/>
+        <location filename="../../brainframe_app.py" line="96"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="116"/>
+        <location filename="../../brainframe_app.py" line="108"/>
         <source>An unhandled exception occurred while communicating with the BrainFrame server</source>
         <translation>与BrainFrame服务器通信时发生未处理的异常</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="120"/>
+        <location filename="../../brainframe_app.py" line="112"/>
         <source>. The client must be closed.</source>
         <translation>。客户端必须关闭。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="210"/>
+        <location filename="../../brainframe_app.py" line="196"/>
         <source>Version Mismatch</source>
         <translation>版本不匹配</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="211"/>
+        <location filename="../../brainframe_app.py" line="197"/>
         <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
         <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="71"/>
+        <location filename="../../brainframe_app.py" line="69"/>
         <source>Collecting server authentication configuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -399,12 +399,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>ClientConfigActivity</name>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.py" line="19"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.py" line="18"/>
         <source>Client Configuration</source>
         <translation>客户端配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.py" line="28"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.py" line="27"/>
         <source>Client</source>
         <translation>客户端配置</translation>
     </message>
@@ -979,12 +979,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>ServerConfigActivity</name>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="30"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="33"/>
         <source>Server Configuration</source>
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="39"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="42"/>
         <source>Server</source>
         <translation>服务器选项</translation>
     </message>
@@ -1022,41 +1022,41 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="78"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="83"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="186"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="193"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="187"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="194"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="191"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="198"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="192"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="199"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="175"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="182"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="176"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="183"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
@@ -1071,42 +1071,42 @@ Please recheck the entered server address.</source>
         <translation>授权配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="229"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="236"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="233"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="240"/>
         <source>Invalid License</source>
         <translation>无效授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="237"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="244"/>
         <source>Missing License</source>
         <translation>未检测到授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="241"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="248"/>
         <source>Connection Successful</source>
         <translation>连接成功</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="244"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="251"/>
         <source>Unknown license state</source>
         <translation>未知的授权状态</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="255"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="262"/>
         <source>Invalid credentials</source>
         <translation>证书无效</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="258"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="265"/>
         <source>Unable to locate server</source>
         <translation>无法连接到服务器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="223"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="230"/>
         <source>&lt;a href=&apos;{license_docs_link}&apos;&gt;Download&lt;/a&gt; a new one</source>
         <translation>&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个新的授权&lt;/a&gt;</translation>
     </message>
@@ -1119,12 +1119,12 @@ Please recheck the entered server address.</source>
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../splash_screen/splash_screen.py" line="78"/>
+        <location filename="../../splash_screen/splash_screen.py" line="72"/>
         <source>Configure</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../../splash_screen/splash_screen.py" line="63"/>
+        <location filename="../../splash_screen/splash_screen.py" line="57"/>
         <source>.</source>
         <translation>。</translation>
     </message>

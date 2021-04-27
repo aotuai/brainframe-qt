@@ -3,9 +3,11 @@ from enum import Enum, auto
 from typing import Optional, Tuple
 
 from PyQt5.QtCore import pyqtSignal, QObject, QThread
+
 from brainframe.api import bf_errors, bf_codecs
+
 from brainframe_qt.api_utils import api
-from brainframe_qt.ui.resources import settings
+from brainframe_qt.ui.resources.config import ServerSettings
 from brainframe_qt.util.secret import decrypt
 
 
@@ -41,6 +43,10 @@ class ConnectionManager(QThread):
         self._connection_state = self.ConnectionState.UNCONFIGURED
         self._connection_configuration: Optional[ConnectionConfiguration] = None
 
+        self.server_settings = ServerSettings()
+
+        self._init_signals()
+
     def run(self) -> None:
         while not self.isInterruptionRequested():
             if self.connection_state is self.ConnectionState.CONNECTED:
@@ -62,6 +68,9 @@ class ConnectionManager(QThread):
                 exc = RuntimeError(f"Unknown ConnectionState {self.connection_state}")
                 self._handle_error(exc)
 
+    def _init_signals(self) -> None:
+        self.server_settings.value_changed.connect(self._handle_settings_change)
+
     @property
     def connection_state(self) -> ConnectionState:
         return self._connection_state
@@ -71,16 +80,14 @@ class ConnectionManager(QThread):
         self._connection_state = connection_state
         self.connection_state_changed.emit(self._connection_state)
 
-    def credentials_changed(self) -> None:
+    def invalidate_config(self) -> None:
         """Force the ConnectionManager to restart the authentication process"""
         self.connection_state = self.ConnectionState.UNCONFIGURED
 
     def _get_configuration(self) -> None:
-        api.set_url(settings.server_url.val())
-
-        url = settings.server_url.val()
-        username = settings.server_username.val()
-        password = settings.server_password.val()
+        url = self.server_settings.server_url
+        username = self.server_settings.server_username
+        password = self.server_settings.server_password
 
         if username and password:
             password = decrypt(password)
@@ -124,6 +131,9 @@ class ConnectionManager(QThread):
     def _handle_error(self, exc: Exception) -> None:
         self.connection_error.emit(exc)
         self.connection_state = self.ConnectionState.RUNTIME_ERROR
+
+    def _handle_settings_change(self, _setting: str, _value: object):
+        self.invalidate_config()
 
 
 @dataclass
