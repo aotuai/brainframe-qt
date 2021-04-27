@@ -3,7 +3,7 @@ import hashlib
 from PyQt5.QtWidgets import QBoxLayout, QDialog, QDialogButtonBox
 from PyQt5.uic import loadUi
 
-from brainframe_qt.ui.resources import settings
+from brainframe_qt.ui.resources.config import LicensingSettings
 from brainframe_qt.ui.resources.paths import qt_ui_paths, text_paths
 
 
@@ -32,8 +32,8 @@ class EULADialog(QDialog):
         license_md5 = hashlib.md5(dialog.text.encode('utf-8')).hexdigest()
 
         # Check if the license was already agreed to
-        license_accepted = settings.client_license_accepted.val()
-        license_accepted_md5 = settings.client_license_md5.val()
+        license_accepted = LicensingSettings().eula_accepted
+        license_accepted_md5 = LicensingSettings().eula_md5
 
         if license_accepted:
             # Ensure that the license agreed to was the current version
@@ -43,8 +43,8 @@ class EULADialog(QDialog):
         # License has not been accepted. Prompt user
         result = dialog.exec_()
 
-        settings.client_license_accepted.set(result)
-        settings.client_license_md5.set(license_md5)
+        LicensingSettings().eula_accepted = result
+        LicensingSettings().eula_md5 = license_md5
 
         return result
 

@@ -305,4 +305,4 @@ class BrainFrameMessage(_BrainFrameMessageUI):
     def _open_server_config(self):
         # Avoid circular imports
         from brainframe_qt.ui.dialogs import ServerConfigurationDialog
-        ServerConfigurationDialog.show_dialog(self)
+        ServerConfigurationDialog.show_dialog(parent=self)

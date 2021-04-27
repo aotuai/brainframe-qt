@@ -2,7 +2,7 @@ import pendulum
 
 from PyQt5.QtWidgets import QLabel, QWidget, QSizePolicy, QHBoxLayout
 
-from brainframe_qt.ui.resources import settings
+from brainframe_qt.ui.resources.config import LocaleSettings
 
 
 class TimeLabelUI(QWidget):
@@ -101,7 +101,7 @@ class TimeLabel(TimeLabelUI):
         self._update()
 
     def _update(self):
-        display_time = self._time.in_tz(settings.get_user_timezone())
+        display_time = self._time.in_tz(LocaleSettings().get_user_timezone())
         self.time_label.setText(display_time.format("HH:mm"))
         if self._display_timezone:
             self.timezone_label.setText(display_time.tzname())

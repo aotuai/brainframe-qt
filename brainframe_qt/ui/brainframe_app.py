@@ -14,9 +14,9 @@ from gstly import gobject_init
 import brainframe_qt
 from brainframe_qt.api_utils import api
 from brainframe_qt.api_utils.connection_manager import ConnectionManager
-from brainframe_qt.api_utils.streaming.frame_buffer import SyncedFrameBuffer
 from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
-from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources, settings
+from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources
+from brainframe_qt.ui.resources.config import ServerSettings
 from brainframe_qt.ui.resources.i18n.translator import BrainFrameTranslator
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
@@ -24,6 +24,7 @@ from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMes
 class BrainFrameApplication(QApplication):
     def __init__(self, argv: Optional[List] = ()):
         super().__init__(argv or [])
+        self.server_config = ServerSettings()
 
         self.connection_manager = ConnectionManager(parent=self)
         self.splash_screen: SplashScreen = SplashScreen()
@@ -71,7 +72,7 @@ class BrainFrameApplication(QApplication):
             message = self.tr("Collecting server authentication configuration")
         elif connection_state is ConnectionManager.ConnectionState.UNCONNECTED:
             message = self.tr("Attempting to communicate with server at {url}")
-            message = message.format(url=settings.server_url.val())
+            message = message.format(url=self.server_config.server_url)
         elif connection_state is ConnectionManager.ConnectionState.LICENSE_UNVALIDATED:
             message = self.tr("Connected to server. Validating license")
         elif connection_state is ConnectionManager.ConnectionState.LICENSE_EXPIRED:
@@ -168,14 +169,8 @@ class BrainFrameApplication(QApplication):
         # noinspection PyProtectedMember
         return QApplication.instance()._handle_error(*args)
 
-    # noinspection PyMethodMayBeStatic
     def _init_config(self):
         self.setOrganizationDomain('aotu.ai')
-
-        SyncedFrameBuffer.set_max_buffer_size(settings.frame_buffer_size.val())
-        settings.frame_buffer_size.subscribe(
-            settings.Topic.CHANGED,
-            SyncedFrameBuffer.set_max_buffer_size)
 
     # noinspection PyMethodMayBeStatic
     def _shutdown(self):

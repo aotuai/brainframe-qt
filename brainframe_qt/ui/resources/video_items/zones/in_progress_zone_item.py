@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 from brainframe.api.bf_codecs import Zone
 
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.base import CircleItem, \
     VideoItem
 from .abstract_zone_item import AbstractZoneItem
@@ -16,7 +16,7 @@ from .zone_region_item import ZoneRegionItem
 class InProgressZoneItem(VideoItem, ABC):
 
     def __init__(self, coords: List[VideoItem.PointType], *,
-                 render_config: QSettingsRenderConfig,
+                 render_config: RenderSettings,
                  parent: Optional[VideoItem] = None,
                  line_style: Qt.PenStyle = Qt.SolidLine):
         super().__init__(parent=parent)
