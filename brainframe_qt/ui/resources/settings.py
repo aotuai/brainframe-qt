@@ -60,6 +60,19 @@ class QSettingsConfig:
         super().__setattr__("_settings", settings_object)
         super().__setattr__("_overrides", {})
 
+    def __delattr__(self, key: str):
+        if key not in typing.get_type_hints(type(self)):
+            raise AttributeError(f"Unknown option '{key}'")
+
+        _settings = super().__getattribute__("_settings")
+        _overrides = super().__getattribute__("_overrides")
+
+        settings_item: Setting = getattr(_settings, key)
+        delattr(_settings, key)
+        delattr(_overrides, key)
+
+        settings_item.delete()
+
     def __getattribute__(self, item: str) -> Any:
         if item not in typing.get_type_hints(type(self)):
             return super().__getattribute__(item)
@@ -87,16 +100,7 @@ class QSettingsConfig:
             settings_item.set(value)
 
 
-# System configuration settings
-server_url = Setting(
-    "http://localhost", type_=str, name="server_url"
-)
-server_username = Setting(
-    None, type_=str, name="server_username"
-)
-server_password = Setting(
-    None, type_=bytes, name="server_password"
-)
+
 # Defines what timezone the user wants times to be displayed in. If this value
 # is an empty string, the current system timezone will be selected.
 user_timezone = Setting(

@@ -10,6 +10,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QWidget
 
 from brainframe.api import bf_codecs, bf_errors
+from brainframe_qt.ui.resources.config.server_config import QSettingsServerConfig
 from gstly import gobject_init
 
 import brainframe_qt
@@ -31,6 +32,7 @@ from brainframe_qt.util.secret import decrypt
 class BrainFrameApplication(QApplication):
     def __init__(self, argv: Optional[List] = ()):
         super().__init__(argv or [])
+        self.server_config = QSettingsServerConfig()
 
         self.splash_screen = typing.cast(SplashScreen, None)
 
@@ -174,10 +176,11 @@ class BrainFrameApplication(QApplication):
 
     # noinspection PyMethodMayBeStatic
     def _init_server_settings(self):
-        api.set_url(settings.server_url.val())
+        self.server_config = QSettingsServerConfig()
+        api.set_url(self.server_config.server_url)
 
-        username = settings.server_username.val()
-        password = settings.server_password.val()
+        username = self.server_config.server_username
+        password = self.server_config.server_password
 
         if username and password:
             password = decrypt(password)
@@ -205,7 +208,7 @@ class BrainFrameApplication(QApplication):
         while not server_visible:
 
             message = self.tr("Attempting to communicate with server at {url}")
-            f_message = message.format(url=settings.server_url.val())
+            f_message = message.format(url=self.server_config.server_url)
             self.splash_screen.showMessage(f_message)
 
             self._wait_for_server()
@@ -238,21 +241,22 @@ class BrainFrameApplication(QApplication):
                                    on_error=on_error)
             worker.start()
 
+            ###### THIS IS BROKEN UNTIL THE MERGE OF #139
             # Wait until we get something back from the server or the user has
             # changed the server URL
-            url_changed_event = settings.server_url.subscribe_as_event(
-                settings.Topic.CHANGED)
-            finished_or_url_changed_event = or_events(
-                worker.finished_event, url_changed_event)
-            self._wait_for_event(finished_or_url_changed_event)
-
-            # The server URL was changed while attempting to connect. Try
-            # again.
-            if url_changed_event.is_set():
-                continue
+            # url_changed_event = settings.server_url.subscribe_as_event(
+            #     settings.Topic.CHANGED)
+            # finished_or_url_changed_event = or_events(
+            #     worker.finished_event, url_changed_event)
+            self._wait_for_event(worker.finished_event)
+            #
+            # # The server URL was changed while attempting to connect. Try
+            # # again.
+            # if url_changed_event.is_set():
+            #     continue
 
             # Connection successful
-            elif worker.err is None:
+            if worker.err is None:
                 break
 
             # Ignore standard communication errors
