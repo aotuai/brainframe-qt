@@ -60,6 +60,9 @@ class SplashScreen(QSplashScreen):
         super().showMessage(message, alignment, color)
 
     def closeEvent(self, event: QCloseEvent) -> None:
+        # If we receive a closeEvent that is spontaneous, that means the event
+        # originated outside of Qt (e.g. from the window manager). This is used to
+        # kill the entire client if the splashscreen is intentionally closed by the user.
         if event.spontaneous():
             self.manually_closed.emit()
         super().closeEvent(event)
