@@ -14,6 +14,7 @@ from gstly import gobject_init
 import brainframe_qt
 from brainframe_qt.api_utils import api
 from brainframe_qt.api_utils.connection_manager import ConnectionManager
+from brainframe_qt.extensions.loader import ExtensionLoader
 from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
 from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources
 from brainframe_qt.ui.resources.config import ServerSettings
@@ -176,12 +177,14 @@ class BrainFrameApplication(QApplication):
         self.connection_manager.terminate()
 
     def _start_ui(self):
-        self.splash_screen.close()
-
         self.verify_version_match()
+
+        ExtensionLoader().load_extensions()
 
         self.main_window = MainWindow()
         self.main_window.show()
+
+        self.splash_screen.finish(self.main_window)
 
     def _verify_eula(self):
         # Ensure that user has accepted license agreement.
