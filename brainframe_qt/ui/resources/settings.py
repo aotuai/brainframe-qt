@@ -21,8 +21,6 @@ class Setting(QObject, Generic[T]):
         self.default = default
         self.type = type_
 
-        self._fake_val: T = None
-
         self._cache: Optional[T] = None
 
     def __set__(self, instance: object, value: T) -> None:
