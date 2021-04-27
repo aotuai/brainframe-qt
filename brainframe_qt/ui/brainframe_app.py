@@ -1,7 +1,8 @@
+import logging
 import typing
 import sys
 from traceback import TracebackException
-from typing import List, Optional
+from typing import Optional
 
 from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot, QDeadlineTimer
 from PyQt5.QtGui import QIcon
@@ -33,12 +34,12 @@ class BrainFrameApplication(SingletonApplication):
         self.translator = self._init_translator()
 
         self._init_style()
-        self._init_signals()
+        self.__init_signals()
 
         self._init_config()
         gobject_init.start(start_main_loop=False)
 
-    def _init_signals(self) -> None:
+    def __init_signals(self) -> None:
         self.aboutToQuit.connect(self._shutdown)
         self.connection_manager.connection_state_changed.connect(
             self._on_connection_state_change

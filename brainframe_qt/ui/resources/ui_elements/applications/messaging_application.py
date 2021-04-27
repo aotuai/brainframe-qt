@@ -42,7 +42,7 @@ class MessagingApplication(QApplication):
             else None
         )
 
-        self._init_signals()
+        self.__init_signals()
 
     def _init_message_server(self, socket_name: str, retries: int = 0) \
             -> Optional["MessagingServer"]:
@@ -86,7 +86,7 @@ class MessagingApplication(QApplication):
 
         return message_socket
 
-    def _init_signals(self) -> None:
+    def __init_signals(self) -> None:
         if self.is_server:
             self.message_server.new_message.connect(self._handle_message)
 
