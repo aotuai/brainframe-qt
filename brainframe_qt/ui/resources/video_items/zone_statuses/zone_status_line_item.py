@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from brainframe.api.bf_codecs import ZoneStatus
 
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.base import VideoItem
 from brainframe_qt.ui.resources.video_items.zones import ZoneLineItem
 from .abstract_zone_status_item import AbstractZoneStatusItem
@@ -10,7 +10,7 @@ from .abstract_zone_status_item import AbstractZoneStatusItem
 class ZoneStatusLineItem(AbstractZoneStatusItem, ZoneLineItem):
 
     def __init__(self, zone_status: ZoneStatus, *,
-                 render_config: QSettingsRenderConfig, parent: VideoItem):
+                 render_config: RenderSettings, parent: VideoItem):
         AbstractZoneStatusItem.__init__(self, zone_status)
         ZoneLineItem.__init__(self, zone_status.zone, color=self.line_color,
                               thickness=self.BORDER_THICKNESS,

@@ -3,16 +3,15 @@ from typing import List, Optional, Tuple
 from PyQt5.QtGui import QColor
 from brainframe.api.bf_codecs import Detection
 
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
-from brainframe_qt.ui.resources.video_items.base import LabelItem, \
-    VideoItem
+from brainframe_qt.ui.resources.config import RenderSettings
+from brainframe_qt.ui.resources.video_items.base import LabelItem, VideoItem
 
 
 class DetectionLabelItem(LabelItem):
     MIN_WIDTH = 150
 
     def __init__(self, detection: Detection, color: QColor,
-                 *, render_config: QSettingsRenderConfig, parent: VideoItem):
+                 *, render_config: RenderSettings, parent: VideoItem):
 
         self.detection = detection
         self.render_config = render_config

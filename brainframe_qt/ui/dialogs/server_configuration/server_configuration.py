@@ -14,7 +14,7 @@ from brainframe_qt.extensions import DialogActivity
 from brainframe_qt.ui.dialogs.license_dialog.license_dialog import \
     LicenseDialog
 from brainframe_qt.ui.resources import QTAsyncWorker
-from brainframe_qt.ui.resources.config.server_config import QSettingsServerConfig
+from brainframe_qt.ui.resources.config import ServerSettings
 from brainframe_qt.ui.resources.links.documentation import \
     LICENSE_DOCS_LINK
 from brainframe_qt.ui.resources.paths import qt_ui_paths
@@ -49,9 +49,7 @@ class ServerConfigurationDialog(QDialog):
 
         loadUi(qt_ui_paths.server_configuration_ui, self)
 
-        self.server_config: QSettingsServerConfig = (
-            QApplication.instance().server_config
-        )
+        self.server_config = ServerSettings()
 
         self._init_ui()
 
@@ -82,13 +80,9 @@ class ServerConfigurationDialog(QDialog):
                     decrypt_password = decrypt(settings_password)
                     self.server_password_line_edit.setText(decrypt_password)
                 except ValueError:
-                    message = self.tr(
-                        "Invalid password saved in QSettings. Clearing.")
+                    message = self.tr("Invalid password saved in QSettings. Clearing.")
                     logging.error(message)
-                    try:
-                        del self.server_config.server_password
-                    except AttributeError:
-                        pass
+                    del self.server_config.server_password
 
         use_auth = bool(self.server_config.server_username)
         self._show_authentication_fields(use_auth)
@@ -176,13 +170,11 @@ class ServerConfigurationDialog(QDialog):
                     # within this repo.
                     encrypted = encrypt(self.server_password)
                     self.server_config.server_password = encrypted
-            if not self.authentication_enabled or not self.save_password:
-                try:
-                    del self.server_config.server_password
-                except AttributeError:
-                    pass
-
-            self.server_config.save_to_disk()
+            if not self.authentication_enabled:
+                del self.server_config.server_username
+                del self.server_config.server_password
+            if not self.save_password:
+                del self.server_config.server_password
 
         try:
             api.set_url(self.server_address)
