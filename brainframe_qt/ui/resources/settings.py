@@ -21,11 +21,9 @@ class Setting(QObject, Generic[T]):
         self.default = default
         self.type = type_
 
-        self._fake_val: T = None
-
         self._cache: Optional[T] = None
 
-    def __set__(self, instance: object, value: T) -> None:
+    def __set__(self, _instance: object, value: T) -> None:
         prev_value = self._cache
 
         _settings.setValue(self.name, value)
@@ -34,13 +32,13 @@ class Setting(QObject, Generic[T]):
         if value != prev_value:
             self.value_changed.emit(value)
 
-    def __get__(self, instance, owner) -> T:
+    def __get__(self, _instance, owner) -> T:
         if self._cache is not None:
             return self._cache
 
         return _settings.value(self.name, defaultValue=self.default, type=self.type)
 
-    def __delete__(self, instance: object) -> None:
+    def __delete__(self, _instance: object) -> None:
         prev_value = self._cache
 
         _settings.remove(self.name)
