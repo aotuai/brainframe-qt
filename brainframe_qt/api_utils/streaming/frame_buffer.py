@@ -1,9 +1,11 @@
+import typing
 from threading import RLock
 from typing import ClassVar, List, Optional
 from weakref import WeakSet
 
 from brainframe_qt.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrame
+from brainframe_qt.ui.resources.config import StreamingSettings
 
 
 class SyncedFrameBuffer:
@@ -24,8 +26,16 @@ class SyncedFrameBuffer:
         self._buffer: List[ZoneStatusFrame] = []
         self._instances.add(self)
 
+        self.streaming_settings = StreamingSettings()
+        self.set_max_buffer_size(self.streaming_settings.frame_buffer_size)
+
+        self._init_signals()
+
     def __len__(self) -> int:
         return len(self._buffer)
+
+    def _init_signals(self) -> None:
+        self.streaming_settings.value_changed.connect(self._handle_settings_change)
 
     def add_frame(self, frame: ZoneStatusFrame) -> None:
         with self._buffer_lock:
@@ -109,3 +119,8 @@ class SyncedFrameBuffer:
     def _total_length(self) -> int:
         with self._buffer_lock:
             return sum(map(len, self._instances))
+
+    def _handle_settings_change(self, setting: str, value: object):
+        if setting == "frame_buffer_size":
+            value = typing.cast(int, value)
+            self.set_max_buffer_size(value)

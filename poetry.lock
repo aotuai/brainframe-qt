@@ -157,21 +157,6 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
-name = "pubsus"
-version = "0.1.0"
-description = ""
-category = "main"
-optional = false
-python-versions = "^3.6"
-develop = false
-
-[package.source]
-type = "git"
-url = "https://github.com/aotuai/pubsus.git"
-reference = "main"
-resolved_reference = "9cd2675a3e05c8f6b2756bd2580be03ddde2130e"
-
-[[package]]
 name = "pycairo"
 version = "1.20.0"
 description = "Python interface for cairo"
@@ -422,7 +407,7 @@ windows = ["gstly"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "2f6e15f79382e7d1b51f5f4caea0429513d604bff7da1baca475b4b6e16b75a6"
+content-hash = "b58039c55aece159c5a3d9229541517ccc44df67345c65932b69669f9b236a57"
 
 [metadata.files]
 altgraph = [
@@ -586,7 +571,6 @@ pillow = [
     {file = "Pillow-7.2.0-pp36-pypy36_pp73-win32.whl", hash = "sha256:25930fadde8019f374400f7986e8404c8b781ce519da27792cbe46eabec00c4d"},
     {file = "Pillow-7.2.0.tar.gz", hash = "sha256:97f9e7953a77d5a70f49b9a48da7776dc51e9b738151b22dacf101641594a626"},
 ]
-pubsus = []
 pycairo = [
     {file = "pycairo-1.20.0-cp36-cp36m-win32.whl", hash = "sha256:e5a3433690c473e073a9917dc8f1fc7dc8b9af7b201bf372894b8ad70d960c6d"},
     {file = "pycairo-1.20.0-cp36-cp36m-win_amd64.whl", hash = "sha256:a942614923b88ae75c794506d5c426fba9c46a055d3fdd3b8db7046b75c079cc"},

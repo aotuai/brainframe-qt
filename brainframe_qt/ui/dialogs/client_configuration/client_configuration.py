@@ -3,8 +3,7 @@ from PyQt5.QtWidgets import QApplication, QDialog, QWidget
 from PyQt5.uic import loadUi
 
 from brainframe_qt.extensions import DialogActivity
-from brainframe_qt.ui.resources import settings
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
@@ -35,7 +34,7 @@ class RenderConfiguration(QDialog):
 
         loadUi(qt_ui_paths.client_configuration_ui, self)
 
-        self.render_config = QSettingsRenderConfig()
+        self.render_config = RenderSettings()
 
         self.detections_checkbox.setChecked(self.render_config.draw_detections)
         self.polygon_radio_button.setChecked(self.render_config.use_polygons)
@@ -82,5 +81,3 @@ class RenderConfiguration(QDialog):
             = dialog.recognition_checkbox.isChecked()
         dialog.render_config.show_extra_data \
             = dialog.extra_data_checkbox.isChecked()
-
-        dialog.render_config.save_to_disk()
