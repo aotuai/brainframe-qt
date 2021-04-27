@@ -1,13 +1,14 @@
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal
+from PyQt5.QtGui import QPixmap, QCloseEvent
 from PyQt5.QtWidgets import QSplashScreen, QVBoxLayout, QPushButton
 
 from brainframe_qt.ui.dialogs import ServerConfigurationDialog
-# noinspection PyUnresolvedReferences
 from brainframe_qt.ui.resources import qt_resources
 
 
 class SplashScreen(QSplashScreen):
+
+    server_config_changed = pyqtSignal()
 
     def __init__(self):
         pixmap = QPixmap(":/images/splash_screen_png")
@@ -73,8 +74,17 @@ class SplashScreen(QSplashScreen):
         button = QPushButton(self.tr("Configure"))
         button.setFocusPolicy(Qt.NoFocus)
         # noinspection PyUnresolvedReferences
-        button.clicked.connect(
-            lambda: ServerConfigurationDialog.show_dialog(self))
+        button.clicked.connect(self._open_server_config)
 
         self.layout().addWidget(button)
         self.layout().setAlignment(button, Qt.AlignBottom | Qt.AlignRight)
+
+    def _open_server_config(self) -> None:
+        server_config = ServerConfigurationDialog(parent=self)
+        server_config.accepted.connect(self.server_config_changed)
+
+        server_config.exec()
+
+
+# Import has side-effects
+_ = qt_resources

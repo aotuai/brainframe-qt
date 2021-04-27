@@ -1,33 +1,32 @@
 import logging
 import typing
+import sys
 from traceback import TracebackException
 from typing import List, Optional
 
-import sys
-from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot
+from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot, QDeadlineTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QWidget
 
-from brainframe.api import bf_codecs, bf_errors
+from brainframe.api import bf_errors
 from gstly import gobject_init
 
 import brainframe_qt
 from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils.connection_manager import ConnectionManager
 from brainframe_qt.api_utils.streaming.frame_buffer import SyncedFrameBuffer
-from brainframe_qt.extensions.loader import ExtensionLoader
 from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
 from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources, settings
 from brainframe_qt.ui.resources.i18n.translator import BrainFrameTranslator
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
-from brainframe_qt.util.events import or_events
-from brainframe_qt.util.secret import decrypt
 
 
 class BrainFrameApplication(QApplication):
     def __init__(self, argv: Optional[List] = ()):
         super().__init__(argv or [])
 
-        self.splash_screen: Optional[SplashScreen] = None
+        self.connection_manager = ConnectionManager(parent=self)
+        self.splash_screen: SplashScreen = SplashScreen()
         self.main_window: Optional[MainWindow] = None
 
         self.translator = self._init_translator()
@@ -36,11 +35,16 @@ class BrainFrameApplication(QApplication):
         self._init_signals()
 
         self._init_config()
-
         gobject_init.start(start_main_loop=False)
 
     def _init_signals(self) -> None:
         self.aboutToQuit.connect(self._shutdown)
+        self.connection_manager.connection_state_changed.connect(
+            self._on_connection_state_change
+        )
+        self.splash_screen.server_config_changed.connect(
+            self._on_server_config_change
+        )
 
     def _init_style(self) -> None:
         self.setWindowIcon(QIcon(":/icons/window_icon"))
@@ -52,24 +56,42 @@ class BrainFrameApplication(QApplication):
         return translator
 
     def exec(self):
-
         self._verify_eula()
-
-        # Show splash screen while waiting for server connection
-        with SplashScreen() as self.splash_screen:
-            self._connect_to_server()
-            self._verify_version_match()
-
-            message = self.tr("Successfully connected to server. Starting UI")
-            self.splash_screen.showMessage(message)
-
-            ExtensionLoader().load_extensions()
-
-            main_window = MainWindow()
-            self.splash_screen.finish(main_window)
-            main_window.show()
-
+        self.connection_manager.start()
+        self.splash_screen.show()
         super().exec()
+
+    def _on_connection_state_change(
+        self, connection_state: ConnectionManager.ConnectionState
+    ):
+        if connection_state is ConnectionManager.ConnectionState.CONNECTED:
+            message = self.tr("Successfully connected to server")
+            self._start_ui()
+        elif connection_state is ConnectionManager.ConnectionState.UNCONFIGURED:
+            message = self.tr("Collecting server authentication configuration")
+        elif connection_state is ConnectionManager.ConnectionState.UNCONNECTED:
+            message = self.tr("Attempting to communicate with server at {url}")
+            message = message.format(url=settings.server_url.val())
+        elif connection_state is ConnectionManager.ConnectionState.LICENSE_UNVALIDATED:
+            message = self.tr("Connected to server. Validating license")
+        elif connection_state is ConnectionManager.ConnectionState.LICENSE_EXPIRED:
+            message = self.tr("License is expired. Please upload a new one")
+        elif connection_state is ConnectionManager.ConnectionState.LICENSE_INVALID:
+            message = self.tr(
+                "Invalid License. Does the server have a connection to the internet?"
+            )
+        elif connection_state is ConnectionManager.ConnectionState.LICENSE_MISSING:
+            message = self.tr("No license exists on the server. Please upload one")
+        else:
+            raise RuntimeError(f"Unknown ConnectionState {connection_state}")
+
+        self.splash_screen.showMessage(message)
+
+    def _on_server_config_change(self) -> None:
+        if self.main_window:
+            self.main_window.close()
+        self.splash_screen.show()
+        self.connection_manager.credentials_changed()
 
     @pyqtSlot(object, object, object, bool)
     def _handle_error(self, exc_type, exc_obj, exc_tb, other_thread=False):
@@ -150,15 +172,6 @@ class BrainFrameApplication(QApplication):
     def _init_config(self):
         self.setOrganizationDomain('aotu.ai')
 
-        api.set_url(settings.server_url.val())
-
-        username = settings.server_username.val()
-        password = settings.server_password.val()
-
-        if username and password:
-            password = decrypt(password)
-            api.set_credentials((username, password))
-
         SyncedFrameBuffer.set_max_buffer_size(settings.frame_buffer_size.val())
         settings.frame_buffer_size.subscribe(
             settings.Topic.CHANGED,
@@ -169,105 +182,25 @@ class BrainFrameApplication(QApplication):
         api.close()
         gobject_init.close()
 
+        self.connection_manager.requestInterruption()
+        self.connection_manager.wait(QDeadlineTimer(5))  # seconds
+        self.connection_manager.terminate()
+
+    def _start_ui(self):
+        self.splash_screen.close()
+
+        self.verify_version_match()
+
+        self.main_window = MainWindow()
+        self.main_window.show()
+
     def _verify_eula(self):
         # Ensure that user has accepted license agreement.
         # Otherwise close program
         if not EULADialog.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
 
-    def _connect_to_server(self):
-
-        server_visible = False
-        while not server_visible:
-
-            message = self.tr("Attempting to communicate with server at {url}")
-            f_message = message.format(url=settings.server_url.val())
-            self.splash_screen.showMessage(f_message)
-
-            self._wait_for_server()
-            server_visible = True
-
-            message = self.tr("Connected to server. Validating license")
-            self.splash_screen.showMessage(message)
-
-            connected = False
-            while not connected:
-                try:
-                    self._wait_for_valid_license()
-                except (bf_errors.ServerNotReadyError,
-                        bf_errors.UnauthorizedError):
-                    # Server address change or disappeared for whatever reason
-                    # Go back to waiting for server
-                    server_visible = False
-                else:
-                    # Successfully connected
-                    connected = True
-
-    def _wait_for_server(self):
-
-        def on_error(_):
-            # Do nothing. We'll handle the error using worker.err
-            pass
-
-        while True:
-            worker = QTAsyncWorker(self, api.wait_for_server_initialization,
-                                   on_error=on_error)
-            worker.start()
-
-            # Wait until we get something back from the server or the user has
-            # changed the server URL
-            url_changed_event = settings.server_url.subscribe_as_event(
-                settings.Topic.CHANGED)
-            finished_or_url_changed_event = or_events(
-                worker.finished_event, url_changed_event)
-            self._wait_for_event(finished_or_url_changed_event)
-
-            # The server URL was changed while attempting to connect. Try
-            # again.
-            if url_changed_event.is_set():
-                continue
-
-            # Connection successful
-            elif worker.err is None:
-                break
-
-            # Ignore standard communication errors
-            elif not isinstance(worker.err, bf_errors.ServerNotReadyError):
-                raise worker.err
-
-    def _wait_for_valid_license(self):
-        license_valid = False
-        while not license_valid:
-            def on_error(_):
-                # Do nothing. We'll handle the error using worker.err
-                pass
-
-            worker = QTAsyncWorker(self, api.get_license_info,
-                                   on_error=on_error)
-            worker.start()
-            self._wait_for_event(worker.finished_event)
-            if worker.err is not None:
-                raise worker.err
-
-            # noinspection PyTypeHints
-            worker.data: bf_codecs.LicenseInfo
-            if worker.data.state is bf_codecs.LicenseInfo.State.VALID:
-                license_valid = True
-                message = self.tr("Successfully connected to server")
-            elif worker.data.state is bf_codecs.LicenseInfo.State.EXPIRED:
-                message = self.tr("License is expired. Please upload a new "
-                                  "one")
-            elif worker.data.state is bf_codecs.LicenseInfo.State.INVALID:
-                message = self.tr("Invalid License. Does the server have a "
-                                  "connection to the internet?")
-            elif worker.data.state is bf_codecs.LicenseInfo.State.MISSING:
-                message = self.tr("No license exists on the server. Please "
-                                  "upload one")
-            else:
-                message = self.tr("Unknown issue with license. Contact Aotu")
-            self.splash_screen.showMessage(message)
-
-    def _verify_version_match(self):
+    def verify_version_match(self):
         worker = QTAsyncWorker(self, api.version)
         worker.start()
         self._wait_for_event(worker.finished_event)
