@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 from brainframe.api.bf_codecs import ZoneStatus
 
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.base import VideoItem
 from brainframe_qt.ui.resources.video_items.zones import ZoneLineItem, \
     ZoneRegionItem
@@ -14,7 +14,7 @@ from .zone_status_region_item import ZoneStatusRegionItem
 class ZoneStatusItem(VideoItem):
 
     def __init__(self, zone_status: ZoneStatus, *,
-                 render_config: QSettingsRenderConfig,
+                 render_config: RenderSettings,
                  parent: Optional[VideoItem] = None):
 
         super().__init__(parent=parent)

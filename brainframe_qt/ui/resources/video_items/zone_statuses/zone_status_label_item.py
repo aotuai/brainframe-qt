@@ -5,7 +5,7 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 from brainframe.api.bf_codecs import ZoneStatus
 
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.base import LabelItem, \
     VideoItem
 from .abstract_zone_status_item import AbstractZoneStatusItem
@@ -16,7 +16,7 @@ class ZoneStatusLabelItem(AbstractZoneStatusItem, LabelItem):
     ALERTING_COLOR = QColor(255, 125, 0)
 
     def __init__(self, zone_status: ZoneStatus, *,
-                 render_config: QSettingsRenderConfig, parent: VideoItem):
+                 render_config: RenderSettings, parent: VideoItem):
         AbstractZoneStatusItem.__init__(self, zone_status)
         LabelItem.__init__(self, self.text, self._zone_pos,
                            color=self._background_color,

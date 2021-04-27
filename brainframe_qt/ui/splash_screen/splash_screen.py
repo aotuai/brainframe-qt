@@ -74,7 +74,7 @@ class SplashScreen(QSplashScreen):
         button.setFocusPolicy(Qt.NoFocus)
         # noinspection PyUnresolvedReferences
         button.clicked.connect(
-            lambda: ServerConfigurationDialog.show_dialog(self))
+            lambda: ServerConfigurationDialog.show_dialog(parent=self))
 
         self.layout().addWidget(button)
         self.layout().setAlignment(button, Qt.AlignBottom | Qt.AlignRight)

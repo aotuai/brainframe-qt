@@ -12,25 +12,22 @@ from gstly import gobject_init
 
 import brainframe_qt
 from brainframe_qt.api_utils import api
-from brainframe_qt.api_utils.streaming.frame_buffer import \
-    SyncedFrameBuffer
 from brainframe_qt.extensions.loader import ExtensionLoader
 from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
 # noinspection PyUnresolvedReferences
-from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources, \
-    settings
+from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources
+from brainframe_qt.ui.resources.config import ServerSettings
 from brainframe_qt.ui.resources.paths import text_paths
 from brainframe_qt.ui.resources.ui_elements.applications import \
     SingletonApplication
-from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
-    BrainFrameMessage
-from brainframe_qt.util.events import or_events
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 from brainframe_qt.util.secret import decrypt
 
 
 class BrainFrameApplication(SingletonApplication):
     def __init__(self):
         super().__init__(internal_name="brainframe-qt")
+        self.server_config = ServerSettings()
 
         self.splash_screen = typing.cast(SplashScreen, None)
 
@@ -185,19 +182,14 @@ class BrainFrameApplication(SingletonApplication):
 
     # noinspection PyMethodMayBeStatic
     def _init_server_settings(self):
-        api.set_url(settings.server_url.val())
+        api.set_url(self.server_config.server_url)
 
-        username = settings.server_username.val()
-        password = settings.server_password.val()
+        username = self.server_config.server_username
+        password = self.server_config.server_password
 
         if username and password:
             password = decrypt(password)
             api.set_credentials((username, password))
-
-        SyncedFrameBuffer.set_max_buffer_size(settings.frame_buffer_size.val())
-        settings.frame_buffer_size.subscribe(
-            settings.Topic.CHANGED,
-            SyncedFrameBuffer.set_max_buffer_size)
 
     # noinspection PyMethodMayBeStatic
     def _shutdown(self):
@@ -216,7 +208,7 @@ class BrainFrameApplication(SingletonApplication):
         while not server_visible:
 
             message = self.tr("Attempting to communicate with server at {url}")
-            f_message = message.format(url=settings.server_url.val())
+            f_message = message.format(url=self.server_config.server_url)
             self.splash_screen.showMessage(f_message)
 
             self._wait_for_server()
@@ -248,22 +240,10 @@ class BrainFrameApplication(SingletonApplication):
             worker = QTAsyncWorker(self, api.wait_for_server_initialization,
                                    on_error=on_error)
             worker.start()
-
-            # Wait until we get something back from the server or the user has
-            # changed the server URL
-            url_changed_event = settings.server_url.subscribe_as_event(
-                settings.Topic.CHANGED)
-            finished_or_url_changed_event = or_events(
-                worker.finished_event, url_changed_event)
-            self._wait_for_event(finished_or_url_changed_event)
-
-            # The server URL was changed while attempting to connect. Try
-            # again.
-            if url_changed_event.is_set():
-                continue
+            self._wait_for_event(worker.finished_event)
 
             # Connection successful
-            elif worker.err is None:
+            if worker.err is None:
                 break
 
             # Ignore standard communication errors
