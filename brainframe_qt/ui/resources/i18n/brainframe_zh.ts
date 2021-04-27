@@ -277,9 +277,9 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="85"/>
-        <source>Successfully connected to server. Starting UI</source>
-        <translation>连接服务器成功，正在启动UI</translation>
+        <location filename="../../brainframe_app.py" line="69"/>
+        <source>Successfully connected to server</source>
+        <translation>连接服务器成功</translation>
     </message>
     <message>
         <location filename="../../brainframe_app.py" line="203"/>
@@ -302,7 +302,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="273"/>
+        <location filename="../../brainframe_app.py" line="79"/>
         <source>License is expired. Please upload a new one</source>
         <translation>授权出现问题，请重新配置配置</translation>
     </message>
@@ -322,7 +322,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>授权出现未知问题，请联系Aotu</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="151"/>
+        <location filename="../../brainframe_app.py" line="98"/>
         <source>Error</source>
         <translation>错误信息</translation>
     </message>
@@ -350,6 +350,11 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <location filename="../../brainframe_app.py" line="293"/>
         <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
         <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="72"/>
+        <source>Collecting server authentication configuration</source>
+        <translation>正在收集服务器身份验证配置</translation>
     </message>
 </context>
 <context>
@@ -1124,12 +1129,12 @@ Please recheck the entered server address.</source>
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../splash_screen/splash_screen.py" line="73"/>
+        <location filename="../../splash_screen/splash_screen.py" line="82"/>
         <source>Configure</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../../splash_screen/splash_screen.py" line="58"/>
+        <location filename="../../splash_screen/splash_screen.py" line="59"/>
         <source>.</source>
         <translation>。</translation>
     </message>
