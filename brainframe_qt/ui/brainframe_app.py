@@ -4,7 +4,7 @@ import sys
 from traceback import TracebackException
 from typing import List, Optional
 
-from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot, QDeadlineTimer
+from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QWidget
 
@@ -173,7 +173,7 @@ class BrainFrameApplication(QApplication):
         gobject_init.close()
 
         self.connection_manager.requestInterruption()
-        self.connection_manager.wait(QDeadlineTimer(5))  # seconds
+        self.connection_manager.wait(5000)  # milliseconds
         self.connection_manager.terminate()
 
     def _start_ui(self):
