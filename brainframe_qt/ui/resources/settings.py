@@ -1,4 +1,5 @@
 import sys
+from abc import ABCMeta
 from typing import Generic, Optional, TypeVar, Type
 
 from PyQt5.QtCore import QSettings, QObject, pyqtSignal
@@ -11,7 +12,13 @@ _settings = QSettings(
     'brainframe')
 
 
-class Setting(QObject, Generic[T]):
+# Hack to allow class to inherit from both QObject (type=sip.wrappertype) and
+# abc.ABC (type=type). No longer necessary with PEP 560 in Python >=3.7
+class QABCMeta(type(QObject), ABCMeta):
+    pass
+
+
+class Setting(QObject, Generic[T], metaclass=QABCMeta):
     value_changed = pyqtSignal(object)
     value_deleted = pyqtSignal()
 
