@@ -177,14 +177,16 @@ class BrainFrameApplication(QApplication):
         self.connection_manager.terminate()
 
     def _start_ui(self):
-        self.verify_version_match()
+        # Start the client if not already started
+        if not self.main_window:
+            self.verify_version_match()
 
-        ExtensionLoader().load_extensions()
+            ExtensionLoader().load_extensions()
 
-        self.main_window = MainWindow()
-        self.main_window.show()
+            self.main_window = MainWindow()
+            self.main_window.show()
 
-        self.splash_screen.finish(self.main_window)
+            self.splash_screen.finish(self.main_window)
 
     def _verify_eula(self):
         # Ensure that user has accepted license agreement.
