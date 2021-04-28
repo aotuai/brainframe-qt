@@ -90,6 +90,7 @@ parts:
       - gstreamer1.0-plugins-base
       - gstreamer1.0-plugins-good
       - gstreamer1.0-libav
+      - gstreamer1.0-vaapi
       - gir1.2-gst-plugins-base-1.0
     build-environment:
       # https://bugs.launchpad.net/snapcraft/+bug/1802345
@@ -107,3 +108,4 @@ apps:
     environment:
       PYTHONPATH: "$SNAP/usr/src/brainframe-api:$SNAP/usr/local/lib/python3.6/site-packages:$PYTHONPATH"
       QT_STYLE_OVERRIDE: "adwaita-dark"
+      LIBVA_DRIVERS_PATH: "$SNAP/usr/lib/x86_64-linux-gnu/dri"
