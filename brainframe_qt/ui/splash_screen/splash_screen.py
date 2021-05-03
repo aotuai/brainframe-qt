@@ -1,13 +1,14 @@
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal
+from PyQt5.QtGui import QPixmap, QCloseEvent
 from PyQt5.QtWidgets import QSplashScreen, QVBoxLayout, QPushButton
 
 from brainframe_qt.ui.dialogs import ServerConfigurationDialog
-# noinspection PyUnresolvedReferences
 from brainframe_qt.ui.resources import qt_resources
 
 
 class SplashScreen(QSplashScreen):
+
+    manually_closed = pyqtSignal()
 
     def __init__(self):
         pixmap = QPixmap(":/images/splash_screen_png")
@@ -58,6 +59,14 @@ class SplashScreen(QSplashScreen):
         message = self.message() + (self.tr(".") * self.num_periods)
         super().showMessage(message, alignment, color)
 
+    def closeEvent(self, event: QCloseEvent) -> None:
+        # If we receive a closeEvent that is spontaneous, that means the event
+        # originated outside of Qt (e.g. from the window manager). This is used to
+        # kill the entire client if the splashscreen is intentionally closed by the user.
+        if event.spontaneous():
+            self.manually_closed.emit()
+        super().closeEvent(event)
+
     def increase_ellipses(self, max_periods=6):
         """Turn the number of periods at the end of the string into a loading
         pattern
@@ -72,9 +81,14 @@ class SplashScreen(QSplashScreen):
         self.setLayout(QVBoxLayout())
         button = QPushButton(self.tr("Configure"))
         button.setFocusPolicy(Qt.NoFocus)
-        # noinspection PyUnresolvedReferences
-        button.clicked.connect(
-            lambda: ServerConfigurationDialog.show_dialog(parent=self))
+        button.clicked.connect(self._open_server_config)
 
         self.layout().addWidget(button)
         self.layout().setAlignment(button, Qt.AlignBottom | Qt.AlignRight)
+
+    def _open_server_config(self) -> None:
+        ServerConfigurationDialog.show_dialog(parent=self)
+
+
+# Import has side-effects
+_ = qt_resources
