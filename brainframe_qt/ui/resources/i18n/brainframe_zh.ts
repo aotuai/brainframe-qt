@@ -282,7 +282,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="205"/>
+        <location filename="../../brainframe_app.py" line="203"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -312,32 +312,32 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>服务器上没有授权。请上传一个</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="147"/>
+        <location filename="../../brainframe_app.py" line="145"/>
         <source>Error</source>
         <translation>错误信息</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="148"/>
+        <location filename="../../brainframe_app.py" line="146"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="155"/>
+        <location filename="../../brainframe_app.py" line="153"/>
         <source>An unhandled exception occurred while communicating with the BrainFrame server</source>
         <translation>与BrainFrame服务器通信时发生未处理的异常</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="159"/>
+        <location filename="../../brainframe_app.py" line="157"/>
         <source>. The client must be closed.</source>
         <translation>。客户端必须关闭。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="214"/>
+        <location filename="../../brainframe_app.py" line="212"/>
         <source>Version Mismatch</source>
         <translation>版本不匹配</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="215"/>
+        <location filename="../../brainframe_app.py" line="213"/>
         <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
         <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
     </message>
