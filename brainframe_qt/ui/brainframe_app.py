@@ -2,11 +2,11 @@ import logging
 import typing
 import sys
 from traceback import TracebackException
-from typing import List, Optional
+from typing import Optional
 
 from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QWidget
 
 from brainframe.api import bf_errors
 from gstly import gobject_init
@@ -19,12 +19,13 @@ from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
 from brainframe_qt.ui.resources import qt_resources
 from brainframe_qt.ui.resources.config import ServerSettings
 from brainframe_qt.ui.resources.i18n.translator import BrainFrameTranslator
+from brainframe_qt.ui.resources.ui_elements.applications import SingletonApplication
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
 
-class BrainFrameApplication(QApplication):
-    def __init__(self, argv: Optional[List] = ()):
-        super().__init__(argv or [])
+class BrainFrameApplication(SingletonApplication):
+    def __init__(self):
+        super().__init__(internal_name="brainframe-qt")
         self.server_config = ServerSettings()
 
         self.connection_manager = ConnectionManager(parent=self)
@@ -34,12 +35,12 @@ class BrainFrameApplication(QApplication):
         self.translator = self._init_translator()
 
         self._init_style()
-        self._init_signals()
+        self.__init_signals()
 
         self._init_config()
         gobject_init.start(start_main_loop=False)
 
-    def _init_signals(self) -> None:
+    def __init_signals(self) -> None:
         self.aboutToQuit.connect(self._shutdown)
         self.connection_manager.connection_state_changed.connect(
             self._on_connection_state_change
@@ -93,46 +94,9 @@ class BrainFrameApplication(QApplication):
     def _handle_error(self, exc_type, exc_obj, exc_tb, other_thread=False):
         """Shows a dialog when an error occurs"""
 
-        # Check if exception occurred in the UI thread
-        if QThread.currentThread() is self.thread():
+        # Make sure the exception occurred in the UI thread
+        if QThread.currentThread() is not self.thread():
 
-            title = self.tr("Error")
-            description = self.tr("An exception has occurred")
-            buttons = BrainFrameMessage.PresetButtons.EXCEPTION
-            traceback_exc = TracebackException(exc_type, exc_obj, exc_tb)
-            close_client = False
-
-            # Close the client if the exception was thrown in another thread
-            if other_thread:
-                close_client = True
-            if not isinstance(exc_obj, bf_errors.BaseAPIError):
-                close_client = True
-
-            if isinstance(exc_obj, bf_errors.ServerNotReadyError):
-                description = self.tr(
-                    "An unhandled exception occurred while communicating with "
-                    "the BrainFrame server")
-            else:
-                description += self.tr(". The client must be closed.")
-
-            if close_client:
-                buttons &= ~BrainFrameMessage.PresetButtons.CLOSE_CLIENT
-                buttons |= BrainFrameMessage.PresetButtons.OK
-
-            # Log exception as well as show it to user
-            log_func = logging.critical if close_client else logging.error
-            exc_str = "".join(traceback_exc.format()).rstrip()
-            log_func(exc_str)
-
-            BrainFrameMessage.exception(
-                parent=typing.cast(QWidget, None),  # No parent
-                title=title,
-                description=description,
-                traceback=traceback_exc,
-                buttons=buttons
-            ).exec()
-
-        else:
             # Call this function again, but from the correct (UI) thread.
             # If a QWidget (the BrainFrameMessage in this case) is used from
             # another thread we WILL segfault. This is undesirable
@@ -146,6 +110,17 @@ class BrainFrameApplication(QApplication):
                 # Note: other_thread is now set true
                 Q_ARG("bool", True)
             )
+
+            return
+
+        traceback_exc = TracebackException(exc_type, exc_obj, exc_tb)
+
+        if not issubclass(exc_type, self.BaseMessagingError):
+            # Close the client if the exception was thrown in another thread
+            need_close = other_thread
+            self._handle_error_with_dialog(traceback_exc, need_close)
+
+        self._handle_error_with_log(traceback_exc)
 
     @staticmethod
     def _handle_error_(*args):
@@ -162,11 +137,47 @@ class BrainFrameApplication(QApplication):
         """
 
         # noinspection PyProtectedMember
-        return QApplication.instance()._handle_error(*args)
+        return BrainFrameApplication.instance()._handle_error(*args)
+
+    def _handle_error_with_dialog(
+        self, traceback_exc: TracebackException, need_close: bool = False
+    ) -> None:
+        title = self.tr("Error")
+        description = self.tr("An exception has occurred")
+        buttons = BrainFrameMessage.PresetButtons.EXCEPTION
+
+        if traceback_exc.exc_type is not bf_errors.BaseAPIError:
+            need_close = True
+
+        if traceback_exc.exc_type is bf_errors.ServerNotReadyError:
+            description = self.tr(
+                "An unhandled exception occurred while communicating with "
+                "the BrainFrame server")
+        else:
+            description += self.tr(". The client must be closed.")
+
+        if need_close:
+            buttons &= ~BrainFrameMessage.PresetButtons.CLOSE_CLIENT
+            buttons |= BrainFrameMessage.PresetButtons.OK
+
+        BrainFrameMessage.exception(
+            parent=typing.cast(QWidget, None),  # No parent
+            title=title,
+            description=description,
+            traceback=traceback_exc,
+            buttons=buttons
+        ).exec()
+
+    def _handle_error_with_log(
+        self, traceback_exc: TracebackException, log_level: int = logging.ERROR
+    ) -> None:
+        exc_str = "".join(traceback_exc.format()).rstrip()
+        logging.log(log_level, exc_str)
 
     def _init_config(self):
         self.setOrganizationDomain('aotu.ai')
 
+    # noinspection PyMethodMayBeStatic
     def _shutdown(self):
         api.close()
         gobject_init.close()
