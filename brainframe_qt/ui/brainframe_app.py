@@ -16,7 +16,7 @@ from brainframe_qt.api_utils import api
 from brainframe_qt.api_utils.connection_manager import ConnectionManager
 from brainframe_qt.extensions.loader import ExtensionLoader
 from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
-from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources
+from brainframe_qt.ui.resources import qt_resources
 from brainframe_qt.ui.resources.config import ServerSettings
 from brainframe_qt.ui.resources.i18n.translator import BrainFrameTranslator
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
@@ -167,7 +167,6 @@ class BrainFrameApplication(QApplication):
     def _init_config(self):
         self.setOrganizationDomain('aotu.ai')
 
-    # noinspection PyMethodMayBeStatic
     def _shutdown(self):
         api.close()
         gobject_init.close()
@@ -180,20 +179,16 @@ class BrainFrameApplication(QApplication):
         # Start the client if not already started
         if not self.main_window:
 
-            def verify_version_before_starting(version: str):
-                if version != brainframe_qt.__version__:
-                    self._handle_version_mismatch(version)
+            server_version = api.version()
+            if server_version != brainframe_qt.__version__:
+                self._handle_version_mismatch(server_version)
 
-                ExtensionLoader().load_extensions()
+            ExtensionLoader().load_extensions()
 
-                self.main_window = MainWindow()
-                self.main_window.show()
+            self.main_window = MainWindow()
+            self.main_window.show()
 
-                self.splash_screen.finish(self.main_window)
-
-            worker = QTAsyncWorker(self, api.version,
-                                   on_success=verify_version_before_starting)
-            worker.start()
+            self.splash_screen.finish(self.main_window)
 
     def _verify_eula(self):
         # Ensure that user has accepted license agreement.
