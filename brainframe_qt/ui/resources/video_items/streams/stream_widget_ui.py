@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGraphicsView, QWidget
 
 from brainframe_qt.ui.resources import stylesheet_watcher
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.paths import qt_qss_paths
 from .stream_graphics_scene import StreamGraphicsScene
 
@@ -16,7 +16,7 @@ class StreamWidgetUI(QGraphicsView):
     def __init__(self, *, parent: QWidget):
         super().__init__(parent=parent)
 
-        self.render_config = QSettingsRenderConfig()
+        self.render_config = RenderSettings()
 
         self._init_scene()
         self._init_style()

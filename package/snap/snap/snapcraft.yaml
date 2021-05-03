@@ -1,5 +1,4 @@
 name: brainframe-client
-version: '0.28.0'
 summary: A smart vision platform that is built to be easy to scale and deploy
 description: >
   BrainFrame is a smart vision platform that is built to be easy to scale,
@@ -18,29 +17,37 @@ description: >
 base: core18
 confinement: strict
 grade: stable
+adopt-info: brainframe-client
 
 parts:
   brainframe-client:
     plugin: nil
+    override-pull: |
+      snapcraftctl pull
+      VERSION=$(awk -F'[ ="]+' '$1 == "version" { print $2 }' pyproject.toml)
+      snapcraftctl set-version ${VERSION}
     override-build: |
-      # Install Poetry
-      curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
-        | python3 - --version 1.1.4
-      export PATH=$HOME/.poetry/bin:$PATH
 
       # Install dependencies
       pip3 install --upgrade pip wheel
+
       # These packages are installed by apt, and Poetry will try to uninstall
       # them because their versions don't match ours. It will then fail since
       # they're dist-packages. As a workaround, we install them with pip so
       # that Poetry removes those instead.
-      python3 -m pip install --ignore-installed httplib2 pyyaml
-      # Install all Poetry dependencies globally
-      poetry config virtualenvs.create false
-      poetry install --no-root --no-dev
+      pip3 install --ignore-installed httplib2 pyyaml
 
       export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
       mkdir -p $PYTHON_INSTALL_DIR
+
+      # Install Poetry
+      curl -sSL --output /tmp/get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
+      python3 /tmp/get-poetry.py --version 1.1.4
+      export PATH=$HOME/.poetry/bin:$PATH
+
+      # Install all Poetry dependencies globally
+      poetry config virtualenvs.create false
+      poetry install --no-root --no-dev
 
       # Copy the project
       cp -r brainframe_qt/ $PYTHON_INSTALL_DIR/
@@ -59,6 +66,7 @@ parts:
       - python3-setuptools
       - python3-distutils
       # Poetry dependencies
+      - curl
       - python3-venv
       - git
       # PyGObject dependencies
@@ -82,6 +90,7 @@ parts:
       - libgirepository-1.0-1
       - gstreamer1.0-plugins-base
       - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
       - gstreamer1.0-libav
       - gir1.2-gst-plugins-base-1.0
     build-environment:

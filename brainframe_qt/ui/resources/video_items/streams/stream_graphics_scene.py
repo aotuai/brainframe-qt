@@ -5,15 +5,14 @@ from PyQt5.QtWidgets import QGraphicsScene, QWidget
 from brainframe.api import bf_codecs
 
 from brainframe_qt.api_utils.detection_tracks import DetectionTrack
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.detections import DetectionItem
 from brainframe_qt.ui.resources.video_items.zone_statuses import \
     ZoneStatusItem
 
 
 class StreamGraphicsScene(QGraphicsScene):
-    def __init__(self, *, render_config: QSettingsRenderConfig,
-                 parent: QWidget):
+    def __init__(self, *, render_config: RenderSettings, parent: QWidget):
 
         super().__init__(parent)
 

@@ -15,7 +15,7 @@ from brainframe.api.bf_codecs import (
     ZoneAlarmRateCondition,
     IntersectionPointType,
 )
-from brainframe_qt.ui.resources import settings
+from brainframe_qt.ui.resources.config import LocaleSettings
 from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 
@@ -77,7 +77,7 @@ class AlarmCreationDialog(QDialog):
         # Show the user's current timezone in the three-letter abbreviation
         # formation (PST, CST, UTC, etc)
         timezone_abbreviation = (pendulum.now()
-                                 .in_tz(settings.get_user_timezone())
+                                 .in_tz(LocaleSettings().get_user_timezone())
                                  .format("zz"))
         self.timezone_label.setText(f"({timezone_abbreviation})")
 
@@ -310,7 +310,7 @@ class AlarmCreationDialog(QDialog):
         """Converts the given time string to UTC, interpreting its time zone
         as the user's configured time zone.
         """
-        user_timezone = settings.get_user_timezone()
+        user_timezone = LocaleSettings().get_user_timezone()
         return (pendulum.parse(original_time, tz=user_timezone)
                 .in_tz(pendulum.UTC)
                 .format("HH:mm:ss"))

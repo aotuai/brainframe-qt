@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QTransform
 from brainframe.api.bf_codecs import Zone
 
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.base import ArrowItem, \
     LineItem, VideoItem
 from .abstract_zone_item import AbstractZoneItem
@@ -13,7 +13,7 @@ class ZoneLineItem(AbstractZoneItem, VideoItem):
     ARROW_LENGTH = 40
 
     def __init__(self, zone: Zone, *,
-                 render_config: QSettingsRenderConfig,
+                 render_config: RenderSettings,
                  parent: VideoItem,
                  color: QColor = AbstractZoneItem.BORDER_COLOR,
                  thickness: int = AbstractZoneItem.BORDER_THICKNESS,

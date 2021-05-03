@@ -1,17 +1,20 @@
 import logging
 from typing import Optional, Tuple
 
+from PyQt5.QtCore import QObject
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QCheckBox, QDialog, QDialogButtonBox, \
     QGridLayout, QLabel, QLineEdit, QPushButton, QWidget
 from PyQt5.uic import loadUi
+
 from brainframe.api import BrainFrameAPI, bf_codecs, bf_errors
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.extensions import DialogActivity
 from brainframe_qt.ui.dialogs.license_dialog.license_dialog import \
     LicenseDialog
-from brainframe_qt.ui.resources import QTAsyncWorker, settings
+from brainframe_qt.ui.resources import QTAsyncWorker
+from brainframe_qt.ui.resources.config import ServerSettings
 from brainframe_qt.ui.resources.links.documentation import \
     LICENSE_DOCS_LINK
 from brainframe_qt.ui.resources.paths import qt_ui_paths
@@ -41,10 +44,12 @@ class ServerConfigActivity(DialogActivity):
 
 class ServerConfigurationDialog(QDialog):
 
-    def __init__(self, parent):
+    def __init__(self, *, parent: QObject):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.server_configuration_ui, self)
+
+        self.server_config = ServerSettings()
 
         self._init_ui()
 
@@ -65,22 +70,21 @@ class ServerConfigurationDialog(QDialog):
 
         self.connection_report_label.setOpenExternalLinks(True)
 
-        self.server_address_line_edit.setText(settings.server_url.val())
-        self.server_username_line_edit.setText(settings.server_username.val())
+        self.server_address_line_edit.setText(self.server_config.server_url)
+        self.server_username_line_edit.setText(self.server_config.server_username)
 
-        if settings.server_password:
-            settings_password = settings.server_password.val()
+        if self.server_config.server_password:
+            settings_password = self.server_config.server_password
             if settings_password:
                 try:
                     decrypt_password = decrypt(settings_password)
                     self.server_password_line_edit.setText(decrypt_password)
                 except ValueError:
-                    message = self.tr(
-                        "Invalid password saved in QSettings. Clearing.")
+                    message = self.tr("Invalid password saved in QSettings. Clearing.")
                     logging.error(message)
-                    settings.server_password.delete()
+                    del self.server_config.server_password
 
-        use_auth = bool(settings.server_username.val())
+        use_auth = bool(self.server_config.server_username)
         self._show_authentication_fields(use_auth)
         self.authentication_checkbox.setChecked(use_auth)
 
@@ -155,19 +159,22 @@ class ServerConfigurationDialog(QDialog):
     def accept(self):
 
         def _save_settings():
-            settings.server_url.set(self.server_address)
+            self.server_config.server_url = self.server_address
 
             if self.authentication_enabled:
-                settings.server_username.set(self.server_username)
+                self.server_config.server_username = self.server_username
                 if self.save_password:
                     # Note that this is _not_ meant to be a form of security,
                     # simply to prevent the password from sitting in plain text
                     # on the client computer. The key is available in plain text
                     # within this repo.
                     encrypted = encrypt(self.server_password)
-                    settings.server_password.set(encrypted)
-            if not self.authentication_enabled or not self.save_password:
-                settings.server_password.delete()
+                    self.server_config.server_password = encrypted
+            if not self.authentication_enabled:
+                del self.server_config.server_username
+                del self.server_config.server_password
+            if not self.save_password:
+                del self.server_config.server_password
 
         try:
             api.set_url(self.server_address)
@@ -210,7 +217,7 @@ class ServerConfigurationDialog(QDialog):
             super().accept()
 
     @classmethod
-    def show_dialog(cls, parent):
+    def show_dialog(cls, *, parent: QObject):
         cls(parent=parent).exec()
 
     def check_connection(self):

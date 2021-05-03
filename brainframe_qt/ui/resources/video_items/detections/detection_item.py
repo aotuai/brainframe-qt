@@ -5,7 +5,7 @@ from PyQt5.QtGui import QColor
 from brainframe.api.bf_codecs import Detection
 
 from brainframe_qt.api_utils.detection_tracks import DetectionTrack
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.base import VideoItem
 from .detection_label_item import DetectionLabelItem
 from .detection_polygon_item import DetectionPolygonItem
@@ -17,7 +17,7 @@ class DetectionItem(VideoItem):
 
     def __init__(self, detection: Detection, *,
                  track: Optional[DetectionTrack],
-                 render_config: QSettingsRenderConfig,
+                 render_config: RenderSettings,
                  parent: Optional[VideoItem] = None):
         super().__init__(parent=parent)
 
@@ -31,7 +31,9 @@ class DetectionItem(VideoItem):
             detection, self.draw_color,
             render_config=render_config, parent=self)
 
-        self.detection_track = DetectionTrackItem(track, parent=self)
+        self.detection_track: Optional[DetectionTrackItem] = None
+        if render_config.show_detection_tracks:
+            self.detection_track = DetectionTrackItem(track, parent=self)
 
     @property
     def draw_color(self) -> QColor:

@@ -3,7 +3,7 @@ from typing import List
 from PyQt5.QtGui import QColor
 from brainframe.api.bf_codecs import Detection
 
-from brainframe_qt.ui.resources.config import QSettingsRenderConfig
+from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.base import PolygonItem, \
     VideoItem
 
@@ -11,7 +11,7 @@ from brainframe_qt.ui.resources.video_items.base import PolygonItem, \
 class DetectionPolygonItem(PolygonItem):
 
     def __init__(self, detection: Detection, color: QColor, *,
-                 render_config: QSettingsRenderConfig,
+                 render_config: RenderSettings,
                  parent: VideoItem):
         self.detection = detection
         self.render_config = render_config
