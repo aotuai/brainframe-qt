@@ -187,14 +187,23 @@ class BrainFrameApplication(SingletonApplication):
         self.connection_manager.terminate()
 
     def _start_ui(self):
-        self.verify_version_match()
+        # Start the client if not already started
+        if not self.main_window:
 
-        ExtensionLoader().load_extensions()
+            def verify_version_before_starting(version: str):
+                if version != brainframe_qt.__version__:
+                    self._handle_version_mismatch(version)
 
-        self.main_window = MainWindow()
-        self.main_window.show()
+                ExtensionLoader().load_extensions()
 
-        self.splash_screen.finish(self.main_window)
+                self.main_window = MainWindow()
+                self.main_window.show()
+
+                self.splash_screen.finish(self.main_window)
+
+            worker = QTAsyncWorker(self, api.version,
+                                   on_success=verify_version_before_starting)
+            worker.start()
 
     def _verify_eula(self):
         # Ensure that user has accepted license agreement.
@@ -202,37 +211,26 @@ class BrainFrameApplication(SingletonApplication):
         if not EULADialog.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
 
-    def verify_version_match(self):
-        worker = QTAsyncWorker(self, api.version)
-        worker.start()
-        self._wait_for_event(worker.finished_event)
+    def _handle_version_mismatch(self, server_version: str) -> None:
+        title = self.tr("Version Mismatch")
+        message = self.tr(
+            "The server is using version {server_version} but this client "
+            "is on version {client_version}. Please download the matching "
+            "version of the client at {download_url}.")
+        message = message.format(
+            server_version=server_version,
+            client_version=brainframe_qt.__version__,
+            download_url="aotu.ai/docs/downloads/")
 
-        version = worker.data
-        if version != brainframe_qt.__version__:
-            title = self.tr("Version Mismatch")
-            message = self.tr(
-                "The server is using version {server_version} but this client "
-                "is on version {client_version}. Please download the matching "
-                "version of the client at {download_url}.")
-            message = message.format(
-                server_version=version,
-                client_version=brainframe_qt.__version__,
-                download_url="aotu.ai/docs/downloads/")
+        dialog = BrainFrameMessage.critical(
+            parent=typing.cast(QWidget, None),
+            title=title,
+            text=message
+        )
 
-            dialog = BrainFrameMessage.critical(
-                parent=typing.cast(QWidget, None),
-                title=title,
-                text=message
-            )
+        dialog.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
-            dialog.setTextInteractionFlags(Qt.TextSelectableByMouse)
-
-            dialog.exec()
-
-    def _wait_for_event(self, event):
-        """Runs the Qt event loop while waiting on an event to be triggered."""
-        while not event.wait(.1):
-            self.processEvents()
+        dialog.exec()
 
     # Handle all exceptions using a graphical handler
     # https://stackoverflow.com/a/41921291/8134178

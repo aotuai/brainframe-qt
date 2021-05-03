@@ -77,8 +77,12 @@ class ConnectionManager(QThread):
 
     @connection_state.setter
     def connection_state(self, connection_state: ConnectionState) -> None:
+        prev_state = self._connection_state
+
         self._connection_state = connection_state
-        self.connection_state_changed.emit(self._connection_state)
+
+        if prev_state != connection_state:
+            self.connection_state_changed.emit(connection_state)
 
     def invalidate_config(self) -> None:
         """Force the ConnectionManager to restart the authentication process"""
@@ -106,7 +110,7 @@ class ConnectionManager(QThread):
         try:
             api.wait_for_server_initialization(self._CONNECT_TIMEOUT)
         except (TimeoutError, bf_errors.ServerNotReadyError):
-            pass
+            self.connection_state = self.ConnectionState.UNCONNECTED
         else:
             self.connection_state = self.ConnectionState.LICENSE_UNVALIDATED
 
