@@ -115,9 +115,7 @@ class BrainFrameApplication(SingletonApplication):
 
         traceback_exc = TracebackException(exc_type, exc_obj, exc_tb)
 
-        if exc_type not in [
-            self.BaseMessagingError,
-        ]:
+        if not issubclass(exc_type, self.BaseMessagingError):
             # Close the client if the exception was thrown in another thread
             need_close = other_thread
             self._handle_error_with_dialog(traceback_exc, need_close)
