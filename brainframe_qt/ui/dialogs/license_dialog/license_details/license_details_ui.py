@@ -116,7 +116,10 @@ class _LicenseDetailsUI(QWidget):
         layout.addWidget(self.expired_license_message, 5, 0, 1, 2)
 
         layout.addWidget(self.license_terms, 6, 0, 1, 2)
-        layout.addWidget(self.license_source_selector, 7, 0, 1, 2)
+
+        layout.addWidget(Line(QFrame.HLine, self), 7, 0, 1, 2)
+
+        layout.addWidget(self.license_source_selector, 8, 0, 1, 2)
 
         # TODO: These are hidden because the information is not provided by
         #       the server yet
