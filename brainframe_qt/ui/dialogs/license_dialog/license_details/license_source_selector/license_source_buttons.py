@@ -19,34 +19,34 @@ class LicenseSourceButtons(QWidget):
 
         self._init_signals()
 
-    def _init_license_key_button(self) -> QRadioButton:
-        button_text = self.tr("License Key")
-        license_key_button = QRadioButton(button_text, self)
-
-        return license_key_button
-
     def _init_aotu_account_button(self) -> QRadioButton:
         button_text = self.tr("Aotu Account")
         aotu_account_button = QRadioButton(button_text, self)
 
         return aotu_account_button
 
+    def _init_license_key_button(self) -> QRadioButton:
+        button_text = self.tr("License Key")
+        license_key_button = QRadioButton(button_text, self)
+
+        return license_key_button
+
     def _init_button_group(self) -> QButtonGroup:
         button_group = QButtonGroup(self)
 
-        button_group.addButton(self.license_key_button)
         button_group.addButton(self.aotu_account_button)
+        button_group.addButton(self.license_key_button)
 
         button_group.setExclusive(True)
-        self.license_key_button.setChecked(True)
+        self.aotu_account_button.setChecked(True)
 
         return button_group
 
     def _init_layout(self) -> None:
         layout = QHBoxLayout(self)
 
-        layout.addWidget(self.license_key_button)
         layout.addWidget(self.aotu_account_button)
+        layout.addWidget(self.license_key_button)
 
         self.setLayout(layout)
 
