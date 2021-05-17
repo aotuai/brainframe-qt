@@ -27,7 +27,7 @@ class LicenseSourceSelector(QWidget):
         self._init_signals()
 
     def _init_license_source_label(self) -> QLabel:
-        label_text = self.tr("License Source:")
+        label_text = self.tr("Activate license with:")
         license_source_label = QLabel(label_text, self)
 
         return license_source_label
@@ -57,8 +57,8 @@ class LicenseSourceSelector(QWidget):
 
         return license_stack_widget
 
-    def _init_source_selector_layout(self) -> QHBoxLayout:
-        source_selector_layout = QHBoxLayout()
+    def _init_source_selector_layout(self) -> QVBoxLayout:
+        source_selector_layout = QVBoxLayout()
 
         source_selector_layout.addWidget(self.license_source_label)
         source_selector_layout.addWidget(self.license_source_buttons)
