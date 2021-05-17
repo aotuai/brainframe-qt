@@ -35,7 +35,7 @@ class CognitoOAuth(QObject):
     class InvalidTokenResponse(Exception):
         """Reply to Access and Refresh Tokens request was invalid"""
 
-    _SCOPES = ["email", "aws.cognito.signin.user.admin", "profile"]
+    _SCOPES = ["email", "aws.cognito.signin.user.admin", "profile", "openid"]
 
     def __init__(self, *, cognito_domain: str, client_id: str, parent: QObject):
         super().__init__(parent=parent)
