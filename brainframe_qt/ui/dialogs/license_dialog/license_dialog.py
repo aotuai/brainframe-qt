@@ -1,32 +1,38 @@
-from PyQt5.QtWidgets import QApplication, QListWidgetItem, QWidget
+from PyQt5.QtCore import QObject
+from PyQt5.QtGui import QDesktopServices
+from PyQt5.QtWidgets import QApplication, QListWidgetItem
+
 from brainframe.api import bf_codecs, bf_errors
 
+from brainframe_qt import constants
 from brainframe_qt.api_utils import api
 from brainframe_qt.ui.resources import QTAsyncWorker
-from brainframe_qt.ui.resources.links.documentation import \
-    LICENSE_DOCS_LINK
-from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
-    BrainFrameMessage, WorkingIndicator
+from brainframe_qt.ui.resources.links.documentation import LICENSE_DOCS_LINK
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage, \
+    WorkingIndicator
+from brainframe_qt.util.oauth.cognito import CognitoOAuth
+
+from .domain.product import LicensedProduct
 from .license_dialog_ui import _LicenseDialogUI
-from .product_sidebar.product_widget import ProductWidget
+from .widgets import ProductWidget
 
 
 class LicenseDialog(_LicenseDialogUI):
     BRAINFRAME_PRODUCT_NAME = "BrainFrame"
+    BRAINFRAME_PRODUCT_ICON = ":/icons/capsule_toolbar"
 
-    def __init__(self, parent: QWidget):
-        super().__init__(parent)
+    def __init__(self, *, parent: QObject):
+        super().__init__(parent=parent)
 
         self._init_signals()
 
         self._init_products()
 
     @classmethod
-    def show_dialog(cls, parent):
-        dialog = cls(parent)
+    def show_dialog(cls, *, parent: QObject):
+        dialog = cls(parent=parent)
 
-        dialog.setWindowTitle(
-            QApplication.translate("LicenseDialog", "Licenses"))
+        dialog.setWindowTitle(QApplication.translate("LicenseDialog", "Licenses"))
         dialog.resize(900, 500)
 
         dialog.exec_()
@@ -34,14 +40,17 @@ class LicenseDialog(_LicenseDialogUI):
     def _init_signals(self) -> None:
         self.product_sidebar.currentItemChanged.connect(self.change_product)
 
-        self.license_details.license_text_update.connect(
-            self.send_update_license_text)
+        self.license_details.license_text_update.connect(self.send_update_license_text)
+        self.license_details.oauth_login_requested.connect(self.get_license_with_oauth)
 
     def _init_products(self):
         def on_success(license_info: bf_codecs.LicenseInfo):
-            icon_path = ":/icons/capsule_toolbar"
-            self.product_sidebar.add_product(
-                self.BRAINFRAME_PRODUCT_NAME, icon_path, license_info)
+            product = LicensedProduct(
+                name=self.BRAINFRAME_PRODUCT_NAME,
+                icon_resource=self.BRAINFRAME_PRODUCT_ICON,
+                license_info=license_info,
+            )
+            self.product_sidebar.add_product(product)
 
             # BrainFrame product should always be first in list
             self.product_sidebar.setCurrentRow(0)
@@ -56,28 +65,71 @@ class LicenseDialog(_LicenseDialogUI):
                       on_success=on_success, on_error=on_error) \
             .start()
 
-        # TODO: Also get capsule information if that's ever added
-
-    def change_product(self, item: QListWidgetItem,
-                       _previous: QListWidgetItem) -> None:
+    def change_product(self, item: QListWidgetItem, _previous: QListWidgetItem) -> None:
         widget: ProductWidget = self.product_sidebar.itemWidget(item)
 
-        self.license_details.set_product(widget.product_name,
-                                         widget.license_info)
+        self.license_details.set_product(widget.product)
+
+    def get_license_with_oauth(self) -> None:
+
+        working_indicator = WorkingIndicator(self)
+        working_indicator.setLabelText(self.tr("Authenticating with OAuth..."))
+        working_indicator.show()
+
+        # This nested function situation is gross
+        def send_tokens_to_server(tokens: bf_codecs.CloudTokens) -> None:
+
+            def on_success(token_response) -> None:
+                user_info: bf_codecs.CloudUserInfo
+                license_info: bf_codecs.LicenseInfo
+                user_info, license_info = token_response
+
+                product = LicensedProduct(
+                    name=self.BRAINFRAME_PRODUCT_NAME,
+                    icon_resource=self.BRAINFRAME_PRODUCT_ICON,
+                    license_info=license_info,
+                )
+                self.update_license_info(product)
+                working_indicator.cancel()
+
+            def on_error(exc: Exception) -> None:
+                working_indicator.cancel()
+                if isinstance(exc, bf_errors.ServerNotReadyError):
+                    self._handle_connection_error(exc)
+                if isinstance(exc, bf_errors.UnauthorizedTokensError):
+                    "Access token is used against invalid domain"
+                    self._handle_unauthorized_tokens_error(exc)
+
+            QTAsyncWorker(self, api.set_cloud_tokens, f_args=(tokens, ),
+                          on_success=on_success, on_error=on_error) \
+                .start()
+
+        oauth = CognitoOAuth(
+            cognito_domain=constants.oauth.COGNITO_DOMAIN,
+            client_id=constants.oauth.CLIENT_ID,
+            parent=self,
+        )
+
+        oauth.ready_to_authenticate.connect(QDesktopServices.openUrl)
+        oauth.authentication_successful.connect(send_tokens_to_server)
+
+        oauth.authenticate()
 
     def send_update_license_text(self, license_key: str):
-        # TODO: Support more than BrainFrame license (if we ever support
-        #       capsule licensing)
-
         working_indicator = WorkingIndicator(self)
         working_indicator.setLabelText(self.tr("Uploading license..."))
         working_indicator.show()
 
         def on_success(license_info: bf_codecs.LicenseInfo):
-            self.update_license_info("BrainFrame", license_info)
+            product = LicensedProduct(
+                name=self.BRAINFRAME_PRODUCT_NAME,
+                icon_resource=self.BRAINFRAME_PRODUCT_ICON,
+                license_info=license_info,
+            )
+            self.update_license_info(product)
             working_indicator.cancel()
 
-        def on_error(exc: BaseException):
+        def on_error(exc: Exception):
             working_indicator.cancel()
 
             if isinstance(exc, bf_errors.LicenseInvalidError):
@@ -96,14 +148,13 @@ class LicenseDialog(_LicenseDialogUI):
                       on_error=on_error) \
             .start()
 
-    def update_license_info(self, product_name: str,
-                            license_info: bf_codecs.LicenseInfo) -> None:
+    def update_license_info(self, product: LicensedProduct) -> None:
 
-        self.product_sidebar.update_license_info(product_name, license_info)
+        self.product_sidebar.update_product(product)
 
         # Only change the license details if the product is already displayed
-        if self.license_details.product_name == product_name:
-            self.license_details.set_product(product_name, license_info)
+        if self.license_details.product_name == product.name:
+            self.license_details.set_product(product)
 
     def _handle_invalid_license_error(self, _exc):
 
@@ -134,8 +185,7 @@ class LicenseDialog(_LicenseDialogUI):
             message=message
         ).exec()
 
-    def _handle_license_server_connection_error(self, exc):
-
+    def _handle_license_server_connection_error(self, _exc):
         message_title = self.tr("License Server Connection Failure")
         message = self.tr(
             "The BrainFrame server was unable to contact the licensing server "
@@ -148,19 +198,19 @@ class LicenseDialog(_LicenseDialogUI):
             message=message
         ).exec()
 
-    def _handle_connection_error(self, _exc):
-        message_title = self.tr("Connection Error")
-        message = self.tr("Connection error while communicating with the "
-                          "server")
+    def _handle_unauthorized_tokens_error(self, _exc):
+        message_title = self.tr("Unauthorized Tokens")
+        message = self.tr(
+            "The BrainFrame server was unable to authenticate with the licensing "
+            "server to retrieve a license. Please ensure that the tokens have not "
+            "expired and are for the proper licensing server."
+        )
 
         BrainFrameMessage.information(
             parent=self,
             title=message_title,
             message=message
         ).exec()
-
-        # Close dialog
-        self.close()
 
     def _handle_unknown_error(self, exc):
         raise exc

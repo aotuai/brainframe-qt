@@ -249,7 +249,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>AotuLoginFormUI</name>
     <message>
-        <location filename="../../dialogs/license_dialog/widgets/brainframe_license/aotu_login_form/aotu_login_form_ui.py" line="17"/>
+        <location filename="../../dialogs/license_dialog/widgets/brainframe_license/aotu_login_form/aotu_login_form_ui.py" line="16"/>
         <source>Sign in using OAuth</source>
         <translation type="unfinished"></translation>
     </message>
@@ -750,7 +750,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>LicenseDialog</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="156"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="161"/>
         <source>Invalid License Format</source>
         <translation>无效的授权格式</translation>
     </message>
@@ -760,34 +760,49 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="87"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="120"/>
         <source>Uploading license...</source>
         <translation>正在上传授权⋯⋯</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="171"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="176"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="172"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="177"/>
         <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
         <translation>提供的授权已过期。请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="158"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="163"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
         <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;;上传新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="185"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="189"/>
         <source>License Server Connection Failure</source>
         <translation>授权服务器连接失败</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="186"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="190"/>
         <source>The BrainFrame server was unable to contact the licensing server to validate the license. Please ensure that the BrainFrame server has internet access.</source>
         <translation>BrainFrame无法连接至授权服务器以验证授权，请确保BrainFrame可以访问互联网。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="76"/>
+        <source>Authenticating with OAuth...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="202"/>
+        <source>Unauthorized Tokens</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="203"/>
+        <source>The BrainFrame server was unable to authenticate with the licensing server to retrieve a license. Please ensure that the tokens have not expired and are for the proper licensing server.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
