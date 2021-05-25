@@ -1,17 +1,16 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject
 from PyQt5.QtWidgets import QApplication, QFrame, QGridLayout, QLabel, QWidget
 
-from brainframe_qt.ui.resources.links.documentation import \
-    LICENSE_DOCS_LINK
+from brainframe_qt.ui.resources.links.documentation import LICENSE_DOCS_LINK
 from brainframe_qt.ui.resources.ui_elements.widgets import Line
-from .license_source_selector import LicenseSourceSelector
-from .license_terms import LicenseTerms
+from ..source_selector import LicenseSourceSelector
+from ..license_terms import LicenseTerms
 
 
 class _LicenseDetailsUI(QWidget):
 
-    def __init__(self, parent: QWidget):
-        super().__init__(parent)
+    def __init__(self, *, parent: QObject):
+        super().__init__(parent=parent)
 
         self.product_name_label = self._init_product_name_label()
 

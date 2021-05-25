@@ -1,34 +1,34 @@
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import pyqtSignal, QObject
 
-from brainframe.api import bf_codecs
+from ....domain.product import LicensedProduct, LicenseState
 from .license_details_ui import _LicenseDetailsUI
 
 
 class LicenseDetails(_LicenseDetailsUI):
     license_text_update = pyqtSignal(str)
+    oauth_login_requested = pyqtSignal()
 
-    def __init__(self, parent: QWidget):
-        super().__init__(parent)
+    def __init__(self, *, parent: QObject):
+        super().__init__(parent=parent)
 
         self._init_signals()
 
     def _init_signals(self) -> None:
         self.license_source_selector.license_text_update.connect(
             self.license_text_update)
+        self.license_source_selector.oauth_login_requested.connect(
+            self.oauth_login_requested)
 
-    def set_product(self, product_name, license_info: bf_codecs.LicenseInfo) \
-            -> None:
-        self.product_name = product_name
-        # self.set_licensee(license_info.licensee)
+    def set_product(self, product: LicensedProduct) -> None:
+        self.product_name = product.name
 
-        if license_info.state is bf_codecs.LicenseInfo.State.MISSING:
+        if product.license_info.state is LicenseState.MISSING:
             self.license_terms.hide()
             self.missing_license_message.show()
-        elif license_info.state is bf_codecs.LicenseInfo.State.INVALID:
+        elif product.license_info.state is LicenseState.INVALID:
             self.license_terms.hide()
             self.invalid_license_message.show()
-        elif license_info.state is bf_codecs.LicenseInfo.State.EXPIRED:
+        elif product.license_info.state is LicenseState.EXPIRED:
             # TODO: BF-1328
             self.license_terms.hide()
             self.expired_license_message.show()
@@ -37,7 +37,7 @@ class LicenseDetails(_LicenseDetailsUI):
             self.missing_license_message.hide()
             self.invalid_license_message.hide()
             self.expired_license_message.hide()
-            self.license_terms.set_license_terms(license_info.terms)
+            self.license_terms.set_license_terms(product.license_info.terms)
 
     @property
     def product_name(self) -> str:

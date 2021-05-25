@@ -286,7 +286,7 @@ class ServerConfigurationDialog(QDialog):
         return license_state
 
     def _open_license_dialog(self):
-        LicenseDialog.show_dialog(self)
+        LicenseDialog.show_dialog(parent=self)
         self.check_connection()
 
     def _verify(self):

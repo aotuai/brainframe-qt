@@ -10,8 +10,10 @@ from typing import Tuple
 from PyQt5.QtCore import QObject, pyqtSignal, QUrl, QUrlQuery
 from PyQt5.QtNetwork import QNetworkRequest, QNetworkAccessManager, QNetworkReply
 
+from brainframe.api import bf_codecs
+
 from brainframe_qt import constants
-from brainframe_qt.util.oauth.base import OAuthTokens, AuthTokenResponse
+from brainframe_qt.util.oauth.base import AuthTokenResponse
 from brainframe_qt.util.oauth.reply_handler import PKCEReplyHandler
 
 
@@ -22,7 +24,7 @@ class CognitoOAuth(QObject):
     """Emitted when the Authentication URL is ready to be opened in a browser window
     on the client computer for authentication"""
 
-    authentication_successful = pyqtSignal(OAuthTokens)
+    authentication_successful = pyqtSignal(bf_codecs.CloudTokens)
     """Emitted when Authentication is successful and both Access and Refresh Tokens have
     been acquired"""
 
@@ -149,7 +151,7 @@ class CognitoOAuth(QObject):
             self.authentication_error.emit(exception)
             return
 
-        tokens = OAuthTokens(
+        tokens = bf_codecs.CloudTokens(
             access_token=access_token,
             refresh_token=refresh_token,
         )
@@ -166,7 +168,7 @@ class CognitoOAuth(QObject):
         alphanumeric = string.ascii_letters + string.digits
         code_verifier = "".join(secrets.choice(alphanumeric) for _ in range(128))
 
-        code_challenge = hashlib.sha256(code_verifier.encode("utf-8")).digest()
+        code_challenge = hashlib.sha256(code_verifier.encode()).digest()
         code_challenge = (base64.urlsafe_b64encode(code_challenge)
                           .decode()
                           .replace("=", ""))
@@ -192,7 +194,7 @@ if __name__ == '__main__':
         parent=typing.cast(QWidget, None),
     )
 
-    def on_success(tokens: OAuthTokens) -> None:
+    def on_success(tokens: bf_codecs.CloudTokens) -> None:
         print(tokens)
         app.exit()
 

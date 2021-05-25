@@ -1,14 +1,15 @@
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QStackedWidget, QVBoxLayout, \
+from PyQt5.QtWidgets import QLabel, QStackedWidget, QVBoxLayout, \
     QWidget
 
-from .aotu_login_form import AotuLoginForm
+from ..aotu_login_form import AotuLoginForm
+from ..text_license_editor import TextLicenseEditor
 from .license_source_buttons import LicenseSourceButtons
-from .text_license_editor import TextLicenseEditor
 
 
 class LicenseSourceSelector(QWidget):
     license_text_update = pyqtSignal(str)
+    oauth_login_requested = pyqtSignal()
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -27,7 +28,7 @@ class LicenseSourceSelector(QWidget):
         self._init_signals()
 
     def _init_license_source_label(self) -> QLabel:
-        label_text = self.tr("Activate license with:")
+        label_text = self.tr("Get license from:")
         license_source_label = QLabel(label_text, self)
 
         return license_source_label
@@ -86,6 +87,7 @@ class LicenseSourceSelector(QWidget):
             self._change_license_source
         )
 
+        self.aotu_login_form.oath_login_requested.connect(self.oauth_login_requested)
         self.text_license_editor.license_text_update.connect(
             self.license_text_update)
 

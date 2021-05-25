@@ -1,15 +1,15 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QHBoxLayout, QWidget
+from PyQt5.QtCore import Qt, QObject
+from PyQt5.QtWidgets import QDialog, QHBoxLayout
 
 from brainframe_qt.ui.resources import stylesheet_watcher
 from brainframe_qt.ui.resources.paths import qt_qss_paths
-from .product_sidebar import ProductSidebar
-from .license_details import LicenseDetails
+from .widgets import ProductSidebar
+from .widgets.brainframe_license import LicenseDetails
 
 
 class _LicenseDialogUI(QDialog):
-    def __init__(self, parent: QWidget):
-        super().__init__(parent)
+    def __init__(self, *, parent: QObject):
+        super().__init__(parent=parent)
 
         self.product_sidebar = self._init_product_sidebar()
         self.license_details = self._init_license_details()
@@ -18,12 +18,12 @@ class _LicenseDialogUI(QDialog):
         self._init_style()
 
     def _init_product_sidebar(self) -> ProductSidebar:
-        product_sidebar = ProductSidebar(self)
+        product_sidebar = ProductSidebar(parent=self)
 
         return product_sidebar
 
     def _init_license_details(self) -> LicenseDetails:
-        license_details = LicenseDetails(self)
+        license_details = LicenseDetails(parent=self)
 
         return license_details
 
