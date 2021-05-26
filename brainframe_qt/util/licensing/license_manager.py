@@ -53,30 +53,3 @@ class LicenseManager(QObject):
 
     def cancel_oauth(self) -> None:
         self.oauth.cancel_authentication()
-
-
-"""
-brainframe.api.bf_errors.UnknownError: UnknownError: 404 Not Found
-
-
-Traceback (most recent call last):
-  File "/home/ignormies/doc/git/aotu/brainframe-qt/brainframe_qt/ui/dialogs/license_dialog/license_dialog.py", line 127, in _handle_error
-    self._handle_unknown_error(exc)
-  File "/home/ignormies/doc/git/aotu/brainframe-qt/brainframe_qt/ui/dialogs/license_dialog/license_dialog.py", line 186, in _handle_unknown_error
-    raise exc
-  File "/home/ignormies/doc/git/aotu/brainframe-qt/brainframe_qt/ui/resources/qt_async_worker.py", line 47, in run
-    self.data = self.func(*self.f_args, **self.f_kwargs)
-  File "/home/ignormies/.cache/pypoetry/virtualenvs/brainframe-D8O-9Dia-py3.9/lib/python3.9/site-packages/brainframe/api/stubs/cloud_tokens.py", line 17, in set_cloud_tokens
-    login_result = self._put_codec(req, timeout, cloud_tokens)
-  File "/home/ignormies/.cache/pypoetry/virtualenvs/brainframe-D8O-9Dia-py3.9/lib/python3.9/site-packages/brainframe/api/stubs/base_stub.py", line 70, in _put_codec
-    resp = self._put(api_url,
-  File "/home/ignormies/.cache/pypoetry/virtualenvs/brainframe-D8O-9Dia-py3.9/lib/python3.9/site-packages/brainframe/api/stubs/base_stub.py", line 201, in _put
-    return self._send_authorized(request, timeout)
-  File "/home/ignormies/.cache/pypoetry/virtualenvs/brainframe-D8O-9Dia-py3.9/lib/python3.9/site-packages/brainframe/api/stubs/base_stub.py", line 300, in _send_authorized
-    resp = send_func(request, timeout)
-  File "/home/ignormies/.cache/pypoetry/virtualenvs/brainframe-D8O-9Dia-py3.9/lib/python3.9/site-packages/brainframe/api/stubs/base_stub.py", line 314, in _send_with_credentials
-    resp = self._perform_request(request, timeout)
-  File "/home/ignormies/.cache/pypoetry/virtualenvs/brainframe-D8O-9Dia-py3.9/lib/python3.9/site-packages/brainframe/api/stubs/base_stub.py", line 347, in _perform_request
-    raise _make_api_error(resp=resp)
-brainframe.api.bf_errors.UnknownError: UnknownError: 404 Not Found
-"""
