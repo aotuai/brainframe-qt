@@ -37,7 +37,8 @@ class CognitoOAuth(QObject):
     class InvalidTokenResponse(Exception):
         """Reply to Access and Refresh Tokens request was invalid"""
 
-    _SCOPES = ["email", "aws.cognito.signin.user.admin", "profile", "openid"]
+    _SCOPES = ["email", "aws.cognito.signin.user.admin", "profile", "openid",
+               *constants.oauth.OAUTH_SCOPES]
 
     def __init__(self, *, cognito_domain: str, client_id: str, parent: QObject):
         super().__init__(parent=parent)
@@ -74,7 +75,7 @@ class CognitoOAuth(QObject):
 
         # Qt insists on using loopback for callback URI, but Cognito only allows
         # localhost
-        scope = "+".join(self._SCOPES)
+        scope = " ".join(self._SCOPES)
 
         query = QUrlQuery()
         query.addQueryItem("response_type", "code")
