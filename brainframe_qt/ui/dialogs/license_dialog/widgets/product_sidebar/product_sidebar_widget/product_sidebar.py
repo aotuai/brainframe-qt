@@ -30,7 +30,7 @@ class ProductSidebar(_ProductSidebarUI):
             item = self.item(row)
             widget = typing.cast(ProductWidget, self.itemWidget(item))
 
-            if widget.product_name == product.name:
+            if widget.product.name == product.name:
                 widget.set_product(product)
                 break
         else:
