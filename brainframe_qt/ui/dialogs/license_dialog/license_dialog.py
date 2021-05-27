@@ -76,7 +76,7 @@ class LicenseDialog(_LicenseDialogUI):
         self.license_details.set_product(widget.product)
 
     def get_license_with_oauth(self) -> None:
-        working_indicator = WorkingIndicator(self)
+        working_indicator = WorkingIndicator(parent=self)
         working_indicator.setLabelText(self.tr("Authenticating with OAuth..."))
         working_indicator.show()
 
@@ -90,7 +90,7 @@ class LicenseDialog(_LicenseDialogUI):
         self.license_manager.authenticate_with_oauth()
 
     def send_update_license_text(self, license_key: str):
-        working_indicator = WorkingIndicator(self)
+        working_indicator = WorkingIndicator(parent=self)
         working_indicator.setLabelText(self.tr("Uploading license..."))
         working_indicator.show()
 
@@ -131,7 +131,7 @@ class LicenseDialog(_LicenseDialogUI):
         elif isinstance(exc, bf_errors.UnauthorizedTokensError):
             self._handle_unauthorized_tokens_error(exc)
         else:
-            self._handle_unknown_error(exc)
+            raise exc
 
     def _handle_invalid_license_error(self, _exc):
 
@@ -188,6 +188,3 @@ class LicenseDialog(_LicenseDialogUI):
             title=message_title,
             message=message
         ).exec()
-
-    def _handle_unknown_error(self, exc):
-        raise exc

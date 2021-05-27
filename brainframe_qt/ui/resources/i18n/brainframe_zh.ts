@@ -755,7 +755,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>无效的授权格式</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="36"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="35"/>
         <source>Licenses</source>
         <translation>授权</translation>
     </message>
