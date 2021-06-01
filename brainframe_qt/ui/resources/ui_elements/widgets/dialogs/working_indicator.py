@@ -9,7 +9,7 @@ class WorkingIndicator(QProgressDialog):
     # https://www.qtcentre.org/threads/21414-Busy-Indicator-using-QProgressDialog?p=202257#post202257
     """
 
-    def __init__(self, cancelable: bool = False, *, parent: QObject):
+    def __init__(self, cancelable: bool = True, *, parent: QObject):
         super().__init__(parent=parent)
 
         self.cancelable = cancelable
