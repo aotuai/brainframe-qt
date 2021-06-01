@@ -24,9 +24,9 @@ class LicenseDialog(_LicenseDialogUI):
 
         self.license_manager = LicenseManager(parent=self)
 
-        self._init_signals()
-
         self._init_products()
+
+        self._init_signals()
 
     @classmethod
     def show_dialog(cls, *, parent: QObject):
@@ -43,9 +43,7 @@ class LicenseDialog(_LicenseDialogUI):
         self.license_details.license_text_update.connect(self.send_update_license_text)
         self.license_details.oauth_login_requested.connect(self.get_license_with_oauth)
 
-        # TODO: Display in client
-        self.license_manager.sign_in_successful.connect(print)
-        self.license_manager.license_applied.connect(self._handle_brainframe_license)
+        self.license_manager.license_applied.connect(self._handle_license_applied)
         self.license_manager.error.connect(self._handle_error)
 
     def _init_products(self):
@@ -80,8 +78,9 @@ class LicenseDialog(_LicenseDialogUI):
         working_indicator.setLabelText(self.tr("Authenticating with OAuth..."))
         working_indicator.show()
 
-        self.license_manager.sign_in_successful.connect(
+        self.license_manager.license_applied.connect(
             lambda _: working_indicator.cancel())
+
         self.license_manager.error.connect(lambda _: working_indicator.cancel())
 
         # TODO: This creates a loop
@@ -97,6 +96,7 @@ class LicenseDialog(_LicenseDialogUI):
         self.license_manager.license_applied.connect(
             lambda _: working_indicator.cancel())
         self.license_manager.error.connect(lambda _: working_indicator.cancel())
+
         # TODO:
         # working_indicator.canceled.connect(self.license_manager.cancel_oauth)
 
@@ -111,13 +111,19 @@ class LicenseDialog(_LicenseDialogUI):
         if self.license_details.product_name == product.name:
             self.license_details.set_product(product)
 
-    def _handle_brainframe_license(self, license_info: bf_codecs.LicenseInfo) -> None:
+    def _handle_license_applied(self, license_info: bf_codecs.LicenseInfo) -> None:
         product = LicensedProduct(
             name=self.BRAINFRAME_PRODUCT_NAME,
             icon_resource=self.BRAINFRAME_PRODUCT_ICON,
             license_info=license_info,
         )
         self.update_license_info(product)
+
+        BrainFrameMessage.information(
+            parent=self,
+            title=self.tr("License applied"),
+            message=self.tr("License successfully applied to server")
+        ).exec()
 
     def _handle_error(self, exc) -> None:
         if isinstance(exc, bf_errors.LicenseInvalidError):
