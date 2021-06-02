@@ -26,17 +26,18 @@ class PKCEReplyHandler(QOAuthHttpServerReplyHandler):
         self.callbackReceived.connect(self._on_callback_received)
 
     def start(self) -> None:
-        """Start listening"""
-        for port in self._PORTS:
-            logging.debug(f"PKCEReplyHandler attempting to listen at localhost:{port}")
-            if self.listen(address=QHostAddress.LocalHost, port=port):
-                break
+        """Start listening. Continue listening if not already listening"""
+        if not self.isListening():
+            for port in self._PORTS:
+                logging.debug(f"PKCEReplyHandler attempting to listen at localhost:{port}")
+                if self.listen(address=QHostAddress.LocalHost, port=port):
+                    break
 
-        else:
-            logging.error("Unable to start PKCEReplyHandler on any configured port")
-            return
+            else:
+                logging.error("Unable to start PKCEReplyHandler on any configured port")
+                return
 
-        logging.debug(f"PKCEReplyHandler listening at localhost:{port}")
+        logging.debug(f"PKCEReplyHandler listening at localhost:{self.port()}")
         self.ready.emit()
 
     def _on_callback_received(self, values: dict) -> None:

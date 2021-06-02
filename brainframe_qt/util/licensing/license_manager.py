@@ -50,6 +50,3 @@ class LicenseManager(QObject):
         QTAsyncWorker(self, api.set_license_key, f_args=(license_key,),
                       on_success=self.license_applied.emit, on_error=self.error.emit) \
             .start()
-
-    def cancel_oauth(self) -> None:
-        self.oauth.cancel_authentication()
