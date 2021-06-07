@@ -6,12 +6,14 @@ from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtWidgets import QWidget
 from shapely import geometry
 
-from brainframe_qt.api_utils.streaming.zone_status_frame import \
-    ZoneStatusFrame
+from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources.video_items.base import VideoItem
 from brainframe_qt.ui.resources.video_items.streams import StreamWidget
-from brainframe_qt.ui.resources.video_items.zones import \
-    InProgressLineItem, InProgressRegionItem, InProgressZoneItem
+from brainframe_qt.ui.resources.video_items.zones import (
+    InProgressLineItem,
+    InProgressRegionItem,
+    InProgressZoneItem
+)
 
 
 class VideoTaskConfig(StreamWidget):
@@ -28,9 +30,9 @@ class VideoTaskConfig(StreamWidget):
         self.setMouseTracking(True)
 
         # Always draw regions and lines. Never draw detections.
-        self.render_config.draw_regions = True
-        self.render_config.draw_lines = True
-        self.render_config.draw_detections = False
+        self.draw_regions = True
+        self.draw_lines = True
+        self.draw_detections = False
 
         self.in_progress_zone: Optional[InProgressZoneItem] = None
         """Displays to the user a zone with all the points they've chosen,
