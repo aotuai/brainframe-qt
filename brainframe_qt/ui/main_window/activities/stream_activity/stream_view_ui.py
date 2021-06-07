@@ -54,9 +54,9 @@ class _StreamViewUI(QWidget):
         self.splitter.addWidget(self.video_expanded_view)
 
         # https://stackoverflow.com/a/43835396/8134178
-        # 1 : 4 width ratio when expanded
-        x = 1000000
-        self.splitter.setSizes([x, 4 * x])
+        big_number = 1000000
+        ratio = 4  # 1:4 ratio when expanded
+        self.splitter.setSizes([big_number, ratio * big_number])
 
         self.setLayout(layout)
 
