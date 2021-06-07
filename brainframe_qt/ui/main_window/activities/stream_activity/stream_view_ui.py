@@ -5,12 +5,10 @@ from PyQt5.QtWidgets import QHBoxLayout, QSplitter, QWidget
 
 from brainframe_qt.ui.main_window.video_expanded_view.video_expanded_view import \
     VideoExpandedView
-from brainframe_qt.ui.main_window.video_thumbnail_view import \
-    VideoThumbnailView
+from brainframe_qt.ui.main_window.video_thumbnail_view import VideoThumbnailView
 from brainframe_qt.ui.resources import stylesheet_watcher
 from brainframe_qt.ui.resources.paths import qt_qss_paths
-from brainframe_qt.ui.resources.ui_elements.buttons import \
-    FloatingActionButton
+from brainframe_qt.ui.resources.ui_elements.buttons import FloatingActionButton
 
 
 class _StreamViewUI(QWidget):
@@ -56,13 +54,9 @@ class _StreamViewUI(QWidget):
         self.splitter.addWidget(self.video_expanded_view)
 
         # https://stackoverflow.com/a/43835396/8134178
-        # 1 : 4 width ratio when expanded
-        # I do this in a single-shot so that .width() can calculate after sizes
-        # have been initialized
-        set_splitter_sizes = functools.partial(
-            self.splitter.setSizes,
-            [.20 * self.width(), .80 * self.width()])
-        QTimer.singleShot(0, set_splitter_sizes)
+        big_number = 1000000
+        ratio = 4  # 1:4 ratio when expanded
+        self.splitter.setSizes([big_number, ratio * big_number])
 
         self.setLayout(layout)
 

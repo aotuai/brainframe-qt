@@ -1500,7 +1500,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>_StreamViewUI</name>
     <message>
-        <location filename="../../main_window/activities/stream_activity/stream_view_ui.py" line="37"/>
+        <location filename="../../main_window/activities/stream_activity/stream_view_ui.py" line="35"/>
         <source>Add new stream</source>
         <translation>添加新视频流</translation>
     </message>
