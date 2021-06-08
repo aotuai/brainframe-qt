@@ -2,8 +2,7 @@ from PyQt5.QtCore import QRectF, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter
 from PyQt5.QtWidgets import QWidget
 
-from brainframe_qt.api_utils.streaming.zone_status_frame import \
-    ZoneStatusFrame
+from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources.video_items.streams import StreamWidget
 
 
@@ -11,20 +10,10 @@ class VideoSmall(StreamWidget):
     """Video for ThumbnailView"""
 
     stream_clicked = pyqtSignal(object)
-    """Alerts the layout view that a thumbnail has been clicked
-    
-    Connected to:
-    - ThumbnailGridLayout -- Dynamic
-      [parent].thumbnail_stream_clicked_slot
-    """
+    """A thumbnail has been clicked"""
+
     ongoing_alerts_signal = pyqtSignal(bool)
-    """Alerts the layout view that the stream has a change in the state of its
-    ongoing alert
-    
-    Connected to:
-    - ThumbnailGridLayout -- Dynamic
-      [parent].ongoing_alerts_slot
-    """
+    """The stream's ongoing alert state has changed"""
 
     def __init__(self, parent: QWidget):
 
@@ -43,8 +32,7 @@ class VideoSmall(StreamWidget):
     def manage_alert_indication(self, zone_statuses):
 
         # Any active alerts?
-        alerts = any(zone_status.alerts
-                     for zone_status in zone_statuses.values())
+        alerts = any(zone_status.alerts for zone_status in zone_statuses.values())
 
         # self.ongoing_alerts is used during every paint in drawForeground
         if alerts and not self.alerts_ongoing:
@@ -63,8 +51,8 @@ class VideoSmall(StreamWidget):
         Text is positioned manually such that it looks nice within alert.
         Icon is positioned manually such that it looks nice within alert.
 
-        Overrides the super().drawForeground method which by default does pretty
-        much nothing
+        Overrides the super().drawForeground method which by default does pretty much
+        nothing
         """
         # Gray rectangle
         brush = painter.brush()
@@ -130,11 +118,3 @@ class VideoSmall(StreamWidget):
         self.stream_clicked.emit(self.stream_conf)
 
         super().mousePressEvent(event)
-
-    def add_selection_border(self):
-        """Add border around stream"""
-        pass
-
-    def remove_selection_border(self):
-        """Remove border around stream"""
-        pass
