@@ -1,8 +1,10 @@
+import typing
 from typing import Dict
 
 from PyQt5.QtCore import Qt, pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
+
 from brainframe.api.bf_codecs import StreamConfiguration
 
 from brainframe_qt.ui.resources.paths import qt_ui_paths
@@ -78,7 +80,7 @@ class ThumbnailGridLayout(QWidget):
         # Because the widgets are added dynamically, we can't connect slots
         # and signals using QtDesigner and have to do it manually
         widget.stream_clicked.connect(self.thumbnail_stream_clicked_slot)
-        widget.ongoing_alerts_signal.connect(self.ongoing_alerts_slot)
+        widget.alert_status_changed.connect(self.ongoing_alerts_slot)
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
@@ -105,7 +107,8 @@ class ThumbnailGridLayout(QWidget):
         - VideoSmall -- Dynamic
           [child].ongoing_alerts_signal
         """
-        stream_conf = self.sender().stream_conf
+        stream_widget = typing.cast(VideoSmall, self.sender())
+        stream_conf = stream_widget.stream_manager.stream_conf
         # noinspection PyUnresolvedReferences
         self.ongoing_alerts_signal.emit(stream_conf, alerts_ongoing)
 
