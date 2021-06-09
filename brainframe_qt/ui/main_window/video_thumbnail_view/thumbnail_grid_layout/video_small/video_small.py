@@ -2,7 +2,6 @@ from PyQt5.QtCore import QRectF, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter
 from PyQt5.QtWidgets import QWidget
 
-from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources.video_items.streams import StreamWidget
 
 
@@ -12,35 +11,19 @@ class VideoSmall(StreamWidget):
     stream_clicked = pyqtSignal(object)
     """A thumbnail has been clicked"""
 
-    ongoing_alerts_signal = pyqtSignal(bool)
+    alert_status_changed = pyqtSignal(bool)
     """The stream's ongoing alert state has changed"""
 
     def __init__(self, parent: QWidget):
+        super().__init__(parent=parent)
 
         self.alerts_ongoing: bool = False
 
-        super().__init__(parent=parent)
+        self._init_signals()
 
-    def on_frame(self, frame: ZoneStatusFrame):
-        super().on_frame(frame)
-
-        # zone_statuses can be None if the server has never once returned a
-        # result for this stream.
-        if frame.zone_statuses is not None:
-            self.manage_alert_indication(frame.zone_statuses)
-
-    def manage_alert_indication(self, zone_statuses):
-
-        # Any active alerts?
-        alerts = any(zone_status.alerts for zone_status in zone_statuses.values())
-
-        # self.ongoing_alerts is used during every paint in drawForeground
-        if alerts and not self.alerts_ongoing:
-            self.alerts_ongoing = True
-            self.ongoing_alerts_signal.emit(True)
-        elif not alerts and self.alerts_ongoing:
-            self.alerts_ongoing = False
-            self.ongoing_alerts_signal.emit(False)
+    def _init_signals(self) -> None:
+        self.stream_manager.alert_status_changed.connect(self.alert_status_changed)
+        self.stream_manager.alert_status_changed.connect(self.manage_alert_state)
 
     def drawForeground(self, painter: QPainter, rect: QRectF):
         """Draw the alert UI if there are ongoing alerts
@@ -108,7 +91,10 @@ class VideoSmall(StreamWidget):
                          int(height - (point_size / 2)),
                          stream_name_text)
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         super().mousePressEvent(event)
 
         self.stream_clicked.emit(self.stream_manager.stream_conf)
+
+    def manage_alert_state(self, alerts_active: bool) -> None:
+        self.alerts_ongoing = alerts_active

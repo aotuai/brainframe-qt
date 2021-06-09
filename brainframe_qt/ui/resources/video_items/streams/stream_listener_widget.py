@@ -18,7 +18,7 @@ class StreamEventManager(StreamListener):
     stream_error = pyqtSignal()
 
     frame_received = pyqtSignal(ZoneStatusFrame)
-    alert_received = pyqtSignal()
+    alert_status_changed = pyqtSignal(bool)
 
     def __init__(self, *, parent: QObject):
         StreamListener.__init__(self, parent=parent)
@@ -27,6 +27,8 @@ class StreamEventManager(StreamListener):
         """Current stream configuration used by the StreamReader"""
 
         self.stream_reader: Optional[SyncedStreamReader] = None
+
+        self._has_alerts: bool = False
 
         self._frame_event_timer = QTimer()
         self._frame_event_timer.timeout.connect(self.check_for_frame_events)
@@ -40,7 +42,19 @@ class StreamEventManager(StreamListener):
         if self.frame_event.is_set():
             self.frame_event.clear()
 
-            self.frame_received.emit(self.latest_frame)
+            new_frame = self.latest_frame
+
+            # Frame signal
+            self.frame_received.emit(new_frame)
+
+            # Alert signals
+            has_alerts = any(zs.alerts for zs in new_frame.zone_statuses.values())
+            if has_alerts and not self._has_alerts:
+                self._has_alerts = True
+                self.alert_status_changed.emit(True)
+            elif not has_alerts and self._has_alerts:
+                self._has_alerts = False
+                self.alert_status_changed.emit(False)
 
         if self.stream_initializing_event.is_set():
             self.stream_initializing_event.clear()
