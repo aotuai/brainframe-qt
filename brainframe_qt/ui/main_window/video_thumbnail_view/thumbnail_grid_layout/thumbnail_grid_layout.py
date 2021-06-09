@@ -56,7 +56,7 @@ class ThumbnailGridLayout(QWidget):
 
     def add_video(self, video: VideoSmall) -> None:
 
-        stream_id = video.stream_conf.id
+        stream_id = video.stream_manager.stream_conf.id
         self.stream_widgets[stream_id] = video
         self._add_widget_to_layout(video)
 

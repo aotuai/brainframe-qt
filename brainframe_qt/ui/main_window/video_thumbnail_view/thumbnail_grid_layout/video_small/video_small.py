@@ -102,7 +102,7 @@ class VideoSmall(StreamWidget):
 
         font_metric = QFontMetricsF(font)
         stream_name_text = font_metric.elidedText(
-            self.stream_conf.name,
+            self.stream_manager.stream_conf.name,
             Qt.ElideRight,
             width - image_width_with_margins)
 
@@ -111,10 +111,6 @@ class VideoSmall(StreamWidget):
                          stream_name_text)
 
     def mouseReleaseEvent(self, event):
-        # Add border around stream to indicate its selection
-        self.add_selection_border()
-
-        # noinspection PyUnresolvedReferences
-        self.stream_clicked.emit(self.stream_conf)
-
         super().mousePressEvent(event)
+
+        self.stream_clicked.emit(self.stream_manager.stream_conf)

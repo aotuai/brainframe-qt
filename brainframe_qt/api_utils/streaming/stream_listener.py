@@ -1,10 +1,14 @@
 from threading import Event
 
+from PyQt5.QtCore import QObject
 
-class StreamListener:
+
+class StreamListener(QObject):
     """This is used by SyncedStreamReader to pass events to the UI"""
 
-    def __init__(self):
+    def __init__(self, parent: QObject):
+        super().__init__(parent=parent)
+
         self.frame_event = Event()
         """Called when a new ZoneStatusFrame is ready"""
 
