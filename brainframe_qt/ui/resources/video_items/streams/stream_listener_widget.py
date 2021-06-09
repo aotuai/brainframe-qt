@@ -10,7 +10,7 @@ from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources import QTAsyncWorker
 
 
-class StreamManager(StreamListener):
+class StreamEventManager(StreamListener):
 
     stream_initializing = pyqtSignal()
     stream_halted = pyqtSignal()

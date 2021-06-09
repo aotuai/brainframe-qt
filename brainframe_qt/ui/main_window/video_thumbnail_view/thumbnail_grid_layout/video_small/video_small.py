@@ -37,11 +37,9 @@ class VideoSmall(StreamWidget):
         # self.ongoing_alerts is used during every paint in drawForeground
         if alerts and not self.alerts_ongoing:
             self.alerts_ongoing = True
-            # noinspection PyUnresolvedReferences
             self.ongoing_alerts_signal.emit(True)
         elif not alerts and self.alerts_ongoing:
             self.alerts_ongoing = False
-            # noinspection PyUnresolvedReferences
             self.ongoing_alerts_signal.emit(False)
 
     def drawForeground(self, painter: QPainter, rect: QRectF):

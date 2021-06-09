@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget
 from brainframe.api.bf_codecs import StreamConfiguration
 
 from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
-from .stream_listener_widget import StreamManager
+from .stream_listener_widget import StreamEventManager
 from .stream_widget_ui import StreamWidgetUI
 
 
@@ -19,7 +19,7 @@ class StreamWidget(StreamWidgetUI):
     def __init__(self, *, parent: QWidget):
         super().__init__(parent=parent)
 
-        self.stream_manager = StreamManager(parent=self)
+        self.stream_manager = StreamEventManager(parent=self)
 
         self._draw_lines: Optional[bool] = None
         self._draw_regions: Optional[bool] = None
