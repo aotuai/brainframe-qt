@@ -8,7 +8,8 @@ from PyQt5.uic import loadUi
 from brainframe.api.bf_codecs import StreamConfiguration
 
 from brainframe_qt.ui.resources.paths import qt_ui_paths
-from .video_small.video_small import VideoSmall
+
+from ..video_small import VideoSmall
 
 
 class ThumbnailGridLayout(QWidget):

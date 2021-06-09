@@ -1524,17 +1524,17 @@ Please recheck the entered server address.</source>
 <context>
     <name>_VideoThumbnailViewUI</name>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="73"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="72"/>
         <source>Streams with ongoing alerts:</source>
         <translation>正在警报的视频流：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="83"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="82"/>
         <source>Streams without alerts:</source>
         <translation>无警报的视频流：</translation>
     </message>
     <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="30"/>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="29"/>
         <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
         <translation>点击 ➕ 按钮以添加新的视频流</translation>
     </message>

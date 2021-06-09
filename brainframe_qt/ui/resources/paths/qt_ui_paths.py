@@ -12,8 +12,9 @@ alert_log_dir              = register_path(video_expanded_view_dir   , "alert_lo
 alert_log_ui               = register_path(alert_log_dir             , "alert_log.ui"             )
 
 video_thumbnail_view_dir   = register_path(main_window_dir           , "video_thumbnail_view"     )
+thumbnail_widget_dir       = register_path(video_thumbnail_view_dir  , "widgets"                  )
 
-thumbnail_grid_layout_dir  = register_path(video_thumbnail_view_dir  , "thumbnail_grid_layout"    )
+thumbnail_grid_layout_dir  = register_path(thumbnail_widget_dir      , "thumbnail_grid_layout"    )
 thumbnail_grid_layout_ui   = register_path(thumbnail_grid_layout_dir , "thumbnail_grid_layout.ui" )
 
 # Activities

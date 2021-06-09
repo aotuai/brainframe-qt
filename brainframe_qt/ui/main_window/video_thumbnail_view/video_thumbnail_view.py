@@ -1,17 +1,16 @@
 from typing import Dict, List
 
-from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, \
-    pyqtSlot
+from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
+
 from brainframe.api import bf_codecs
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.api_utils.zss_pubsub import zss_publisher
-from brainframe_qt.ui.main_window.video_thumbnail_view \
-    .thumbnail_grid_layout.video_small.video_small import VideoSmall
-from brainframe_qt.ui.main_window.video_thumbnail_view \
-    .video_thumbnail_view_ui import _VideoThumbnailViewUI
 from brainframe_qt.ui.resources import QTAsyncWorker
+
+from .widgets.video_small import VideoSmall
+from .video_thumbnail_view_ui import _VideoThumbnailViewUI
 
 
 class VideoThumbnailView(_VideoThumbnailViewUI):
