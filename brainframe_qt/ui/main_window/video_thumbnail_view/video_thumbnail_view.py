@@ -104,17 +104,16 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
                 # Currently unsupported
                 continue
 
-            if alert.end_time is not None \
-                    and stream_id not in alertless_streams:
+            if alert.end_time is not None and stream_id not in alertless_streams:
+                video_widget = self.alert_stream_layout.pop_stream_widget(stream_id)
 
-                video_widget = self.alert_stream_layout.pop_stream_widget(
-                    stream_id)
+                video_widget.alerts_ongoing = False
                 self.alertless_stream_layout.add_video(video_widget)
 
             elif alert.end_time is None and stream_id not in alert_streams:
+                video_widget = self.alertless_stream_layout.pop_stream_widget(stream_id)
 
-                video_widget = self.alertless_stream_layout.pop_stream_widget(
-                    stream_id)
+                video_widget.alerts_ongoing = True
                 self.alert_stream_layout.add_video(video_widget)
 
         streams_with_alerts = len(self.alert_stream_layout.stream_widgets) > 0
