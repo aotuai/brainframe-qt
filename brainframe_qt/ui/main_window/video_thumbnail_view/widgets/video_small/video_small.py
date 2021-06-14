@@ -68,22 +68,23 @@ class VideoSmall(StreamWidget):
 
             image_width_with_margins = image.width() + (2.5 * image_margin)
 
-        # Draw text
-        font = painter.font()
-        point_size = bar_height / 2
-        font.setPointSizeF(point_size if point_size > 0 else 1)
-        painter.setFont(font)
-        painter.setPen(Qt.white)
+        if self.stream_manager.stream_conf is not None:
+            # Draw text
+            font = painter.font()
+            point_size = bar_height / 2
+            font.setPointSizeF(point_size if point_size > 0 else 1)
+            painter.setFont(font)
+            painter.setPen(Qt.white)
 
-        font_metric = QFontMetricsF(font)
-        stream_name_text = font_metric.elidedText(
-            self.stream_manager.stream_conf.name,
-            Qt.ElideRight,
-            width - image_width_with_margins)
+            font_metric = QFontMetricsF(font)
+            stream_name_text = font_metric.elidedText(
+                self.stream_manager.stream_conf.name,
+                Qt.ElideRight,
+                width - image_width_with_margins)
 
-        painter.drawText(int(point_size / 2),
-                         int(height - (point_size / 2)),
-                         stream_name_text)
+            painter.drawText(int(point_size / 2),
+                             int(height - (point_size / 2)),
+                             stream_name_text)
 
     def mouseReleaseEvent(self, event) -> None:
         super().mousePressEvent(event)
