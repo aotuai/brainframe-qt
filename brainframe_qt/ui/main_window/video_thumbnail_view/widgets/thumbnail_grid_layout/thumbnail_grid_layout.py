@@ -53,9 +53,10 @@ class ThumbnailGridLayout(QWidget):
         video = VideoSmall(parent=self)
         video.change_stream(stream_conf)
 
-        self.add_video(video)
+        video.stream_clicked.connect(self.thumbnail_stream_clicked_slot)
+        video.alert_status_changed.connect(self.ongoing_alerts_slot)
 
-        self._connect_widget_signals(video)
+        self.add_video(video)
 
     def add_video(self, video: VideoSmall) -> None:
 
@@ -73,15 +74,6 @@ class ThumbnailGridLayout(QWidget):
         # row+1 is equal to number of rows in grid after addition
         # (+1 is for indexing at 1 for a count)
         self.grid_num_rows = row + 1
-
-    def _connect_widget_signals(self, widget: VideoSmall):
-        """Connect the stream widget's signal(s) to the grid and to the parent
-        view
-        """
-        # Because the widgets are added dynamically, we can't connect slots
-        # and signals using QtDesigner and have to do it manually
-        widget.stream_clicked.connect(self.thumbnail_stream_clicked_slot)
-        widget.alert_status_changed.connect(self.ongoing_alerts_slot)
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
