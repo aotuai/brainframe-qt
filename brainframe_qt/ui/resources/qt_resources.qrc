@@ -6,6 +6,8 @@
         <file alias="loading_image_svg">images/loading_image.svg</file>
         <file alias="no_image_svg">images/no_image_available.svg</file>
         <file alias="splash_screen_png">images/splash_screen.png</file>
+        <file alias="streaming_paused_png">images/streaming_paused.png</file>
+        <file alias="streaming_stopped_png">images/streaming_stopped.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="alarm">images/icons/alarm.svg</file>

@@ -1,8 +1,9 @@
 from typing import Optional
 
-from PyQt5.QtCore import QCoreApplication, QTimer, QObject, pyqtSignal
+from PyQt5.QtCore import QTimer, QObject, pyqtSignal
 
-from brainframe.api import bf_codecs, bf_errors
+from brainframe.api.bf_codecs import StreamConfiguration
+from brainframe.api.bf_errors import StreamConfigNotFoundError, StreamNotOpenedError
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.api_utils.streaming import StreamListener, SyncedStreamReader
@@ -19,12 +20,10 @@ class StreamEventManager(StreamListener):
 
     frame_received = pyqtSignal(ZoneStatusFrame)
 
-    def __init__(self, *, parent: QObject):
+    def __init__(self, stream_conf: StreamConfiguration, *, parent: QObject):
         StreamListener.__init__(self, parent=parent)
 
-        self.stream_conf: Optional[bf_codecs.StreamConfiguration] = None
-        """Current stream configuration used by the StreamReader"""
-
+        self.stream_conf: StreamConfiguration = stream_conf
         self.stream_reader: Optional[SyncedStreamReader] = None
 
         self._has_alerts: bool = False
@@ -32,6 +31,8 @@ class StreamEventManager(StreamListener):
         self._frame_event_timer = QTimer()
         self._frame_event_timer.timeout.connect(self.check_for_frame_events)
         self._frame_event_timer.start(1000 // 30)  # ~30 FPS
+
+        self._start_streaming()
 
     @property
     def latest_frame(self) -> ZoneStatusFrame:
@@ -64,11 +65,7 @@ class StreamEventManager(StreamListener):
 
             self.stream_error.emit()
 
-    def change_stream(self, stream_conf: bf_codecs.StreamConfiguration) -> None:
-
-        # Clear the existing stream reader to get ready for a new one
-        self._clear_current_stream_reader()
-        self.stream_conf = stream_conf
+    def _start_streaming(self) -> None:
 
         def handle_stream_url(stream_url: Optional[str]) -> None:
             # Occurs when the get_stream_url() call fails due to
@@ -76,44 +73,17 @@ class StreamEventManager(StreamListener):
             if stream_url is None:
                 return
 
-            self._subscribe_to_stream(stream_conf, stream_url)
+            self._subscribe_to_stream(stream_url)
 
-        QTAsyncWorker(self, self._get_stream_url, f_args=(stream_conf,),
+        QTAsyncWorker(self, self._get_stream_url, f_args=(self.stream_conf,),
                       on_success=handle_stream_url) \
             .start()
 
-    def stop_streaming(self) -> None:
-        self._clear_current_stream_reader()
-        self.stream_conf = None
-
-        self.stream_halted.emit()
-
-    def _clear_current_stream_reader(self):
-        """If we currently have a stream reader, unsubscribe its listener
-        and clear any posted events"""
-
-        # Ensure that we're not storing a stream_conf
-        self.stream_conf = None
-
-        if not self.stream_reader:
-            return
-
-        self.destroyed.disconnect()
-
-        self.stream_reader.remove_listener(listener=self)
-
-        # Make sure no more events are sent to this listener
-        QCoreApplication.removePostedEvents(self)
-
-        self.stream_reader = None
-
-    def _subscribe_to_stream(self, stream_conf: bf_codecs.StreamConfiguration,
-                             stream_url: str) \
-            -> None:
+    def _subscribe_to_stream(self, stream_url: str) -> None:
 
         # Create the stream reader
         stream_reader = api.get_stream_manager() \
-            .start_streaming(stream_conf, stream_url)
+            .start_streaming(self.stream_conf, stream_url)
 
         if stream_reader is None:
             # This will happen if we try to get a StreamReader for a stream
@@ -124,19 +94,14 @@ class StreamEventManager(StreamListener):
 
         # Subscribe to the StreamReader
         self.stream_reader = stream_reader
-        self.stream_reader.add_listener(listener=self)
+        self.stream_reader.add_listener(self)
 
         # Make sure video is unsubscribed before it is GCed
-        self.destroyed.connect(
-            lambda: self.stream_reader.remove_listener(listener=self))
+        self.destroyed.connect(lambda: self.stream_reader.remove_listener(self))
 
     @staticmethod
-    def _get_stream_url(stream_conf: bf_codecs.StreamConfiguration) \
-            -> Optional[str]:
+    def _get_stream_url(stream_conf: StreamConfiguration) -> Optional[str]:
         try:
             return api.get_stream_url(stream_conf.id)
-        except (
-                bf_errors.StreamConfigNotFoundError,
-                bf_errors.StreamNotOpenedError
-        ):
+        except (StreamConfigNotFoundError, StreamNotOpenedError):
             return None
