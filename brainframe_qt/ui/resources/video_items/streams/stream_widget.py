@@ -79,11 +79,11 @@ class StreamWidget(StreamWidgetUI):
     def draw_detections(self, draw_detections: bool):
         self._draw_detections = draw_detections
 
-    def change_stream(self, stream_conf: Optional[StreamConfiguration]) -> None:
-        if stream_conf is None:
-            self.stream_manager.stop_streaming()
-        else:
-            self.stream_manager.change_stream(stream_conf)
+    def change_stream(self, stream_conf: StreamConfiguration) -> None:
+        self.stream_manager.change_stream(stream_conf)
+
+    def stop_streaming(self) -> None:
+        self.stream_manager.stop_streaming()
 
     def on_frame(self, frame: ZoneStatusFrame) -> None:
 

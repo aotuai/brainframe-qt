@@ -129,7 +129,8 @@ class MainWindow(MainWindowUI):
                 self.close_sidebar_widget()
 
         def change_stream_configuration(
-                stream_conf: Optional[bf_codecs.StreamConfiguration]):
+                stream_conf: bf_codecs.StreamConfiguration
+        ) -> None:
             sidebar_widget = self.sidebar_dock_widget.widget()
             if not isinstance(sidebar_widget, StreamConfiguration):
                 return

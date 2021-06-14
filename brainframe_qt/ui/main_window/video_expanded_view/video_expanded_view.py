@@ -119,10 +119,10 @@ class VideoExpandedView(QWidget):
         """Signaled by close button"""
 
         # Stop attempting to display a stream
-        self.expanded_video.change_stream(None)
+        self.expanded_video.stop_streaming()
 
         # Stop alert log from asking for alerts from stream
-        self.alert_log.change_stream(None)
+        self.alert_log.stop_streaming()
 
         # No more stream_conf associate with
         self.stream_conf = None

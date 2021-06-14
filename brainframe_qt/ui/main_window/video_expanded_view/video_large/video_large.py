@@ -38,13 +38,15 @@ class VideoLarge(StreamWidget):
         # of the layout when the VideoLarge widget is very narrow
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
-    def change_stream(self,
-                      stream_conf: Optional[bf_codecs.StreamConfiguration]) \
-            -> None:
-
+    def change_stream(self, stream_conf: bf_codecs.StreamConfiguration) -> None:
         super().change_stream(stream_conf)
 
         self.stream_overlay.change_stream(stream_conf)
+
+    def stop_streaming(self) -> None:
+        super().stop_streaming()
+
+        self.stream_overlay.stop_streaming()
 
     def on_frame(self, frame: ZoneStatusFrame):
         super().on_frame(frame)

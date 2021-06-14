@@ -43,8 +43,7 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
 
             self._init_alert_pubsub()
 
-        QTAsyncWorker(self, api.get_stream_configurations,
-                      on_success=on_success) \
+        QTAsyncWorker(self, api.get_stream_configurations, on_success=on_success) \
             .start()
 
     @property
@@ -125,6 +124,5 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
 
         abandoned_stream_ids = alert_streams.keys() - stream_ids_with_alerts
         for stream_id in abandoned_stream_ids:
-            video_widget = self.alert_stream_layout \
-                .pop_stream_widget(stream_id)
+            video_widget = self.alert_stream_layout.pop_stream_widget(stream_id)
             self.alertless_stream_layout.add_video(video_widget)

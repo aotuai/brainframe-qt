@@ -64,9 +64,7 @@ class StreamEventManager(StreamListener):
 
             self.stream_error.emit()
 
-    def change_stream(
-        self, stream_conf: Optional[bf_codecs.StreamConfiguration]
-    ) -> None:
+    def change_stream(self, stream_conf: bf_codecs.StreamConfiguration) -> None:
 
         # Clear the existing stream reader to get ready for a new one
         self._clear_current_stream_reader()

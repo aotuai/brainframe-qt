@@ -49,7 +49,7 @@ class ThumbnailGridLayout(QWidget):
 
         self._init_style()
 
-    def new_stream_widget(self, stream_conf: StreamConfiguration):
+    def new_stream_widget(self, stream_conf: StreamConfiguration) -> None:
         video = VideoSmall(parent=self)
         video.change_stream(stream_conf)
 
