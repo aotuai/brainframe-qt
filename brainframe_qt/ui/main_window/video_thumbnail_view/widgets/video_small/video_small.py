@@ -19,12 +19,6 @@ class VideoSmall(StreamWidget):
 
         self.alerts_ongoing: bool = False
 
-        self._init_signals()
-
-    def _init_signals(self) -> None:
-        self.stream_manager.alert_status_changed.connect(self.alert_status_changed)
-        self.stream_manager.alert_status_changed.connect(self.manage_alert_state)
-
     def drawForeground(self, painter: QPainter, rect: QRectF):
         """Draw the alert UI if there are ongoing alerts
 

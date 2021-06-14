@@ -18,7 +18,6 @@ class StreamEventManager(StreamListener):
     stream_error = pyqtSignal()
 
     frame_received = pyqtSignal(ZoneStatusFrame)
-    alert_status_changed = pyqtSignal(bool)
 
     def __init__(self, *, parent: QObject):
         StreamListener.__init__(self, parent=parent)
@@ -42,19 +41,8 @@ class StreamEventManager(StreamListener):
         if self.frame_event.is_set():
             self.frame_event.clear()
 
-            new_frame = self.latest_frame
-
-            # Frame signal
-            self.frame_received.emit(new_frame)
-
-            # Alert signals
-            has_alerts = any(zs.alerts for zs in new_frame.zone_statuses.values())
-            if has_alerts and not self._has_alerts:
-                self._has_alerts = True
-                self.alert_status_changed.emit(True)
-            elif not has_alerts and self._has_alerts:
-                self._has_alerts = False
-                self.alert_status_changed.emit(False)
+            frame = self.stream_reader.latest_processed_frame
+            self.frame_received.emit(frame)
 
         if self.stream_initializing_event.is_set():
             self.stream_initializing_event.clear()
@@ -84,15 +72,6 @@ class StreamEventManager(StreamListener):
         self._clear_current_stream_reader()
         self.stream_conf = stream_conf
 
-        # When we no longer want to use a StreamListenerWidget for an active
-        # stream
-        if not stream_conf:
-            # Typically a user shouldn't see this, but sometimes the client is
-            # laggy in closing the widget, so we don't use the error message
-            self.on_stream_closed()
-
-            return
-
         def handle_stream_url(stream_url: Optional[str]) -> None:
             # Occurs when the get_stream_url() call fails due to
             # the stream having been deleted
@@ -104,6 +83,12 @@ class StreamEventManager(StreamListener):
         QTAsyncWorker(self, self._get_stream_url, f_args=(stream_conf,),
                       on_success=handle_stream_url) \
             .start()
+
+    def stop_streaming(self) -> None:
+        self._clear_current_stream_reader()
+        self.stream_conf = None
+
+        self.stream_halted.emit()
 
     def _clear_current_stream_reader(self):
         """If we currently have a stream reader, unsubscribe its listener
