@@ -1,35 +1,47 @@
 import logging
+from typing import Dict, List
 
-from brainframe.api import BrainFrameAPI, StatusReceiver
+from PyQt5.QtCore import QObject
+
 from brainframe.api.bf_codecs import StreamConfiguration
 from gstly import gobject_init
 from gstly.gst_stream_reader import GstStreamReader
 from gstly.abstract_stream_reader import StreamReader
 
+from brainframe_qt.api_utils import api
+
 from .synced_reader import SyncedStreamReader
 
 
-class StreamManager:
-    """Keeps track of existing Stream objects, and creates new ones as
-    necessary.
-    """
+class StreamManager(QObject):
+    """Keeps track of existing Stream objects, and creates new ones as necessary"""
 
-    REHOSTED_VIDEO_TYPES = [StreamConfiguration.ConnType.WEBCAM,
-                            StreamConfiguration.ConnType.FILE]
+    REHOSTED_VIDEO_TYPES = [
+        StreamConfiguration.ConnType.WEBCAM,
+        StreamConfiguration.ConnType.FILE,
+    ]
     """These video types are re-hosted by the server."""
 
-    def __init__(self, status_receiver: StatusReceiver):
-        self._stream_readers = {}
-        self._status_receiver = status_receiver
-        self._async_closing_streams = []
+    def __init__(self, *, parent: QObject):
+        super().__init__(parent=parent)
+
+        self._stream_readers: Dict[int, SyncedStreamReader] = {}
+        self._async_closing_streams: List[SyncedStreamReader] = []
         """A list of StreamReader objects that are closing or may have finished
         closing"""
 
-    def start_streaming(self,
-                        stream_config: StreamConfiguration,
-                        url: str) -> SyncedStreamReader:
-        """Starts reading from the stream using the given information, or
-        returns an existing reader if we're already reading this stream.
+        self._init_signals()
+
+    def _init_signals(self) -> None:
+        self.destroyed.connect(self.close)
+
+    def start_streaming(
+        self,
+        stream_config: StreamConfiguration,
+        url: str
+    ) -> SyncedStreamReader:
+        """Starts reading from the stream using the given information, or returns an
+        existing reader if we're already reading this stream.
 
         :param stream_config: The stream to connect to
         :param url: The URL to stream on
@@ -42,22 +54,25 @@ class StreamManager:
             latency = StreamReader.DEFAULT_LATENCY
             if stream_config.connection_type in self.REHOSTED_VIDEO_TYPES:
                 latency = StreamReader.REHOSTED_LATENCY
+
             gobject_init.start()
 
-            # Streams created with a premises are always proxied from that
-            # premises
-            proxied = stream_config.premises_id is not None
+            # Streams created with a premises are always proxied from that premises
+            is_proxied = stream_config.premises_id is not None
 
             stream_reader = GstStreamReader(
                 url,
                 latency=latency,
                 runtime_options=stream_config.runtime_options,
                 pipeline_str=pipeline,
-                proxied=proxied)
+                proxied=is_proxied)
+
             synced_stream_reader = SyncedStreamReader(
                 stream_config.id,
                 stream_reader,
-                self._status_receiver)
+                parent=self,
+            )
+
             self._stream_readers[stream_config.id] = synced_stream_reader
 
         return self._stream_readers[stream_config.id]
@@ -96,30 +111,10 @@ class StreamManager:
         stream.close()
         return stream
 
-
-class StreamManagerAPI(BrainFrameAPI):
-    """Augments the API class to manage and provide a StreamManager."""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._stream_manager = None
-
-    def delete_stream_configuration(self, stream_id,
-                                    timeout=120):
-        super().delete_stream_configuration(stream_id, timeout)
-        if self._stream_manager is not None \
-                and self._stream_manager.is_streaming(stream_id):
-            self._stream_manager.close_stream_async(stream_id)
-
-    def get_stream_manager(self):
-        """Returns a singleton StreamManager object"""
-        # Lazily import streaming code to avoid OpenCV dependencies unless
-        # necessary
-        from brainframe_qt.api_utils.streaming import StreamManager
-
-        if self._stream_manager is None:
-            self._stream_manager = StreamManager(self.get_status_receiver())
-        return self._stream_manager
+    def delete_stream(self, stream_id: int, timeout: int = 120) -> None:
+        api.delete_stream_configuration(stream_id, timeout=timeout)
+        if self.is_streaming(stream_id):
+            self.close_stream_async(stream_id)
 
     def get_stream_reader(self, stream_config: StreamConfiguration):
         """Get the SyncedStreamReader for the given stream_configuration.
@@ -127,13 +122,7 @@ class StreamManagerAPI(BrainFrameAPI):
         :param stream_config: The stream configuration to open.
         :return: A SyncedStreamReader object
         """
-        url = self.get_stream_url(stream_config.id)
+        url = api.get_stream_url(stream_config.id)
         logging.info("API: Opening stream on url " + url)
 
-        return self.get_stream_manager().start_streaming(stream_config, url)
-
-    def close(self):
-        super().close()
-        if self._stream_manager is not None:
-            self._stream_manager.close()
-            self._stream_manager = None
+        return self.start_streaming(stream_config, url)

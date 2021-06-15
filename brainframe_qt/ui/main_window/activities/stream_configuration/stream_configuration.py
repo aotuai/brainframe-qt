@@ -6,19 +6,16 @@ from typing import Callable, List, Optional, Union
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QDialogButtonBox, QWidget
+
 from brainframe.api import bf_codecs, bf_errors
 
-from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils import api, get_stream_manager
 from brainframe_qt.ui.main_window.activities.stream_configuration \
     .stream_configuration_ui import StreamConfigurationUI
-from brainframe_qt.ui.resources import CanceledError, ProgressFileReader, \
-    QTAsyncWorker
-from brainframe_qt.ui.resources.links.documentation \
-    import IP_CAMERA_DOCS_LINK
-from brainframe_qt.ui.resources.ui_elements.widgets import \
-    FileUploadProgressDialog
-from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
-    BrainFrameMessage
+from brainframe_qt.ui.resources import CanceledError, ProgressFileReader, QTAsyncWorker
+from brainframe_qt.ui.resources.links.documentation import IP_CAMERA_DOCS_LINK
+from brainframe_qt.ui.resources.ui_elements.widgets import FileUploadProgressDialog
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
 
 class StreamConfiguration(StreamConfigurationUI):
@@ -697,7 +694,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if isinstance(exc, bf_errors.AnalysisLimitExceededError):
             # Delete the stream configuration, since you almost never want to
             # have a stream that can't have analysis running
-            QTAsyncWorker(self, api.delete_stream_configuration,
+            QTAsyncWorker(self, get_stream_manager().delete_stream_configuration,
                           f_args=(stream_conf.id,)) \
                 .start()
 

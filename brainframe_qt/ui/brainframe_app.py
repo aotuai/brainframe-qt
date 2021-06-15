@@ -12,7 +12,7 @@ from brainframe.api import bf_errors
 from gstly import gobject_init
 
 import brainframe_qt
-from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils import api, init_stream_manager
 from brainframe_qt.api_utils.connection_manager import ConnectionManager
 from brainframe_qt.extensions.loader import ExtensionLoader
 from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
@@ -193,6 +193,10 @@ class BrainFrameApplication(SingletonApplication):
             server_version = api.version()
             if server_version != brainframe_qt.__version__:
                 self._handle_version_mismatch(server_version)
+
+            # Initialize the StreamManager
+            # TODO: Find a better way of doing this
+            init_stream_manager(parent=self)
 
             ExtensionLoader().load_extensions()
 

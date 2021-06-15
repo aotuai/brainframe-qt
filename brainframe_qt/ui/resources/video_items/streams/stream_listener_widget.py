@@ -2,13 +2,12 @@ from typing import Optional
 
 from PyQt5.QtCore import QCoreApplication, QTimer
 from PyQt5.QtWidgets import QWidget
+
 from brainframe.api import bf_codecs, bf_errors
 
-from brainframe_qt.api_utils import api
-from brainframe_qt.api_utils.streaming import StreamListener, \
-    SyncedStreamReader
-from brainframe_qt.api_utils.streaming.zone_status_frame import \
-    ZoneStatusFrame
+from brainframe_qt.api_utils import api, get_stream_manager
+from brainframe_qt.api_utils.streaming import StreamListener, SyncedStreamReader
+from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources import QTAsyncWorker
 
 
@@ -118,8 +117,8 @@ class StreamListenerWidget(QWidget, StreamListener):
             -> None:
 
         # Create the stream reader
-        stream_reader = api.get_stream_manager() \
-            .start_streaming(stream_conf, stream_url)
+        stream_manager = get_stream_manager()
+        stream_reader = stream_manager.start_streaming(stream_conf, stream_url)
 
         if stream_reader is None:
             # This will happen if we try to get a StreamReader for a stream
