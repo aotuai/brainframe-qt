@@ -1,9 +1,9 @@
 import logging
-from threading import RLock, Thread, Event
+from threading import Thread, Event
 from time import sleep
-from typing import Optional, Set
+from typing import Optional
 
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, pyqtSignal
 
 from gstly.abstract_stream_reader import StreamReader, StreamStatus, FRAME
 from gstly.gst_stream_reader import GstStreamReader
@@ -13,12 +13,14 @@ from brainframe_qt.ui.resources.mixins.base_mixin import ABCObject
 from brainframe_qt.util.events import or_events
 
 from .frame_syncer import FrameSyncer
-from .stream_listener import StreamListener
 from .zone_status_frame import ZoneStatusFrame
 
 
 class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
     """Reads frames from a stream and syncs them up with zone statuses."""
+
+    frame_received = pyqtSignal(ZoneStatusFrame)
+    stream_state_changed = pyqtSignal(StreamStatus)
 
     def __init__(
         self,
@@ -40,8 +42,7 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
         self.latest_processed_frame: Optional[ZoneStatusFrame] = None
         """Latest frame synced with results. None if no frames have been synced yet"""
 
-        self.stream_listeners: Set[StreamListener] = set()
-        self._stream_listeners_lock = RLock()
+        self.frame_syncer = FrameSyncer()
 
         # Start threads, now that the object is all set up
         self._thread = Thread(
@@ -50,45 +51,6 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
             daemon=True
         )
         self._thread.start()
-
-    def alert_frame_listeners(self) -> None:
-        with self._stream_listeners_lock:
-            if self.status is StreamStatus.STREAMING:
-                for listener in self.stream_listeners:
-                    listener.frame_event.set()
-
-    def alert_status_listeners(self, status: StreamStatus) -> None:
-        """This should be called whenever the StreamStatus has changed"""
-        with self._stream_listeners_lock:
-            if status is StreamStatus.INITIALIZING:
-                for listener in self.stream_listeners:
-                    listener.stream_initializing_event.set()
-            elif status is StreamStatus.HALTED:
-                for listener in self.stream_listeners:
-                    listener.stream_halted_event.set()
-            elif status is StreamStatus.CLOSED:
-                for listener in self.stream_listeners:
-                    listener.stream_closed_event.set()
-            else:
-                logging.critical("SyncedStreamReader: An event was called, but was not "
-                                 "actually necessary!")
-                for listener in self.stream_listeners:
-                    listener.stream_error_event.set()
-
-    def add_listener(self, listener: StreamListener) -> None:
-        with self._stream_listeners_lock:
-            self.stream_listeners.add(listener)
-            if self.status is not StreamStatus.STREAMING:
-                self.alert_status_listeners(self.status)
-            elif self.latest_processed_frame is not None:
-                self.alert_frame_listeners()
-            else:
-                listener.stream_initializing_event.set()
-
-    def remove_listener(self, listener: StreamListener) -> None:
-        with self._stream_listeners_lock:
-            self.stream_listeners.remove(listener)
-            listener.clear_all_events()
 
     @property
     def status(self) -> StreamStatus:
@@ -113,65 +75,58 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
         while self.status is not StreamStatus.INITIALIZING:
             sleep(0.01)
 
-        # Create the FrameSyncer
-        frame_syncer = FrameSyncer()
-
         frame_or_status_event = or_events(self._stream_reader.new_frame_event,
                                           self._stream_reader.new_status_event)
 
-        while True:
+        while self.status is not StreamStatus.CLOSED:
             frame_or_status_event.wait()
 
             if self._stream_reader.new_status_event.is_set():
-                self._stream_reader.new_status_event.clear()
-                if self.status is StreamStatus.CLOSED:
-                    break
-                if self.status is not StreamStatus.STREAMING:
-                    self.alert_status_listeners(self.status)
-                    continue
-
-            # If streaming is the new event we need to process the frame
-            if not self._stream_reader.new_frame_event.is_set():
-                continue
-
-            # new_frame_event must have been triggered
-            self._stream_reader.new_frame_event.clear()
-
-            # Get the new frame + timestamp
-            frame_tstamp, frame_bgr = self._stream_reader.latest_frame
-            frame_rgb = frame_bgr[..., ::-1].copy()
-            del frame_bgr
-
-            # Get the latest zone statuses from status receiver thread
-            statuses = api.get_status_receiver().latest_statuses(self.stream_id)
-
-            # Run the syncing algorithm
-            new_processed_frame = frame_syncer.sync(
-                latest_frame=ZoneStatusFrame(
-                    frame=frame_rgb,
-                    tstamp=frame_tstamp,
-                ),
-                latest_zone_statuses=statuses
-            )
-
-            if new_processed_frame is not None:
-                if self.latest_processed_frame is None:
-                    is_new = True
-                else:
-                    previous_tstamp = self.latest_processed_frame.tstamp
-                    new_tstamp = new_processed_frame.tstamp
-                    is_new = new_tstamp > previous_tstamp
-
-                # This value must be set before alerting frame listeners. This
-                # prevents a race condition where latest_processed_frame is
-                # None
-                self.latest_processed_frame = new_processed_frame
-
-                # Alert frame listeners if this a new frame
-                if is_new:
-                    self.alert_frame_listeners()
+                self._handle_status_event()
+            if self._stream_reader.new_frame_event.is_set():
+                self._handle_frame_event()
 
         logging.info("SyncedStreamReader: Closing")
+
+    def _handle_status_event(self) -> None:
+        self._stream_reader.new_status_event.clear()
+        self.stream_state_changed.emit(self.status)
+
+    def _handle_frame_event(self) -> None:
+        self._stream_reader.new_frame_event.clear()
+
+        # Get the new frame + timestamp
+        frame_tstamp, frame_bgr = self._stream_reader.latest_frame
+        frame_rgb = frame_bgr[..., ::-1].copy()
+        del frame_bgr
+
+        # Get the latest zone statuses from status receiver thread
+        statuses = api.get_status_receiver().latest_statuses(self.stream_id)
+
+        # Run the syncing algorithm
+        new_processed_frame = self.frame_syncer.sync(
+            latest_frame=ZoneStatusFrame(
+                frame=frame_rgb,
+                tstamp=frame_tstamp,
+            ),
+            latest_zone_statuses=statuses
+        )
+
+        if new_processed_frame is not None:
+            if self.latest_processed_frame is None:
+                is_new = True
+            else:
+                previous_tstamp = self.latest_processed_frame.tstamp
+                new_tstamp = new_processed_frame.tstamp
+                is_new = new_tstamp > previous_tstamp
+
+            # This value must be set before alerting frame listeners. This prevents a
+            # race condition where latest_processed_frame is None
+            self.latest_processed_frame = new_processed_frame
+
+            # Alert frame listeners if this a new frame
+            if is_new:
+                self.frame_received.emit(self.latest_processed_frame)
 
     def close(self) -> None:
         """Sends a request to close the SyncedStreamReader."""
