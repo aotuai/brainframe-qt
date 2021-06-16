@@ -12,7 +12,7 @@ from brainframe.api import bf_errors
 from gstly import gobject_init
 
 import brainframe_qt
-from brainframe_qt.api_utils import api, init_stream_manager
+from brainframe_qt.api_utils import api, init_stream_manager, get_stream_manager
 from brainframe_qt.api_utils.connection_manager import ConnectionManager
 from brainframe_qt.extensions.loader import ExtensionLoader
 from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
@@ -181,6 +181,8 @@ class BrainFrameApplication(SingletonApplication):
     def _shutdown(self):
         api.close()
         gobject_init.close()
+
+        get_stream_manager().close()
 
         self.connection_manager.requestInterruption()
         self.connection_manager.wait(5000)  # milliseconds

@@ -694,7 +694,7 @@ class StreamConfiguration(StreamConfigurationUI):
         if isinstance(exc, bf_errors.AnalysisLimitExceededError):
             # Delete the stream configuration, since you almost never want to
             # have a stream that can't have analysis running
-            QTAsyncWorker(self, get_stream_manager().delete_stream_configuration,
+            QTAsyncWorker(self, get_stream_manager().delete_stream,
                           f_args=(stream_conf.id,)) \
                 .start()
 

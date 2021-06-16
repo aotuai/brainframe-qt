@@ -1,5 +1,5 @@
 import logging
-from threading import Thread, Event
+from threading import Event
 from time import sleep
 from typing import Optional
 
@@ -21,6 +21,8 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
 
     frame_received = pyqtSignal(ZoneStatusFrame)
     stream_state_changed = pyqtSignal(StreamStatus)
+
+    finished = pyqtSignal()
 
     def __init__(
         self,
@@ -44,13 +46,27 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
 
         self.frame_syncer = FrameSyncer()
 
-        # Start threads, now that the object is all set up
-        self._thread = Thread(
-            name=f"SyncedStreamReader thread for stream ID {stream_reader}",
-            target=self._sync_detections_with_stream,
-            daemon=True
-        )
-        self._thread.start()
+    def run(self) -> None:
+        while self.status is not StreamStatus.INITIALIZING:
+            sleep(0.01)
+
+        frame_or_status_event = or_events(self._stream_reader.new_frame_event,
+                                          self._stream_reader.new_status_event)
+
+        while (
+            self.status is not StreamStatus.CLOSED
+            and not self.thread().isInterruptionRequested()
+        ):
+            if not frame_or_status_event.wait(10):
+                continue
+
+            if self._stream_reader.new_status_event.is_set():
+                self._handle_status_event()
+            if self._stream_reader.new_frame_event.is_set():
+                self._handle_frame_event()
+
+        logging.info(f"SyncedStreamReader for stream {self.stream_id} closing")
+        self.finished.emit()
 
     @property
     def status(self) -> StreamStatus:
@@ -70,23 +86,6 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
 
     def set_runtime_option_vals(self, runtime_options: dict) -> None:
         self._stream_reader.set_runtime_option_vals(runtime_options)
-
-    def _sync_detections_with_stream(self) -> None:
-        while self.status is not StreamStatus.INITIALIZING:
-            sleep(0.01)
-
-        frame_or_status_event = or_events(self._stream_reader.new_frame_event,
-                                          self._stream_reader.new_status_event)
-
-        while self.status is not StreamStatus.CLOSED:
-            frame_or_status_event.wait()
-
-            if self._stream_reader.new_status_event.is_set():
-                self._handle_status_event()
-            if self._stream_reader.new_frame_event.is_set():
-                self._handle_frame_event()
-
-        logging.info("SyncedStreamReader: Closing")
 
     def _handle_status_event(self) -> None:
         self._stream_reader.new_status_event.clear()
@@ -129,10 +128,15 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
                 self.frame_received.emit(self.latest_processed_frame)
 
     def close(self) -> None:
-        """Sends a request to close the SyncedStreamReader."""
+        """Sends a request to close the SyncedStreamReader"""
+        self.thread().quit()
+        self.thread().requestInterruption()
+
         self._stream_reader.close()
 
     def wait_until_closed(self) -> None:
-        """Hangs until the SyncedStreamReader has been closed."""
+        """Hangs until the SyncedStreamReader has been closed. Must be called from
+        another QThread"""
         self._stream_reader.wait_until_closed()
-        self._thread.join()
+
+        self.thread().wait()
