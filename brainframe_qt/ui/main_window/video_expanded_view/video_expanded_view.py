@@ -4,16 +4,16 @@ import typing
 from PyQt5.QtCore import QEvent, QTimerEvent, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
+
 from brainframe.api.bf_codecs import StreamConfiguration
 from requests.exceptions import RequestException
 
-from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils import api, get_stream_manager
 from brainframe_qt.ui.dialogs import CapsuleConfigDialog, TaskConfiguration
 from brainframe_qt.ui.resources import QTAsyncWorker, stylesheet_watcher
 from brainframe_qt.ui.resources.paths import qt_qss_paths, qt_ui_paths
 from brainframe_qt.ui.resources.ui_elements.buttons import FloatingXButton
-from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
-    BrainFrameMessage
+from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
 
 class VideoExpandedView(QWidget):
@@ -146,7 +146,7 @@ class VideoExpandedView(QWidget):
 
         # Delete stream from database
         QTAsyncWorker(
-            self, api.delete_stream_configuration,
+            self, get_stream_manager().delete_stream,
             f_args=(self.stream_conf.id, 600)
         ).start()
 
