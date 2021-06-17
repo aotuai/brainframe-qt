@@ -182,7 +182,9 @@ class BrainFrameApplication(SingletonApplication):
         api.close()
         gobject_init.close()
 
-        get_stream_manager().close()
+        stream_manager = get_stream_manager()
+        if stream_manager is not None:
+            stream_manager.close()
 
         self.connection_manager.requestInterruption()
         self.connection_manager.wait(5000)  # milliseconds
