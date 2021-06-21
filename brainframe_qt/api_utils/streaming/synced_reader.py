@@ -57,7 +57,7 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
             self.status is not StreamStatus.CLOSED
             and not self.thread().isInterruptionRequested()
         ):
-            if not frame_or_status_event.wait(10):
+            if not frame_or_status_event.wait(0.1):
                 continue
 
             if self._stream_reader.new_status_event.is_set():

@@ -182,7 +182,12 @@ class BrainFrameApplication(SingletonApplication):
         api.close()
         gobject_init.close()
 
-        get_stream_manager().close()
+        try:
+            stream_manager = get_stream_manager()
+        except RuntimeError:
+            pass
+        else:
+            stream_manager.close()
 
         self.connection_manager.requestInterruption()
         self.connection_manager.wait(5000)  # milliseconds
