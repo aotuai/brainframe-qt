@@ -6,7 +6,7 @@ from PyQt5.QtCore import QObject
 class StreamListener(QObject):
     """This is used by SyncedStreamReader to pass events to the UI"""
 
-    def __init__(self, parent: QObject):
+    def __init__(self, *, parent: QObject):
         super().__init__(parent=parent)
 
         self.frame_event = Event()

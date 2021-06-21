@@ -1,11 +1,10 @@
-from typing import Optional
-
 from PyQt5.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+
 from brainframe.api import bf_codecs
 
-from brainframe_qt.api_utils.streaming.zone_status_frame import \
-    ZoneStatusFrame
+from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources.video_items.streams import StreamWidget
+
 from .stream_overlay import StreamWidgetOverlay
 
 

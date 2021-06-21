@@ -21,53 +21,22 @@ class StreamEventManager(StreamListener):
 
     frame_received = pyqtSignal(ZoneStatusFrame)
 
-    def __init__(self, stream_conf: StreamConfiguration, *, parent: QObject):
-        super().__init__(self, parent=parent)
+    def __init__(self, *, parent: QObject):
+        super().__init__(parent=parent)
 
-        self.stream_conf: StreamConfiguration = stream_conf
+        self.stream_conf: Optional[StreamConfiguration] = None
         self.stream_reader: Optional[SyncedStreamReader] = None
 
-    @property
-    def latest_frame(self) -> ZoneStatusFrame:
-        return self.stream_reader.latest_processed_frame
-
-    def check_for_frame_events(self) -> None:
-        if self.frame_event.is_set():
-            self.frame_event.clear()
-
-            frame = self.stream_reader.latest_processed_frame
-            self.frame_received.emit(frame)
-
-        if self.stream_initializing_event.is_set():
-            self.stream_initializing_event.clear()
-
-            self.stream_initializing.emit()
-
-        if self.stream_halted_event.is_set():
-            self.stream_halted_event.clear()
-
-            self.stream_halted.emit()
-
-        if self.stream_closed_event.is_set():
-            self.stream_closed_event.clear()
-
-            self.stream_closed.emit()
-
-        if self.stream_error_event.is_set():
-            self.stream_error_event.clear()
-
-            self.stream_error.emit()
-
-    def change_stream(self, stream_conf: Optional[StreamConfiguration]) -> None:
-
-        # Clear the existing stream reader to get ready for a new one
-        self._clear_current_stream_reader()
+    def change_stream(self, stream_conf: StreamConfiguration) -> None:
+        self.stop_streaming()
         self.stream_conf = stream_conf
+        self.start_streaming()
 
-        if not stream_conf:
-            self._disconnect_stream_reader()
-            self.stream_reader = None
-            return
+    def start_streaming(self) -> None:
+
+        # Store the current stream_conf before async code is run to check to see if we
+        # should abort after async
+        stream_conf = self.stream_conf
 
         def handle_stream_url(stream_url: Optional[str]) -> None:
             # Occurs when the get_stream_url() call fails due to
@@ -85,6 +54,15 @@ class StreamEventManager(StreamListener):
         QTAsyncWorker(self, self._get_stream_url, f_args=(stream_conf,),
                       on_success=handle_stream_url) \
             .start()
+
+    def stop_streaming(self) -> None:
+        if self.stream_reader is None:
+            return
+
+        self.stream_reader.frame_received.disconnect(self.frame_received)
+        self.stream_reader.stream_state_changed.disconnect(self._on_state_change)
+
+        self.stream_reader = None
 
     def _on_state_change(self, state: StreamStatus) -> None:
         if state is StreamStatus.INITIALIZING:
@@ -117,14 +95,14 @@ class StreamEventManager(StreamListener):
 
         # Connect new signals
         stream_reader.frame_received.connect(self.frame_received)
-        stream_reader.stream_state_changed.connect(self.state_changed)
+        stream_reader.stream_state_changed.connect(self._on_state_change)
 
         self.stream_reader = stream_reader
 
         # Don't wait for the first event to start displaying
         latest_frame = self.stream_reader.latest_processed_frame
         if latest_frame is not None:
-            self.on_frame(latest_frame)
+            self.frame_received.emit(latest_frame)
         else:
             self._on_state_change(stream_reader.status)
 

@@ -3,9 +3,11 @@ from typing import Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QWidget
+
 from brainframe.api.bf_codecs import StreamConfiguration
 
 from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
+
 from .stream_listener_widget import StreamEventManager
 from .stream_widget_ui import StreamWidgetUI
 
@@ -19,11 +21,21 @@ class StreamWidget(StreamWidgetUI):
     def __init__(self, *, parent: QWidget):
         super().__init__(parent=parent)
 
-        self.stream_manager: Optional[StreamEventManager] = None
+        self.stream_manager = StreamEventManager(parent=self)
 
         self._draw_lines: Optional[bool] = None
         self._draw_regions: Optional[bool] = None
         self._draw_detections: Optional[bool] = None
+
+        self._init_signals()
+
+    def _init_signals(self) -> None:
+        self.stream_manager.frame_received.connect(self.on_frame)
+
+        self.stream_manager.stream_initializing.connect(self.on_stream_init)
+        self.stream_manager.stream_halted.connect(self.on_stream_halted)
+        self.stream_manager.stream_closed.connect(self.on_stream_halted)
+        self.stream_manager.stream_error.connect(self.on_stream_error)
 
     def resizeEvent(self, _event: Optional[QResizeEvent] = None) -> None:
         """Take up entire width using aspect ratio of scene"""
@@ -70,14 +82,7 @@ class StreamWidget(StreamWidgetUI):
         self._draw_detections = draw_detections
 
     def change_stream(self, stream_conf: StreamConfiguration) -> None:
-        self.stream_manager = StreamEventManager(stream_conf, parent=self)
-
-        self.stream_manager.frame_received.connect(self.on_frame)
-
-        self.stream_manager.stream_initializing.connect(self.on_stream_init)
-        self.stream_manager.stream_halted.connect(self.on_stream_halted)
-        self.stream_manager.stream_closed.connect(self.on_stream_halted)
-        self.stream_manager.stream_error.connect(self.on_stream_error)
+        self.stream_manager.change_stream(stream_conf)
 
     # def pause_streaming(self) -> None:
     #     self.stream_manager.stop_streaming()
@@ -86,7 +91,7 @@ class StreamWidget(StreamWidgetUI):
     #     self.scene().set_frame(path=":/images/streaming_paused_png")
 
     def stop_streaming(self) -> None:
-        self.stream_manager = None
+        self.stream_manager.stop_streaming()
 
         self.scene().remove_all_items()
         self.scene().set_frame(path=":/images/streaming_stopped_png")
