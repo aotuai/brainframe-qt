@@ -55,7 +55,7 @@ class StreamManager(QObject):
         """Checks if the the manager has a stream reader for the given stream id.
 
         :param stream_id: The stream ID to check
-        :return: True if the stream manager has a stream reader, false otherwise
+        :return: True if the stream manager has a stream reader, False otherwise
         """
         return stream_id in self._stream_readers
 
@@ -82,6 +82,7 @@ class StreamManager(QObject):
         StreamReader"""
         api.delete_stream_configuration(stream_id, timeout=timeout)
         if self.is_streaming(stream_id):
+            # The stream is removed from self._stream_readers in a teardown callback
             self.close_stream(stream_id)
 
     def get_stream_reader(
@@ -129,9 +130,14 @@ class StreamManager(QObject):
 
         synced_stream_reader.moveToThread(thread)
         thread.started.connect(synced_stream_reader.run)
+
+        # Quit the thread when the StreamReader is done operating
         synced_stream_reader.finished.connect(thread.quit)
 
+        # Delete the thread when its done operating
         thread.finished.connect(thread.deleteLater)
+
+        # When StreamReader is done, remove it from the collection that tracks them
         synced_stream_reader.finished.connect(
             lambda: self._remove_stream_reference(stream_conf.id)
         )
