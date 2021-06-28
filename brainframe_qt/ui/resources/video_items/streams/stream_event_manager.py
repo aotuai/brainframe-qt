@@ -41,7 +41,9 @@ class StreamEventManager(StreamListener):
         return self.stream_reader.stream_status is SyncedStatus.PAUSED
 
     def change_stream(self, stream_conf: StreamConfiguration) -> None:
-        self.stop_streaming()
+        if self.stream_reader is not None:
+            self.stop_streaming()
+
         self.stream_conf = stream_conf
         self.start_streaming()
 
