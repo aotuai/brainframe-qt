@@ -1,13 +1,14 @@
+import logging
 from typing import Optional
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
 from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.api.bf_errors import StreamConfigNotFoundError, StreamNotOpenedError
-from gstly.abstract_stream_reader import StreamStatus
 
 from brainframe_qt.api_utils import api, get_stream_manager
 from brainframe_qt.api_utils.streaming import StreamListener, SyncedStreamReader
+from brainframe_qt.api_utils.streaming.synced_reader import SyncedStatus
 from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources import QTAsyncWorker
 
@@ -17,6 +18,9 @@ class StreamEventManager(StreamListener):
     stream_initializing = pyqtSignal()
     stream_halted = pyqtSignal()
     stream_closed = pyqtSignal()
+    stream_paused = pyqtSignal()
+    stream_finished = pyqtSignal()
+
     stream_error = pyqtSignal()
 
     frame_received = pyqtSignal(ZoneStatusFrame)
@@ -27,10 +31,46 @@ class StreamEventManager(StreamListener):
         self.stream_conf: Optional[StreamConfiguration] = None
         self.stream_reader: Optional[SyncedStreamReader] = None
 
+    @property
+    def is_streaming_paused(self) -> bool:
+        if self.stream_conf is None:
+            return False
+        if self.stream_reader is None:
+            return False
+
+        return self.stream_reader.stream_status is SyncedStatus.PAUSED
+
     def change_stream(self, stream_conf: StreamConfiguration) -> None:
         self.stop_streaming()
         self.stream_conf = stream_conf
         self.start_streaming()
+
+    def pause_streaming(self) -> None:
+        if self.stream_reader is None:
+            logging.warning(
+                f"Attempted to pause StreamEventManager, but it had no "
+                f"SyncedStreamReader"
+            )
+            return
+
+        self.stream_reader.pause_streaming()
+
+    def resume_streaming(self) -> None:
+        if self.stream_reader is None:
+            logging.warning(
+                f"Attempted to resume StreamEventManager, but it had no "
+                f"SyncedStreamReader"
+            )
+            return
+
+        if self.stream_reader.stream_status is not SyncedStatus.PAUSED:
+            logging.warning(
+                f"Attempted to resume StreamEventManager streaming for stream "
+                f"{self.stream_conf.id}, but it was not paused"
+            )
+            return
+
+        self.stream_reader.resume_streaming()
 
     def start_streaming(self) -> None:
 
@@ -57,25 +97,52 @@ class StreamEventManager(StreamListener):
 
     def stop_streaming(self) -> None:
         if self.stream_reader is None:
+            logging.warning(
+                f"Attempted to stop StreamEventManager, but it had no "
+                f"SyncedStreamReader"
+            )
+            return
+
+        self._unsubscribe_from_stream()
+
+        self.stream_conf = None
+
+    def _on_state_change(self, state: SyncedStatus) -> None:
+        if state is SyncedStatus.INITIALIZING:
+            self.stream_initializing.emit()
+        elif state is SyncedStatus.HALTED:
+            self.stream_halted.emit()
+        elif state is SyncedStatus.CLOSED:
+            self.stream_closed.emit()
+        elif state is SyncedStatus.PAUSED:
+            self.stream_paused.emit()
+        elif state is SyncedStatus.FINISHED:
+            self.stream_finished.emit()
+        elif state is SyncedStatus.STREAMING:
+            # Streaming, but no frame received yet
+            self.stream_initializing.emit()
+        else:
+            self.stream_error.emit()
+
+    def _unsubscribe_from_stream(self) -> None:
+        """Remove the StreamEventManager's reference to the SyncedStreamReader after
+        disconnecting the connected signals/slots.
+
+        Note that this does not directly delete/remove/stop the SyncedStreamReader. We
+        rely on garbage collection to do this. Multiple StreamWidgets (each with their
+        own StreamEventManager) could be using the same SyncedStreamReader.
+        """
+        if self.stream_reader is None:
+            logging.warning(
+                "Attempted to unsubscribe StreamEventManager from stream when it was "
+                "already disconnected"
+            )
             return
 
         self.stream_reader.frame_received.disconnect(self.frame_received)
         self.stream_reader.stream_state_changed.disconnect(self._on_state_change)
 
         self.stream_reader = None
-
-    def _on_state_change(self, state: StreamStatus) -> None:
-        if state is StreamStatus.INITIALIZING:
-            self.stream_initializing.emit()
-        elif state is StreamStatus.HALTED:
-            self.stream_halted.emit()
-        elif state is StreamStatus.CLOSED:
-            self.stream_closed.emit()
-        elif state is StreamStatus.STREAMING:
-            # Streaming, but no frame received yet
-            self.stream_initializing.emit()
-        else:
-            self.stream_error.emit()
 
     def _subscribe_to_stream(
         self,
@@ -104,7 +171,7 @@ class StreamEventManager(StreamListener):
         if latest_frame is not None:
             self.frame_received.emit(latest_frame)
         else:
-            self._on_state_change(stream_reader.status)
+            self._on_state_change(stream_reader.stream_status)
 
     @staticmethod
     def _get_stream_url(stream_conf: StreamConfiguration) -> Optional[str]:

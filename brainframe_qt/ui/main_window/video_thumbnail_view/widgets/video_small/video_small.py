@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QRectF, Qt, pyqtSignal
-from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter
+from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter, QMouseEvent
 from PyQt5.QtWidgets import QWidget
 
 from brainframe_qt.ui.resources.video_items.streams import StreamWidget
@@ -68,7 +68,7 @@ class VideoSmall(StreamWidget):
 
             image_width_with_margins = image.width() + (2.5 * image_margin)
 
-        if self.stream_manager.stream_conf is not None:
+        if self.stream_event_manager.stream_conf is not None:
             # Draw text
             font = painter.font()
             point_size = bar_height / 2
@@ -78,7 +78,7 @@ class VideoSmall(StreamWidget):
 
             font_metric = QFontMetricsF(font)
             stream_name_text = font_metric.elidedText(
-                self.stream_manager.stream_conf.name,
+                self.stream_event_manager.stream_conf.name,
                 Qt.ElideRight,
                 width - image_width_with_margins)
 
@@ -86,10 +86,16 @@ class VideoSmall(StreamWidget):
                              int(height - (point_size / 2)),
                              stream_name_text)
 
-    def mouseReleaseEvent(self, event) -> None:
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         super().mousePressEvent(event)
 
-        self.stream_clicked.emit(self.stream_manager.stream_conf)
+        if event.button() == Qt.LeftButton:
+            self.stream_clicked.emit(self.stream_event_manager.stream_conf)
+        elif event.button() == Qt.RightButton:
+            if not self.stream_event_manager.is_streaming_paused:
+                self.stream_event_manager.pause_streaming()
+            else:
+                self.stream_event_manager.resume_streaming()
 
     def manage_alert_state(self, alerts_active: bool) -> None:
         self.alerts_ongoing = alerts_active

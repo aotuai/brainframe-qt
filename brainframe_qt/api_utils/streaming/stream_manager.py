@@ -1,13 +1,10 @@
 import logging
 import typing
-from typing import Dict, Optional
+from typing import Dict
 
 from PyQt5.QtCore import QObject, QThread
 
 from brainframe.api.bf_codecs import StreamConfiguration
-from gstly import gobject_init
-from gstly.gst_stream_reader import GstStreamReader
-from gstly.abstract_stream_reader import StreamReader
 
 from brainframe_qt.api_utils import api
 
@@ -16,12 +13,6 @@ from .synced_reader import SyncedStreamReader
 
 class StreamManager(QObject):
     """Keeps track of existing Stream objects, and creates new ones as necessary"""
-
-    REHOSTED_VIDEO_TYPES = [
-        StreamConfiguration.ConnType.WEBCAM,
-        StreamConfiguration.ConnType.FILE,
-    ]
-    """Video types that are re-hosted by the server"""
 
     def __init__(self, *, parent: QObject):
         super().__init__(parent=parent)
@@ -101,27 +92,10 @@ class StreamManager(QObject):
     def _create_synced_reader(
         self, stream_conf: StreamConfiguration, url: str
     ) -> SyncedStreamReader:
-        pipeline: Optional[str] = stream_conf.connection_options.get("pipeline")
-
-        latency = StreamReader.DEFAULT_LATENCY
-        if stream_conf.connection_type in self.REHOSTED_VIDEO_TYPES:
-            latency = StreamReader.REHOSTED_LATENCY
-
-        gobject_init.start()
-
-        # Streams created with a premises are always proxied from that premises
-        is_proxied = stream_conf.premises_id is not None
-
-        stream_reader = GstStreamReader(
-            url,
-            latency=latency,
-            runtime_options=stream_conf.runtime_options,
-            pipeline_str=pipeline,
-            proxied=is_proxied)
 
         synced_stream_reader = SyncedStreamReader(
-            stream_conf.id,
-            stream_reader,
+            stream_conf,
+            url,
             # No parent if moving to a different thread
             parent=typing.cast(QObject, None),
         )

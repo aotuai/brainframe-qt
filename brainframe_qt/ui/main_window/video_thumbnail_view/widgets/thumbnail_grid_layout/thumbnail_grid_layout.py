@@ -60,7 +60,7 @@ class ThumbnailGridLayout(QWidget):
 
     def add_video(self, video: VideoSmall) -> None:
 
-        stream_id = video.stream_manager.stream_conf.id
+        stream_id = video.stream_event_manager.stream_conf.id
         self.stream_widgets[stream_id] = video
         self._add_widget_to_layout(video)
 
@@ -101,7 +101,7 @@ class ThumbnailGridLayout(QWidget):
           [child].ongoing_alerts_signal
         """
         stream_widget = typing.cast(VideoSmall, self.sender())
-        stream_conf = stream_widget.stream_manager.stream_conf
+        stream_conf = stream_widget.stream_event_manager.stream_conf
         # noinspection PyUnresolvedReferences
         self.ongoing_alerts_signal.emit(stream_conf, alerts_ongoing)
 

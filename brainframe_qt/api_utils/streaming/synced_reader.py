@@ -1,95 +1,150 @@
 import logging
+import time
+from enum import Enum, auto
 from threading import Event
-from time import sleep
 from typing import Optional
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
-from gstly.abstract_stream_reader import StreamReader, StreamStatus, FRAME
+from brainframe.api.bf_codecs import StreamConfiguration
+from gstly import gobject_init
+from gstly.abstract_stream_reader import StreamReader, StreamStatus
 from gstly.gst_stream_reader import GstStreamReader
 
 from brainframe_qt.api_utils import api
-from brainframe_qt.ui.resources.mixins.base_mixin import ABCObject
 from brainframe_qt.util.events import or_events
 
 from .frame_syncer import FrameSyncer
 from .zone_status_frame import ZoneStatusFrame
 
 
-class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
+class SyncedStatus(Enum):
+    INITIALIZING = auto()
+    STREAMING = auto()
+    HALTED = auto()
+    CLOSED = auto()
+    PAUSED = auto()
+
+    FINISHED = auto()
+    """The SyncedStreamReader has is terminating and its thread will close soon"""
+
+    @classmethod
+    def from_stream_status(cls, status: StreamStatus) -> "SyncedStatus":
+        if status is StreamStatus.INITIALIZING:
+            return cls.INITIALIZING
+        elif status is StreamStatus.STREAMING:
+            return cls.STREAMING
+        elif status is StreamStatus.HALTED:
+            return cls.HALTED
+        elif status is StreamStatus.CLOSED:
+            return cls.CLOSED
+        else:
+            raise ValueError(f"Unknown StreamStatus {status}")
+
+
+class SyncedStreamReader(QObject):
     """Reads frames from a stream and syncs them up with zone statuses."""
 
     frame_received = pyqtSignal(ZoneStatusFrame)
-    stream_state_changed = pyqtSignal(StreamStatus)
+    stream_state_changed = pyqtSignal(SyncedStatus)
 
     finished = pyqtSignal()
 
+    REHOSTED_VIDEO_TYPES = [
+        StreamConfiguration.ConnType.WEBCAM,
+        StreamConfiguration.ConnType.FILE,
+    ]
+    """Video types that are re-hosted by the server"""
+
     def __init__(
         self,
-        stream_id: int,
-        stream_reader: GstStreamReader,
+        stream_conf: StreamConfiguration,
+        stream_url: str,
         *,
         parent: QObject
     ):
         """Creates a new SyncedStreamReader.
 
-        :param stream_id: The stream ID that this synced stream reader is for
-        :param stream_reader: The stream reader to get frames from
+        :param stream_conf: The stream that this synced stream reader is for
+        :param stream_url: The url of the stream
         """
         super().__init__(parent=parent)
 
-        self.stream_id = stream_id
-        self._stream_reader = stream_reader
+        self.stream_conf = stream_conf
+        self.stream_url = stream_url
+
+        self._stream_reader: Optional[GstStreamReader] = None
 
         self.latest_processed_frame: Optional[ZoneStatusFrame] = None
         """Latest frame synced with results. None if no frames have been synced yet"""
 
         self.frame_syncer = FrameSyncer()
 
+        self._stream_status = SyncedStatus.FINISHED
+
+        self._start_streaming_event = Event()
+        """Used to request the thread to start streaming"""
+        self._pause_streaming_event = Event()
+        """Used to request the thread to (temporarily) pause streaming"""
+
+        self._start_streaming()
+
+    @property
+    def stream_status(self) -> SyncedStatus:
+        return self._stream_status
+
+    @stream_status.setter
+    def stream_status(self, stream_status: SyncedStatus) -> None:
+        if stream_status is not self._stream_status:
+            self._stream_status = stream_status
+            self.stream_state_changed.emit(stream_status)
+
+    def close(self) -> None:
+        """Sends a request to close the SyncedStreamReader"""
+        logging.info(f"SyncedStreamReader for stream {self.stream_conf.id} closing")
+
+        self.thread().quit()
+        self.thread().requestInterruption()
+
+    def pause_streaming(self) -> None:
+        """Request that streaming is paused. Streaming is _not_ immediately paused, but
+        will be the next time the thread loops again"""
+        self._pause_streaming_event.set()
+
+    def resume_streaming(self) -> None:
+        if self.stream_status is not SyncedStatus.PAUSED:
+            logging.warning(
+                "Attempted to unpause streaming on SyncedStreamReader for stream "
+                f"{self.stream_conf.id}, but it is not paused."
+            )
+            return
+
+        self._start_streaming()
+
     def run(self) -> None:
-        while self.status is not StreamStatus.INITIALIZING:
-            sleep(0.01)
+        # Thread closing around us. Usually on application exit
+        while not self.thread().isInterruptionRequested():
+            if self._start_streaming_event.wait(0.2):
+                self._stream()
 
-        frame_or_status_event = or_events(self._stream_reader.new_frame_event,
-                                          self._stream_reader.new_status_event)
+        if self._stream_reader is not None:
+            self._stop_streaming()
 
-        while (
-            self.status is not StreamStatus.CLOSED
-            and not self.thread().isInterruptionRequested()
-        ):
-            if not frame_or_status_event.wait(0.1):
-                continue
+        self._finish()
 
-            if self._stream_reader.new_status_event.is_set():
-                self._handle_status_event()
-            if self._stream_reader.new_frame_event.is_set():
-                self._handle_frame_event()
+    def wait_until_closed(self) -> None:
+        """Hangs until the SyncedStreamReader has been closed. Must be called from
+        another QThread"""
+        if self._stream_reader is not None:
+            self._stream_reader.wait_until_closed()
 
-        logging.info(f"SyncedStreamReader for stream {self.stream_id} closing")
+        self.thread().wait()
+
+    def _finish(self) -> None:
+        logging.info(f"SyncedStreamReader for stream {self.stream_conf.id} closed")
+
+        self.stream_status = SyncedStatus.FINISHED
         self.finished.emit()
-
-    @property
-    def status(self) -> StreamStatus:
-        return self._stream_reader.status
-
-    @property
-    def latest_frame(self) -> FRAME:
-        return self._stream_reader.latest_frame
-
-    @property
-    def new_frame_event(self) -> Event:
-        return self._stream_reader.new_frame_event
-
-    @property
-    def new_status_event(self) -> Event:
-        return self._stream_reader.new_status_event
-
-    def set_runtime_option_vals(self, runtime_options: dict) -> None:
-        self._stream_reader.set_runtime_option_vals(runtime_options)
-
-    def _handle_status_event(self) -> None:
-        self._stream_reader.new_status_event.clear()
-        self.stream_state_changed.emit(self.status)
 
     def _handle_frame_event(self) -> None:
         self._stream_reader.new_frame_event.clear()
@@ -100,7 +155,7 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
         del frame_bgr
 
         # Get the latest zone statuses from status receiver thread
-        statuses = api.get_status_receiver().latest_statuses(self.stream_id)
+        statuses = api.get_status_receiver().latest_statuses(self.stream_conf.id)
 
         # Run the syncing algorithm
         new_processed_frame = self.frame_syncer.sync(
@@ -127,16 +182,66 @@ class SyncedStreamReader(StreamReader, QObject, metaclass=ABCObject):
             if is_new:
                 self.frame_received.emit(self.latest_processed_frame)
 
-    def close(self) -> None:
-        """Sends a request to close the SyncedStreamReader"""
-        self.thread().quit()
-        self.thread().requestInterruption()
+    def _handle_status_event(self) -> None:
+        self._stream_reader.new_status_event.clear()
 
+        self.stream_status = SyncedStatus.from_stream_status(self._stream_reader.status)
+
+    def _start_streaming(self) -> None:
+        pipeline: Optional[str] = self.stream_conf.connection_options.get("pipeline")
+
+        latency = StreamReader.DEFAULT_LATENCY
+        if self.stream_conf.connection_type in self.REHOSTED_VIDEO_TYPES:
+            latency = StreamReader.REHOSTED_LATENCY
+
+        # Streams created with a premises are always proxied from that premises
+        is_proxied = self.stream_conf.premises_id is not None
+
+        gobject_init.start()
+
+        self._stream_reader = GstStreamReader(
+            url=self.stream_url,
+            latency=latency,
+            runtime_options=self.stream_conf.runtime_options,
+            pipeline_str=pipeline,
+            proxied=is_proxied
+        )
+
+        # Signal the thread to start
+        self._start_streaming_event.set()
+
+    def _stop_streaming(self) -> None:
         self._stream_reader.close()
+        self._stream_reader = None
 
-    def wait_until_closed(self) -> None:
-        """Hangs until the SyncedStreamReader has been closed. Must be called from
-        another QThread"""
-        self._stream_reader.wait_until_closed()
+    def _stream(self) -> None:
+        self._start_streaming_event.clear()
 
-        self.thread().wait()
+        if self._stream_reader is None:
+            logging.warning(
+                f"Attempted to start streaming on SyncedStreamReader for stream "
+                f"{self.stream_conf.id} without a GstStreamReader set"
+            )
+            return
+
+        frame_or_status_event = or_events(self._stream_reader.new_frame_event,
+                                          self._stream_reader.new_status_event)
+
+        while not self.thread().isInterruptionRequested():
+
+            if self._pause_streaming_event.is_set():
+                # Streaming paused. Stop loop for now
+                self.stream_status = SyncedStatus.PAUSED
+                self._pause_streaming_event.clear()
+                break
+
+            if not frame_or_status_event.wait(0.1):
+                continue
+
+            if self._stream_reader.new_status_event.is_set():
+                self._handle_status_event()
+            if self._stream_reader.new_frame_event.is_set():
+                self._handle_frame_event()
+
+        if self._stream_reader is not None:
+            self._stop_streaming()
