@@ -8,7 +8,7 @@ from brainframe.api.bf_codecs import StreamConfiguration
 
 from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 
-from .stream_listener_widget import StreamEventManager
+from .stream_event_manager import StreamEventManager
 from .stream_widget_ui import StreamWidgetUI
 
 
