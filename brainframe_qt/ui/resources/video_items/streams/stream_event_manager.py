@@ -38,7 +38,7 @@ class StreamEventManager(StreamListener):
         if self.stream_reader is None:
             return False
 
-        return self.stream_reader.stream_status is SyncedStatus.PAUSED
+        return self.stream_reader.is_streaming_paused
 
     def change_stream(self, stream_conf: StreamConfiguration) -> None:
         if self.stream_reader is not None:

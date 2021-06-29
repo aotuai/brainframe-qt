@@ -87,7 +87,14 @@ class SyncedStreamReader(QObject):
         self._pause_streaming_event = Event()
         """Used to request the thread to (temporarily) pause streaming"""
 
-        self._start_streaming()
+        self._start_streaming_event.set()
+
+    @property
+    def is_streaming_paused(self) -> bool:
+        return (
+            self._pause_streaming_event.is_set()
+            or self.stream_status is SyncedStatus.PAUSED
+        )
 
     @property
     def stream_status(self) -> SyncedStatus:
@@ -101,17 +108,26 @@ class SyncedStreamReader(QObject):
 
     def close(self) -> None:
         """Sends a request to close the SyncedStreamReader"""
+
         logging.info(f"SyncedStreamReader for stream {self.stream_conf.id} closing")
 
         self.thread().quit()
         self.thread().requestInterruption()
 
     def pause_streaming(self) -> None:
-        """Request that streaming is paused. Streaming is _not_ immediately paused, but
-        will be the next time the thread loops again"""
+        """Pause streaming.
+
+        Streaming is not immediately paused, but will be handled in the main loop in
+        _process_stream_events
+        """
+
         self._pause_streaming_event.set()
 
     def resume_streaming(self) -> None:
+        """Resume (more accurately, re-start) streaming.
+
+        Streaming is not immediately paused, but will be handled in the main loop
+        """
         if self.stream_status is not SyncedStatus.PAUSED:
             logging.warning(
                 "Attempted to unpause streaming on SyncedStreamReader for stream "
@@ -119,13 +135,14 @@ class SyncedStreamReader(QObject):
             )
             return
 
-        self._start_streaming()
+        self._start_streaming_event.set()
 
     def run(self) -> None:
         # Thread closing around us. Usually on application exit
         while not self.thread().isInterruptionRequested():
             if self._start_streaming_event.wait(0.2):
-                self._stream()
+                self._start_streaming()
+                self._process_stream_events()
 
         if self._stream_reader is not None:
             self._stop_streaming()
@@ -135,6 +152,7 @@ class SyncedStreamReader(QObject):
     def wait_until_closed(self) -> None:
         """Hangs until the SyncedStreamReader has been closed. Must be called from
         another QThread"""
+
         if self._stream_reader is not None:
             self._stream_reader.wait_until_closed()
 
@@ -188,6 +206,8 @@ class SyncedStreamReader(QObject):
         self.stream_status = SyncedStatus.from_stream_status(self._stream_reader.status)
 
     def _start_streaming(self) -> None:
+        """Create a new GstStreamReader. Gstreamer streaming begins immediately"""
+
         pipeline: Optional[str] = self.stream_conf.connection_options.get("pipeline")
 
         latency = StreamReader.DEFAULT_LATENCY
@@ -207,14 +227,18 @@ class SyncedStreamReader(QObject):
             proxied=is_proxied
         )
 
-        # Signal the thread to start
-        self._start_streaming_event.set()
-
     def _stop_streaming(self) -> None:
-        self._stream_reader.close()
+        """Stop the current stream. Blocking function.
+
+        Tells the GstStreamReader to close and wait for the thread to join. Then
+        discards the reference to the GstStreamReader
+        """
+
+        self._stream_reader.wait_until_closed()
         self._stream_reader = None
 
-    def _stream(self) -> None:
+    def _process_stream_events(self) -> None:
+        """Handle posted events in current object and within the GstStreamReader"""
         self._start_streaming_event.clear()
 
         if self._stream_reader is None:
@@ -235,7 +259,7 @@ class SyncedStreamReader(QObject):
                 self._pause_streaming_event.clear()
                 break
 
-            if not frame_or_status_event.wait(0.1):
+            if not frame_or_status_event.wait(0.2):
                 continue
 
             if self._stream_reader.new_status_event.is_set():
