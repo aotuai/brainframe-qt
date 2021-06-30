@@ -241,6 +241,9 @@ class SyncedStreamReader(QObject):
             proxied=is_proxied
         )
 
+        # Ensure that the status is sent out (esp. if we're resuming a stream)
+        self.stream_status = SyncedStatus.INITIALIZING
+
     def _stop_streaming(self) -> None:
         """Stop the current stream. Blocking function.
 
