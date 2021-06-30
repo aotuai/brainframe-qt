@@ -18,12 +18,16 @@ from .zone_status_frame import ZoneStatusFrame
 
 
 class SyncedStatus(Enum):
+    """SyncedStreamReader wrapper of gstly's StreamStatus.
+
+    Adds PAUSED and FINISHED states.
+    """
     INITIALIZING = auto()
     STREAMING = auto()
     HALTED = auto()
     CLOSED = auto()
     PAUSED = auto()
-
+    """Streaming is paused client-side to save bandwidth/resources"""
     FINISHED = auto()
     """The SyncedStreamReader is terminating and its thread will close soon"""
 
