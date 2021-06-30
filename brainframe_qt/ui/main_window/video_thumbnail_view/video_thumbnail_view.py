@@ -3,7 +3,7 @@ from typing import Dict, List
 from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
-from brainframe.api import bf_codecs
+from brainframe.api.bf_codecs import Alert, StreamConfiguration
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.api_utils.zss_pubsub import zss_publisher
@@ -14,7 +14,7 @@ from .video_thumbnail_view_ui import _VideoThumbnailViewUI
 
 
 class VideoThumbnailView(_VideoThumbnailViewUI):
-    stream_clicked = pyqtSignal(bf_codecs.StreamConfiguration)
+    stream_clicked = pyqtSignal(StreamConfiguration)
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -35,9 +35,9 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         stream_sub = zss_publisher.subscribe_alerts(self._handle_alerts)
         self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
 
-    def update_streams(self):
+    def update_streams(self) -> None:
 
-        def on_success(stream_confs: List[bf_codecs.StreamConfiguration]):
+        def on_success(stream_confs: List[StreamConfiguration]) -> None:
             for stream_conf in stream_confs:
                 self.add_stream_conf(stream_conf)
 
@@ -59,12 +59,12 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         self.scroll_area.setHidden(show_background)
         self.background_widget.setVisible(show_background)
 
-    def add_stream_conf(self, stream_conf: bf_codecs.StreamConfiguration):
+    def add_stream_conf(self, stream_conf: StreamConfiguration):
         self.alertless_stream_layout.new_stream_widget(stream_conf)
 
         self.show_background_image(False)
 
-    def delete_stream_conf(self, stream_conf: bf_codecs.StreamConfiguration):
+    def delete_stream_conf(self, stream_conf: StreamConfiguration):
         # Figure out which layout the stream is in, and remove it
         for layout in [self.alert_stream_layout, self.alertless_stream_layout]:
             for stream_id, stream_widget in layout.stream_widgets.items():
@@ -85,7 +85,7 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         self.alert_stream_layout.expand_grid(expand)
 
     @pyqtSlot(object)
-    def _handle_alerts(self, alerts: List[bf_codecs.Alert]):
+    def _handle_alerts(self, alerts: List[Alert]):
 
         if QThread.currentThread() != self.thread():
             # Move to the UI Thread
