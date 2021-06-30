@@ -69,8 +69,9 @@ class StreamManager(QObject):
         logging.info("StreamManager close finished")
 
     def delete_stream(self, stream_id: int, timeout: int = 120) -> None:
-        """Delete a stream through the API and initiate the closing of its corresponding
-        StreamReader"""
+        """[blocking API] Delete a stream through the API and initiate the closing of
+        its corresponding StreamReader
+        """
         api.delete_stream_configuration(stream_id, timeout=timeout)
         if self.is_streaming(stream_id):
             # The stream is removed from self._stream_readers in a teardown callback
@@ -79,7 +80,7 @@ class StreamManager(QObject):
     def get_stream_reader(
         self, stream_config: StreamConfiguration
     ) -> SyncedStreamReader:
-        """Get the SyncedStreamReader for the given stream_configuration.
+        """[blocking API] Get the SyncedStreamReader for the given stream_configuration.
 
         :param stream_config: The stream configuration to open.
         :return: A SyncedStreamReader object
