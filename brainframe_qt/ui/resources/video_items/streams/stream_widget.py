@@ -35,6 +35,7 @@ class StreamWidget(StreamWidgetUI):
         self.stream_event_manager.stream_initializing.connect(self.on_stream_init)
         self.stream_event_manager.stream_halted.connect(self.on_stream_halted)
         self.stream_event_manager.stream_closed.connect(self.on_stream_halted)
+        self.stream_event_manager.stream_paused.connect(self.on_stream_paused)
         self.stream_event_manager.stream_error.connect(self.on_stream_error)
 
     def resizeEvent(self, _event: Optional[QResizeEvent] = None) -> None:
@@ -131,4 +132,4 @@ class StreamWidget(StreamWidgetUI):
 
     def on_stream_paused(self) -> None:
         self.scene().remove_all_items()
-        self.scene().set_frame(path=":/images/streaming_paused_png")
+        self.scene().set_frame(path=":/images/stream_paused_png")
