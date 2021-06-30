@@ -1,5 +1,4 @@
 import logging
-import time
 from enum import Enum, auto
 from threading import Event
 from typing import Optional
@@ -26,7 +25,7 @@ class SyncedStatus(Enum):
     PAUSED = auto()
 
     FINISHED = auto()
-    """The SyncedStreamReader has is terminating and its thread will close soon"""
+    """The SyncedStreamReader is terminating and its thread will close soon"""
 
     @classmethod
     def from_stream_status(cls, status: StreamStatus) -> "SyncedStatus":
@@ -91,6 +90,7 @@ class SyncedStreamReader(QObject):
 
     @property
     def is_streaming_paused(self) -> bool:
+        """Whether the stream is paused or has been requested to do so"""
         return (
             self._pause_streaming_event.is_set()
             or self.stream_status is SyncedStatus.PAUSED
@@ -98,17 +98,21 @@ class SyncedStreamReader(QObject):
 
     @property
     def stream_status(self) -> SyncedStatus:
+        """The current status of the stream"""
         return self._stream_status
 
     @stream_status.setter
     def stream_status(self, stream_status: SyncedStatus) -> None:
+        """[private] Setter method for the stream status
+
+        The stream_state_changed signal is emitted if the status changes.
+        """
         if stream_status is not self._stream_status:
             self._stream_status = stream_status
             self.stream_state_changed.emit(stream_status)
 
     def close(self) -> None:
         """Sends a request to close the SyncedStreamReader"""
-
         logging.info(f"SyncedStreamReader for stream {self.stream_conf.id} closing")
 
         self.thread().quit()
@@ -120,15 +124,16 @@ class SyncedStreamReader(QObject):
         Streaming is not immediately paused, but will be handled in the main loop in
         _process_stream_events
         """
-
         self._pause_streaming_event.set()
 
     def resume_streaming(self) -> None:
         """Resume (more accurately, re-start) streaming.
 
-        Streaming is not immediately paused, but will be handled in the main loop
+        Streaming is not immediately paused, but will be handled in the main loop. This
+        function does nothing (except print a warning) if the stream is not already
+        paused.
         """
-        if self.stream_status is not SyncedStatus.PAUSED:
+        if not self.is_streaming_paused:
             logging.warning(
                 "Attempted to unpause streaming on SyncedStreamReader for stream "
                 f"{self.stream_conf.id}, but it is not paused."
@@ -138,7 +143,7 @@ class SyncedStreamReader(QObject):
         self._start_streaming_event.set()
 
     def run(self) -> None:
-        # Thread closing around us. Usually on application exit
+        """Main loop for the created thread"""
         while not self.thread().isInterruptionRequested():
             if self._start_streaming_event.wait(0.2):
                 self._start_streaming()
@@ -152,13 +157,17 @@ class SyncedStreamReader(QObject):
     def wait_until_closed(self) -> None:
         """Hangs until the SyncedStreamReader has been closed. Must be called from
         another QThread"""
-
         if self._stream_reader is not None:
             self._stream_reader.wait_until_closed()
 
         self.thread().wait()
 
     def _finish(self) -> None:
+        """Final clean-up for the SyncedStreamReader.
+
+        To be called during complete stream shutdown, not simple pauses.
+        Sets the status to FINISHED and emits the `finished` signal
+        """
         logging.info(f"SyncedStreamReader for stream {self.stream_conf.id} closed")
 
         self.stream_status = SyncedStatus.FINISHED
@@ -207,6 +216,7 @@ class SyncedStreamReader(QObject):
 
     def _start_streaming(self) -> None:
         """Create a new GstStreamReader. Gstreamer streaming begins immediately"""
+        self._start_streaming_event.clear()
 
         pipeline: Optional[str] = self.stream_conf.connection_options.get("pipeline")
 
@@ -233,17 +243,14 @@ class SyncedStreamReader(QObject):
         Tells the GstStreamReader to close and wait for the thread to join. Then
         discards the reference to the GstStreamReader
         """
-
         self._stream_reader.wait_until_closed()
         self._stream_reader = None
 
     def _process_stream_events(self) -> None:
         """Handle posted events in current object and within the GstStreamReader"""
-        self._start_streaming_event.clear()
-
         if self._stream_reader is None:
             logging.warning(
-                f"Attempted to start streaming on SyncedStreamReader for stream "
+                f"Attempted to process stream events on SyncedStreamReader for stream "
                 f"{self.stream_conf.id} without a GstStreamReader set"
             )
             return
