@@ -1,14 +1,16 @@
 from PyQt5.QtCore import QRectF, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFontMetricsF, QImage, QPainter, QMouseEvent
 from PyQt5.QtWidgets import QWidget
+from brainframe.api.bf_codecs import StreamConfiguration
 
+from brainframe_qt.api_utils import get_stream_manager
 from brainframe_qt.ui.resources.video_items.streams import StreamWidget
 
 
 class VideoSmall(StreamWidget):
     """Video for ThumbnailView"""
 
-    stream_clicked = pyqtSignal(object)
+    stream_clicked = pyqtSignal(StreamConfiguration)
     """A thumbnail has been clicked"""
 
     alert_status_changed = pyqtSignal(bool)
@@ -91,11 +93,6 @@ class VideoSmall(StreamWidget):
 
         if event.button() == Qt.LeftButton:
             self.stream_clicked.emit(self.stream_event_manager.stream_conf)
-        elif event.button() == Qt.RightButton:
-            if not self.stream_event_manager.is_streaming_paused:
-                self.stream_event_manager.pause_streaming()
-            else:
-                self.stream_event_manager.resume_streaming()
 
     def manage_alert_state(self, alerts_active: bool) -> None:
         self.alerts_ongoing = alerts_active

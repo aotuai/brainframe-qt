@@ -19,7 +19,7 @@ class StreamView(_StreamViewUI):
             lambda: self.display_expanded_video(False))
 
         self.video_expanded_view.stream_delete_signal.connect(
-            self.video_thumbnail_view.delete_stream_conf)
+            self.video_thumbnail_view.remove_stream)
         self.video_expanded_view.stream_delete_signal.connect(
             lambda: self.display_expanded_video(False))
 

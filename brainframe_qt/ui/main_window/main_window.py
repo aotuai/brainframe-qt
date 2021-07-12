@@ -186,7 +186,7 @@ class MainWindow(MainWindowUI):
         if isinstance(sidebar_widget, StreamConfiguration):
             stream_view = self._activity_widget_map[self._stream_activity]
             sidebar_widget.stream_conf_modified.connect(
-                stream_view.video_thumbnail_view.add_stream_conf)
+                stream_view.video_thumbnail_view.add_stream)
             sidebar_widget.stream_conf_modified.connect(
                 self._handle_stream_config_modification)
 

@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget
 
 from brainframe.api.bf_codecs import Alert, StreamConfiguration
 
-from brainframe_qt.api_utils import api
+from brainframe_qt.api_utils import api, get_stream_manager
 from brainframe_qt.api_utils.zss_pubsub import zss_publisher
 from brainframe_qt.ui.resources import QTAsyncWorker
 
@@ -19,32 +19,25 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
 
-        self.update_streams()
-
         self._init_signals()
 
-    def _init_signals(self):
+        self._retrieve_remote_streams()
+
+    def _init_signals(self) -> None:
 
         self.alert_stream_layout.thumbnail_stream_clicked_signal.connect(
             self.stream_clicked)
         self.alertless_stream_layout.thumbnail_stream_clicked_signal.connect(
             self.stream_clicked)
+        self.alert_stream_layout.thumbnail_stream_clicked_signal.connect(
+            self._refresh_active_streams)
+        self.alertless_stream_layout.thumbnail_stream_clicked_signal.connect(
+            self._refresh_active_streams)
 
     def _init_alert_pubsub(self):
         """Called after streams are initially populated"""
         stream_sub = zss_publisher.subscribe_alerts(self._handle_alerts)
         self.destroyed.connect(lambda: zss_publisher.unsubscribe(stream_sub))
-
-    def update_streams(self) -> None:
-
-        def on_success(stream_confs: List[StreamConfiguration]) -> None:
-            for stream_conf in stream_confs:
-                self.add_stream_conf(stream_conf)
-
-            self._init_alert_pubsub()
-
-        QTAsyncWorker(self, api.get_stream_configurations, on_success=on_success) \
-            .start()
 
     @property
     def streams(self) -> Dict[int, VideoSmall]:
@@ -55,16 +48,20 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
 
         return all_streams
 
-    def show_background_image(self, show_background: bool):
+    def show_background_image(self, show_background: bool) -> None:
         self.scroll_area.setHidden(show_background)
         self.background_widget.setVisible(show_background)
 
-    def add_stream_conf(self, stream_conf: StreamConfiguration):
+    def add_stream(self, stream_conf: StreamConfiguration) -> None:
         self.alertless_stream_layout.new_stream_widget(stream_conf)
 
         self.show_background_image(False)
 
-    def delete_stream_conf(self, stream_conf: StreamConfiguration):
+    def expand_video_grids(self, expand) -> None:
+        self.alertless_stream_layout.expand_grid(expand)
+        self.alert_stream_layout.expand_grid(expand)
+
+    def remove_stream(self, stream_conf: StreamConfiguration) -> None:
         # Figure out which layout the stream is in, and remove it
         for layout in [self.alert_stream_layout, self.alertless_stream_layout]:
             for stream_id, stream_widget in layout.stream_widgets.items():
@@ -80,12 +77,8 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         if len(self.streams) == 0:
             self.show_background_image(True)
 
-    def expand_video_grids(self, expand):
-        self.alertless_stream_layout.expand_grid(expand)
-        self.alert_stream_layout.expand_grid(expand)
-
-    @pyqtSlot(object)
-    def _handle_alerts(self, alerts: List[Alert]):
+    @pyqtSlot(object)  # This is here for QMetaObject.invokeMethod
+    def _handle_alerts(self, alerts: List[Alert]) -> None:
 
         if QThread.currentThread() != self.thread():
             # Move to the UI Thread
@@ -126,3 +119,17 @@ class VideoThumbnailView(_VideoThumbnailViewUI):
         for stream_id in abandoned_stream_ids:
             video_widget = self.alert_stream_layout.pop_stream_widget(stream_id)
             self.alertless_stream_layout.add_video(video_widget)
+
+    def _refresh_active_streams(self, stream_conf: StreamConfiguration) -> None:
+        get_stream_manager().resume_streaming(stream_conf.id)
+
+    def _retrieve_remote_streams(self) -> None:
+
+        def on_success(stream_confs: List[StreamConfiguration]) -> None:
+            for stream_conf in stream_confs:
+                self.add_stream(stream_conf)
+
+            self._init_alert_pubsub()
+
+        QTAsyncWorker(self, api.get_stream_configurations, on_success=on_success) \
+            .start()
