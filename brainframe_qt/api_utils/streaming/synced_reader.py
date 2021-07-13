@@ -83,7 +83,7 @@ class SyncedStreamReader(QObject):
 
         self.frame_syncer = FrameSyncer()
 
-        self._stream_status = SyncedStatus.FINISHED
+        self._stream_status = SyncedStatus.INITIALIZING
 
         self._start_streaming_event = Event()
         """Used to request the thread to start streaming"""
@@ -117,7 +117,7 @@ class SyncedStreamReader(QObject):
 
     def close(self) -> None:
         """Sends a request to close the SyncedStreamReader"""
-        logging.info(f"SyncedStreamReader for stream {self.stream_conf.id} closing")
+        logging.debug(f"SyncedStreamReader for stream {self.stream_conf.id} closing")
 
         self.thread().quit()
         self.thread().requestInterruption()
@@ -172,7 +172,7 @@ class SyncedStreamReader(QObject):
         To be called during complete stream shutdown, not simple pauses.
         Sets the status to FINISHED and emits the `finished` signal
         """
-        logging.info(f"SyncedStreamReader for stream {self.stream_conf.id} closed")
+        logging.debug(f"SyncedStreamReader for stream {self.stream_conf.id} closed")
 
         self.stream_status = SyncedStatus.FINISHED
         self.finished.emit()
