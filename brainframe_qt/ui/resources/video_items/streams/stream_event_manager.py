@@ -7,13 +7,13 @@ from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe.api.bf_errors import StreamConfigNotFoundError, StreamNotOpenedError
 
 from brainframe_qt.api_utils import api, get_stream_manager
-from brainframe_qt.api_utils.streaming import StreamListener, SyncedStreamReader
+from brainframe_qt.api_utils.streaming import SyncedStreamReader
 from brainframe_qt.api_utils.streaming.synced_reader import SyncedStatus
 from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources import QTAsyncWorker
 
 
-class StreamEventManager(StreamListener):
+class StreamEventManager(QObject):
 
     stream_initializing = pyqtSignal()
     stream_halted = pyqtSignal()
