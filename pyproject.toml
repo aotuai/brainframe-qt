@@ -6,7 +6,7 @@ authors = ["Aotu"]
 license = "Proprietary"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.2"
 brainframe-api = "^0.28.1"
 # Windows is locked to 1.16, due to gcc version on windows being 8.3. https://github.com/numpy/numpy/issues/14787
 numpy = [
