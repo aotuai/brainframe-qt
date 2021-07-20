@@ -76,7 +76,7 @@ class AlertPreviewUI(QFrame):
     def _get_no_image_available_image(cls):
         """Cache the no image available SVG as a 1920x1080 pixmap"""
         if cls._no_image_available_image is None:
-            icon = QIcon(":/images/no_image")
+            icon = QIcon(":/images/no_image_svg")
             cls._no_image_available_image = icon.pixmap(1920, 1080)
         return cls._no_image_available_image
 

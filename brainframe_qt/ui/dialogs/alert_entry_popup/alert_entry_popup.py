@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QImage, QPixmap, QIcon
 from PyQt5.QtWidgets import QDialog, QLabel
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.uic import loadUi
@@ -30,6 +30,10 @@ class AlertEntryPopup(QDialog):
 
     def get_frame(self, alert_id):
         frame = api.get_alert_frame(alert_id)
+
+        if frame is None:
+            icon = QIcon(":/images/no_image_svg")
+            return icon.pixmap(QSize(1000, 1000))
 
         height, width, channels = frame.shape
         bytes_per_line = width * channels
