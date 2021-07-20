@@ -6,7 +6,7 @@ authors = ["Aotu"]
 license = "Proprietary"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.2"
 brainframe-api = "^0.28.1"
 # Windows is locked to 1.16, due to gcc version on windows being 8.3. https://github.com/numpy/numpy/issues/14787
 numpy = [
@@ -25,8 +25,8 @@ pycryptodomex = "^3.9.6"
 pendulum = "^2.0.5"
 dataclasses = { version = "^0.7", python = ">=3.6,<3.7" }
 gstly = [
-    { version = "^0.1.7", platform = 'linux' },
-    { version = "^0.1.7", platform = 'windows', optional = true },
+    { version = "^0.3.2", platform = 'linux' },
+    { version = "^0.3.2", platform = 'windows', optional = true },
 ]
 
 pyqt5ac = { version = "^1.1.0", optional = true }
