@@ -187,10 +187,13 @@ class SyncedStreamReader(QObject):
         # Get the latest zone statuses from status receiver thread
         statuses = api.get_status_receiver().latest_statuses(self.stream_conf.id)
 
+        # Convert the numpy frame to a QPixmap
+        frame = ZoneStatusFrame.pixmap_from_numpy_frame(frame_rgb)
+
         # Run the syncing algorithm
         new_processed_frame = self.frame_syncer.sync(
             latest_frame=ZoneStatusFrame(
-                frame=frame_rgb,
+                frame=frame,
                 tstamp=frame_tstamp,
             ),
             latest_zone_statuses=statuses

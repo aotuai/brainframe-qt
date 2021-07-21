@@ -96,7 +96,7 @@ class StreamWidget(StreamWidgetUI):
 
     def on_frame(self, frame: ZoneStatusFrame) -> None:
         self.scene().remove_all_items()
-        self.scene().set_frame(frame=frame.frame)
+        self.scene().set_frame(pixmap=frame.frame)
 
         # This frame has never been paired with ZoneStatuses from the server
         # so nothing should be rendered. This occurs when the server has

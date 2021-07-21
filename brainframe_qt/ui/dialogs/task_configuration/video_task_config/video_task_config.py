@@ -94,7 +94,7 @@ class VideoTaskConfig(StreamWidget):
         if self.in_progress_zone is None:
             super().on_frame(frame)
         else:
-            self.scene().set_frame(frame=frame.frame)
+            self.scene().set_frame(pixmap=frame.frame)
 
     def start_new_zone(self, zone_type: InProgressZoneType) -> None:
         # Temporarily disable region and line drawing

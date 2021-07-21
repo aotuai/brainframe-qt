@@ -1,6 +1,7 @@
-from typing import List
+from typing import List, overload
 
-from PyQt5.QtGui import QImage, QPixmap
+import numpy as np
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QGraphicsScene, QWidget
 from brainframe.api import bf_codecs
 
@@ -20,12 +21,17 @@ class StreamGraphicsScene(QGraphicsScene):
 
         self.current_frame = None
 
-    def set_frame(self, *, pixmap=None, frame=None, path=None):
+    @overload
+    def set_frame(self, pixmap: QPixmap) -> None:
+        ...
 
-        if frame is not None:
-            pixmap = self._get_pixmap_from_numpy_frame(frame)
+    @overload
+    def set_frame(self, path: str) -> None:
+        ...
 
-        elif path is not None:
+    def set_frame(self, *, pixmap=None, path=None) -> None:
+
+        if path is not None:
             pixmap = QPixmap(str(path))
 
         """Set the current frame to the given pixmap"""
@@ -96,14 +102,6 @@ class StreamGraphicsScene(QGraphicsScene):
             return item is not self.current_frame
 
         self.remove_items(self.items(), condition)
-
-    @staticmethod
-    def _get_pixmap_from_numpy_frame(frame):
-        height, width, channel = frame.shape
-        bytes_per_line = width * 3
-        image = QImage(frame.data, width, height, bytes_per_line,
-                       QImage.Format_RGB888)
-        return QPixmap.fromImage(image)
 
     def _new_zone_status_polygon(self, zone_status):
         zone_status_item = ZoneStatusItem(
