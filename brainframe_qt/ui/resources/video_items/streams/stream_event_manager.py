@@ -209,6 +209,9 @@ class StreamEventManager(QObject):
         self.stream_reader.frame_received.disconnect(self._handle_frame_signal)
         self.stream_reader.stream_state_changed.disconnect(self._handle_status_signal)
 
+        self._frame_event.clear()
+        self._status_event.clear()
+
         self.stream_reader = None
 
     def _subscribe_to_stream(
