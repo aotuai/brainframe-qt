@@ -113,14 +113,15 @@ class StreamManager(QObject):
         """
         if stream_id in self._running_streams:
             self._running_streams.remove(stream_id)
-        else:
+
+            if len(self._paused_streams) > 0:
+                self.resume_streaming(self._paused_streams[0])
+
+        elif stream_id in self._paused_streams:
             self._paused_streams.remove(stream_id)
 
         stream_reader = self.stream_readers[stream_id]
         stream_reader.close()
-
-        # Removing references to Stream Reader is handled in _remove_stream_reference
-        # slot asynchronously
 
     def _create_synced_reader(
         self, stream_conf: StreamConfiguration, url: str

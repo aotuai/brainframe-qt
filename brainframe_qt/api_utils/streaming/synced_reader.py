@@ -7,8 +7,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 
 from brainframe.api.bf_codecs import StreamConfiguration
 from gstly import gobject_init
-from gstly.abstract_stream_reader import StreamReader, StreamStatus
-from gstly.gst_stream_reader import GstStreamReader
+from gstly.stream_reader import GstStreamReader, StreamReader, StreamStatus
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.util.events import or_events
