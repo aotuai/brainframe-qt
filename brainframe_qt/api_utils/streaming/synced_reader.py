@@ -47,7 +47,7 @@ class SyncedStatus(Enum):
 class SyncedStreamReader(QObject):
     """Reads frames from a stream and syncs them up with zone statuses."""
 
-    frame_received = pyqtSignal(ZoneStatusFrame)
+    frame_received = pyqtSignal()
     stream_state_changed = pyqtSignal(SyncedStatus)
 
     finished = pyqtSignal()
@@ -229,7 +229,7 @@ class SyncedStreamReader(QObject):
 
             # Alert frame listeners if this a new frame
             if is_new:
-                self.frame_received.emit(self.latest_processed_frame)
+                self.frame_received.emit()
 
     def _handle_status_event(self) -> None:
         self._stream_reader.new_status_event.clear()

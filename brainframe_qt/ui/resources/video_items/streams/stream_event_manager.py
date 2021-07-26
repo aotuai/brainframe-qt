@@ -132,7 +132,7 @@ class StreamEventManager(QObject):
 
         self.stream_conf = None
 
-    def _handle_frame_signal(self, _frame: ZoneStatusFrame) -> None:
+    def _handle_frame_signal(self) -> None:
         """Connected to the SyncedStreamReader"""
         self._frame_event.set()
 
