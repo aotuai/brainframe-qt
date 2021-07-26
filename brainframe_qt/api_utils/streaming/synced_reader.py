@@ -1,6 +1,6 @@
 import logging
 from enum import Enum, auto
-from threading import Event
+from threading import Event, Thread
 from typing import Optional
 
 from PyQt5.QtCore import QObject, pyqtSignal
@@ -91,6 +91,23 @@ class SyncedStreamReader(QObject):
 
         self._start_streaming_event.set()
 
+        self._interrupt_requested = False
+        """Used to signal thread to stop"""
+
+        # Start thread, now that the object is all set up
+        self._thread = self._init_thread()
+
+    def _init_thread(self) -> Thread:
+        thread = Thread(
+            name=f"SyncedStreamReader thread for stream ID {self.stream_conf.id}",
+            target=self.run,
+            daemon=True
+        )
+
+        thread.start()
+
+        return thread
+
     @property
     def is_streaming_paused(self) -> bool:
         """Whether the stream is paused or has been requested to do so"""
@@ -118,8 +135,7 @@ class SyncedStreamReader(QObject):
         """Sends a request to close the SyncedStreamReader"""
         logging.debug(f"SyncedStreamReader for stream {self.stream_conf.id} closing")
 
-        self.thread().quit()
-        self.thread().requestInterruption()
+        self._interrupt_requested = True
 
     def pause_streaming(self) -> None:
         """Pause streaming.
@@ -147,7 +163,7 @@ class SyncedStreamReader(QObject):
 
     def run(self) -> None:
         """Main loop for the created thread"""
-        while not self.thread().isInterruptionRequested():
+        while not self._interrupt_requested:
             if self._start_streaming_event.wait(0.2):
                 self._start_streaming()
                 self._process_stream_events()
@@ -267,7 +283,7 @@ class SyncedStreamReader(QObject):
         frame_or_status_event = or_events(self._stream_reader.new_frame_event,
                                           self._stream_reader.new_status_event)
 
-        while not self.thread().isInterruptionRequested():
+        while not self._interrupt_requested:
 
             if self._pause_streaming_event.is_set():
                 # Streaming paused. Stop loop for now

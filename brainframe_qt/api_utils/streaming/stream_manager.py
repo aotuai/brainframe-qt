@@ -134,23 +134,10 @@ class StreamManager(QObject):
             parent=typing.cast(QObject, None),
         )
 
-        thread = QThread(parent=self)
-
-        synced_stream_reader.moveToThread(thread)
-        thread.started.connect(synced_stream_reader.run)
-
-        # Quit the thread when the StreamReader is done operating
-        synced_stream_reader.finished.connect(thread.quit)
-
-        # Delete the thread when its done operating
-        thread.finished.connect(thread.deleteLater)
-
         # When StreamReader is done, remove it from the collection that tracks them
         synced_stream_reader.finished.connect(
             lambda: self._handle_dereference(stream_conf.id)
         )
-
-        thread.start()
 
         return synced_stream_reader
 
