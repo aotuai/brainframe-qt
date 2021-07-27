@@ -41,7 +41,7 @@ class ZoneStatusFrame:
     }
 
     @staticmethod
-    def pixmap_from_numpy_frame(frame) -> QPixmap:
+    def pixmap_from_numpy_frame(frame: np.ndarray) -> QPixmap:
         height, width, channel = frame.shape
         bytes_per_line = width * 3
         image = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
