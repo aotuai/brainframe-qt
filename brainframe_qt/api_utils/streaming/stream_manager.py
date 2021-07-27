@@ -1,5 +1,6 @@
 import logging
 import typing
+from collections import OrderedDict
 from typing import Dict, List
 
 from PyQt5.QtCore import QObject, QThread
@@ -111,16 +112,8 @@ class StreamManager(QObject):
 
         :param stream_id: The ID of the stream to delete
         """
-        if stream_id in self._running_streams:
-            self._running_streams.remove(stream_id)
-
-            if len(self._paused_streams) > 0:
-                self.resume_streaming(self._paused_streams[0])
-
-        elif stream_id in self._paused_streams:
-            self._paused_streams.remove(stream_id)
-
         stream_reader = self.stream_readers[stream_id]
+        self.dereference_stream(stream_id)
         stream_reader.close()
 
     def _create_synced_reader(
@@ -136,12 +129,12 @@ class StreamManager(QObject):
 
         # When StreamReader is done, remove it from the collection that tracks them
         synced_stream_reader.finished.connect(
-            lambda: self._handle_dereference(stream_conf.id)
+            lambda: self.dereference_stream(stream_conf.id)
         )
 
         return synced_stream_reader
 
-    def _handle_dereference(self, stream_id: int) -> None:
+    def dereference_stream(self, stream_id: int) -> None:
         self.stream_readers.pop(stream_id)
 
         # Remove reference if stream is running, resuming another stream if available
