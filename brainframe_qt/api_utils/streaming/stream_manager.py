@@ -1,14 +1,13 @@
 import logging
 import typing
-from collections import OrderedDict
-from typing import Dict, List
+from threading import RLock
+from typing import Dict, List, Optional
 
-from PyQt5.QtCore import QObject, QThread
+from PyQt5.QtCore import QObject
 
 from brainframe.api.bf_codecs import StreamConfiguration
 
 from brainframe_qt.api_utils import api
-
 from .synced_reader import SyncedStreamReader
 
 
@@ -20,6 +19,8 @@ class StreamManager(QObject):
 
     def __init__(self, *, parent: QObject):
         super().__init__(parent=parent)
+
+        self._stream_lock = RLock()
 
         self._running_streams: List[int] = []
         """Currently running streams. Does not include stay-alive streams.
@@ -40,11 +41,7 @@ class StreamManager(QObject):
     def close(self) -> None:
         """Request and wait for all streams to close"""
         logging.info("Initiating StreamManager close")
-        stream_readers = self.stream_readers.values()
-        for stream_reader in stream_readers:
-            stream_reader.close()
-        for stream_reader in stream_readers:
-            stream_reader.wait_until_closed()
+        self._close()
         logging.info("StreamManager close finished")
 
     def delete_stream(self, stream_id: int, timeout: int = 120) -> None:
@@ -55,38 +52,17 @@ class StreamManager(QObject):
         api.delete_stream_configuration(stream_id, timeout=timeout)
 
     def pause_streaming(self, stream_id) -> None:
-        stream_reader = self.stream_readers[stream_id]
-        stream_reader.pause_streaming()
-
-        if stream_id in self._running_streams:
-            self._running_streams.remove(stream_id)
-
-        self._paused_streams.insert(0, stream_id)
+        self._set_stream_paused(stream_id, True)
+        self._ensure_running_streams()
 
     def resume_streaming(self, stream_id) -> None:
-        if stream_id in self._paused_streams:
-            self._paused_streams.remove(stream_id)
-
-        elif stream_id in self._running_streams:
-            self._running_streams.remove(stream_id)
-
-        # Insert the newest stream at the front of the queue
-        self._running_streams.insert(0, stream_id)
-
-        # Check if over max concurrent streams and pause the oldest if necessary
-        # The while loop is here as a safety mechanism
-        while len(self._running_streams) > self._MAX_ACTIVE_STREAMS:
-            self.pause_streaming(self._running_streams[-1])
-
-        # Resume the streaming if it was paused
-        stream_reader = self.stream_readers[stream_id]
-        if stream_reader.is_streaming_paused:
-            stream_reader.resume_streaming()
+        self._set_stream_paused(stream_id, False)
+        self._ensure_running_streams()
 
     def start_streaming(
-        self,
-        stream_conf: StreamConfiguration,
-        url: str,
+            self,
+            stream_conf: StreamConfiguration,
+            url: str,
     ) -> SyncedStreamReader:
         """Starts reading from the stream using the given information, or returns an
         existing reader if we're already reading this stream.
@@ -95,29 +71,25 @@ class StreamManager(QObject):
         :param url: The URL to stream on
         :return: A SyncedStreamReader for the stream
         """
-        # Get the Stream Reader
-        if stream_conf.id in self.stream_readers:
-            # If it's paused, then run self._unpause_stream, otherwise, return it
-            stream_reader = self.stream_readers[stream_conf.id]
-        else:
-            stream_reader = self._create_synced_reader(stream_conf, url)
-            self.stream_readers[stream_conf.id] = stream_reader
-
-        self.resume_streaming(stream_conf.id)
-
-        return stream_reader
+        return self._start_stream(stream_conf, url)
 
     def stop_streaming(self, stream_id: int) -> None:
         """Requests a stream to close asynchronously
 
         :param stream_id: The ID of the stream to delete
         """
-        stream_reader = self.stream_readers[stream_id]
-        self.dereference_stream(stream_id)
-        stream_reader.close()
+        self._stop_stream(stream_id)
+        self._ensure_running_streams()
+
+    def _close(self) -> None:
+        with self._stream_lock:
+            streams = self.stream_readers.copy()
+            for stream_id, stream_reader in streams.items():
+                self._stop_stream(stream_id)
+                stream_reader.wait_until_closed()
 
     def _create_synced_reader(
-        self, stream_conf: StreamConfiguration, url: str
+            self, stream_conf: StreamConfiguration, url: str
     ) -> SyncedStreamReader:
 
         synced_stream_reader = SyncedStreamReader(
@@ -129,21 +101,80 @@ class StreamManager(QObject):
 
         # When StreamReader is done, remove it from the collection that tracks them
         synced_stream_reader.finished.connect(
-            lambda: self.dereference_stream(stream_conf.id)
+            lambda: self._forget_stream(stream_conf.id)
         )
 
         return synced_stream_reader
 
-    def dereference_stream(self, stream_id: int) -> None:
-        self.stream_readers.pop(stream_id)
+    def _ensure_running_streams(self) -> None:
+        """Pause/unpause streams if over/under max"""
+        with self._stream_lock:
+            while (
+                len(self._running_streams) < self._MAX_ACTIVE_STREAMS
+                and self._paused_streams
+            ):
+                self._set_stream_paused(self._paused_streams[0], False)
 
-        # Remove reference if stream is running, resuming another stream if available
-        if stream_id in self._running_streams:
-            self._running_streams.remove(stream_id)
+            for _running_stream_id in self._running_streams[self._MAX_ACTIVE_STREAMS:]:
+                self._set_stream_paused(_running_stream_id, paused=True)
 
-            if len(self._paused_streams) > 0:
-                self.resume_streaming(self._paused_streams[0])
+    def _forget_stream(self, stream_id: int) -> None:
+        with self._stream_lock:
+            self._set_stream_paused(stream_id, paused=True)
 
-        # Remove reference if stream is paused
-        elif stream_id in self._paused_streams:
             self._paused_streams.remove(stream_id)
+            self.stream_readers.pop(stream_id)
+
+    def _get_stream_reader(
+        self,
+        stream_conf: StreamConfiguration,
+        url: str,
+    ) -> Optional[SyncedStreamReader]:
+        with self._stream_lock:
+            if stream_conf.id in self.stream_readers:
+                # If it's paused, then run self._unpause_stream, otherwise, return it
+                stream_reader = self.stream_readers[stream_conf.id]
+            else:
+                stream_reader = self._create_synced_reader(stream_conf, url)
+                self.stream_readers[stream_conf.id] = stream_reader
+
+        return stream_reader
+
+    def _set_stream_paused(self, stream_id: int, paused: bool) -> None:
+        with self._stream_lock:
+            stream_reader = self.stream_readers[stream_id]
+
+            if paused:
+                stream_reader.pause_streaming()
+                destination_list = self._paused_streams
+            else:
+                stream_reader.resume_streaming()
+                destination_list = self._running_streams
+
+            if stream_id in self._paused_streams:
+                self._paused_streams.remove(stream_id)
+            if stream_id in self._running_streams:
+                self._running_streams.remove(stream_id)
+
+            destination_list.insert(0, stream_id)
+
+    def _start_stream(
+            self,
+            stream_conf: StreamConfiguration,
+            url: str,
+    ) -> SyncedStreamReader:
+        with self._stream_lock:
+            stream_reader = self._get_stream_reader(stream_conf, url)
+
+            if stream_conf.id not in self._running_streams:
+                self._set_stream_paused(stream_conf.id, False)
+
+            self._ensure_running_streams()
+
+        return stream_reader
+
+    def _stop_stream(self, stream_id: int) -> None:
+        with self._stream_lock:
+            stream_reader = self.stream_readers[stream_id]
+            self._forget_stream(stream_id)
+            stream_reader.close()
