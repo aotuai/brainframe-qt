@@ -48,8 +48,8 @@ class StreamManager(QObject):
         """[blocking API] Delete a stream through the API and initiate the closing of
         its corresponding StreamReader
         """
-        self.stop_streaming(stream_id)
         api.delete_stream_configuration(stream_id, timeout=timeout)
+        self.stop_streaming(stream_id)
 
     def pause_streaming(self, stream_id) -> None:
         self._set_stream_paused(stream_id, True)
@@ -97,11 +97,6 @@ class StreamManager(QObject):
             url,
             # No parent if moving to a different thread
             parent=typing.cast(QObject, None),
-        )
-
-        # When StreamReader is done, remove it from the collection that tracks them
-        synced_stream_reader.finished.connect(
-            lambda: self._forget_stream(stream_conf.id)
         )
 
         return synced_stream_reader
