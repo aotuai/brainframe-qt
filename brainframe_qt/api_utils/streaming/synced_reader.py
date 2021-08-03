@@ -4,8 +4,7 @@ from time import sleep
 from typing import Optional, Set
 
 from brainframe.api import StatusReceiver
-from gstly.abstract_stream_reader import StreamReader, StreamStatus
-from gstly.gst_stream_reader import GstStreamReader
+from gstly.stream_reader import GstStreamReader, StreamReader, StreamStatus
 
 from brainframe_qt.util.events import or_events
 from .frame_syncer import FrameSyncer
