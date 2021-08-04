@@ -61,7 +61,7 @@ parts:
 
       # Check that no Gstly source is in the build
       export GSTLY_PATH=$(python3 -c "import pathlib, gstly; print(pathlib.Path(gstly.__file__).parent)")
-      (find ${GSTLY_PATH} -name "*.py" | grep .) && false
+      ! find ${GSTLY_PATH} -name "*.py" | grep .
     source: .
     build-packages:
       # Basic Python packages
