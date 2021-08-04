@@ -9,8 +9,7 @@ from PyQt5.uic import loadUi
 
 from brainframe_qt.api_utils import api
 from brainframe.api.bf_codecs import Zone, ZoneAlarm
-# noinspection PyUnresolvedReferences
-from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources
+from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.ui.resources.paths import qt_ui_paths
 from .zone_list_item import ZoneListItem
 
@@ -68,13 +67,7 @@ class ZoneList(QTreeWidget):
         zone_item = self._new_row(zone.name, entry_type)
         self.addTopLevelItem(zone_item)
 
-        self._add_trash_button(zone_item)
-        if zone.name == Zone.FULL_FRAME_ZONE_NAME:
-            zone_item.trash_button.setDisabled(True)
-        else:
-            zone_item.trash_button.clicked.connect(
-                lambda: self.delete_zone(zone.id)
-            )
+        self._init_zone_buttons(zone, zone_item)
 
         self.zones[zone.id] = zone_item
 
@@ -92,11 +85,7 @@ class ZoneList(QTreeWidget):
 
         zone_item.addChild(alarm_item)
 
-        self._add_trash_button(alarm_item)
-
-        alarm_item.trash_button.clicked.connect(
-            lambda: self.delete_alarm(zone.id, alarm.id)
-        )
+        self._init_alarm_buttons(zone, alarm, alarm_item)
 
         self.alarms[alarm.id] = alarm_item
 
@@ -150,6 +139,21 @@ class ZoneList(QTreeWidget):
             entry_type_icon = QIcon(":/icons/question_mark")
 
         return entry_type_icon
+
+    def _init_alarm_buttons(
+        self, zone: Zone, alarm: ZoneAlarm, alarm_item: ZoneListItem
+    ) -> None:
+        self.setItemWidget(alarm_item, 2, alarm_item.trash_button)
+        alarm_item.trash_button.clicked.connect(
+            lambda: self.delete_alarm(zone.id, alarm.id)
+        )
+
+    def _init_zone_buttons(self, zone: Zone, zone_item: ZoneListItem) -> None:
+        self.setItemWidget(zone_item, 2, zone_item.trash_button)
+        if zone.name == Zone.FULL_FRAME_ZONE_NAME:
+            zone_item.trash_button.setDisabled(True)
+        else:
+            zone_item.trash_button.clicked.connect(lambda: self.delete_zone(zone.id))
 
     def _add_trash_button(self, row_item: ZoneListItem):
         trash_button = QPushButton()
