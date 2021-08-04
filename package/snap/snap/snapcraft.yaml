@@ -60,8 +60,8 @@ parts:
       cp brainframe_client.py $PYTHON_INSTALL_DIR/
 
       # Check that no Gstly source is in the build
-      export GSTLY_PATH=$(python3 -c "from pathlib import Path; import gstly; print(Path(gstly.__file__).parent)")
-      if [ $(find ${GSTLY_PATH} -name "*.py" | wc -l) -gt 0 ]; then false; fi
+      export GSTLY_PATH=$(python3 -c "import pathlib, gstly; print(pathlib.Path(gstly.__file__).parent)")
+      (find ${GSTLY_PATH} -name "*.py" | grep .) && false
     source: .
     build-packages:
       # Basic Python packages
