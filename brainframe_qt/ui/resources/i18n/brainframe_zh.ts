@@ -1426,6 +1426,19 @@ Please recheck the entered server address.</source>
     </message>
 </context>
 <context>
+    <name>ZoneListItem</name>
+    <message>
+        <location filename="../../dialogs/task_configuration/zone_list/zone_list_item/zone_list_item.py" line="24"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/zone_list/zone_list_item/zone_list_item.py" line="32"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ZoneStatusLabelItem</name>
     <message>
         <location filename="../video_items/zone_statuses/zone_status_label_item.py" line="63"/>

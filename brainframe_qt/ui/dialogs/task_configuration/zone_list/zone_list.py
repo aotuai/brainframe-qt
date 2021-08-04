@@ -3,8 +3,12 @@ from typing import Dict
 
 from PyQt5.QtCore import QModelIndex, pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QHeaderView, QPushButton, QStyleOptionViewItem,
-                             QStyledItemDelegate, QTreeWidget)
+from PyQt5.QtWidgets import (
+    QHeaderView,
+    QStyleOptionViewItem,
+    QStyledItemDelegate,
+    QTreeWidget
+)
 from PyQt5.uic import loadUi
 
 from brainframe_qt.api_utils import api
@@ -23,12 +27,13 @@ class ZoneList(QTreeWidget):
         loadUi(qt_ui_paths.zone_list_ui, self)
 
         # Crashes when set in UI file for some reason
-        self.setColumnCount(3)
+        self.setColumnCount(4)
 
         # Scale columns in view
         self.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
         self.header().setSectionResizeMode(1, QHeaderView.Stretch)
         self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        self.header().setSectionResizeMode(3, QHeaderView.ResizeToContents)
 
         # Item delegate is used to force a custom row height
         self.setItemDelegate(ZoneListItemDelegate(row_height=40))
@@ -122,7 +127,7 @@ class ZoneList(QTreeWidget):
         zone_item.setIcon(0, icon)
 
     def _new_row(self, name, entry_type: EntryType):
-        row = ZoneListItem(["", name, ""])
+        row = ZoneListItem(["", name, "", ""])
         row.setIcon(0, self._get_item_icon(entry_type))
 
         return row
@@ -143,24 +148,21 @@ class ZoneList(QTreeWidget):
     def _init_alarm_buttons(
         self, zone: Zone, alarm: ZoneAlarm, alarm_item: ZoneListItem
     ) -> None:
-        self.setItemWidget(alarm_item, 2, alarm_item.trash_button)
+        self.setItemWidget(alarm_item, 2, alarm_item.edit_button)
+        self.setItemWidget(alarm_item, 3, alarm_item.trash_button)
         alarm_item.trash_button.clicked.connect(
             lambda: self.delete_alarm(zone.id, alarm.id)
         )
 
     def _init_zone_buttons(self, zone: Zone, zone_item: ZoneListItem) -> None:
-        self.setItemWidget(zone_item, 2, zone_item.trash_button)
+        self.setItemWidget(zone_item, 2, zone_item.edit_button)
+        self.setItemWidget(zone_item, 3, zone_item.trash_button)
+
         if zone.name == Zone.FULL_FRAME_ZONE_NAME:
             zone_item.trash_button.setDisabled(True)
+            zone_item.edit_button.setDisabled(True)
         else:
             zone_item.trash_button.clicked.connect(lambda: self.delete_zone(zone.id))
-
-    def _add_trash_button(self, row_item: ZoneListItem):
-        trash_button = QPushButton()
-        trash_button.setIcon(QIcon(":/icons/trash"))
-        self.setItemWidget(row_item, 2, trash_button)
-
-        row_item.trash_button = trash_button
 
 
 class ZoneListItemDelegate(QStyledItemDelegate):

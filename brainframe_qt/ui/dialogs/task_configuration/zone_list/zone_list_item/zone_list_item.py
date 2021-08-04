@@ -19,12 +19,16 @@ class ZoneListItem(QTreeWidgetItem):
 
     def _init_edit_button(self) -> QPushButton:
         edit_button = QPushButton(self.parent())
-        edit_button.setIcon(QIcon(":/icons/edit"))
+
+        edit_button.setIcon(QIcon(":/icons/trash"))
+        edit_button.setToolTip("Edit")
 
         return edit_button
 
     def _init_trash_button(self) -> QPushButton:
         trash_button = QPushButton(self.parent())
+
         trash_button.setIcon(QIcon(":/icons/trash"))
+        trash_button.setToolTip("Delete")
 
         return trash_button
