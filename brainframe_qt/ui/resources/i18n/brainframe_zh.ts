@@ -277,57 +277,57 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>BrainFrameApplication</name>
     <message>
-        <location filename="../../brainframe_app.py" line="71"/>
+        <location filename="../../brainframe_app.py" line="82"/>
         <source>Successfully connected to server</source>
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="219"/>
+        <location filename="../../brainframe_app.py" line="217"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="76"/>
+        <location filename="../../brainframe_app.py" line="87"/>
         <source>Attempting to communicate with server at {url}</source>
         <translation>尝试连接服务器至{url}</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="79"/>
+        <location filename="../../brainframe_app.py" line="90"/>
         <source>Connected to server. Validating license</source>
         <translation>已连接到服务器，正在验证授权</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="81"/>
+        <location filename="../../brainframe_app.py" line="92"/>
         <source>License is expired. Please upload a new one</source>
         <translation>授权出现问题，请重新配置配置</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="83"/>
+        <location filename="../../brainframe_app.py" line="94"/>
         <source>Invalid License. Does the server have a connection to the internet?</source>
         <translation>授权无效，服务器是否已连接到互联网？</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="87"/>
+        <location filename="../../brainframe_app.py" line="98"/>
         <source>No license exists on the server. Please upload one</source>
         <translation>服务器上没有授权。请上传一个</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="145"/>
+        <location filename="../../brainframe_app.py" line="156"/>
         <source>Error</source>
         <translation>错误信息</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="146"/>
+        <location filename="../../brainframe_app.py" line="157"/>
         <source>An exception has occurred</source>
         <translation>发生了一个例外</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="153"/>
+        <location filename="../../brainframe_app.py" line="164"/>
         <source>An unhandled exception occurred while communicating with the BrainFrame server</source>
         <translation>与BrainFrame服务器通信时发生未处理的异常</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="157"/>
+        <location filename="../../brainframe_app.py" line="168"/>
         <source>. The client must be closed.</source>
         <translation>。客户端必须关闭。</translation>
     </message>
@@ -345,6 +345,26 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <location filename="../../brainframe_app.py" line="74"/>
         <source>Collecting server authentication configuration</source>
         <translation>正在收集服务器身份验证配置</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="223"/>
+        <source>The server is using version {server_version} but this client is on version {client_version}.</source>
+        <translation>服务器版本为{server_version}，但此客户端版为{client_version}。</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="226"/>
+        <source>For a stable experience, please &lt;a href=&apos;{client_download_url}&apos;&gt;download&lt;/a&gt; the latest {outdated} version.</source>
+        <translation>为了获得更稳定的体验，请&lt;a href=&apos;{client_download_url}&apos;&gt;下载&lt;/a&gt;最新的{outdated}版本。</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="231"/>
+        <source>client</source>
+        <translation>客户端</translation>
+    </message>
+    <message>
+        <location filename="../../brainframe_app.py" line="231"/>
+        <source>server</source>
+        <translation>服务器端</translation>
     </message>
 </context>
 <context>

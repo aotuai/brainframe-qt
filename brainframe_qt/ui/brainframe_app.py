@@ -19,6 +19,7 @@ from brainframe_qt.ui import EULADialog, MainWindow, SplashScreen
 from brainframe_qt.ui.resources import qt_resources
 from brainframe_qt.ui.resources.config import ServerSettings
 from brainframe_qt.ui.resources.i18n.translator import BrainFrameTranslator
+from brainframe_qt.ui.resources.links.documentation import DOWNLOADS_LINK
 from brainframe_qt.ui.resources.ui_elements.applications import SingletonApplication
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
@@ -63,6 +64,16 @@ class BrainFrameApplication(SingletonApplication):
         self.connection_manager.start()
         self.splash_screen.show()
         super().exec()
+
+    def _check_server_version(self) -> None:
+        server_version = api.version()
+
+        server_split = server_version.split(".")
+        client_split = brainframe_qt.__version__.split(".")
+
+        if client_split[:2] != server_split[:2]:
+            client_outdated = client_split[:2] < server_split[:2]
+            self._handle_version_mismatch(server_version, client_outdated)
 
     def _on_connection_state_change(
         self, connection_state: ConnectionManager.ConnectionState
@@ -197,9 +208,7 @@ class BrainFrameApplication(SingletonApplication):
         # Start the client if not already started
         if not self.main_window:
 
-            server_version = api.version()
-            if server_version != brainframe_qt.__version__:
-                self._handle_version_mismatch(server_version)
+            self._check_server_version()
 
             # Initialize the StreamManager
             # TODO: Find a better way of doing this
@@ -218,21 +227,34 @@ class BrainFrameApplication(SingletonApplication):
         if not EULADialog.get_agreement(parent=None):
             sys.exit(self.tr("Program Closing: License Not Accepted"))
 
-    def _handle_version_mismatch(self, server_version: str) -> None:
+    def _handle_version_mismatch(
+            self, server_version: str, client_outdated: bool
+    ) -> None:
         title = self.tr("Version Mismatch")
-        message = self.tr(
-            "The server is using version {server_version} but this client "
-            "is on version {client_version}. Please download the matching "
-            "version of the client at {download_url}.")
-        message = message.format(
+        text = self.tr(
+            "The server is using version {server_version} but this client is on "
+            "version {client_version}.")
+        subtext = self.tr(
+            "For a stable experience, please "
+            "<a href='{client_download_url}'>download</a> the latest {outdated} "
+            "version."
+        )
+        outdated = self.tr("client") if client_outdated else self.tr("server")
+
+        text = text.format(
             server_version=server_version,
             client_version=brainframe_qt.__version__,
-            download_url="aotu.ai/docs/downloads/")
+        )
+        subtext = subtext.format(
+            client_download_url=DOWNLOADS_LINK,
+            outdated=outdated,
+        )
 
-        dialog = BrainFrameMessage.critical(
+        dialog = BrainFrameMessage.warning(
             parent=typing.cast(QWidget, None),
             title=title,
-            text=message
+            warning=text,
+            subtext=subtext,
         )
 
         dialog.setTextInteractionFlags(Qt.TextSelectableByMouse)
