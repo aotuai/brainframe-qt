@@ -1,11 +1,11 @@
 from datetime import timedelta
-from typing import List, Optional
+from typing import List
 
 from PyQt5.QtWidgets import QWidget
 from brainframe.api import bf_codecs
 
-from brainframe_qt.api_utils.streaming.zone_status_frame import \
-    ZoneStatusFrameMeta
+from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrameMeta
+
 from . import alerts as stream_alerts
 from .stream_widget_overlay_ui import StreamWidgetOverlayUI
 
@@ -16,20 +16,16 @@ class StreamWidgetOverlay(StreamWidgetOverlayUI):
     def __init__(self, *, parent: QWidget):
         super().__init__(parent=parent)
 
-    def change_stream(self,
-                      stream_conf: Optional[bf_codecs.StreamConfiguration]) \
-            -> None:
+    def change_stream(self, stream_conf: bf_codecs.StreamConfiguration) -> None:
+        self.titlebar.set_stream_name(stream_conf.name)
 
-        if stream_conf is None:
-            self.titlebar.set_stream_name(None)
-        else:
-            self.titlebar.set_stream_name(stream_conf.name)
-
-    def handle_frame_metadata(self, frame_metadata: ZoneStatusFrameMeta) \
-            -> None:
+    def handle_frame_metadata(self, frame_metadata: ZoneStatusFrameMeta) -> None:
 
         alerts = self._metadata_to_alerts(frame_metadata)
         self.body.handle_alerts(alerts)
+
+    def stop_streaming(self) -> None:
+        self.titlebar.set_stream_name(None)
 
     def _metadata_to_alerts(self, frame_metadata: ZoneStatusFrameMeta) \
             -> List[stream_alerts.AbstractOverlayAlert]:
