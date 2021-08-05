@@ -282,7 +282,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>连接服务器成功</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="217"/>
+        <location filename="../../brainframe_app.py" line="228"/>
         <source>Program Closing: License Not Accepted</source>
         <translation>程序正在关闭：授权不符</translation>
     </message>
@@ -332,37 +332,32 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>。客户端必须关闭。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="222"/>
+        <location filename="../../brainframe_app.py" line="233"/>
         <source>Version Mismatch</source>
         <translation>版本不匹配</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="223"/>
-        <source>The server is using version {server_version} but this client is on version {client_version}. Please download the matching version of the client at {download_url}.</source>
-        <translation>正在使用的服务器版本为{server_version}，但是此客户端版本为{client_version}。请从{download_url}下载匹配版本的客户端。</translation>
-    </message>
-    <message>
-        <location filename="../../brainframe_app.py" line="74"/>
+        <location filename="../../brainframe_app.py" line="85"/>
         <source>Collecting server authentication configuration</source>
         <translation>正在收集服务器身份验证配置</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="223"/>
+        <location filename="../../brainframe_app.py" line="234"/>
         <source>The server is using version {server_version} but this client is on version {client_version}.</source>
         <translation>服务器版本为{server_version}，但此客户端版为{client_version}。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="226"/>
+        <location filename="../../brainframe_app.py" line="237"/>
         <source>For a stable experience, please &lt;a href=&apos;{client_download_url}&apos;&gt;download&lt;/a&gt; the latest {outdated} version.</source>
         <translation>为了获得更稳定的体验，请&lt;a href=&apos;{client_download_url}&apos;&gt;下载&lt;/a&gt;最新的{outdated}版本。</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="231"/>
+        <location filename="../../brainframe_app.py" line="242"/>
         <source>client</source>
         <translation>客户端</translation>
     </message>
     <message>
-        <location filename="../../brainframe_app.py" line="231"/>
+        <location filename="../../brainframe_app.py" line="242"/>
         <source>server</source>
         <translation>服务器端</translation>
     </message>
