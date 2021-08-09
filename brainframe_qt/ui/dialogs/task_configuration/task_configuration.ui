@@ -282,7 +282,7 @@
    <sender>region_button</sender>
    <signal>clicked()</signal>
    <receiver>TaskConfiguration</receiver>
-   <slot>new_region()</slot>
+   <slot>edit_region()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>144</x>
@@ -298,7 +298,7 @@
    <sender>line_button</sender>
    <signal>clicked()</signal>
    <receiver>TaskConfiguration</receiver>
-   <slot>new_line()</slot>
+   <slot>edit_line()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>235</x>
@@ -314,7 +314,7 @@
    <sender>confirm_op_button</sender>
    <signal>clicked()</signal>
    <receiver>TaskConfiguration</receiver>
-   <slot>new_zone_confirmed()</slot>
+   <slot>confirm_zone_edit()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>555</x>
@@ -377,10 +377,10 @@
  </connections>
  <slots>
   <slot>new_alarm()</slot>
-  <slot>new_region()</slot>
-  <slot>new_line()</slot>
-  <slot>new_zone_confirmed()</slot>
-  <slot>new_zone_canceled(int)</slot>
+  <slot>edit_region()</slot>
+  <slot>edit_line()</slot>
+  <slot>confirm_zone_edit()</slot>
+  <slot>cancel_zone_edit(int)</slot>
   <slot>enable_confirm_op_button(bool)</slot>
  </slots>
 </ui>

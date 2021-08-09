@@ -96,7 +96,7 @@ class VideoTaskConfig(StreamWidget):
         else:
             self.scene().set_frame(pixmap=frame.frame)
 
-    def start_new_zone(self, zone_type: InProgressZoneType) -> None:
+    def start_zone_edit(self, zone_type: InProgressZoneType) -> None:
         # Temporarily disable region and line drawing
         self.render_config.draw_regions = False
         self.render_config.draw_lines = False
@@ -128,13 +128,13 @@ class VideoTaskConfig(StreamWidget):
         self.scene().addItem(self.in_progress_zone)
         self.scene().addItem(self.preview_zone)
 
-    def confirm_new_zone(self) -> List[VideoItem.PointType]:
+    def confirm_zone_edit(self) -> List[VideoItem.PointType]:
         zone_vertices = self.in_progress_zone.current_vertices
-        self.discard_new_zone()
+        self.discard_zone_edit()
 
         return zone_vertices
 
-    def discard_new_zone(self) -> None:
+    def discard_zone_edit(self) -> None:
         # Re-enable region and line drawing
         self.render_config.draw_regions = True
         self.render_config.draw_lines = True

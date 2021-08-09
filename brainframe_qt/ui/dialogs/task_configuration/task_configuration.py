@@ -31,7 +31,7 @@ class TaskConfiguration(QDialog):
 
         self._hide_operation_widgets(True)
 
-        self.cancel_op_button.clicked.connect(self.new_zone_canceled)
+        self.cancel_op_button.clicked.connect(self.cancel_zone_edit)
 
     @classmethod
     def open_configuration(cls, stream_conf, parent):
@@ -70,31 +70,31 @@ class TaskConfiguration(QDialog):
             .start()
 
     @pyqtSlot()
-    def new_line(self):
+    def edit_line(self):
         line_name = self.get_new_zone_name(
             self.tr("New Line"),
             self.tr("Name for new line:"))
         if line_name is None:
             return
-        self.new_zone(VideoTaskConfig.InProgressZoneType.LINE, line_name)
+        self.edit_zone(VideoTaskConfig.InProgressZoneType.LINE, line_name)
 
     @pyqtSlot()
-    def new_region(self):
+    def edit_region(self):
         region_name = self.get_new_zone_name(
             self.tr("New Region"),
             self.tr("Name for new region:"))
         if region_name is None:
             return
-        self.new_zone(VideoTaskConfig.InProgressZoneType.REGION, region_name)
+        self.edit_zone(VideoTaskConfig.InProgressZoneType.REGION, region_name)
 
     @pyqtSlot()
-    def new_zone_confirmed(self):
+    def confirm_zone_edit(self):
         self.instruction_label.setText("")
 
         # Instruct the VideoTaskConfig to confirm the unconfirmed zone and
         # return its coordinates
         self.unconfirmed_zone.coords \
-            = self.video_task_config.confirm_new_zone()
+            = self.video_task_config.confirm_zone_edit()
 
         """List of based point tuples
         
@@ -126,7 +126,7 @@ class TaskConfiguration(QDialog):
         self._hide_operation_widgets(True)
 
     @pyqtSlot()
-    def new_zone_canceled(self):
+    def cancel_zone_edit(self):
         if None in self.zone_list.zones:
             # Remove instruction text
             self.instruction_label.setText("")
@@ -136,13 +136,13 @@ class TaskConfiguration(QDialog):
 
             # Instruct the VideoTaskConfig instance to delete its unconfirmed
             # zone
-            self.video_task_config.discard_new_zone()
+            self.video_task_config.discard_zone_edit()
 
             self._set_widgets_enabled(True)
             self._hide_operation_widgets(True)
 
-    def new_zone(self, zone_type: VideoTaskConfig.InProgressZoneType,
-                 zone_name: str) -> None:
+    def edit_zone(self, zone_type: VideoTaskConfig.InProgressZoneType,
+                  zone_name: str) -> None:
         """Create a new zone (either line or region)"""
         # Create a new Zone
         self.unconfirmed_zone = Zone(name=zone_name,
@@ -156,15 +156,12 @@ class TaskConfiguration(QDialog):
         # Add the a Zone widget to the sidebar
         unconfirmed_zone_item = self.zone_list.add_zone(self.unconfirmed_zone)
 
-        # Allow delete button on new zone widget in zone list to cancel the new
-        # zone
+        # Allow delete button on new zone widget in zone list to cancel the new zone
         unconfirmed_zone_item.trash_button.clicked.disconnect()
-        unconfirmed_zone_item.trash_button.clicked.connect(
-            self.new_zone_canceled
-        )
+        unconfirmed_zone_item.trash_button.clicked.connect(self.cancel_zone_edit)
 
         # Instruct the VideoTaskConfig instance to start accepting mouseEvents
-        self.video_task_config.start_new_zone(zone_type)
+        self.video_task_config.start_zone_edit(zone_type)
 
         # Disable critical widgets from being interacted with during creation
         self._set_widgets_enabled(False)
@@ -181,8 +178,7 @@ class TaskConfiguration(QDialog):
             -> Optional[str]:
         """Get the name for a new zone, while checking if it exists"""
         while True:
-            region_name, ok = QInputDialog.getText(self, prompt_title,
-                                                   prompt_text)
+            region_name, ok = QInputDialog.getText(self, prompt_title, prompt_text)
             if not ok:
                 # User pressed cancel or escape or otherwise closed the window
                 # without pressing Ok

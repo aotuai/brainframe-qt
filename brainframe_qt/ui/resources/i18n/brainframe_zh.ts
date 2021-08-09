@@ -1294,17 +1294,17 @@ Please recheck the entered server address.</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="202"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="198"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="203"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="199"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="205"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="201"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>
@@ -1423,19 +1423,6 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="183"/>
         <source>This will delete all Zones, Detections, Alarms, Alerts, etc. associated with this stream and cannot be undone. This process will happen in the background and can take several minutes.&lt;br&gt;&lt;br&gt;Are you sure you want to continue?</source>
         <translation>这将删除所有此视频流相关的区域、检测结果、警报、报警信息等，并且无法撤消。这个流程会在后台发生&lt;br&gt;&lt;br&gt;可能需要几分钟。</translation>
-    </message>
-</context>
-<context>
-    <name>ZoneListItem</name>
-    <message>
-        <location filename="../../dialogs/task_configuration/zone_list/zone_list_item/zone_list_item.py" line="24"/>
-        <source>Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/zone_list/zone_list_item/zone_list_item.py" line="32"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
