@@ -4,18 +4,20 @@ from PyQt5.QtCore import pyqtSlot, QObject
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QInputDialog
 from PyQt5.uic import loadUi
 
-from brainframe.api.bf_codecs import StreamConfiguration, Zone
+from brainframe.api import bf_codecs
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.ui.dialogs import AlarmCreationDialog
 from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.ui.resources.paths import qt_ui_paths
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
+
+from .core.zone import Zone, Line, Region
 from .video_task_config import VideoTaskConfig
 
 
 class TaskConfiguration(QDialog):
-    def __init__(self, stream_conf: StreamConfiguration, *, parent: QObject):
+    def __init__(self, stream_conf: bf_codecs.StreamConfiguration, *, parent: QObject):
         super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.task_configuration_ui, self)
@@ -69,23 +71,29 @@ class TaskConfiguration(QDialog):
                       on_success=create_alarm) \
             .start()
 
-    @pyqtSlot()
-    def edit_line(self):
-        line_name = self.get_new_zone_name(
-            self.tr("New Line"),
-            self.tr("Name for new line:"))
-        if line_name is None:
-            return
-        self.edit_zone(VideoTaskConfig.InProgressZoneType.LINE, line_name)
+    def edit_line(self, _, line: Optional[Line] = None):
+        if line is None:
+            line_name = self.get_new_zone_name(
+                self.tr("New Line"),
+                self.tr("Name for new line:"))
+            if line_name is None:
+                return
 
-    @pyqtSlot()
-    def edit_region(self):
-        region_name = self.get_new_zone_name(
-            self.tr("New Region"),
-            self.tr("Name for new region:"))
-        if region_name is None:
-            return
-        self.edit_zone(VideoTaskConfig.InProgressZoneType.REGION, region_name)
+            line = Line(name=line_name, coords=[])
+
+        self.edit_zone(line)
+
+    def edit_region(self, _, region: Optional[Region] = None):
+        if region is None:
+            region_name = self.get_new_zone_name(
+                self.tr("New Region"),
+                self.tr("Name for new region:"))
+            if region_name is None:
+                return
+
+            region = Region(name=region_name, coords=[])
+
+        self.edit_zone(region)
 
     @pyqtSlot()
     def confirm_zone_edit(self):
@@ -141,13 +149,9 @@ class TaskConfiguration(QDialog):
             self._set_widgets_enabled(True)
             self._hide_operation_widgets(True)
 
-    def edit_zone(self, zone_type: VideoTaskConfig.InProgressZoneType,
-                  zone_name: str) -> None:
-        """Create a new zone (either line or region)"""
-        # Create a new Zone
-        self.unconfirmed_zone = Zone(name=zone_name,
-                                     stream_id=self.stream_conf.id,
-                                     coords=[])
+    def edit_zone(self, zone: Zone) -> None:
+        """Create a new zone"""
+        self.unconfirmed_zone = zone.to_api_zone(stream_id=self.stream_conf.id)
 
         # Set instruction text
         text = self.tr('Add points until done, then press "Confirm" button')
@@ -161,7 +165,7 @@ class TaskConfiguration(QDialog):
         unconfirmed_zone_item.trash_button.clicked.connect(self.cancel_zone_edit)
 
         # Instruct the VideoTaskConfig instance to start accepting mouseEvents
-        self.video_task_config.start_zone_edit(zone_type)
+        self.video_task_config.start_zone_edit(zone)
 
         # Disable critical widgets from being interacted with during creation
         self._set_widgets_enabled(False)
@@ -174,8 +178,7 @@ class TaskConfiguration(QDialog):
     def enable_confirm_op_button(self, enable):
         self.confirm_op_button.setEnabled(enable)
 
-    def get_new_zone_name(self, prompt_title: str, prompt_text: str) \
-            -> Optional[str]:
+    def get_new_zone_name(self, prompt_title: str, prompt_text: str) -> Optional[str]:
         """Get the name for a new zone, while checking if it exists"""
         while True:
             region_name, ok = QInputDialog.getText(self, prompt_title, prompt_text)

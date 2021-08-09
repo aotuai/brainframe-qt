@@ -15,6 +15,8 @@ from brainframe_qt.ui.resources.video_items.zones import (
     InProgressZoneItem
 )
 
+from ..core.zone import Zone, Line, Region
+
 
 class VideoTaskConfig(StreamWidget):
     polygon_is_valid_signal = pyqtSignal(bool)
@@ -96,14 +98,14 @@ class VideoTaskConfig(StreamWidget):
         else:
             self.scene().set_frame(pixmap=frame.frame)
 
-    def start_zone_edit(self, zone_type: InProgressZoneType) -> None:
+    def start_zone_edit(self, zone: Zone) -> None:
         # Temporarily disable region and line drawing
         self.render_config.draw_regions = False
         self.render_config.draw_lines = False
 
         self.scene().remove_all_items()
 
-        if zone_type is self.InProgressZoneType.LINE:
+        if isinstance(zone, Line):
             self.in_progress_zone = InProgressLineItem(
                 coords=[],
                 render_config=self.render_config)
@@ -111,7 +113,7 @@ class VideoTaskConfig(StreamWidget):
                 coords=[],
                 render_config=self.render_config,
                 line_style=Qt.DotLine)
-        elif zone_type is self.InProgressZoneType.REGION:
+        elif isinstance(zone, Region):
             self.in_progress_zone = InProgressRegionItem(
                 coords=[],
                 render_config=self.render_config)
@@ -120,7 +122,7 @@ class VideoTaskConfig(StreamWidget):
                 render_config=self.render_config,
                 line_style=Qt.DotLine)
         else:
-            raise NotImplementedError(f"Unknown zone type: {zone_type}")
+            raise NotImplementedError(f"Unknown zone object: {zone}")
 
         # Add the first vertex to the preview zone
         self.preview_zone.add_vertex((0.0, 0.0))
