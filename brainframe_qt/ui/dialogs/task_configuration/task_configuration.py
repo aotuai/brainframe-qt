@@ -1,6 +1,6 @@
 from typing import Optional
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QObject
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QInputDialog
 from PyQt5.uic import loadUi
 
@@ -15,21 +15,17 @@ from .video_task_config import VideoTaskConfig
 
 
 class TaskConfiguration(QDialog):
-    def __init__(self, parent=None, stream_conf=None):
-        """There should _always_ be a stream_configuration passed here. The
-        reason it is None is to allow compatibility with QTDesigner."""
-        super().__init__(parent)
+    def __init__(self, stream_conf: StreamConfiguration, *, parent: QObject):
+        super().__init__(parent=parent)
 
         loadUi(qt_ui_paths.task_configuration_ui, self)
 
-        # If not running within QTDesigner, run logic
-        self.stream_conf: StreamConfiguration = stream_conf
-        if stream_conf:
-            self.video_task_config.change_stream(stream_conf)
-            self.stream_name_label.setText(stream_conf.name)
+        self.stream_conf = stream_conf
+        self.video_task_config.change_stream(stream_conf)
+        self.stream_name_label.setText(stream_conf.name)
 
-            # Create TaskAndZone widgets in ZoneList for zones in database
-            self.zone_list.init_zones(stream_conf.id)
+        # Create TaskAndZone widgets in ZoneList for zones in database
+        self.zone_list.init_zones(stream_conf.id)
 
         self.unconfirmed_zone: Zone = None
 
@@ -39,7 +35,7 @@ class TaskConfiguration(QDialog):
 
     @classmethod
     def open_configuration(cls, stream_conf, parent):
-        dialog = cls(parent=parent, stream_conf=stream_conf)
+        dialog = cls(stream_conf=stream_conf, parent=parent)
         result = dialog.exec_()
 
         return result
@@ -232,13 +228,3 @@ class TaskConfiguration(QDialog):
         self.confirm_op_button.setHidden(hidden)
         self.cancel_op_button.setHidden(hidden)
         self.instruction_label.setHidden(hidden)
-
-
-if __name__ == '__main__':
-    from PyQt5.QtWidgets import QApplication
-
-    app = QApplication([])
-    window = TaskConfiguration(None)
-    window.show()
-
-    app.exec_()

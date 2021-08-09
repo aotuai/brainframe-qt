@@ -1,12 +1,15 @@
+import typing
 from typing import Dict
 
 from PyQt5.QtCore import Qt, pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
+
 from brainframe.api.bf_codecs import StreamConfiguration
 
 from brainframe_qt.ui.resources.paths import qt_ui_paths
-from .video_small.video_small import VideoSmall
+
+from ..video_small import VideoSmall
 
 
 class ThumbnailGridLayout(QWidget):
@@ -46,17 +49,18 @@ class ThumbnailGridLayout(QWidget):
 
         self._init_style()
 
-    def new_stream_widget(self, stream_conf: StreamConfiguration):
+    def new_stream_widget(self, stream_conf: StreamConfiguration) -> None:
         video = VideoSmall(parent=self)
         video.change_stream(stream_conf)
 
-        self.add_video(video)
+        video.stream_clicked.connect(self.thumbnail_stream_clicked_slot)
+        video.alert_status_changed.connect(self.ongoing_alerts_slot)
 
-        self._connect_widget_signals(video)
+        self.add_video(video)
 
     def add_video(self, video: VideoSmall) -> None:
 
-        stream_id = video.stream_conf.id
+        stream_id = video.stream_event_manager.stream_conf.id
         self.stream_widgets[stream_id] = video
         self._add_widget_to_layout(video)
 
@@ -70,15 +74,6 @@ class ThumbnailGridLayout(QWidget):
         # row+1 is equal to number of rows in grid after addition
         # (+1 is for indexing at 1 for a count)
         self.grid_num_rows = row + 1
-
-    def _connect_widget_signals(self, widget: VideoSmall):
-        """Connect the stream widget's signal(s) to the grid and to the parent
-        view
-        """
-        # Because the widgets are added dynamically, we can't connect slots
-        # and signals using QtDesigner and have to do it manually
-        widget.stream_clicked.connect(self.thumbnail_stream_clicked_slot)
-        widget.ongoing_alerts_signal.connect(self.ongoing_alerts_slot)
 
     @pyqtSlot(object)
     def thumbnail_stream_clicked_slot(self, stream_conf):
@@ -105,7 +100,8 @@ class ThumbnailGridLayout(QWidget):
         - VideoSmall -- Dynamic
           [child].ongoing_alerts_signal
         """
-        stream_conf = self.sender().stream_conf
+        stream_widget = typing.cast(VideoSmall, self.sender())
+        stream_conf = stream_widget.stream_event_manager.stream_conf
         # noinspection PyUnresolvedReferences
         self.ongoing_alerts_signal.emit(stream_conf, alerts_ongoing)
 
