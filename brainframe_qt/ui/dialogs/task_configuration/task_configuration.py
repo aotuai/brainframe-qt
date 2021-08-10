@@ -13,7 +13,6 @@ from brainframe_qt.ui.resources.paths import qt_ui_paths
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
 from .core.zone import Zone, Line, Region
-from .video_task_config import VideoTaskConfig
 
 
 class TaskConfiguration(QDialog):
@@ -76,7 +75,7 @@ class TaskConfiguration(QDialog):
                       on_success=create_alarm) \
             .start()
 
-    def edit_line(self, line: Optional[Line] = None):
+    def edit_line(self, line: Optional[Line] = None) -> None:
         if line is None:
             line_name = self.get_new_zone_name(
                 self.tr("New Line"),
@@ -88,7 +87,7 @@ class TaskConfiguration(QDialog):
 
         self.edit_zone(line)
 
-    def edit_region(self, region: Optional[Region] = None):
+    def edit_region(self, region: Optional[Region] = None) -> None:
         if region is None:
             region_name = self.get_new_zone_name(
                 self.tr("New Region"),
@@ -101,13 +100,12 @@ class TaskConfiguration(QDialog):
         self.edit_zone(region)
 
     @pyqtSlot()
-    def confirm_zone_edit(self):
+    def confirm_zone_edit(self) -> None:
         self.instruction_label.setText("")
 
-        # Instruct the VideoTaskConfig to confirm the unconfirmed zone and
-        # return its coordinates
-        self.unconfirmed_zone.coords \
-            = self.video_task_config.confirm_zone_edit()
+        # Instruct the VideoTaskConfig to confirm the unconfirmed zone and return its
+        # coordinates
+        self.unconfirmed_zone.coords = self.video_task_config.confirm_zone_edit()
 
         """List of based point tuples
         
@@ -178,7 +176,7 @@ class TaskConfiguration(QDialog):
         self.confirm_op_button.setEnabled(False)
 
     @pyqtSlot(bool)
-    def enable_confirm_op_button(self, enable):
+    def enable_confirm_op_button(self, enable) -> None:
         self.confirm_op_button.setEnabled(enable)
 
     def get_new_zone_name(self, prompt_title: str, prompt_text: str) -> Optional[str]:
@@ -186,8 +184,8 @@ class TaskConfiguration(QDialog):
         while True:
             region_name, ok = QInputDialog.getText(self, prompt_title, prompt_text)
             if not ok:
-                # User pressed cancel or escape or otherwise closed the window
-                # without pressing Ok
+                # User pressed cancel or escape or otherwise closed the window without
+                # pressing Ok
                 return None
 
             # Strip whitespace as a favor for the user
@@ -203,7 +201,8 @@ class TaskConfiguration(QDialog):
             if region_name in [zone.name for zone in zones]:
                 title = self.tr("Item Name Already Exists")
                 message = self.tr("Item {} already exists in Stream").format(
-                    region_name)
+                    region_name
+                )
                 message += "<br>" + self.tr("Please use another name.")
 
                 BrainFrameMessage.information(
@@ -217,7 +216,7 @@ class TaskConfiguration(QDialog):
             break
         return region_name
 
-    def _set_widgets_enabled(self, enabled):
+    def _set_widgets_enabled(self, enabled) -> None:
         # TODO(Bryce Beagle): Do this dynamically:
         # https://stackoverflow.com/a/34892529/8134178
 
@@ -226,7 +225,7 @@ class TaskConfiguration(QDialog):
         self.new_line_button.setEnabled(enabled)
         self.new_region_button.setEnabled(enabled)
 
-    def _hide_operation_widgets(self, hidden):
+    def _hide_operation_widgets(self, hidden) -> None:
         self.confirm_op_button.setHidden(hidden)
         self.cancel_op_button.setHidden(hidden)
         self.instruction_label.setHidden(hidden)
