@@ -39,6 +39,8 @@ class TaskConfiguration(QDialog):
         self.new_line_button.clicked.connect(lambda _clicked: self.edit_line())
         self.new_region_button.clicked.connect(lambda _clicked: self.edit_region())
 
+        self.zone_list.initiate_zone_edit.connect(self.edit_zone)
+
     @classmethod
     def open_configuration(cls, stream_conf, parent):
         dialog = cls(stream_conf=stream_conf, parent=parent)

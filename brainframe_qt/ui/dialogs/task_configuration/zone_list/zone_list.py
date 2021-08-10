@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Dict
 
-from PyQt5.QtCore import QModelIndex, pyqtSlot
+from PyQt5.QtCore import QModelIndex, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QHeaderView,
@@ -11,15 +11,20 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.uic import loadUi
 
+from brainframe.api import bf_codecs
+
 from brainframe_qt.api_utils import api
-from brainframe.api.bf_codecs import Zone, ZoneAlarm
 from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.ui.resources.paths import qt_ui_paths
+
+from ..core.zone import Zone
 from .zone_list_item import ZoneListItem
 
 
 class ZoneList(QTreeWidget):
     EntryType = Enum('EntryType', "REGION LINE ALARM UNKNOWN")
+
+    initiate_zone_edit = pyqtSignal(Zone)
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -62,7 +67,7 @@ class ZoneList(QTreeWidget):
     def add_zone(self, zone: Zone):
         """Creates and returns the new ZoneListItem using the zone"""
 
-        if zone.name == Zone.FULL_FRAME_ZONE_NAME or len(zone.coords) > 2:
+        if zone.name == bf_codecs.Zone.FULL_FRAME_ZONE_NAME or len(zone.coords) > 2:
             entry_type = self.EntryType.REGION
         elif len(zone.coords) == 2:
             entry_type = self.EntryType.LINE
@@ -84,7 +89,7 @@ class ZoneList(QTreeWidget):
 
         return zone_item
 
-    def add_alarm(self, zone: Zone, alarm: ZoneAlarm):
+    def add_alarm(self, zone: bf_codecs.Zone, alarm: bf_codecs.ZoneAlarm):
         zone_item = self.zones[zone.id]
         alarm_item = self._new_row(alarm.name, self.EntryType.ALARM)
 
@@ -146,7 +151,7 @@ class ZoneList(QTreeWidget):
         return entry_type_icon
 
     def _init_alarm_buttons(
-        self, zone: Zone, alarm: ZoneAlarm, alarm_item: ZoneListItem
+        self, zone: bf_codecs.Zone, alarm: bf_codecs.ZoneAlarm, alarm_item: ZoneListItem
     ) -> None:
         self.setItemWidget(alarm_item, 2, alarm_item.edit_button)
         self.setItemWidget(alarm_item, 3, alarm_item.trash_button)
@@ -154,11 +159,11 @@ class ZoneList(QTreeWidget):
             lambda: self.delete_alarm(zone.id, alarm.id)
         )
 
-    def _init_zone_buttons(self, zone: Zone, zone_item: ZoneListItem) -> None:
+    def _init_zone_buttons(self, zone: bf_codecs.Zone, zone_item: ZoneListItem) -> None:
         self.setItemWidget(zone_item, 2, zone_item.edit_button)
         self.setItemWidget(zone_item, 3, zone_item.trash_button)
 
-        if zone.name == Zone.FULL_FRAME_ZONE_NAME:
+        if zone.name == bf_codecs.Zone.FULL_FRAME_ZONE_NAME:
             zone_item.trash_button.setDisabled(True)
             zone_item.edit_button.setDisabled(True)
         else:
