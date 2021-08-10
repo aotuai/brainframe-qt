@@ -37,8 +37,8 @@ class TaskConfiguration(QDialog):
 
     def _init_signals(self) -> None:
         self.cancel_op_button.clicked.connect(self.cancel_zone_edit)
-        self.line_button.clicked.connect(lambda _clicked: self.edit_line())
-        self.region_button.clicked.connect(lambda _clicked: self.edit_region())
+        self.new_line_button.clicked.connect(lambda _clicked: self.edit_line())
+        self.new_region_button.clicked.connect(lambda _clicked: self.edit_region())
 
     @classmethod
     def open_configuration(cls, stream_conf, parent):
@@ -223,8 +223,8 @@ class TaskConfiguration(QDialog):
 
         self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(enabled)
         self.alarm_button.setEnabled(enabled)
-        self.line_button.setEnabled(enabled)
-        self.region_button.setEnabled(enabled)
+        self.new_line_button.setEnabled(enabled)
+        self.new_region_button.setEnabled(enabled)
 
     def _hide_operation_widgets(self, hidden):
         self.confirm_op_button.setHidden(hidden)

@@ -1289,22 +1289,22 @@ Please recheck the entered server address.</source>
         <translation>新检测区域不能由于少于两个点组成</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="161"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="160"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="205"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="204"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="206"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="205"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="208"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="207"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>

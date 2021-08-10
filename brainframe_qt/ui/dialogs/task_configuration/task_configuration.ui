@@ -55,14 +55,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="region_button">
+         <widget class="QPushButton" name="new_region_button">
           <property name="text">
            <string>Region</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="line_button">
+         <widget class="QPushButton" name="new_line_button">
           <property name="text">
            <string>Line</string>
           </property>
