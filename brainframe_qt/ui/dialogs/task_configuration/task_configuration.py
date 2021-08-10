@@ -33,7 +33,12 @@ class TaskConfiguration(QDialog):
 
         self._hide_operation_widgets(True)
 
+        self._init_signals()
+
+    def _init_signals(self) -> None:
         self.cancel_op_button.clicked.connect(self.cancel_zone_edit)
+        self.line_button.clicked.connect(lambda _clicked: self.edit_line())
+        self.region_button.clicked.connect(lambda _clicked: self.edit_region())
 
     @classmethod
     def open_configuration(cls, stream_conf, parent):
@@ -71,7 +76,7 @@ class TaskConfiguration(QDialog):
                       on_success=create_alarm) \
             .start()
 
-    def edit_line(self, _, line: Optional[Line] = None):
+    def edit_line(self, line: Optional[Line] = None):
         if line is None:
             line_name = self.get_new_zone_name(
                 self.tr("New Line"),
@@ -83,7 +88,7 @@ class TaskConfiguration(QDialog):
 
         self.edit_zone(line)
 
-    def edit_region(self, _, region: Optional[Region] = None):
+    def edit_region(self, region: Optional[Region] = None):
         if region is None:
             region_name = self.get_new_zone_name(
                 self.tr("New Region"),
@@ -133,8 +138,7 @@ class TaskConfiguration(QDialog):
         self._set_widgets_enabled(True)
         self._hide_operation_widgets(True)
 
-    @pyqtSlot()
-    def cancel_zone_edit(self):
+    def cancel_zone_edit(self) -> None:
         if None in self.zone_list.zones:
             # Remove instruction text
             self.instruction_label.setText("")
@@ -142,8 +146,7 @@ class TaskConfiguration(QDialog):
             # Delete unconfirmed zone
             self.zone_list.delete_zone(None)
 
-            # Instruct the VideoTaskConfig instance to delete its unconfirmed
-            # zone
+            # Instruct the VideoTaskConfig instance to delete its unconfirmed zone
             self.video_task_config.discard_zone_edit()
 
             self._set_widgets_enabled(True)

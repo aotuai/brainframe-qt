@@ -279,38 +279,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>region_button</sender>
-   <signal>clicked()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>edit_region()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>144</x>
-     <y>48</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>421</x>
-     <y>251</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>line_button</sender>
-   <signal>clicked()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>edit_line()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>235</x>
-     <y>48</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>421</x>
-     <y>251</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>confirm_op_button</sender>
    <signal>clicked()</signal>
    <receiver>TaskConfiguration</receiver>
@@ -377,10 +345,7 @@
  </connections>
  <slots>
   <slot>new_alarm()</slot>
-  <slot>edit_region()</slot>
-  <slot>edit_line()</slot>
   <slot>confirm_zone_edit()</slot>
-  <slot>cancel_zone_edit(int)</slot>
   <slot>enable_confirm_op_button(bool)</slot>
  </slots>
 </ui>
