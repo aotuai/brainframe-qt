@@ -3,14 +3,16 @@ from typing import List, Optional
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
+
 from brainframe.api.bf_codecs import Zone
 
 from brainframe_qt.ui.resources.config import RenderSettings
-from brainframe_qt.ui.resources.video_items.base import CircleItem, \
-    VideoItem
-from .abstract_zone_item import AbstractZoneItem
-from .zone_line_item import ZoneLineItem
-from .zone_region_item import ZoneRegionItem
+from brainframe_qt.ui.resources.video_items.base import CircleItem, VideoItem
+from brainframe_qt.ui.resources.video_items.zones import (
+    AbstractZoneItem,
+    ZoneLineItem,
+    ZoneRegionItem,
+)
 
 
 class InProgressZoneItem(VideoItem, ABC):

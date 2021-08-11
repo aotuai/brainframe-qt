@@ -9,27 +9,20 @@ from shapely import geometry
 from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from brainframe_qt.ui.resources.video_items.base import VideoItem
 from brainframe_qt.ui.resources.video_items.streams import StreamWidget
-from brainframe_qt.ui.resources.video_items.zones import (
+
+from ..core.zone import Zone, Line, Region
+from .in_progress_zone_item import (
     InProgressLineItem,
     InProgressRegionItem,
     InProgressZoneItem
 )
 
-from ..core.zone import Zone, Line, Region
-
 
 class VideoTaskConfig(StreamWidget):
     polygon_is_valid_signal = pyqtSignal(bool)
 
-    class InProgressZoneType(Enum):
-        REGION = auto()
-        LINE = auto()
-
     def __init__(self, parent: QWidget):
         super().__init__(parent=parent)
-
-        # Allow for real-time zone previews
-        self.setMouseTracking(True)
 
         # Always draw regions and lines. Never draw detections.
         self.draw_regions = True
@@ -46,13 +39,16 @@ class VideoTaskConfig(StreamWidget):
         preview of what the zone would look like if they click.
         """
 
+        # Allow for real-time zone previews
+        self.setMouseTracking(True)
+
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         click_pos = self.mapToScene(event.pos())
         click_pos = (click_pos.x(), click_pos.y())
         self._handle_click(click_pos)
         super().mouseReleaseEvent(event)
 
-    def mouseMoveEvent(self, event: QMouseEvent):
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
         # Don't do anything if we're not currently making a zone
         if self.preview_zone is None:
             return
@@ -91,8 +87,7 @@ class VideoTaskConfig(StreamWidget):
             self.polygon_is_valid_signal.emit(True)
 
     def on_frame(self, frame: ZoneStatusFrame):
-        # Only change the video frame if we're in the process of creating a new
-        # zone
+        # Only change the video frame if we're in the process of creating a new zone
         if self.in_progress_zone is None:
             super().on_frame(frame)
         else:
