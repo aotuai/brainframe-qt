@@ -1,6 +1,6 @@
 from typing import Optional
 
-from PyQt5.QtCore import pyqtSlot, QObject
+from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QInputDialog
 from PyQt5.uic import loadUi
 
@@ -35,11 +35,23 @@ class TaskConfiguration(QDialog):
         self._init_signals()
 
     def _init_signals(self) -> None:
-        self.cancel_op_button.clicked.connect(self.cancel_zone_edit)
+        self.new_alarm_button.clicked.connect(lambda _clicked: self.new_alarm())
         self.new_line_button.clicked.connect(lambda _clicked: self.new_line())
         self.new_region_button.clicked.connect(lambda _clicked: self.new_region())
 
+        self.confirm_op_button.clicked.connect(
+            lambda _clicked: self.confirm_zone_edit()
+        )
+        self.cancel_op_button.clicked.connect(lambda _clicked: self.cancel_zone_edit())
+
+        self.video_task_config.polygon_is_valid_signal.connect(
+            self.enable_confirm_op_button
+        )
+
         self.zone_list.initiate_zone_edit.connect(self.edit_zone)
+
+        self.dialog_button_box.accepted.connect(self.accept)
+        self.dialog_button_box.rejected.connect(self.reject)
 
     @classmethod
     def open_configuration(cls, stream_conf, parent):
@@ -48,7 +60,6 @@ class TaskConfiguration(QDialog):
 
         return result
 
-    @pyqtSlot()
     def new_alarm(self):
 
         def get_capsules_and_zones():
@@ -109,7 +120,6 @@ class TaskConfiguration(QDialog):
         unconfirmed_zone_item.trash_button.clicked.disconnect()
         unconfirmed_zone_item.trash_button.clicked.connect(self.cancel_zone_edit)
 
-    @pyqtSlot()
     def confirm_zone_edit(self) -> None:
         self.instruction_label.setText("")
 
@@ -180,8 +190,7 @@ class TaskConfiguration(QDialog):
         # Disable confirmation until the zone has enough points to be valid
         self.confirm_op_button.setEnabled(False)
 
-    @pyqtSlot(bool)
-    def enable_confirm_op_button(self, enable) -> None:
+    def enable_confirm_op_button(self, enable: bool) -> None:
         self.confirm_op_button.setEnabled(enable)
 
     def get_new_zone_name(self, prompt_title: str, prompt_text: str) -> Optional[str]:
@@ -223,10 +232,11 @@ class TaskConfiguration(QDialog):
 
     def _set_widgets_enabled(self, enabled) -> None:
         # TODO(Bryce Beagle): Do this dynamically:
+        # TODO(Bryce Beagle): Do this dynamically:
         # https://stackoverflow.com/a/34892529/8134178
 
         self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(enabled)
-        self.alarm_button.setEnabled(enabled)
+        self.new_alarm_button.setEnabled(enabled)
         self.new_line_button.setEnabled(enabled)
         self.new_region_button.setEnabled(enabled)
 
