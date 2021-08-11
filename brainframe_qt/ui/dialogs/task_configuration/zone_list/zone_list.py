@@ -18,7 +18,7 @@ from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 from ..core.zone import Zone, Line, Region
-from .zone_list_item import ZoneListItem
+from ..widgets.zone_list_item import ZoneListItem
 
 
 class ZoneList(QTreeWidget):
