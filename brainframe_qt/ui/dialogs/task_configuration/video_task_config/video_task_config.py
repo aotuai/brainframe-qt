@@ -107,25 +107,22 @@ class VideoTaskConfig(StreamWidget):
 
         if isinstance(zone, Line):
             self.in_progress_zone = InProgressLineItem(
-                coords=[],
+                coords=zone.coords.copy(),
                 render_config=self.render_config)
             self.preview_zone = InProgressLineItem(
-                coords=[],
+                coords=zone.coords.copy() + [(0, 0)],
                 render_config=self.render_config,
                 line_style=Qt.DotLine)
         elif isinstance(zone, Region):
             self.in_progress_zone = InProgressRegionItem(
-                coords=[],
+                coords=zone.coords.copy(),
                 render_config=self.render_config)
             self.preview_zone = InProgressRegionItem(
-                coords=[],
+                coords=zone.coords.copy() + [(0, 0)],
                 render_config=self.render_config,
                 line_style=Qt.DotLine)
         else:
             raise NotImplementedError(f"Unknown zone object: {zone}")
-
-        # Add the first vertex to the preview zone
-        self.preview_zone.add_vertex((0.0, 0.0))
 
         self.scene().addItem(self.in_progress_zone)
         self.scene().addItem(self.preview_zone)

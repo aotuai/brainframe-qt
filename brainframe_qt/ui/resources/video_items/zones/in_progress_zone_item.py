@@ -39,7 +39,7 @@ class InProgressZoneItem(VideoItem, ABC):
 
         self.coords.append(vertex)
 
-        if self._zone_item is not None:
+        if self._zone_item is not None and self.scene() is not None:
             self.scene().removeItem(self._zone_item)
         self._zone_item = self._init_zone_item()
 
@@ -47,22 +47,23 @@ class InProgressZoneItem(VideoItem, ABC):
         self._vertex_items.append(vertex_item)
 
     def update_latest_vertex(self, vertex: VideoItem.PointType) -> None:
-        """Updates the position of the latest vertex. The zone item must have
-        at least one vertex added to call this method.
+        """Updates the position of the latest vertex. If the zone_item has no vertices,
+        an initial one will be created
 
         :param vertex: The new position
         """
-        if len(self.coords) == 0:
-            raise RuntimeError("The zone item has no vertices to update")
-
-        self.coords[-1] = vertex
+        vertex_item = _DraggableVertex(vertex, parent=self)
 
         if self._zone_item is not None:
             self.scene().removeItem(self._zone_item)
         self._zone_item = self._init_zone_item()
 
-        self.scene().removeItem(self._vertex_items[-1])
-        self._vertex_items[-1] = _DraggableVertex(vertex, parent=self)
+        if len(self.coords) > 0:
+            self.coords.pop()
+            self.scene().removeItem(self._vertex_items.pop())
+
+        self.coords.append(vertex)
+        self._vertex_items.append(vertex_item)
 
     @abstractmethod
     def is_shape_ready(self) -> bool:
