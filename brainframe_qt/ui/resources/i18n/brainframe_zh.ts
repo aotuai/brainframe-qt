@@ -1284,22 +1284,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="171"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="170"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="208"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="207"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="209"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="208"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="212"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="211"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>

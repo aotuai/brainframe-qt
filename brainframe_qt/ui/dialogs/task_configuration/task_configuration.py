@@ -133,15 +133,15 @@ class TaskConfiguration(QDialog):
 
         # Add zone to database
         api_zone = self.unconfirmed_zone.to_api_zone(self.stream_conf.id)
-        zone = api.set_zone(api_zone)
+        confirmed_zone = Zone.from_api_zone(api.set_zone(api_zone))
 
         # Only do this for new zones
         if self.unconfirmed_zone.id is None:
-            self.zone_list.zones[zone.id] = self.zone_list.zones.pop(None)
-            self.zone_list.update_zone_type(zone.id, zone_type)
+            self.zone_list.zones[confirmed_zone.id] = self.zone_list.zones.pop(None)
+            self.zone_list.update_zone_type(confirmed_zone.id, zone_type)
 
-            self.zone_list.zones[zone.id].trash_button.clicked.connect(
-                lambda: self.zone_list.delete_zone(zone.id)
+            self.zone_list.zones[confirmed_zone.id].trash_button.clicked.connect(
+                lambda: self.zone_list.delete_zone(confirmed_zone.id)
             )
 
         self.unconfirmed_zone = None
@@ -150,18 +150,17 @@ class TaskConfiguration(QDialog):
         self._hide_operation_widgets(True)
 
     def cancel_zone_edit(self) -> None:
+        # Remove instruction text
+        self.instruction_label.setText("")
+
+        # Instruct the VideoTaskConfig instance to delete its unconfirmed zone
+        self.video_task_config.discard_zone_edit()
+
+        self._set_widgets_enabled(True)
+        self._hide_operation_widgets(True)
+
         if None in self.zone_list.zones:
-            # Remove instruction text
-            self.instruction_label.setText("")
-
-            # Delete unconfirmed zone
             self.zone_list.delete_zone(None)
-
-            # Instruct the VideoTaskConfig instance to delete its unconfirmed zone
-            self.video_task_config.discard_zone_edit()
-
-            self._set_widgets_enabled(True)
-            self._hide_operation_widgets(True)
 
     def edit_zone(self, zone: Zone) -> None:
         """Create a new zone"""
