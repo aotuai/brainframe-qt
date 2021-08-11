@@ -72,9 +72,6 @@ task_configuration_ui      = register_path(task_configuration_dir    , "task_con
 client_configuration_dir   = register_path(dialogs_dir               , "client_configuration"     )
 client_configuration_ui    = register_path(client_configuration_dir  , "client_configuration.ui"  )
 
-zone_list_dir              = register_path(task_configuration_dir    , "zone_list"                )
-zone_list_ui               = register_path(zone_list_dir             , "zone_list.ui"             )
-
 # Resources
 ui_elements_dir            = register_path(ui_dir                    , "resources", "ui_elements" )
 button_resources_dir       = register_path(ui_elements_dir           , "buttons"                  )

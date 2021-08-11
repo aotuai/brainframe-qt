@@ -41,8 +41,8 @@ class SingletonApplication(MessagingApplication):
         self.new_instance_attempted.connect(self._bring_main_window_to_front)
 
         # We weren't able to acquire a lock before, so we need to close
-        if self._lock is None:
-            self._close_as_duplicate_instance()
+        # if self._lock is None:
+        #     self._close_as_duplicate_instance()
 
     @property
     def main_window(self) -> QWidget:

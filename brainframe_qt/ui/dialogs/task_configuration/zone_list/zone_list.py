@@ -9,13 +9,11 @@ from PyQt5.QtWidgets import (
     QStyledItemDelegate,
     QTreeWidget
 )
-from PyQt5.uic import loadUi
 
 from brainframe.api import bf_codecs
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.ui.resources import QTAsyncWorker
-from brainframe_qt.ui.resources.paths import qt_ui_paths
 
 from ..core.zone import Zone, Line, Region
 from ..widgets.zone_list_item import ZoneListItem
@@ -29,25 +27,27 @@ class ZoneList(QTreeWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        loadUi(qt_ui_paths.zone_list_ui, self)
+        self.stream_id = None
 
-        # Crashes when set in UI file for some reason
+        # Lookup table to get zone/alarm from id (used during deletion)
+        self.zones: Dict[int, ZoneListItem] = {}
+        self.alarms: Dict[int, ZoneListItem] = {}
+
         self.setColumnCount(4)
+
+        self._init_style()
+
+    def _init_style(self) -> None:
+        # Item delegate is used to force a custom row height
+        self.setItemDelegate(ZoneListItemDelegate(row_height=40))
+
+        self.setHeaderHidden(True)
 
         # Scale columns in view
         self.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
         self.header().setSectionResizeMode(1, QHeaderView.Stretch)
         self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
         self.header().setSectionResizeMode(3, QHeaderView.ResizeToContents)
-
-        # Item delegate is used to force a custom row height
-        self.setItemDelegate(ZoneListItemDelegate(row_height=40))
-
-        self.stream_id = None
-
-        # Lookup table to get zone/alarm from id (used during deletion)
-        self.zones: Dict[int, ZoneListItem] = {}
-        self.alarms: Dict[int, ZoneListItem] = {}
 
     def init_zones(self, stream_id):
         """Initialize zone list with zones already in database"""

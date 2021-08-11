@@ -60,6 +60,5 @@
         <file alias="client_configuration">../dialogs/client_configuration/client_configuration.ui</file>
         <file alias="video_expanded_view">../main_window/video_expanded_view/video_expanded_view.ui</file>
         <file alias="video_thumbnail_view">../main_window/video_thumbnail_view/video_thumbnail_view.ui</file>
-        <file alias="zone_list">../dialogs/task_configuration/zone_list/zone_list.ui</file>
     </qresource>
 </RCC>
