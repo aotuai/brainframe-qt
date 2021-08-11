@@ -28,7 +28,7 @@ class TaskConfiguration(QDialog):
         # Create TaskAndZone widgets in ZoneList for zones in database
         self.zone_list.init_zones(stream_conf.id)
 
-        self.unconfirmed_zone: Zone = None
+        self.unconfirmed_zone: Optional[Zone] = None
 
         self._hide_operation_widgets(True)
 
@@ -36,8 +36,8 @@ class TaskConfiguration(QDialog):
 
     def _init_signals(self) -> None:
         self.cancel_op_button.clicked.connect(self.cancel_zone_edit)
-        self.new_line_button.clicked.connect(lambda _clicked: self.edit_line())
-        self.new_region_button.clicked.connect(lambda _clicked: self.edit_region())
+        self.new_line_button.clicked.connect(lambda _clicked: self.new_line())
+        self.new_region_button.clicked.connect(lambda _clicked: self.new_region())
 
         self.zone_list.initiate_zone_edit.connect(self.edit_zone)
 
@@ -77,29 +77,37 @@ class TaskConfiguration(QDialog):
                       on_success=create_alarm) \
             .start()
 
-    def edit_line(self, line: Optional[Line] = None) -> None:
-        if line is None:
-            line_name = self.get_new_zone_name(
-                self.tr("New Line"),
-                self.tr("Name for new line:"))
-            if line_name is None:
-                return
+    def new_line(self) -> None:
+        line_name = self.get_new_zone_name(
+            self.tr("New Line"),
+            self.tr("Name for new line:"))
+        if line_name is None:
+            return
 
-            line = Line(name=line_name, coords=[])
+        line = Line(name=line_name, coords=[])
 
-        self.edit_zone(line)
+        self.new_zone(line)
 
-    def edit_region(self, region: Optional[Region] = None) -> None:
-        if region is None:
-            region_name = self.get_new_zone_name(
-                self.tr("New Region"),
-                self.tr("Name for new region:"))
-            if region_name is None:
-                return
+    def new_region(self) -> None:
+        region_name = self.get_new_zone_name(
+            self.tr("New Region"),
+            self.tr("Name for new region:"))
+        if region_name is None:
+            return
 
-            region = Region(name=region_name, coords=[])
+        region = Region(name=region_name, coords=[])
 
-        self.edit_zone(region)
+        self.new_zone(region)
+
+    def new_zone(self, zone: Zone) -> None:
+        self.edit_zone(zone)
+
+        # Add the a Zone widget to the sidebar
+        unconfirmed_zone_item = self.zone_list.add_zone(self.unconfirmed_zone)
+
+        # Allow delete button on new zone widget in zone list to cancel the new zone
+        unconfirmed_zone_item.trash_button.clicked.disconnect()
+        unconfirmed_zone_item.trash_button.clicked.connect(self.cancel_zone_edit)
 
     @pyqtSlot()
     def confirm_zone_edit(self) -> None:
@@ -120,18 +128,21 @@ class TaskConfiguration(QDialog):
         elif len(self.unconfirmed_zone.coords) >= 2:
             zone_type = self.zone_list.EntryType.REGION
         else:
-            message = self.tr("New zone cannot have fewer than 2 points")
+            message = "New zone cannot have fewer than 2 points"
             raise NotImplementedError(message)
 
         # Add zone to database
-        zone = api.set_zone(self.unconfirmed_zone)
+        api_zone = self.unconfirmed_zone.to_api_zone(self.stream_conf.id)
+        zone = api.set_zone(api_zone)
 
-        self.zone_list.zones[zone.id] = self.zone_list.zones.pop(None)
-        self.zone_list.update_zone_type(zone.id, zone_type)
+        # Only do this for new zones
+        if self.unconfirmed_zone.id is None:
+            self.zone_list.zones[zone.id] = self.zone_list.zones.pop(None)
+            self.zone_list.update_zone_type(zone.id, zone_type)
 
-        self.zone_list.zones[zone.id].trash_button.clicked.connect(
-            lambda: self.zone_list.delete_zone(zone.id)
-        )
+            self.zone_list.zones[zone.id].trash_button.clicked.connect(
+                lambda: self.zone_list.delete_zone(zone.id)
+            )
 
         self.unconfirmed_zone = None
 
@@ -154,18 +165,11 @@ class TaskConfiguration(QDialog):
 
     def edit_zone(self, zone: Zone) -> None:
         """Create a new zone"""
-        self.unconfirmed_zone = zone.to_api_zone(stream_id=self.stream_conf.id)
+        self.unconfirmed_zone = zone.copy()
 
         # Set instruction text
         text = self.tr('Add points until done, then press "Confirm" button')
         self.instruction_label.setText(text)
-
-        # Add the a Zone widget to the sidebar
-        unconfirmed_zone_item = self.zone_list.add_zone(self.unconfirmed_zone)
-
-        # Allow delete button on new zone widget in zone list to cancel the new zone
-        unconfirmed_zone_item.trash_button.clicked.disconnect()
-        unconfirmed_zone_item.trash_button.clicked.connect(self.cancel_zone_edit)
 
         # Instruct the VideoTaskConfig instance to start accepting mouseEvents
         self.video_task_config.start_zone_edit(zone)

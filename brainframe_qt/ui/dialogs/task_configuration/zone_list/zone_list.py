@@ -154,7 +154,7 @@ class ZoneList(QTreeWidget):
         return entry_type_icon
 
     def _init_alarm_buttons(
-        self, zone: bf_codecs.Zone, alarm: bf_codecs.ZoneAlarm, alarm_item: ZoneListItem
+        self, zone: Zone, alarm: bf_codecs.ZoneAlarm, alarm_item: ZoneListItem
     ) -> None:
         self.setItemWidget(alarm_item, 2, alarm_item.edit_button)
         self.setItemWidget(alarm_item, 3, alarm_item.trash_button)
@@ -162,7 +162,7 @@ class ZoneList(QTreeWidget):
             lambda: self.delete_alarm(zone.id, alarm.id)
         )
 
-    def _init_zone_buttons(self, zone: bf_codecs.Zone, zone_item: ZoneListItem) -> None:
+    def _init_zone_buttons(self, zone: Zone, zone_item: ZoneListItem) -> None:
         self.setItemWidget(zone_item, 2, zone_item.edit_button)
         self.setItemWidget(zone_item, 3, zone_item.trash_button)
 
@@ -171,7 +171,9 @@ class ZoneList(QTreeWidget):
             zone_item.edit_button.setDisabled(True)
         else:
             zone_item.trash_button.clicked.connect(lambda: self.delete_zone(zone.id))
-            zone_item.edit_button.clicked.connect(lambda: self.initiate_zone_edit(zone))
+            zone_item.edit_button.clicked.connect(
+                lambda: self.initiate_zone_edit.emit(zone)
+            )
 
 
 class ZoneListItemDelegate(QStyledItemDelegate):

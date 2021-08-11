@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, TypeVar
 
 from brainframe.api import bf_codecs
+
+T = TypeVar("T")
 
 
 @dataclass
@@ -23,6 +25,10 @@ class Zone(ABC):
     """A list of Alarms that the Zone holds"""
 
     @abstractmethod
+    def copy(self: T) -> T:
+        ...
+
+    @abstractmethod
     def is_shape_ready(self) -> bool:
         ...
 
@@ -40,6 +46,8 @@ class Zone(ABC):
             name=self.name,
             stream_id=stream_id,
             coords=coords,
+            alarms=self.alarms,
+            id=self.id
         )
 
     @classmethod
@@ -51,6 +59,14 @@ class Zone(ABC):
 
 
 class Line(Zone):
+    def copy(self) -> "Line":
+        return Line(
+            coords=self.coords.copy(),
+            name=self.name,
+            id=self.id,
+            alarms=self.alarms.copy()
+        )
+
     def is_shape_ready(self) -> bool:
         return len(self.coords) == 2
 
@@ -71,6 +87,16 @@ class Line(Zone):
 
 
 class Region(Zone):
+    def copy(self) -> "Region":
+        coords = None if self.coords is None else self.coords.copy()
+
+        return Region(
+            coords=coords,
+            name=self.name,
+            id=self.id,
+            alarms=self.alarms.copy()
+        )
+
     def is_shape_ready(self) -> bool:
         return len(self.coords) == 2
 
