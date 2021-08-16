@@ -15,10 +15,12 @@ from ..core.zone import Line, Region, Zone
 
 class InProgressZoneItem(VideoItem, ABC):
 
+    _DEFAULT_LINE_STYLE: Qt.PenStyle = Qt.SolidLine
+
     def __init__(self, zone: Zone, *,
                  render_config: RenderSettings,
                  parent: Optional[VideoItem] = None,
-                 line_style: Qt.PenStyle = Qt.SolidLine):
+                 line_style: Qt.PenStyle = _DEFAULT_LINE_STYLE):
         super().__init__(parent=parent)
 
         self.zone = zone
@@ -31,12 +33,21 @@ class InProgressZoneItem(VideoItem, ABC):
 
     @classmethod
     def from_zone(
-        cls, zone: Zone, *, render_config: RenderSettings
+        cls, zone: Zone, *,
+        render_config: RenderSettings, line_style: Qt.PenStyle = _DEFAULT_LINE_STYLE
     ) -> "InProgressZoneItem":
         if isinstance(zone, Region):
-            return InProgressRegionItem(zone, render_config=render_config)
+            return InProgressRegionItem(
+                zone,
+                render_config=render_config,
+                line_style=line_style,
+            )
         elif isinstance(zone, Line):
-            return InProgressLineItem(zone, render_config=render_config)
+            return InProgressLineItem(
+                zone,
+                render_config=render_config,
+                line_style=line_style
+            )
 
     @property
     def current_vertices(self) -> List[VideoItem.PointType]:

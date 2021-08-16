@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtWidgets import QWidget
 
@@ -113,7 +113,7 @@ class VideoTaskConfig(StreamWidget):
             self.in_progress_zone, render_config=self.render_config
         )
         self._preview_zone_item = InProgressZoneItem.from_zone(
-            self.preview_zone, render_config=self.render_config
+            self.preview_zone, render_config=self.render_config, line_style=Qt.DotLine
         )
 
         self.scene().addItem(self._in_progress_zone_item)
