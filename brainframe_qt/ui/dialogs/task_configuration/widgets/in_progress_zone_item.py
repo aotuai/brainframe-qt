@@ -4,137 +4,113 @@ from typing import List, Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
-from brainframe.api.bf_codecs import Zone
+from brainframe.api import bf_codecs
 
 from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.video_items.base import CircleItem, VideoItem
-from brainframe_qt.ui.resources.video_items.zones import (
-    AbstractZoneItem,
-    ZoneLineItem,
-    ZoneRegionItem,
-)
+from brainframe_qt.ui.resources.video_items.zones import ZoneLineItem, ZoneRegionItem
+
+from ..core.zone import Line, Region, Zone
 
 
 class InProgressZoneItem(VideoItem, ABC):
 
-    def __init__(self, coords: List[VideoItem.PointType], *,
+    def __init__(self, zone: Zone, *,
                  render_config: RenderSettings,
                  parent: Optional[VideoItem] = None,
                  line_style: Qt.PenStyle = Qt.SolidLine):
         super().__init__(parent=parent)
 
-        self.coords = coords
+        self.zone = zone
         self.render_config = render_config
 
         self._line_style = line_style
+
         self._zone_item = self._init_zone_item()
         self._vertex_items = self._init_vertex_items()
+
+    @classmethod
+    def from_zone(
+        cls, zone: Zone, *, render_config: RenderSettings
+    ) -> "InProgressZoneItem":
+        if isinstance(zone, Region):
+            return InProgressRegionItem(zone, render_config=render_config)
+        elif isinstance(zone, Line):
+            return InProgressLineItem(zone, render_config=render_config)
 
     @property
     def current_vertices(self) -> List[VideoItem.PointType]:
         return [vertex_item.pos() for vertex_item in self._vertex_items]
 
     def add_vertex(self, vertex: VideoItem.PointType) -> None:
-        if not self.takes_additional_points():
+        if not self.zone.takes_additional_points():
             raise RuntimeError("This zone item does not support adding any "
                                "more points")
 
-        self.coords.append(vertex)
+        self.zone.coords.append(vertex)
 
+        self.refresh_shape()
+
+        vertex_item = _DraggableVertex(vertex, parent=self)
+        self._vertex_items.append(vertex_item)
+
+    def refresh_shape(self) -> None:
         if self._zone_item is not None and self.scene() is not None:
             self.scene().removeItem(self._zone_item)
+            for item in self._vertex_items:
+                self.scene().removeItem(item)
+
         self._zone_item = self._init_zone_item()
-
-        vertex_item = _DraggableVertex(vertex, parent=self)
-        self._vertex_items.append(vertex_item)
-
-    def update_latest_vertex(self, vertex: VideoItem.PointType) -> None:
-        """Updates the position of the latest vertex. If the zone_item has no vertices,
-        an initial one will be created
-
-        :param vertex: The new position
-        """
-        vertex_item = _DraggableVertex(vertex, parent=self)
-
         if self._zone_item is not None:
-            self.scene().removeItem(self._zone_item)
-        self._zone_item = self._init_zone_item()
-
-        if len(self.coords) > 0:
-            self.coords.pop()
-            self.scene().removeItem(self._vertex_items.pop())
-
-        self.coords.append(vertex)
-        self._vertex_items.append(vertex_item)
+            self._vertex_items = self._init_vertex_items()
 
     @abstractmethod
-    def is_shape_ready(self) -> bool:
-        """
-        :return: True if the item represents a valid zone in its current state
-        """
-
-    @abstractmethod
-    def takes_additional_points(self) -> bool:
-        """
-        :return: True if the user can add more points to this zone item
-        """
-
-    @abstractmethod
-    def _init_zone_item(self) -> Optional[AbstractZoneItem]:
+    def _init_zone_item(self) -> Optional["InProgressZoneItem"]:
         """
         :return: A zone item that can draw this zone's lines, or None if the
             zone is not ready to be drawn yet
         """
 
     def _init_vertex_items(self) -> List['_DraggableVertex']:
+        assert self.zone.coords is not None
+
         vertex_items: List[_DraggableVertex] = []
-        for coord in self.coords:
+        for coord in self.zone.coords:
             vertex_items.append(_DraggableVertex(coord, parent=self))
 
         return vertex_items
 
 
 class InProgressRegionItem(InProgressZoneItem):
-    def is_shape_ready(self) -> bool:
-        return len(self.coords) >= 3
-
-    def takes_additional_points(self) -> bool:
-        # A region zone can take an infinite amount of points
-        return True
-
     def _init_zone_item(self) -> Optional[ZoneRegionItem]:
-        if len(self.coords) < 2:
+        if len(self.zone.coords) < 2:
             return None
-        else:
-            points = list(map(list, self.coords))
-            zone = Zone(name="in_progress_region", coords=points, stream_id=-1)
 
-            return ZoneRegionItem(
-                zone,
-                render_config=self.render_config,
-                line_style=self._line_style,
-                parent=self)
+        points = list(map(list, self.zone.coords))
+        zone = bf_codecs.Zone(name="in_progress_zone", coords=points, stream_id=-1)
+
+        return ZoneRegionItem(
+            zone=zone,
+            render_config=self.render_config,
+            line_style=self._line_style,
+            parent=self
+        )
 
 
 class InProgressLineItem(InProgressZoneItem):
-    def is_shape_ready(self) -> bool:
-        return len(self.coords) == 2
-
-    def takes_additional_points(self) -> bool:
-        return len(self.coords) < 2
-
     def _init_zone_item(self) -> Optional[ZoneLineItem]:
-        if len(self.coords) < 2:
+        if len(self.zone.coords) < 2:
             return None
-        else:
-            points = list(map(list, self.coords))
-            zone = Zone(name="in_progress_line", coords=points, stream_id=-1)
 
-            return ZoneLineItem(
-                zone,
-                render_config=self.render_config,
-                line_style=self._line_style,
-                parent=self)
+        points = list(map(list, self.zone.coords))
+        zone = bf_codecs.Zone(name="in_progress_line", coords=points, stream_id=-1)
+
+        return ZoneLineItem(
+            zone=zone,
+            render_config=self.render_config,
+            line_style=self._line_style,
+            parent=self
+        )
 
 
 class _DraggableVertex(CircleItem):

@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Tuple, TypeVar
 
 from brainframe.api import bf_codecs
+from shapely import geometry
 
 T = TypeVar("T")
 
@@ -26,15 +27,29 @@ class Zone(ABC):
 
     @abstractmethod
     def copy(self: T) -> T:
-        ...
+        """Deep copy"""
 
     @abstractmethod
     def is_shape_ready(self) -> bool:
-        ...
+        """Whether this type of Zone has enough points to be considered complete"""
 
     @abstractmethod
     def takes_additional_points(self) -> bool:
-        ...
+        """Whether more points can be added to this type of Zone"""
+
+    @abstractmethod
+    def would_be_valid_zone(self, new_vertex: Tuple[int, int]) -> bool:
+        """Whether the addition of new_vertex to the zone would result in a valid
+        zone"""
+
+    def add_vertex(self, vertex: Tuple[int, int]) -> None:
+        assert self.coords is not None
+        self.coords.append(vertex)
+
+    def adjust_final_vertex(self, vertex: Tuple[int, int]) -> None:
+        assert self.coords is not None
+        assert len(self.coords) >= 1
+        self.coords[-1] = vertex
 
     def to_api_zone(self, stream_id: int) -> bf_codecs.Zone:
         assert self.name is not None
@@ -73,6 +88,9 @@ class Line(Zone):
     def takes_additional_points(self) -> bool:
         return len(self.coords) < 2
 
+    def would_be_valid_zone(self, new_vertex: Tuple[int, int]) -> bool:
+        return True
+
     @classmethod
     def from_api_line(cls, zone: bf_codecs.Zone) -> "Line":
         # BrainFrame uses a list of lists
@@ -98,10 +116,15 @@ class Region(Zone):
         )
 
     def is_shape_ready(self) -> bool:
-        return len(self.coords) == 2
+        return len(self.coords) >= 3
 
     def takes_additional_points(self) -> bool:
         return True
+
+    def would_be_valid_zone(self, new_vertex: Tuple[int, int]) -> bool:
+        new_coords = self.coords + [new_vertex]
+        shapely_polygon = geometry.Polygon(new_coords)
+        return shapely_polygon.is_valid
 
     @classmethod
     def from_api_region(cls, zone: bf_codecs.Zone) -> "Region":
