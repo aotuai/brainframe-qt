@@ -20,7 +20,7 @@ class ZoneListItem(QTreeWidgetItem):
     def _init_edit_button(self) -> QPushButton:
         edit_button = QPushButton(self.parent())
 
-        edit_button.setIcon(QIcon(":/icons/trash"))
+        edit_button.setIcon(QIcon(":/icons/edit"))
         edit_button.setToolTip("Edit")
 
         return edit_button

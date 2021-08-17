@@ -73,6 +73,12 @@ class ZoneList(QTreeWidget):
 
         return zone_item
 
+    def confirm_zone(self, zone: Zone) -> None:
+        assert None in self.zones
+
+        self.delete_zone(None)
+        self.add_zone(zone)
+
     def add_alarm(self, zone: Zone, alarm: bf_codecs.ZoneAlarm):
         zone_item = self.zones[zone.id]
         alarm_item = self._new_row(alarm.name, self.EntryType.ALARM)

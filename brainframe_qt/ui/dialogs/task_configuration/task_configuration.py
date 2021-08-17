@@ -48,7 +48,7 @@ class TaskConfiguration(QDialog):
             self.enable_confirm_op_button
         )
 
-        self.zone_list.initiate_zone_edit.connect(self.edit_zone)
+        self.zone_list.initiate_zone_edit.connect(self._edit_zone_by_id)
 
         self.dialog_button_box.accepted.connect(self.accept)
         self.dialog_button_box.rejected.connect(self.reject)
@@ -132,14 +132,9 @@ class TaskConfiguration(QDialog):
         Eg. [(0, 0), (100, 0), (100, 100), (0, 100)]
         """
 
-        # Update zone type
-        if len(self.unconfirmed_zone.coords) == 2:
-            zone_type = self.zone_list.EntryType.LINE
-        elif len(self.unconfirmed_zone.coords) >= 2:
-            zone_type = self.zone_list.EntryType.REGION
-        else:
+        if len(self.unconfirmed_zone.coords) < 2:
             message = "New zone cannot have fewer than 2 points"
-            raise NotImplementedError(message)
+            raise RuntimeError(message)
 
         # Add zone to database
         api_zone = self.unconfirmed_zone.to_api_zone(self.stream_conf.id)
@@ -147,12 +142,7 @@ class TaskConfiguration(QDialog):
 
         # Only do this for new zones
         if self.unconfirmed_zone.id is None:
-            self.zone_list.zones[confirmed_zone.id] = self.zone_list.zones.pop(None)
-            self.zone_list.update_zone_type(confirmed_zone.id, zone_type)
-
-            self.zone_list.zones[confirmed_zone.id].trash_button.clicked.connect(
-                lambda: self.zone_list.delete_zone(confirmed_zone.id)
-            )
+            self.zone_list.confirm_zone(confirmed_zone)
 
         self.unconfirmed_zone = None
 
@@ -172,31 +162,24 @@ class TaskConfiguration(QDialog):
         if None in self.zone_list.zones:
             self.zone_list.delete_zone(None)
 
-    def edit_zone(self, zone_id: int) -> None:
+    def edit_zone(self, zone: Zone) -> None:
 
-        def _get_zone() -> Zone:
-            api_zone = api.get_zone(zone_id)
-            return Zone.from_api_zone(api_zone)
+        """Create a new zone"""
+        self.unconfirmed_zone = zone.copy()
 
-        def _edit_zone(zone: Zone) -> None:
-            """Create a new zone"""
-            self.unconfirmed_zone = zone.copy()
+        # Set instruction text
+        text = self.tr('Add points until done, then press "Confirm" button')
+        self.instruction_label.setText(text)
 
-            # Set instruction text
-            text = self.tr('Add points until done, then press "Confirm" button')
-            self.instruction_label.setText(text)
+        # Instruct the VideoTaskConfig instance to start accepting mouseEvents
+        self.video_task_config.start_zone_edit(zone)
 
-            # Instruct the VideoTaskConfig instance to start accepting mouseEvents
-            self.video_task_config.start_zone_edit(zone)
+        # Disable critical widgets from being interacted with during creation
+        self._set_widgets_enabled(False)
+        self._hide_operation_widgets(False)
 
-            # Disable critical widgets from being interacted with during creation
-            self._set_widgets_enabled(False)
-            self._hide_operation_widgets(False)
-
-            # Disable confirmation until the zone has enough points to be valid
-            self.confirm_op_button.setEnabled(False)
-
-        QTAsyncWorker(self, _get_zone, on_success=_edit_zone).start()
+        # Disable confirmation until the zone has enough points to be valid
+        self.confirm_op_button.setEnabled(False)
 
     def enable_confirm_op_button(self, enable: bool) -> None:
         self.confirm_op_button.setEnabled(enable)
@@ -247,6 +230,13 @@ class TaskConfiguration(QDialog):
         self.new_alarm_button.setEnabled(enabled)
         self.new_line_button.setEnabled(enabled)
         self.new_region_button.setEnabled(enabled)
+
+    def _edit_zone_by_id(self, zone_id: int) -> None:
+        def _get_zone() -> Zone:
+            api_zone = api.get_zone(zone_id)
+            return Zone.from_api_zone(api_zone)
+
+        QTAsyncWorker(self, _get_zone, on_success=self.edit_zone).start()
 
     def _hide_operation_widgets(self, hidden) -> None:
         self.confirm_op_button.setHidden(hidden)

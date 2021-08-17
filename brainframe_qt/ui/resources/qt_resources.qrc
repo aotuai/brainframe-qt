@@ -15,6 +15,7 @@
         <file alias="alert_view">images/icons/alarm_view_action.svg</file>
         <file alias="analysis_error">images/icons/no_analysis_results_for_stream.svg</file>
         <file alias="capsule_toolbar">images/icons/capsule_toolbar.svg</file>
+        <file alias="edit">images/icons/edit_pencil.svg</file>
         <file alias="folder">images/icons/folder.svg</file>
         <file alias="identity_toolbar">images/icons/identity_toolbar.svg</file>
         <file alias="info">images/icons/information.svg</file>

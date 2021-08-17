@@ -87,7 +87,9 @@ class VideoTaskConfig(StreamWidget):
 
         self.in_progress_zone = zone.copy()
         self.preview_zone = zone.copy()
-        self.preview_zone.coords.append(self.preview_zone.coords[-1])
+
+        if self.preview_zone.takes_additional_points():
+            self.preview_zone.coords.append((0, 0))
 
         self._add_zone_items()
 
