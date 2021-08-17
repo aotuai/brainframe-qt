@@ -13,7 +13,6 @@ from PyQt5.QtWidgets import (
 from brainframe.api import bf_codecs
 
 from brainframe_qt.api_utils import api
-from brainframe_qt.ui.resources import QTAsyncWorker
 
 from ..core.zone import Zone, Line, Region
 from .zone_list_item import ZoneListItem
@@ -22,7 +21,7 @@ from .zone_list_item import ZoneListItem
 class ZoneList(QTreeWidget):
     EntryType = Enum('EntryType', "REGION LINE ALARM UNKNOWN")
 
-    initiate_zone_edit = pyqtSignal(Zone)
+    initiate_zone_edit = pyqtSignal(int)
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -48,24 +47,6 @@ class ZoneList(QTreeWidget):
         self.header().setSectionResizeMode(1, QHeaderView.Stretch)
         self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
         self.header().setSectionResizeMode(3, QHeaderView.ResizeToContents)
-
-    def init_zones(self, stream_id):
-        """Initialize zone list with zones already in database"""
-        self.stream_id = stream_id
-
-        def get_zones() -> List[Zone]:
-            api_zones = api.get_zones(stream_id)
-            zones = list(map(Zone.from_api_zone, api_zones))
-
-            return zones
-
-        def add_zones(zones: List[Zone]):
-            for zone in zones:
-                self.add_zone(zone)
-
-            self.clearSelection()
-
-        QTAsyncWorker(self, get_zones, on_success=add_zones).start()
 
     def add_zone(self, zone: Zone) -> ZoneListItem:
         """Creates and returns the new ZoneListItem using the zone"""
@@ -172,7 +153,7 @@ class ZoneList(QTreeWidget):
         else:
             zone_item.trash_button.clicked.connect(lambda: self.delete_zone(zone.id))
             zone_item.edit_button.clicked.connect(
-                lambda: self.initiate_zone_edit.emit(zone)
+                lambda: self.initiate_zone_edit.emit(zone.id)
             )
 
 

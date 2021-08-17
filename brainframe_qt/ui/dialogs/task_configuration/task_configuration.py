@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QInputDialog
@@ -26,7 +26,7 @@ class TaskConfiguration(QDialog):
         self.stream_name_label.setText(stream_conf.name)
 
         # Create TaskAndZone widgets in ZoneList for zones in database
-        self.zone_list.init_zones(stream_conf.id)
+        self._init_zones()
 
         self.unconfirmed_zone: Optional[Zone] = None
 
@@ -172,23 +172,31 @@ class TaskConfiguration(QDialog):
         if None in self.zone_list.zones:
             self.zone_list.delete_zone(None)
 
-    def edit_zone(self, zone: Zone) -> None:
-        """Create a new zone"""
-        self.unconfirmed_zone = zone.copy()
+    def edit_zone(self, zone_id: int) -> None:
 
-        # Set instruction text
-        text = self.tr('Add points until done, then press "Confirm" button')
-        self.instruction_label.setText(text)
+        def _get_zone() -> Zone:
+            api_zone = api.get_zone(zone_id)
+            return Zone.from_api_zone(api_zone)
 
-        # Instruct the VideoTaskConfig instance to start accepting mouseEvents
-        self.video_task_config.start_zone_edit(zone)
+        def _edit_zone(zone: Zone) -> None:
+            """Create a new zone"""
+            self.unconfirmed_zone = zone.copy()
 
-        # Disable critical widgets from being interacted with during creation
-        self._set_widgets_enabled(False)
-        self._hide_operation_widgets(False)
+            # Set instruction text
+            text = self.tr('Add points until done, then press "Confirm" button')
+            self.instruction_label.setText(text)
 
-        # Disable confirmation until the zone has enough points to be valid
-        self.confirm_op_button.setEnabled(False)
+            # Instruct the VideoTaskConfig instance to start accepting mouseEvents
+            self.video_task_config.start_zone_edit(zone)
+
+            # Disable critical widgets from being interacted with during creation
+            self._set_widgets_enabled(False)
+            self._hide_operation_widgets(False)
+
+            # Disable confirmation until the zone has enough points to be valid
+            self.confirm_op_button.setEnabled(False)
+
+        QTAsyncWorker(self, _get_zone, on_success=_edit_zone).start()
 
     def enable_confirm_op_button(self, enable: bool) -> None:
         self.confirm_op_button.setEnabled(enable)
@@ -244,3 +252,17 @@ class TaskConfiguration(QDialog):
         self.confirm_op_button.setHidden(hidden)
         self.cancel_op_button.setHidden(hidden)
         self.instruction_label.setHidden(hidden)
+
+    def _init_zones(self):
+        """Initialize zone list with zones already in database"""
+        def get_zones() -> List[Zone]:
+            api_zones = api.get_zones(self.stream_conf.id)
+            zones = list(map(Zone.from_api_zone, api_zones))
+
+            return zones
+
+        def add_zones(zones: List[Zone]):
+            for zone in zones:
+                self.zone_list.add_zone(zone)
+
+        QTAsyncWorker(self, get_zones, on_success=add_zones).start()
