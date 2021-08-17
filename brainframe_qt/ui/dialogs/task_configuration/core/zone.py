@@ -43,16 +43,31 @@ class Zone(ABC):
         zone"""
 
     def add_vertex(self, vertex: Tuple[int, int]) -> None:
+        if self.coords is None:
+            message = (
+                "Zone.coords is None. Most likely attempting to add vertex to "
+                "full-frame Zone."
+            )
+            raise RuntimeError(message)
+
         assert self.coords is not None
         self.coords.append(vertex)
 
     def adjust_final_vertex(self, vertex: Tuple[int, int]) -> None:
-        assert self.coords is not None
-        assert len(self.coords) >= 1
+        if self.coords is None:
+            message = (
+                "Zone.coords is None. Most likely attempting to adjust vertices on "
+                "full-frame Zone."
+            )
+            raise RuntimeError(message)
+        if len(self.coords) == 0:
+            raise RuntimeError("Zone.coords is empty. No vertices to adjust.")
+
         self.coords[-1] = vertex
 
     def to_api_zone(self, stream_id: int) -> bf_codecs.Zone:
-        assert self.name is not None
+        if self.name is None:
+            raise RuntimeError("Zone name is None. Cannot create API Zone codec.")
 
         # BrainFrame uses a list of lists
         coords = [] if self.coords is None else list(map(list, self.coords))
