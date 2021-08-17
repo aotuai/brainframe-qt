@@ -223,7 +223,6 @@ class TaskConfiguration(QDialog):
 
     def _set_widgets_enabled(self, enabled) -> None:
         # TODO(Bryce Beagle): Do this dynamically:
-        # TODO(Bryce Beagle): Do this dynamically:
         # https://stackoverflow.com/a/34892529/8134178
 
         self.dialog_button_box.button(QDialogButtonBox.Ok).setEnabled(enabled)
