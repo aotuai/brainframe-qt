@@ -72,7 +72,8 @@ class VideoTaskConfig(StreamWidget):
             self.polygon_is_valid_signal.emit(True)
 
     def on_frame(self, frame: ZoneStatusFrame) -> None:
-        # Only change the video frame if we're in the process of creating a new zone
+        # Base class' .on_frame also clears all QGraphicsItems, so we skip that while
+        # we're working on a Zone
         if self.in_progress_zone is None:
             super().on_frame(frame)
         else:
