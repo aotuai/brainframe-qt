@@ -48,21 +48,21 @@
       <item>
        <layout class="QHBoxLayout" name="add_button_layout">
         <item>
-         <widget class="QPushButton" name="alarm_button">
+         <widget class="QPushButton" name="new_alarm_button">
           <property name="text">
            <string>Alarm</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="region_button">
+         <widget class="QPushButton" name="new_region_button">
           <property name="text">
            <string>Region</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="line_button">
+         <widget class="QPushButton" name="new_line_button">
           <property name="text">
            <string>Line</string>
           </property>
@@ -252,135 +252,13 @@
   <customwidget>
    <class>VideoTaskConfig</class>
    <extends>QGraphicsView</extends>
-   <header>brainframe_qt.ui.dialogs.task_configuration.video_task_config.video_task_config</header>
+   <header>brainframe_qt.ui.dialogs.task_configuration.widgets.video_task_config</header>
   </customwidget>
   <customwidget>
    <class>ZoneList</class>
    <extends>QTreeWidget</extends>
-   <header>brainframe_qt.ui.dialogs.task_configuration.zone_list.zone_list</header>
+   <header>brainframe_qt.ui.dialogs.task_configuration.widgets.zone_list</header>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>alarm_button</sender>
-   <signal>clicked()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>new_alarm()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>53</x>
-     <y>48</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>421</x>
-     <y>251</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>region_button</sender>
-   <signal>clicked()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>new_region()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>144</x>
-     <y>48</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>421</x>
-     <y>251</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>line_button</sender>
-   <signal>clicked()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>new_line()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>235</x>
-     <y>48</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>421</x>
-     <y>251</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>confirm_op_button</sender>
-   <signal>clicked()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>new_zone_confirmed()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>555</x>
-     <y>342</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>434</x>
-     <y>7</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>video_task_config</sender>
-   <signal>polygon_is_valid_signal(bool)</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>enable_confirm_op_button(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>629</x>
-     <y>196</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>372</x>
-     <y>441</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dialog_button_box</sender>
-   <signal>accepted()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>831</x>
-     <y>457</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dialog_button_box</sender>
-   <signal>rejected()</signal>
-   <receiver>TaskConfiguration</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>831</x>
-     <y>457</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
- <slots>
-  <slot>new_alarm()</slot>
-  <slot>new_region()</slot>
-  <slot>new_line()</slot>
-  <slot>new_zone_confirmed()</slot>
-  <slot>new_zone_canceled(int)</slot>
-  <slot>enable_confirm_op_button(bool)</slot>
- </slots>
 </ui>
