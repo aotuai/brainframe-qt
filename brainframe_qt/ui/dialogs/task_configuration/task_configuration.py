@@ -257,6 +257,12 @@ class TaskConfiguration(QDialog):
             return zones
 
         def add_zones(zones: List[Zone]):
+            # Add full-frame zone first
+            zone_names = [zone.name for zone in zones]
+            screen_zone_index = zone_names.index(bf_codecs.Zone.FULL_FRAME_ZONE_NAME)
+            screen_zone = zones.pop(screen_zone_index)
+            self.zone_list.add_zone(screen_zone)
+
             for zone in zones:
                 self.zone_list.add_zone(zone)
 
