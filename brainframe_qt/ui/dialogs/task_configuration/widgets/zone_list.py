@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, List
+from typing import Dict
 
 from PyQt5.QtCore import QModelIndex, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QIcon
@@ -22,6 +22,7 @@ class ZoneList(QTreeWidget):
     EntryType = Enum('EntryType', "REGION LINE ALARM UNKNOWN")
 
     initiate_zone_edit = pyqtSignal(int)
+    zone_delete = pyqtSignal(int)
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -71,12 +72,16 @@ class ZoneList(QTreeWidget):
         self.clearSelection()
         zone_item.setSelected(True)
 
+        # zone_list_item = ZoneListItem(zone.name, entry_type)
+        # zone_list_item.to_delete.connect(lambda: self.zone_delete.emit(zone.id))
+        # zone_list_item.to_edit.connect(lambda: self.initiate_zone_edit.emit(zone.id))
+
         return zone_item
 
     def confirm_zone(self, zone: Zone) -> None:
         assert None in self.zones
 
-        self.delete_zone(None)
+        self.remove_zone(None)
         self.add_zone(zone)
 
     def add_alarm(self, zone: Zone, alarm: bf_codecs.ZoneAlarm):
@@ -92,16 +97,6 @@ class ZoneList(QTreeWidget):
         self.clearSelection()
         zone_item.setExpanded(True)
         alarm_item.setSelected(True)
-
-    @pyqtSlot(int)
-    def delete_zone(self, zone_id: int):
-
-        # Delete zone from database
-        if zone_id is not None:
-            api.delete_zone(zone_id)
-
-        # Delete the zone ZoneListItem from tree
-        self.takeTopLevelItem(self.indexOfTopLevelItem(self.zones[zone_id]))
 
     @pyqtSlot(int, int)
     def delete_alarm(self, zone_id: int, alarm_id: int):
@@ -120,6 +115,9 @@ class ZoneList(QTreeWidget):
         icon = self._get_item_icon(entry_type)
 
         zone_item.setIcon(0, icon)
+
+    def remove_zone(self, zone_id: int) -> None:
+        self.takeTopLevelItem(self.indexOfTopLevelItem(self.zones[zone_id]))
 
     def _new_row(self, name, entry_type: EntryType):
         row = ZoneListItem(["", name, "", ""])
@@ -157,7 +155,9 @@ class ZoneList(QTreeWidget):
             zone_item.trash_button.setDisabled(True)
             zone_item.edit_button.setDisabled(True)
         else:
-            zone_item.trash_button.clicked.connect(lambda: self.delete_zone(zone.id))
+            zone_item.trash_button.clicked.connect(
+                lambda: self.zone_delete.emit(zone.id)
+            )
             zone_item.edit_button.clicked.connect(
                 lambda: self.initiate_zone_edit.emit(zone.id)
             )

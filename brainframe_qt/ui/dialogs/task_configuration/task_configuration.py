@@ -49,6 +49,7 @@ class TaskConfiguration(QDialog):
         )
 
         self.zone_list.initiate_zone_edit.connect(self._edit_zone_by_id)
+        self.zone_list.zone_delete.connect(self.delete_zone)
 
         self.dialog_button_box.accepted.connect(self.accept)
         self.dialog_button_box.rejected.connect(self.reject)
@@ -160,7 +161,11 @@ class TaskConfiguration(QDialog):
         self._hide_operation_widgets(True)
 
         if None in self.zone_list.zones:
-            self.zone_list.delete_zone(None)
+            self.zone_list.remove_zone(None)
+
+    def delete_zone(self, zone_id: int) -> None:
+        api.delete_zone(zone_id)
+        self.zone_list.remove_zone(zone_id)
 
     def edit_zone(self, zone: Zone) -> None:
 
