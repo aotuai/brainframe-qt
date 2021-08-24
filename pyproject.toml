@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "brainframe-qt"
-version = "0.28.4"
+version = "0.28.5"
 description = "Official BrainFrame client"
 authors = ["Aotu"]
 license = "Proprietary"
