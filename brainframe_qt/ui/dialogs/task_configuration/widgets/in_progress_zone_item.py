@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from PyQt5.QtCore import Qt
 
@@ -29,6 +29,7 @@ class InProgressZoneItem(VideoItem, ABC):
         self._line_style = line_style
 
         self._zone_item = self._init_zone_item()
+        self._vertex_items: Dict[VideoItem.PointType, DraggableVertex]
         self._vertex_items = self._init_vertex_items()
 
     @classmethod
@@ -55,8 +56,7 @@ class InProgressZoneItem(VideoItem, ABC):
 
     def add_vertex(self, vertex: VideoItem.PointType) -> None:
         if not self.zone.takes_additional_points():
-            raise RuntimeError("This zone item does not support adding any "
-                               "more points")
+            raise RuntimeError("This zone item does not support adding any more points")
 
         self.zone.coords.append(vertex)
 
@@ -65,7 +65,7 @@ class InProgressZoneItem(VideoItem, ABC):
     def refresh_shape(self) -> None:
         if self._zone_item is not None and self.scene() is not None:
             self.scene().removeItem(self._zone_item)
-            for item in self._vertex_items:
+            for item in self._vertex_items.values():
                 self.scene().removeItem(item)
 
         self._zone_item = self._init_zone_item()
@@ -79,13 +79,13 @@ class InProgressZoneItem(VideoItem, ABC):
             zone is not ready to be drawn yet
         """
 
-    def _init_vertex_items(self) -> List['DraggableVertex']:
+    def _init_vertex_items(self) -> Dict[VideoItem.PointType, DraggableVertex]:
         assert self.zone.coords is not None
 
-        vertex_items: List[DraggableVertex] = []
+        vertex_items: Dict[VideoItem.PointType, DraggableVertex] = {}
         for coord in self.zone.coords:
             vertex_item = DraggableVertex(coord, parent=self)
-            vertex_items.append(vertex_item)
+            vertex_items[coord] = vertex_item
 
         return vertex_items
 
