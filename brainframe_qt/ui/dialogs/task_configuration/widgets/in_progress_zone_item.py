@@ -62,9 +62,6 @@ class InProgressZoneItem(VideoItem, ABC):
 
         self.refresh_shape()
 
-        vertex_item = DraggableVertex(vertex, parent=self)
-        self._vertex_items.append(vertex_item)
-
     def refresh_shape(self) -> None:
         if self._zone_item is not None and self.scene() is not None:
             self.scene().removeItem(self._zone_item)
