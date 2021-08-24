@@ -1,8 +1,6 @@
-from enum import Enum
 from typing import Dict
 
 from PyQt5.QtCore import QModelIndex, pyqtSlot, pyqtSignal
-from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QHeaderView,
     QStyleOptionViewItem,
@@ -15,12 +13,10 @@ from brainframe.api import bf_codecs
 from brainframe_qt.api_utils import api
 
 from ..core.zone import Zone, Line, Region
-from .zone_list_item import ZoneListItem
+from .zone_list_item import ZoneListItem, ZoneListType
 
 
 class ZoneList(QTreeWidget):
-    EntryType = Enum('EntryType', "REGION LINE ALARM UNKNOWN")
-
     initiate_zone_edit = pyqtSignal(int)
     zone_delete = pyqtSignal(int)
 
@@ -53,11 +49,11 @@ class ZoneList(QTreeWidget):
         """Creates and returns the new ZoneListItem using the zone"""
 
         if isinstance(zone, Line):
-            entry_type = self.EntryType.LINE
+            entry_type = ZoneListType.LINE
         elif isinstance(zone, Region):
-            entry_type = self.EntryType.REGION
+            entry_type = ZoneListType.REGION
         else:
-            entry_type = self.EntryType.UNKNOWN
+            entry_type = ZoneListType.UNKNOWN
 
         zone_item = self._new_row(zone.name, entry_type)
         self.addTopLevelItem(zone_item)
@@ -86,7 +82,7 @@ class ZoneList(QTreeWidget):
 
     def add_alarm(self, zone: Zone, alarm: bf_codecs.ZoneAlarm):
         zone_item = self.zones[zone.id]
-        alarm_item = self._new_row(alarm.name, self.EntryType.ALARM)
+        alarm_item = self._new_row(alarm.name, ZoneListType.ALARM)
 
         zone_item.addChild(alarm_item)
 
@@ -110,33 +106,22 @@ class ZoneList(QTreeWidget):
         # Delete the alarm ZoneListItem from tree
         zone_item.removeChild(alarm_item)
 
-    def update_zone_type(self, zone_id: int, entry_type: EntryType):
+    def update_zone_type(self, zone_id: int, entry_type: ZoneListType):
         zone_item = self.zones[zone_id]
-        icon = self._get_item_icon(entry_type)
+        icon = ZoneListItem.get_icon(entry_type)
 
         zone_item.setIcon(0, icon)
 
     def remove_zone(self, zone_id: int) -> None:
         self.takeTopLevelItem(self.indexOfTopLevelItem(self.zones[zone_id]))
 
-    def _new_row(self, name, entry_type: EntryType):
+    def _new_row(self, name, entry_type: ZoneListType):
         row = ZoneListItem(["", name, "", ""])
-        row.setIcon(0, self._get_item_icon(entry_type))
+
+        icon = ZoneListItem.get_icon(entry_type)
+        row.setIcon(0, icon)
 
         return row
-
-    def _get_item_icon(self, entry_type: EntryType):
-
-        if entry_type == self.EntryType.REGION:
-            entry_type_icon = QIcon(":/icons/region")
-        elif entry_type == self.EntryType.LINE:
-            entry_type_icon = QIcon(":/icons/line")
-        elif entry_type == self.EntryType.ALARM:
-            entry_type_icon = QIcon(":/icons/alarm")
-        else:  # includes self.EntryType.UNKNOWN
-            entry_type_icon = QIcon(":/icons/question_mark")
-
-        return entry_type_icon
 
     def _init_alarm_buttons(
         self, zone: Zone, alarm: bf_codecs.ZoneAlarm, alarm_item: ZoneListItem
