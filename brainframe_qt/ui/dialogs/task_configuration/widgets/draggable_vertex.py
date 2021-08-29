@@ -1,5 +1,4 @@
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QGraphicsSceneMouseEvent
 
 from brainframe_qt.ui.resources.video_items.base import CircleItem, VideoItem
 
@@ -15,14 +14,3 @@ class DraggableVertex(CircleItem):
                          radius=self.DEFAULT_RADIUS,
                          border_thickness=self.DEFAULT_BORDER_THICKNESS,
                          parent=parent)
-
-    #     self.setFlag(self.ItemIsSelectable, True)
-    #     self.setFlag(self.ItemIsMovable, True)
-    #
-    # def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent) -> None:
-    #     event.ignore()
-    #     super().mouseMoveEvent(event)
-    #
-    # def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent) -> None:
-    #     event.ignore()
-    #     super().mouseMoveEvent(event)
