@@ -50,6 +50,8 @@ class VideoTaskConfig(StreamWidget):
 
             self._update_zone_items()
 
+        super().mouseMoveEvent(event)
+
     def _handle_click(self, click_pos: VideoItem.PointType) -> None:
         # Don't do anything if we're not currently making a zone
         if self.in_progress_zone is None:
