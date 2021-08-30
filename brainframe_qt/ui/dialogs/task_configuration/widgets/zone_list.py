@@ -90,17 +90,10 @@ class ZoneList(QWidget):
 
         self.layout().insertWidget(insert_index, alarm_item)
 
-    @pyqtSlot(int, int)
-    def delete_alarm(self, zone_id: int, alarm_id: int):
+    def remove_alarm(self, alarm_id: int) -> None:
+        alarm_widget = self.alarms.pop(alarm_id)
 
-        zone_item = self.zones[zone_id]
-        alarm_item = self.alarms[alarm_id]
-
-        # Delete alarm from database
-        api.delete_zone_alarm(alarm_id)
-
-        # Delete the alarm ZoneListItem from tree
-        zone_item.removeChild(alarm_item)
+        self.layout().removeWidget(alarm_widget)
 
     def remove_zone(self, zone_id: int) -> None:
         zone_widget: ZoneListZoneItem = self.zones.pop(zone_id)
@@ -121,4 +114,6 @@ class ZoneList(QWidget):
         # Remove zone and all child alarms
         self.layout().removeWidget(zone_widget)
         for alarm_widget in alarm_widgets:
-            self.layout().removeWidget(alarm_widget)
+            # Uses private attribute for now, but this is temporary until zone widgets
+            # contain alarm widgets inside of them
+            self.remove_alarm(alarm_widget._alarm.id)
