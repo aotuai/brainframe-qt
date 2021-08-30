@@ -36,16 +36,8 @@ class ZoneList(QWidget):
     def _init_style(self) -> None:
         self.setAttribute(Qt.WA_StyledBackground, True)
 
-        # self.layout().setSpacing(1)
-
-        # # Item delegate is used to force a custom row height
-        # self.setItemDelegate(ZoneListItemDelegate(row_height=40))
-        #
-        # # Scale columns in view
-        # self.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        # self.header().setSectionResizeMode(1, QHeaderView.Stretch)
-        # self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        # self.header().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.layout().setSpacing(0)
 
     def add_zone(self, zone: Zone) -> ZoneListZoneItem:
         """Creates and returns the new ZoneListItem using the Zone"""
