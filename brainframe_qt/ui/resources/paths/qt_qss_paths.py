@@ -53,6 +53,11 @@ alarm_view_qss = register_path(alarm_view_dir / "alarm_view.qss")
 license_dialog_dir = register_path(dialog_dir / "license_dialog")
 license_dialog_qss = register_path(license_dialog_dir / "license_dialog.qss")
 
+# Task Configuration
+task_configuration_dir = register_path(dialog_dir / "task_configuration")
+task_configuration_qss = register_path(
+    task_configuration_dir / "task_configuration.qss")
+
 ###############################################################################
 # BrainFrame Resources
 ###############################################################################

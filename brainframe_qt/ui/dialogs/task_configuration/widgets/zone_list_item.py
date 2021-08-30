@@ -1,55 +1,83 @@
-from enum import Enum, auto
-from typing import List
+from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtWidgets import QWidget
 
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QPushButton, QTreeWidgetItem
+from brainframe.api import bf_codecs
 
-from brainframe.api.bf_codecs import Zone, ZoneAlarm
-
-
-class ZoneListType(Enum):
-    REGION = auto()
-    LINE = auto()
-    ALARM = auto()
-    UNKNOWN = auto()
+from ..core.zone import Line, Region, Zone
+from ..widgets.zone_list_item_ui import ZoneListItemUI, ZoneListType
 
 
-class ZoneListItem(QTreeWidgetItem):
+class ZoneListZoneItem(ZoneListItemUI):
 
-    _ICON_MAP = {
-        ZoneListType.REGION: QIcon(":/icons/region"),
-        ZoneListType.LINE: QIcon(":/icons/line"),
-        ZoneListType.ALARM: QIcon(":/icons/alarm"),
-        ZoneListType.UNKNOWN: QIcon(":/icons/question_mark"),
-    }
+    zone_delete = pyqtSignal(int)
+    zone_edit = pyqtSignal(int)
 
-    def __init__(self, strings: List[str]):
-        super().__init__(strings)
+    def __init__(self, zone: Zone, *, parent: QObject):
+        super().__init__(parent=parent)
 
-        self.zone: Zone = None
-        self.alarm: ZoneAlarm = None
+        self._zone = zone
 
-        self.edit_button = self._init_edit_button()
-        self.trash_button = self._init_trash_button()
+        self.entry_name = zone.name
+        self.entry_type = self._get_entry_type(zone)
 
-    def _init_edit_button(self) -> QPushButton:
-        edit_button = QPushButton(self.parent())
+        self._init_signals()
+        self._configure_buttons()
 
-        edit_button.setIcon(QIcon(":/icons/edit"))
-        edit_button.setToolTip("Edit")
+    def _init_signals(self) -> None:
+        self.trash_button.clicked.connect(self._on_trash_button_click)
+        self.edit_button.clicked.connect(self._on_edit_button_click)
 
-        return edit_button
+    def _configure_buttons(self) -> None:
+        if self._zone.name == bf_codecs.Zone.FULL_FRAME_ZONE_NAME:
+            self.trash_button.setDisabled(True)
+            self.edit_button.setDisabled(True)
 
-    def _init_trash_button(self) -> QPushButton:
-        trash_button = QPushButton(self.parent())
+    def _on_edit_button_click(self, _clicked: bool) -> None:
+        self.zone_edit.emit(self._zone.id)
 
-        trash_button.setIcon(QIcon(":/icons/trash"))
-        trash_button.setToolTip("Delete")
+    def _on_trash_button_click(self, _clicked: bool) -> None:
+        self.zone_delete.emit(self._zone.id)
 
-        return trash_button
+    @staticmethod
+    def _get_entry_type(zone: Zone) -> ZoneListType:
+        if isinstance(zone, Line):
+            return ZoneListType.LINE
+        elif isinstance(zone, Region):
+            return ZoneListType.REGION
+        else:
+            return ZoneListType.UNKNOWN
 
-    @classmethod
-    def get_icon(cls, entry_type: ZoneListType) -> QIcon:
-        if entry_type not in cls._ICON_MAP:
-            entry_type = ZoneListType.UNKNOWN
-        return cls._ICON_MAP[entry_type]
+
+class ZoneListAlarmItem(ZoneListItemUI):
+    """Temporary until ZoneListZoneItem holds Alarm widgets"""
+    alarm_delete = pyqtSignal(int)
+
+    def __init__(self, alarm: bf_codecs.ZoneAlarm, *, parent: QObject):
+        super().__init__(parent=parent)
+
+        self._padding_widget = self._init_padding_widget()
+
+        self._alarm = alarm
+
+        self.entry_name = alarm.name
+        self.entry_type = ZoneListType.ALARM
+
+        self._init_signals()
+
+    def _init_signals(self) -> None:
+        self.trash_button.clicked.connect(self._on_trash_button_click)
+
+    def _init_padding_widget(self) -> QWidget:
+        """Temporary solution to indent alarm widgets a bit.
+
+        Stylesheet controls width
+        """
+        widget = QWidget(self)
+        widget.setObjectName("padding_widget")
+
+        self.layout().insertWidget(0, widget)
+
+        return widget
+
+    def _on_trash_button_click(self, _clicked: bool) -> None:
+        self.alarm_delete.emit(self._alarm.id)

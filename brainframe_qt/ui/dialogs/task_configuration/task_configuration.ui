@@ -93,50 +93,64 @@
        </widget>
       </item>
       <item>
-       <widget class="ZoneList" name="zone_list">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>350</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <attribute name="headerDefaultSectionSize">
-         <number>45</number>
-        </attribute>
-        <attribute name="headerMinimumSectionSize">
-         <number>0</number>
-        </attribute>
-        <attribute name="headerStretchLastSection">
-         <bool>false</bool>
-        </attribute>
-        <column>
-         <property name="text">
-          <string notr="true">1</string>
+       <layout class="QVBoxLayout" name="zone_list_layout">
+        <item>
+         <widget class="ZoneList" name="zone_list">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>350</width>
+            <height>0</height>
+           </size>
+          </property>
+          <attribute name="headerDefaultSectionSize">
+           <number>45</number>
+          </attribute>
+          <attribute name="headerMinimumSectionSize">
+           <number>0</number>
+          </attribute>
+          <attribute name="headerStretchLastSection">
+           <bool>false</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string notr="true">2</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string notr="true">3</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </column>
-        <column>
-         <property name="text">
-          <string notr="true">2</string>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
          </property>
-        </column>
-        <column>
-         <property name="text">
-          <string notr="true">3</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>0</height>
+          </size>
          </property>
-        </column>
-       </widget>
+        </spacer>
+       </item>
+       </layout>
       </item>
      </layout>
     </widget>

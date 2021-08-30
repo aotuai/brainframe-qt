@@ -8,8 +8,8 @@ from brainframe.api import bf_codecs
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.ui.dialogs import AlarmCreationDialog
-from brainframe_qt.ui.resources import QTAsyncWorker
-from brainframe_qt.ui.resources.paths import qt_ui_paths
+from brainframe_qt.ui.resources import QTAsyncWorker, stylesheet_watcher
+from brainframe_qt.ui.resources.paths import qt_ui_paths, qt_qss_paths
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
 from .core.zone import Zone, Line, Region
@@ -32,7 +32,11 @@ class TaskConfiguration(QDialog):
 
         self._hide_operation_widgets(True)
 
+        self._init_ui()
         self._init_signals()
+
+    def _init_ui(self) -> None:
+        stylesheet_watcher.watch(self, qt_qss_paths.task_configuration_qss)
 
     def _init_signals(self) -> None:
         self.new_alarm_button.clicked.connect(lambda _clicked: self.new_alarm())

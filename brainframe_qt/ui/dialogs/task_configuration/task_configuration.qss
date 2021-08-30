@@ -1,0 +1,19 @@
+ZoneListItemUI #entry_icon {
+    min-width: 35px;
+    max-width: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+
+ZoneListItemUI > QPushButton {
+    min-width: 35px;
+    max-width: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+
+ZoneListAlarmItem > #padding_widget {
+    min-width: 40px;
+    max-width: 40px;
+}
+

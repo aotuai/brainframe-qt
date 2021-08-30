@@ -1284,22 +1284,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="176"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="180"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="212"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="216"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="213"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="217"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="216"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="220"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>
@@ -1334,32 +1334,32 @@ Please recheck the entered server address.</source>
         <translation>已有任务</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="203"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="217"/>
         <source>Confirm</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="210"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="224"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="93"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="97"/>
         <source>New Line</source>
         <translation>新检测线段</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="93"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="97"/>
         <source>Name for new line:</source>
         <translation>新检测线段名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="104"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="108"/>
         <source>New Region</source>
         <translation>新检测区域</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="104"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="108"/>
         <source>Name for new region:</source>
         <translation>新检测区域名称：</translation>
     </message>
