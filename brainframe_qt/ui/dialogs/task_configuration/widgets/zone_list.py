@@ -1,4 +1,4 @@
-from typing import Dict, Callable
+from typing import Dict, Callable, List
 
 from PyQt5.QtCore import QModelIndex, pyqtSlot, pyqtSignal, Qt
 from PyQt5.QtWidgets import QStyleOptionViewItem, QStyledItemDelegate, QWidget, \
@@ -103,5 +103,22 @@ class ZoneList(QWidget):
         zone_item.removeChild(alarm_item)
 
     def remove_zone(self, zone_id: int) -> None:
-        zone_widget = self.zones.pop(zone_id)
+        zone_widget: ZoneListZoneItem = self.zones.pop(zone_id)
+        zone_index = self.layout().indexOf(zone_widget)
+
+        # Find all child alarms
+        alarm_widgets: List[ZoneListAlarmItem] = []
+        for index in range(zone_index + 1, self.layout().count()):
+            widget_item = self.layout().itemAt(index)
+            widget = widget_item.widget()
+
+            if isinstance(widget, ZoneListZoneItem):
+                break
+
+            if isinstance(widget, ZoneListAlarmItem):
+                alarm_widgets.append(widget)
+
+        # Remove zone and all child alarms
         self.layout().removeWidget(zone_widget)
+        for alarm_widget in alarm_widgets:
+            self.layout().removeWidget(alarm_widget)
