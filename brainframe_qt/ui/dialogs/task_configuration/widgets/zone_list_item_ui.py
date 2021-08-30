@@ -4,6 +4,7 @@ from PyQt5.QtCore import QObject, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QLabel
 
+from brainframe_qt.ui.resources.ui_elements.buttons import IconButton
 from brainframe_qt.ui.resources.ui_elements.widgets import AspectRatioSVGWidget
 
 
@@ -52,19 +53,23 @@ class ZoneListItemUI(QWidget):
 
         return label
 
-    def _init_edit_button(self) -> QPushButton:
-        edit_button = QPushButton(self.parent())
+    def _init_edit_button(self) -> IconButton:
+        edit_button = IconButton(self.parent())
 
         edit_button.setIcon(QIcon(":/icons/edit"))
         edit_button.setToolTip("Edit")
 
+        edit_button.setFlat(True)
+
         return edit_button
 
-    def _init_trash_button(self) -> QPushButton:
-        trash_button = QPushButton(self.parent())
+    def _init_trash_button(self) -> IconButton:
+        trash_button = IconButton(self.parent())
 
         trash_button.setIcon(QIcon(":/icons/trash"))
         trash_button.setToolTip("Delete")
+
+        trash_button.setFlat(True)
 
         return trash_button
 
