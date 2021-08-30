@@ -13,9 +13,12 @@ from brainframe_qt.ui.resources.paths import qt_ui_paths, qt_qss_paths
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
 from .core.zone import Zone, Line, Region
+from .widgets.zone_list import ZoneList
 
 
 class TaskConfiguration(QDialog):
+    zone_list: ZoneList
+
     def __init__(self, stream_conf: bf_codecs.StreamConfiguration, *, parent: QObject):
         super().__init__(parent=parent)
 
@@ -54,6 +57,7 @@ class TaskConfiguration(QDialog):
 
         self.zone_list.initiate_zone_edit.connect(self._edit_zone_by_id)
         self.zone_list.zone_delete.connect(self.delete_zone)
+        self.zone_list.alarm_delete.connect(self.delete_alarm)
 
         self.dialog_button_box.accepted.connect(self.accept)
         self.dialog_button_box.rejected.connect(self.reject)
@@ -166,6 +170,10 @@ class TaskConfiguration(QDialog):
 
         if None in self.zone_list.zones:
             self.zone_list.remove_zone(None)
+
+    def delete_alarm(self, alarm_id: int) -> None:
+        api.delete_zone_alarm(alarm_id)
+        self.zone_list.remove_alarm(alarm_id)
 
     def delete_zone(self, zone_id: int) -> None:
         api.delete_zone(zone_id)
