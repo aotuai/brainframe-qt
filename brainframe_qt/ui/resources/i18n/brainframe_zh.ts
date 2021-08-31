@@ -1284,22 +1284,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="200"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="230"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="236"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="266"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="237"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="267"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="240"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="270"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>
@@ -1362,6 +1362,11 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/task_configuration/task_configuration.py" line="113"/>
         <source>Name for new region:</source>
         <translation>新检测区域名称：</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="188"/>
+        <source>Unable to rename zone</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

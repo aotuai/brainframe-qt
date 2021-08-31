@@ -4,7 +4,7 @@ from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QInputDialog
 from PyQt5.uic import loadUi
 
-from brainframe.api import bf_codecs
+from brainframe.api import bf_codecs, bf_errors
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.ui.dialogs import AlarmCreationDialog
@@ -173,15 +173,45 @@ class TaskConfiguration(QDialog):
             self.zone_list.remove_zone(None)
 
     def change_zone_name(self, zone_id: int, zone_name: str) -> None:
-        def update_zone_name() -> None:
+        def update_zone_name() -> Zone:
             zone = api.get_zone(zone_id)
             zone.name = zone_name
-            updated_zone = api.set_zone(zone)
+
+            updated_zone = Zone.from_api_zone(api.set_zone(zone))
+            return updated_zone
+
+        def on_success(updated_zone: Zone) -> None:
+            self.zone_list.update_zone(updated_zone)
 
         def on_error(error: Exception) -> None:
-            print(error)
+            dialog: Optional[BrainFrameMessage] = None
+            title = self.tr("Unable to rename zone")
 
-        QTAsyncWorker(self, update_zone_name, on_error=on_error).start()
+            if isinstance(error, bf_errors.ZoneNotFoundError):
+                message = (
+                    f"Attempted to rename Zone {zone_id} to {zone_name} but the Zone "
+                    f"no longer exists."
+                )
+                try:
+                    self.zone_list.remove_zone(zone_id)
+                except KeyError:
+                    pass
+
+                dialog = BrainFrameMessage.warning(
+                    parent=self,
+                    title=title,
+                    warning=message,
+                )
+
+            if dialog is not None:
+                dialog.exec()
+
+        QTAsyncWorker(
+            self,
+            update_zone_name,
+            on_success=on_success,
+            on_error=on_error,
+        ).start()
 
     def delete_alarm(self, alarm_id: int) -> None:
         api.delete_zone_alarm(alarm_id)

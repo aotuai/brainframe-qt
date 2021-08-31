@@ -64,6 +64,14 @@ class ZoneList(QWidget):
         self.remove_zone(None)
         self.add_zone(zone)
 
+    def update_zone(self, zone: Zone) -> None:
+        old_zone_widget = self.zones[zone.id]
+        new_zone_widget = self.add_zone(zone)
+
+        self.layout().replaceWidget(old_zone_widget, new_zone_widget)
+
+        old_zone_widget.deleteLater()
+
     def add_alarm(self, zone: Zone, alarm: bf_codecs.ZoneAlarm):
         alarm_widget = ZoneListAlarmItem(alarm, parent=self)
 
