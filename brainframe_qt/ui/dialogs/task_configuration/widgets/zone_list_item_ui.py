@@ -2,10 +2,11 @@ from enum import Enum, auto
 
 from PyQt5.QtCore import QObject, Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QWidget, QHBoxLayout
 
 from brainframe_qt.ui.resources.ui_elements.buttons import IconButton
 from brainframe_qt.ui.resources.ui_elements.widgets import AspectRatioSVGWidget
+from brainframe_qt.ui.resources.ui_elements.widgets.text_edit import EditableLabel
 
 
 class ZoneListType(Enum):
@@ -48,8 +49,8 @@ class ZoneListItemUI(QWidget):
 
         return icon
 
-    def _init_name_label(self) -> QLabel:
-        label = QLabel(self._entry_name, parent=self)
+    def _init_name_label(self) -> EditableLabel:
+        label = EditableLabel(self._entry_name, parent=self)
 
         return label
 
@@ -93,7 +94,7 @@ class ZoneListItemUI(QWidget):
     @entry_name.setter
     def entry_name(self, entry_name: str) -> None:
         self._entry_name = entry_name
-        self.name_label.setText(entry_name)
+        self.name_label.text = entry_name
 
     @property
     def entry_type(self) -> ZoneListType:
