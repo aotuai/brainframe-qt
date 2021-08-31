@@ -14,6 +14,8 @@ class ZoneList(QWidget):
     zone_delete = pyqtSignal(int)
     alarm_delete = pyqtSignal(int)
 
+    zone_name_change = pyqtSignal(int, str)
+
     layout: Callable[..., QVBoxLayout]
 
     def __init__(self, parent=None):
@@ -47,6 +49,7 @@ class ZoneList(QWidget):
 
         zone_item.zone_edit.connect(self.initiate_zone_edit)
         zone_item.zone_delete.connect(self.zone_delete)
+        zone_item.zone_name_change.connect(self.zone_name_change)
 
         self.layout().addWidget(zone_item)
 

@@ -11,6 +11,7 @@ class ZoneListZoneItem(ZoneListItemUI):
 
     zone_delete = pyqtSignal(int)
     zone_edit = pyqtSignal(int)
+    zone_name_change = pyqtSignal(int, str)
 
     def __init__(self, zone: Zone, *, parent: QObject):
         super().__init__(parent=parent)
@@ -26,6 +27,7 @@ class ZoneListZoneItem(ZoneListItemUI):
     def _init_signals(self) -> None:
         self.trash_button.clicked.connect(self._on_trash_button_click)
         self.edit_button.clicked.connect(self._on_edit_button_click)
+        self.name_label.text_changed.connect(self._on_zone_name_change)
 
     def _configure_buttons(self) -> None:
         if self._zone.name == bf_codecs.Zone.FULL_FRAME_ZONE_NAME:
@@ -37,6 +39,9 @@ class ZoneListZoneItem(ZoneListItemUI):
 
     def _on_trash_button_click(self, _clicked: bool) -> None:
         self.zone_delete.emit(self._zone.id)
+
+    def _on_zone_name_change(self, zone_name: str) -> None:
+        self.zone_name_change.emit(self._zone.id, zone_name)
 
     @staticmethod
     def _get_entry_type(zone: Zone) -> ZoneListType:

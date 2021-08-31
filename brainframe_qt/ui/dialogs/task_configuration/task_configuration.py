@@ -58,6 +58,7 @@ class TaskConfiguration(QDialog):
         self.zone_list.initiate_zone_edit.connect(self._edit_zone_by_id)
         self.zone_list.zone_delete.connect(self.delete_zone)
         self.zone_list.alarm_delete.connect(self.delete_alarm)
+        self.zone_list.zone_name_change.connect(self.change_zone_name)
 
         self.dialog_button_box.accepted.connect(self.accept)
         self.dialog_button_box.rejected.connect(self.reject)
@@ -170,6 +171,17 @@ class TaskConfiguration(QDialog):
 
         if None in self.zone_list.zones:
             self.zone_list.remove_zone(None)
+
+    def change_zone_name(self, zone_id: int, zone_name: str) -> None:
+        def update_zone_name() -> None:
+            zone = api.get_zone(zone_id)
+            zone.name = zone_name
+            updated_zone = api.set_zone(zone)
+
+        def on_error(error: Exception) -> None:
+            print(error)
+
+        QTAsyncWorker(self, update_zone_name, on_error=on_error).start()
 
     def delete_alarm(self, alarm_id: int) -> None:
         api.delete_zone_alarm(alarm_id)
