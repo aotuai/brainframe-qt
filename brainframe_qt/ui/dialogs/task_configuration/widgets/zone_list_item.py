@@ -22,17 +22,21 @@ class ZoneListZoneItem(ZoneListItemUI):
         self.entry_type = self._get_entry_type(zone)
 
         self._init_signals()
-        self._configure_buttons()
+
+        self._handle_full_frame_zone()
 
     def _init_signals(self) -> None:
         self.trash_button.clicked.connect(self._on_trash_button_click)
         self.edit_button.clicked.connect(self._on_edit_button_click)
         self.name_label.text_changed.connect(self._on_zone_name_change)
 
-    def _configure_buttons(self) -> None:
+    def _handle_full_frame_zone(self) -> None:
+        """Disable some functionality if the Zone is the full-frame zone"""
         if self._zone.name == bf_codecs.Zone.FULL_FRAME_ZONE_NAME:
             self.trash_button.setDisabled(True)
             self.edit_button.setDisabled(True)
+
+            self.name_label.editable = False
 
     def _on_edit_button_click(self, _clicked: bool) -> None:
         self.zone_edit.emit(self._zone.id)
@@ -56,6 +60,7 @@ class ZoneListZoneItem(ZoneListItemUI):
 class ZoneListAlarmItem(ZoneListItemUI):
     """Temporary until ZoneListZoneItem holds Alarm widgets"""
     alarm_delete = pyqtSignal(int)
+    alarm_edit = pyqtSignal(int)
 
     def __init__(self, alarm: bf_codecs.ZoneAlarm, *, parent: QObject):
         super().__init__(parent=parent)
@@ -69,8 +74,11 @@ class ZoneListAlarmItem(ZoneListItemUI):
 
         self._init_signals()
 
+        self._disable_editing()
+
     def _init_signals(self) -> None:
         self.trash_button.clicked.connect(self._on_trash_button_click)
+        self.edit_button.clicked.connect(self._on_edit_button_click)
 
     def _init_padding_widget(self) -> QWidget:
         """Temporary solution to indent alarm widgets a bit.
@@ -86,3 +94,15 @@ class ZoneListAlarmItem(ZoneListItemUI):
 
     def _on_trash_button_click(self, _clicked: bool) -> None:
         self.alarm_delete.emit(self._alarm.id)
+
+    def _on_edit_button_click(self, _clicked: bool) -> None:
+        self.alarm_edit.emit(self._alarm.id)
+
+    def _disable_editing(self) -> None:
+        """Editing of alarms is not currently supported"""
+        self.edit_button.setDisabled(True)
+        self.edit_button.setToolTip(self.tr(
+            "Editing of alarms is not currently not supported"
+        ))
+
+        self.name_label.editable = False

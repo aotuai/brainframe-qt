@@ -12,6 +12,9 @@ class EditableLabel(QStackedWidget):
         self._label = self._init_label()
         self._line_edit = self._init_line_edit()
 
+        self.editable = True
+        """If this is False, editing text is disabled"""
+
         self._text = ""
         self.text = text
 
@@ -47,6 +50,9 @@ class EditableLabel(QStackedWidget):
             self.cancel_edit()
 
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
+        if not self.editable:
+            return
+
         if not self._editing:
             self.start_edit()
 
@@ -67,6 +73,10 @@ class EditableLabel(QStackedWidget):
         self._editing = False
 
     def finish_edit(self) -> None:
+        if not self.editable:
+            self.cancel_edit()
+            return
+
         if not self._editing:
             return
 
@@ -79,7 +89,7 @@ class EditableLabel(QStackedWidget):
         self.text_changed.emit(self.text)
 
     def start_edit(self) -> None:
-        if self._editing:
+        if not self.editable or self._editing:
             return
 
         self._line_edit.setText(self.text)

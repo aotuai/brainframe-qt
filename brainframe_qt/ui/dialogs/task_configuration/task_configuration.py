@@ -185,16 +185,17 @@ class TaskConfiguration(QDialog):
 
         def on_error(error: Exception) -> None:
             dialog: Optional[BrainFrameMessage] = None
-            title = self.tr("Unable to rename zone")
+            title = self.tr("Unable to rename Zone")
 
             if isinstance(error, bf_errors.ZoneNotFoundError):
-                message = (
+                message = self.tr(
                     f"Attempted to rename Zone {zone_id} to {zone_name} but the Zone "
                     f"no longer exists."
                 )
                 try:
                     self.zone_list.remove_zone(zone_id)
                 except KeyError:
+                    # Zone must already be gone
                     pass
 
                 dialog = BrainFrameMessage.warning(
