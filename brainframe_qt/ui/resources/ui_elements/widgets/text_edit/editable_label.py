@@ -62,7 +62,11 @@ class EditableLabel(QStackedWidget):
         if not self._editing:
             return
 
+        # Block signals to prevent out-focus event from self._line_edit triggering
+        # self.finish_edit
+        self._line_edit.blockSignals(True)
         self.setCurrentWidget(self._label)
+        self._line_edit.blockSignals(False)
 
         self._editing = False
 
