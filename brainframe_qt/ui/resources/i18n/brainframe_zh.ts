@@ -1366,12 +1366,12 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.py" line="188"/>
         <source>Unable to rename Zone</source>
-        <translation type="unfinished"></translation>
+        <translation>无法重命名区域</translation>
     </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.py" line="191"/>
         <source>Attempted to rename Zone {zone_id} to {zone_name} but the Zone no longer exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>尝试将区域 {zone_id} 重命名为 {zone_name}，但该区域不再存在。</translation>
     </message>
 </context>
 <context>
@@ -1435,7 +1435,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/task_configuration/widgets/zone_list_item.py" line="104"/>
         <source>Editing of alarms is not currently not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>目前不支持编辑预警</translation>
     </message>
 </context>
 <context>
