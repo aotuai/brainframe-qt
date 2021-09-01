@@ -1,39 +1,25 @@
 from PyQt5.QtCore import QObject, Qt, pyqtSignal
-from PyQt5.QtGui import QMouseEvent, QKeyEvent
+from PyQt5.QtGui import QMouseEvent, QKeyEvent, QValidator
 from PyQt5.QtWidgets import QStackedWidget, QLabel, QLineEdit
 
 
 class EditableLabel(QStackedWidget):
     text_changed = pyqtSignal(str)
 
-    def __init__(self, text: str, *, parent: QObject):
+    def __init__(self, label: QLabel, line_edit: QLineEdit, *, parent: QObject):
         super().__init__(parent=parent)
 
-        self._label = self._init_label()
-        self._line_edit = self._init_line_edit()
+        self._label = label
+        self._line_edit = line_edit
 
         self.editable = True
         """If this is False, editing text is disabled"""
-
-        self._text = ""
-        self.text = text
-
         self._editing = False
 
         self._init_layout()
         self._init_style()
 
         self._init_signals()
-
-    def _init_label(self) -> QLabel:
-        label = QLabel(parent=self)
-
-        return label
-
-    def _init_line_edit(self) -> QLineEdit:
-        line_edit = QLineEdit(parent=self)
-
-        return line_edit
 
     def _init_layout(self) -> None:
         self.addWidget(self._label)
@@ -61,8 +47,16 @@ class EditableLabel(QStackedWidget):
         return self._label.text()
 
     @text.setter
-    def text(self, text: str):
+    def text(self, text: str) -> None:
         self._label.setText(text)
+
+    @property
+    def validator(self) -> QValidator:
+        return self._line_edit.validator()
+
+    @validator.setter
+    def validator(self, validator: QValidator) -> None:
+        self._line_edit.setValidator(validator)
 
     def cancel_edit(self) -> None:
         if not self._editing:

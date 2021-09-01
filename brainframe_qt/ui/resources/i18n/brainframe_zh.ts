@@ -1433,7 +1433,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>ZoneListAlarmItem</name>
     <message>
-        <location filename="../../dialogs/task_configuration/widgets/zone_list_item.py" line="104"/>
+        <location filename="../../dialogs/task_configuration/widgets/zone_list_item.py" line="122"/>
         <source>Editing of alarms is not currently not supported</source>
         <translation>目前不支持编辑预警</translation>
     </message>

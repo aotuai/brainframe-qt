@@ -1,4 +1,7 @@
+from typing import Tuple
+
 from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtGui import QValidator
 from PyQt5.QtWidgets import QWidget
 
 from brainframe.api import bf_codecs
@@ -21,6 +24,7 @@ class ZoneListZoneItem(ZoneListItemUI):
         self.entry_name = zone.name
         self.entry_type = self._get_entry_type(zone)
 
+        self._init_validators()
         self._init_signals()
 
         self._handle_full_frame_zone()
@@ -29,6 +33,11 @@ class ZoneListZoneItem(ZoneListItemUI):
         self.trash_button.clicked.connect(self._on_trash_button_click)
         self.edit_button.clicked.connect(self._on_edit_button_click)
         self.name_label.text_changed.connect(self._on_zone_name_change)
+
+    def _init_validators(self) -> None:
+        validator = self._ZoneNameValidator()
+
+        self.name_label.validator = validator
 
     def _handle_full_frame_zone(self) -> None:
         """Disable some functionality if the Zone is the full-frame zone"""
@@ -55,6 +64,15 @@ class ZoneListZoneItem(ZoneListItemUI):
             return ZoneListType.REGION
         else:
             return ZoneListType.UNKNOWN
+
+    class _ZoneNameValidator(QValidator):
+        def validate(self, input_: str, pos: int) -> Tuple[QValidator.State, str, int]:
+            if input_ == bf_codecs.Zone.FULL_FRAME_ZONE_NAME:
+                state = QValidator.Intermediate
+            else:
+                state = QValidator.Acceptable
+
+            return state, input_, pos
 
 
 class ZoneListAlarmItem(ZoneListItemUI):

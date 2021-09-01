@@ -2,7 +2,7 @@ from enum import Enum, auto
 
 from PyQt5.QtCore import QObject, Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit
 
 from brainframe_qt.ui.resources.ui_elements.buttons import IconButton
 from brainframe_qt.ui.resources.ui_elements.widgets import AspectRatioSVGWidget
@@ -50,7 +50,10 @@ class ZoneListItemUI(QWidget):
         return icon
 
     def _init_name_label(self) -> EditableLabel:
-        label = EditableLabel(self._entry_name, parent=self)
+        label = QLabel(self._entry_name, parent=self)
+        line_edit = QLineEdit(parent=self)
+
+        label = EditableLabel(label, line_edit, parent=self)
 
         return label
 
