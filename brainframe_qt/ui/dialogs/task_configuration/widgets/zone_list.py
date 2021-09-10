@@ -86,6 +86,8 @@ class ZoneList(QWidget):
 
         self.layout().removeWidget(alarm_widget)
 
+        alarm_widget.deleteLater()
+
     def remove_zone(self, zone_id: int) -> None:
         zone_widget: ZoneListZoneItem = self.zones.pop(zone_id)
 
@@ -97,6 +99,8 @@ class ZoneList(QWidget):
             # Uses private attribute for now, but this is temporary until zone widgets
             # contain alarm widgets inside of them
             self.remove_alarm(alarm_widget._alarm.id)
+
+        zone_widget.deleteLater()
 
     def _add_alarm_widget(self, alarm_widget: ZoneListAlarmItem, zone_id: int) -> None:
         """Add an alarm widget to the correct zone"""
