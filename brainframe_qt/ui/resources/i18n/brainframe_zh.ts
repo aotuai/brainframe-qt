@@ -1334,12 +1334,12 @@ Please recheck the entered server address.</source>
         <translation>已有任务</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="217"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="238"/>
         <source>Confirm</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="224"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="245"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -1372,6 +1372,11 @@ Please recheck the entered server address.</source>
         <location filename="../../dialogs/task_configuration/task_configuration.py" line="191"/>
         <source>Attempted to rename Zone {zone_id} to {zone_name} but the Zone no longer exists.</source>
         <translation>尝试将区域 {zone_id} 重命名为 {zone_name}，但该区域不再存在。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="167"/>
+        <source>Double click a zone to rename it</source>
+        <translation>双击区域以重命名</translation>
     </message>
 </context>
 <context>
