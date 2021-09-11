@@ -6,6 +6,8 @@
         <file alias="loading_image_svg">images/loading_image.svg</file>
         <file alias="no_image_svg">images/no_image_available.svg</file>
         <file alias="splash_screen_png">images/splash_screen.png</file>
+        <file alias="stream_paused_png">images/stream_paused.png</file>
+        <file alias="streaming_stopped_png">images/streaming_stopped.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="alarm">images/icons/alarm.svg</file>
@@ -13,6 +15,7 @@
         <file alias="alert_view">images/icons/alarm_view_action.svg</file>
         <file alias="analysis_error">images/icons/no_analysis_results_for_stream.svg</file>
         <file alias="capsule_toolbar">images/icons/capsule_toolbar.svg</file>
+        <file alias="edit">images/icons/edit_pencil.svg</file>
         <file alias="folder">images/icons/folder.svg</file>
         <file alias="identity_toolbar">images/icons/identity_toolbar.svg</file>
         <file alias="info">images/icons/information.svg</file>
@@ -58,6 +61,5 @@
         <file alias="client_configuration">../dialogs/client_configuration/client_configuration.ui</file>
         <file alias="video_expanded_view">../main_window/video_expanded_view/video_expanded_view.ui</file>
         <file alias="video_thumbnail_view">../main_window/video_thumbnail_view/video_thumbnail_view.ui</file>
-        <file alias="zone_list">../dialogs/task_configuration/zone_list/zone_list.ui</file>
     </qresource>
 </RCC>

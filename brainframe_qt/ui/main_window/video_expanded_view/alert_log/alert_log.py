@@ -33,10 +33,14 @@ class AlertLog(QWidget):
 
         self.alert_log.setLayout(QVBoxLayout())
 
-    def change_stream(self, stream_id):
+    def change_stream(self, stream_id: int) -> None:
         self.stream_id = stream_id
         self._delete_alerts_by_id(self.alert_widgets.keys())
         self.sync_alerts_with_server()
+
+    def stop_streaming(self) -> None:
+        self.stream_id = None
+        self._delete_alerts_by_id(self.alert_widgets.keys())
 
     def sync_alerts_with_server(self):
 

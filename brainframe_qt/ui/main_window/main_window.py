@@ -129,7 +129,8 @@ class MainWindow(MainWindowUI):
                 self.close_sidebar_widget()
 
         def change_stream_configuration(
-                stream_conf: Optional[bf_codecs.StreamConfiguration]):
+                stream_conf: bf_codecs.StreamConfiguration
+        ) -> None:
             sidebar_widget = self.sidebar_dock_widget.widget()
             if not isinstance(sidebar_widget, StreamConfiguration):
                 return
@@ -185,7 +186,7 @@ class MainWindow(MainWindowUI):
         if isinstance(sidebar_widget, StreamConfiguration):
             stream_view = self._activity_widget_map[self._stream_activity]
             sidebar_widget.stream_conf_modified.connect(
-                stream_view.video_thumbnail_view.add_stream_conf)
+                stream_view.video_thumbnail_view.add_stream)
             sidebar_widget.stream_conf_modified.connect(
                 self._handle_stream_config_modification)
 

@@ -12,8 +12,9 @@ alert_log_dir              = register_path(video_expanded_view_dir   , "alert_lo
 alert_log_ui               = register_path(alert_log_dir             , "alert_log.ui"             )
 
 video_thumbnail_view_dir   = register_path(main_window_dir           , "video_thumbnail_view"     )
+thumbnail_widget_dir       = register_path(video_thumbnail_view_dir  , "widgets"                  )
 
-thumbnail_grid_layout_dir  = register_path(video_thumbnail_view_dir  , "thumbnail_grid_layout"    )
+thumbnail_grid_layout_dir  = register_path(thumbnail_widget_dir      , "thumbnail_grid_layout"    )
 thumbnail_grid_layout_ui   = register_path(thumbnail_grid_layout_dir , "thumbnail_grid_layout.ui" )
 
 # Activities
@@ -70,9 +71,6 @@ task_configuration_ui      = register_path(task_configuration_dir    , "task_con
 
 client_configuration_dir   = register_path(dialogs_dir               , "client_configuration"     )
 client_configuration_ui    = register_path(client_configuration_dir  , "client_configuration.ui"  )
-
-zone_list_dir              = register_path(task_configuration_dir    , "zone_list"                )
-zone_list_ui               = register_path(zone_list_dir             , "zone_list.ui"             )
 
 # Resources
 ui_elements_dir            = register_path(ui_dir                    , "resources", "ui_elements" )

@@ -13,14 +13,13 @@ class StreamView(_StreamViewUI):
         self._init_signals()
 
     def _init_signals(self):
-        self.video_thumbnail_view.stream_clicked.connect(
-            self.open_expanded_view)
+        self.video_thumbnail_view.stream_clicked.connect(self.open_expanded_view)
 
         self.video_expanded_view.expanded_stream_closed_signal.connect(
             lambda: self.display_expanded_video(False))
 
         self.video_expanded_view.stream_delete_signal.connect(
-            self.video_thumbnail_view.delete_stream_conf)
+            self.video_thumbnail_view.remove_stream)
         self.video_expanded_view.stream_delete_signal.connect(
             lambda: self.display_expanded_video(False))
 

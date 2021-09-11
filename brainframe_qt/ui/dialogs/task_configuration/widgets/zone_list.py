@@ -1,38 +1,30 @@
 from enum import Enum
-from typing import Dict
+from typing import Dict, List
 
-from PyQt5.QtCore import QModelIndex, pyqtSlot
+from PyQt5.QtCore import QModelIndex, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QHeaderView, QPushButton, QStyleOptionViewItem,
-                             QStyledItemDelegate, QTreeWidget)
-from PyQt5.uic import loadUi
+from PyQt5.QtWidgets import (
+    QHeaderView,
+    QStyleOptionViewItem,
+    QStyledItemDelegate,
+    QTreeWidget
+)
+
+from brainframe.api import bf_codecs
 
 from brainframe_qt.api_utils import api
-from brainframe.api.bf_codecs import Zone, ZoneAlarm
-# noinspection PyUnresolvedReferences
-from brainframe_qt.ui.resources import QTAsyncWorker, qt_resources
-from brainframe_qt.ui.resources.paths import qt_ui_paths
+
+from ..core.zone import Zone, Line, Region
 from .zone_list_item import ZoneListItem
 
 
 class ZoneList(QTreeWidget):
     EntryType = Enum('EntryType', "REGION LINE ALARM UNKNOWN")
 
+    initiate_zone_edit = pyqtSignal(int)
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-
-        loadUi(qt_ui_paths.zone_list_ui, self)
-
-        # Crashes when set in UI file for some reason
-        self.setColumnCount(3)
-
-        # Scale columns in view
-        self.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        self.header().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
-
-        # Item delegate is used to force a custom row height
-        self.setItemDelegate(ZoneListItemDelegate(row_height=40))
 
         self.stream_id = None
 
@@ -40,41 +32,36 @@ class ZoneList(QTreeWidget):
         self.zones: Dict[int, ZoneListItem] = {}
         self.alarms: Dict[int, ZoneListItem] = {}
 
-    def init_zones(self, stream_id):
-        """Initialize zone list with zones already in database"""
-        self.stream_id = stream_id
+        self.setColumnCount(4)
 
-        def get_zones():
-            return api.get_zones(stream_id)
+        self._init_style()
 
-        def add_zones(zones):
-            for zone in zones:
-                self.add_zone(zone)
+    def _init_style(self) -> None:
+        # Item delegate is used to force a custom row height
+        self.setItemDelegate(ZoneListItemDelegate(row_height=40))
 
-            self.clearSelection()
+        self.setHeaderHidden(True)
 
-        QTAsyncWorker(self, get_zones, on_success=add_zones).start()
+        # Scale columns in view
+        self.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        self.header().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        self.header().setSectionResizeMode(3, QHeaderView.ResizeToContents)
 
-    def add_zone(self, zone: Zone):
+    def add_zone(self, zone: Zone) -> ZoneListItem:
         """Creates and returns the new ZoneListItem using the zone"""
 
-        if zone.name == Zone.FULL_FRAME_ZONE_NAME or len(zone.coords) > 2:
-            entry_type = self.EntryType.REGION
-        elif len(zone.coords) == 2:
+        if isinstance(zone, Line):
             entry_type = self.EntryType.LINE
+        elif isinstance(zone, Region):
+            entry_type = self.EntryType.REGION
         else:
             entry_type = self.EntryType.UNKNOWN
 
         zone_item = self._new_row(zone.name, entry_type)
         self.addTopLevelItem(zone_item)
 
-        self._add_trash_button(zone_item)
-        if zone.name == Zone.FULL_FRAME_ZONE_NAME:
-            zone_item.trash_button.setDisabled(True)
-        else:
-            zone_item.trash_button.clicked.connect(
-                lambda: self.delete_zone(zone.id)
-            )
+        self._init_zone_buttons(zone, zone_item)
 
         self.zones[zone.id] = zone_item
 
@@ -86,17 +73,19 @@ class ZoneList(QTreeWidget):
 
         return zone_item
 
-    def add_alarm(self, zone: Zone, alarm: ZoneAlarm):
+    def confirm_zone(self, zone: Zone) -> None:
+        assert None in self.zones
+
+        self.delete_zone(None)
+        self.add_zone(zone)
+
+    def add_alarm(self, zone: Zone, alarm: bf_codecs.ZoneAlarm):
         zone_item = self.zones[zone.id]
         alarm_item = self._new_row(alarm.name, self.EntryType.ALARM)
 
         zone_item.addChild(alarm_item)
 
-        self._add_trash_button(alarm_item)
-
-        alarm_item.trash_button.clicked.connect(
-            lambda: self.delete_alarm(zone.id, alarm.id)
-        )
+        self._init_alarm_buttons(zone, alarm, alarm_item)
 
         self.alarms[alarm.id] = alarm_item
 
@@ -133,7 +122,7 @@ class ZoneList(QTreeWidget):
         zone_item.setIcon(0, icon)
 
     def _new_row(self, name, entry_type: EntryType):
-        row = ZoneListItem(["", name, ""])
+        row = ZoneListItem(["", name, "", ""])
         row.setIcon(0, self._get_item_icon(entry_type))
 
         return row
@@ -151,12 +140,27 @@ class ZoneList(QTreeWidget):
 
         return entry_type_icon
 
-    def _add_trash_button(self, row_item: ZoneListItem):
-        trash_button = QPushButton()
-        trash_button.setIcon(QIcon(":/icons/trash"))
-        self.setItemWidget(row_item, 2, trash_button)
+    def _init_alarm_buttons(
+        self, zone: Zone, alarm: bf_codecs.ZoneAlarm, alarm_item: ZoneListItem
+    ) -> None:
+        self.setItemWidget(alarm_item, 2, alarm_item.edit_button)
+        self.setItemWidget(alarm_item, 3, alarm_item.trash_button)
+        alarm_item.trash_button.clicked.connect(
+            lambda: self.delete_alarm(zone.id, alarm.id)
+        )
 
-        row_item.trash_button = trash_button
+    def _init_zone_buttons(self, zone: Zone, zone_item: ZoneListItem) -> None:
+        self.setItemWidget(zone_item, 2, zone_item.edit_button)
+        self.setItemWidget(zone_item, 3, zone_item.trash_button)
+
+        if zone.name == bf_codecs.Zone.FULL_FRAME_ZONE_NAME:
+            zone_item.trash_button.setDisabled(True)
+            zone_item.edit_button.setDisabled(True)
+        else:
+            zone_item.trash_button.clicked.connect(lambda: self.delete_zone(zone.id))
+            zone_item.edit_button.clicked.connect(
+                lambda: self.initiate_zone_edit.emit(zone.id)
+            )
 
 
 class ZoneListItemDelegate(QStyledItemDelegate):
