@@ -132,8 +132,6 @@ class LicenseDialog(_LicenseDialogUI):
             self._handle_expired_license_error(exc)
         elif isinstance(exc, bf_errors.RemoteConnectionError):
             self._handle_license_server_connection_error(exc)
-        elif isinstance(exc, bf_errors.ServerNotReadyError):
-            self._handle_connection_error(exc)
         elif isinstance(exc, bf_errors.UnauthorizedTokensError):
             self._handle_unauthorized_tokens_error(exc)
         else:
