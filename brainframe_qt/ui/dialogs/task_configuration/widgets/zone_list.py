@@ -1,4 +1,4 @@
-from typing import Dict, Callable, List
+from typing import Callable, Dict, List, Optional
 
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
@@ -13,6 +13,8 @@ class ZoneList(QWidget):
     initiate_zone_edit = pyqtSignal(int)
     zone_delete = pyqtSignal(int)
     alarm_delete = pyqtSignal(int)
+
+    zone_name_change = pyqtSignal(int, str)
 
     layout: Callable[..., QVBoxLayout]
 
@@ -39,7 +41,7 @@ class ZoneList(QWidget):
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(0)
 
-    def add_zone(self, zone: Zone) -> ZoneListZoneItem:
+    def add_zone(self, zone: Zone, index: Optional[int] = None) -> ZoneListZoneItem:
         """Creates and returns the new ZoneListItem using the Zone"""
         zone_item = ZoneListZoneItem(zone, parent=self)
 
@@ -47,11 +49,14 @@ class ZoneList(QWidget):
 
         zone_item.zone_edit.connect(self.initiate_zone_edit)
         zone_item.zone_delete.connect(self.zone_delete)
+        zone_item.zone_name_change.connect(self.zone_name_change)
 
-        self.layout().addWidget(zone_item)
+        if index is not None:
+            self.layout().insertWidget(index, zone_item)
+        else:
+            self.layout().addWidget(zone_item)
 
-        for alarm in zone.alarms:
-            self.add_alarm(zone, alarm)
+        self._add_alarm_widgets_for_zone(zone)
 
         return zone_item
 
@@ -60,6 +65,13 @@ class ZoneList(QWidget):
 
         self.remove_zone(None)
         self.add_zone(zone)
+
+    def update_zone(self, zone: Zone) -> None:
+        old_zone_widget = self.zones[zone.id]
+        old_index = self.layout().indexOf(old_zone_widget)
+
+        self.remove_zone(zone.id)
+        self.add_zone(zone, old_index)
 
     def add_alarm(self, zone: Zone, alarm: bf_codecs.ZoneAlarm):
         alarm_widget = ZoneListAlarmItem(alarm, parent=self)
@@ -74,6 +86,7 @@ class ZoneList(QWidget):
         alarm_widget = self.alarms.pop(alarm_id)
 
         self.layout().removeWidget(alarm_widget)
+        alarm_widget.deleteLater()
 
     def remove_zone(self, zone_id: int) -> None:
         zone_widget: ZoneListZoneItem = self.zones.pop(zone_id)
@@ -81,11 +94,12 @@ class ZoneList(QWidget):
         alarm_widgets = self._find_alarm_widgets_for_zone(zone_widget)
 
         # Remove zone and all child alarms
-        self.layout().removeWidget(zone_widget)
         for alarm_widget in alarm_widgets:
             # Uses private attribute for now, but this is temporary until zone widgets
             # contain alarm widgets inside of them
             self.remove_alarm(alarm_widget._alarm.id)
+        self.layout().removeWidget(zone_widget)
+        zone_widget.deleteLater()
 
     def _add_alarm_widget(self, alarm_widget: ZoneListAlarmItem, zone_id: int) -> None:
         """Add an alarm widget to the correct zone"""
@@ -102,6 +116,10 @@ class ZoneList(QWidget):
         insert_index = index + 1
 
         self.layout().insertWidget(insert_index, alarm_widget)
+
+    def _add_alarm_widgets_for_zone(self, zone: Zone) -> None:
+        for alarm in zone.alarms:
+            self.add_alarm(zone, alarm)
 
     def _find_alarm_widgets_for_zone(
         self, zone_widget: ZoneListZoneItem

@@ -150,6 +150,27 @@
          </property>
         </spacer>
        </item>
+        <item alignment="Qt::AlignHCenter">
+         <widget class="QLabel" name="rename_help_label">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <weight>35</weight>
+           </font>
+          </property>
+          <property name="text">
+           <string>Double click a zone to rename it</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>

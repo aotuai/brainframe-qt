@@ -1284,22 +1284,22 @@ Please recheck the entered server address.</source>
 <context>
     <name>TaskConfiguration</name>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="188"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="231"/>
         <source>Add points until done, then press &quot;Confirm&quot; button</source>
         <translation>添加点直到完成，然后按“确认”按钮</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="224"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="267"/>
         <source>Item Name Already Exists</source>
         <translation>名称已存在</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="225"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="268"/>
         <source>Item {} already exists in Stream</source>
         <translation>项目{}已存在于视频流中</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="228"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="271"/>
         <source>Please use another name.</source>
         <translation>请使用另一个名称。</translation>
     </message>
@@ -1334,34 +1334,49 @@ Please recheck the entered server address.</source>
         <translation>已有任务</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="217"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="238"/>
         <source>Confirm</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="224"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="245"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="101"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="102"/>
         <source>New Line</source>
         <translation>新检测线段</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="101"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="102"/>
         <source>Name for new line:</source>
         <translation>新检测线段名称：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="112"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="113"/>
         <source>New Region</source>
         <translation>新检测区域</translation>
     </message>
     <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="112"/>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="113"/>
         <source>Name for new region:</source>
         <translation>新检测区域名称：</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="188"/>
+        <source>Unable to rename Zone</source>
+        <translation>无法重命名区域</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="191"/>
+        <source>Attempted to rename Zone {zone_id} to {zone_name} but the Zone no longer exists.</source>
+        <translation>尝试将区域 {zone_id} 重命名为 {zone_name}，但该区域不再存在。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.ui" line="167"/>
+        <source>Double click a zone to rename it</source>
+        <translation>双击区域以重命名</translation>
     </message>
 </context>
 <context>
@@ -1418,6 +1433,14 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="183"/>
         <source>This will delete all Zones, Detections, Alarms, Alerts, etc. associated with this stream and cannot be undone. This process will happen in the background and can take several minutes.&lt;br&gt;&lt;br&gt;Are you sure you want to continue?</source>
         <translation>这将删除所有此视频流相关的区域、检测结果、警报、报警信息等，并且无法撤消。这个流程会在后台发生&lt;br&gt;&lt;br&gt;可能需要几分钟。</translation>
+    </message>
+</context>
+<context>
+    <name>ZoneListAlarmItem</name>
+    <message>
+        <location filename="../../dialogs/task_configuration/widgets/zone_list_item.py" line="122"/>
+        <source>Editing of alarms is not currently not supported</source>
+        <translation>目前不支持编辑预警</translation>
     </message>
 </context>
 <context>

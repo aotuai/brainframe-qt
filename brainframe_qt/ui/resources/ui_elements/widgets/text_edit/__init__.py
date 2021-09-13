@@ -1,2 +1,3 @@
 from .drag_and_drop_text_editor import DragAndDropTextEditor
+from .editable_label import EditableLabel
 from .placeholder_text_edit import PlaceholderTextEdit
