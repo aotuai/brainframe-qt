@@ -4,7 +4,7 @@ from typing import Optional
 import pendulum
 from PyQt5.QtWidgets import QWidget
 
-from ....domain.product import LicensedProduct, LicenseState
+from brainframe_qt.util.licensing.license_info import LicensedProduct, LicenseState
 from .product_widget_ui import _ProductWidgetUI
 
 

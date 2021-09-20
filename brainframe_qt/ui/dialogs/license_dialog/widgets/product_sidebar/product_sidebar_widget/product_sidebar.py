@@ -2,7 +2,7 @@ import typing
 
 from PyQt5.QtWidgets import QListWidgetItem, QWidget
 
-from ....domain.product import LicensedProduct
+from brainframe_qt.util.licensing.license_info import LicensedProduct
 from ..product_widget import ProductWidget
 from .product_sidebar_ui import _ProductSidebarUI
 

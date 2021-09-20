@@ -8,9 +8,8 @@ from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.ui.resources.links.documentation import LICENSE_DOCS_LINK
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage, \
     WorkingIndicator
-from brainframe_qt.util.licensing.license_manager import LicenseManager
+from brainframe_qt.util.licensing import LicenseManager, LicensedProduct
 
-from .domain.product import LicensedProduct
 from .license_dialog_ui import _LicenseDialogUI
 from .widgets import ProductWidget
 
