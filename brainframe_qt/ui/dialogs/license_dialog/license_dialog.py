@@ -85,7 +85,7 @@ class LicenseDialog(_LicenseDialogUI):
         # TODO: Currently no way of canceling OAuth while auth is in-progress (i.e.
         #       a user can cancel before they sign-in, but not after, even though cancel
         #       button is still available)
-        working_indicator.canceled.connect(self.license_manager.cancel_oauth)
+        # working_indicator.canceled.connect(self.license_manager.cancel_oauth)
 
         self.license_manager.authenticate_with_oauth()
 
