@@ -2,9 +2,9 @@ import typing
 
 from PyQt5.QtWidgets import QListWidgetItem, QWidget
 
-from brainframe_qt.util.licensing import LicensedProduct
-from ..product_widget import ProductWidget
 from .product_sidebar_ui import _ProductSidebarUI
+from ..product_widget import ProductWidget
+from ....core.base import LicensedProduct
 
 
 class ProductSidebar(_ProductSidebarUI):

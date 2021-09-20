@@ -44,7 +44,7 @@ class CognitoOAuth(QObject):
         super().__init__(parent=parent)
 
         self.cognito_domain = cognito_domain
-        """Cognito hosted sign-in domain"""
+        """Cognito hosted sign-in core"""
         self.client_id = client_id
         """Client ID of the Application known by the Authentication server"""
 

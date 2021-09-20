@@ -1,7 +1,8 @@
 from PyQt5.QtCore import pyqtSignal, QObject
 
-from brainframe_qt.util.licensing import LicensedProduct, LicenseState
+from brainframe_qt.util.licensing import LicenseState
 from .license_details_ui import _LicenseDetailsUI
+from ....core.base import LicensedProduct
 
 
 class LicenseDetails(_LicenseDetailsUI):

@@ -984,27 +984,27 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>ProductWidget</name>
     <message>
-        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="48"/>
+        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="49"/>
         <source>Unlicensed</source>
         <translation>无授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="50"/>
+        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="51"/>
         <source>Invalid License</source>
         <translation>无效授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="52"/>
+        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="53"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="55"/>
+        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="56"/>
         <source>Perpetual License</source>
         <translation>永久授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="59"/>
+        <location filename="../../dialogs/license_dialog/widgets/product_sidebar/product_widget/product_widget.py" line="60"/>
         <source>Active until {date_str}</source>
         <translation>授权有效期至{date_str}</translation>
     </message>

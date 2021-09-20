@@ -1,15 +1,15 @@
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QApplication, QListWidgetItem
+from brainframe.api import bf_errors
 
-from brainframe.api import bf_codecs, bf_errors
-
-from brainframe_qt.api_utils import api
 from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.ui.resources.links.documentation import LICENSE_DOCS_LINK
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage, \
     WorkingIndicator
-from brainframe_qt.util.licensing import LicenseInfo, LicenseManager, LicensedProduct
+from brainframe_qt.util.licensing import LicenseInfo, LicenseManager
 
+from .core import licensing
+from .core.base import LicensedProduct
 from .license_dialog_ui import _LicenseDialogUI
 from .widgets import ProductWidget
 
@@ -46,11 +46,11 @@ class LicenseDialog(_LicenseDialogUI):
         self.license_manager.error.connect(self._handle_error)
 
     def _init_products(self):
-        def on_success(license_info: bf_codecs.LicenseInfo):
+        def on_success(license_info: LicenseInfo):
             product = LicensedProduct(
                 name=self.BRAINFRAME_PRODUCT_NAME,
                 icon_resource=self.BRAINFRAME_PRODUCT_ICON,
-                license_info=LicenseInfo.from_api_info(license_info),
+                license_info=license_info,
             )
             self.product_sidebar.add_product(product)
 
@@ -63,7 +63,7 @@ class LicenseDialog(_LicenseDialogUI):
             else:
                 self._handle_unknown_error(exc)
 
-        QTAsyncWorker(self, api.get_license_info,
+        QTAsyncWorker(self, licensing.get_brainframe_license_info,
                       on_success=on_success, on_error=on_error) \
             .start()
 
