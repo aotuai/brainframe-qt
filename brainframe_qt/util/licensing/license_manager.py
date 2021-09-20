@@ -6,12 +6,13 @@ from brainframe.api import bf_codecs, bf_errors
 from brainframe_qt import constants
 from brainframe_qt.api_utils import api
 from brainframe_qt.ui.resources import QTAsyncWorker
+from brainframe_qt.util.licensing import LicenseInfo
 from brainframe_qt.util.oauth.cognito import CognitoOAuth
 
 
 class LicenseManager(QObject):
     sign_in_successful = pyqtSignal(bf_codecs.CloudUserInfo)
-    license_applied = pyqtSignal(bf_codecs.LicenseInfo)
+    license_applied = pyqtSignal(LicenseInfo)
     error = pyqtSignal(bf_errors.BaseAPIError)
 
     def __init__(self, *, parent: QObject):
@@ -36,8 +37,10 @@ class LicenseManager(QObject):
     def authenticate_with_tokens(self, tokens: bf_codecs.CloudTokens) -> None:
         def on_success(token_response) -> None:
             cloud_user_info: bf_codecs.CloudUserInfo
-            license_info: bf_codecs.LicenseInfo
-            cloud_user_info, license_info = token_response
+            api_license_info: bf_codecs.LicenseInfo
+            cloud_user_info, api_license_info = token_response
+
+            license_info = LicenseInfo.from_api_info(api_license_info)
 
             self.sign_in_successful.emit(cloud_user_info)
             self.license_applied.emit(license_info)

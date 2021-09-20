@@ -8,7 +8,7 @@ from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.ui.resources.links.documentation import LICENSE_DOCS_LINK
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage, \
     WorkingIndicator
-from brainframe_qt.util.licensing import LicenseManager, LicensedProduct
+from brainframe_qt.util.licensing import LicenseInfo, LicenseManager, LicensedProduct
 
 from .license_dialog_ui import _LicenseDialogUI
 from .widgets import ProductWidget
@@ -50,7 +50,7 @@ class LicenseDialog(_LicenseDialogUI):
             product = LicensedProduct(
                 name=self.BRAINFRAME_PRODUCT_NAME,
                 icon_resource=self.BRAINFRAME_PRODUCT_ICON,
-                license_info=license_info,
+                license_info=LicenseInfo.from_api_info(license_info),
             )
             self.product_sidebar.add_product(product)
 
@@ -110,7 +110,7 @@ class LicenseDialog(_LicenseDialogUI):
         if self.license_details.product_name == product.name:
             self.license_details.set_product(product)
 
-    def _handle_license_applied(self, license_info: bf_codecs.LicenseInfo) -> None:
+    def _handle_license_applied(self, license_info: LicenseInfo) -> None:
         product = LicensedProduct(
             name=self.BRAINFRAME_PRODUCT_NAME,
             icon_resource=self.BRAINFRAME_PRODUCT_ICON,

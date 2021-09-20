@@ -1012,12 +1012,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>ServerConfigActivity</name>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="33"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="34"/>
         <source>Server Configuration</source>
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="42"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="43"/>
         <source>Server</source>
         <translation>服务器选项</translation>
     </message>
@@ -1055,41 +1055,41 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="83"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="193"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="194"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="194"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="195"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="198"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="199"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="199"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="200"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="182"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="183"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="183"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="184"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
@@ -1104,42 +1104,42 @@ Please recheck the entered server address.</source>
         <translation>授权配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="236"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="237"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="240"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="241"/>
         <source>Invalid License</source>
         <translation>无效授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="244"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="245"/>
         <source>Missing License</source>
         <translation>未检测到授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="248"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="249"/>
         <source>Connection Successful</source>
         <translation>连接成功</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="251"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="252"/>
         <source>Unknown license state</source>
         <translation>未知的授权状态</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="262"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="263"/>
         <source>Invalid credentials</source>
         <translation>证书无效</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="265"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="266"/>
         <source>Unable to locate server</source>
         <translation>无法连接到服务器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="230"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="231"/>
         <source>&lt;a href=&apos;{license_docs_link}&apos;&gt;Download&lt;/a&gt; a new one</source>
         <translation>&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个新的授权&lt;/a&gt;</translation>
     </message>
