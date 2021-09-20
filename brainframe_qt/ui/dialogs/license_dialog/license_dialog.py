@@ -82,24 +82,22 @@ class LicenseDialog(_LicenseDialogUI):
 
         self.license_manager.error.connect(lambda _: working_indicator.cancel())
 
-        # TODO: This creates a loop
-        # working_indicator.canceled.connect(self.license_manager.cancel_oauth)
+        # TODO: Currently no way of canceling OAuth while auth is in-progress (i.e.
+        #       a user can cancel before they sign-in, but not after, even though cancel
+        #       button is still available)
+        working_indicator.canceled.connect(self.license_manager.cancel_oauth)
 
         self.license_manager.authenticate_with_oauth()
 
     def send_update_license_text(self, license_key: str):
         working_indicator = WorkingIndicator(parent=self)
+        working_indicator.cancelable = False
         working_indicator.setLabelText(self.tr("Uploading license..."))
         working_indicator.show()
 
         self.license_manager.license_applied.connect(
             lambda _: working_indicator.cancel())
         self.license_manager.error.connect(lambda _: working_indicator.cancel())
-
-        # TODO:
-        # working_indicator.canceled.connect(self.license_manager.cancel_oauth)
-
-        # TODO: Remove any Cloud User information from client
 
         self.license_manager.authenticate_with_license_key(license_key)
 
