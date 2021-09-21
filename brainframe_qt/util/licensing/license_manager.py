@@ -50,6 +50,11 @@ class LicenseManager(QObject):
             .start()
 
     def authenticate_with_license_key(self, license_key: str) -> None:
+        def on_success(api_license_info: bf_codecs.LicenseInfo) -> None:
+            license_info = LicenseInfo.from_api_info(api_license_info)
+
+            self.license_applied.emit(license_info)
+
         QTAsyncWorker(self, api.set_license_key, f_args=(license_key,),
-                      on_success=self.license_applied.emit, on_error=self.error.emit) \
+                      on_success=on_success, on_error=self.error.emit) \
             .start()
