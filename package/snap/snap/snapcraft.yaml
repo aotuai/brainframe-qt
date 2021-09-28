@@ -20,8 +20,8 @@ grade: stable
 adopt-info: brainframe-client
 
 parts:
-  # TODO: Use the package-repositories field once MakeDeb supports GPG signing
-  #       and we're comfortable having it as a high-priority repo.
+  # TODO: Use Snap's package-repositories field once MakeDeb supports GPG
+  #       signing and we're comfortable having it as a high-priority repo.
   add-repo:
     plugin: nil
     override-build: |
