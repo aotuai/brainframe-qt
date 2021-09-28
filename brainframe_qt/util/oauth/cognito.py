@@ -73,8 +73,6 @@ class CognitoOAuth(QObject):
         application"""
         url = QUrl(f"https://{self.cognito_domain}/oauth2/authorize")
 
-        # Qt insists on using loopback for callback URI, but Cognito only allows
-        # localhost
         scope = " ".join(self._SCOPES)
 
         query = QUrlQuery()
@@ -93,6 +91,8 @@ class CognitoOAuth(QObject):
     @property
     def callback_url(self) -> QUrl:
         """Redirect URL to supply to the authorization and token requests"""
+        # Qt insists on using loopback for callback URI, but Cognito only allows
+        # localhost
         callback_url = self._reply_handler.callback().replace("127.0.0.1", "localhost")
         return QUrl(callback_url)
 
