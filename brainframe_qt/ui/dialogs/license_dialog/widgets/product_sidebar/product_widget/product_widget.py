@@ -24,7 +24,7 @@ class ProductWidget(_ProductWidgetUI):
 
         expiration_date: Optional[pendulum.DateTime]
         if product.license_info.state is LicenseState.VALID:
-            expiration_date = product.license_info.expiration_date
+            expiration_date = product.license_info.terms.expiration_date
         else:
             expiration_date = None
 

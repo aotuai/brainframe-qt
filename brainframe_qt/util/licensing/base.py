@@ -9,14 +9,12 @@ from brainframe.api import bf_codecs
 @dataclass
 class LicenseInfo:
     state: "LicenseState"
-    expiration_date: Optional[pendulum.DateTime]
-    terms: bf_codecs.LicenseTerms  # TODO: Convert to core-specific object
+    terms: Optional[bf_codecs.LicenseTerms]  # TODO: Convert to core-specific object
 
     @classmethod
     def from_api_info(cls, license_info: bf_codecs.LicenseInfo) -> "LicenseInfo":
         return cls(
             state=LicenseState.from_api_state(license_info.state),
-            expiration_date=license_info.terms.expiration_date,
             terms=license_info.terms,
         )
 
