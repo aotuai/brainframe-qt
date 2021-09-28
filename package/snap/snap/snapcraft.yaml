@@ -31,8 +31,8 @@ parts:
 
       # Pin our repository to lowest priority so that only packages that are
       # missing from other repos will be pulled from ours
-      echo "Package: *\nPin: origin apt-internal.staging.aotu.ai\nPin-Priority: 1" \
-        | sudo tee /etc/apt/preferences.d/99-apt-internal.pref
+      echo "Package: *\nPin: origin apt-internal.aotu.ai\nPin-Priority: 1" \
+        | sudo tee /etc/apt/preferences.d/apt-internal.pref
 
       sudo apt-get update
 
