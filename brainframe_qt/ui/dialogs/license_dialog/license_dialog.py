@@ -57,14 +57,8 @@ class LicenseDialog(_LicenseDialogUI):
             # BrainFrame product should always be first in list
             self.product_sidebar.setCurrentRow(0)
 
-        def on_error(exc: BaseException):
-            if isinstance(exc, bf_errors.ServerNotReadyError):
-                self._handle_connection_error(exc)
-            else:
-                self._handle_unknown_error(exc)
-
         QTAsyncWorker(self, licensing.get_brainframe_license_info,
-                      on_success=on_success, on_error=on_error) \
+                      on_success=on_success, on_error=self._handle_error) \
             .start()
 
     def change_product(self, item: QListWidgetItem, _previous: QListWidgetItem) -> None:
