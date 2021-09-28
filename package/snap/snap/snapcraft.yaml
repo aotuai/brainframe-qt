@@ -20,8 +20,25 @@ grade: stable
 adopt-info: brainframe-client
 
 parts:
+  # TODO: Use the package-repositories field once MakeDeb supports GPG signing
+  #       and we're comfortable having it as a high-priority repo.
+  add-repo:
+    plugin: nil
+    override-build: |
+      # Introduce our apt repository
+      echo "deb [arch=amd64, trusted=yes] http://apt-internal.aotu.ai/ubuntu bionic main" \
+        | sudo tee /etc/apt/sources.list.d/apt-internal.list
+
+      # Pin our repository to lowest priority so that only packages that are
+      # missing from other repos will be pulled from ours
+      echo "Package: *\nPin: origin apt-internal.staging.aotu.ai\nPin-Priority: 1" \
+        | sudo tee /etc/apt/preferences.d/99-apt-internal.pref
+
+      sudo apt-get update
+
   brainframe-client:
     plugin: nil
+    after: [add-repo]
     override-pull: |
       snapcraftctl pull
       VERSION=$(awk -F'[ ="]+' '$1 == "version" { print $2 }' pyproject.toml)
@@ -87,9 +104,13 @@ parts:
       - python3-distutils
       # For theming
       - adwaita-qt
+      # The QtNetworkAuth module, provided by the Aotu APT repo
+      - libqt5networkauth5
       # PyQt
       - python3-pyqt5
       - python3-pyqt5.qtsvg
+      # PyQt bindings for the QtNetworkAuth module, provided by the Aotu APT repo
+      - python3-pyqt5.qtnetworkauth
       # PyGObject dependencies
       - libgirepository-1.0-1
       - gstreamer1.0-plugins-base
@@ -109,6 +130,7 @@ apps:
     plugs:
       - opengl
       - network
+      - network-bind
       - home
     environment:
       PYTHONPATH: "$SNAP/usr/src/brainframe-api:$SNAP/usr/local/lib/python3.6/site-packages:$PYTHONPATH"
