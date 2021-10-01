@@ -22,6 +22,11 @@ adopt-info: brainframe-client
 parts:
   # TODO: Use Snap's package-repositories field once MakeDeb supports GPG
   #       signing and we're comfortable having it as a high-priority repo.
+  #
+  # Everything in the Aotu.ai internal repository has a corresponding source
+  # package. Simply add this line to your /etc/apt/sources.list:
+  #
+  #     deb-src [arch=amd64, trusted=yes] http://apt-internal.aotu.ai/ubuntu bionic main
   add-repo:
     plugin: nil
     override-build: |
