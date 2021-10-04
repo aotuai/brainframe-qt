@@ -765,7 +765,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>LicenseDialog</name>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="152"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="154"/>
         <source>Invalid License Format</source>
         <translation>无效的授权格式</translation>
     </message>
@@ -775,97 +775,97 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="96"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="98"/>
         <source>Uploading license...</source>
         <translation>正在上传授权⋯⋯</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="167"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="169"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="168"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="170"/>
         <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
         <translation>提供的授权已过期。请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="154"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="156"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
         <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;;上传新授权&lt;/a&gt;。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="180"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="182"/>
         <source>License Server Connection Failure</source>
         <translation>授权服务器连接失败</translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="181"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="183"/>
         <source>The BrainFrame server was unable to contact the licensing server to validate the license. Please ensure that the BrainFrame server has internet access.</source>
         <translation>BrainFrame无法连接至授权服务器以验证授权，请确保BrainFrame可以访问互联网。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="77"/>
-        <source>Authenticating with OAuth...</source>
+        <source>Authenticating with OAuth using browser window...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="243"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="245"/>
         <source>Unauthorized Tokens</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="244"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="246"/>
         <source>The BrainFrame server was unable to authenticate with the licensing server to retrieve a license. Please ensure that the tokens have not expired and are for the proper licensing server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="120"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="122"/>
         <source>License applied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="120"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="122"/>
         <source>License successfully applied to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="195"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="197"/>
         <source>Invalid OAuth State</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="196"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="198"/>
         <source>The OAuth flow failed because the state returned to the Redirect URL did not match the state sent to the authentication server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="210"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="212"/>
         <source>Invalid Token Response</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="211"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="213"/>
         <source>The OAuth flow failed because the reply to the Access/Refresh tokens was invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="228"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="230"/>
         <source>OAuth Callback Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="229"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="231"/>
         <source>An error occurred while handling the request to the OAuth Callback URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="257"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="259"/>
         <source>Unknown OAuth error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../dialogs/license_dialog/license_dialog.py" line="258"/>
+        <location filename="../../dialogs/license_dialog/license_dialog.py" line="260"/>
         <source>An unknown error occurred while authenticating with OAuth</source>
         <translation type="unfinished"></translation>
     </message>

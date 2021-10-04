@@ -74,7 +74,9 @@ class LicenseDialog(_LicenseDialogUI):
 
     def get_license_with_oauth(self) -> None:
         working_indicator = WorkingIndicator(parent=self)
-        working_indicator.setLabelText(self.tr("Authenticating with OAuth..."))
+        working_indicator.setLabelText(self.tr(
+            "Authenticating with OAuth using browser window..."
+        ))
         working_indicator.show()
 
         self.license_manager.license_applied.connect(
