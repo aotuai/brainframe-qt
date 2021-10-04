@@ -1,5 +1,5 @@
 COGNITO_DOMAIN = "auth-aotuai-staging.auth.us-east-1.amazoncognito.com"
-"""Cognito hosted sign-in core"""
+"""Cognito hosted sign-in domain"""
 
 CLIENT_ID = "1qmt0ljvorrice6gnu6qmqio7k"
 """Client ID of the Application known by Cognito"""

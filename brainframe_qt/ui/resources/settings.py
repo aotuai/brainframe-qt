@@ -6,7 +6,7 @@ from PyQt5.QtCore import QSettings, QObject, pyqtSignal
 T = TypeVar("T")
 
 _settings = QSettings(
-    # MacOS uses internet core instead of organization name
+    # MacOS uses internet domain instead of organization name
     'aotu.ai' if sys.platform == 'darwin' else 'aotu',
     'brainframe')
 
