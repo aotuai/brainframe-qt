@@ -14,6 +14,7 @@ from brainframe.api import bf_codecs
 
 from brainframe_qt import constants
 from brainframe_qt.util.oauth.base import AuthTokenResponse
+from brainframe_qt.util.oauth.error import OAuthError
 from brainframe_qt.util.oauth.reply_handler import PKCEReplyHandler
 
 
@@ -28,14 +29,17 @@ class CognitoOAuth(QObject):
     """Emitted when Authentication is successful and both Access and Refresh Tokens have
     been acquired"""
 
-    authentication_error = pyqtSignal(Exception)
+    authentication_error = pyqtSignal(OAuthError)
     """Emitted when there was an Error during the Authentication procedure"""
 
-    class InvalidStateError(Exception):
+    class InvalidStateError(OAuthError):
         """State returned to redirect_uri did not match state sent to auth server"""
 
-    class InvalidTokenResponse(Exception):
+    class InvalidTokenResponse(OAuthError):
         """Reply to Access and Refresh Tokens request was invalid"""
+
+    class ReplyHandlerError(OAuthError):
+        """An error occurred in the PKCEReplyHandler"""
 
     _SCOPES = ["email", "aws.cognito.signin.user.admin", "profile", "openid",
                *constants.oauth.OAUTH_SCOPES]
@@ -62,6 +66,7 @@ class CognitoOAuth(QObject):
     def _init_signals(self) -> None:
         self._reply_handler.ready.connect(self._on_reply_handler_ready)
         self._reply_handler.completed.connect(self._on_reply_handler_completed)
+        self._reply_handler.error.connect(self._on_reply_handler_error)
 
     def authenticate(self) -> None:
         """Start the Authentication procedure"""
@@ -127,6 +132,11 @@ class CognitoOAuth(QObject):
         )
 
         network_manager.post(request, body.encode())
+
+    def _on_reply_handler_error(self, error: OAuthError) -> None:
+        new_error = self.ReplyHandlerError()
+        new_error.__cause__ = error
+        self.authentication_error.emit(new_error)
 
     def _on_reply_handler_ready(self) -> None:
         self.ready_to_authenticate.emit(self.authorization_url)

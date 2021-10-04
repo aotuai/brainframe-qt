@@ -1,3 +1,5 @@
+from traceback import TracebackException
+
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QApplication, QListWidgetItem
 from brainframe.api import bf_errors
@@ -7,6 +9,8 @@ from brainframe_qt.ui.resources.links.documentation import LICENSE_DOCS_LINK
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage, \
     WorkingIndicator
 from brainframe_qt.util.licensing import LicenseInfo, LicenseManager
+from brainframe_qt.util.oauth.cognito import CognitoOAuth
+from brainframe_qt.util.oauth.error import OAuthError
 
 from .core import licensing
 from .core.base import LicensedProduct
@@ -43,7 +47,9 @@ class LicenseDialog(_LicenseDialogUI):
         self.license_details.oauth_login_requested.connect(self.get_license_with_oauth)
 
         self.license_manager.license_applied.connect(self._handle_license_applied)
-        self.license_manager.error.connect(self._handle_error)
+
+        self.license_manager.api_error.connect(self._handle_api_error)
+        self.license_manager.oauth_error.connect(self._handle_oauth_error)
 
     def _init_products(self):
         def on_success(license_info: LicenseInfo):
@@ -58,7 +64,7 @@ class LicenseDialog(_LicenseDialogUI):
             self.product_sidebar.setCurrentRow(0)
 
         QTAsyncWorker(self, licensing.get_brainframe_license_info,
-                      on_success=on_success, on_error=self._handle_error) \
+                      on_success=on_success, on_error=self._handle_api_error) \
             .start()
 
     def change_product(self, item: QListWidgetItem, _previous: QListWidgetItem) -> None:
@@ -74,7 +80,8 @@ class LicenseDialog(_LicenseDialogUI):
         self.license_manager.license_applied.connect(
             lambda _: working_indicator.cancel())
 
-        self.license_manager.error.connect(lambda _: working_indicator.cancel())
+        self.license_manager.api_error.connect(lambda _: working_indicator.cancel())
+        self.license_manager.oauth_error.connect(lambda _: working_indicator.cancel())
 
         # TODO: Currently no way of canceling OAuth while auth is in-progress (i.e.
         #       a user can cancel before they sign-in, but not after, even though cancel
@@ -91,7 +98,7 @@ class LicenseDialog(_LicenseDialogUI):
 
         self.license_manager.license_applied.connect(
             lambda _: working_indicator.cancel())
-        self.license_manager.error.connect(lambda _: working_indicator.cancel())
+        self.license_manager.api_error.connect(lambda _: working_indicator.cancel())
 
         self.license_manager.authenticate_with_license_key(license_key)
 
@@ -116,7 +123,7 @@ class LicenseDialog(_LicenseDialogUI):
             message=self.tr("License successfully applied to server")
         ).exec()
 
-    def _handle_error(self, exc) -> None:
+    def _handle_api_error(self, exc: bf_errors.BaseAPIError) -> None:
         if isinstance(exc, bf_errors.LicenseInvalidError):
             self._handle_invalid_license_error(exc)
         elif isinstance(exc, bf_errors.LicenseExpiredError):
@@ -128,7 +135,19 @@ class LicenseDialog(_LicenseDialogUI):
         else:
             raise exc
 
-    def _handle_invalid_license_error(self, _exc):
+    def _handle_oauth_error(self, error: OAuthError) -> None:
+        if isinstance(error, CognitoOAuth.InvalidStateError):
+            self._handle_invalid_state_error(error)
+        elif isinstance(error, CognitoOAuth.InvalidTokenResponse):
+            self._handle_invalid_token_response(error)
+        elif isinstance(error, CognitoOAuth.ReplyHandlerError):
+            self._handle_reply_handler_error(error)
+        elif isinstance(error, OAuthError):
+            self._handle_unknown_oauth_error(error)
+        else:
+            raise error
+
+    def _handle_invalid_license_error(self, _exc) -> None:
 
         message_title = self.tr("Invalid License Format")
         # TODO: BF-1332 - Failed online check-in results in an Invalid license
@@ -143,7 +162,7 @@ class LicenseDialog(_LicenseDialogUI):
             message=message
         ).exec()
 
-    def _handle_expired_license_error(self, _exc):
+    def _handle_expired_license_error(self, _exc) -> None:
 
         message_title = self.tr("Expired License")
         message = self.tr(
@@ -157,7 +176,7 @@ class LicenseDialog(_LicenseDialogUI):
             message=message
         ).exec()
 
-    def _handle_license_server_connection_error(self, _exc):
+    def _handle_license_server_connection_error(self, _exc) -> None:
         message_title = self.tr("License Server Connection Failure")
         message = self.tr(
             "The BrainFrame server was unable to contact the licensing server "
@@ -170,7 +189,57 @@ class LicenseDialog(_LicenseDialogUI):
             message=message
         ).exec()
 
-    def _handle_unauthorized_tokens_error(self, _exc):
+    def _handle_invalid_state_error(
+        self, _error: CognitoOAuth.InvalidStateError
+    ) -> None:
+        message_title = self.tr("Invalid OAuth State")
+        message = self.tr(
+            "The OAuth flow failed because the state returned to the Redirect URL did "
+            "not match the state sent to the authentication server"
+        )
+
+        BrainFrameMessage.error(
+            parent=self,
+            title=message_title,
+            error=message,
+        ).exec()
+
+    def _handle_invalid_token_response(
+            self, error: CognitoOAuth.InvalidTokenResponse
+    ) -> None:
+        message_title = self.tr("Invalid Token Response")
+        description = self.tr(
+            "The OAuth flow failed because the reply to the Access/Refresh tokens was "
+            "invalid"
+        )
+        traceback_exc = TracebackException.from_exception(error)
+
+        BrainFrameMessage.exception(
+            parent=self,
+            title=message_title,
+            description=description,
+            traceback=traceback_exc,
+            buttons=BrainFrameMessage.PresetButtons.WARNING,
+        ).exec()
+
+    def _handle_reply_handler_error(
+        self, error: CognitoOAuth.ReplyHandlerError
+    ) -> None:
+        message_title = self.tr("OAuth Callback Error")
+        description = self.tr(
+            "An error occurred while handling the request to the OAuth Callback URL"
+        )
+        traceback_exc = TracebackException.from_exception(error)
+
+        BrainFrameMessage.exception(
+            parent=self,
+            title=message_title,
+            description=description,
+            traceback=traceback_exc,
+            buttons=BrainFrameMessage.PresetButtons.WARNING,
+        ).exec()
+
+    def _handle_unauthorized_tokens_error(self, _exc) -> None:
         message_title = self.tr("Unauthorized Tokens")
         message = self.tr(
             "The BrainFrame server was unable to authenticate with the licensing "
@@ -178,8 +247,23 @@ class LicenseDialog(_LicenseDialogUI):
             "expired and are for the proper licensing server."
         )
 
-        BrainFrameMessage.information(
+        BrainFrameMessage.warning(
             parent=self,
             title=message_title,
-            message=message
+            warning=message
+        ).exec()
+
+    def _handle_unknown_oauth_error(self, error: OAuthError) -> None:
+        message_title = self.tr("Unknown OAuth error")
+        description = self.tr(
+            "An unknown error occurred while authenticating with OAuth"
+        )
+        traceback_exc = TracebackException.from_exception(error)
+
+        BrainFrameMessage.exception(
+            parent=self,
+            title=message_title,
+            description=description,
+            traceback=traceback_exc,
+            buttons=BrainFrameMessage.PresetButtons.WARNING,
         ).exec()

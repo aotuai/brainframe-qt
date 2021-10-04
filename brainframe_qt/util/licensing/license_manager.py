@@ -8,12 +8,15 @@ from brainframe_qt.api_utils import api
 from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.util.licensing import LicenseInfo
 from brainframe_qt.util.oauth.cognito import CognitoOAuth
+from brainframe_qt.util.oauth.error import OAuthError
 
 
 class LicenseManager(QObject):
     sign_in_successful = pyqtSignal(bf_codecs.CloudUserInfo)
     license_applied = pyqtSignal(LicenseInfo)
-    error = pyqtSignal(bf_errors.BaseAPIError)
+
+    api_error = pyqtSignal(bf_errors.BaseAPIError)
+    oauth_error = pyqtSignal(OAuthError)
 
     def __init__(self, *, parent: QObject):
         super().__init__(parent=parent)
@@ -29,7 +32,7 @@ class LicenseManager(QObject):
     def _init_signals(self) -> None:
         self.oauth.ready_to_authenticate.connect(QDesktopServices.openUrl)
         self.oauth.authentication_successful.connect(self.authenticate_with_tokens)
-        self.oauth.authentication_error.connect(self.error)
+        self.oauth.authentication_error.connect(self.oauth_error)
 
     def authenticate_with_oauth(self):
         self.oauth.authenticate()
@@ -46,7 +49,7 @@ class LicenseManager(QObject):
             self.license_applied.emit(license_info)
 
         QTAsyncWorker(self, api.set_cloud_tokens, f_args=(tokens,),
-                      on_success=on_success, on_error=self.error.emit) \
+                      on_success=on_success, on_error=self.api_error.emit) \
             .start()
 
     def authenticate_with_license_key(self, license_key: str) -> None:
@@ -56,5 +59,5 @@ class LicenseManager(QObject):
             self.license_applied.emit(license_info)
 
         QTAsyncWorker(self, api.set_license_key, f_args=(license_key,),
-                      on_success=on_success, on_error=self.error.emit) \
+                      on_success=on_success, on_error=self.api_error.emit) \
             .start()

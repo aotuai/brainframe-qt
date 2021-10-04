@@ -1,10 +1,12 @@
 import logging
+from typing import Optional
 
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5.QtNetwork import QHostAddress
 from PyQt5.QtNetworkAuth import QOAuthHttpServerReplyHandler
 
 from brainframe_qt.util.oauth.base import AuthTokenResponse
+from brainframe_qt.util.oauth.error import OAuthError, UnknownOAuthError
 
 
 class PKCEReplyHandler(QOAuthHttpServerReplyHandler):
@@ -12,6 +14,18 @@ class PKCEReplyHandler(QOAuthHttpServerReplyHandler):
     """Emitted when the ReplyHandler is ready for connections"""
     completed = pyqtSignal(AuthTokenResponse)
     """Emitted when the ReplyHandler has received an Authorization Code"""
+    error = pyqtSignal(OAuthError)
+
+    class UnknownCallbackError(UnknownOAuthError):
+        def __init__(self, error: str, description: Optional[str]):
+            self.error = error
+            self.description = description
+
+    class MissingCodeData(OAuthError):
+        """Callback was called without providing `code` data"""
+
+    class MissingStateData(OAuthError):
+        """Callback was called without providing `state` data"""
 
     _PORTS = [21849, 32047, 31415]
 
@@ -43,12 +57,22 @@ class PKCEReplyHandler(QOAuthHttpServerReplyHandler):
     def _on_callback_received(self, values: dict) -> None:
         logging.debug(f"Callback received data: {values}")
 
-        if "code" not in values:
-            # Unknown connection/data
+        if not values:
+            # Ignore empty requests
             return
 
-        if "state" not in values:
-            # Unknown connection/data
+        error: Optional[OAuthError] = None
+        if "error" in values:
+            error_type = values["error"]
+            error_message = values.get("error_description")
+            error = self.UnknownCallbackError(error_type, error_message)
+        elif "code" not in values:
+            error = self.MissingCodeData()
+        elif "state" not in values:
+            error = self.MissingStateData()
+
+        if error is not None:
+            self.error.emit(error)
             return
 
         auth_response = AuthTokenResponse(

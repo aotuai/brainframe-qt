@@ -1,0 +1,6 @@
+class OAuthError(Exception):
+    ...
+
+
+class UnknownOAuthError(OAuthError):
+    ...
