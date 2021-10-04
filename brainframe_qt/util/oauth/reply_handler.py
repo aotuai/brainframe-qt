@@ -28,6 +28,10 @@ class PKCEReplyHandler(QOAuthHttpServerReplyHandler):
         """Callback was called without providing `state` data"""
 
     _PORTS = [21849, 32047, 31415]
+    """Ports that the OAuth2 client is configured to redirect requests to. 
+    
+    We supply multiple options in case one is already being used by another service.
+    """
 
     def __init__(self, *, parent: QObject):
         super().__init__(parent=parent)
