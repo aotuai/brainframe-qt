@@ -251,7 +251,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/widgets/brainframe_license/aotu_login_form/aotu_login_form_ui.py" line="16"/>
         <source>Sign in using OAuth</source>
-        <translation type="unfinished"></translation>
+        <translation>使用OAuth身份验证登录</translation>
     </message>
 </context>
 <context>
@@ -807,67 +807,67 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="77"/>
         <source>Authenticating with OAuth using browser window...</source>
-        <translation type="unfinished"></translation>
+        <translation>在浏览器窗口使用OAuth身份验证登录</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="245"/>
         <source>Unauthorized Tokens</source>
-        <translation type="unfinished"></translation>
+        <translation>未授权令牌</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="246"/>
         <source>The BrainFrame server was unable to authenticate with the licensing server to retrieve a license. Please ensure that the tokens have not expired and are for the proper licensing server.</source>
-        <translation type="unfinished"></translation>
+        <translation>BrainFrame服务端无法在授权服务器认证获得授权。请确保使用正确授权的令牌，并且在有效期内。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="122"/>
         <source>License applied</source>
-        <translation type="unfinished"></translation>
+        <translation>授权已安装</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="122"/>
         <source>License successfully applied to server</source>
-        <translation type="unfinished"></translation>
+        <translation>授权已经成功安装到服务端</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="197"/>
         <source>Invalid OAuth State</source>
-        <translation type="unfinished"></translation>
+        <translation>无效的OAuth身份验证状态</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="198"/>
         <source>The OAuth flow failed because the state returned to the Redirect URL did not match the state sent to the authentication server</source>
-        <translation type="unfinished"></translation>
+        <translation>OAuth身份验证失败。返回给跳转URL的状态和发给授权服务器的状态不匹配</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="212"/>
         <source>Invalid Token Response</source>
-        <translation type="unfinished"></translation>
+        <translation>无效的令牌响应</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="213"/>
         <source>The OAuth flow failed because the reply to the Access/Refresh tokens was invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>OAuth身份验证失败。登录/更新令牌应答无效</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="230"/>
         <source>OAuth Callback Error</source>
-        <translation type="unfinished"></translation>
+        <translation>OAuth身份验证回调错误</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="231"/>
         <source>An error occurred while handling the request to the OAuth Callback URL</source>
-        <translation type="unfinished"></translation>
+        <translation>处理发给OAuth身份验证回调地址的请求时，发生错误</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="259"/>
         <source>Unknown OAuth error</source>
-        <translation type="unfinished"></translation>
+        <translation>未知OAuth身份验证错误</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="260"/>
         <source>An unknown error occurred while authenticating with OAuth</source>
-        <translation type="unfinished"></translation>
+        <translation>OAuth身份验证时发生未知错误</translation>
     </message>
 </context>
 <context>
@@ -888,7 +888,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/widgets/brainframe_license/source_selector/license_source_selector.py" line="31"/>
         <source>Get license from:</source>
-        <translation type="unfinished">授权来源：</translation>
+        <translation>获取授权文件：</translation>
     </message>
 </context>
 <context>
