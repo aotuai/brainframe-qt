@@ -1163,7 +1163,7 @@ Please recheck the entered server address.</source>
 <context>
     <name>StreamConfiguration</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="650"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="296"/>
         <source>Error Opening Stream</source>
         <translation>打开视频流时出错</translation>
     </message>
@@ -1183,42 +1183,37 @@ Please recheck the entered server address.</source>
         <translation>您已经打开了视频流源。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="674"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="700"/>
         <source>Error: </source>
         <translation>错误： </translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="671"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="699"/>
         <source>Error encountered while opening stream</source>
         <translation>打开视频流时出错</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="672"/>
-        <source>Is stream already open?</source>
-        <translation>视频流是否已打开？</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="673"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="663"/>
         <source>Is this a valid stream source?</source>
         <translation>这是一个有效的视频流源吗？</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="701"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="709"/>
         <source>Active Stream Limit Exceeded</source>
         <translation>视频流数量超过上限</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="702"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="710"/>
         <source>You have exceeded the number of active streams available to you under the terms of your license. Consider deleting another stream or contacting Aotu to increase your active stream limit.</source>
         <translation>您已经超出了许可条款下可供使用的最大视频流数量，请考虑删除其他视频流或与Aotu联系以增加最大视频流限制。</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="717"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="737"/>
         <source>Error uploading file</source>
         <translation>上传文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="718"/>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="738"/>
         <source>No such file: {filepath}</source>
         <translation>没有这样的文件：{filepath}</translation>
     </message>
@@ -1246,6 +1241,36 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="625"/>
         <source>Standard RTSP format:&lt;br&gt;{rtsp_format}</source>
         <translation>标准RTSP格式：&lt;br&gt;{rtsp_format}</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="662"/>
+        <source>Error encountered with the stream&apos;s configuration.</source>
+        <translation>视频流发生错误</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="687"/>
+        <source>Valid camera IDs can be found by running &apos;sudo ls /dev | grep video&apos;</source>
+        <translation>可以执行这个命令获得有效的摄像头ID &apos;sudo ls /dev | grep video&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="690"/>
+        <source>There is a problem with the camera url.</source>
+        <translation>摄像头URL有问题</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="693"/>
+        <source>Is the video file a supported format?</source>
+        <translation>这个视频文件的格式是可以支持的吗？</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="698"/>
+        <source>Error Connecting to Stream</source>
+        <translation>连接视频流发生错误</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="650"/>
+        <source>Error Configuring Stream</source>
+        <translation>配置视频流发生错误</translation>
     </message>
 </context>
 <context>
