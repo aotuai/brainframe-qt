@@ -1,17 +1,16 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject
 from PyQt5.QtWidgets import QApplication, QFrame, QGridLayout, QLabel, QWidget
 
-from brainframe_qt.ui.resources.links.documentation import \
-    LICENSE_DOCS_LINK
+from brainframe_qt.ui.resources.links.documentation import LICENSE_DOCS_LINK
 from brainframe_qt.ui.resources.ui_elements.widgets import Line
-from .license_source_selector import LicenseSourceSelector
-from .license_terms import LicenseTerms
+from ..source_selector import LicenseSourceSelector
+from ..license_terms import LicenseTerms
 
 
 class _LicenseDetailsUI(QWidget):
 
-    def __init__(self, parent: QWidget):
-        super().__init__(parent)
+    def __init__(self, *, parent: QObject):
+        super().__init__(parent=parent)
 
         self.product_name_label = self._init_product_name_label()
 
@@ -116,7 +115,10 @@ class _LicenseDetailsUI(QWidget):
         layout.addWidget(self.expired_license_message, 5, 0, 1, 2)
 
         layout.addWidget(self.license_terms, 6, 0, 1, 2)
-        layout.addWidget(self.license_source_selector, 7, 0, 1, 2)
+
+        layout.addWidget(Line(QFrame.HLine, self), 7, 0, 1, 2)
+
+        layout.addWidget(self.license_source_selector, 8, 0, 1, 2)
 
         # TODO: These are hidden because the information is not provided by
         #       the server yet

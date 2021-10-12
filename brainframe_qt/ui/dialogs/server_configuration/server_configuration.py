@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QCheckBox, QDialog, QDialogButtonBox, 
     QGridLayout, QLabel, QLineEdit, QPushButton, QWidget
 from PyQt5.uic import loadUi
 
-from brainframe.api import BrainFrameAPI, bf_codecs, bf_errors
+from brainframe.api import BrainFrameAPI, bf_errors
 
 from brainframe_qt.api_utils import api
 from brainframe_qt.extensions import DialogActivity
@@ -20,6 +20,7 @@ from brainframe_qt.ui.resources.links.documentation import \
 from brainframe_qt.ui.resources.paths import qt_ui_paths
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import \
     BrainFrameMessage
+from brainframe_qt.util.licensing import LicenseState
 from brainframe_qt.util.secret import decrypt, encrypt
 
 
@@ -222,7 +223,7 @@ class ServerConfigurationDialog(QDialog):
 
     def check_connection(self):
 
-        def on_success(license_state: bf_codecs.LicenseInfo.State):
+        def on_success(license_state: LicenseState):
 
             self.license_config_button.setEnabled(True)
 
@@ -231,19 +232,19 @@ class ServerConfigurationDialog(QDialog):
                 "<a href='{license_docs_link}'>Download</a> a new one") \
                 .format(license_docs_link=LICENSE_DOCS_LINK)
 
-            if license_state is bf_codecs.LicenseInfo.State.EXPIRED:
+            if license_state is LicenseState.EXPIRED:
                 label_text = "❗"
                 report_text = self.tr("Expired License")
                 report_text += license_link
-            elif license_state is bf_codecs.LicenseInfo.State.INVALID:
+            elif license_state is LicenseState.INVALID:
                 label_text = "❗"
                 report_text = self.tr("Invalid License")
                 report_text += license_link
-            elif license_state is bf_codecs.LicenseInfo.State.MISSING:
+            elif license_state is LicenseState.MISSING:
                 label_text = "❗"
                 report_text = self.tr("Missing License")
                 report_text += license_link
-            elif license_state is bf_codecs.LicenseInfo.State.VALID:
+            elif license_state is LicenseState.VALID:
                 label_text = "✔️"
                 report_text = self.tr("Connection Successful")
             else:
@@ -273,7 +274,7 @@ class ServerConfigurationDialog(QDialog):
                       on_success=on_success, on_error=on_error) \
             .start()
 
-    def _check_connection(self) -> bf_codecs.LicenseInfo.State:
+    def _check_connection(self) -> LicenseState:
         # Create a temporary API object to check connection with
         temp_api = BrainFrameAPI(self.server_address, self.credentials)
 
@@ -281,12 +282,13 @@ class ServerConfigurationDialog(QDialog):
         temp_api.version()
 
         # Check license state
-        license_state = temp_api.get_license_info().state
+        api_state = temp_api.get_license_info().state
+        license_state = LicenseState.from_api_state(api_state)
 
         return license_state
 
     def _open_license_dialog(self):
-        LicenseDialog.show_dialog(self)
+        LicenseDialog.show_dialog(parent=self)
         self.check_connection()
 
     def _verify(self):

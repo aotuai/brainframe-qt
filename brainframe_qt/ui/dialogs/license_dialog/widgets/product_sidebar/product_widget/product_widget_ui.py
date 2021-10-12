@@ -8,8 +8,8 @@ from brainframe_qt.ui.resources.ui_elements.widgets import \
 
 
 class _ProductWidgetUI(QWidget):
-    def __init__(self, parent: QWidget):
-        super().__init__(parent)
+    def __init__(self, *, parent: QWidget):
+        super().__init__(parent=parent)
 
         self.product_icon = self._init_product_icon()
         self.product_name_label = self._init_product_name()

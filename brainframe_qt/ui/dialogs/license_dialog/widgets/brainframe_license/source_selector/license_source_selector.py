@@ -1,13 +1,15 @@
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QStackedWidget, QVBoxLayout, \
+from PyQt5.QtWidgets import QLabel, QStackedWidget, QVBoxLayout, \
     QWidget
 
+from ..aotu_login_form import AotuLoginForm
+from ..text_license_editor import TextLicenseEditor
 from .license_source_buttons import LicenseSourceButtons
-from .text_license_editor import TextLicenseEditor
 
 
 class LicenseSourceSelector(QWidget):
     license_text_update = pyqtSignal(str)
+    oauth_login_requested = pyqtSignal()
 
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -15,6 +17,7 @@ class LicenseSourceSelector(QWidget):
         self.license_source_label = self._init_license_source_label()
         self.license_source_buttons = self._init_license_source_buttons()
 
+        self.aotu_login_form = self._init_aotu_login_form()
         self.text_license_editor = self._init_text_license_editor()
         self.license_stack_widget = self._init_license_stack_widget()
 
@@ -25,7 +28,7 @@ class LicenseSourceSelector(QWidget):
         self._init_signals()
 
     def _init_license_source_label(self) -> QLabel:
-        label_text = self.tr("License Source:")
+        label_text = self.tr("Get license from:")
         license_source_label = QLabel(label_text, self)
 
         return license_source_label
@@ -35,6 +38,11 @@ class LicenseSourceSelector(QWidget):
 
         return license_source_buttons
 
+    def _init_aotu_login_form(self) -> AotuLoginForm:
+        aotu_login_form = AotuLoginForm(parent=self)
+
+        return aotu_login_form
+
     def _init_text_license_editor(self) -> TextLicenseEditor:
         text_license_editor = TextLicenseEditor(self)
 
@@ -43,12 +51,15 @@ class LicenseSourceSelector(QWidget):
     def _init_license_stack_widget(self) -> QStackedWidget:
         license_stack_widget = QStackedWidget(self)
 
+        license_stack_widget.addWidget(self.aotu_login_form)
         license_stack_widget.addWidget(self.text_license_editor)
+
+        license_stack_widget.setCurrentWidget(self.aotu_login_form)
 
         return license_stack_widget
 
-    def _init_source_selector_layout(self) -> QHBoxLayout:
-        source_selector_layout = QHBoxLayout()
+    def _init_source_selector_layout(self) -> QVBoxLayout:
+        source_selector_layout = QVBoxLayout()
 
         source_selector_layout.addWidget(self.license_source_label)
         source_selector_layout.addWidget(self.license_source_buttons)
@@ -72,5 +83,20 @@ class LicenseSourceSelector(QWidget):
         self._source_selector_layout.setAlignment(Qt.AlignLeft)
 
     def _init_signals(self) -> None:
+        self.license_source_buttons.license_source_changed.connect(
+            self._change_license_source
+        )
+
+        self.aotu_login_form.oath_login_requested.connect(self.oauth_login_requested)
         self.text_license_editor.license_text_update.connect(
             self.license_text_update)
+
+    def _change_license_source(self, license_source: str) -> None:
+        if license_source == "aotu_account":
+            desired_widget = self.aotu_login_form
+        elif license_source == "license_file":
+            desired_widget = self.text_license_editor
+        else:
+            raise ValueError(f"Unknown license source {license_source}")
+
+        self.license_stack_widget.setCurrentWidget(desired_widget)
