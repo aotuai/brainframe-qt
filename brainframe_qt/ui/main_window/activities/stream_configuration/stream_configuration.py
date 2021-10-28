@@ -647,7 +647,7 @@ class StreamConfiguration(StreamConfigurationUI):
 
     def _handle_send_stream_conf_error(self, exc: BaseException) -> None:
 
-        message_title = self.tr("Error Opening Stream")
+        message_title = self.tr("Error Configuring Stream")
 
         if isinstance(exc, bf_errors.DuplicateStreamSourceError):
             message_desc = self.tr("Stream source already open")
@@ -658,24 +658,13 @@ class StreamConfiguration(StreamConfigurationUI):
                       f"{message_info}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
-        elif isinstance(exc, bf_errors.StreamNotOpenedError):
-            message_desc = self.tr("Error encountered while opening stream")
-            error_text = self.tr("Error: ")
-            message = f"<b>{message_desc}</b>" \
-                      f"<br><br>" \
-                      f"{exc}<br><br>" \
-                      f"{exc.description}<br><br>" \
-                      f"{error_text}<b>{exc.kind}</b>"
-
         elif isinstance(exc, bf_errors.BaseAPIError):
-            message_desc = self.tr("Error encountered while opening stream")
-            message_info1 = self.tr("Is stream already open?")
-            message_info2 = self.tr("Is this a valid stream source?")
+            message_desc = self.tr("Error encountered with the stream's configuration.")
+            message_info = self.tr("Is this a valid stream source?")
             error_text = self.tr("Error: ")
             message = f"<b>{message_desc}</b>" \
                       f"<br><br>" \
-                      f"{message_info1}<br>" \
-                      f"{message_info2}<br><br>" \
+                      f"{message_info}<br><br>" \
                       f"{error_text}<b>{exc.kind}</b>"
 
         else:
@@ -691,6 +680,25 @@ class StreamConfiguration(StreamConfigurationUI):
             self, stream_conf: bf_codecs.StreamConfiguration,
             exc: BaseException) \
             -> None:
+        # Delete the buggy stream configuration
+        api.delete_stream_configuration(stream_conf.id)
+
+        source_hints = {
+            bf_codecs.StreamConfiguration.ConnType.WEBCAM: self.tr(
+                "Valid camera IDs can be found by running 'sudo ls /dev | grep video'"
+            ),
+            bf_codecs.StreamConfiguration.ConnType.IP_CAMERA: self.tr(
+                "There is a problem with the camera url."
+            ),
+            bf_codecs.StreamConfiguration.ConnType.FILE: self.tr(
+                "Is the video file a supported format?"
+            ),
+        }
+
+        message_title = self.tr("Error Connecting to Stream")
+        message_desc = self.tr("Error encountered while opening stream")
+        error_text = self.tr("Error: ")
+
         if isinstance(exc, bf_errors.AnalysisLimitExceededError):
             # Delete the stream configuration, since you almost never want to
             # have a stream that can't have analysis running
@@ -699,19 +707,31 @@ class StreamConfiguration(StreamConfigurationUI):
                 .start()
 
             message_title = self.tr("Active Stream Limit Exceeded")
-            message_desc = self.tr(
+            message = self.tr(
                 "You have exceeded the number of active streams available to "
                 "you under the terms of your license. Consider deleting "
                 "another stream or contacting Aotu to increase your "
                 "active stream limit.")
 
-            BrainFrameMessage.warning(
-                parent=self,
-                title=message_title,
-                warning=message_desc).exec()
+        elif isinstance(exc, bf_errors.StreamNotOpenedError):
+            message = f"<b>{message_desc}</b>" \
+                      f"<br><br>" \
+                      f"{source_hints[stream_conf.connection_type]}<br><br>" \
+                      f"{exc}<br><br>" \
+                      f"{error_text}<b>{exc.kind}</b>"
 
+        elif isinstance(exc, bf_errors.BaseAPIError):
+            message = f"<b>{message_desc}</b>" \
+                      f"<br><br>" \
+                      f"{source_hints[stream_conf.connection_type]}<br><br>" \
+                      f"{error_text}<b>{exc.kind}</b>"
         else:
             raise exc
+
+        BrainFrameMessage.warning(
+            parent=self,
+            title=message_title,
+            warning=message).open()
 
     def _handle_missing_file_error(self, filepath: Path) -> None:
         message_title = self.tr("Error uploading file")
