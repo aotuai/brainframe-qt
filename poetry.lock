@@ -220,18 +220,18 @@ python-versions = "*"
 
 [[package]]
 name = "pyqt5"
-version = "5.15.6"
+version = "5.15.3"
 description = "Python bindings for the Qt cross platform application toolkit"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-PyQt5-Qt5 = ">=5.15.2"
+PyQt5-Qt = ">=5.15"
 PyQt5-sip = ">=12.8,<13"
 
 [[package]]
-name = "pyqt5-qt5"
+name = "pyqt5-qt"
 version = "5.15.2"
 description = "The subset of a Qt installation needed by PyQt5."
 category = "main"
@@ -285,19 +285,19 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "pyqtnetworkauth"
-version = "5.15.4"
+version = "5.15.3"
 description = "Python bindings for the Qt Network Authorization library"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-PyQt5 = ">=5.15.4"
+PyQt5 = ">=5.15.3"
 PyQt5-sip = ">=12.8,<13"
-PyQtNetworkAuth-Qt5 = ">=5.15"
+PyQtNetworkAuth-Qt = ">=5.15"
 
 [[package]]
-name = "pyqtnetworkauth-qt5"
+name = "pyqtnetworkauth-qt"
 version = "5.15.2"
 description = "The subset of a Qt installation needed by PyQtNetworkAuth."
 category = "main"
@@ -437,7 +437,7 @@ windows = ["gstly"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "2b51e87c0b7d471a675d7a339e6759088af99cc1611029aa996128166a4008c3"
+content-hash = "6e64f38d35cccfba33dbd539871dbba100d2c732d0535af72fe106f17b9b4a04"
 
 [metadata.files]
 altgraph = [
@@ -663,17 +663,17 @@ pyinstaller-hooks-contrib = [
     {file = "pyinstaller_hooks_contrib-2020.11-py2.py3-none-any.whl", hash = "sha256:fa8280b79d8a2b267a2e43ff44f73b3e4a68fc8d205b8d34e8e06c960f7c2fcf"},
 ]
 pyqt5 = [
-    {file = "PyQt5-5.15.6-cp36-abi3-macosx_10_13_x86_64.whl", hash = "sha256:33ced1c876f6a26e7899615a5a4efef2167c263488837c7beed023a64cebd051"},
-    {file = "PyQt5-5.15.6-cp36-abi3-manylinux1_x86_64.whl", hash = "sha256:9d6efad0377aa78bf081a20ac752ce86096ded18f04c592d98f5b92dc879ad0a"},
-    {file = "PyQt5-5.15.6-cp36-abi3-win32.whl", hash = "sha256:9d2dcdaf82263ae56023410a7af15d1fd746c8e361733a7d0d1bd1f004ec2793"},
-    {file = "PyQt5-5.15.6-cp36-abi3-win_amd64.whl", hash = "sha256:f411ecda52e488e1d3c5cce7563e1b2ca9cf0b7531e3c25b03d9a7e56e07e7fc"},
-    {file = "PyQt5-5.15.6.tar.gz", hash = "sha256:80343bcab95ffba619f2ed2467fd828ffeb0a251ad7225be5fc06dcc333af452"},
+    {file = "PyQt5-5.15.3-cp36.cp37.cp38.cp39-abi3-macosx_10_13_intel.whl", hash = "sha256:69fdceed983ebd388f44ceab9b8a6c2c086c79c705182fcc7b06837e2ccf7ba3"},
+    {file = "PyQt5-5.15.3-cp36.cp37.cp38.cp39-abi3-manylinux2014_x86_64.whl", hash = "sha256:8b9e07094382d51dc34f63c5a417b735dae1ad934a9dd9bc08bbc0a39452bfe8"},
+    {file = "PyQt5-5.15.3-cp36.cp37.cp38.cp39-none-win32.whl", hash = "sha256:ef2682dc829d6603fb5c958274d721fb076fd84a88fcb8f9fc7655cbb72b2bfc"},
+    {file = "PyQt5-5.15.3-cp36.cp37.cp38.cp39-none-win_amd64.whl", hash = "sha256:4e0fc6993df120e686528de46f2e002e930e24f99f103788724f0bd8bec9b4f7"},
+    {file = "PyQt5-5.15.3.tar.gz", hash = "sha256:965ba50e7029b37f218a54ace24e87c77db3e5a9f0b83baeb21fb57b4154b838"},
 ]
-pyqt5-qt5 = [
-    {file = "PyQt5_Qt5-5.15.2-py3-none-macosx_10_13_intel.whl", hash = "sha256:76980cd3d7ae87e3c7a33bfebfaee84448fd650bad6840471d6cae199b56e154"},
-    {file = "PyQt5_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl", hash = "sha256:1988f364ec8caf87a6ee5d5a3a5210d57539988bf8e84714c7d60972692e2f4a"},
-    {file = "PyQt5_Qt5-5.15.2-py3-none-win32.whl", hash = "sha256:9cc7a768b1921f4b982ebc00a318ccb38578e44e45316c7a4a850e953e1dd327"},
-    {file = "PyQt5_Qt5-5.15.2-py3-none-win_amd64.whl", hash = "sha256:750b78e4dba6bdf1607febedc08738e318ea09e9b10aea9ff0d73073f11f6962"},
+pyqt5-qt = [
+    {file = "PyQt5_Qt-5.15.2-py3-none-macosx_10_13_intel.whl", hash = "sha256:962511bfdc847f0746e1de92499cbb1ae127ca5ec356f009a6d9f924fe1230d5"},
+    {file = "PyQt5_Qt-5.15.2-py3-none-manylinux2014_x86_64.whl", hash = "sha256:dec2e88fbfabc0d3365bb4007c88c75fc99fc75cfb418399aeb5acd1d5f7d484"},
+    {file = "PyQt5_Qt-5.15.2-py3-none-win32.whl", hash = "sha256:8aba4f0a245c42f186a235c47011ee422a14b949e52fc64e697b10d1c433ff39"},
+    {file = "PyQt5_Qt-5.15.2-py3-none-win_amd64.whl", hash = "sha256:756b8c055033b2d96d18e74e1380bdb64984b150879fa92cd62d327f78636153"},
 ]
 pyqt5-sip = [
     {file = "PyQt5_sip-12.9.0-cp36-cp36m-macosx_10_6_intel.whl", hash = "sha256:d85002238b5180bce4b245c13d6face848faa1a7a9e5c6e292025004f2fd619a"},
@@ -700,17 +700,17 @@ pyqt5ac = [
     {file = "pyqt5ac-1.2.1.tar.gz", hash = "sha256:21a2b629d8e29f13d17cb76cb8d6b3c0cade3edfe3490e35e9da83d10ed8f374"},
 ]
 pyqtnetworkauth = [
-    {file = "PyQtNetworkAuth-5.15.4-cp36.cp37.cp38.cp39-abi3-macosx_10_13_intel.whl", hash = "sha256:66628ba57fcc196196dade0072259bbd7b59395be9f1a6bc11cb175ef69dce19"},
-    {file = "PyQtNetworkAuth-5.15.4-cp36.cp37.cp38.cp39-abi3-manylinux2014_x86_64.whl", hash = "sha256:614b605b58c79d480b83fac72e713f637c8c65d4e6bc773e325148828c7567ce"},
-    {file = "PyQtNetworkAuth-5.15.4-cp36.cp37.cp38.cp39-none-win32.whl", hash = "sha256:da0765cb50b217503b75f4937265c23f7bca821e3b28cad6e51c400518a05c15"},
-    {file = "PyQtNetworkAuth-5.15.4-cp36.cp37.cp38.cp39-none-win_amd64.whl", hash = "sha256:9384d03d8378a458905140e48ba13fddfa8f9966f16cf1b4a3081e8e58d78c52"},
-    {file = "PyQtNetworkAuth-5.15.4.tar.gz", hash = "sha256:893b9f8afb26a64757e9fa3436261b8bfcb4e696efc2a364a9dc8ac44db67fa7"},
+    {file = "PyQtNetworkAuth-5.15.3-cp36.cp37.cp38.cp39-abi3-macosx_10_13_intel.whl", hash = "sha256:86adb1add03447e16401752171da3a1f901b04be6bc4911cf40b0491558810c9"},
+    {file = "PyQtNetworkAuth-5.15.3-cp36.cp37.cp38.cp39-abi3-manylinux2014_x86_64.whl", hash = "sha256:6a5932251f7f7c8a03e57c34ff0eea177352c07a9ddcbaf5331f5d5a0ff50df0"},
+    {file = "PyQtNetworkAuth-5.15.3-cp36.cp37.cp38.cp39-none-win32.whl", hash = "sha256:7f91090f633cdd0130f54a1585ab4cb67585e4f8da59ff67fa7b581baf75037a"},
+    {file = "PyQtNetworkAuth-5.15.3-cp36.cp37.cp38.cp39-none-win_amd64.whl", hash = "sha256:f3e148acb326e8f0c0336f2d781fb79e557adf98301a539bf337dff8aa91aa7b"},
+    {file = "PyQtNetworkAuth-5.15.3.tar.gz", hash = "sha256:2590eae76d4b87ceb9f0d857a5631e13dd14f7fdab2b5e696df61f77e4e3fd82"},
 ]
-pyqtnetworkauth-qt5 = [
-    {file = "PyQtNetworkAuth_Qt5-5.15.2-py3-none-macosx_10_13_intel.whl", hash = "sha256:acbba8c8fbe2eb9bb856e4bfc2bf4d90e7cd37a423cd250b7a2f43636286d6a1"},
-    {file = "PyQtNetworkAuth_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl", hash = "sha256:f8ef4aa76e3b4cb428c0b3a0795bfa972e36f5570db80cdd3b28a93e9f2e268b"},
-    {file = "PyQtNetworkAuth_Qt5-5.15.2-py3-none-win32.whl", hash = "sha256:9e54a3939097860e4911d19d2269183e3603b0011b4bf1922e941846eaed32fe"},
-    {file = "PyQtNetworkAuth_Qt5-5.15.2-py3-none-win_amd64.whl", hash = "sha256:ff0ff1702414e0dfabda0a337e44b33c6479c988a42d2cc61052eb27ff9ec905"},
+pyqtnetworkauth-qt = [
+    {file = "PyQtNetworkAuth_Qt-5.15.2-py3-none-macosx_10_13_intel.whl", hash = "sha256:0c081b6086b6bfd1f5252b17bcd7488d89985915bbea9f799d9bfac0adeac924"},
+    {file = "PyQtNetworkAuth_Qt-5.15.2-py3-none-manylinux2014_x86_64.whl", hash = "sha256:b3d3eaa9272f6fe750429b1dd87a6eeaad1a379925579a04df2a6f180979c001"},
+    {file = "PyQtNetworkAuth_Qt-5.15.2-py3-none-win32.whl", hash = "sha256:a6072123e58d250976ded00c8979904f1be4a412f0e76c3295fbf4c1bccc7090"},
+    {file = "PyQtNetworkAuth_Qt-5.15.2-py3-none-win_amd64.whl", hash = "sha256:f9056f12b1ca98936a3ffcf565a9ee5aec1a2fdf0814713cf7678303ffd05ab1"},
 ]
 python-dateutil = [
     {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
