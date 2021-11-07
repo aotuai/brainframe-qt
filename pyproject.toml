@@ -31,7 +31,7 @@ gstly = [
 
 pyqt5ac = { version = "^1.1.0", optional = true }
 pyinstaller = { version = "^4.1", optional = true }
-PyQtNetworkAuth-Qt5 = "5.15.2"
+PyQtNetworkAuth = "5.15.3"
 
 [tool.poetry.dev-dependencies]
 pyqt5 = "^5.15.0"
