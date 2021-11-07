@@ -297,7 +297,7 @@ test = ["pytest", "pytest-cov"]
 name = "pyqtnetworkauth"
 version = "5.15.4"
 description = "Python bindings for the Qt Network Authorization library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -310,7 +310,7 @@ PyQtNetworkAuth-Qt5 = ">=5.15"
 name = "pyqtnetworkauth-qt5"
 version = "5.15.2"
 description = "The subset of a Qt installation needed by PyQtNetworkAuth."
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -459,7 +459,7 @@ windows = ["gstly"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "c3edf2ce99c8d0f1b1d5e4146bd92445c4b0a47863648643a46ec204bb97b9ee"
+content-hash = "551094b164a5e75c52f80924d31ecf85031d5b81a93709267c53ef58f059cc46"
 
 [metadata.files]
 altgraph = [
