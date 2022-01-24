@@ -2,6 +2,8 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QButtonGroup, QHBoxLayout, QRadioButton, \
     QWidget, QAbstractButton
 
+from brainframe_qt.util.licensing import LicenseManager
+
 
 class LicenseSourceButtons(QWidget):
     license_source_changed = pyqtSignal(str)
@@ -22,6 +24,9 @@ class LicenseSourceButtons(QWidget):
     def _init_aotu_account_button(self) -> QRadioButton:
         button_text = self.tr("Aotu Account")
         aotu_account_button = QRadioButton(button_text, self)
+
+        if not LicenseManager.is_oauth_available():
+            aotu_account_button.setDisabled(True)
 
         return aotu_account_button
 

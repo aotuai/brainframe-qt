@@ -7,7 +7,6 @@ from brainframe_qt import constants
 from brainframe_qt.api_utils import api
 from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.util.licensing import LicenseInfo
-from brainframe_qt.util.oauth.cognito import CognitoOAuth
 from brainframe_qt.util.oauth.error import OAuthError
 
 
@@ -21,20 +20,27 @@ class LicenseManager(QObject):
     def __init__(self, *, parent: QObject):
         super().__init__(parent=parent)
 
-        self.oauth = CognitoOAuth(
-            cognito_domain=constants.oauth.COGNITO_DOMAIN,
-            client_id=constants.oauth.CLIENT_ID,
-            parent=self,
-        )
+        if self.is_oauth_available():
+            from brainframe_qt.util.oauth.cognito import CognitoOAuth
+            self.oauth = CognitoOAuth(
+                cognito_domain=constants.oauth.COGNITO_DOMAIN,
+                client_id=constants.oauth.CLIENT_ID,
+                parent=self,
+            )
+        else:
+            self.oauth = None
 
         self._init_signals()
 
     def _init_signals(self) -> None:
-        self.oauth.ready_to_authenticate.connect(QDesktopServices.openUrl)
-        self.oauth.authentication_successful.connect(self.authenticate_with_tokens)
-        self.oauth.authentication_error.connect(self.oauth_error)
+        if self.is_oauth_available():
+            self.oauth.ready_to_authenticate.connect(QDesktopServices.openUrl)
+            self.oauth.authentication_successful.connect(self.authenticate_with_tokens)
+            self.oauth.authentication_error.connect(self.oauth_error)
 
     def authenticate_with_oauth(self):
+        if not self.is_oauth_available():
+            raise RuntimeError("OAuth is not available on this platform.")
         self.oauth.authenticate()
 
     def authenticate_with_tokens(self, tokens: bf_codecs.CloudTokens) -> None:
@@ -61,3 +67,13 @@ class LicenseManager(QObject):
         QTAsyncWorker(self, api.set_license_key, f_args=(license_key,),
                       on_success=on_success, on_error=self.api_error.emit) \
             .start()
+
+    @staticmethod
+    def is_oauth_available() -> bool:
+        # We've been unable to get QtNetworkAuth installed for Windows within MSYS
+        try:
+            from PyQt5 import QtNetworkAuth
+        except ImportError:
+            return False
+        else:
+            return True
