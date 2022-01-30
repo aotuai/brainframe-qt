@@ -459,7 +459,7 @@ windows = ["gstly"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.2"
-content-hash = "a8e08f0f533647f7b886475c819cae203e3a58537444b890feecdb00a8bade47"
+content-hash = "6355931b9401b7f319b5d692afb4e8a7992a2fce8d2e1eb007dd0f1570b22102"
 
 [metadata.files]
 altgraph = [
