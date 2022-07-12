@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh" sourcelanguage="en">
+<!DOCTYPE TS>
+<TS version="2.1" language="zh" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -357,7 +358,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../brainframe_app.py" line="237"/>
         <source>For a stable experience, please &lt;a href=&apos;{client_download_url}&apos;&gt;download&lt;/a&gt; the latest {outdated} version.</source>
-        <translation>为了获得更稳定的体验，请&lt;a href=&apos;{client_download_url}&apos;&gt;下载&lt;/a&gt;最新的{outdated}版本。</translation>
+        <translation>为了获得更稳定的体验，请&lt;a href='{client_download_url}'&gt;下载&lt;/a&gt;最新的{outdated}版本。</translation>
     </message>
     <message>
         <location filename="../../brainframe_app.py" line="242"/>
@@ -749,17 +750,17 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/widgets/brainframe_license/license_details/license_details_ui.py" line="39"/>
         <source>No license exists on the server. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload one&lt;/a&gt;.</source>
-        <translation>服务器上没有授权。请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个授权&lt;/a&gt;。</translation>
+        <translation>服务器上没有授权。请&lt;a href='{license_docs_link}'&gt;上传一个授权&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/widgets/brainframe_license/license_details/license_details_ui.py" line="53"/>
         <source>Server holds an invalid license or the BrainFrame server was unable to talk to Aotu&apos;s licensing servers.&lt;br&gt;Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt; or ensure that the server is connected to the internet.</source>
-        <translation>服务器持有的授权无效，或者BrainFrame服务器无法与Aotu的授权服务器进行通信。&lt;br&gt;请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;或确保服务器已连接到互联网。</translation>
+        <translation>服务器持有的授权无效，或者BrainFrame服务器无法与Aotu的授权服务器进行通信。&lt;br&gt;请&lt;a href='{license_docs_link}'&gt;上传新授权&lt;/a&gt;或确保服务器已连接到互联网。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/widgets/brainframe_license/license_details/license_details_ui.py" line="69"/>
         <source>License is expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new one&lt;/a&gt;.</source>
-        <translation>授权出现问题，请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个新的授权&lt;/a&gt;。</translation>
+        <translation>授权出现问题，请&lt;a href='{license_docs_link}'&gt;上传一个新的授权&lt;/a&gt;。</translation>
     </message>
 </context>
 <context>
@@ -787,12 +788,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="170"/>
         <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
-        <translation>提供的授权已过期。请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;。</translation>
+        <translation>提供的授权已过期。请&lt;a href='{license_docs_link}'&gt;上传新授权&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="156"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
-        <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;;上传新授权&lt;/a&gt;。</translation>
+        <translation>提供的授权格式无效。请&lt;a href='{license_docs_link}'&gt;;上传新授权&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="182"/>
@@ -1181,7 +1182,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="231"/>
         <source>&lt;a href=&apos;{license_docs_link}&apos;&gt;Download&lt;/a&gt; a new one</source>
-        <translation>&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个新的授权&lt;/a&gt;</translation>
+        <translation>&lt;a href='{license_docs_link}'&gt;上传一个新的授权&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="93"/>
@@ -1293,7 +1294,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="628"/>
         <source>Please see the &lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;documentation&lt;/a&gt; for more information on adding IP Cameras.</source>
-        <translation>有关添加IP摄像机的详细信息，请参见&lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;文档&lt;/a&gt;。</translation>
+        <translation>有关添加IP摄像机的详细信息，请参见&lt;a href='{ip_camera_docs_link}'&gt;文档&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="625"/>
@@ -1308,7 +1309,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="687"/>
         <source>Valid camera IDs can be found by running &apos;sudo ls /dev | grep video&apos;</source>
-        <translation>可以执行这个命令获得有效的摄像头ID &apos;sudo ls /dev | grep video&apos;</translation>
+        <translation>可以执行这个命令获得有效的摄像头ID 'sudo ls /dev | grep video'</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="690"/>
@@ -1629,7 +1630,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="29"/>
         <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
-        <translation>点击 ➕ 按钮以添加新的视频流</translation>
+        <translation type="unfinished">点击 ➕ 按钮以添加新的视频流</translation>
     </message>
 </context>
 </TS>

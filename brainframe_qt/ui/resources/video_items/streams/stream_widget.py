@@ -11,6 +11,7 @@ from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from .stream_event_manager import StreamEventManager
 from .stream_widget_ui import StreamWidgetUI
 
+from brainframe_qt.ui.resources.config import RenderSettings
 
 class StreamWidget(StreamWidgetUI):
     """Base widget that uses Stream object to get frames.
@@ -131,5 +132,7 @@ class StreamWidget(StreamWidgetUI):
         self.scene().set_frame(path=":/images/error_message_png")
 
     def on_stream_paused(self) -> None:
-        self.scene().remove_all_items()
-        self.scene().set_frame(path=":/images/stream_paused_png")
+        temp_render_settings = RenderSettings()
+        if temp_render_settings.show_on_paused == False:
+            self.scene().remove_all_items()
+        self.scene().set_frame(pixmap=self.scene().current_frame.pixmap())
