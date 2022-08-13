@@ -1,7 +1,8 @@
 from typing import List, overload
 
 import numpy as np
-from PyQt5.QtGui import QPixmap
+from PyQt5 import QtCore
+from PyQt5.QtGui import QPixmap, QPainter
 from PyQt5.QtWidgets import QGraphicsScene, QWidget
 from brainframe.api import bf_codecs
 
@@ -29,6 +30,11 @@ class StreamGraphicsScene(QGraphicsScene):
     def set_frame(self, path: str) -> None:
         ...
 
+    def add_frame(self, pixmap=None, path=None) -> None:
+        if path is not None:
+            pixmap = QPixmap(str(path))
+        self.current_frame = self.addPixmap(pixmap)
+
     def set_frame(self, *, pixmap=None, path=None) -> None:
 
         if path is not None:
@@ -39,7 +45,6 @@ class StreamGraphicsScene(QGraphicsScene):
         if not self.current_frame:
             current_frame_size = None
             self.current_frame = self.addPixmap(pixmap)
-
             # Fixes BF-319: Clicking a stream, closing it, and reopening it
             # again resulted in a stream that wasn't displayed properly. This
             # was because the resizeEvent() would be triggered before the frame
