@@ -33,6 +33,7 @@ class StreamGraphicsScene(QGraphicsScene):
     def add_frame(self, pixmap=None, path=None) -> None:
         if path is not None:
             pixmap = QPixmap(str(path))
+        pixmap = pixmap.scaled(self.current_frame.pixmap().size())
         self.current_frame = self.addPixmap(pixmap)
 
     def set_frame(self, *, pixmap=None, path=None) -> None:
