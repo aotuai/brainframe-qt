@@ -13,7 +13,7 @@ numpy = [
     { version = "1.16.5", markers = "sys_platform == 'win32'" },
     { version = "^1.16", markers = "sys_platform == 'linux'" },
 ]
-shapely = "^1.7.1"
+shapely = "1.7.1"
 requests = "^2.23.0"
 python-dateutil = "^2.8.1"
 # https://github.com/pypa/setuptools/issues/1694
