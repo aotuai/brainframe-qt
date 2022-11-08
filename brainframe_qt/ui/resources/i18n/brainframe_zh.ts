@@ -50,7 +50,7 @@
 Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br&gt;{exc}</source>
         <translation>无法解析此文件夹！
 
-请阅读文档以了解文件夹结构。&lt;br&gt;&lt;br&gt;{exc}</translation>
+请阅读文档以了解文件夹结构。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;{exc}</translation>
     </message>
 </context>
 <context>
@@ -349,7 +349,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../brainframe_app.py" line="237"/>
         <source>For a stable experience, please &lt;a href=&apos;{client_download_url}&apos;&gt;download&lt;/a&gt; the latest {outdated} version.</source>
-        <translation>为了获得更稳定的体验，请&lt;a href=&apos;{client_download_url}&apos;&gt;下载&lt;/a&gt;最新的{outdated}版本。</translation>
+        <translation>为了获得更稳定的体验，请&amp;lt;a href=&apos;{client_download_url}&apos;&amp;gt;下载&amp;lt;/a&amp;gt;最新的{outdated}版本。</translation>
     </message>
     <message>
         <location filename="../../brainframe_app.py" line="242"/>
@@ -741,17 +741,17 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="40"/>
         <source>No license exists on the server. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload one&lt;/a&gt;.</source>
-        <translation>服务器上没有授权。请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个授权&lt;/a&gt;。</translation>
+        <translation>服务器上没有授权。请&amp;lt;a href=&apos;{license_docs_link}&apos;&amp;gt;上传一个授权&amp;lt;/a&amp;gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="54"/>
         <source>Server holds an invalid license or the BrainFrame server was unable to talk to Aotu&apos;s licensing servers.&lt;br&gt;Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt; or ensure that the server is connected to the internet.</source>
-        <translation>服务器持有的授权无效，或者BrainFrame服务器无法与Aotu的授权服务器进行通信。&lt;br&gt;请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;或确保服务器已连接到互联网。</translation>
+        <translation>服务器持有的授权无效，或者BrainFrame服务器无法与Aotu的授权服务器进行通信。&amp;lt;br&amp;gt;请&amp;lt;a href=&apos;{license_docs_link}&apos;&amp;gt;上传新授权&amp;lt;/a&amp;gt;或确保服务器已连接到互联网。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="70"/>
         <source>License is expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new one&lt;/a&gt;.</source>
-        <translation>授权出现问题，请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个新的授权&lt;/a&gt;。</translation>
+        <translation>授权出现问题，请&amp;lt;a href=&apos;{license_docs_link}&apos;&amp;gt;上传一个新的授权&amp;lt;/a&amp;gt;。</translation>
     </message>
 </context>
 <context>
@@ -789,12 +789,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="126"/>
         <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
-        <translation>提供的授权已过期。请&lt;a href=&apos;{license_docs_link}&apos;&gt;上传新授权&lt;/a&gt;。</translation>
+        <translation>提供的授权已过期。请&amp;lt;a href=&apos;{license_docs_link}&apos;&amp;gt;上传新授权&amp;lt;/a&amp;gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="112"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
-        <translation>提供的授权格式无效。请&lt;a href=&apos;{license_docs_link}&apos;&gt;;上传新授权&lt;/a&gt;。</translation>
+        <translation>提供的授权格式无效。请&amp;lt;a href=&apos;{license_docs_link}&apos;&amp;gt;;上传新授权&amp;lt;/a&amp;gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="139"/>
@@ -1123,7 +1123,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="230"/>
         <source>&lt;a href=&apos;{license_docs_link}&apos;&gt;Download&lt;/a&gt; a new one</source>
-        <translation>&lt;a href=&apos;{license_docs_link}&apos;&gt;上传一个新的授权&lt;/a&gt;</translation>
+        <translation>&amp;lt;a href=&apos;{license_docs_link}&apos;&amp;gt;上传一个新的授权&amp;lt;/a&amp;gt;</translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="93"/>
@@ -1230,7 +1230,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
         <source>Webcams and other video devices must be attached to the computer running the BrainFrame server.&lt;br&gt;&lt;br&gt;To add a webcam, open a terminal on the server machine and run &lt;pre&gt;ls /dev/video*&lt;/pre&gt;If you get a message about &quot;No such file or directory&quot;, you do not have any webcams attached to theserver computer.&lt;br&gt;&lt;br&gt;Otherwise, select the digit at the end of the results and provide it to BrainFrame. For example, if the command returns &quot;/dev/video0&quot;, input &quot;0&quot; (without the quotes).</source>
-        <translation>网络摄像头和其他视频设备必须连接到运行BrainFrame的计算机。如果在启动BrainFrame后插入设备，请重新启动BrainFrame。&lt;br&gt;&lt;br&gt;要添加网络摄像头，请在服务器上打开终端并运行&lt;pre&gt;ls /dev/video*&lt;/pre&gt;如果收到类似“No such file or directory“的消息，则说明运行BrainFrame的计算机没有连接任何网络摄像头。&lt;br&gt;&lt;br&gt;否则，请选择结果末尾的数字并将其提供给BrainFrame。例如，如果命令返回“/dev/video0“，则输入“0“（不带引号）。</translation>
+        <translation>网络摄像头和其他视频设备必须连接到运行BrainFrame的计算机。如果在启动BrainFrame后插入设备，请重新启动BrainFrame。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;要添加网络摄像头，请在服务器上打开终端并运行&amp;lt;pre&amp;gt;ls /dev/video*&amp;lt;/pre&amp;gt;如果收到类似“No such file or directory“的消息，则说明运行BrainFrame的计算机没有连接任何网络摄像头。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;否则，请选择结果末尾的数字并将其提供给BrainFrame。例如，如果命令返回“/dev/video0“，则输入“0“（不带引号）。</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="624"/>
@@ -1240,12 +1240,12 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="628"/>
         <source>Please see the &lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;documentation&lt;/a&gt; for more information on adding IP Cameras.</source>
-        <translation>有关添加IP摄像机的详细信息，请参见&lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;文档&lt;/a&gt;。</translation>
+        <translation>有关添加IP摄像机的详细信息，请参见&amp;lt;a href=&apos;{ip_camera_docs_link}&apos;&amp;gt;文档&amp;lt;/a&amp;gt;。</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="625"/>
         <source>Standard RTSP format:&lt;br&gt;{rtsp_format}</source>
-        <translation>标准RTSP格式：&lt;br&gt;{rtsp_format}</translation>
+        <translation>标准RTSP格式：&amp;lt;br&amp;gt;{rtsp_format}</translation>
     </message>
 </context>
 <context>
@@ -1417,7 +1417,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="183"/>
         <source>This will delete all Zones, Detections, Alarms, Alerts, etc. associated with this stream and cannot be undone. This process will happen in the background and can take several minutes.&lt;br&gt;&lt;br&gt;Are you sure you want to continue?</source>
-        <translation>这将删除所有此视频流相关的区域、检测结果、警报、报警信息等，并且无法撤消。这个流程会在后台发生&lt;br&gt;&lt;br&gt;可能需要几分钟。</translation>
+        <translation>这将删除所有此视频流相关的区域、检测结果、警报、报警信息等，并且无法撤消。这个流程会在后台发生&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;可能需要几分钟。</translation>
     </message>
 </context>
 <context>
