@@ -42,7 +42,7 @@ parts:
 
       # Install Poetry
       curl -sSL --output /tmp/get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
-      python3 /tmp/get-poetry.py --version 1.1.4
+      python3 /tmp/get-poetry.py --version 1.1.14
       export PATH=$HOME/.poetry/bin:$PATH
 
       # Install all Poetry dependencies globally
