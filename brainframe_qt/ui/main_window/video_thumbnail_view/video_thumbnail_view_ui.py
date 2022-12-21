@@ -26,7 +26,7 @@ class _VideoThumbnailViewUI(QWidget):
         self._init_style()
 
     def _init_background_widget(self) -> BackgroundImageText:
-        text = self.trUtf8("Click the ➕ button to add a new stream".encode(encoding='UTF-8'))
+        text = self.tr("Click the ➕ button to add a new stream")
         svg_path = ":/icons/no_streams"
 
         background_widget = BackgroundImageText(text, svg_path, self)
