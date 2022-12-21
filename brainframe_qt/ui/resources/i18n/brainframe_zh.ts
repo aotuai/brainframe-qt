@@ -422,12 +422,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>ClientConfigActivity</name>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.py" line="18"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.py" line="19"/>
         <source>Client Configuration</source>
         <translation>客户端配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.py" line="27"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.py" line="28"/>
         <source>Client</source>
         <translation>客户端配置</translation>
     </message>
@@ -445,32 +445,32 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>显示检测信息</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="48"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="88"/>
         <source>Show labels</source>
         <translation>显示标签</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="84"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="52"/>
         <source>Use polygons when available</source>
         <translation>在可用时使用多边形</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="97"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="98"/>
         <source>Show attributes (e.g. gender/behavior for a person detection)</source>
         <translation>显示属性（例如，人物检测的性别/行为）</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="104"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="35"/>
         <source>Show tracking</source>
         <translation>显示跟踪信息</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="111"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="42"/>
         <source>Always use bounding boxes</source>
         <translation>始终使用长方形检测框</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="121"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="65"/>
         <source>Show recognition</source>
         <translation>显示识别结果</translation>
     </message>
@@ -485,9 +485,19 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>显示线段</translation>
     </message>
     <message>
-        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="58"/>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="118"/>
         <source>Show extra data</source>
         <translation>显示元数据 (Metadata)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="171"/>
+        <source>Show on paused streams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="221"/>
+        <source>Maximum streams</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1629,7 +1639,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="29"/>
         <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
-        <translation>点击 ➕ 按钮以添加新的视频流</translation>
+        <translation type="unfinished">点击 ➕ 按钮以添加新的视频流</translation>
     </message>
 </context>
 </TS>
