@@ -47,3 +47,13 @@ class RenderSettings(SettingsManager):
         default=False,
         type_=bool,
     )
+    max_streams = Setting(
+    	name="max_streams_allowed",
+    	default=5,
+    	type_=int,
+    )
+    show_on_paused = Setting(
+        name="show_on_paused_streams",
+        default=False,
+        type_=bool,
+    )

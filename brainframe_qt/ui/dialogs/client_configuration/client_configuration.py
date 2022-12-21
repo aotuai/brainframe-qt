@@ -5,6 +5,7 @@ from PyQt5.uic import loadUi
 from brainframe_qt.extensions import DialogActivity
 from brainframe_qt.ui.resources.config import RenderSettings
 from brainframe_qt.ui.resources.paths import qt_ui_paths
+from brainframe_qt.api_utils import get_stream_manager
 
 
 class ClientConfigActivity(DialogActivity):
@@ -35,7 +36,9 @@ class RenderConfiguration(QDialog):
         loadUi(qt_ui_paths.client_configuration_ui, self)
 
         self.render_config = RenderSettings()
-
+        
+        self.stream_limit_spinbox.setValue(self.render_config.max_streams)
+        self.still_pictures_checkbox.setChecked(self.render_config.show_on_paused)
         self.detections_checkbox.setChecked(self.render_config.draw_detections)
         self.polygon_radio_button.setChecked(self.render_config.use_polygons)
         self.bbox_radio_button.setChecked(not self.render_config.use_polygons)
@@ -56,6 +59,7 @@ class RenderConfiguration(QDialog):
         ...
 
         dialog = cls(parent)
+        stream_manager = get_stream_manager()
 
         result = dialog.exec_()
         if not result:
@@ -81,3 +85,6 @@ class RenderConfiguration(QDialog):
             = dialog.recognition_checkbox.isChecked()
         dialog.render_config.show_extra_data \
             = dialog.extra_data_checkbox.isChecked()
+        dialog.render_config.max_streams = dialog.stream_limit_spinbox.value()
+        dialog.render_config.show_on_paused = dialog.still_pictures_checkbox.isChecked()
+        stream_manager.change_max_active_streams(dialog.stream_limit_spinbox.value())

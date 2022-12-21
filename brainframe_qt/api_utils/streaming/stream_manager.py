@@ -10,11 +10,12 @@ from brainframe.api.bf_codecs import StreamConfiguration
 from brainframe_qt.api_utils import api
 from .synced_reader import SyncedStreamReader
 
+from brainframe_qt.ui.resources.config import RenderSettings
 
 class StreamManager(QObject):
     """Keeps track of existing Stream objects, and creates new ones as necessary"""
-
-    _MAX_ACTIVE_STREAMS = 5
+    temp_render_settings = RenderSettings()
+    _MAX_ACTIVE_STREAMS = temp_render_settings.max_streams
     """Number of streams to run concurrently"""
 
     def __init__(self, *, parent: QObject):
@@ -37,6 +38,9 @@ class StreamManager(QObject):
 
     def _init_signals(self) -> None:
         self.destroyed.connect(self.close)
+
+    def change_max_active_streams(self, num_streams):
+    	self._MAX_ACTIVE_STREAMS = num_streams
 
     def close(self) -> None:
         """Request and wait for all streams to close"""

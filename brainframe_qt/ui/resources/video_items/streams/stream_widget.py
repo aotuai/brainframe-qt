@@ -1,7 +1,7 @@
 from typing import Optional
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtGui import QResizeEvent, QPixmap, QPainter
 from PyQt5.QtWidgets import QWidget
 
 from brainframe.api.bf_codecs import StreamConfiguration
@@ -11,6 +11,7 @@ from brainframe_qt.api_utils.streaming.zone_status_frame import ZoneStatusFrame
 from .stream_event_manager import StreamEventManager
 from .stream_widget_ui import StreamWidgetUI
 
+from brainframe_qt.ui.resources.config import RenderSettings
 
 class StreamWidget(StreamWidgetUI):
     """Base widget that uses Stream object to get frames.
@@ -131,5 +132,20 @@ class StreamWidget(StreamWidgetUI):
         self.scene().set_frame(path=":/images/error_message_png")
 
     def on_stream_paused(self) -> None:
-        self.scene().remove_all_items()
-        self.scene().set_frame(path=":/images/stream_paused_png")
+        #remove items based on settings
+        temp_render_settings = RenderSettings()
+        if temp_render_settings.show_on_paused == False:
+            self.scene().remove_all_items()
+        #prepare opaque pixmap
+        whitemap = QPixmap(1920, 1080)
+        whitemap.fill(Qt.white)
+        newmap = QPixmap(whitemap.size())
+        newmap.fill(Qt.transparent)
+        painter = QPainter(newmap)
+        painter.setOpacity(0.50)
+        painter.drawPixmap(QPoint(), whitemap)
+        painter.end()
+        #set frame to current frame with the pause overlay
+        self.scene().set_frame(pixmap=self.scene().current_frame.pixmap())
+        self.scene().add_frame(pixmap=newmap)
+        self.scene().add_frame(path=":/images/stream_paused_png")
