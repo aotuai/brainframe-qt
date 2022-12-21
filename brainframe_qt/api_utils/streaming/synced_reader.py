@@ -15,6 +15,8 @@ from brainframe_qt.util.events import or_events
 from .frame_syncer import FrameSyncer
 from .zone_status_frame import ZoneStatusFrame
 
+NEW_FRAME_EVENT_TIMEOUT: float = 30.0
+
 
 class SyncedStatus(Enum):
     """SyncedStreamReader wrapper of gstly's StreamStatus.
@@ -193,10 +195,14 @@ class SyncedStreamReader(QObject):
         self.finished.emit()
 
     def _handle_frame_event(self) -> None:
-        self._stream_reader.new_frame_event.clear()
+        self._stream_reader.latest_frame_event.clear()
 
         # Get the new frame + timestamp
         frame_tstamp, frame_bgr = self._stream_reader.latest_frame
+
+        if frame_bgr is None:
+            return
+
         frame_rgb = frame_bgr[..., ::-1].copy()
         del frame_bgr
 
@@ -281,7 +287,7 @@ class SyncedStreamReader(QObject):
             )
             return
 
-        frame_or_status_event = or_events(self._stream_reader.new_frame_event,
+        frame_or_status_event = or_events(self._stream_reader.latest_frame_event,
                                           self._stream_reader.new_status_event)
 
         while not self._interrupt_requested:
@@ -292,12 +298,12 @@ class SyncedStreamReader(QObject):
                 self._pause_streaming_event.clear()
                 break
 
-            if not frame_or_status_event.wait(0.2):
+            if not frame_or_status_event.wait(NEW_FRAME_EVENT_TIMEOUT):
                 continue
 
             if self._stream_reader.new_status_event.is_set():
                 self._handle_status_event()
-            if self._stream_reader.new_frame_event.is_set():
+            if self._stream_reader.latest_frame_event.is_set():
                 self._handle_frame_event()
 
         if self._stream_reader is not None:
