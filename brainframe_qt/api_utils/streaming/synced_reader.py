@@ -252,6 +252,7 @@ class SyncedStreamReader(QObject):
         gobject_init.start()
 
         self._stream_reader = GstStreamReader(
+            self.stream_conf.id,
             url=self.stream_url,
             latency=latency,
             runtime_options=self.stream_conf.runtime_options,
