@@ -1140,8 +1140,8 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../splash_screen/splash_screen.py" line="59"/>
-        <source>.</source>
-        <translation>。</translation>
+        <source> .</source>
+        <translation> .</translation>
     </message>
 </context>
 <context>
@@ -1545,7 +1545,7 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="29"/>
-        <source>Click the ➕ button to add a new stream</source>
+        <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
         <translation>点击 ➕ 按钮以添加新的视频流</translation>
     </message>
 </context>
