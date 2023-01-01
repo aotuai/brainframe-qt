@@ -5,7 +5,7 @@ from weakref import WeakSet
 
 from brainframe_qt.api_utils.streaming.zone_status_frame import \
     ZoneStatusFrame
-from brainframe_qt.ui.resources.config import StreamingSettings
+from brainframe_qt.ui.resources.config import StreamingSettings, RenderSettings
 
 
 class SyncedFrameBuffer:
@@ -22,9 +22,14 @@ class SyncedFrameBuffer:
     setting when run normally.
     """
 
+    _delay_compensation: ClassVar[float] = 0.0
+
     def __init__(self):
         self._buffer: List[ZoneStatusFrame] = []
         self._instances.add(self)
+
+        self.render_settings = RenderSettings()
+        self.set_delay_compensation(self.render_settings.delay_compensation)
 
         self.streaming_settings = StreamingSettings()
         self.set_max_buffer_size(self.streaming_settings.frame_buffer_size)
@@ -36,10 +41,21 @@ class SyncedFrameBuffer:
 
     def _init_signals(self) -> None:
         self.streaming_settings.value_changed.connect(self._handle_settings_change)
+        self.render_settings.value_changed.connect(self._handle_settings_change)
 
     def add_frame(self, frame: ZoneStatusFrame) -> None:
+
         with self._buffer_lock:
+            frame.tstamp += self._delay_compensation
             self._buffer.append(frame)
+
+    @classmethod
+    def set_delay_compensation(cls, delay_compensation: float) -> None:
+        """Sets the video stream delay compensation in seconds.
+
+        :param delay_compensation: The video stream delay compensation
+        """
+        cls._delay_compensation = delay_compensation
 
     @classmethod
     def set_max_buffer_size(cls, max_size: int) -> None:
@@ -124,3 +140,6 @@ class SyncedFrameBuffer:
         if setting == "frame_buffer_size":
             value = typing.cast(int, value)
             self.set_max_buffer_size(value)
+        if setting == "video_delay_compensation":
+            value = typing.cast(float, value)
+            self.set_delay_compensation(value)

@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QDoubleValidator
 from PyQt5.QtWidgets import QApplication, QDialog, QWidget
 from PyQt5.uic import loadUi
 
@@ -37,6 +37,8 @@ class RenderConfiguration(QDialog):
         self.render_config = RenderSettings()
 
         self.detections_checkbox.setChecked(self.render_config.draw_detections)
+        self.compensation_input.setValidator(QDoubleValidator(-9.99, 9.99, 2, notation=QDoubleValidator.StandardNotation))
+        self.compensation_input.setText(f'{self.render_config.delay_compensation}')
         self.polygon_radio_button.setChecked(self.render_config.use_polygons)
         self.bbox_radio_button.setChecked(not self.render_config.use_polygons)
         self.detection_labels_checkbox.setChecked(
@@ -56,6 +58,7 @@ class RenderConfiguration(QDialog):
         ...
 
         dialog = cls(parent)
+        dialog.compensation_input.setValidator(QDoubleValidator(-9.99, 9.99, 2, notation=QDoubleValidator.StandardNotation))
 
         result = dialog.exec_()
         if not result:
@@ -70,6 +73,11 @@ class RenderConfiguration(QDialog):
         dialog.render_config.draw_lines = dialog.lines_checkbox.isChecked()
         dialog.render_config.draw_detections \
             = dialog.detections_checkbox.isChecked()
+        compensation_input_text = dialog.compensation_input.text()
+        if compensation_input_text == '':
+            pass # dialog.render_config.delay_compensation = 0.0
+        else:
+            dialog.render_config.delay_compensation = float(compensation_input_text)
         dialog.render_config.use_polygons = use_polygons
         dialog.render_config.show_detection_labels \
             = dialog.detection_labels_checkbox.isChecked()

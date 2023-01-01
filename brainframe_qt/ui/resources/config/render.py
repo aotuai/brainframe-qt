@@ -17,6 +17,7 @@ class RenderSettings(SettingsManager):
         default=True,
         type_=bool,
     )
+    delay_compensation = Setting(name="video_delay_compensation", default=0.0, type_=float)
     use_polygons = Setting(
         name="video_use_polygons",
         default=True,
