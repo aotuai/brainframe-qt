@@ -15,6 +15,11 @@ class MainWindowUI(QMainWindow):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
 
+        import pkg_resources
+        brainframe_qt_version = pkg_resources.get_distribution('brainframe-qt').version
+        title = f'BrainFrame Client version v{brainframe_qt_version}'
+        self.setWindowTitle(title)
+
         self.stacked_widget = self._init_tab_widget()
         self.toolbar = self._init_toolbar()
 
