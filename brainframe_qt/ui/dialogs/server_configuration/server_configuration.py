@@ -67,6 +67,7 @@ class ServerConfigurationDialog(QDialog):
         self.connection_status_label: QLabel
         self.connection_report_label: QLabel
         self.check_connection_button: QPushButton
+        self.server_version: str
 
         self.connection_report_label.setOpenExternalLinks(True)
 
@@ -245,7 +246,8 @@ class ServerConfigurationDialog(QDialog):
                 report_text += license_link
             elif license_state is bf_codecs.LicenseInfo.State.VALID:
                 label_text = "✔️"
-                report_text = self.tr("Connection Successful")
+                report_text = self.tr("Connection Successful") + "\n\n"
+                report_text += self.tr("Server is powered by BrainFrame AI Vision OS v") + self.server_version
             else:
                 label_text = "❗"
                 report_text = self.tr("Unknown license state")
@@ -278,7 +280,7 @@ class ServerConfigurationDialog(QDialog):
         temp_api = BrainFrameAPI(self.server_address, self.credentials)
 
         # Check connection
-        temp_api.version()
+        self.server_version = temp_api.version()
 
         # Check license state
         license_state = temp_api.get_license_info().state
