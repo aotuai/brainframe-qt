@@ -51,7 +51,7 @@
 Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br&gt;{exc}</source>
         <translation>无法解析此文件夹！
 
-请阅读文档以了解文件夹结构。&lt;br&gt;&lt;br&gt;{exc}</translation>
+请阅读文档以了解文件夹结构。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;{exc}</translation>
     </message>
 </context>
 <context>
@@ -350,7 +350,7 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../brainframe_app.py" line="237"/>
         <source>For a stable experience, please &lt;a href=&apos;{client_download_url}&apos;&gt;download&lt;/a&gt; the latest {outdated} version.</source>
-        <translation>为了获得更稳定的体验，请&lt;a href='{client_download_url}'&gt;下载&lt;/a&gt;最新的{outdated}版本。</translation>
+        <translation>为了获得更稳定的体验，请&amp;lt;a href='{client_download_url}'&amp;gt;下载&amp;lt;/a&amp;gt;最新的{outdated}版本。</translation>
     </message>
     <message>
         <location filename="../../brainframe_app.py" line="242"/>
@@ -481,6 +481,21 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <location filename="../../dialogs/client_configuration/client_configuration.ui" line="58"/>
         <source>Show extra data</source>
         <translation>显示元数据 (Metadata)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="171"/>
+        <source>Video delay render compensation</source>
+        <translation>视频流延迟渲染补偿</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="178"/>
+        <source>Floating point number, for example, 0.0</source>
+        <translation>浮点数，例如: 0.0</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/client_configuration/client_configuration.ui" line="181"/>
+        <source>0.0</source>
+        <translation>0.0</translation>
     </message>
 </context>
 <context>
@@ -742,17 +757,17 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="40"/>
         <source>No license exists on the server. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload one&lt;/a&gt;.</source>
-        <translation>服务器上没有授权。请&lt;a href='{license_docs_link}'&gt;上传一个授权&lt;/a&gt;。</translation>
+        <translation>服务器上没有授权。请&amp;lt;a href='{license_docs_link}'&amp;gt;上传一个授权&amp;lt;/a&amp;gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="54"/>
         <source>Server holds an invalid license or the BrainFrame server was unable to talk to Aotu&apos;s licensing servers.&lt;br&gt;Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt; or ensure that the server is connected to the internet.</source>
-        <translation>服务器持有的授权无效，或者BrainFrame服务器无法与Aotu的授权服务器进行通信。&lt;br&gt;请&lt;a href='{license_docs_link}'&gt;上传新授权&lt;/a&gt;或确保服务器已连接到互联网。</translation>
+        <translation>服务器持有的授权无效，或者BrainFrame服务器无法与Aotu的授权服务器进行通信。&amp;lt;br&amp;gt;请&amp;lt;a href='{license_docs_link}'&amp;gt;上传新授权&amp;lt;/a&amp;gt;或确保服务器已连接到互联网。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_details/license_details_ui.py" line="70"/>
         <source>License is expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new one&lt;/a&gt;.</source>
-        <translation>授权出现问题，请&lt;a href='{license_docs_link}'&gt;上传一个新的授权&lt;/a&gt;。</translation>
+        <translation>授权出现问题，请&amp;lt;a href='{license_docs_link}'&amp;gt;上传一个新的授权&amp;lt;/a&amp;gt;。</translation>
     </message>
 </context>
 <context>
@@ -790,12 +805,12 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="126"/>
         <source>The provided license has expired. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
-        <translation>提供的授权已过期。请&lt;a href='{license_docs_link}'&gt;上传新授权&lt;/a&gt;。</translation>
+        <translation>提供的授权已过期。请&amp;lt;a href='{license_docs_link}'&amp;gt;上传新授权&amp;lt;/a&amp;gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="112"/>
         <source>The provided license has an invalid format. Please &lt;a href=&apos;{license_docs_link}&apos;&gt;upload a new license&lt;/a&gt;.</source>
-        <translation>提供的授权格式无效。请&lt;a href='{license_docs_link}'&gt;;上传新授权&lt;/a&gt;。</translation>
+        <translation>提供的授权格式无效。请&amp;lt;a href='{license_docs_link}'&amp;gt;;上传新授权&amp;lt;/a&amp;gt;。</translation>
     </message>
     <message>
         <location filename="../../dialogs/license_dialog/license_dialog.py" line="139"/>
@@ -1038,41 +1053,41 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
         <translation>服务器选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="83"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="84"/>
         <source>Invalid password saved in QSettings. Clearing.</source>
         <translation>QSettings中保存的密码无效，正在清除。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="193"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="194"/>
         <source>Server Authentication Error</source>
         <translation>服务器认证错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="194"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="195"/>
         <source>Unable to authenticate with the BrainFrame server. 
 Please recheck the entered credentials.</source>
         <translation>无法使用BrainFrame服务器进行身份验证。
 请重新检查输入的凭据。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="198"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="199"/>
         <source>Connection Error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="199"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="200"/>
         <source>Unable to connect to the BrainFrame server. 
 Please recheck the entered server address.</source>
         <translation>无法连接到BrainFrame服务器。
 请重新检查输入的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="182"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="183"/>
         <source>Invalid Schema</source>
         <translation>无效架构</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="183"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="184"/>
         <source>Unable to connect to a BrainFrame server with the provided URL schema. Supported schemas are {0} and {1}.</source>
         <translation>无法使用提供的URL架构连接到BrainFrame服务器。支持的架构为 {0} 或 {1} 。</translation>
     </message>
@@ -1087,49 +1102,54 @@ Please recheck the entered server address.</source>
         <translation>授权配置</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="236"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="237"/>
         <source>Expired License</source>
         <translation>过期授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="240"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="241"/>
         <source>Invalid License</source>
         <translation>无效授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="244"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="245"/>
         <source>Missing License</source>
         <translation>未检测到授权</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="248"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="249"/>
         <source>Connection Successful</source>
         <translation>连接成功</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="251"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="253"/>
         <source>Unknown license state</source>
         <translation>未知的授权状态</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="262"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="264"/>
         <source>Invalid credentials</source>
         <translation>证书无效</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="265"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="267"/>
         <source>Unable to locate server</source>
         <translation>无法连接到服务器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/server_configuration/server_configuration.py" line="230"/>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="231"/>
         <source>&lt;a href=&apos;{license_docs_link}&apos;&gt;Download&lt;/a&gt; a new one</source>
-        <translation>&lt;a href='{license_docs_link}'&gt;上传一个新的授权&lt;/a&gt;</translation>
+        <translation>&amp;lt;a href='{license_docs_link}'&amp;gt;上传一个新的授权&amp;lt;/a&amp;gt;</translation>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.ui" line="93"/>
         <source>This is stored unencrypted on your client&apos;s machine. If you have security concerns, do not use this option.</source>
         <translation>这将以未加密形式存储在客户端计算机上的。 如果您安全性的顾虑，请不要使用此选项。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/server_configuration/server_configuration.py" line="250"/>
+        <source>Server is powered by BrainFrame AI Vision OS v</source>
+        <translation>服务器加载了 BrainFrame AI 视觉操作系统 v</translation>
     </message>
 </context>
 <context>
@@ -1231,7 +1251,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
         <source>Webcams and other video devices must be attached to the computer running the BrainFrame server.&lt;br&gt;&lt;br&gt;To add a webcam, open a terminal on the server machine and run &lt;pre&gt;ls /dev/video*&lt;/pre&gt;If you get a message about &quot;No such file or directory&quot;, you do not have any webcams attached to theserver computer.&lt;br&gt;&lt;br&gt;Otherwise, select the digit at the end of the results and provide it to BrainFrame. For example, if the command returns &quot;/dev/video0&quot;, input &quot;0&quot; (without the quotes).</source>
-        <translation>网络摄像头和其他视频设备必须连接到运行BrainFrame的计算机。如果在启动BrainFrame后插入设备，请重新启动BrainFrame。&lt;br&gt;&lt;br&gt;要添加网络摄像头，请在服务器上打开终端并运行&lt;pre&gt;ls /dev/video*&lt;/pre&gt;如果收到类似“No such file or directory“的消息，则说明运行BrainFrame的计算机没有连接任何网络摄像头。&lt;br&gt;&lt;br&gt;否则，请选择结果末尾的数字并将其提供给BrainFrame。例如，如果命令返回“/dev/video0“，则输入“0“（不带引号）。</translation>
+        <translation>网络摄像头和其他视频设备必须连接到运行BrainFrame的计算机。如果在启动BrainFrame后插入设备，请重新启动BrainFrame。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;要添加网络摄像头，请在服务器上打开终端并运行&amp;lt;pre&amp;gt;ls /dev/video*&amp;lt;/pre&amp;gt;如果收到类似“No such file or directory“的消息，则说明运行BrainFrame的计算机没有连接任何网络摄像头。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;否则，请选择结果末尾的数字并将其提供给BrainFrame。例如，如果命令返回“/dev/video0“，则输入“0“（不带引号）。</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="624"/>
@@ -1241,12 +1261,12 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="628"/>
         <source>Please see the &lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;documentation&lt;/a&gt; for more information on adding IP Cameras.</source>
-        <translation>有关添加IP摄像机的详细信息，请参见&lt;a href='{ip_camera_docs_link}'&gt;文档&lt;/a&gt;。</translation>
+        <translation>有关添加IP摄像机的详细信息，请参见&amp;lt;a href='{ip_camera_docs_link}'&amp;gt;文档&amp;lt;/a&amp;gt;。</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="625"/>
         <source>Standard RTSP format:&lt;br&gt;{rtsp_format}</source>
-        <translation>标准RTSP格式：&lt;br&gt;{rtsp_format}</translation>
+        <translation>标准RTSP格式：&amp;lt;br&amp;gt;{rtsp_format}</translation>
     </message>
 </context>
 <context>
@@ -1418,7 +1438,7 @@ Please recheck the entered server address.</source>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="183"/>
         <source>This will delete all Zones, Detections, Alarms, Alerts, etc. associated with this stream and cannot be undone. This process will happen in the background and can take several minutes.&lt;br&gt;&lt;br&gt;Are you sure you want to continue?</source>
-        <translation>这将删除所有此视频流相关的区域、检测结果、警报、报警信息等，并且无法撤消。这个流程会在后台发生&lt;br&gt;&lt;br&gt;可能需要几分钟。</translation>
+        <translation>这将删除所有此视频流相关的区域、检测结果、警报、报警信息等，并且无法撤消。这个流程会在后台发生&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;可能需要几分钟。</translation>
     </message>
 </context>
 <context>
