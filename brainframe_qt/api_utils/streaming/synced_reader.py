@@ -178,10 +178,7 @@ class SyncedStreamReader(QObject):
     def wait_until_closed(self) -> None:
         """Hangs until the SyncedStreamReader has been closed. Must be called from
         another QThread"""
-        if self._stream_reader is not None:
-            self._stream_reader.wait_until_closed()
-
-        self.thread().wait()
+        self._thread.join()
 
     def _finish(self) -> None:
         """Final clean-up for the SyncedStreamReader.
@@ -275,6 +272,7 @@ class SyncedStreamReader(QObject):
         Tells the GstStreamReader to close and wait for the thread to join. Then
         discards the reference to the GstStreamReader
         """
+        self._stream_reader.close()
         self._stream_reader.wait_until_closed()
         self._stream_reader = None
 
@@ -305,6 +303,3 @@ class SyncedStreamReader(QObject):
                 self._handle_status_event()
             if self._stream_reader.latest_frame_event.is_set():
                 self._handle_frame_event()
-
-        if self._stream_reader is not None:
-            self._stop_streaming()

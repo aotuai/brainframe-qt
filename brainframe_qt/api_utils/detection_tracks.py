@@ -83,7 +83,7 @@ class DetectionTrack:
 
         # Return a new Detection but the coordinates have been interpolated
         return Detection(
-            coords=interp_coords.astype(np.int).tolist(),
+            coords=interp_coords.astype(np.int32).tolist(),
             class_name=recent[0].class_name,
             children=recent[0].children,
             attributes=recent[0].attributes,
