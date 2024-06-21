@@ -233,13 +233,7 @@ class TaskConfiguration(QDialog):
     def _edit_zone_by_id(self, zone_id: int) -> None:
         def _get_zone() -> Zone:
             api_zone = api.get_zone(zone_id)
-
-            client_zone = Zone.from_api_zone(api_zone)
-
-            # TODO: Remove with addition of point moving/deleting
-            client_zone.coords = []
-
-            return client_zone
+            return Zone.from_api_zone(api_zone)
 
         QTAsyncWorker(self, _get_zone, on_success=self.edit_zone).start()
 
