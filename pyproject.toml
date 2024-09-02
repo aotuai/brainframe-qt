@@ -6,7 +6,7 @@ authors = ["Aotu"]
 license = "Proprietary"
 
 [tool.poetry.dependencies]
-python = "^3.6.2"
+python = "^3.8"
 brainframe-api = "^0.28.1"
 # Windows is locked to 1.16, due to gcc version on windows being 8.3. https://github.com/numpy/numpy/issues/14787
 numpy = [
@@ -19,11 +19,11 @@ python-dateutil = "^2.8.1"
 # https://github.com/pypa/setuptools/issues/1694
 # https://github.com/GNOME/pygobject/blob/7d5f4cd41ee0221c13842ab6323b7a016df02c7e/pyproject.toml
 # 3.36 is broken
-PyGObject = "~3.34.0"
+PyGObject = "~3.48.2"
+pycairo = "v1.26.1"
 readerwriterlock = "^1.0.6"
 pycryptodomex = "^3.9.6"
 pendulum = "^2.0.5"
-dataclasses = { version = "^0.7", python = ">=3.6,<3.7" }
 gstly = [
     { version = "^0.4.2", platform = 'linux' },
     { version = "^0.4.2", platform = 'windows', optional = true },
