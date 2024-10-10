@@ -37,11 +37,11 @@ parts:
       # that Poetry removes those instead.
       pip3 install --ignore-installed httplib2 pyyaml
 
-      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
+      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.8/site-packages
       mkdir -p $PYTHON_INSTALL_DIR
 
       # Install Poetry
-      curl -sSL https://install.python-poetry.org | python3 - --version 1.1.14
+      curl -sSL https://install.python-poetry.org | python3 - --version 1.8.3
       export PATH=$HOME/.poetry/bin:$PATH
 
       # Install all Poetry dependencies globally
