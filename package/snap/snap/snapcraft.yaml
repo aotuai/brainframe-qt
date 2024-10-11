@@ -14,7 +14,7 @@ description: >
   VisionCapsules without any programming experience.
 # TODO: Update to core20 when the kde-neon extension supports it.
 #       See: https://bugs.kde.org/show_bug.cgi?id=427576
-base: core18
+base: core20
 confinement: strict
 grade: stable
 adopt-info: brainframe-client
@@ -35,18 +35,19 @@ parts:
       # them because their versions don't match ours. It will then fail since
       # they're dist-packages. As a workaround, we install them with pip so
       # that Poetry removes those instead.
-      pip3 install --ignore-installed httplib2 pyyaml
+      pip3 install --ignore-installed httplib2 pyyaml testresources
 
-      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
+      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.8/site-packages
       mkdir -p $PYTHON_INSTALL_DIR
 
       # Install Poetry
-      curl -sSL https://install.python-poetry.org | python3 - --version 1.8.3
+      curl -sSL https://install.python-poetry.org | python3 - --version 1.1.14
       export PATH=$HOME/.poetry/bin:$PATH
 
       # Install all Poetry dependencies globally
       poetry config virtualenvs.create false
-      poetry install --no-root --no-dev
+
+      poetry install --no-root --no-dev --no-interaction
 
       # Copy the project
       cp -r brainframe_qt/ $PYTHON_INSTALL_DIR/
@@ -96,13 +97,14 @@ parts:
       - gstreamer1.0-plugins-bad
       - gstreamer1.0-libav
       - gir1.2-gst-plugins-base-1.0
+      - distro-info
     build-environment:
       # https://bugs.launchpad.net/snapcraft/+bug/1802345
-      - C_INCLUDE_PATH: /usr/include/python3.6m
+      - C_INCLUDE_PATH: /usr/include/python3.8
 
 apps:
   brainframe-client:
-    command: python3 $SNAP/usr/local/lib/python3.6/site-packages/brainframe_client.py
+    command: python3 $SNAP/usr/local/lib/python3.8/site-packages/brainframe_client.py
     extensions:
       - kde-neon
     plugs:
@@ -110,5 +112,5 @@ apps:
       - network
       - home
     environment:
-      PYTHONPATH: "$SNAP/usr/src/brainframe-api:$SNAP/usr/local/lib/python3.6/site-packages:$PYTHONPATH"
+      PYTHONPATH: "$SNAP/usr/src/brainframe-api:$SNAP/usr/local/lib/python3.8/site-packages:$PYTHONPATH"
       QT_STYLE_OVERRIDE: "adwaita-dark"
