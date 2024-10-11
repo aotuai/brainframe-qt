@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Import hack for LGPL compliance. This runs stuff on import
 # noinspection PyUnresolvedReferences
 from brainframe_qt.util import preimport_hooks

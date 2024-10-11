@@ -31,6 +31,7 @@ gstly = [
 
 pyqt5ac = { version = "^1.1.0", optional = true }
 pyinstaller = { version = "4.5.1", optional = false }
+pycairo = "^1.26.1"
 
 [tool.poetry.dev-dependencies]
 pyqt5 = "^5.15.0"

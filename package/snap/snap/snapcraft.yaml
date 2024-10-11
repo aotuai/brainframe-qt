@@ -14,7 +14,7 @@ description: >
   VisionCapsules without any programming experience.
 # TODO: Update to core20 when the kde-neon extension supports it.
 #       See: https://bugs.kde.org/show_bug.cgi?id=427576
-base: core18
+base: core20
 confinement: strict
 grade: stable
 adopt-info: brainframe-client
@@ -27,40 +27,56 @@ parts:
       VERSION=$(awk -F'[ ="]+' '$1 == "version" { print $2 }' pyproject.toml)
       snapcraftctl set-version ${VERSION}
     override-build: |
+      # Install system dependencies
+      apt-get update
+      apt-get install -y python3-pip python3-setuptools python3-wheel python3-venv
 
-      # Install dependencies
-      pip3 install --upgrade pip wheel
+      # Upgrade pip and install Poetry
+      pip3 install --upgrade pip
+      pip3 install poetry==1.8.3
 
-      # These packages are installed by apt, and Poetry will try to uninstall
-      # them because their versions don't match ours. It will then fail since
-      # they're dist-packages. As a workaround, we install them with pip so
-      # that Poetry removes those instead.
-      pip3 install --ignore-installed httplib2 pyyaml
+      # Create a virtual environment
+      python3 -m venv /root/.venv
+      . /root/.venv/bin/activate
 
-      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.6/site-packages
+      # Configure Poetry to use the virtual environment
+      poetry config virtualenvs.in-project true
+
+      # Install problematic packages separately
+      pip install --ignore-installed httplib2 pyyaml tomli zipp importlib_metadata packaging==21.3 platformdirs
+
+      # Manually uninstall pycairo (ignore errors)
+      pip uninstall -y pycairo || true
+
+      # Install project dependencies
+      poetry install --no-root --only main --no-interaction
+
+      # Set up installation directory
+      export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.8/site-packages
       mkdir -p $PYTHON_INSTALL_DIR
 
-      # Install Poetry
-      curl -sSL https://install.python-poetry.org | python3 - --version 1.8.3
-      export PATH=$HOME/.poetry/bin:$PATH
+      # Copy virtual environment to the installation directory
+      cp -r /root/.venv/* $PYTHON_INSTALL_DIR/
 
-      # Install all Poetry dependencies globally
-      poetry config virtualenvs.create false
-      poetry install --no-root --no-dev
-
-      # Copy the project
+      # Copy project files
       cp -r brainframe_qt/ $PYTHON_INSTALL_DIR/
-      # Remove all undesirable file types
-      for undesirable in "*.pyc" "__pycache__"
-        do find $PYTHON_INSTALL_DIR/brainframe_qt/ -name "$undesirable" -delete
-      done
+      # Remove undesirable file types
+      find $PYTHON_INSTALL_DIR/brainframe_qt/ -name "*.pyc" -delete
+      find $PYTHON_INSTALL_DIR/brainframe_qt/ -name "__pycache__" -type d -exec rm -r {} +
 
       # Add the main Python file
       cp brainframe_client.py $PYTHON_INSTALL_DIR/
 
-      # Check that no Gstly source is in the build
+      # Check for Gstly source (keeping this as is)
       export GSTLY_PATH=$(python3 -c "import pathlib, gstly; print(pathlib.Path(gstly.__file__).parent)")
       ! find ${GSTLY_PATH} -name "*.py" | grep .
+
+      # Deactivate the virtual environment
+      deactivate
+
+      cp brainframe_client.py $SNAPCRAFT_PART_INSTALL
+      chmod +x $SNAPCRAFT_PART_INSTALL/brainframe_client.py
+
     source: .
     build-packages:
       # Basic Python packages
@@ -68,6 +84,7 @@ parts:
       - python3-dev
       - python3-setuptools
       - python3-distutils
+      - libpython3-dev
       # Poetry dependencies
       - curl
       - python3-venv
@@ -82,8 +99,15 @@ parts:
       - qttools5-dev-tools
     stage-packages:
       # Basic Python packages
+      - python3
+      - python3-pip
+      - python3-wheel
       - python3-setuptools
       - python3-distutils
+      - libpython3.8
+      # OpenGL and graphics
+      - libglu1-mesa
+      - freeglut3
       # For theming
       - adwaita-qt
       # PyQt
@@ -96,13 +120,15 @@ parts:
       - gstreamer1.0-plugins-bad
       - gstreamer1.0-libav
       - gir1.2-gst-plugins-base-1.0
+      # Other
+      - distro-info
     build-environment:
       # https://bugs.launchpad.net/snapcraft/+bug/1802345
-      - C_INCLUDE_PATH: /usr/include/python3.6m
+      - C_INCLUDE_PATH: /usr/include/python3.8
 
 apps:
   brainframe-client:
-    command: python3 $SNAP/usr/local/lib/python3.6/site-packages/brainframe_client.py
+    command: brainframe_client.py
     extensions:
       - kde-neon
     plugs:
@@ -110,5 +136,5 @@ apps:
       - network
       - home
     environment:
-      PYTHONPATH: "$SNAP/usr/src/brainframe-api:$SNAP/usr/local/lib/python3.6/site-packages:$PYTHONPATH"
+      PYTHONPATH: "$SNAP/usr/local/lib/python3.8/site-packages:$PYTHONPATH"
       QT_STYLE_OVERRIDE: "adwaita-dark"
