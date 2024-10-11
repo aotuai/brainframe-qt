@@ -29,24 +29,24 @@ parts:
     override-build: |
 
       # Install dependencies
-      pip3 install --upgrade pip wheel
+      pip3 install --upgrade --no-warn-script-location testresources pip wheel setuptools
 
       # These packages are installed by apt, and Poetry will try to uninstall
       # them because their versions don't match ours. It will then fail since
       # they're dist-packages. As a workaround, we install them with pip so
       # that Poetry removes those instead.
-      pip3 install --ignore-installed httplib2 pyyaml testresources
+      pip3 install --ignore-installed httplib2 pyyaml tomli zipp importlib_metadata packaging==21.3
+
+      pip3 install poetry==1.8.3 virtualenv
+      pip3 install --user platformdirs
 
       export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.8/site-packages
       mkdir -p $PYTHON_INSTALL_DIR
 
-      # Install Poetry
-      curl -sSL https://install.python-poetry.org | python3 - --version 1.1.14
       export PATH=$HOME/.poetry/bin:$PATH
 
       # Install all Poetry dependencies globally
       poetry config virtualenvs.create false
-
       poetry install --no-root --no-dev --no-interaction
 
       # Copy the project
