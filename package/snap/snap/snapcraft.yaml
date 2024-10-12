@@ -38,12 +38,13 @@ parts:
       pip3 install --ignore-installed httplib2 pyyaml tomli zipp importlib_metadata packaging==21.3
 
       pip3 install poetry==1.8.3 virtualenv
-      pip3 install --user platformdirs
 
       export PYTHON_INSTALL_DIR=$SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.8/site-packages
       mkdir -p $PYTHON_INSTALL_DIR
 
       export PATH=$HOME/.poetry/bin:$PATH
+
+      pip3 install platformdirs
 
       # Install all Poetry dependencies globally
       poetry config virtualenvs.create false
