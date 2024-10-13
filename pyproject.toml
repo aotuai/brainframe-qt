@@ -19,8 +19,7 @@ python-dateutil = "^2.8.1"
 # https://github.com/pypa/setuptools/issues/1694
 # https://github.com/GNOME/pygobject/blob/7d5f4cd41ee0221c13842ab6323b7a016df02c7e/pyproject.toml
 # 3.36 is broken
-PyGObject = "~3.48.2"
-pycairo = "v1.26.1"
+PyGObject = "~3.34.0"
 readerwriterlock = "^1.0.6"
 pycryptodomex = "^3.9.6"
 pendulum = "^2.0.5"
