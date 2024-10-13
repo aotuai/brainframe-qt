@@ -35,6 +35,12 @@ WORKDIR /brainframe-qt
 # Install dependencies
 COPY --chown=circleci pyproject.toml poetry.lock ./
 RUN poetry install --no-dev --no-root -E build -E resource_build
+    # PyQt5 causes issues when scripts/compile_qt_resources.py does translation
+    # Use python3-pyqt5 instead
+RUN curl https://bootstrap.pypa.io/pip/3.6/get-pip.py -o get-pip.py && \
+    python3 get-pip.py && \
+    poetry run pip3 uninstall -y PyQt5-sip PyQt5 && \
+    poetry run pip3 --no-cache-dir install PyQt5==5.14.2
 
 # Add project source
 COPY --chown=circleci . .
