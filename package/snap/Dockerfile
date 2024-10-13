@@ -51,7 +51,7 @@ RUN poetry run python3 scripts/compile_qt_resources.py
 # Build snap
 RUN mkdir ./snap/ && cp -r package/snap/snap/ .
 
-RUN snapcraft
+RUN snapcraft --enable-experimental-extensions
 
 ################################################################################
 # Output
