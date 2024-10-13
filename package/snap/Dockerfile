@@ -2,7 +2,7 @@
 # Build
 ################################################################################
 
-FROM cibuilds/snapcraft:core18 AS snap-build
+FROM cibuilds/snapcraft:core20 AS snap-build
 
 RUN sudo rm -rf /snap/snapcraft/current
 
@@ -24,7 +24,7 @@ RUN sudo apt-get update && \
 
 # Install Poetry
 ARG POETRY_VERSION=1.8.3
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
+RUN curl -sSL https://install.python-poetry.org \
     | python3 - --version $POETRY_VERSION
 ENV PATH="${PATH}:~/.poetry/bin"
 
