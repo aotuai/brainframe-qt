@@ -24,7 +24,7 @@ RUN sudo apt-get update && \
 
 # Install Poetry
 ARG POETRY_VERSION=1.1.14
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
+RUN curl -sSL https://install.python-poetry.org \
     | python3 - --version $POETRY_VERSION
 ENV PATH="${PATH}:~/.poetry/bin"
 
