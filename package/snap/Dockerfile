@@ -7,7 +7,7 @@ FROM cibuilds/snapcraft:core18 AS snap-build
 RUN sudo rm -rf /snap/snapcraft/current
 
 # Manually install the snapcraft snap 4.x, latest stable is not compatible
-RUN curl -L $(curl -H "X-Ubuntu-Series: 16" "https://api.snapcraft.io/api/v1/snaps/details/snapcraft?channel=4.x/stable" | jq ".download_url" -r) --output snapcraft.snap && \
+RUN curl -s -L $(curl -s -H "X-Ubuntu-Series: 16" "https://api.snapcraft.io/api/v1/snaps/details/snapcraft?channel=4.x/stable" | jq ".download_url" -r) --output snapcraft.snap && \
 	sudo mkdir -p /snap/snapcraft && \
 	sudo unsquashfs -d /snap/snapcraft/current snapcraft.snap && \
 	rm -f snapcraft.snap
