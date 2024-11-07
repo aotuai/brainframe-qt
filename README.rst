@@ -180,10 +180,30 @@ Finally, start the client
 
 .. code-block:: bash
 
-    python brainframe_client.py  # Use python3 if on an older system
+    poetry run python brainframe_client.py  # Use python3 if on an older system
 
 .. _Poetry: https://github.com/python-poetry/poetry
 .. _`Poetry instructions`: https://python-poetry.org/docs/#installation
+
+If errors below happen when launching the client,
+
+ImportError: /lib/x86_64-linux-gnu/libstdc++.so.6: version GLIBCXX_3.4.29 not found (required by .../gstcallbacks.cpython-38-x86_64-linux-gnu.so)
+strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBCXX
+
+.. code-block:: bash
+
+    sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    sudo apt update
+    sudo apt install gcc-10 g++-10
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+    sudo update-alternatives --config gcc
+    sudo apt-get install --reinstall libstdc++6
+
+ModuleNotFoundError: No module named 'PyQt5.QtSvg'
+
+.. code-block:: bash
+
+    pip install --upgrade PyQt5
 
 ################
 (Re)distribution
