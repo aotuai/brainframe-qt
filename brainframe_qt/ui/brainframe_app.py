@@ -1,11 +1,12 @@
 import logging
 import typing
+import os
 import sys
 from traceback import TracebackException
 from typing import Optional
 
 from PyQt5.QtCore import QMetaObject, QThread, Q_ARG, Qt, pyqtSlot
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 from PyQt5.QtWidgets import QWidget
 
 from brainframe.api import bf_errors
@@ -25,9 +26,43 @@ from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMes
 
 
 class BrainFrameApplication(SingletonApplication):
+    def setup_fonts_conf(self):
+        if getattr(sys, 'frozen', False):
+            # Running in a PyInstaller bundle
+            basedir = sys._MEIPASS
+        else:
+            return
+
+        fonts_conf = os.path.join(basedir, 'etc', 'fonts', 'fonts.conf')
+
+        os.environ['FONTCONFIG_FILE'] = fonts_conf
+
+        return basedir
+
+    def setup_fonts(self, basedir):
+        if basedir is None:
+            # Running in normal Python environment
+            monospace_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
+            self.setFont(monospace_font)
+            return
+
+        font_dir = os.path.join(basedir, 'truetype', 'dejavu')
+
+        os.environ['FONTCONFIG_PATH'] = font_dir
+
+        if os.path.exists(font_dir):
+            for font_file in os.listdir(font_dir):
+                if font_file.endswith('.ttf'):
+                    font_path = os.path.join(font_dir, font_file)
+                    result = QFontDatabase.addApplicationFont(font_path)
+
     def __init__(self):
+        basedir = self.setup_fonts_conf()
+
         super().__init__(internal_name="brainframe-qt")
         self.server_config = ServerSettings()
+
+        self.setup_fonts(basedir)
 
         self.connection_manager = ConnectionManager(parent=self)
         self.splash_screen: SplashScreen = SplashScreen()
