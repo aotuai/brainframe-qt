@@ -1198,6 +1198,31 @@ Please recheck the entered server address.</source>
         <translation>上传视频文件过程中发生了一个错误</translation>
     </message>
     <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="598"/>
+        <source>Adding a webcam</source>
+        <translation>添加一个网络摄像头</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
+        <source>Webcams and other video devices must be attached to the computer running the BrainFrame server.&lt;br&gt;&lt;br&gt;To add a webcam, open a terminal on the server machine and run &lt;pre&gt;ls /dev/video*&lt;/pre&gt;If you get a message about &quot;No such file or directory&quot;, you do not have any webcams attached to theserver computer.&lt;br&gt;&lt;br&gt;Otherwise, select the digit at the end of the results and provide it to BrainFrame. For example, if the command returns &quot;/dev/video0&quot;, input &quot;0&quot; (without the quotes).</source>
+        <translation>网络摄像头和其他视频设备必须连接到运行BrainFrame的计算机。如果在启动BrainFrame后插入设备，请重新启动BrainFrame。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;要添加网络摄像头，请在服务器上打开终端并运行&amp;lt;pre&amp;gt;ls /dev/video*&amp;lt;/pre&amp;gt;如果收到类似“No such file or directory“的消息，则说明运行BrainFrame的计算机没有连接任何网络摄像头。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;否则，请选择结果末尾的数字并将其提供给BrainFrame。例如，如果命令返回“/dev/video0“，则输入“0“（不带引号）。</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="624"/>
+        <source>Adding an IP Camera</source>
+        <translation>添加IP摄像头</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="625"/>
+        <source>Standard RTSP format:&lt;br&gt;{rtsp_format}</source>
+        <translation>标准RTSP格式：&amp;lt;br&amp;gt;{rtsp_format}</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="628"/>
+        <source>Please see the &lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;documentation&lt;/a&gt; for more information on adding IP Cameras.</source>
+        <translation>有关添加IP摄像机的详细信息，请参见&amp;lt;a href=&apos;{ip_camera_docs_link}&apos;&amp;gt;文档&amp;lt;/a&amp;gt;。</translation>
+    </message>
+    <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="653"/>
         <source>Stream source already open</source>
         <translation>视频流源已经打开</translation>
@@ -1247,39 +1272,9 @@ Please recheck the entered server address.</source>
         <source>No such file: {filepath}</source>
         <translation>没有这样的文件：{filepath}</translation>
     </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="598"/>
-        <source>Adding a webcam</source>
-        <translation>添加一个网络摄像头</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="599"/>
-        <source>Webcams and other video devices must be attached to the computer running the BrainFrame server.&lt;br&gt;&lt;br&gt;To add a webcam, open a terminal on the server machine and run &lt;pre&gt;ls /dev/video*&lt;/pre&gt;If you get a message about &quot;No such file or directory&quot;, you do not have any webcams attached to theserver computer.&lt;br&gt;&lt;br&gt;Otherwise, select the digit at the end of the results and provide it to BrainFrame. For example, if the command returns &quot;/dev/video0&quot;, input &quot;0&quot; (without the quotes).</source>
-        <translation>网络摄像头和其他视频设备必须连接到运行BrainFrame的计算机。如果在启动BrainFrame后插入设备，请重新启动BrainFrame。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;要添加网络摄像头，请在服务器上打开终端并运行&amp;lt;pre&amp;gt;ls /dev/video*&amp;lt;/pre&amp;gt;如果收到类似“No such file or directory“的消息，则说明运行BrainFrame的计算机没有连接任何网络摄像头。&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;否则，请选择结果末尾的数字并将其提供给BrainFrame。例如，如果命令返回“/dev/video0“，则输入“0“（不带引号）。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="624"/>
-        <source>Adding an IP Camera</source>
-        <translation>添加IP摄像头</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="628"/>
-        <source>Please see the &lt;a href=&apos;{ip_camera_docs_link}&apos;&gt;documentation&lt;/a&gt; for more information on adding IP Cameras.</source>
-        <translation>有关添加IP摄像机的详细信息，请参见&amp;lt;a href=&apos;{ip_camera_docs_link}&apos;&amp;gt;文档&amp;lt;/a&amp;gt;。</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration.py" line="625"/>
-        <source>Standard RTSP format:&lt;br&gt;{rtsp_format}</source>
-        <translation>标准RTSP格式：&amp;lt;br&amp;gt;{rtsp_format}</translation>
-    </message>
 </context>
 <context>
     <name>StreamConfigurationUI</name>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="72"/>
-        <source>Stream Options</source>
-        <translation>视频流选项</translation>
-    </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="44"/>
         <source>Stream Name</source>
@@ -1305,29 +1300,14 @@ Please recheck the entered server address.</source>
         <source>Video File</source>
         <translation>视频文件</translation>
     </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="72"/>
+        <source>Stream Options</source>
+        <translation>视频流选项</translation>
+    </message>
 </context>
 <context>
     <name>TaskConfiguration</name>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="171"/>
-        <source>Add points until done, then press &quot;Confirm&quot; button</source>
-        <translation>添加点直到完成，然后按“确认”按钮</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="207"/>
-        <source>Item Name Already Exists</source>
-        <translation>名称已存在</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="208"/>
-        <source>Item {} already exists in Stream</source>
-        <translation>项目{}已存在于视频流中</translation>
-    </message>
-    <message>
-        <location filename="../../dialogs/task_configuration/task_configuration.py" line="211"/>
-        <source>Please use another name.</source>
-        <translation>请使用另一个名称。</translation>
-    </message>
     <message>
         <location filename="../../dialogs/task_configuration/task_configuration.ui" line="14"/>
         <source>Task Configuration</source>
@@ -1388,6 +1368,26 @@ Please recheck the entered server address.</source>
         <source>Name for new region:</source>
         <translation>新检测区域名称：</translation>
     </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="171"/>
+        <source>Add points until done, then press &quot;Confirm&quot; button</source>
+        <translation>添加点直到完成，然后按“确认”按钮</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="207"/>
+        <source>Item Name Already Exists</source>
+        <translation>名称已存在</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="208"/>
+        <source>Item {} already exists in Stream</source>
+        <translation>项目{}已存在于视频流中</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/task_configuration/task_configuration.py" line="211"/>
+        <source>Please use another name.</source>
+        <translation>请使用另一个名称。</translation>
+    </message>
 </context>
 <context>
     <name>TextLicenseEditor</name>
@@ -1404,6 +1404,11 @@ Please recheck the entered server address.</source>
 </context>
 <context>
     <name>VideoExpandedView</name>
+    <message>
+        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="58"/>
+        <source>Toggle Stream Config</source>
+        <translation>切换视频流配置</translation>
+    </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="71"/>
         <source>Task Config</source>
@@ -1423,11 +1428,6 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="60"/>
         <source>Close expanded video view</source>
         <translation>关闭扩展视频视图</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_expanded_view/video_expanded_view.ui" line="58"/>
-        <source>Toggle Stream Config</source>
-        <translation>切换视频流配置</translation>
     </message>
     <message>
         <location filename="../../main_window/video_expanded_view/video_expanded_view.py" line="177"/>
@@ -1476,14 +1476,14 @@ Please recheck the entered server address.</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="287"/>
-        <source>Avoid transcoding</source>
-        <translation>避免转码</translation>
-    </message>
-    <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="282"/>
         <source>None</source>
         <translation>空</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="287"/>
+        <source>Avoid transcoding</source>
+        <translation>避免转码</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="293"/>
@@ -1502,9 +1502,14 @@ Please recheck the entered server address.</source>
 <context>
     <name>_StreamOptions</name>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="211"/>
-        <source>Advanced Options</source>
-        <translation>高级选项</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="140"/>
+        <source>Network address</source>
+        <translation>网络地址</translation>
+    </message>
+    <message>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="158"/>
+        <source>Device ID</source>
+        <translation>设备编号</translation>
     </message>
     <message>
         <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="176"/>
@@ -1522,14 +1527,9 @@ Please recheck the entered server address.</source>
         <translation>本地网络</translation>
     </message>
     <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="140"/>
-        <source>Network address</source>
-        <translation>网络地址</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="158"/>
-        <source>Device ID</source>
-        <translation>设备编号</translation>
+        <location filename="../../main_window/activities/stream_configuration/stream_configuration_ui.py" line="211"/>
+        <source>Advanced Options</source>
+        <translation>高级选项</translation>
     </message>
 </context>
 <context>
@@ -1559,6 +1559,11 @@ Please recheck the entered server address.</source>
 <context>
     <name>_VideoThumbnailViewUI</name>
     <message>
+        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="29"/>
+        <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
+        <translation>点击 ➕ 按钮以添加新的视频流</translation>
+    </message>
+    <message>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="72"/>
         <source>Streams with ongoing alerts:</source>
         <translation>正在警报的视频流：</translation>
@@ -1567,11 +1572,6 @@ Please recheck the entered server address.</source>
         <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="82"/>
         <source>Streams without alerts:</source>
         <translation>无警报的视频流：</translation>
-    </message>
-    <message>
-        <location filename="../../main_window/video_thumbnail_view/video_thumbnail_view_ui.py" line="29"/>
-        <source>Click the &#xe2;&#x9e;&#x95; button to add a new stream</source>
-        <translation>点击 ➕ 按钮以添加新的视频流</translation>
     </message>
 </context>
 </TS>
