@@ -1,9 +1,9 @@
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QPixmap, QCloseEvent
-from PyQt5.QtWidgets import QSplashScreen, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QSplashScreen, QVBoxLayout, QPushButton, QWidget
 
 from brainframe_qt.ui.dialogs import ServerConfigurationDialog
-from brainframe_qt.ui.resources import qt_resources
+from brainframe_qt.ui.resources import qt_resources, actions
 
 
 class SplashScreen(QSplashScreen):
@@ -79,12 +79,25 @@ class SplashScreen(QSplashScreen):
 
     def show_configuration_button(self):
         self.setLayout(QVBoxLayout())
-        button = QPushButton(self.tr("Configure"))
-        button.setFocusPolicy(Qt.NoFocus)
-        button.clicked.connect(self._open_server_config)
 
-        self.layout().addWidget(button)
-        self.layout().setAlignment(button, Qt.AlignBottom | Qt.AlignRight)
+        config_button = QPushButton(self.tr("Configure"))
+        config_button.setFocusPolicy(Qt.NoFocus)
+        config_button.clicked.connect(self._open_server_config)
+
+        exit_button = QPushButton(self.tr("Exit"))
+        exit_button.setFocusPolicy(Qt.NoFocus)
+        exit_button.clicked.connect(actions.close_client)
+
+        button_layout = QVBoxLayout()
+        button_layout.addWidget(config_button)
+        button_layout.addWidget(exit_button)
+
+        button_widget = QWidget()
+        button_widget.setLayout(button_layout)
+
+        self.layout().addStretch(1)
+        self.layout().addWidget(button_widget, 0, Qt.AlignBottom | Qt.AlignRight)
+
 
     def _open_server_config(self) -> None:
         ServerConfigurationDialog.show_dialog(parent=self)
