@@ -1163,6 +1163,11 @@ Please recheck the entered server address.</source>
         <source> .</source>
         <translation> .</translation>
     </message>
+    <message>
+        <location filename="../../splash_screen/splash_screen.py" line="87"/>
+        <source>Exit</source>
+        <translation">退出</translation>
+    </message>
 </context>
 <context>
     <name>StreamActivity</name>
