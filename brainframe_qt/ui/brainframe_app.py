@@ -203,7 +203,7 @@ class BrainFrameApplication(SingletonApplication):
             description += self.tr(". The client must be closed.")
 
         if need_close:
-            buttons &= ~BrainFrameMessage.PresetButtons.CLOSE_CLIENT
+            buttons |= BrainFrameMessage.PresetButtons.CLOSE_CLIENT
             buttons |= BrainFrameMessage.PresetButtons.OK
 
         BrainFrameMessage.exception(

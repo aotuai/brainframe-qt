@@ -23,9 +23,9 @@ class BrainFrameMessage(_BrainFrameMessageUI):
 
         INFORMATION = OK
         QUESTION = YES | NO
-        WARNING = OK | COPY_TO_CLIPBOARD
-        EXCEPTION = CLOSE_CLIENT | COPY_TO_CLIPBOARD | SERVER_CONFIG
-        ERROR = CLOSE_CLIENT | COPY_TO_CLIPBOARD | SERVER_CONFIG
+        WARNING = CLOSE_CLIENT | OK | COPY_TO_CLIPBOARD
+        EXCEPTION = CLOSE_CLIENT | COPY_TO_CLIPBOARD
+        ERROR = CLOSE_CLIENT | COPY_TO_CLIPBOARD
         CRITICAL = CLOSE_CLIENT | COPY_TO_CLIPBOARD
 
     def __init__(self, *, parent: QWidget, title: str, text: str,
