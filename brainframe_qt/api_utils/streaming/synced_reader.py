@@ -155,10 +155,6 @@ class SyncedStreamReader(QObject):
         paused.
         """
         if not self.is_streaming_paused:
-            logging.warning(
-                "Attempted to unpause streaming on SyncedStreamReader for stream "
-                f"{self.stream_conf.id}, but it is not paused."
-            )
             return
 
         self._start_streaming_event.set()

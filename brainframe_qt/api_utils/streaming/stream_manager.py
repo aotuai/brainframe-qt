@@ -40,9 +40,7 @@ class StreamManager(QObject):
 
     def close(self) -> None:
         """Request and wait for all streams to close"""
-        logging.info("Initiating StreamManager close")
         self._close()
-        logging.info("StreamManager close finished")
 
     def delete_stream(self, stream_id: int, timeout: int = 120) -> None:
         """[blocking API] Delete a stream through the API and initiate the closing of

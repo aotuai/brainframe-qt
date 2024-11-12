@@ -65,18 +65,13 @@ class MessagingApplication(QApplication):
         if message_server.serverError() == QAbstractSocket.AddressInUseError:
             if retries > 3:
                 # Already retried. Give up trying to create the server.
-                logging.error(f"Max retries reached. Giving up on socket takeover")
                 return None
 
-            logging.warning(f"Socket for IPC is open, but connection was refused. "
-                            f"Attempting takeover.")
             # Attempt hostile takeover of socket
             MessagingServer.removeServer(socket_name)
             message_server = self._init_message_server(socket_name, retries=retries + 1)
 
-            if message_server:
-                logging.info("IPC server socket takeover successful")
-            else:
+            if not message_server:
                 logging.error("Unable to perform takeover on socket")
 
         return message_server
