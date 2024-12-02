@@ -10,8 +10,8 @@ python = "^3.8"
 brainframe-api = "^0.28.1"
 # Windows is locked to 1.16, due to gcc version on windows being 8.3. https://github.com/numpy/numpy/issues/14787
 numpy = [
-    { version = "1.16.5", markers = "sys_platform == 'win32'" },
-    { version = "^1.16", markers = "sys_platform == 'linux'" },
+    { version = "1.24.4", markers = "sys_platform == 'win32'" },
+    { version = "^1.24", markers = "sys_platform == 'linux'" },
 ]
 shapely = "1.7.1"
 requests = "^2.23.0"
