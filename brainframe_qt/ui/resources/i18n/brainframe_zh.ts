@@ -1147,8 +1147,8 @@ Please recheck the entered server address.</source>
     </message>
     <message>
         <location filename="../../dialogs/server_configuration/server_configuration.py" line="250"/>
-        <source>Server is powered by BrainFrame AI Vision OS v</source>
-        <translation>服务器加载了 BrainFrame AI 视觉操作系统 v</translation>
+        <source>BrainFrame Vision OS: v</source>
+        <translation>BrainFrame 视觉操作系统: v</translation>
     </message>
 </context>
 <context>

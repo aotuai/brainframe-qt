@@ -247,7 +247,7 @@ class ServerConfigurationDialog(QDialog):
             elif license_state is bf_codecs.LicenseInfo.State.VALID:
                 label_text = "✔️"
                 report_text = self.tr("Connection Successful") + "\n\n"
-                report_text += self.tr("Server is powered by BrainFrame AI Vision OS v") + self.server_version
+                report_text += self.tr("BrainFrame Vision OS: v") + self.server_version
             else:
                 label_text = "❗"
                 report_text = self.tr("Unknown license state")
