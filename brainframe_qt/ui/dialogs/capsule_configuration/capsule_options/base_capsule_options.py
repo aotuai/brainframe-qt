@@ -9,6 +9,7 @@ from .option_items import (
     EnumOptionItem,
     FloatOptionItem,
     IntOptionItem,
+    TextOptionItem,
     BoolOptionItem
 )
 from brainframe.api.bf_codecs import CapsuleOption
@@ -103,6 +104,8 @@ class BaseCapsuleOptionsWidget(QGroupBox):
 
         if type_ is CapsuleOption.Type.BOOL:
             item = BoolOptionItem(*args)
+        elif type_ is CapsuleOption.Type.STR:
+            item = TextOptionItem(*args)
         elif type_ is CapsuleOption.Type.ENUM:
             item = EnumOptionItem(*args)
         elif type_ is CapsuleOption.Type.FLOAT:

@@ -209,6 +209,32 @@ class IntOptionItem(FloatOptionItem):
         return int(super().val)
 
 
+class TextOptionItem(CapsuleOptionItem):
+    """A capsule option that holds a str value."""
+
+    def __init__(self, name: str, value: str, constraints,
+                 description: Optional[str] = None,
+                 parent=None):
+        self.option_widget = QLineEdit(parent=parent)  # Use QLineEdit for text input
+        self.change_signal = self.option_widget.textChanged  # Signal when text changes
+        
+        # Store constraints if needed for validation
+        self._constraints = constraints
+        
+        super().__init__(name, value, description, parent=parent)
+
+    def set_val(self, value: str):
+        self.option_widget.setText(value)
+
+    @property
+    def val(self):
+        return self.option_widget.text()
+
+    def is_valid(self):
+        # Add validation based on constraints if needed
+        return isinstance(self.val, str)
+
+
 class BoolOptionItem(CapsuleOptionItem):
     """A capsule option that holds an boolean value."""
 
