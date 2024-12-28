@@ -5,7 +5,7 @@ from typing import Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
 from PyQt5.QtWidgets import QWidget, QComboBox, QCheckBox, QLabel, QLineEdit, \
-    QPushButton, QSizePolicy, QApplication, QMessageBox
+    QPushButton, QSizePolicy, QApplication, QMessageBox, QTextEdit
 
 from brainframe_qt.ui.dialogs.capsule_configuration import capsule_utils
 from brainframe_qt.ui.resources.ui_elements.buttons import TextIconButton
@@ -215,23 +215,27 @@ class TextOptionItem(CapsuleOptionItem):
     def __init__(self, name: str, value: str, constraints,
                  description: Optional[str] = None,
                  parent=None):
-        self.option_widget = QLineEdit(parent=parent)  # Use QLineEdit for text input
-        self.change_signal = self.option_widget.textChanged  # Signal when text changes
+        self.option_widget = QTextEdit(parent=parent)
+        self.change_signal = self.option_widget.textChanged
         
-        # Store constraints if needed for validation
+        font_metrics = self.option_widget.fontMetrics()
+        line_spacing = font_metrics.lineSpacing()
+        height = line_spacing * 3 + 10  # 3 lines and some padding
+        self.option_widget.setMinimumHeight(height)
+        self.option_widget.setMaximumHeight(height)
+        
         self._constraints = constraints
         
         super().__init__(name, value, description, parent=parent)
 
     def set_val(self, value: str):
-        self.option_widget.setText(value)
+        self.option_widget.setPlainText(value)
 
     @property
     def val(self):
-        return self.option_widget.text()
+        return self.option_widget.toPlainText()
 
     def is_valid(self):
-        # Add validation based on constraints if needed
         return isinstance(self.val, str)
 
 
