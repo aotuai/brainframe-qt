@@ -17,7 +17,7 @@ class MainWindowUI(QMainWindow):
 
         import pkg_resources
         brainframe_qt_version = pkg_resources.get_distribution('brainframe-qt').version
-        title = f'BrainFrame Client version v{brainframe_qt_version}'
+        title = f'BrainFrame Client Version v{brainframe_qt_version}'
         self.setWindowTitle(title)
 
         self.stacked_widget = self._init_tab_widget()

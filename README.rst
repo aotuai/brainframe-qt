@@ -176,6 +176,19 @@ Install the Python dependencies using Poetry.
     # If using Windows, installation requires an extra
     poetry install --extra windows
 
+Generate QT resources, fix translation as needed
+
+.. code-block:: bash
+
+    python3 scripts/compile_qt_resources.py
+
+If the above command fails, install PyQt5 5.14.2 then run it again
+
+.. code-block:: bash
+
+    pip3 uninstall -y PyQt5-sip PyQt5
+    pip3 install PyQt5==5.14.2
+
 Finally, start the client
 
 .. code-block:: bash
