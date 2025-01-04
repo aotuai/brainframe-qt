@@ -249,27 +249,27 @@ Read the manual to learn about the required directory structure.&lt;br&gt;&lt;br
 <context>
     <name>BaseCapsuleOptionsWidget</name>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="60"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="61"/>
         <source>Options</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="69"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="70"/>
         <source>Capsule Enabled</source>
         <translation>已启用算法胶囊</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="113"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="116"/>
         <source>The capsule option of name {} has an invalid type of type {}</source>
         <translation>名称为 {} 的算法胶囊选项的类型 {} 类型无效 </translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="147"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="150"/>
         <source>Not all options are valid!</source>
         <translation>并非所有选项都有效！</translation>
     </message>
     <message>
-        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="152"/>
+        <location filename="../../dialogs/capsule_configuration/capsule_options/base_capsule_options.py" line="155"/>
         <source>You can&apos;t apply changes if the capsule never got set!</source>
         <translation>如果算法胶囊尚未被设置，则无法应用更改！</translation>
     </message>
