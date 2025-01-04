@@ -13,13 +13,13 @@ files = [
 
 [[package]]
 name = "brainframe-api"
-version = "0.30.1.1"
+version = "0.30.3"
 description = "Provides a Python wrapper around the BrainFrame REST API."
 optional = false
 python-versions = "<4.0,>=3.6"
 files = [
-    {file = "brainframe_api-0.30.1.1-py3-none-any.whl", hash = "sha256:cf617f7f4ad2d40328ef5db6f9c033572abedbcc975249c40fe7a75a8d674246"},
-    {file = "brainframe_api-0.30.1.1.tar.gz", hash = "sha256:eb0520692311b23197d502f82688bad5a485348ef495f757cf6aa5bc41e62be9"},
+    {file = "brainframe_api-0.30.3-py3-none-any.whl", hash = "sha256:d381357cd130222ba559ac723d6cdcd9a51d29a1429d4465c2e6bfa3ea377f8c"},
+    {file = "brainframe_api-0.30.3.tar.gz", hash = "sha256:443b2de9720b8d7deb74379f58bb7d2ea2440d843b5671cae4b97d43ca12fbfb"},
 ]
 
 [package.dependencies]
@@ -975,4 +975,4 @@ windows = ["gstly", "gstly"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.14"
-content-hash = "28971e449c1fe0de1787ef5a917e87fba8ba7e60bc17b8bdf50501cc845df26b"
+content-hash = "1b3d90acf6d49bf8c3ce16b78ab2f3957aeaa377a8c88920f40ea357815aac61"

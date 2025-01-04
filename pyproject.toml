@@ -7,7 +7,7 @@ license = "Proprietary"
 
 [tool.poetry.dependencies]
 python = "^3.8,<3.14"
-brainframe-api = "^0.30.1.1"
+brainframe-api = "^0.30.3"
 # Windows is locked to 1.16, due to gcc version on windows being 8.3. https://github.com/numpy/numpy/issues/14787
 numpy = [
     { version = "1.24.4", markers = "sys_platform == 'win32'" },
