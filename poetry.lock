@@ -13,13 +13,13 @@ files = [
 
 [[package]]
 name = "brainframe-api"
-version = "0.30.3"
+version = "0.30.4"
 description = "Provides a Python wrapper around the BrainFrame REST API."
 optional = false
 python-versions = "<4.0,>=3.6"
 files = [
-    {file = "brainframe_api-0.30.3-py3-none-any.whl", hash = "sha256:d381357cd130222ba559ac723d6cdcd9a51d29a1429d4465c2e6bfa3ea377f8c"},
-    {file = "brainframe_api-0.30.3.tar.gz", hash = "sha256:443b2de9720b8d7deb74379f58bb7d2ea2440d843b5671cae4b97d43ca12fbfb"},
+    {file = "brainframe_api-0.30.4-py3-none-any.whl", hash = "sha256:e690bece5cc3b5a39699f3d719276c4147ff12947219208b80c5cf917949d2ff"},
+    {file = "brainframe_api-0.30.4.tar.gz", hash = "sha256:2f6f8ca2103a7c07bba7782f0c11da7ce765537c8c16f3b32c70ff70038f6a8a"},
 ]
 
 [package.dependencies]
@@ -509,13 +509,13 @@ files = [
 
 [[package]]
 name = "pygments"
-version = "2.18.0"
+version = "2.19.1"
 description = "Pygments is a syntax highlighting package written in Python."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pygments-2.18.0-py3-none-any.whl", hash = "sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a"},
-    {file = "pygments-2.18.0.tar.gz", hash = "sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199"},
+    {file = "pygments-2.19.1-py3-none-any.whl", hash = "sha256:9ea1544ad55cecf4b8242fab6dd35a93bbce657034b0611ee383099054ab6d8c"},
+    {file = "pygments-2.19.1.tar.gz", hash = "sha256:61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f"},
 ]
 
 [package.extras]
@@ -975,4 +975,4 @@ windows = ["gstly", "gstly"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.14"
-content-hash = "1b3d90acf6d49bf8c3ce16b78ab2f3957aeaa377a8c88920f40ea357815aac61"
+content-hash = "e1557b1e345ca87bebebb52a6868fc70a62971ebc48dc5fef58f67e8eb0c71c1"
