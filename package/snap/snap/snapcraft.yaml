@@ -14,7 +14,7 @@ description: >
   VisionCapsules without any programming experience.
 # TODO: Update to core20 when the kde-neon extension supports it.
 #       See: https://bugs.kde.org/show_bug.cgi?id=427576
-base: core20
+base: core22
 confinement: strict
 grade: stable
 adopt-info: brainframe-client
