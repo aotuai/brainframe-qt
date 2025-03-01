@@ -29,13 +29,13 @@ requests = ">=2.24.0,<3.0.0"
 
 [[package]]
 name = "certifi"
-version = "2024.12.14"
+version = "2025.1.31"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "certifi-2024.12.14-py3-none-any.whl", hash = "sha256:1275f7a45be9464efc1173084eaa30f866fe2e47d389406136d332ed4967ec56"},
-    {file = "certifi-2024.12.14.tar.gz", hash = "sha256:b650d30f370c2b724812bee08008be0c4163b163ddaec3f2546c1caf65f191db"},
+    {file = "certifi-2025.1.31-py3-none-any.whl", hash = "sha256:ca78db4565a652026a4db2bcdf68f2fb589ea80d0be70e03929ed730746b84fe"},
+    {file = "certifi-2025.1.31.tar.gz", hash = "sha256:3d5da6925056f6f18f119200434a4780a94263f10d1c21d032a6f6b2baa20651"},
 ]
 
 [[package]]
@@ -187,12 +187,13 @@ tls = ["cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=17.5.0)"]
 
 [[package]]
 name = "gstly"
-version = "0.4.13"
+version = "0.4.14"
 description = "Internal GStreamer libraries for BrainFrame"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "gstly-0.4.13-cp39-cp39-manylinux_2_35_x86_64.whl", hash = "sha256:b4cb299432aac7898a1ee5c7113d16e1f0edda59c20778fa519cce5525e8d6d0"},
+    {file = "gstly-0.4.14-cp38-cp38-manylinux_2_31_x86_64.whl", hash = "sha256:8f433958cda1e2cd82465de62e965bf873d53b1fdd4599cdd3e13cf11b654179"},
+    {file = "gstly-0.4.14-cp39-cp39-manylinux_2_35_x86_64.whl", hash = "sha256:893b62ddc79207732237c19a8bdc07cdb4a4d64f9456650b8a918bb220398dce"},
 ]
 
 [package.dependencies]
@@ -569,13 +570,13 @@ hook-testing = ["execnet (>=1.5.0)", "psutil", "pytest (>=2.7.3)"]
 
 [[package]]
 name = "pyinstaller-hooks-contrib"
-version = "2024.11"
+version = "2025.1"
 description = "Community maintained hooks for PyInstaller"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pyinstaller_hooks_contrib-2024.11-py3-none-any.whl", hash = "sha256:2781d121a1ee961152ba7287a262c65a1078da30c9ef7621cb8c819326884fd5"},
-    {file = "pyinstaller_hooks_contrib-2024.11.tar.gz", hash = "sha256:84399af6b4b902030958063df25f657abbff249d0f329c5344928355c9833ab4"},
+    {file = "pyinstaller_hooks_contrib-2025.1-py3-none-any.whl", hash = "sha256:d3c799470cbc0bda60dcc8e6b4ab976777532b77621337f2037f558905e3a8e9"},
+    {file = "pyinstaller_hooks_contrib-2025.1.tar.gz", hash = "sha256:130818f9e9a0a7f2261f1fd66054966a3a50c99d000981c5d1db11d3ad0c6ab2"},
 ]
 
 [package.dependencies]
@@ -973,5 +974,5 @@ windows = ["gstly", "gstly"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.9,<3.14"
-content-hash = "9863d1ad62b5a0bee2ec4952e6b30a8ccad173a821bce3c95eb6740e65d37af8"
+python-versions = ">=3.8,<3.14"
+content-hash = "1351e54af9af7149b65bd3ea578b01549146a02fc86ff1324fdfebe85455f029"
