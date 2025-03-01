@@ -24,8 +24,11 @@ parts:
     plugin: nil
     override-pull: |
       snapcraftctl pull
-      VERSION=$(awk -F'[ ="]+' '$1 == "version" { print $2 }' pyproject.toml)
-      snapcraftctl set-version ${VERSION}
+      # Only set version if it hasn't been set already
+      if ! snapcraftctl get version &>/dev/null; then
+        VERSION=$(awk -F'[ ="]+' '$1 == "version" { print $2 }' pyproject.toml)
+        snapcraftctl set-version ${VERSION}
+      fi
     override-build: |
       # Install system dependencies
       apt-get update
