@@ -14,7 +14,7 @@ description: >
   VisionCapsules without any programming experience.
 # TODO: Update to core20 when the kde-neon extension supports it.
 #       See: https://bugs.kde.org/show_bug.cgi?id=427576
-base: core22
+base: core20
 confinement: strict
 grade: stable
 adopt-info: brainframe-client
@@ -46,7 +46,7 @@ parts:
       poetry config virtualenvs.in-project true
 
       # Install problematic packages separately
-      pip install --ignore-installed httplib2 pyyaml tomli zipp importlib_metadata packaging==21.3 platformdirs
+      pip install --ignore-installed httplib2 pyyaml tomli zipp importlib_metadata packaging==22.0 platformdirs
 
       # Manually uninstall pycairo (ignore errors)
       pip uninstall -y pycairo || true
