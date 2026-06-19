@@ -165,6 +165,54 @@ files = [
 ]
 
 [[package]]
+name = "cython"
+version = "3.2.5"
+description = "The Cython compiler for writing C extensions in the Python language."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "cython-3.2.5-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:220e8b160b2a4ddc362ad8a8c2ab885aa7156099702cdc48f6518a5de921b553"},
+    {file = "cython-3.2.5-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:f4e722ceab6d795b4682d693656218671c873d4aa74119c54a2b62de0e7c48ce"},
+    {file = "cython-3.2.5-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:b4bfb00baef07106a1e5e7252ace18de91225322f7fa29970995aea7c380fa21"},
+    {file = "cython-3.2.5-cp310-cp310-win_amd64.whl", hash = "sha256:45baf00cb8b222a2ca7e9c48add5dac3ceb6e65be4f591150a6b6767ce1f86b0"},
+    {file = "cython-3.2.5-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:5887c24ebd19604b7a76d8ea57446cb562a590f7f2557e5954a69aae38b3195e"},
+    {file = "cython-3.2.5-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:56c97c5e43782ec9d9e66c465e253d2ccde0c578c364c46445efe484965524f0"},
+    {file = "cython-3.2.5-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:75f5295dc1b32d084fec598f9507e6f264311d78c07da640bc9a05dc47f7ac2c"},
+    {file = "cython-3.2.5-cp311-cp311-win_amd64.whl", hash = "sha256:b8bc1325cf3e4394cc08a3c1ea7fa24f02f405eef0e8c156d5055f6f9a7a1565"},
+    {file = "cython-3.2.5-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:eb38b89e5a8eb2508a1a0832063826b0703dfb02be84e4aa34b8818ce0ca50fe"},
+    {file = "cython-3.2.5-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:c80e1e5cba5b4b9890364e9360939fc298c474f25754bb4bb861270d24bda6d6"},
+    {file = "cython-3.2.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:4d00e2c976ee96da4deff50506c7882ccebb4a932fc178ef27eb42bfde959839"},
+    {file = "cython-3.2.5-cp312-cp312-win_amd64.whl", hash = "sha256:29243859d6824e2d33bae92fc83d591c3671b6d9ac1b757fa264b894ae906c2b"},
+    {file = "cython-3.2.5-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:6e5d7a60835345a8bd29d3aa57070880cc3ce017ea0ade7b9f771ce4bf539b1f"},
+    {file = "cython-3.2.5-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:f9b564f67b01bffa2521f475794b49f2787709cec1f91d5935a38eba37f2b359"},
+    {file = "cython-3.2.5-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:0a81220817ff954eddf4512a5b82089094a2f523eb1dc4ad555efd6f07b009b4"},
+    {file = "cython-3.2.5-cp313-cp313-win_amd64.whl", hash = "sha256:3795237ab49753647e329181b140c424e8aa97543074f171f8d2c45e5014a06e"},
+    {file = "cython-3.2.5-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:a636c8b7824f3cb587eb2fdde59d8f4a14d433565508081cc290198e37567910"},
+    {file = "cython-3.2.5-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:69cd71b90d4e0f142fd15b2353982c3f9171fc5e613001f16bcb366ffb29004b"},
+    {file = "cython-3.2.5-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:3864da4ca2ebe4660d8f672f2143b02840bf3045655222f6090486171c84298f"},
+    {file = "cython-3.2.5-cp314-cp314-win_amd64.whl", hash = "sha256:605c447188aecf2941709f53a2ce44862be256e54601c01b38ab710d83db8047"},
+    {file = "cython-3.2.5-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:a3a423468ee77c3c5b26494f57d9c52e9318991fb7142f4c49fb01b99373e8d6"},
+    {file = "cython-3.2.5-cp38-cp38-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:cce98a9011ac6a2560b3587db22912bd0138267669ec567b0d57eddd2d741b8b"},
+    {file = "cython-3.2.5-cp38-cp38-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:561613ddd1ee83088eb126e80a5a7d73ee6eb82e0b1aea09afbe170287e5e27f"},
+    {file = "cython-3.2.5-cp38-cp38-win_amd64.whl", hash = "sha256:677bb60fd8f5949e26c0a7898983967dbbb65f7628481d8480956b85ca766554"},
+    {file = "cython-3.2.5-cp39-abi3-macosx_10_9_x86_64.whl", hash = "sha256:224149d18d980e6ea5001b70fc7ce096c1891d59035dfa9cc5ede50f55804913"},
+    {file = "cython-3.2.5-cp39-abi3-manylinux1_i686.manylinux_2_28_i686.manylinux_2_5_i686.whl", hash = "sha256:992a50e90d01813333752f374a4405863113059ec67102ab8d6a431a171ee328"},
+    {file = "cython-3.2.5-cp39-abi3-manylinux2014_armv7l.manylinux_2_17_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:8d7b81e6a52a84a02993f01aa5873786ba1dd593c892d93d5fe9866da0bad297"},
+    {file = "cython-3.2.5-cp39-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:34d21aeb08477c9173e8be7a566b19e880a7c8109ec6bb47a4b20cb680141114"},
+    {file = "cython-3.2.5-cp39-abi3-musllinux_1_2_armv7l.whl", hash = "sha256:c4c79e697db55f082a2d3ba97702e71881d5bb1f56f0a80fa338e69101e4c59b"},
+    {file = "cython-3.2.5-cp39-abi3-musllinux_1_2_i686.whl", hash = "sha256:39acb30eba78ba6d995d5cf3d97d57d450663d93aac6f8b93753d2b89d768c60"},
+    {file = "cython-3.2.5-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:382122de8d6b6024fc374fabc3a2b14ba5860ed981c25055ed14fe44278b9dc7"},
+    {file = "cython-3.2.5-cp39-abi3-win32.whl", hash = "sha256:0bc29c7f870b09efdb1f583fbec9592b33af81a7ce273b89c8f5163d7572d5c1"},
+    {file = "cython-3.2.5-cp39-abi3-win_arm64.whl", hash = "sha256:85b2944c3eddfc230f9082720195a2e9f869908e5a8b3185be1be832755ee7fc"},
+    {file = "cython-3.2.5-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:91cb5b9ff599612737b3fd0dddcd401acdf904b78c2caf8cd1049501d0a53f2d"},
+    {file = "cython-3.2.5-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:268aecadcabcdad9f773b8a5694746e0b9ee7894b56b84e2e3a2ccb6c929ea79"},
+    {file = "cython-3.2.5-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:05c22cd606ac8d14a9cf17e48668bb37734c803978bf4d793c7f11ef54c4451f"},
+    {file = "cython-3.2.5-cp39-cp39-win_amd64.whl", hash = "sha256:3e5e519bad217a0b96fc281666720ed7d339da618acaa012bea712980b8fe6c9"},
+    {file = "cython-3.2.5-py3-none-any.whl", hash = "sha256:dc1c8cebb7df5bce37f5f8dc1e5bf04313272a5973d50a55c0ec76c83812911b"},
+    {file = "cython-3.2.5.tar.gz", hash = "sha256:3dd42e4cf36ad15f265bdfec2337cc00c688c8eb6d374ffd13bb19437c27bba1"},
+]
+
+[[package]]
 name = "docker"
 version = "4.4.4"
 description = "A Python library for the Docker Engine API."
@@ -187,17 +235,20 @@ tls = ["cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=17.5.0)"]
 
 [[package]]
 name = "gstly"
-version = "0.4.14"
+version = "0.4.19"
 description = "Internal GStreamer libraries for BrainFrame"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "gstly-0.4.14-cp38-cp38-manylinux_2_31_x86_64.whl", hash = "sha256:8f433958cda1e2cd82465de62e965bf873d53b1fdd4599cdd3e13cf11b654179"},
-    {file = "gstly-0.4.14-cp39-cp39-manylinux_2_35_x86_64.whl", hash = "sha256:893b62ddc79207732237c19a8bdc07cdb4a4d64f9456650b8a918bb220398dce"},
+    {file = "gstly-0.4.19-cp312-cp312-manylinux_2_39_x86_64.whl", hash = "sha256:349fdd15ae1515225ac9565013f8106bce5dd06070a32e0cdc3bf71e90bddc73"},
+    {file = "gstly-0.4.19-cp38-cp38-manylinux_2_31_x86_64.whl", hash = "sha256:303dcaac4e4604db1947e5257fa93047655a3f1da9acacaeafd34fa0112e2c11"},
+    {file = "gstly-0.4.19-cp39-cp39-manylinux_2_35_x86_64.whl", hash = "sha256:070ee08fa24e9af09f55fb0671ebd03566594f6de3db95e8c6479999f872206e"},
+    {file = "gstly-0.4.19-py3-none-any.whl", hash = "sha256:74849222eb6d23f7ff1c8e2674a7ca8e4eea3953b46368fa58be4a77e603722d"},
 ]
 
 [package.dependencies]
-numpy = ">=1.16,<2.0"
+Cython = ">=3.0.0,<4.0.0"
+numpy = ">=1.19.2"
 PyGObject = ">=3.34.0,<4.0.0"
 
 [[package]]
@@ -975,4 +1026,4 @@ windows = ["gstly", "gstly"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.14"
-content-hash = "1351e54af9af7149b65bd3ea578b01549146a02fc86ff1324fdfebe85455f029"
+content-hash = "934afde601779a22657e18b0bac68949208073b49a4a0be6a6cb905e7c2cc50f"
