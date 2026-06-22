@@ -99,7 +99,7 @@ class StreamGraphicsScene(QGraphicsScene):
     def remove_all_items(self):
 
         def condition(item):
-            return item is not self.current_frame
+            return item is not self.current_frame and item.parentItem() is None
 
         self.remove_items(self.items(), condition)
 
