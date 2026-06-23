@@ -64,7 +64,7 @@ class StreamEventManager(QObject):
         return self.stream_reader.is_streaming_paused
 
     def change_stream(self, stream_conf: StreamConfiguration) -> None:
-        if self.stream_reader is not None:
+        if self.stream_reader is None:
             self.stop_streaming()
 
         self.stream_conf = stream_conf
@@ -143,18 +143,11 @@ class StreamEventManager(QObject):
         self._frame_event.clear()
 
         if self.stream_reader is None:
-            stream_id = self.stream_conf.id if self.stream_conf else "Unknown"
-            logging.info(
-                f"StreamEventManager for stream {stream_id} received "
-                f"frame event, but SyncedStreamReader is None")
             return
 
         frame = self.stream_reader.latest_processed_frame
 
         if frame is None:
-            logging.info(
-                f"StreamEventManager for stream {self.stream_conf.id} received "
-                f"frame event, but frame is None")
             return
 
         self.frame_received.emit(frame)
@@ -163,10 +156,6 @@ class StreamEventManager(QObject):
         self._status_event.clear()
 
         if self.stream_reader is None:
-            stream_id = self.stream_conf.id if self.stream_conf else "Unknown"
-            logging.info(
-                f"StreamEventManager for stream {stream_id} received "
-                f"status event, but SyncedStreamReader is None")
             return
 
         state = self.stream_reader.stream_status
