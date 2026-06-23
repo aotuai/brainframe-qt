@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.uic import loadUi
 
 from brainframe_qt.api_utils import api
+from brainframe.api import bf_codecs, bf_errors
 from brainframe.api.bf_codecs import Alert, Zone, ZoneAlarm
-from brainframe.api.bf_errors import StreamConfigNotFoundError
 from brainframe_qt.ui.resources import QTAsyncWorker
 from brainframe_qt.ui.resources.paths import qt_ui_paths
 
@@ -59,11 +59,11 @@ class AlertLog(QWidget):
                     stream_id=stream_id,
                     limit=100,
                     offset=0)
-            except StreamConfigNotFoundError:
+            except bf_errors.StreamConfigNotFoundError:
                 # Return an empty list. The callback will delete all the
                 # existing Alerts from the UI
                 return []
-            except RequestException as ex:
+            except (RequestException, bf_errors.BaseAPIError) as ex:
                 logging.error(f"While polling for alerts: {ex}")
                 return None
 
@@ -96,9 +96,9 @@ class AlertLog(QWidget):
             try:
                 alarms: List[ZoneAlarm] = api.get_zone_alarms(self.stream_id)
                 zones: List[Zone] = api.get_zones(self.stream_id)
-            except StreamConfigNotFoundError:
+            except bf_errors.StreamConfigNotFoundError:
                 return None
-            except RequestException as ex:
+            except (RequestException, bf_errors.BaseAPIError) as ex:
                 logging.error(f"Error while getting alarms and zones for "
                               f"alerts: {ex}")
                 return None

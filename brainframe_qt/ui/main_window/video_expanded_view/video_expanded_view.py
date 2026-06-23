@@ -88,7 +88,7 @@ class VideoExpandedView(QWidget):
             try:
                 stream_configurations = api.get_stream_configurations()
                 return stream_configurations
-            except (RequestException, bf_errors.ServerNotReadyError, bf_errors.BaseAPIError) as ex:
+            except (RequestException, bf_errors.BaseAPIError) as ex:
                 logging.error(f"Error while polling for stream "
                               f"configurations: {ex}")
                 return None
