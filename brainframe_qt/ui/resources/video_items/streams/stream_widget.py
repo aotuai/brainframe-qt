@@ -1,7 +1,7 @@
 from typing import Optional
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtGui import QResizeEvent, QPixmap
 from PyQt5.QtWidgets import QWidget
 
 from brainframe.api.bf_codecs import StreamConfiguration
@@ -14,7 +14,6 @@ from .stream_widget_ui import StreamWidgetUI
 
 class StreamWidget(StreamWidgetUI):
     """Base widget that uses Stream object to get frames.
-
     Makes use of a QTimer to get frames
     """
 
@@ -96,7 +95,10 @@ class StreamWidget(StreamWidgetUI):
 
     def on_frame(self, frame: ZoneStatusFrame) -> None:
         self.scene().remove_all_items()
-        self.scene().set_frame(pixmap=frame.frame)
+        
+        # Convert QImage to QPixmap on the Main Thread
+        pixmap = QPixmap.fromImage(frame.frame)
+        self.scene().set_frame(pixmap=pixmap)
 
         # This frame has never been paired with ZoneStatuses from the server
         # so nothing should be rendered. This occurs when the server has

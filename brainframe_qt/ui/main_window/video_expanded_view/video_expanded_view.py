@@ -5,6 +5,7 @@ from PyQt5.QtCore import QEvent, QTimerEvent, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
+from brainframe.api import bf_errors
 from brainframe.api.bf_codecs import StreamConfiguration
 from requests.exceptions import RequestException
 
@@ -17,7 +18,8 @@ from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMes
 
 
 class VideoExpandedView(QWidget):
-    """Holds the expanded video view. Hidden when no stream selected"""
+    """Holds the expanded video view.
+    Hidden when no stream selected"""
 
     expanded_stream_closed_signal = pyqtSignal()
     """Signaled when expanded stream is closed

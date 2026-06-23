@@ -3,7 +3,7 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 import numpy as np
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QImage
 
 from brainframe.api.bf_codecs import ZoneStatus
 
@@ -14,8 +14,8 @@ from brainframe_qt.api_utils.detection_tracks import DetectionTrack
 class ZoneStatusFrame:
     """A frame that may or may not have undergone processing on the server."""
 
-    frame: QPixmap
-    """Frame as a QPixmap"""
+    frame: QImage
+    """Frame as a QImage"""
 
     tstamp: float
     """The timestamp of the frame"""
@@ -41,11 +41,11 @@ class ZoneStatusFrame:
     }
 
     @staticmethod
-    def pixmap_from_numpy_frame(frame: np.ndarray) -> QPixmap:
+    def image_from_numpy_frame(frame: np.ndarray) -> QImage:
         height, width, channel = frame.shape
         bytes_per_line = width * 3
         image = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
-        return QPixmap.fromImage(image)
+        return image
 
 
 @dataclass

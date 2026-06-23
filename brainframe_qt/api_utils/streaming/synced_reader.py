@@ -20,7 +20,6 @@ NEW_FRAME_EVENT_TIMEOUT: float = 30.0
 
 class SyncedStatus(Enum):
     """SyncedStreamReader wrapper of gstly's StreamStatus.
-
     Adds PAUSED and FINISHED states.
     """
     INITIALIZING = auto()
@@ -68,7 +67,6 @@ class SyncedStreamReader(QObject):
         parent: QObject
     ):
         """Creates a new SyncedStreamReader.
-
         :param stream_conf: The stream that this synced stream reader is for
         :param stream_url: The url of the stream
         """
@@ -80,7 +78,8 @@ class SyncedStreamReader(QObject):
         self._stream_reader: Optional[GstStreamReader] = None
 
         self.latest_processed_frame: Optional[ZoneStatusFrame] = None
-        """Latest frame synced with results. None if no frames have been synced yet"""
+        """Latest frame synced with results.
+        None if no frames have been synced yet"""
 
         self.frame_syncer = FrameSyncer()
 
@@ -141,7 +140,6 @@ class SyncedStreamReader(QObject):
 
     def pause_streaming(self) -> None:
         """Pause streaming.
-
         Streaming is not immediately paused, but will be handled in the main loop in
         _process_stream_events
         """
@@ -149,8 +147,8 @@ class SyncedStreamReader(QObject):
 
     def resume_streaming(self) -> None:
         """Resume (more accurately, re-start) streaming.
-
-        Streaming is not immediately paused, but will be handled in the main loop. This
+        Streaming is not immediately paused, but will be handled in the main loop.
+        This
         function does nothing (except print a warning) if the stream is not already
         paused.
         """
@@ -172,13 +170,13 @@ class SyncedStreamReader(QObject):
         self._finish()
 
     def wait_until_closed(self) -> None:
-        """Hangs until the SyncedStreamReader has been closed. Must be called from
+        """Hangs until the SyncedStreamReader has been closed.
+        Must be called from
         another QThread"""
         self._thread.join()
 
     def _finish(self) -> None:
         """Final clean-up for the SyncedStreamReader.
-
         To be called during complete stream shutdown, not simple pauses.
         Sets the status to FINISHED and emits the `finished` signal
         """
@@ -202,8 +200,8 @@ class SyncedStreamReader(QObject):
         # Get the latest zone statuses from status receiver thread
         statuses = api.get_status_receiver().latest_statuses(self.stream_conf.id)
 
-        # Convert the numpy frame to a QPixmap
-        frame = ZoneStatusFrame.pixmap_from_numpy_frame(frame_rgb)
+        # Convert the numpy frame to a QImage (Thread-Safe)
+        frame = ZoneStatusFrame.image_from_numpy_frame(frame_rgb)
 
         # Run the syncing algorithm
         new_processed_frame = self.frame_syncer.sync(
@@ -222,8 +220,8 @@ class SyncedStreamReader(QObject):
                 new_tstamp = new_processed_frame.tstamp
                 is_new = new_tstamp > previous_tstamp
 
-            # This value must be set before alerting frame listeners. This prevents a
-            # race condition where latest_processed_frame is None
+            # This value must be set before alerting frame listeners.
+            # This prevents a race condition where latest_processed_frame is None
             self.latest_processed_frame = new_processed_frame
 
             # Alert frame listeners if this a new frame
