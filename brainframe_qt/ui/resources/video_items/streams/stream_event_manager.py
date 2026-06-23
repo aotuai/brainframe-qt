@@ -143,8 +143,9 @@ class StreamEventManager(QObject):
         self._frame_event.clear()
 
         if self.stream_reader is None:
+            stream_id = self.stream_conf.id if self.stream_conf else "Unknown"
             logging.info(
-                f"StreamEventManager for stream {self.stream_conf.id} received "
+                f"StreamEventManager for stream {stream_id} received "
                 f"frame event, but SyncedStreamReader is None")
             return
 
@@ -162,8 +163,9 @@ class StreamEventManager(QObject):
         self._status_event.clear()
 
         if self.stream_reader is None:
+            stream_id = self.stream_conf.id if self.stream_conf else "Unknown"
             logging.info(
-                f"StreamEventManager for stream {self.stream_conf.id} received "
+                f"StreamEventManager for stream {stream_id} received "
                 f"status event, but SyncedStreamReader is None")
             return
 
