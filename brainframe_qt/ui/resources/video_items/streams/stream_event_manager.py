@@ -248,6 +248,13 @@ class StreamEventManager(QObject):
     @staticmethod
     def _get_stream_url(stream_conf: StreamConfiguration) -> Optional[str]:
         try:
-            return api.get_stream_url(stream_conf.id)
+            try:
+                url = api.get_stream_url(stream_conf.id, routing_type="rtsp")
+            except TypeError:
+                url = api.get_stream_url(stream_conf.id)
+                
+            if isinstance(url, dict):
+                return url.get("rtsp_url", url.get("url"))
+            return url
         except (StreamConfigNotFoundError, StreamNotOpenedError):
             return None
