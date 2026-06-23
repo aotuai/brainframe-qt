@@ -64,7 +64,7 @@ class AlertLog(QWidget):
                 # existing Alerts from the UI
                 return []
             except (RequestException, bf_errors.BaseAPIError) as ex:
-                logging.error(f"While polling for alerts: {ex}")
+                logging.debug(f"While polling for alerts: {ex}")
                 return None
 
             # We want it oldest to newest
@@ -99,7 +99,7 @@ class AlertLog(QWidget):
             except bf_errors.StreamConfigNotFoundError:
                 return None
             except (RequestException, bf_errors.BaseAPIError) as ex:
-                logging.error(f"Error while getting alarms and zones for "
+                logging.debug(f"Error while getting alarms and zones for "
                               f"alerts: {ex}")
                 return None
             alarm_dict = {alarm.id: alarm for alarm in alarms}
