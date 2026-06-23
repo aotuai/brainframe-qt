@@ -241,9 +241,8 @@ class SyncedStreamReader(QObject):
 
         pipeline: Optional[str] = self.stream_conf.connection_options.get("pipeline")
 
-        latency = StreamReader.DEFAULT_LATENCY
-        if self.stream_conf.connection_type in self.REHOSTED_VIDEO_TYPES:
-            latency = StreamReader.REHOSTED_LATENCY
+        import os
+        latency = int(os.environ.get("BF_STREAM_LATENCY", 50))
 
         # Streams created with a premises are always proxied from that premises
         is_proxied = self.stream_conf.premises_id is not None
@@ -258,6 +257,7 @@ class SyncedStreamReader(QObject):
             pipeline_str=pipeline,
             proxied=is_proxied
         )
+        self._stream_reader._default_latency = latency
 
         # Ensure that the status is sent out (esp. if we're resuming a stream)
         self.stream_status = SyncedStatus.INITIALIZING
