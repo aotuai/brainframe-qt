@@ -29,7 +29,7 @@ class DetectionTrack:
     def __repr__(self):
         if len(self._history):
             return f"DetectionTrack(tstamp: {self.latest_tstamp}, " \
-                f"det:{self.latest_det})"
+                   f"det:{self.latest_det})"
         else:
             return "DetectionTrack()"
 
