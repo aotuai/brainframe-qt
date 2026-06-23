@@ -47,6 +47,11 @@ class DetectionTrack:
         :param interp_to_tstamp: The timestamp that we would like to estimate
         the position of the detection at.
         """
+        # If the video timestamp is decoupled from the server clock (e.g., proxied stream), 
+        # interpolation is impossible. Just return the latest detection.
+        if abs(self.latest_tstamp - interp_to_tstamp) > 60:
+            return self.latest_det
+
         if len(self._history) == 1:
             return self._history[0][0]
 

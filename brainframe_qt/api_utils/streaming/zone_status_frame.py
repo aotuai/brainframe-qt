@@ -33,7 +33,7 @@ class ZoneStatusFrame:
     # fixes it. There's a PR to fix this, and here's the relevant issue:
     # https://github.com/cython/cython/issues/2552
     __annotations__ = {
-        'frame': np.ndarray,
+        'frame': QImage,
         'tstamp': float,
         'zone_statuses': Optional[Dict[str, ZoneStatus]],
         'tracks': Optional[List[DetectionTrack]],
@@ -44,7 +44,8 @@ class ZoneStatusFrame:
     def image_from_numpy_frame(frame: np.ndarray) -> QImage:
         height, width, channel = frame.shape
         bytes_per_line = width * 3
-        image = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+        # Create a deep copy of the QImage so the background thread can safely discard the underlying numpy array
+        image = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888).copy()
         return image
 
 
