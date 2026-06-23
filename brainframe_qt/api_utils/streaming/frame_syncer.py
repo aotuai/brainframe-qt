@@ -72,11 +72,6 @@ class FrameSyncer:
 
         # Check if this is a fresh zone_status or not
         if self.last_status_tstamp != status_tstamp:
-            # Catch buffer up to the previous inference frame (get rid of
-            # frames that the client will never render because it's running
-            # too far behind)
-            self.buffer.pop_until(self.last_status_tstamp)
-
             self.last_status_tstamp = status_tstamp
 
             # Iterate over all new detections, and add them to their tracks
@@ -85,28 +80,17 @@ class FrameSyncer:
                 # Create new tracks where necessary
                 track_id = det.track_id if det.track_id else uuid4()
 
-                if det.track_id not in self.tracks:
+                if track_id not in self.tracks:
                     self.tracks[track_id] = DetectionTrack()
                 self.tracks[track_id].add_detection(det, status_tstamp)
 
-        # If we have a zone status/inference result newer than the latest
-        # received frame, associate the buffer's oldest frame with the zone
-        # status
-        popped_frame = self.buffer.pop_if_older(self.last_status_tstamp)
-        if popped_frame is not None:
-            analysis_latency = status_tstamp - popped_frame.tstamp
-            analysis_latency = timedelta(seconds=analysis_latency)
-            popped_frame.frame_metadata.analysis_latency = analysis_latency
-
-        # Pop a frame if we're over the combined buffer max, but we also have
-        # more frames than the guaranteed minimum
-        else:
-            if self.buffer.is_full and not self.buffer.needs_guaranteed_space:
-                popped_frame = self.buffer.pop_oldest()
-                popped_frame.frame_metadata.client_buffer_full = True
+        # Always pop the oldest frame to prevent buffering/freezing due to decoupled timestamps
+        popped_frame = self.buffer.pop_oldest()
 
         # If we have a frame using any means, use it
         if popped_frame is not None:
+            popped_frame.frame_metadata.analysis_latency = timedelta(seconds=0)
+
             self._apply_statuses_to_frame(
                 frame=popped_frame,
                 statuses=latest_zone_statuses,
@@ -115,8 +99,8 @@ class FrameSyncer:
 
             self.last_used_zone_statuses = latest_zone_statuses
 
-        # Prune DetectionTracks that haven't had a detection in a while
-        self._prune_detection_tracks(latest_frame.tstamp)
+        # Prune DetectionTracks using the server timestamp so they don't expire instantly
+        self._prune_detection_tracks(status_tstamp)
 
         self.latest_processed = popped_frame
         return popped_frame
