@@ -24,7 +24,7 @@ from brainframe_qt.ui.resources.links.documentation import DOWNLOADS_LINK
 from brainframe_qt.ui.resources.ui_elements.applications import SingletonApplication
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
-BRAINFRAME_QT_VERSION_MIN = "0.30.1"
+BRAINFRAME_QT_VERSION_MIN = "0.30.2"
 
 class BrainFrameApplication(SingletonApplication):
     def setup_fonts_conf(self):
