@@ -24,6 +24,7 @@ from brainframe_qt.ui.resources.links.documentation import DOWNLOADS_LINK
 from brainframe_qt.ui.resources.ui_elements.applications import SingletonApplication
 from brainframe_qt.ui.resources.ui_elements.widgets.dialogs import BrainFrameMessage
 
+BRAINFRAME_QT_VERSION_MIN = "0.30.1"
 
 class BrainFrameApplication(SingletonApplication):
     def setup_fonts_conf(self):
@@ -106,7 +107,19 @@ class BrainFrameApplication(SingletonApplication):
         server_split = server_version.split(".")
         client_split = brainframe_qt.__version__.split(".")
 
-        if client_split[:2] != server_split[:2]:
+        # Convert to integer tuples for safe less-than comparison (e.g., (0, 30, 1))
+        client_tuple = tuple(map(int, client_split))
+        latest_tuple = tuple(map(int, BRAINFRAME_QT_VERSION_MIN.split(".")))
+
+        # 1) Server major/minor doesn't match client major/minor
+        versions_mismatch = client_split[:2] != server_split[:2]
+    
+        # 2) Client version is less than the latest version
+        client_is_older_than_latest = client_tuple < latest_tuple
+
+        if versions_mismatch and client_is_older_than_latest:
+            # Note: Your original client_outdated check still uses string comparison, 
+            # which you might also want to map to ints to be perfectly safe!
             client_outdated = client_split[:2] < server_split[:2]
             self._handle_version_mismatch(server_version, client_outdated)
 
