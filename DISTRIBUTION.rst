@@ -21,5 +21,5 @@ Please note that this file does not constitute legal advice.
        otherwise-open-source BrainFrame client) in our blog here_.
 
 .. _here: https://aotu.ai/en/blog/2021/01/19/publishing-a-proprietary-python-package-on-pypi-using-poetry/
-.. _binaries: https://aotu.ai/docs/downloads/#brainframe-client
+.. _binaries: https://aotu.ai/docs/getting_started/#brainframe-client
 .. _website: https://riverbankcomputing.com/commercial/buy

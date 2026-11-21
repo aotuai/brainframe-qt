@@ -58,7 +58,7 @@ Windows
 
 You can download an :code:`.exe` of the `Windows client`_ from our website.
 
-.. _`Windows client`: https://aotu.ai/docs/downloads/#brainframe-client
+.. _`Windows client`: https://aotu.ai/docs/getting_started/#brainframe-client
 
 ####################
 Building from source
