@@ -168,6 +168,18 @@ class StreamManager(QObject):
 
     def _stop_stream(self, stream_id: int) -> None:
         with self._stream_lock:
-            stream_reader = self.stream_readers[stream_id]
+            stream_reader = self.stream_readers.get(stream_id)
+            if stream_reader is None:
+                # There is no reader tracked for this stream. This happens when a
+                # stream that was never successfully started (e.g. it was rejected
+                # for exceeding the license's stream limit) or one that has already
+                # been stopped gets deleted. There is nothing to tear down, so
+                # treat it as a no-op instead of raising a KeyError.
+                logging.debug(
+                    "Ignoring request to stop stream %s: no reader is tracked "
+                    "for it", stream_id
+                )
+                return
+
             self._forget_stream(stream_id)
             stream_reader.close()
